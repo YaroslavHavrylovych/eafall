@@ -3,4 +3,5 @@ gen
 out
 AndEngine.iml
 SpaceInvadors.iml
+AndEnginePhysicsBox2DExtension.iml
 project.properties
