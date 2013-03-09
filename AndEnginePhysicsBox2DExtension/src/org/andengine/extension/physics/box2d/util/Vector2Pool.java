@@ -1,15 +1,17 @@
-package org.andengine.ui.activity;
+package org.andengine.extension.physics.box2d.util;
 
-import org.andengine.opengl.view.RenderSurfaceView;
+import org.andengine.util.adt.pool.GenericPool;
+
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * (c) 2010 Nicolas Gramlich 
  * (c) 2011 Zynga Inc.
  * 
  * @author Nicolas Gramlich
- * @since 10:18:50 - 06.10.2010
+ * @since 16:22:23 - 14.09.2010
  */
-public abstract class LayoutGameActivity extends BaseGameActivity {
+public class Vector2Pool {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -17,6 +19,13 @@ public abstract class LayoutGameActivity extends BaseGameActivity {
 	// ===========================================================
 	// Fields
 	// ===========================================================
+
+	private static final GenericPool<Vector2> POOL = new GenericPool<Vector2>() {
+		@Override
+		protected Vector2 onAllocatePoolItem() {
+			return new Vector2();
+		}
+	};
 
 	// ===========================================================
 	// Constructors
@@ -30,16 +39,20 @@ public abstract class LayoutGameActivity extends BaseGameActivity {
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
 
-	protected abstract int getLayoutID();
-	protected abstract int getRenderSurfaceViewID();
+	public static Vector2 obtain() {
+		return POOL.obtainPoolItem();
+	}
 
-	@Override
-	protected void onSetContentView() {
-		super.setContentView(this.getLayoutID());
+	public static Vector2 obtain(final Vector2 pCopyFrom) {
+		return POOL.obtainPoolItem().set(pCopyFrom);
+	}
 
-		this.mRenderSurfaceView = (RenderSurfaceView) this.findViewById(this.getRenderSurfaceViewID());
+	public static Vector2 obtain(final float pX, final float pY) {
+		return POOL.obtainPoolItem().set(pX, pY);
+	}
 
-		this.mRenderSurfaceView.setRenderer(this.mEngine, this);
+	public static void recycle(final Vector2 pVector2) {
+		POOL.recyclePoolItem(pVector2);
 	}
 
 	// ===========================================================

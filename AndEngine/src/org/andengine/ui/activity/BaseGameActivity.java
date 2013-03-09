@@ -52,7 +52,7 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 	// Fields
 	// ===========================================================
 
-	protected Engine engine;
+	protected Engine mEngine;
 
 	private WakeLock mWakeLock;
 
@@ -77,8 +77,8 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 
 		this.mGamePaused = true;
 
-		this.engine = this.onCreateEngine(this.onCreateEngineOptions());
-		this.engine.startUpdateThread();
+		this.mEngine = this.onCreateEngine(this.onCreateEngineOptions());
+		this.mEngine.startUpdateThread();
 
 		this.applyEngineOptions();
 
@@ -144,7 +144,7 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 		final OnCreateSceneCallback onCreateSceneCallback = new OnCreateSceneCallback() {
 			@Override
 			public void onCreateSceneFinished(final Scene pScene) {
-				BaseGameActivity.this.engine.setScene(pScene);
+				BaseGameActivity.this.mEngine.setScene(pScene);
 
 				try {
 					if(BuildConfig.DEBUG) {
@@ -219,7 +219,7 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 			Debug.d(this.getClass().getSimpleName() + ".onResumeGame" + " @(Thread: '" + Thread.currentThread().getName() + "')");
 		}
 
-		this.engine.start();
+		this.mEngine.start();
 
 		this.mGamePaused = false;
 	}
@@ -239,7 +239,7 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 			Debug.d(this.getClass().getSimpleName() + ".onReloadResources" + " @(Thread: '" + Thread.currentThread().getName() + "')");
 		}
 
-		this.engine.onReloadResources();
+		this.mEngine.onReloadResources();
 	}
 
 	@Override
@@ -266,7 +266,7 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 
 		this.mGamePaused = true;
 
-		this.engine.stop();
+		this.mEngine.stop();
 	}
 
 	@Override
@@ -277,7 +277,7 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 
 		super.onDestroy();
 
-		this.engine.onDestroy();
+		this.mEngine.onDestroy();
 
 		try {
 			this.onDestroyResources();
@@ -287,7 +287,7 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 
 		this.onGameDestroyed();
 
-		this.engine = null;
+		this.mEngine = null;
 	}
 
 	@Override
@@ -296,11 +296,11 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 			Debug.d(this.getClass().getSimpleName() + ".onDestroyResources" + " @(Thread: '" + Thread.currentThread().getName() + "')");
 		}
 
-		if(this.engine.getEngineOptions().getAudioOptions().needsMusic()) {
+		if(this.mEngine.getEngineOptions().getAudioOptions().needsMusic()) {
 			this.getMusicManager().releaseAll();
 		}
 
-		if(this.engine.getEngineOptions().getAudioOptions().needsSound()) {
+		if(this.mEngine.getEngineOptions().getAudioOptions().needsSound()) {
 			this.getSoundManager().releaseAll();
 		}
 	}
@@ -319,7 +319,7 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 	// ===========================================================
 
 	public Engine getEngine() {
-		return this.engine;
+		return this.mEngine;
 	}
 
 	public boolean isGamePaused() {
@@ -335,27 +335,27 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 	}
 
 	public VertexBufferObjectManager getVertexBufferObjectManager() {
-		return this.engine.getVertexBufferObjectManager();
+		return this.mEngine.getVertexBufferObjectManager();
 	}
 
 	public TextureManager getTextureManager() {
-		return this.engine.getTextureManager();
+		return this.mEngine.getTextureManager();
 	}
 
 	public FontManager getFontManager() {
-		return this.engine.getFontManager();
+		return this.mEngine.getFontManager();
 	}
 
 	public ShaderProgramManager getShaderProgramManager() {
-		return this.engine.getShaderProgramManager();
+		return this.mEngine.getShaderProgramManager();
 	}
 
 	public SoundManager getSoundManager() {
-		return this.engine.getSoundManager();
+		return this.mEngine.getSoundManager();
 	}
 
 	public MusicManager getMusicManager() {
-		return this.engine.getMusicManager();
+		return this.mEngine.getMusicManager();
 	}
 
 	// ===========================================================
@@ -377,7 +377,7 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 
 	protected void onSetContentView() {
 		this.mRenderSurfaceView = new RenderSurfaceView(this);
-		this.mRenderSurfaceView.setRenderer(this.engine, this);
+		this.mRenderSurfaceView.setRenderer(this.mEngine, this);
 
 		this.setContentView(this.mRenderSurfaceView, BaseGameActivity.createSurfaceViewLayoutParams());
 	}
@@ -386,18 +386,18 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 	 * @see Engine#runOnUpdateThread(Runnable)
 	 */
 	public void runOnUpdateThread(final Runnable pRunnable) {
-		this.engine.runOnUpdateThread(pRunnable);
+		this.mEngine.runOnUpdateThread(pRunnable);
 	}
 
 	/**
 	 * @see Engine#runOnUpdateThread(Runnable, boolean)
 	 */
 	public void runOnUpdateThread(final Runnable pRunnable, final boolean pOnlyWhenEngineRunning) {
-		this.engine.runOnUpdateThread(pRunnable, pOnlyWhenEngineRunning);
+		this.mEngine.runOnUpdateThread(pRunnable, pOnlyWhenEngineRunning);
 	}
 
 	private void acquireWakeLock() {
-		this.acquireWakeLock(this.engine.getEngineOptions().getWakeLockOptions());
+		this.acquireWakeLock(this.mEngine.getEngineOptions().getWakeLockOptions());
 	}
 
 	private void acquireWakeLock(final WakeLockOptions pWakeLockOptions) {
@@ -421,7 +421,7 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 	}
 
 	private void applyEngineOptions() {
-		final EngineOptions engineOptions = this.engine.getEngineOptions();
+		final EngineOptions engineOptions = this.mEngine.getEngineOptions();
 
 		if(engineOptions.isFullscreen()) {
 			ActivityUtils.requestFullscreen(this);
@@ -464,63 +464,63 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 	}
 
 	protected void enableVibrator() {
-		this.engine.enableVibrator(this);
+		this.mEngine.enableVibrator(this);
 	}
 
 	/**
 	 * @see {@link Engine#enableLocationSensor(Context, ILocationListener, LocationSensorOptions)}
 	 */
 	protected void enableLocationSensor(final ILocationListener pLocationListener, final LocationSensorOptions pLocationSensorOptions) {
-		this.engine.enableLocationSensor(this, pLocationListener, pLocationSensorOptions);
+		this.mEngine.enableLocationSensor(this, pLocationListener, pLocationSensorOptions);
 	}
 
 	/**
 	 * @see {@link Engine#disableLocationSensor(Context)}
 	 */
 	protected void disableLocationSensor() {
-		this.engine.disableLocationSensor(this);
+		this.mEngine.disableLocationSensor(this);
 	}
 
 	/**
 	 * @see {@link Engine#enableAccelerationSensor(Context, IAccelerationListener)}
 	 */
 	protected boolean enableAccelerationSensor(final IAccelerationListener pAccelerationListener) {
-		return this.engine.enableAccelerationSensor(this, pAccelerationListener);
+		return this.mEngine.enableAccelerationSensor(this, pAccelerationListener);
 	}
 
 	/**
 	 * @see {@link Engine#enableAccelerationSensor(Context, IAccelerationListener, AccelerationSensorOptions)}
 	 */
 	protected boolean enableAccelerationSensor(final IAccelerationListener pAccelerationListener, final AccelerationSensorOptions pAccelerationSensorOptions) {
-		return this.engine.enableAccelerationSensor(this, pAccelerationListener, pAccelerationSensorOptions);
+		return this.mEngine.enableAccelerationSensor(this, pAccelerationListener, pAccelerationSensorOptions);
 	}
 
 	/**
 	 * @see {@link Engine#disableAccelerationSensor(Context)}
 	 */
 	protected boolean disableAccelerationSensor() {
-		return this.engine.disableAccelerationSensor(this);
+		return this.mEngine.disableAccelerationSensor(this);
 	}
 
 	/**
 	 * @see {@link Engine#enableOrientationSensor(Context, IOrientationListener)}
 	 */
 	protected boolean enableOrientationSensor(final IOrientationListener pOrientationListener) {
-		return this.engine.enableOrientationSensor(this, pOrientationListener);
+		return this.mEngine.enableOrientationSensor(this, pOrientationListener);
 	}
 
 	/**
 	 * @see {@link Engine#enableOrientationSensor(Context, IOrientationListener, OrientationSensorOptions)}
 	 */
 	protected boolean enableOrientationSensor(final IOrientationListener pOrientationListener, final OrientationSensorOptions pLocationSensorOptions) {
-		return this.engine.enableOrientationSensor(this, pOrientationListener, pLocationSensorOptions);
+		return this.mEngine.enableOrientationSensor(this, pOrientationListener, pLocationSensorOptions);
 	}
 
 	/**
 	 * @see {@link Engine#disableOrientationSensor(Context)}
 	 */
 	protected boolean disableOrientationSensor() {
-		return this.engine.disableOrientationSensor(this);
+		return this.mEngine.disableOrientationSensor(this);
 	}
 
 	// ===========================================================

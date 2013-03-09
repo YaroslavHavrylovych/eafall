@@ -1,15 +1,15 @@
-package org.andengine.ui.activity;
+package org.andengine.extension.physics.box2d.util.hull;
 
-import org.andengine.opengl.view.RenderSurfaceView;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * (c) 2010 Nicolas Gramlich 
  * (c) 2011 Zynga Inc.
  * 
  * @author Nicolas Gramlich
- * @since 10:18:50 - 06.10.2010
+ * @since 13:43:54 - 14.09.2010
  */
-public abstract class LayoutGameActivity extends BaseGameActivity {
+class Vector2Line {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -18,9 +18,17 @@ public abstract class LayoutGameActivity extends BaseGameActivity {
 	// Fields
 	// ===========================================================
 
+	Vector2 mVertexA;
+	Vector2 mVertexB;
+
 	// ===========================================================
 	// Constructors
 	// ===========================================================
+
+	public Vector2Line(final Vector2 pVertexA, final Vector2 pVertexB) {
+		this.mVertexA = pVertexA;
+		this.mVertexB = pVertexB;
+	}
 
 	// ===========================================================
 	// Getter & Setter
@@ -29,18 +37,6 @@ public abstract class LayoutGameActivity extends BaseGameActivity {
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
-
-	protected abstract int getLayoutID();
-	protected abstract int getRenderSurfaceViewID();
-
-	@Override
-	protected void onSetContentView() {
-		super.setContentView(this.getLayoutID());
-
-		this.mRenderSurfaceView = (RenderSurfaceView) this.findViewById(this.getRenderSurfaceViewID());
-
-		this.mRenderSurfaceView.setRenderer(this.mEngine, this);
-	}
 
 	// ===========================================================
 	// Methods
