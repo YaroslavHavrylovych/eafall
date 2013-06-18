@@ -35,7 +35,7 @@ public class GameActivity extends BaseGameActivity {
     public static final String TAG = GameActivity.class.getCanonicalName();
     private static final int sCameraWidth = 800;
     private static final int sCameraHeight = 480;
-    private final FixtureDef mStaticBodyFixtureDef = PhysicsFactory.createFixtureDef(0.0f, 0.0f, 0.0f);
+    private final FixtureDef mStaticBodyFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f);
     private ITextureRegion mSunTextureRegion;
     private ITextureRegion mRedPlanetTextureRegion;
     private ITextureRegion mBluePlanetTextureRegion;
@@ -45,6 +45,8 @@ public class GameActivity extends BaseGameActivity {
     private Scene mScene;
     private HashMap<String, StaticObject> mStaticObjects = new HashMap<String, StaticObject>();
     private ArrayList<SimpleWarrior> mSimpleWarriorObjects = new ArrayList<SimpleWarrior>();
+    private ArrayList<SimpleWarrior> mWarriorCommandRed = new ArrayList<SimpleWarrior>();
+    private ArrayList<SimpleWarrior> mWarriorCommandBlue = new ArrayList<SimpleWarrior>();
 
     @Override
     public EngineOptions onCreateEngineOptions() {
@@ -100,40 +102,49 @@ public class GameActivity extends BaseGameActivity {
         LoggerHelper.methodInvocation(TAG, "createDynamicObjects");
         SimpleWarrior simpleWarrior = new SimpleWarrior(x, y, textureRegion, mEngine.getVertexBufferObjectManager());
         final FixtureDef playerFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f);
+        scene.attachChild(simpleWarrior);
         Body body = PhysicsFactory.createCircleBody(mPhysicsWorld, simpleWarrior, BodyDef.BodyType.DynamicBody, playerFixtureDef);
         simpleWarrior.setBody(body);
-        scene.attachChild(simpleWarrior);
         mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(simpleWarrior, body, true, true));
         mSimpleWarriorObjects.add(simpleWarrior);
         return simpleWarrior;
     }
 
     public void initPlanetTouchListeners() {
+        final StaticObject redPlanetStaticObject = mStaticObjects.get(IGameObjectsConstants.KEY_RED_PLANET);
+        final StaticObject bluePlanetStaticObject = mStaticObjects.get(IGameObjectsConstants.KEY_BLUE_PLANET);
+
         ISpriteTouchListener redPlanetTouchListener = new ISpriteTouchListener() {
             @Override
             public boolean onTouch(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
                 LoggerHelper.methodInvocation(TAG, "initPlanetTouchListeners.planetOnTouchListener");
-                if (pSceneTouchEvent.isActionUp())
-                    createDynamicObjects(pSceneTouchEvent.getX() + 5, pSceneTouchEvent.getY(), mRedWarriorTextureRegion, mScene);
-                return true;
-            }
-        };
-        StaticObject staticObject = mStaticObjects.get(IGameObjectsConstants.KEY_RED_PLANET);
-        staticObject.setOnTouchListener(redPlanetTouchListener);
-        mScene.registerTouchArea(staticObject);
+                if (!pSceneTouchEvent.isActionUp()) return true;
 
-        ISpriteTouchListener bluePlanetTouchListener = new ISpriteTouchListener() {
-            @Override
-            public boolean onTouch(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                LoggerHelper.methodInvocation(TAG, "initPlanetTouchListeners.planetOnTouchListener");
-                if (pSceneTouchEvent.isActionUp())
-                    createDynamicObjects(pSceneTouchEvent.getX() - 15, pSceneTouchEvent.getY(), mBlueWarriorTextureRegion, mScene);
+                SimpleWarrior warrior = createDynamicObjects(pSceneTouchEvent.getX() - 15, pSceneTouchEvent.getY(), mRedWarriorTextureRegion, mScene);
+                mWarriorCommandBlue.add(warrior);
+                warrior.setMainTarget(bluePlanetStaticObject.getX(), bluePlanetStaticObject.getY());
                 return true;
             }
         };
-        staticObject = mStaticObjects.get(IGameObjectsConstants.KEY_BLUE_PLANET);
-        staticObject.setOnTouchListener(bluePlanetTouchListener);
-        mScene.registerTouchArea(staticObject);
+        redPlanetStaticObject.setOnTouchListener(redPlanetTouchListener);
+        mScene.registerTouchArea(redPlanetStaticObject);
+
+
+        ISpriteTouchListener bluePlanetTouchListener = new
+                ISpriteTouchListener() {
+                    @Override
+                    public boolean onTouch(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                        LoggerHelper.methodInvocation(TAG, "initPlanetTouchListeners.planetOnTouchListener");
+                        if (!pSceneTouchEvent.isActionUp()) return true;
+
+                        SimpleWarrior warrior = createDynamicObjects(pSceneTouchEvent.getX() - 15, pSceneTouchEvent.getY(), mBlueWarriorTextureRegion, mScene);
+                        mWarriorCommandRed.add(warrior);
+                        warrior.setMainTarget(redPlanetStaticObject.getX(), redPlanetStaticObject.getY());
+                        return true;
+                    }
+                };
+        bluePlanetStaticObject.setOnTouchListener(bluePlanetTouchListener);
+        mScene.registerTouchArea(bluePlanetStaticObject);
     }
 
     @Override
