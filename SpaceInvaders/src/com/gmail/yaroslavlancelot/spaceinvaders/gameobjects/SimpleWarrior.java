@@ -47,6 +47,11 @@ public class SimpleWarrior extends Sprite {
         mSimpleWarriorBody.setLinearVelocity(velocity);
         Vector2Pool.recycle(velocity);
     }
+    
+//    check this code, meybe it help to with obstacle avoiding
+//    for(int i=0;i<obstacleList.size();i++){
+//   if(Obstacle.this.collideWith(obstacleList.get(i))
+//    }
 
 //    public void setMaxVelocity(float maxVelocityX, float maxVelocityY) {
 //        mMaxVelocityX = maxVelocityX;
