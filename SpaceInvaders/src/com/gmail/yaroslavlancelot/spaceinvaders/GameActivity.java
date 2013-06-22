@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.SimpleWarrior;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.SimpleUnit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.StaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.constants.IGameObjectsConstants;
@@ -29,24 +29,38 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Main game Activity.
+ * Main game Activity. Extends {@link BaseGameActivity} class and contains main game elements.
+ * Loads resources, initialize scene, engine and etc.
  */
 public class GameActivity extends BaseGameActivity {
+    /** tag, which is used for debugging purpose */
     public static final String TAG = GameActivity.class.getCanonicalName();
+    /** Camera width. Width of part of the screen which is currently viewed by user */
     private static final int sCameraWidth = 800;
+    /** Camera height. Height of part of the screen which is currently viewed by user */
     private static final int sCameraHeight = 480;
+    /** {@link FixtureDef} for obstacles (static bodies) */
     private final FixtureDef mStaticBodyFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f);
+    /*
+     * ITexture definitions
+     */
     private ITextureRegion mSunTextureRegion;
     private ITextureRegion mRedPlanetTextureRegion;
     private ITextureRegion mBluePlanetTextureRegion;
     private ITextureRegion mRedWarriorTextureRegion;
     private ITextureRegion mBlueWarriorTextureRegion;
+    /** current game physics world */
     private PhysicsWorld mPhysicsWorld;
+    /** currently viewed by user screen */
     private Scene mScene;
+    /** contains game obstacles and other static objects */
     private HashMap<String, StaticObject> mStaticObjects = new HashMap<String, StaticObject>();
-    private ArrayList<SimpleWarrior> mSimpleWarriorObjects = new ArrayList<SimpleWarrior>();
-    private ArrayList<SimpleWarrior> mWarriorCommandRed = new ArrayList<SimpleWarrior>();
-    private ArrayList<SimpleWarrior> mWarriorCommandBlue = new ArrayList<SimpleWarrior>();
+    /** contains whole game units/warriors */
+    private ArrayList<SimpleUnit> mSimpleUnitObjects = new ArrayList<SimpleUnit>();
+    /** contains red command warriors */
+    private ArrayList<SimpleUnit> mWarriorCommandRed = new ArrayList<SimpleUnit>();
+    /** contains blue command warriors */
+    private ArrayList<SimpleUnit> mWarriorCommandBlue = new ArrayList<SimpleUnit>();
 
     @Override
     public EngineOptions onCreateEngineOptions() {
@@ -89,6 +103,16 @@ public class GameActivity extends BaseGameActivity {
         onCreateSceneCallback.onCreateSceneFinished(mScene);
     }
 
+    /**
+     * create static game object (e.g. sun, planet)
+     *
+     * @param x abscissa (top left corner) of created static object
+     * @param y ordinate (top left corner) of created static object
+     * @param textureRegion static object {@link ITextureRegion} for creating new {@link StaticObject}
+     * @param key key of current static object
+     *
+     * @return newly created {@link StaticObject}
+     */
     private Sprite createStaticObject(float x, float y, ITextureRegion textureRegion, String key) {
         LoggerHelper.methodInvocation(TAG, "createStaticObject");
         StaticObject staticObjectSprite = new StaticObject(x, y, textureRegion, mEngine.getVertexBufferObjectManager());
@@ -98,16 +122,25 @@ public class GameActivity extends BaseGameActivity {
         return staticObjectSprite;
     }
 
-    private SimpleWarrior createDynamicObjects(float x, float y, ITextureRegion textureRegion, Scene scene) {
+    /**
+     * create dynamic game object (e.g. warrior or some other stuff)
+     *
+     * @param x abscissa (top left corner) of created dynamic object
+     * @param y ordinate (top left corner) of created dynamic object
+     * @param textureRegion static object {@link ITextureRegion} for creating new {@link com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.SimpleUnit}
+     *
+     * @return newly created {@link com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.SimpleUnit}
+     */
+    private SimpleUnit createDynamicObjects(float x, float y, ITextureRegion textureRegion, Scene scene) {
         LoggerHelper.methodInvocation(TAG, "createDynamicObjects");
-        SimpleWarrior simpleWarrior = new SimpleWarrior(x, y, textureRegion, mEngine.getVertexBufferObjectManager());
+        SimpleUnit mSimpleUnit = new SimpleUnit(x, y, textureRegion, mEngine.getVertexBufferObjectManager());
         final FixtureDef playerFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f);
-        scene.attachChild(simpleWarrior);
-        Body body = PhysicsFactory.createCircleBody(mPhysicsWorld, simpleWarrior, BodyDef.BodyType.DynamicBody, playerFixtureDef);
-        simpleWarrior.setBody(body);
-        mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(simpleWarrior, body, true, true));
-        mSimpleWarriorObjects.add(simpleWarrior);
-        return simpleWarrior;
+        scene.attachChild(mSimpleUnit);
+        Body body = PhysicsFactory.createCircleBody(mPhysicsWorld, mSimpleUnit, BodyDef.BodyType.DynamicBody, playerFixtureDef);
+        mSimpleUnit.setBody(body);
+        mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(mSimpleUnit, body, true, true));
+        mSimpleUnitObjects.add(mSimpleUnit);
+        return mSimpleUnit;
     }
 
     public void initPlanetTouchListeners() {
@@ -120,7 +153,7 @@ public class GameActivity extends BaseGameActivity {
                 LoggerHelper.methodInvocation(TAG, "initPlanetTouchListeners.planetOnTouchListener");
                 if (!pSceneTouchEvent.isActionUp()) return true;
 
-                SimpleWarrior warrior = createDynamicObjects(pSceneTouchEvent.getX() - 15, pSceneTouchEvent.getY(), mRedWarriorTextureRegion, mScene);
+                SimpleUnit warrior = createDynamicObjects(pSceneTouchEvent.getX() - 15, pSceneTouchEvent.getY(), mRedWarriorTextureRegion, mScene);
                 mWarriorCommandBlue.add(warrior);
                 warrior.setMainTarget(bluePlanetStaticObject.getX(), bluePlanetStaticObject.getY());
                 return true;
@@ -129,15 +162,15 @@ public class GameActivity extends BaseGameActivity {
         redPlanetStaticObject.setOnTouchListener(redPlanetTouchListener);
         mScene.registerTouchArea(redPlanetStaticObject);
 
-
         ISpriteTouchListener bluePlanetTouchListener = new
+
                 ISpriteTouchListener() {
                     @Override
                     public boolean onTouch(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
                         LoggerHelper.methodInvocation(TAG, "initPlanetTouchListeners.planetOnTouchListener");
                         if (!pSceneTouchEvent.isActionUp()) return true;
 
-                        SimpleWarrior warrior = createDynamicObjects(pSceneTouchEvent.getX() - 15, pSceneTouchEvent.getY(), mBlueWarriorTextureRegion, mScene);
+                        SimpleUnit warrior = createDynamicObjects(pSceneTouchEvent.getX() - 15, pSceneTouchEvent.getY(), mBlueWarriorTextureRegion, mScene);
                         mWarriorCommandRed.add(warrior);
                         warrior.setMainTarget(redPlanetStaticObject.getX(), redPlanetStaticObject.getY());
                         return true;
