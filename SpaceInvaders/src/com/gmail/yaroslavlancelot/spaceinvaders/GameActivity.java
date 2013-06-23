@@ -4,8 +4,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.SimpleUnit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.StaticObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
+import com.gmail.yaroslavlancelot.spaceinvaders.teams.Team;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.constants.IGameObjectsConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.touch.ISpriteTouchListener;
@@ -15,7 +18,6 @@ import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
@@ -27,6 +29,7 @@ import org.andengine.ui.activity.BaseGameActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Main game Activity. Extends {@link BaseGameActivity} class and contains main game elements.
@@ -48,6 +51,7 @@ public class GameActivity extends BaseGameActivity {
     private ITextureRegion mRedPlanetTextureRegion;
     private ITextureRegion mBluePlanetTextureRegion;
     private ITextureRegion mRedWarriorTextureRegion;
+    @SuppressWarnings("unused")
     private ITextureRegion mBlueWarriorTextureRegion;
     /** current game physics world */
     private PhysicsWorld mPhysicsWorld;
@@ -57,10 +61,12 @@ public class GameActivity extends BaseGameActivity {
     private HashMap<String, StaticObject> mStaticObjects = new HashMap<String, StaticObject>();
     /** contains whole game units/warriors */
     private ArrayList<SimpleUnit> mSimpleUnitObjects = new ArrayList<SimpleUnit>();
-    /** contains red command warriors */
-    private ArrayList<SimpleUnit> mWarriorCommandRed = new ArrayList<SimpleUnit>();
-    /** contains blue command warriors */
-    private ArrayList<SimpleUnit> mWarriorCommandBlue = new ArrayList<SimpleUnit>();
+    /** all teams in current game */
+    private List<ITeam> mITeamsList = new ArrayList<ITeam>();
+    /** red team */
+    private Team mRedTeam;
+    /** blue team */
+    private Team mBlueTeam;
 
     @Override
     public EngineOptions onCreateEngineOptions() {
@@ -94,17 +100,26 @@ public class GameActivity extends BaseGameActivity {
         // create Sun
         createStaticObject(sCameraWidth / 2 - 32, sCameraHeight / 2 - 32, mSunTextureRegion, IGameObjectsConstants.KEY_SUN);
         // create red planet
-        createStaticObject(0, sCameraHeight / 2 - 32, mRedPlanetTextureRegion, IGameObjectsConstants.KEY_RED_PLANET);
+        mRedTeam = new Team(createPlanet(0, sCameraHeight / 2 - 32, mRedPlanetTextureRegion, IGameObjectsConstants.KEY_RED_PLANET));
+        mRedTeam.getTeamPlanet().setSpawnPoint(32 + 15, sCameraHeight / 2);
+        mITeamsList.add(mRedTeam);
         // create blue planet
-        createStaticObject(sCameraWidth - 64, sCameraHeight / 2 - 32, mBluePlanetTextureRegion, IGameObjectsConstants.KEY_BLUE_PLANET);
+        mBlueTeam = new Team(createPlanet(sCameraWidth - 64, sCameraHeight / 2 - 32, mBluePlanetTextureRegion, IGameObjectsConstants.KEY_BLUE_PLANET));
+        mBlueTeam.getTeamPlanet().setSpawnPoint(sCameraWidth - 32 - 15, sCameraHeight / 2);
+        mITeamsList.add(mBlueTeam);
 
         initPlanetTouchListeners();
 
         onCreateSceneCallback.onCreateSceneFinished(mScene);
     }
 
+    @Override
+    public void onPopulateScene(Scene scene, OnPopulateSceneCallback onPopulateSceneCallback) {
+        onPopulateSceneCallback.onPopulateSceneFinished();
+    }
+
     /**
-     * create static game object (e.g. sun, planet)
+     * create static game object
      *
      * @param x abscissa (top left corner) of created static object
      * @param y ordinate (top left corner) of created static object
@@ -113,7 +128,7 @@ public class GameActivity extends BaseGameActivity {
      *
      * @return newly created {@link StaticObject}
      */
-    private Sprite createStaticObject(float x, float y, ITextureRegion textureRegion, String key) {
+    private StaticObject createStaticObject(float x, float y, ITextureRegion textureRegion, String key) {
         LoggerHelper.methodInvocation(TAG, "createStaticObject");
         StaticObject staticObjectSprite = new StaticObject(x, y, textureRegion, mEngine.getVertexBufferObjectManager());
         PhysicsFactory.createBoxBody(mPhysicsWorld, staticObjectSprite, BodyDef.BodyType.StaticBody, mStaticBodyFixtureDef);
@@ -123,16 +138,35 @@ public class GameActivity extends BaseGameActivity {
     }
 
     /**
+     * create planet game object
+     *
+     * @param x abscissa (top left corner) of created planet
+     * @param y ordinate (top left corner) of created planet
+     * @param textureRegion static object {@link ITextureRegion} for creating new {@link PlanetStaticObject}
+     * @param key key of current planet
+     *
+     * @return newly created {@link PlanetStaticObject}
+     */
+    private PlanetStaticObject createPlanet(float x, float y, ITextureRegion textureRegion, String key) {
+        LoggerHelper.methodInvocation(TAG, "createPlanet");
+        PlanetStaticObject planetStaticObject = new PlanetStaticObject(x, y, textureRegion, mEngine.getVertexBufferObjectManager());
+        PhysicsFactory.createBoxBody(mPhysicsWorld, planetStaticObject, BodyDef.BodyType.StaticBody, mStaticBodyFixtureDef);
+        mScene.attachChild(planetStaticObject);
+        mStaticObjects.put(key, planetStaticObject);
+        return planetStaticObject;
+    }
+
+    /**
      * create dynamic game object (e.g. warrior or some other stuff)
      *
      * @param x abscissa (top left corner) of created dynamic object
      * @param y ordinate (top left corner) of created dynamic object
-     * @param textureRegion static object {@link ITextureRegion} for creating new {@link com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.SimpleUnit}
+     * @param textureRegion static object {@link ITextureRegion} for creating new {@link SimpleUnit}
      *
-     * @return newly created {@link com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.SimpleUnit}
+     * @return newly created {@link SimpleUnit}
      */
-    private SimpleUnit createDynamicObjects(float x, float y, ITextureRegion textureRegion, Scene scene) {
-        LoggerHelper.methodInvocation(TAG, "createDynamicObjects");
+    private SimpleUnit createSimpleUnit(float x, float y, ITextureRegion textureRegion, Scene scene) {
+        LoggerHelper.methodInvocation(TAG, "createSimpleUnit");
         SimpleUnit mSimpleUnit = new SimpleUnit(x, y, textureRegion, mEngine.getVertexBufferObjectManager());
         final FixtureDef playerFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f);
         scene.attachChild(mSimpleUnit);
@@ -143,45 +177,36 @@ public class GameActivity extends BaseGameActivity {
         return mSimpleUnit;
     }
 
-    public void initPlanetTouchListeners() {
-        final StaticObject redPlanetStaticObject = mStaticObjects.get(IGameObjectsConstants.KEY_RED_PLANET);
-        final StaticObject bluePlanetStaticObject = mStaticObjects.get(IGameObjectsConstants.KEY_BLUE_PLANET);
+    private void initPlanetTouchListeners() {
+        initPlanetTouchListener(mRedTeam);
+        initPlanetTouchListener(mBlueTeam);
+    }
 
-        ISpriteTouchListener redPlanetTouchListener = new ISpriteTouchListener() {
-            @Override
-            public boolean onTouch(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                LoggerHelper.methodInvocation(TAG, "initPlanetTouchListeners.planetOnTouchListener");
-                if (!pSceneTouchEvent.isActionUp()) return true;
-
-                SimpleUnit warrior = createDynamicObjects(pSceneTouchEvent.getX() - 15, pSceneTouchEvent.getY(), mRedWarriorTextureRegion, mScene);
-                mWarriorCommandBlue.add(warrior);
-                warrior.setMainTarget(bluePlanetStaticObject.getX(), bluePlanetStaticObject.getY());
-                return true;
-            }
-        };
-        redPlanetStaticObject.setOnTouchListener(redPlanetTouchListener);
-        mScene.registerTouchArea(redPlanetStaticObject);
-
-        ISpriteTouchListener bluePlanetTouchListener = new
-
-                ISpriteTouchListener() {
+    private void initPlanetTouchListener(final ITeam initiatedTeam) {
+        for (final ITeam team : mITeamsList) {
+            if (!initiatedTeam.isFriendlyTeam(team)) {
+                final StaticObject initiatedTeamPlanet = initiatedTeam.getTeamPlanet();
+                ISpriteTouchListener initiatedTeamPlanetTouchListener = new ISpriteTouchListener() {
                     @Override
-                    public boolean onTouch(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                    public boolean onTouch(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
                         LoggerHelper.methodInvocation(TAG, "initPlanetTouchListeners.planetOnTouchListener");
                         if (!pSceneTouchEvent.isActionUp()) return true;
 
-                        SimpleUnit warrior = createDynamicObjects(pSceneTouchEvent.getX() - 15, pSceneTouchEvent.getY(), mBlueWarriorTextureRegion, mScene);
-                        mWarriorCommandRed.add(warrior);
-                        warrior.setMainTarget(redPlanetStaticObject.getX(), redPlanetStaticObject.getY());
+                        createUnitForTeam(mRedWarriorTextureRegion, initiatedTeam, team);
                         return true;
                     }
                 };
-        bluePlanetStaticObject.setOnTouchListener(bluePlanetTouchListener);
-        mScene.registerTouchArea(bluePlanetStaticObject);
+                initiatedTeamPlanet.setOnTouchListener(initiatedTeamPlanetTouchListener);
+                mScene.registerTouchArea(initiatedTeamPlanet);
+                break;
+            }
+        }
     }
 
-    @Override
-    public void onPopulateScene(Scene scene, OnPopulateSceneCallback onPopulateSceneCallback) {
-        onPopulateSceneCallback.onPopulateSceneFinished();
+    private SimpleUnit createUnitForTeam(final ITextureRegion textureRegion, final ITeam unitTeam, final ITeam teamAgainst) {
+        SimpleUnit warrior = createSimpleUnit(unitTeam.getTeamPlanet().getSpawnPointX(), unitTeam.getTeamPlanet().getSpawnPointY(), textureRegion, mScene);
+        unitTeam.addObjectToTeam(warrior);
+        warrior.setMainTarget(teamAgainst.getTeamPlanet().getSpawnPointX(), teamAgainst.getTeamPlanet().getSpawnPointY());
+        return warrior;
     }
 }
