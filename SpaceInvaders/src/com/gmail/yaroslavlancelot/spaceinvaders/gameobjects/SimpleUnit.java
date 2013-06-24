@@ -48,8 +48,10 @@ public class SimpleUnit extends Sprite {
      * @param mainTargetY main target ordinate
      */
     public void setMainTarget(float mainTargetX, float mainTargetY) {
+        LoggerHelper.methodInvocation(TAG, "setMainTarget");
         mMainTargetX = mainTargetX;
         mMainTargetY = mainTargetY;
+        Log.v(TAG, "mMainTargetX = " + mMainTargetX + ", mMainTargetY = " + mMainTargetY);
     }
 
     @Override
@@ -62,19 +64,19 @@ public class SimpleUnit extends Sprite {
         @Override
         public void onTimePassed(TimerHandler pTimerHandler) {
             LoggerHelper.methodInvocation(TAG, "onTimePassed");
-            float sum = mMainTargetX + mMainTargetY;
-            float x = mMaxVelocity * (mMainTargetX - getX()) / sum,
-                    y = mMaxVelocity * (mMainTargetY - getY()) / sum;
+            float distanceX = mMainTargetX - getX(),
+                    distanceY = mMainTargetY - getY();
+            float absDistanceX = Math.abs(distanceX),
+                    absDistanceY = Math.abs(distanceY),
+                    maxAbsDistance = absDistanceX > absDistanceY ? absDistanceX : absDistanceY;
+            float ordinateSpeed = mMaxVelocity * distanceX / maxAbsDistance,
+                    abscissaSpeed = mMaxVelocity * distanceY / maxAbsDistance;
 
-            Log.v(TAG, "x = " + x + ", y = " + y);
-            final Vector2 velocity = Vector2Pool.obtain(x, y);
+            Log.v(TAG, "xSpeed = " + ordinateSpeed + ", ySpeed = " + abscissaSpeed);
+            final Vector2 velocity = Vector2Pool.obtain(ordinateSpeed, abscissaSpeed);
             mSimpleWarriorBody.setLinearVelocity(velocity);
             Vector2Pool.recycle(velocity);
 
         }
     }
 }
-
-//    check this code, meybe it help to with obstacle avoiding
-//    for(int i=0;i<obstacleList.size();i++)
-//          if(Obstacle.this.collideWith(obstacleList.get(i))
