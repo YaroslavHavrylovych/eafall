@@ -22,6 +22,7 @@ import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -77,12 +78,12 @@ public class GameActivity extends BaseGameActivity {
 
     @Override
     public void onCreateResources(OnCreateResourcesCallback onCreateResourcesCallback) {
-        BitmapTextureAtlas simpleWarriorTexture = new BitmapTextureAtlas(getTextureManager(), 24, 12);
+        BitmapTextureAtlas simpleWarriorTexture = new BitmapTextureAtlas(getTextureManager(), 24, 12, TextureOptions.BILINEAR);
         mRedWarriorTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(simpleWarriorTexture, this, IGameObjectsConstants.FILE_RED_WARRIOR, 0, 0);
         mBlueWarriorTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(simpleWarriorTexture, this, IGameObjectsConstants.FILE_BLUE_WARRIOR, 12, 0);
         simpleWarriorTexture.load();
 
-        BitmapTextureAtlas staticObjectsTexture = new BitmapTextureAtlas(getTextureManager(), 192, 64);
+        BitmapTextureAtlas staticObjectsTexture = new BitmapTextureAtlas(getTextureManager(), 192, 64, TextureOptions.BILINEAR);
         mSunTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(staticObjectsTexture, this, IGameObjectsConstants.FILE_SUN, 0, 0);
         mRedPlanetTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(staticObjectsTexture, this, IGameObjectsConstants.FILE_RED_PLANET, 64, 0);
         mBluePlanetTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(staticObjectsTexture, this, IGameObjectsConstants.FILE_BLUE_PLANET, 128, 0);
@@ -100,11 +101,11 @@ public class GameActivity extends BaseGameActivity {
         // create Sun
         createStaticObject(sCameraWidth / 2 - 32, sCameraHeight / 2 - 32, mSunTextureRegion, IGameObjectsConstants.KEY_SUN);
         // create red planet
-        mRedTeam = new Team(createPlanet(0, sCameraHeight / 2 - 32, mRedPlanetTextureRegion, IGameObjectsConstants.KEY_RED_PLANET));
+        mRedTeam = new Team(IGameObjectsConstants.RED_TEAM_NAME, createPlanet(0, sCameraHeight / 2 - 32, mRedPlanetTextureRegion, IGameObjectsConstants.KEY_RED_PLANET));
         mRedTeam.getTeamPlanet().setSpawnPoint(32 + 15, sCameraHeight / 2);
         mITeamsList.add(mRedTeam);
         // create blue planet
-        mBlueTeam = new Team(createPlanet(sCameraWidth - 64, sCameraHeight / 2 - 32, mBluePlanetTextureRegion, IGameObjectsConstants.KEY_BLUE_PLANET));
+        mBlueTeam = new Team(IGameObjectsConstants.BLUE_TEAM_NAME, createPlanet(sCameraWidth - 64, sCameraHeight / 2 - 32, mBluePlanetTextureRegion, IGameObjectsConstants.KEY_BLUE_PLANET));
         mBlueTeam.getTeamPlanet().setSpawnPoint(sCameraWidth - 32 - 15, sCameraHeight / 2);
         mITeamsList.add(mBlueTeam);
 
@@ -192,7 +193,8 @@ public class GameActivity extends BaseGameActivity {
                         LoggerHelper.methodInvocation(TAG, "initPlanetTouchListeners.planetOnTouchListener");
                         if (!pSceneTouchEvent.isActionUp()) return true;
 
-                        createUnitForTeam(mRedWarriorTextureRegion, initiatedTeam, team);
+                        ITextureRegion textureRegion = initiatedTeam.getTeamName().equals(IGameObjectsConstants.RED_TEAM_NAME) ? mRedWarriorTextureRegion : mBlueWarriorTextureRegion;
+                        createUnitForTeam(textureRegion, initiatedTeam, team);
                         return true;
                     }
                 };

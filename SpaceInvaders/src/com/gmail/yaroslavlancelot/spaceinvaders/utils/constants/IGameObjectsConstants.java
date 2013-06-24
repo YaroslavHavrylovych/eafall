@@ -18,4 +18,8 @@ public interface IGameObjectsConstants {
     String KEY_RED_PLANET = "red_planet_key";
     /** used like key for blue planet static object */
     String KEY_BLUE_PLANET = "blue_planet_key";
+    /** red team name */
+    String RED_TEAM_NAME = "red";
+    /** blue team name */
+    String BLUE_TEAM_NAME = "blue";
 }

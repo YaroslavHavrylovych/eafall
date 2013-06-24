@@ -8,20 +8,27 @@ import java.util.List;
 
 /**  */
 public class Team implements ITeam {
+    private final String mTeamName;
     private List<Sprite> mTeamObjects;
     private List<ITeam> mFriendlyTeams;
     private PlanetStaticObject mTeamPlanet;
 
-    public Team(final PlanetStaticObject teamPlanet) {
+    public Team(final String teamName, final PlanetStaticObject teamPlanet) {
         mFriendlyTeams = new ArrayList<ITeam>();
         mTeamObjects = new ArrayList<Sprite>();
         mTeamPlanet = teamPlanet;
+        mTeamName = teamName;
     }
 
     @SuppressWarnings("unused")
-    public Team(final PlanetStaticObject teamPlanet, final ITeam iTeam) {
-        this(teamPlanet);
+    public Team(final String teamName, final PlanetStaticObject teamPlanet, final ITeam iTeam) {
+        this(teamName, teamPlanet);
         addFriendlyTeam(iTeam);
+    }
+
+    @Override
+    public String getTeamName() {
+        return mTeamName;
     }
 
     @Override

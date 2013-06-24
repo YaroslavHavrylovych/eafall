@@ -21,4 +21,6 @@ public interface ITeam {
     boolean isFriendlyTeam(ITeam iTeam);
 
     PlanetStaticObject getTeamPlanet();
+
+    String getTeamName();
 }
