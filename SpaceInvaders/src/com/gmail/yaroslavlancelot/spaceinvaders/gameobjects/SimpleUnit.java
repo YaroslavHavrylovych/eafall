@@ -18,9 +18,7 @@ public class SimpleUnit extends Sprite {
     public static final String TAG = SimpleUnit.class.getCanonicalName();
     /** physics body associated with current object {@link Sprite} */
     private Body mSimpleWarriorBody;
-    /*
-     * main target abscissa and ordinate
-     */
+    /* main target abscissa and ordinate */
     private float mMainTargetX, mMainTargetY;
     /** max velocity for this unit */
     private float mMaxVelocity = 2.0f;

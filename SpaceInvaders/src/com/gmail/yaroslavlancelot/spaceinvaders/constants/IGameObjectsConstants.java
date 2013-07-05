@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.utils.constants;
+package com.gmail.yaroslavlancelot.spaceinvaders.constants;
 
 /** game constants for game objects */
 public interface IGameObjectsConstants {

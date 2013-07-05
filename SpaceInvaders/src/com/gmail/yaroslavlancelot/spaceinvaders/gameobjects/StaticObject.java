@@ -1,8 +1,8 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.touch.ISpriteTouchListener;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.touch.ISpriteTouchable;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ISpriteTouchListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ISpriteTouchable;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;

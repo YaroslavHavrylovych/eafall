@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.utils.touch;
+package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch;
 
 import org.andengine.input.touch.TouchEvent;
 

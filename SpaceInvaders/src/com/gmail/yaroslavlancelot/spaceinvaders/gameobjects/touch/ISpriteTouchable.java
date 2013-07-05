@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.utils.touch;
+package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch;
 
 /** if some class extends this interface, this will marks objects as touchable */
 public interface ISpriteTouchable {
