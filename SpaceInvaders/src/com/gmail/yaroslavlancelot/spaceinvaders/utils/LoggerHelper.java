@@ -15,6 +15,26 @@ public final class LoggerHelper {
      * @param methodName invoked method name
      */
     public static void methodInvocation(String tag, String methodName) {
-        Log.v(tag, methodName + "(params) has been invoked");
+        printDebugMessage(tag, methodName + "(params) has been invoked");
+    }
+
+    /**
+     * Print in verbose some message
+     *
+     * @param tag log TAG
+     * @param message message text
+     */
+    public static void printVerboseMessage(String tag, String message) {
+        Log.v(tag, message);
+    }
+
+    /**
+     * Print in debug some message
+     *
+     * @param tag log TAG
+     * @param message message text
+     */
+    public static void printDebugMessage(String tag, String message) {
+        Log.d(tag, message);
     }
 }
