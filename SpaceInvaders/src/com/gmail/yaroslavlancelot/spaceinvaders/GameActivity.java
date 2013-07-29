@@ -1,6 +1,5 @@
 package com.gmail.yaroslavlancelot.spaceinvaders;
 
-import android.view.ScaleGestureDetector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -10,6 +9,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.SimpleUnit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.StaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ISpriteTouchListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.MainSceneTouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.Team;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
@@ -17,7 +17,6 @@ import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
-import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
@@ -71,12 +70,10 @@ public class GameActivity extends BaseGameActivity {
     private Team mBlueTeam;
     /** game camera */
     private SmoothCamera mCamera;
-    /** for zoom operations detecting (motions with two fingers) */
-    private ScaleGestureDetector mMapZoomScaleGestureDetector = new ScaleGestureDetector(this, new MapZoomScaleGestureDetector());
 
     @Override
     public EngineOptions onCreateEngineOptions() {
-        mCamera = new SmoothCamera(0, 0, sCameraWidth, sCameraHeight, 10, 10, 1.0f);
+        mCamera = new SmoothCamera(0, 0, sCameraWidth, sCameraHeight, 200f, 200f, 1.0f);
         return new EngineOptions(
                 true, ScreenOrientation.LANDSCAPE_FIXED, new RatioResolutionPolicy(sCameraWidth, sCameraHeight), mCamera);
     }
@@ -219,69 +216,7 @@ public class GameActivity extends BaseGameActivity {
         return warrior;
     }
 
-    private float stickToBorderOrLeftValue(float value, float minValue, float maxValue) {
-        if (value > maxValue)
-            return maxValue;
-        else if (value < minValue)
-            return minValue;
-        return value;
-    }
-
     private void initSceneTouch() {
-        mScene.setOnSceneTouchListener(new IOnSceneTouchListener() {
-            private float xPos;
-            private float yPos;
-
-            @Override
-            public boolean onSceneTouchEvent(final Scene pScene, final TouchEvent pSceneTouchEvent) {
-                LoggerHelper.methodInvocation(TAG, "onSceneTouchEvent");
-                //zoom
-                mMapZoomScaleGestureDetector.onTouchEvent(pSceneTouchEvent.getMotionEvent());
-                LoggerHelper.printVerboseMessage(TAG, "number of fingers in the screen = " + pSceneTouchEvent.getMotionEvent().getPointerCount());
-                if (pSceneTouchEvent.getMotionEvent().getPointerCount() >= 2) return true;
-
-                // moving
-                switch (pSceneTouchEvent.getAction()) {
-                    case TouchEvent.ACTION_DOWN:
-                        xPos = pSceneTouchEvent.getX();
-                        yPos = pSceneTouchEvent.getY();
-                    case TouchEvent.ACTION_MOVE:
-                        float newPositionX = mCamera.getCenterX() + (xPos - pSceneTouchEvent.getX()),
-                                newPositionY = mCamera.getCenterY() + (yPos - pSceneTouchEvent.getY());
-
-                        newPositionX = stickToBorderOrLeftValue(newPositionX, 0, sCameraWidth);
-                        newPositionY = stickToBorderOrLeftValue(newPositionY, 0, sCameraHeight);
-
-                        if (xPos != newPositionX || yPos != newPositionY) {
-                            mCamera.setCenterDirect(newPositionX, newPositionY);
-                            xPos = pSceneTouchEvent.getX();
-                            yPos = pSceneTouchEvent.getY();
-                        }
-                }
-                return true;
-            }
-        });
-    }
-
-    private class MapZoomScaleGestureDetector extends ScaleGestureDetector.SimpleOnScaleGestureListener {
-        private float mMaximumZoomFactor = 2.f;
-        private float mMinimumZoomFactor = 1.f;
-
-        @Override
-        public boolean onScale(final ScaleGestureDetector detector) {
-            LoggerHelper.methodInvocation(TAG, "onScale");
-
-            float scaleFactor = detector.getScaleFactor();
-            float nextZoomFactor = mCamera.getZoomFactor() * scaleFactor;
-
-            LoggerHelper.printVerboseMessage(TAG, "scaleFactor = " + scaleFactor);
-            LoggerHelper.printVerboseMessage(TAG, "nextZoomFactor = " + nextZoomFactor);
-
-            nextZoomFactor = stickToBorderOrLeftValue(nextZoomFactor, mMinimumZoomFactor, mMaximumZoomFactor);
-
-            if (nextZoomFactor != mCamera.getZoomFactor())
-                mCamera.setZoomFactor(nextZoomFactor);
-            return true;
-        }
+        mScene.setOnSceneTouchListener(new MainSceneTouchListener(mCamera, this));
     }
 }
