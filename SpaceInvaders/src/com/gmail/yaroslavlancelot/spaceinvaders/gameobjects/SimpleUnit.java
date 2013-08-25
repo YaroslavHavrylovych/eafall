@@ -4,6 +4,7 @@ import android.util.Log;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitPathUtil;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.sprite.Sprite;
@@ -18,16 +19,17 @@ public class SimpleUnit extends Sprite {
     public static final String TAG = SimpleUnit.class.getCanonicalName();
     /** physics body associated with current object {@link Sprite} */
     private Body mSimpleWarriorBody;
-    /* main target abscissa and ordinate */
-    private float mMainTargetX, mMainTargetY;
     /** max velocity for this unit */
     private float mMaxVelocity = 2.0f;
     /** update time for current object */
     private float mUpdateCycleTime = .5f;
+    /** unit path */
+    private UnitPathUtil.UnitPath mUnitPath;
 
     public SimpleUnit(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
         super(x, y, textureRegion, vertexBufferObjectManager);
         registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new SimpleUnitTimerCallback()));
+        mUnitPath = UnitPathUtil.getUnitPathAccordingToStartAbscissa(x);
     }
 
     /**
@@ -39,19 +41,6 @@ public class SimpleUnit extends Sprite {
         mSimpleWarriorBody = body;
     }
 
-    /**
-     * main target coordinates for current unit
-     *
-     * @param mainTargetX main target abscissa
-     * @param mainTargetY main target ordinate
-     */
-    public void setMainTarget(float mainTargetX, float mainTargetY) {
-        LoggerHelper.methodInvocation(TAG, "setMainTarget");
-        mMainTargetX = mainTargetX;
-        mMainTargetY = mainTargetY;
-        Log.v(TAG, "mMainTargetX = " + mMainTargetX + ", mMainTargetY = " + mMainTargetY);
-    }
-
     @Override
     public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
         return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
@@ -59,11 +48,17 @@ public class SimpleUnit extends Sprite {
 
     /** used for update current object in game loop */
     protected class SimpleUnitTimerCallback implements ITimerCallback {
+        private float[] mTwoDimensionFloatArray = new float[2];
+
         @Override
         public void onTimePassed(TimerHandler pTimerHandler) {
             LoggerHelper.methodInvocation(TAG, "onTimePassed");
-            float distanceX = mMainTargetX - getX(),
-                    distanceY = mMainTargetY - getY();
+            mTwoDimensionFloatArray[0] = getX();
+            mTwoDimensionFloatArray[1] = getY();
+            mUnitPath.getNextPathPoint(mTwoDimensionFloatArray, mTwoDimensionFloatArray);
+
+            float distanceX = mTwoDimensionFloatArray[0] - getX(),
+                    distanceY = mTwoDimensionFloatArray[1] - getY();
             float absDistanceX = Math.abs(distanceX),
                     absDistanceY = Math.abs(distanceY),
                     maxAbsDistance = absDistanceX > absDistanceY ? absDistanceX : absDistanceY;
@@ -74,7 +69,6 @@ public class SimpleUnit extends Sprite {
             final Vector2 velocity = Vector2Pool.obtain(ordinateSpeed, abscissaSpeed);
             mSimpleWarriorBody.setLinearVelocity(velocity);
             Vector2Pool.recycle(velocity);
-
         }
     }
 }

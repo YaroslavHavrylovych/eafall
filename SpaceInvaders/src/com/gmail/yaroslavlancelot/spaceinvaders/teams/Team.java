@@ -14,8 +14,8 @@ public class Team implements ITeam {
     private PlanetStaticObject mTeamPlanet;
 
     public Team(final String teamName, final PlanetStaticObject teamPlanet) {
-        mFriendlyTeams = new ArrayList<ITeam>();
-        mTeamObjects = new ArrayList<Sprite>();
+        mFriendlyTeams = new ArrayList<ITeam>(1);
+        mTeamObjects = new ArrayList<Sprite>(20);
         mTeamPlanet = teamPlanet;
         mTeamName = teamName;
     }
@@ -64,5 +64,15 @@ public class Team implements ITeam {
     @Override
     public PlanetStaticObject getTeamPlanet() {
         return mTeamPlanet;
+    }
+
+    @Override
+    public List<ITeam> getFriendlyTeams() {
+        return mFriendlyTeams;
+    }
+
+    @Override
+    public List<Sprite> getTeamUnits() {
+        return mTeamObjects;
     }
 }

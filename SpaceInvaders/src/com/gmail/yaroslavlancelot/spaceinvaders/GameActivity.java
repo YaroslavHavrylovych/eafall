@@ -41,9 +41,9 @@ public class GameActivity extends BaseGameActivity {
     /** tag, which is used for debugging purpose */
     public static final String TAG = GameActivity.class.getCanonicalName();
     /** Camera width. Width of part of the screen which is currently viewed by user */
-    private static final int sCameraWidth = 800;
+    public static final int sCameraWidth = 800;
     /** Camera height. Height of part of the screen which is currently viewed by user */
-    private static final int sCameraHeight = 480;
+    public static final int sCameraHeight = 480;
     /** {@link FixtureDef} for obstacles (static bodies) */
     private final FixtureDef mStaticBodyFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f);
     /*
@@ -198,7 +198,7 @@ public class GameActivity extends BaseGameActivity {
                         if (!pSceneTouchEvent.isActionUp()) return true;
 
                         ITextureRegion textureRegion = initiatedTeam.getTeamName().equals(IGameObjectsConstants.RED_TEAM_NAME) ? mRedWarriorTextureRegion : mBlueWarriorTextureRegion;
-                        createUnitForTeam(textureRegion, initiatedTeam, team);
+                        createUnitForTeam(textureRegion, initiatedTeam);
                         return true;
                     }
                 };
@@ -209,10 +209,9 @@ public class GameActivity extends BaseGameActivity {
         }
     }
 
-    private SimpleUnit createUnitForTeam(final ITextureRegion textureRegion, final ITeam unitTeam, final ITeam teamAgainst) {
+    private SimpleUnit createUnitForTeam(final ITextureRegion textureRegion, final ITeam unitTeam) {
         SimpleUnit warrior = createSimpleUnit(unitTeam.getTeamPlanet().getSpawnPointX(), unitTeam.getTeamPlanet().getSpawnPointY(), textureRegion, mScene);
         unitTeam.addObjectToTeam(warrior);
-        warrior.setMainTarget(teamAgainst.getTeamPlanet().getSpawnPointX(), teamAgainst.getTeamPlanet().getSpawnPointY());
         return warrior;
     }
 
