@@ -8,11 +8,14 @@ import com.gmail.yaroslavlancelot.spaceinvaders.constants.IGameObjectsConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.SimpleUnit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.StaticObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.gameevents.ISimpleUnitDestroyedListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.gameevents.ISimpleUnitEnemiesUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ISpriteTouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.MainSceneTouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.Team;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitPathUtil;
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
@@ -61,7 +64,7 @@ public class GameActivity extends BaseGameActivity {
     /** contains game obstacles and other static objects */
     private HashMap<String, StaticObject> mStaticObjects = new HashMap<String, StaticObject>();
     /** contains whole game units/warriors */
-    private ArrayList<SimpleUnit> mSimpleUnitObjects = new ArrayList<SimpleUnit>();
+    private ArrayList<SimpleUnit> mSimpleUnitObjects = new ArrayList<SimpleUnit>(50);
     /** all teams in current game */
     private List<ITeam> mITeamsList = new ArrayList<ITeam>();
     /** red team */
@@ -70,6 +73,25 @@ public class GameActivity extends BaseGameActivity {
     private Team mBlueTeam;
     /** game camera */
     private SmoothCamera mCamera;
+    /** */
+    private ISimpleUnitEnemiesUpdater mRedTeamEnemiesUpdater = new RedPlanetSimpleUnitEnemiesUpdater();
+    /** */
+    private ISimpleUnitEnemiesUpdater mBlueTeamEnemiesUpdater = new BluePlanetSimpleUnitEnemiesUpdater();
+    /** */
+    private ISimpleUnitDestroyedListener mRedTeamDestroyedListener = new RedPlanetSimpleUnitDestroyedListener();
+    /** */
+    private ISimpleUnitDestroyedListener mBlueTeamDestroyedListener = new BluePlanetSimpleUnitDestroyedListener();
+
+    public static List<SimpleUnit> getEnemies(final SimpleUnit simpleUnit, ITeam enemyTeam) {
+        List<SimpleUnit> enemies = enemyTeam.getTeamUnits();
+        List<SimpleUnit> enemiesInView = new ArrayList<SimpleUnit>(5);
+        for (SimpleUnit enemy : enemies) {
+            if (UnitPathUtil.getDistanceBetweenPoints(enemy.getX(), enemy.getY(),
+                    simpleUnit.getX(), simpleUnit.getY()) < simpleUnit.getViewRadius())
+                enemiesInView.add(enemy);
+        }
+        return enemiesInView;
+    }
 
     @Override
     public EngineOptions onCreateEngineOptions() {
@@ -212,10 +234,52 @@ public class GameActivity extends BaseGameActivity {
     private SimpleUnit createUnitForTeam(final ITextureRegion textureRegion, final ITeam unitTeam) {
         SimpleUnit warrior = createSimpleUnit(unitTeam.getTeamPlanet().getSpawnPointX(), unitTeam.getTeamPlanet().getSpawnPointY(), textureRegion, mScene);
         unitTeam.addObjectToTeam(warrior);
+        warrior.setEnemiesUpdater(unitTeam.equals(mRedTeam) ? mRedTeamEnemiesUpdater : mBlueTeamEnemiesUpdater);
+        warrior.setUnitDestroyedListener(
+                unitTeam.equals(mRedTeam) ? mRedTeamDestroyedListener : mBlueTeamDestroyedListener);
         return warrior;
     }
 
     private void initSceneTouch() {
         mScene.setOnSceneTouchListener(new MainSceneTouchListener(mCamera, this));
+    }
+
+    private class RedPlanetSimpleUnitEnemiesUpdater implements ISimpleUnitEnemiesUpdater {
+        @Override
+        public List<SimpleUnit> getEnemies(final SimpleUnit simpleUnit) {
+            return GameActivity.getEnemies(simpleUnit, mBlueTeam);
+        }
+    }
+
+    private class BluePlanetSimpleUnitEnemiesUpdater implements ISimpleUnitEnemiesUpdater {
+        @Override
+        public List<SimpleUnit> getEnemies(final SimpleUnit simpleUnit) {
+            return GameActivity.getEnemies(simpleUnit, mRedTeam);
+        }
+    }
+
+    private class RedPlanetSimpleUnitDestroyedListener implements ISimpleUnitDestroyedListener {
+        @Override
+        public void unitDestroyed(final SimpleUnit simpleUnit) {
+            mRedTeam.removeObjectFromTeam(simpleUnit);
+            detachUnit(simpleUnit);
+        }
+    }
+
+    private class BluePlanetSimpleUnitDestroyedListener implements ISimpleUnitDestroyedListener {
+        @Override
+        public void unitDestroyed(final SimpleUnit simpleUnit) {
+            mBlueTeam.removeObjectFromTeam(simpleUnit);
+            detachUnit(simpleUnit);
+        }
+    }
+
+    private void detachUnit(final SimpleUnit simpleUnit) {
+        GameActivity.this.runOnUpdateThread(new Runnable() {
+            @Override
+            public void run() {
+                mScene.detachChild(simpleUnit);
+            }
+        });
     }
 }

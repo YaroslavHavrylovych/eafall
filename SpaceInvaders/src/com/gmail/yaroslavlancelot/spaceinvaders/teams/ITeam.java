@@ -1,19 +1,19 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.teams;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.PlanetStaticObject;
-import org.andengine.entity.sprite.Sprite;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.SimpleUnit;
 
 import java.util.List;
 
 /**  */
 public interface ITeam {
-    void addObjectToTeam(Sprite sprite);
+    void addObjectToTeam(SimpleUnit sprite);
 
     @SuppressWarnings("unused")
-    void removeObjectFromTeam(Sprite sprite);
+    void removeObjectFromTeam(SimpleUnit sprite);
 
     @SuppressWarnings("unused")
-    boolean isObjectInTeam(Sprite sprite);
+    boolean isObjectInTeam(SimpleUnit sprite);
 
     void addFriendlyTeam(ITeam iTeam);
 
@@ -26,7 +26,7 @@ public interface ITeam {
     List<ITeam> getFriendlyTeams();
 
     @SuppressWarnings("unused")
-    List<Sprite> getTeamUnits();
+    List<SimpleUnit> getTeamUnits();
 
     PlanetStaticObject getTeamPlanet();
 
