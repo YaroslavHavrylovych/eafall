@@ -2,6 +2,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch;
 
 import android.content.Context;
 import android.view.ScaleGestureDetector;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
@@ -13,7 +14,7 @@ public class MainSceneTouchListener implements IOnSceneTouchListener {
     /** previous event ordinate */
     private float xPos;
     /** if user want to move camera after taking one finger from the screen just after zoom */
-    private boolean isInPreviousEventWasMoreThanOneFinger = false;
+    private boolean mIsInPreviousEventWasMoreThanOneFinger = false;
     /** camera width */
     private float mCameraWidth;
     /** camera height */
@@ -35,12 +36,12 @@ public class MainSceneTouchListener implements IOnSceneTouchListener {
         //zoom
         mMapZoomScaleGestureDetector.onTouchEvent(pSceneTouchEvent.getMotionEvent());
         if (pSceneTouchEvent.getMotionEvent().getPointerCount() >= 2)
-            return isInPreviousEventWasMoreThanOneFinger = true;
+            return mIsInPreviousEventWasMoreThanOneFinger = true;
 
-        if (isInPreviousEventWasMoreThanOneFinger && pSceneTouchEvent.getAction() != TouchEvent.ACTION_DOWN) {
+        if (mIsInPreviousEventWasMoreThanOneFinger && pSceneTouchEvent.getAction() != TouchEvent.ACTION_DOWN) {
             xPos = pSceneTouchEvent.getX();
             yPos = pSceneTouchEvent.getY();
-            isInPreviousEventWasMoreThanOneFinger = false;
+            mIsInPreviousEventWasMoreThanOneFinger = false;
             return true;
         }
 

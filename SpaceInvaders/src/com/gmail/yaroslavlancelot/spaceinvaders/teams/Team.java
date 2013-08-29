@@ -1,7 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.teams;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.PlanetStaticObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.SimpleUnit;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.Unit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,13 +9,13 @@ import java.util.List;
 /**  */
 public class Team implements ITeam {
     private final String mTeamName;
-    private List<SimpleUnit> mTeamObjects;
+    private List<Unit> mTeamObjects;
     private List<ITeam> mFriendlyTeams;
     private PlanetStaticObject mTeamPlanet;
 
     public Team(final String teamName, final PlanetStaticObject teamPlanet) {
         mFriendlyTeams = new ArrayList<ITeam>(1);
-        mTeamObjects = new ArrayList<SimpleUnit>(20);
+        mTeamObjects = new ArrayList<Unit>(20);
         mTeamPlanet = teamPlanet;
         mTeamName = teamName;
     }
@@ -32,17 +32,17 @@ public class Team implements ITeam {
     }
 
     @Override
-    public void addObjectToTeam(final SimpleUnit sprite) {
+    public void addObjectToTeam(final Unit sprite) {
         mTeamObjects.add(sprite);
     }
 
     @Override
-    public void removeObjectFromTeam(final SimpleUnit sprite) {
+    public void removeObjectFromTeam(final Unit sprite) {
         mTeamObjects.remove(sprite);
     }
 
     @Override
-    public boolean isObjectInTeam(final SimpleUnit sprite) {
+    public boolean isObjectInTeam(final Unit sprite) {
         return mTeamObjects.contains(sprite);
     }
 
@@ -72,7 +72,7 @@ public class Team implements ITeam {
     }
 
     @Override
-    public List<SimpleUnit> getTeamUnits() {
+    public List<Unit> getTeamUnits() {
         return mTeamObjects;
     }
 }

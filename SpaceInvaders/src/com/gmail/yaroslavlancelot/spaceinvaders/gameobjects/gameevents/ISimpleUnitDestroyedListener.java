@@ -1,7 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.gameevents;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.SimpleUnit;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.Unit;
 
 public interface ISimpleUnitDestroyedListener {
-    public void unitDestroyed(SimpleUnit simpleUnit);
+    public void unitDestroyed(Unit unit);
 }

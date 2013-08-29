@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch;
+package com.gmail.yaroslavlancelot.spaceinvaders.utils;
 
 /** Helping functions to work with touch events */
 public final class TouchUtils {

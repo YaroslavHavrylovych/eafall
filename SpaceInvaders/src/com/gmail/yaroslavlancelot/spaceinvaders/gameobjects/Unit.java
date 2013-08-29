@@ -18,9 +18,9 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import java.util.List;
 
 /** Basic class for all dynamic game units */
-public class SimpleUnit extends Sprite {
+public class Unit extends Sprite {
     /** tag, which is used for debugging purpose */
-    public static final String TAG = SimpleUnit.class.getCanonicalName();
+    public static final String TAG = Unit.class.getCanonicalName();
     /** physics body associated with current object {@link Sprite} */
     private Body mSimpleWarriorBody;
     /** max velocity for this unit */
@@ -31,20 +31,20 @@ public class SimpleUnit extends Sprite {
     private int mUnitHealth = 100;
     /** unit damage */
     private int mDamage = 15;
-    /** */
+    /** attack radius of current unit */
     private int mAttackRadius = 40;
-    /** */
+    /** area in which unit can search for enemies */
     private int mViewRadius = 100;
-    /** */
-    private SimpleUnit mUnitToAttack;
-    /** */
+    /** currently attacked unit */
+    private Unit mUnitToAttack;
+    /** callback for using to update unit visible enemies */
     private ISimpleUnitEnemiesUpdater mEnemiesUpdater;
-    /** */
+    /** callback to send message about unit death */
     private ISimpleUnitDestroyedListener mUnitDestroyedListener;
     /** unit path */
     private UnitPathUtil.UnitPath mUnitPath;
 
-    public SimpleUnit(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
+    public Unit(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
         super(x, y, textureRegion, vertexBufferObjectManager);
         registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new SimpleUnitTimerCallback()));
         mUnitPath = UnitPathUtil.getUnitPathAccordingToStartAbscissa(x);
@@ -108,9 +108,9 @@ public class SimpleUnit extends Sprite {
 
             // search for new unit to attack
             if (mEnemiesUpdater != null) {
-                List<SimpleUnit> simpleUnits = mEnemiesUpdater.getEnemies(SimpleUnit.this);
-                if (simpleUnits != null && !simpleUnits.isEmpty()) {
-                    mUnitToAttack = simpleUnits.get(0);
+                List<Unit> units = mEnemiesUpdater.getEnemies(Unit.this);
+                if (units != null && !units.isEmpty()) {
+                    mUnitToAttack = units.get(0);
                     attackOrMove();
                     return;
                 }
@@ -127,9 +127,11 @@ public class SimpleUnit extends Sprite {
         private void attackOrMove() {
             // check if we already can attack
             if (UnitPathUtil.getDistanceBetweenPoints(
-                    getX(), getY(), mUnitToAttack.getX(), mUnitToAttack.getY()) < mAttackRadius)
+                    getX(), getY(), mUnitToAttack.getX(), mUnitToAttack.getY()) < mAttackRadius) {
                 mUnitToAttack.hitUnit(mDamage);
-            else
+                // stay on position
+                setUnitLinearVelocity(0, 0);
+            } else
                 // pursuit attacked unit
                 moveToPoint(mUnitToAttack.getX(), mUnitToAttack.getY());
         }
@@ -144,7 +146,11 @@ public class SimpleUnit extends Sprite {
                     abscissaSpeed = mMaxVelocity * distanceY / maxAbsDistance;
 
             Log.v(TAG, "xSpeed = " + ordinateSpeed + ", ySpeed = " + abscissaSpeed);
-            final Vector2 velocity = Vector2Pool.obtain(ordinateSpeed, abscissaSpeed);
+            setUnitLinearVelocity(ordinateSpeed, abscissaSpeed);
+        }
+
+        private void setUnitLinearVelocity(float x, float y) {
+            final Vector2 velocity = Vector2Pool.obtain(x, y);
             mSimpleWarriorBody.setLinearVelocity(velocity);
             Vector2Pool.recycle(velocity);
         }
