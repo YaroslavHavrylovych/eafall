@@ -6,16 +6,16 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.IGameObjectsConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.PlanetStaticObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.StaticObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.gameevents.ISimpleUnitDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.gameevents.ISimpleUnitEnemiesUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ISpriteTouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.MainSceneTouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.Team;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.TeamUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.TeamUtils;
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
@@ -84,7 +84,7 @@ public class GameActivity extends BaseGameActivity {
 
     @Override
     public EngineOptions onCreateEngineOptions() {
-        mCamera = new SmoothCamera(0, 0, sCameraWidth, sCameraHeight, 200f, 200f, 1.0f);
+        mCamera = new SmoothCamera(0, 0, sCameraWidth, sCameraHeight, 300f, 150f, 1.0f);
         return new EngineOptions(
                 true, ScreenOrientation.LANDSCAPE_FIXED, new RatioResolutionPolicy(sCameraWidth, sCameraHeight), mCamera);
     }
@@ -235,6 +235,15 @@ public class GameActivity extends BaseGameActivity {
         mScene.setOnSceneTouchListener(new MainSceneTouchListener(mCamera, this));
     }
 
+    private void detachUnit(final Unit unit) {
+        GameActivity.this.runOnUpdateThread(new Runnable() {
+            @Override
+            public void run() {
+                mScene.detachChild(unit);
+            }
+        });
+    }
+
     private class RedPlanetSimpleUnitEnemiesUpdater implements ISimpleUnitEnemiesUpdater {
         @Override
         public List<Unit> getEnemies(final Unit unit) {
@@ -263,14 +272,5 @@ public class GameActivity extends BaseGameActivity {
             mBlueTeam.removeObjectFromTeam(unit);
             detachUnit(unit);
         }
-    }
-
-    private void detachUnit(final Unit unit) {
-        GameActivity.this.runOnUpdateThread(new Runnable() {
-            @Override
-            public void run() {
-                mScene.detachChild(unit);
-            }
-        });
     }
 }

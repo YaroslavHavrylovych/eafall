@@ -32,9 +32,9 @@ public class Unit extends Sprite {
     /** unit damage */
     private int mDamage = 15;
     /** attack radius of current unit */
-    private int mAttackRadius = 40;
+    private int mAttackRadius = 100;
     /** area in which unit can search for enemies */
-    private int mViewRadius = 100;
+    private int mViewRadius = 150;
     /** currently attacked unit */
     private Unit mUnitToAttack;
     /** callback for using to update unit visible enemies */

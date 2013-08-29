@@ -10,9 +10,13 @@ import org.andengine.input.touch.TouchEvent;
 
 public class MainSceneTouchListener implements IOnSceneTouchListener {
     /** previous event abscissa */
-    private float yPos;
+    private float mYPos;
     /** previous event ordinate */
-    private float xPos;
+    private float mXPos;
+    /** */
+    private float mPraPreviousPositionX;
+    /** */
+    private float mPraPreviousPositionY;
     /** if user want to move camera after taking one finger from the screen just after zoom */
     private boolean mIsInPreviousEventWasMoreThanOneFinger = false;
     /** camera width */
@@ -39,8 +43,10 @@ public class MainSceneTouchListener implements IOnSceneTouchListener {
             return mIsInPreviousEventWasMoreThanOneFinger = true;
 
         if (mIsInPreviousEventWasMoreThanOneFinger && pSceneTouchEvent.getAction() != TouchEvent.ACTION_DOWN) {
-            xPos = pSceneTouchEvent.getX();
-            yPos = pSceneTouchEvent.getY();
+            mPraPreviousPositionX = mXPos;
+            mXPos = pSceneTouchEvent.getX();
+            mPraPreviousPositionY = mYPos;
+            mYPos = pSceneTouchEvent.getY();
             mIsInPreviousEventWasMoreThanOneFinger = false;
             return true;
         }
@@ -48,25 +54,34 @@ public class MainSceneTouchListener implements IOnSceneTouchListener {
         // moving
         switch (pSceneTouchEvent.getAction()) {
             case TouchEvent.ACTION_DOWN:
-                xPos = pSceneTouchEvent.getX();
-                yPos = pSceneTouchEvent.getY();
+                mPraPreviousPositionX = mXPos;
+                mPraPreviousPositionY = mYPos;
+                mXPos = pSceneTouchEvent.getX();
+                mYPos = pSceneTouchEvent.getY();
                 break;
             case TouchEvent.ACTION_CANCEL:
             case TouchEvent.ACTION_MOVE:
-                float newPositionX = mCamera.getCenterX() + (xPos - pSceneTouchEvent.getX()),
-                        newPositionY = mCamera.getCenterY() + (yPos - pSceneTouchEvent.getY());
+                float newPositionX = mCamera.getCenterX() + (mXPos - pSceneTouchEvent.getX()),
+                        newPositionY = mCamera.getCenterY() + (mYPos - pSceneTouchEvent.getY());
 
                 newPositionX = TouchUtils.stickToBorderOrLeftValue(newPositionX, 0, mCameraWidth);
                 newPositionY = TouchUtils.stickToBorderOrLeftValue(newPositionY, 0, mCameraHeight);
 
-                if (xPos != newPositionX || yPos != newPositionY) {
+                if ((!equals(mXPos, newPositionX) || !equals(mYPos, newPositionY)) &&
+                        (!equals(mPraPreviousPositionX, newPositionX) || !equals(mPraPreviousPositionY, newPositionY))) {
                     mCamera.setCenter(newPositionX, newPositionY);
-                    xPos = pSceneTouchEvent.getX();
-                    yPos = pSceneTouchEvent.getY();
+                    mPraPreviousPositionX = mXPos;
+                    mPraPreviousPositionY = mYPos;
+                    mXPos = pSceneTouchEvent.getX();
+                    mYPos = pSceneTouchEvent.getY();
                 }
                 break;
         }
         return true;
+    }
+
+    private boolean equals(float fl1, float fl2) {
+        return Math.round(fl1 * 100 / mCamera.getZoomFactor()) == Math.round(fl2 * 100 / mCamera.getZoomFactor());
     }
 
     private class MapZoomScaleGestureDetector extends ScaleGestureDetector.SimpleOnScaleGestureListener {
