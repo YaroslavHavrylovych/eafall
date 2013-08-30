@@ -24,6 +24,7 @@ public final class LoggerHelper {
      * @param tag log TAG
      * @param message message text
      */
+    @SuppressWarnings("unused")
     public static void printVerboseMessage(String tag, String message) {
         Log.v(tag, message);
     }
@@ -36,5 +37,15 @@ public final class LoggerHelper {
      */
     public static void printDebugMessage(String tag, String message) {
         Log.d(tag, message);
+    }
+
+    /**
+     * Print in error some message
+     *
+     * @param tag log TAG
+     * @param message message text
+     */
+    public static void printErrorMessage(String tag, String message) {
+        Log.e(tag, message);
     }
 }

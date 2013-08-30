@@ -1,5 +1,8 @@
 package com.gmail.yaroslavlancelot.spaceinvaders;
 
+import android.util.DisplayMetrics;
+import android.view.Display;
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -16,6 +19,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.Team;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TeamUtils;
+
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
@@ -26,6 +30,7 @@ import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.input.touch.controller.MultiTouch;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
@@ -84,7 +89,13 @@ public class GameActivity extends BaseGameActivity {
 
     @Override
     public EngineOptions onCreateEngineOptions() {
-        mCamera = new SmoothCamera(0, 0, sCameraWidth, sCameraHeight, 300f, 150f, 1.0f);
+        mCamera = new SmoothCamera(0, 0, sCameraWidth, sCameraHeight, sCameraWidth, sCameraHeight, 1.0f);
+        // multi-touch
+        if(!MultiTouch.isSupported(this)) {
+            LoggerHelper.printErrorMessage(TAG, "MultiTouch isn't supported");
+            finish();
+        }
+
         return new EngineOptions(
                 true, ScreenOrientation.LANDSCAPE_FIXED, new RatioResolutionPolicy(sCameraWidth, sCameraHeight), mCamera);
     }
@@ -108,6 +119,7 @@ public class GameActivity extends BaseGameActivity {
     @Override
     public void onCreateScene(OnCreateSceneCallback onCreateSceneCallback) {
         mScene = new Scene();
+
         mScene.setBackground(new Background(0, 0, 0));
         mPhysicsWorld = new PhysicsWorld(new Vector2(0, 0), false);
         mScene.registerUpdateHandler(mPhysicsWorld);
@@ -232,7 +244,11 @@ public class GameActivity extends BaseGameActivity {
     }
 
     private void initSceneTouch() {
-        mScene.setOnSceneTouchListener(new MainSceneTouchListener(mCamera, this));
+        Display display = getWindowManager().getDefaultDisplay();
+        DisplayMetrics metrics = new DisplayMetrics();
+        display.getMetrics(metrics);
+        float screenToSceneRatio = metrics.widthPixels / sCameraWidth;
+        mScene.setOnSceneTouchListener(new MainSceneTouchListener(mCamera, this, screenToSceneRatio));
     }
 
     private void detachUnit(final Unit unit) {
