@@ -2,7 +2,6 @@ package com.gmail.yaroslavlancelot.spaceinvaders;
 
 import android.util.DisplayMetrics;
 import android.view.Display;
-
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -19,7 +18,6 @@ import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.Team;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TeamUtils;
-
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
@@ -89,9 +87,12 @@ public class GameActivity extends BaseGameActivity {
 
     @Override
     public EngineOptions onCreateEngineOptions() {
+        // init camera
         mCamera = new SmoothCamera(0, 0, sCameraWidth, sCameraHeight, sCameraWidth, sCameraHeight, 1.0f);
+        mCamera.setBounds(0, 0, sCameraWidth, sCameraHeight);
+        mCamera.setBoundsEnabled(true);
         // multi-touch
-        if(!MultiTouch.isSupported(this)) {
+        if (!MultiTouch.isSupported(this)) {
             LoggerHelper.printErrorMessage(TAG, "MultiTouch isn't supported");
             finish();
         }
@@ -134,6 +135,8 @@ public class GameActivity extends BaseGameActivity {
         mBlueTeam.getTeamPlanet().setSpawnPoint(sCameraWidth - 32 - 15, sCameraHeight / 2);
         mTeams.add(mBlueTeam);
 
+        createBounds();
+
         initPlanetsTouchListeners();
 
         initSceneTouch();
@@ -159,7 +162,7 @@ public class GameActivity extends BaseGameActivity {
     private StaticObject createStaticObject(float x, float y, ITextureRegion textureRegion, String key) {
         LoggerHelper.methodInvocation(TAG, "createStaticObject");
         StaticObject staticObjectSprite = new StaticObject(x, y, textureRegion, mEngine.getVertexBufferObjectManager());
-        PhysicsFactory.createBoxBody(mPhysicsWorld, staticObjectSprite, BodyDef.BodyType.StaticBody, mStaticBodyFixtureDef);
+        PhysicsFactory.createCircleBody(mPhysicsWorld, staticObjectSprite, BodyDef.BodyType.StaticBody, mStaticBodyFixtureDef);
         mScene.attachChild(staticObjectSprite);
         mStaticObjects.put(key, staticObjectSprite);
         return staticObjectSprite;
@@ -178,7 +181,7 @@ public class GameActivity extends BaseGameActivity {
     private PlanetStaticObject createPlanet(float x, float y, ITextureRegion textureRegion, String key) {
         LoggerHelper.methodInvocation(TAG, "createPlanet");
         PlanetStaticObject planetStaticObject = new PlanetStaticObject(x, y, textureRegion, mEngine.getVertexBufferObjectManager());
-        PhysicsFactory.createBoxBody(mPhysicsWorld, planetStaticObject, BodyDef.BodyType.StaticBody, mStaticBodyFixtureDef);
+        PhysicsFactory.createCircleBody(mPhysicsWorld, planetStaticObject, BodyDef.BodyType.StaticBody, mStaticBodyFixtureDef);
         mScene.attachChild(planetStaticObject);
         mStaticObjects.put(key, planetStaticObject);
         return planetStaticObject;
@@ -193,8 +196,8 @@ public class GameActivity extends BaseGameActivity {
      *
      * @return newly created {@link com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.Unit}
      */
-    private Unit createSimpleUnit(float x, float y, ITextureRegion textureRegion, Scene scene) {
-        LoggerHelper.methodInvocation(TAG, "createSimpleUnit");
+    private Unit createUnit(float x, float y, ITextureRegion textureRegion, Scene scene) {
+        LoggerHelper.methodInvocation(TAG, "createUnit");
         Unit mUnit = new Unit(x, y, textureRegion, mEngine.getVertexBufferObjectManager());
         final FixtureDef playerFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f);
         scene.attachChild(mUnit);
@@ -234,8 +237,16 @@ public class GameActivity extends BaseGameActivity {
         }
     }
 
+    private void createBounds() {
+        LoggerHelper.methodInvocation(TAG, "createBounds");
+        PhysicsFactory.createLineBody(mPhysicsWorld, -1, -1, -1, sCameraHeight + 1, mStaticBodyFixtureDef);
+        PhysicsFactory.createLineBody(mPhysicsWorld, -1, -1, sCameraWidth + 1, -1, mStaticBodyFixtureDef);
+        PhysicsFactory.createLineBody(mPhysicsWorld, sCameraWidth + 1, -1, sCameraWidth + 1, sCameraHeight + 1, mStaticBodyFixtureDef);
+        PhysicsFactory.createLineBody(mPhysicsWorld, sCameraWidth + 1, sCameraHeight + 1, -1, sCameraHeight + 1, mStaticBodyFixtureDef);
+    }
+
     private Unit createUnitForTeam(final ITextureRegion textureRegion, final ITeam unitTeam) {
-        Unit warrior = createSimpleUnit(unitTeam.getTeamPlanet().getSpawnPointX(), unitTeam.getTeamPlanet().getSpawnPointY(), textureRegion, mScene);
+        Unit warrior = createUnit(unitTeam.getTeamPlanet().getSpawnPointX(), unitTeam.getTeamPlanet().getSpawnPointY(), textureRegion, mScene);
         unitTeam.addObjectToTeam(warrior);
         warrior.setEnemiesUpdater(unitTeam.equals(mRedTeam) ? mRedTeamEnemiesUpdater : mBlueTeamEnemiesUpdater);
         warrior.setUnitDestroyedListener(
