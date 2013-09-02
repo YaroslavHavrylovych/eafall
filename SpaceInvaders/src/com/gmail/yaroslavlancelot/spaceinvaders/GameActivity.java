@@ -9,7 +9,8 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.IGameObjectsConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.StaticObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.Unit;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.units.HandsAttacker;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.units.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.gameevents.ISimpleUnitDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.gameevents.ISimpleUnitEnemiesUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ISpriteTouchListener;
@@ -192,20 +193,20 @@ public class GameActivity extends BaseGameActivity {
      *
      * @param x abscissa (top left corner) of created dynamic object
      * @param y ordinate (top left corner) of created dynamic object
-     * @param textureRegion static object {@link ITextureRegion} for creating new {@link com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.Unit}
+     * @param textureRegion static object {@link ITextureRegion} for creating new {@link com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.units.Unit}
      *
-     * @return newly created {@link com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.Unit}
+     * @return newly created {@link com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.units.Unit}
      */
     private Unit createUnit(float x, float y, ITextureRegion textureRegion, Scene scene) {
         LoggerHelper.methodInvocation(TAG, "createUnit");
-        Unit mUnit = new Unit(x, y, textureRegion, mEngine.getVertexBufferObjectManager());
+        Unit unit = new HandsAttacker(x, y, textureRegion, mEngine.getVertexBufferObjectManager());
         final FixtureDef playerFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f);
-        scene.attachChild(mUnit);
-        Body body = PhysicsFactory.createCircleBody(mPhysicsWorld, mUnit, BodyDef.BodyType.DynamicBody, playerFixtureDef);
-        mUnit.setBody(body);
-        mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(mUnit, body, true, true));
-        mUnits.add(mUnit);
-        return mUnit;
+        scene.attachChild(unit);
+        Body body = PhysicsFactory.createCircleBody(mPhysicsWorld, unit, BodyDef.BodyType.DynamicBody, playerFixtureDef);
+        unit.setBody(body);
+        mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(unit, body, true, true));
+        mUnits.add(unit);
+        return unit;
     }
 
     /** init planet touch listeners for all teams */

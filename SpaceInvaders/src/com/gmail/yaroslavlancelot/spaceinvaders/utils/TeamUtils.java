@@ -1,6 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.utils;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.Unit;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.units.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 
 import java.util.ArrayList;

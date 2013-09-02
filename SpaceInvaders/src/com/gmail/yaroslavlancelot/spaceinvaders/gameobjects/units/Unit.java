@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects;
+package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.units;
 
 import android.util.Log;
 import com.badlogic.gdx.math.Vector2;
@@ -18,37 +18,39 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import java.util.List;
 
 /** Basic class for all dynamic game units */
-public class Unit extends Sprite {
+public abstract class Unit extends Sprite {
     /** tag, which is used for debugging purpose */
     public static final String TAG = Unit.class.getCanonicalName();
     /** physics body associated with current object {@link Sprite} */
-    private Body mSimpleWarriorBody;
+    protected Body mSimpleWarriorBody;
     /** max velocity for this unit */
-    private float mMaxVelocity = 2.0f;
+    protected float mMaxVelocity = 2.0f;
     /** update time for current object */
-    private float mUpdateCycleTime = .5f;
+    protected float mUpdateCycleTime = .5f;
     /** unit health */
-    private int mUnitHealth = 100;
+    protected int mUnitHealth = 100;
     /** unit damage */
-    private int mDamage = 15;
+    protected int mDamage = 15;
     /** attack radius of current unit */
-    private int mAttackRadius = 100;
+    protected int mAttackRadius = 100;
     /** area in which unit can search for enemies */
-    private int mViewRadius = 150;
+    protected int mViewRadius = 150;
     /** currently attacked unit */
-    private Unit mUnitToAttack;
+    protected Unit mUnitToAttack;
     /** callback for using to update unit visible enemies */
-    private ISimpleUnitEnemiesUpdater mEnemiesUpdater;
+    protected ISimpleUnitEnemiesUpdater mEnemiesUpdater;
     /** callback to send message about unit death */
-    private ISimpleUnitDestroyedListener mUnitDestroyedListener;
+    protected ISimpleUnitDestroyedListener mUnitDestroyedListener;
     /** unit path */
-    private UnitPathUtil.UnitPath mUnitPath;
+    protected UnitPathUtil.UnitPath mUnitPath;
 
     public Unit(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
         super(x, y, textureRegion, vertexBufferObjectManager);
         registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new SimpleUnitTimerCallback()));
         mUnitPath = UnitPathUtil.getUnitPathAccordingToStartAbscissa(x);
     }
+
+    public abstract void hitUnit(int hitPower);
 
     /**
      * set physics body associated with current {@link Sprite}
@@ -57,14 +59,6 @@ public class Unit extends Sprite {
      */
     public void setBody(Body body) {
         mSimpleWarriorBody = body;
-    }
-
-    public synchronized void hitUnit(int hitPower) {
-        mUnitHealth -= hitPower;
-        if (mUnitHealth < 0) {
-            if (mUnitDestroyedListener != null)
-                mUnitDestroyedListener.unitDestroyed(this);
-        }
     }
 
     public void setEnemiesUpdater(final ISimpleUnitEnemiesUpdater enemiesUpdater) {
@@ -87,6 +81,8 @@ public class Unit extends Sprite {
     public int getViewRadius() {
         return mViewRadius;
     }
+
+    protected abstract void attackGoal();
 
     /** used for update current object in game loop */
     protected class SimpleUnitTimerCallback implements ITimerCallback {
@@ -128,7 +124,7 @@ public class Unit extends Sprite {
             // check if we already can attack
             if (UnitPathUtil.getDistanceBetweenPoints(
                     getX(), getY(), mUnitToAttack.getX(), mUnitToAttack.getY()) < mAttackRadius) {
-                mUnitToAttack.hitUnit(mDamage);
+                attackGoal();
                 // stay on position
                 setUnitLinearVelocity(0, 0);
             } else

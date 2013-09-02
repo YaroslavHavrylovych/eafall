@@ -1,7 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.teams;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.PlanetStaticObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.Unit;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.units.Unit;
 
 import java.util.ArrayList;
 import java.util.List;
