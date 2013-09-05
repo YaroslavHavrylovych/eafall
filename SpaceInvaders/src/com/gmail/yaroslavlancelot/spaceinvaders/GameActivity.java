@@ -2,6 +2,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders;
 
 import android.util.DisplayMetrics;
 import android.view.Display;
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -9,16 +10,17 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.IGameObjectsConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.StaticObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.units.HandsAttacker;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.units.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.gameevents.ISimpleUnitDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.gameevents.ISimpleUnitEnemiesUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ISpriteTouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.MainSceneTouchListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.units.HandsAttacker;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.units.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.Team;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TeamUtils;
+
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
