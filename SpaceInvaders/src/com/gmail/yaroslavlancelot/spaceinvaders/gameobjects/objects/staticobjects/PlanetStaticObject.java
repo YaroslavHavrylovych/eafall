@@ -32,7 +32,7 @@ public class PlanetStaticObject extends StaticObject {
     }
 
     public void buildFirstBuilding() {
-        final FirstBuildingStaticObject staticObject = new FirstBuildingStaticObject(16 - 3, 5f, TextureRegionHolderUtils.getInstance().getRegion(
+        final FirstBuildingStaticObject staticObject = new FirstBuildingStaticObject(16 - 3, 5f, TextureRegionHolderUtils.getInstance().getElement(
                 GameObjectsConstants.KEY_FIRST_BUILDING), getVertexBufferObjectManager());
         attachChild(staticObject);
         buildings.add(staticObject);
@@ -40,7 +40,7 @@ public class PlanetStaticObject extends StaticObject {
     }
 
     public void buildSecondBuilding() {
-        StaticObject staticObject = new FirstBuildingStaticObject(16 - 3, 22f, TextureRegionHolderUtils.getInstance().getRegion(
+        StaticObject staticObject = new FirstBuildingStaticObject(16 - 3, 22f, TextureRegionHolderUtils.getInstance().getElement(
                 GameObjectsConstants.KEY_SECOND_BUILDING), getVertexBufferObjectManager());
         attachChild(staticObject);
         buildings.add(staticObject);

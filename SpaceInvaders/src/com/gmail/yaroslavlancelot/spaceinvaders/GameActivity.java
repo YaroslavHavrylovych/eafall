@@ -114,14 +114,14 @@ public class GameActivity extends BaseGameActivity {
 
         BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(getTextureManager(), 29, 12, TextureOptions.BILINEAR);
         // warriors
-        mTextureRegionHolderUtils.addTextureRegion(GameObjectsConstants.KEY_RED_WARRIOR,
+        mTextureRegionHolderUtils.addElement(GameObjectsConstants.KEY_RED_WARRIOR,
                 BitmapTextureAtlasTextureRegionFactory.createFromAsset(smallObjectTexture, this, GameObjectsConstants.FILE_RED_WARRIOR, 0, 0));
-        mTextureRegionHolderUtils.addTextureRegion(GameObjectsConstants.KEY_BLUE_WARRIOR,
+        mTextureRegionHolderUtils.addElement(GameObjectsConstants.KEY_BLUE_WARRIOR,
                 BitmapTextureAtlasTextureRegionFactory.createFromAsset(smallObjectTexture, this, GameObjectsConstants.FILE_BLUE_WARRIOR, 12, 0));
         // buildings
-        mTextureRegionHolderUtils.addTextureRegion(GameObjectsConstants.KEY_FIRST_BUILDING,
+        mTextureRegionHolderUtils.addElement(GameObjectsConstants.KEY_FIRST_BUILDING,
                 BitmapTextureAtlasTextureRegionFactory.createFromAsset(smallObjectTexture, this, GameObjectsConstants.FILE_FIRST_BUILDING, 24, 0));
-        mTextureRegionHolderUtils.addTextureRegion(GameObjectsConstants.KEY_SECOND_BUILDING,
+        mTextureRegionHolderUtils.addElement(GameObjectsConstants.KEY_SECOND_BUILDING,
                 BitmapTextureAtlasTextureRegionFactory.createFromAsset(smallObjectTexture, this, GameObjectsConstants.FILE_SECOND_BUILDING, 24, 5));
 
         // loading
@@ -130,11 +130,11 @@ public class GameActivity extends BaseGameActivity {
 
         //* bigger objects
         BitmapTextureAtlas biggerObjectsTexture = new BitmapTextureAtlas(getTextureManager(), 192, 64, TextureOptions.BILINEAR);
-        mTextureRegionHolderUtils.addTextureRegion(GameObjectsConstants.KEY_SUN,
+        mTextureRegionHolderUtils.addElement(GameObjectsConstants.KEY_SUN,
                 BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, this, GameObjectsConstants.FILE_SUN, 0, 0));
-        mTextureRegionHolderUtils.addTextureRegion(GameObjectsConstants.KEY_RED_PLANET,
+        mTextureRegionHolderUtils.addElement(GameObjectsConstants.KEY_RED_PLANET,
                 BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, this, GameObjectsConstants.FILE_RED_PLANET, 64, 0));
-        mTextureRegionHolderUtils.addTextureRegion(GameObjectsConstants.KEY_BLUE_PLANET,
+        mTextureRegionHolderUtils.addElement(GameObjectsConstants.KEY_BLUE_PLANET,
                 BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, this, GameObjectsConstants.FILE_BLUE_PLANET, 128, 0));
         biggerObjectsTexture.load();
 
@@ -154,16 +154,16 @@ public class GameActivity extends BaseGameActivity {
         mPhysicsWorld = new PhysicsWorld(new Vector2(0, 0), false);
         mScene.registerUpdateHandler(mPhysicsWorld);
         // create Sun
-        createStaticObject(sCameraWidth / 2 - PLANET_RADIUS, sCameraHeight / 2 - PLANET_RADIUS, mTextureRegionHolderUtils.getRegion(GameObjectsConstants.KEY_SUN), GameObjectsConstants.KEY_SUN);
+        createStaticObject(sCameraWidth / 2 - PLANET_RADIUS, sCameraHeight / 2 - PLANET_RADIUS, mTextureRegionHolderUtils.getElement(GameObjectsConstants.KEY_SUN), GameObjectsConstants.KEY_SUN);
         // create red planet
         mRedTeam = new Team(GameObjectsConstants.RED_TEAM_NAME, createPlanet(0, sCameraHeight / 2 - PLANET_RADIUS,
-                mTextureRegionHolderUtils.getRegion(GameObjectsConstants.KEY_RED_PLANET), GameObjectsConstants.KEY_RED_PLANET));
+                mTextureRegionHolderUtils.getElement(GameObjectsConstants.KEY_RED_PLANET), GameObjectsConstants.KEY_RED_PLANET));
         mRedTeam.getTeamPlanet().setSpawnPoint(PLANET_RADIUS + 15, sCameraHeight / 2);
         mTeams.add(mRedTeam);
         // create blue planet
         mBlueTeam = new Team(GameObjectsConstants.BLUE_TEAM_NAME, createPlanet(sCameraWidth - PLANET_RADIUS * 2,
                 sCameraHeight / 2 - PLANET_RADIUS,
-                mTextureRegionHolderUtils.getRegion(GameObjectsConstants.KEY_BLUE_PLANET), GameObjectsConstants.KEY_BLUE_PLANET));
+                mTextureRegionHolderUtils.getElement(GameObjectsConstants.KEY_BLUE_PLANET), GameObjectsConstants.KEY_BLUE_PLANET));
         mBlueTeam.getTeamPlanet().setSpawnPoint(sCameraWidth - PLANET_RADIUS - 15, sCameraHeight / 2);
         mTeams.add(mBlueTeam);
 
@@ -236,8 +236,8 @@ public class GameActivity extends BaseGameActivity {
 //                if (!pSceneTouchEvent.isActionUp()) return true;
 //
 //                ITextureRegion textureRegion = initializingTeam.getTeamName().equals(GameObjectsConstants.RED_TEAM_NAME) ?
-//                        mTextureRegionHolderUtils.getRegion(GameObjectsConstants.KEY_RED_WARRIOR) :
-//                        mTextureRegionHolderUtils.getRegion(GameObjectsConstants.KEY_BLUE_WARRIOR);
+//                        mTextureRegionHolderUtils.getElement(GameObjectsConstants.KEY_RED_WARRIOR) :
+//                        mTextureRegionHolderUtils.getElement(GameObjectsConstants.KEY_BLUE_WARRIOR);
 //                createUnitForTeam(textureRegion, initializingTeam, enemyTeam);
 //                return true;
 //            }
