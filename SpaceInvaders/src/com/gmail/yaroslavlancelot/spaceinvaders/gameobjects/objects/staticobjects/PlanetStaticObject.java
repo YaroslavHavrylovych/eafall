@@ -8,9 +8,11 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import java.util.ArrayList;
 import java.util.List;
 
-/**  */
+/** represent team planet */
 public class PlanetStaticObject extends StaticObject {
+    // unit spawn point
     private float mSpawnPointX, mSpawnPointY;
+    // buildings in current planet
     private List<StaticObject> buildings = new ArrayList<StaticObject>(15);
 
     public PlanetStaticObject(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
@@ -31,6 +33,7 @@ public class PlanetStaticObject extends StaticObject {
         return mSpawnPointY;
     }
 
+    /** build first building */
     public void buildFirstBuilding() {
         final FirstBuildingStaticObject staticObject = new FirstBuildingStaticObject(16 - 3, 5f, TextureRegionHolderUtils.getInstance().getElement(
                 GameObjectsConstants.KEY_FIRST_BUILDING), getVertexBufferObjectManager());
@@ -39,6 +42,7 @@ public class PlanetStaticObject extends StaticObject {
         mIncomeIncreasingValue += staticObject.getObjectIncomeIncreasingValue();
     }
 
+    /** build second building */
     public void buildSecondBuilding() {
         StaticObject staticObject = new FirstBuildingStaticObject(16 - 3, 22f, TextureRegionHolderUtils.getInstance().getElement(
                 GameObjectsConstants.KEY_SECOND_BUILDING), getVertexBufferObjectManager());

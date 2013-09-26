@@ -1,11 +1,11 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.teams;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 
 import java.util.List;
 
-/**  */
+/** Player team interface */
 public interface ITeam {
     void addObjectToTeam(Unit sprite);
 
@@ -31,6 +31,7 @@ public interface ITeam {
 
     PlanetStaticObject getTeamPlanet();
 
+    @SuppressWarnings("unused")
     String getTeamName();
 
     int getMoney();

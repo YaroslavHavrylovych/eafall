@@ -6,9 +6,15 @@ import org.andengine.engine.handler.timer.TimerHandler;
 
 import java.util.List;
 
+/** update money amount in the game */
 public abstract class MoneyUpdateCycle implements ITimerCallback {
     private List<ITeam> mTeams;
 
+    /**
+     * create new timer
+     *
+     * @param teams teams money of which will be updated after each iteration
+     */
     public MoneyUpdateCycle(List<ITeam> teams) {
         mTeams = teams;
     }
@@ -21,5 +27,6 @@ public abstract class MoneyUpdateCycle implements ITimerCallback {
         postUpdate();
     }
 
+    /** called after money update */
     public abstract void postUpdate();
 }

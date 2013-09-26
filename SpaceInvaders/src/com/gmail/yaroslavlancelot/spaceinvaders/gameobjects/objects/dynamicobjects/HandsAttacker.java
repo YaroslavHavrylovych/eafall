@@ -3,6 +3,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobje
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
+/** unit which can attack without bullets */
 public class HandsAttacker extends Unit {
     public HandsAttacker(final float x, final float y, final ITextureRegion textureRegion,
                          final VertexBufferObjectManager vertexBufferObjectManager) {

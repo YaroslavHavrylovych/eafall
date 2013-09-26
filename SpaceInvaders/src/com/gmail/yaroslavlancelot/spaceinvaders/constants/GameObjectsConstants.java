@@ -26,12 +26,12 @@ public interface GameObjectsConstants {
     String RED_TEAM_NAME = "red";
     /** blue team name */
     String BLUE_TEAM_NAME = "blue";
-    /** */
+    /** red team warrior key */
     String KEY_RED_WARRIOR = "key_red_warrior";
-    /** */
+    /** blue team warrior key */
     String KEY_BLUE_WARRIOR = "key_blue_warrior";
-    /** */
+    /** first building key */
     String KEY_FIRST_BUILDING = "key_first_building";
-    /** */
+    /** second building key */
     String KEY_SECOND_BUILDING = "key_second_building";
 }

@@ -1,25 +1,23 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.teams;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**  */
+/** Player team */
 public class Team implements ITeam {
+    /** current team name */
     private final String mTeamName;
+    /** object related to current team */
     private List<Unit> mTeamObjects;
+    /** teams friendly with current team */
     private List<ITeam> mFriendlyTeams;
+    /** current team main planet */
     private PlanetStaticObject mTeamPlanet;
+    /** current team money amount */
     private int mMoneyAmount;
-
-    public Team(final String teamName, final PlanetStaticObject teamPlanet) {
-        mFriendlyTeams = new ArrayList<ITeam>(1);
-        mTeamObjects = new ArrayList<Unit>(20);
-        mTeamPlanet = teamPlanet;
-        mTeamName = teamName;
-    }
 
     @SuppressWarnings("unused")
     public Team(final String teamName, final PlanetStaticObject teamPlanet, final ITeam iTeam) {
@@ -27,9 +25,11 @@ public class Team implements ITeam {
         addFriendlyTeam(iTeam);
     }
 
-    @Override
-    public String getTeamName() {
-        return mTeamName;
+    public Team(final String teamName, final PlanetStaticObject teamPlanet) {
+        mFriendlyTeams = new ArrayList<ITeam>(1);
+        mTeamObjects = new ArrayList<Unit>(20);
+        mTeamPlanet = teamPlanet;
+        mTeamName = teamName;
     }
 
     @Override
@@ -63,11 +63,6 @@ public class Team implements ITeam {
     }
 
     @Override
-    public PlanetStaticObject getTeamPlanet() {
-        return mTeamPlanet;
-    }
-
-    @Override
     public List<ITeam> getFriendlyTeams() {
         return mFriendlyTeams;
     }
@@ -75,6 +70,16 @@ public class Team implements ITeam {
     @Override
     public List<Unit> getTeamUnits() {
         return mTeamObjects;
+    }
+
+    @Override
+    public PlanetStaticObject getTeamPlanet() {
+        return mTeamPlanet;
+    }
+
+    @Override
+    public String getTeamName() {
+        return mTeamName;
     }
 
     @Override

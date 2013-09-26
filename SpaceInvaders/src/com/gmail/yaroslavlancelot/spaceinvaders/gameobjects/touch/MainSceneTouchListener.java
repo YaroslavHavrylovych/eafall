@@ -2,14 +2,13 @@ package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch;
 
 import android.content.Context;
 import android.view.ScaleGestureDetector;
-
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
-
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.input.touch.TouchEvent;
 
+/** main game activity touch listener */
 public class MainSceneTouchListener implements IOnSceneTouchListener {
     private final float mScreenToSceneRatio;
     /** previous event abscissa */
@@ -71,6 +70,7 @@ public class MainSceneTouchListener implements IOnSceneTouchListener {
         return true;
     }
 
+    /** used to perform scaling operations */
     private class MapZoomScaleGestureDetector extends ScaleGestureDetector.SimpleOnScaleGestureListener {
         private float mMaximumZoomFactor = 2.f;
         private float mMinimumZoomFactor = 1.f;

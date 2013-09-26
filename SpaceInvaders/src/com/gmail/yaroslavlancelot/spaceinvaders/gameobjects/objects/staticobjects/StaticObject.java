@@ -8,7 +8,7 @@ import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-/** Basic class for all dynamic game units */
+/** Basic class for all dynamic units in the game */
 public abstract class StaticObject extends Sprite implements ISpriteTouchable {
     /** tag, which is used for debugging purpose */
     public static final String TAG = StaticObject.class.getCanonicalName();
