@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.units;
+package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects;
 
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -13,8 +13,8 @@ public class HandsAttacker extends Unit {
     public synchronized void hitUnit(final int hitPower) {
         mUnitHealth -= hitPower;
         if (mUnitHealth < 0) {
-            if (mUnitDestroyedListener != null)
-                mUnitDestroyedListener.unitDestroyed(this);
+            if (mObjectDestroyedListener != null)
+                mObjectDestroyedListener.unitDestroyed(this);
         }
     }
 

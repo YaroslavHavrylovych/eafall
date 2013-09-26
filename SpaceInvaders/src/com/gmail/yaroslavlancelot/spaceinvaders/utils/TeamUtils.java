@@ -1,6 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.utils;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.units.Unit;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 
 import java.util.ArrayList;
@@ -16,5 +16,9 @@ public class TeamUtils {
                 enemiesInView.add(enemy);
         }
         return enemiesInView;
+    }
+
+    public static String getMoneyString(String prefix, ITeam team) {
+        return prefix + team.getMoney();
     }
 }

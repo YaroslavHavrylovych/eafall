@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects;
+package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ISpriteTouchListener;
@@ -9,11 +9,13 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /** Basic class for all dynamic game units */
-public class StaticObject extends Sprite implements ISpriteTouchable {
+public abstract class StaticObject extends Sprite implements ISpriteTouchable {
     /** tag, which is used for debugging purpose */
     public static final String TAG = StaticObject.class.getCanonicalName();
     /** current object touch listener */
     private ISpriteTouchListener mSpriteOnTouchListener;
+    /** amount of money that brings current object */
+    protected int mIncomeIncreasingValue;
 
     public StaticObject(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
         super(x, y, textureRegion, vertexBufferObjectManager);
@@ -29,5 +31,9 @@ public class StaticObject extends Sprite implements ISpriteTouchable {
     public void setOnTouchListener(ISpriteTouchListener spriteTouchListener) {
         LoggerHelper.methodInvocation(TAG, "setOnTouchListener");
         mSpriteOnTouchListener = spriteTouchListener;
+    }
+
+    public int getObjectIncomeIncreasingValue() {
+        return mIncomeIncreasingValue;
     }
 }

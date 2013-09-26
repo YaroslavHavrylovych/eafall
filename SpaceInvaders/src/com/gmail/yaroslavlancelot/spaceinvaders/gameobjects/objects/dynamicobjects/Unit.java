@@ -1,11 +1,10 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.units;
+package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects;
 
 import android.util.Log;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.gameevents.ISimpleUnitDestroyedListener;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.gameevents.ISimpleUnitEnemiesUpdater;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.IObjectDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitPathUtil;
 
@@ -42,7 +41,7 @@ public abstract class Unit extends Sprite {
     /** callback for using to update unit visible enemies */
     protected ISimpleUnitEnemiesUpdater mEnemiesUpdater;
     /** callback to send message about unit death */
-    protected ISimpleUnitDestroyedListener mUnitDestroyedListener;
+    protected IObjectDestroyedListener mObjectDestroyedListener;
     /** unit path */
     protected UnitPathUtil.UnitPath mUnitPath;
 
@@ -71,8 +70,8 @@ public abstract class Unit extends Sprite {
         return mUnitHealth > 0;
     }
 
-    public void setUnitDestroyedListener(final ISimpleUnitDestroyedListener unitDestroyedListener) {
-        mUnitDestroyedListener = unitDestroyedListener;
+    public void setObjectDestroyedListener(final IObjectDestroyedListener objectDestroyedListener) {
+        mObjectDestroyedListener = objectDestroyedListener;
     }
 
     @Override

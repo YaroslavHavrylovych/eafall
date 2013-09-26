@@ -1,7 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.teams;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.PlanetStaticObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.units.Unit;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +12,7 @@ public class Team implements ITeam {
     private List<Unit> mTeamObjects;
     private List<ITeam> mFriendlyTeams;
     private PlanetStaticObject mTeamPlanet;
+    private int mMoneyAmount;
 
     public Team(final String teamName, final PlanetStaticObject teamPlanet) {
         mFriendlyTeams = new ArrayList<ITeam>(1);
@@ -74,5 +75,20 @@ public class Team implements ITeam {
     @Override
     public List<Unit> getTeamUnits() {
         return mTeamObjects;
+    }
+
+    @Override
+    public int getMoney() {
+        return mMoneyAmount;
+    }
+
+    @Override
+    public void changeMoney(final int delta) {
+        mMoneyAmount += delta;
+    }
+
+    @Override
+    public void incomeTime() {
+        mMoneyAmount += mTeamPlanet.getObjectIncomeIncreasingValue();
     }
 }
