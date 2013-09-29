@@ -1,4 +1,4 @@
 .idea
-gen
-out
+.gradle
+build
 project.properties

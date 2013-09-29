@@ -1,0 +1,1 @@
+include ':AndEngine',':AndEnginePhysicsBox2DExtension',':SpaceInvaders'
