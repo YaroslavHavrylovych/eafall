@@ -1,6 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameObjectsConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -36,7 +36,7 @@ public class PlanetStaticObject extends StaticObject {
     /** build first building */
     public void buildFirstBuilding() {
         final FirstBuildingStaticObject staticObject = new FirstBuildingStaticObject(16 - 3, 5f, TextureRegionHolderUtils.getInstance().getElement(
-                GameObjectsConstants.KEY_FIRST_BUILDING), getVertexBufferObjectManager());
+                GameStringConstants.KEY_FIRST_BUILDING), getVertexBufferObjectManager());
         attachChild(staticObject);
         buildings.add(staticObject);
         mIncomeIncreasingValue += staticObject.getObjectIncomeIncreasingValue();
@@ -45,7 +45,7 @@ public class PlanetStaticObject extends StaticObject {
     /** build second building */
     public void buildSecondBuilding() {
         StaticObject staticObject = new FirstBuildingStaticObject(16 - 3, 22f, TextureRegionHolderUtils.getInstance().getElement(
-                GameObjectsConstants.KEY_SECOND_BUILDING), getVertexBufferObjectManager());
+                GameStringConstants.KEY_SECOND_BUILDING), getVertexBufferObjectManager());
         attachChild(staticObject);
         buildings.add(staticObject);
         mIncomeIncreasingValue += staticObject.getObjectIncomeIncreasingValue();

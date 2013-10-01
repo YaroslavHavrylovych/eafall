@@ -1,7 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.constants;
 
 /** game constants for game objects */
-public interface GameObjectsConstants {
+public interface GameStringConstants {
     /** sun file name */
     String FILE_SUN = "icon.png";
     /** file name for red planet */
@@ -34,4 +34,6 @@ public interface GameObjectsConstants {
     String KEY_FIRST_BUILDING = "key_first_building";
     /** second building key */
     String KEY_SECOND_BUILDING = "key_second_building";
+    /** key used to identify money font */
+    String KEY_FONT_MONEY = "key_money_font";
 }

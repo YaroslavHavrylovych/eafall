@@ -7,12 +7,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameObjectsConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameloop.MoneyUpdateCycle;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.IObjectDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.HandsAttacker;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitCallbacksUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.SunStaticObject;
@@ -21,9 +20,11 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.MainSceneTouch
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.UserPlanetTouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.Team;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TeamUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitCallbacksUtils;
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
@@ -86,8 +87,6 @@ public class GameActivity extends BaseGameActivity {
     private SmoothCamera mCamera;
     /** object, which display money status to user */
     private Text mMoneyText;
-    /** font used to display money */
-    private IFont mMoneyFont;
     /** hold all texture regions used in current game */
     private TextureRegionHolderUtils mTextureRegionHolderUtils;
     /** text which displaying to user with money amount */
@@ -117,15 +116,15 @@ public class GameActivity extends BaseGameActivity {
 
         BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(getTextureManager(), 29, 12, TextureOptions.BILINEAR);
         // warriors
-        mTextureRegionHolderUtils.addElement(GameObjectsConstants.KEY_RED_WARRIOR,
-                BitmapTextureAtlasTextureRegionFactory.createFromAsset(smallObjectTexture, this, GameObjectsConstants.FILE_RED_WARRIOR, 0, 0));
-        mTextureRegionHolderUtils.addElement(GameObjectsConstants.KEY_BLUE_WARRIOR,
-                BitmapTextureAtlasTextureRegionFactory.createFromAsset(smallObjectTexture, this, GameObjectsConstants.FILE_BLUE_WARRIOR, 12, 0));
+        mTextureRegionHolderUtils.addElement(GameStringConstants.KEY_RED_WARRIOR,
+                BitmapTextureAtlasTextureRegionFactory.createFromAsset(smallObjectTexture, this, GameStringConstants.FILE_RED_WARRIOR, 0, 0));
+        mTextureRegionHolderUtils.addElement(GameStringConstants.KEY_BLUE_WARRIOR,
+                BitmapTextureAtlasTextureRegionFactory.createFromAsset(smallObjectTexture, this, GameStringConstants.FILE_BLUE_WARRIOR, 12, 0));
         // buildings
-        mTextureRegionHolderUtils.addElement(GameObjectsConstants.KEY_FIRST_BUILDING,
-                BitmapTextureAtlasTextureRegionFactory.createFromAsset(smallObjectTexture, this, GameObjectsConstants.FILE_FIRST_BUILDING, 24, 0));
-        mTextureRegionHolderUtils.addElement(GameObjectsConstants.KEY_SECOND_BUILDING,
-                BitmapTextureAtlasTextureRegionFactory.createFromAsset(smallObjectTexture, this, GameObjectsConstants.FILE_SECOND_BUILDING, 24, 5));
+        mTextureRegionHolderUtils.addElement(GameStringConstants.KEY_FIRST_BUILDING,
+                BitmapTextureAtlasTextureRegionFactory.createFromAsset(smallObjectTexture, this, GameStringConstants.FILE_FIRST_BUILDING, 24, 0));
+        mTextureRegionHolderUtils.addElement(GameStringConstants.KEY_SECOND_BUILDING,
+                BitmapTextureAtlasTextureRegionFactory.createFromAsset(smallObjectTexture, this, GameStringConstants.FILE_SECOND_BUILDING, 24, 5));
 
         // loading
         smallObjectTexture.load();
@@ -133,18 +132,20 @@ public class GameActivity extends BaseGameActivity {
 
         //* bigger objects
         BitmapTextureAtlas biggerObjectsTexture = new BitmapTextureAtlas(getTextureManager(), 192, 64, TextureOptions.BILINEAR);
-        mTextureRegionHolderUtils.addElement(GameObjectsConstants.KEY_SUN,
-                BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, this, GameObjectsConstants.FILE_SUN, 0, 0));
-        mTextureRegionHolderUtils.addElement(GameObjectsConstants.KEY_RED_PLANET,
-                BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, this, GameObjectsConstants.FILE_RED_PLANET, 64, 0));
-        mTextureRegionHolderUtils.addElement(GameObjectsConstants.KEY_BLUE_PLANET,
-                BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, this, GameObjectsConstants.FILE_BLUE_PLANET, 128, 0));
+        mTextureRegionHolderUtils.addElement(GameStringConstants.KEY_SUN,
+                BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, this, GameStringConstants.FILE_SUN, 0, 0));
+        mTextureRegionHolderUtils.addElement(GameStringConstants.KEY_RED_PLANET,
+                BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, this, GameStringConstants.FILE_RED_PLANET, 64, 0));
+        mTextureRegionHolderUtils.addElement(GameStringConstants.KEY_BLUE_PLANET,
+                BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, this, GameStringConstants.FILE_BLUE_PLANET, 128, 0));
         biggerObjectsTexture.load();
 
 
         // font
-        mMoneyFont = FontFactory.create(this.getFontManager(), this.getTextureManager(), 256, 256, Typeface.create(Typeface.DEFAULT, Typeface.BOLD), 12, Color.WHITE.hashCode());
-        mMoneyFont.load();
+        IFont font = FontFactory.create(this.getFontManager(), this.getTextureManager(), 256, 256,
+                Typeface.create(Typeface.DEFAULT, Typeface.BOLD), 12, Color.WHITE.hashCode());
+        font.load();
+        FontHolderUtils.getInstance().addElement(GameStringConstants.KEY_FONT_MONEY, font);
 
         onCreateResourcesCallback.onCreateResourcesFinished();
     }
@@ -157,16 +158,16 @@ public class GameActivity extends BaseGameActivity {
         mPhysicsWorld = new PhysicsWorld(new Vector2(0, 0), false);
         mScene.registerUpdateHandler(mPhysicsWorld);
         // create Sun
-        createStaticObject(sCameraWidth / 2 - PLANET_RADIUS, sCameraHeight / 2 - PLANET_RADIUS, mTextureRegionHolderUtils.getElement(GameObjectsConstants.KEY_SUN), GameObjectsConstants.KEY_SUN);
+        createStaticObject(sCameraWidth / 2 - PLANET_RADIUS, sCameraHeight / 2 - PLANET_RADIUS, mTextureRegionHolderUtils.getElement(GameStringConstants.KEY_SUN), GameStringConstants.KEY_SUN);
         // create red planet
-        mRedTeam = new Team(GameObjectsConstants.RED_TEAM_NAME, createPlanet(0, sCameraHeight / 2 - PLANET_RADIUS,
-                mTextureRegionHolderUtils.getElement(GameObjectsConstants.KEY_RED_PLANET), GameObjectsConstants.KEY_RED_PLANET));
+        mRedTeam = new Team(GameStringConstants.RED_TEAM_NAME, createPlanet(0, sCameraHeight / 2 - PLANET_RADIUS,
+                mTextureRegionHolderUtils.getElement(GameStringConstants.KEY_RED_PLANET), GameStringConstants.KEY_RED_PLANET));
         mRedTeam.getTeamPlanet().setSpawnPoint(PLANET_RADIUS + 15, sCameraHeight / 2);
         mTeams.add(mRedTeam);
         // create blue planet
-        mBlueTeam = new Team(GameObjectsConstants.BLUE_TEAM_NAME, createPlanet(sCameraWidth - PLANET_RADIUS * 2,
+        mBlueTeam = new Team(GameStringConstants.BLUE_TEAM_NAME, createPlanet(sCameraWidth - PLANET_RADIUS * 2,
                 sCameraHeight / 2 - PLANET_RADIUS,
-                mTextureRegionHolderUtils.getElement(GameObjectsConstants.KEY_BLUE_PLANET), GameObjectsConstants.KEY_BLUE_PLANET));
+                mTextureRegionHolderUtils.getElement(GameStringConstants.KEY_BLUE_PLANET), GameStringConstants.KEY_BLUE_PLANET));
         mBlueTeam.getTeamPlanet().setSpawnPoint(sCameraWidth - PLANET_RADIUS - 15, sCameraHeight / 2);
         mTeams.add(mBlueTeam);
 
@@ -178,89 +179,9 @@ public class GameActivity extends BaseGameActivity {
         onCreateSceneCallback.onCreateSceneFinished(mScene);
     }
 
-    private void initSceneTouch() {
-        Display display = getWindowManager().getDefaultDisplay();
-        DisplayMetrics metrics = new DisplayMetrics();
-        display.getMetrics(metrics);
-        float screenToSceneRatio = metrics.widthPixels / sCameraWidth;
-        mScene.setOnSceneTouchListener(new MainSceneTouchListener(mCamera, this, screenToSceneRatio));
-    }
-
-    private void createBounds() {
-        LoggerHelper.methodInvocation(TAG, "createBounds");
-        PhysicsFactory.createLineBody(mPhysicsWorld, -1, -1, -1, sCameraHeight + 1, mStaticBodyFixtureDef);
-        PhysicsFactory.createLineBody(mPhysicsWorld, -1, -1, sCameraWidth + 1, -1, mStaticBodyFixtureDef);
-        PhysicsFactory.createLineBody(mPhysicsWorld, sCameraWidth + 1, -1, sCameraWidth + 1, sCameraHeight + 1, mStaticBodyFixtureDef);
-        PhysicsFactory.createLineBody(mPhysicsWorld, sCameraWidth + 1, sCameraHeight + 1, -1, sCameraHeight + 1, mStaticBodyFixtureDef);
-    }
-
-    /** should to separate red (your) from blue (pc) logic */
-    private void initGameLogicAndRelatedElements() {
-        initUser(mRedTeam, mBlueTeam);
-        initBot(mBlueTeam, mRedTeam);
-        initMoney();
-    }
-
-    /** init money string for  displaying to user */
-    private void initMoney() {
-        mMoneyTextPrefixString = getResources().getString(R.string.money_colon);
-        mMoneyText = new Text(sCameraWidth / 2 - 25, 20, mMoneyFont, "", mMoneyTextPrefixString.length() + 10,
-                getVertexBufferObjectManager());
-        mScene.attachChild(mMoneyText);
-        mScene.registerUpdateHandler(new TimerHandler(MONEY_UPDATE_TIME, true, new MoneyUpdateCycle(mTeams) {
-            @Override
-            public void postUpdate() {
-                updateMoneyTextOnScreen();
-            }
-        }));
-    }
-
-    private void updateMoneyTextOnScreen() {
-        mMoneyText.setText(TeamUtils.getMoneyString(mMoneyTextPrefixString, mRedTeam));
-    }
-
-    private void initBot(final ITeam initializingTeam, final ITeam enemyTeam) {
-    }
-
-    /** init planet touch listener for some team */
-    private void initUser(final ITeam initializingTeam, final ITeam enemyTeam) {
-        // create building
-        final StaticObject initiatedTeamPlanet = initializingTeam.getTeamPlanet();
-//        ISpriteTouchListener initiatedTeamPlanetTouchListener = new ISpriteTouchListener() {
-//            @Override
-//            public boolean onTouch(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-//                LoggerHelper.methodInvocation(TAG, "initGameLogicAndRelatedElements.planetOnTouchListener");
-//                if (!pSceneTouchEvent.isActionUp()) return true;
-//
-//                ITextureRegion textureRegion = initializingTeam.getTeamName().equals(GameObjectsConstants.RED_TEAM_NAME) ?
-//                        mTextureRegionHolderUtils.getElement(GameObjectsConstants.KEY_RED_WARRIOR) :
-//                        mTextureRegionHolderUtils.getElement(GameObjectsConstants.KEY_BLUE_WARRIOR);
-//                createUnitForTeam(textureRegion, initializingTeam, enemyTeam);
-//                return true;
-//            }
-//        };
-        ISpriteTouchListener initiatedTeamPlanetTouchListener = new UserPlanetTouchListener(initializingTeam, getVertexBufferObjectManager(), mScene);
-        initiatedTeamPlanet.setOnTouchListener(initiatedTeamPlanetTouchListener);
-        mScene.registerTouchArea(initiatedTeamPlanet);
-    }
-
-    /**
-     * create planet game object
-     *
-     * @param x abscissa (top left corner) of created planet
-     * @param y ordinate (top left corner) of created planet
-     * @param textureRegion static object {@link ITextureRegion} for creating new {@link PlanetStaticObject}
-     * @param key key of current planet
-     *
-     * @return newly created {@link PlanetStaticObject}
-     */
-    private PlanetStaticObject createPlanet(float x, float y, ITextureRegion textureRegion, String key) {
-        LoggerHelper.methodInvocation(TAG, "createPlanet");
-        PlanetStaticObject planetStaticObject = new PlanetStaticObject(x, y, textureRegion, mEngine.getVertexBufferObjectManager());
-        PhysicsFactory.createCircleBody(mPhysicsWorld, planetStaticObject, BodyDef.BodyType.StaticBody, mStaticBodyFixtureDef);
-        mScene.attachChild(planetStaticObject);
-        mStaticObjects.put(key, planetStaticObject);
-        return planetStaticObject;
+    @Override
+    public void onPopulateScene(Scene scene, OnPopulateSceneCallback onPopulateSceneCallback) {
+        onPopulateSceneCallback.onPopulateSceneFinished();
     }
 
     /**
@@ -282,9 +203,90 @@ public class GameActivity extends BaseGameActivity {
         return staticObjectSprite;
     }
 
-    @Override
-    public void onPopulateScene(Scene scene, OnPopulateSceneCallback onPopulateSceneCallback) {
-        onPopulateSceneCallback.onPopulateSceneFinished();
+    /**
+     * create planet game object
+     *
+     * @param x abscissa (top left corner) of created planet
+     * @param y ordinate (top left corner) of created planet
+     * @param textureRegion static object {@link ITextureRegion} for creating new {@link PlanetStaticObject}
+     * @param key key of current planet
+     *
+     * @return newly created {@link PlanetStaticObject}
+     */
+    private PlanetStaticObject createPlanet(float x, float y, ITextureRegion textureRegion, String key) {
+        LoggerHelper.methodInvocation(TAG, "createPlanet");
+        PlanetStaticObject planetStaticObject = new PlanetStaticObject(x, y, textureRegion, mEngine.getVertexBufferObjectManager());
+        PhysicsFactory.createCircleBody(mPhysicsWorld, planetStaticObject, BodyDef.BodyType.StaticBody, mStaticBodyFixtureDef);
+        mScene.attachChild(planetStaticObject);
+        mStaticObjects.put(key, planetStaticObject);
+        return planetStaticObject;
+    }
+
+    /** should to separate red (your) from blue (pc) logic */
+    private void initGameLogicAndRelatedElements() {
+        initUser(mRedTeam, mBlueTeam);
+        initBot(mBlueTeam, mRedTeam);
+        initMoney();
+    }
+
+    /** init planet touch listener for some team */
+    private void initUser(final ITeam initializingTeam, final ITeam enemyTeam) {
+        // create building
+        final StaticObject initiatedTeamPlanet = initializingTeam.getTeamPlanet();
+//        ISpriteTouchListener initiatedTeamPlanetTouchListener = new ISpriteTouchListener() {
+//            @Override
+//            public boolean onTouch(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+//                LoggerHelper.methodInvocation(TAG, "initGameLogicAndRelatedElements.planetOnTouchListener");
+//                if (!pSceneTouchEvent.isActionUp()) return true;
+//
+//                ITextureRegion textureRegion = initializingTeam.getTeamName().equals(GameStringConstants.RED_TEAM_NAME) ?
+//                        mTextureRegionHolderUtils.getElement(GameStringConstants.KEY_RED_WARRIOR) :
+//                        mTextureRegionHolderUtils.getElement(GameStringConstants.KEY_BLUE_WARRIOR);
+//                createUnitForTeam(textureRegion, initializingTeam, enemyTeam);
+//                return true;
+//            }
+//        };
+        ISpriteTouchListener initiatedTeamPlanetTouchListener = new UserPlanetTouchListener(initializingTeam, getVertexBufferObjectManager(), mScene);
+        initiatedTeamPlanet.setOnTouchListener(initiatedTeamPlanetTouchListener);
+        mScene.registerTouchArea(initiatedTeamPlanet);
+    }
+
+    private void initBot(final ITeam initializingTeam, final ITeam enemyTeam) {
+    }
+
+    /** init money string for  displaying to user */
+    private void initMoney() {
+        mMoneyTextPrefixString = getResources().getString(R.string.money_colon);
+        mMoneyText = new Text(sCameraWidth / 2 - 25, 20,
+                FontHolderUtils.getInstance().getElement(GameStringConstants.KEY_FONT_MONEY),
+                "", mMoneyTextPrefixString.length() + 10, getVertexBufferObjectManager());
+        mScene.attachChild(mMoneyText);
+        mScene.registerUpdateHandler(new TimerHandler(MONEY_UPDATE_TIME, true, new MoneyUpdateCycle(mTeams) {
+            @Override
+            public void postUpdate() {
+                updateMoneyTextOnScreen();
+            }
+        }));
+    }
+
+    private void updateMoneyTextOnScreen() {
+        mMoneyText.setText(TeamUtils.getMoneyString(mMoneyTextPrefixString, mRedTeam));
+    }
+
+    private void createBounds() {
+        LoggerHelper.methodInvocation(TAG, "createBounds");
+        PhysicsFactory.createLineBody(mPhysicsWorld, -1, -1, -1, sCameraHeight + 1, mStaticBodyFixtureDef);
+        PhysicsFactory.createLineBody(mPhysicsWorld, -1, -1, sCameraWidth + 1, -1, mStaticBodyFixtureDef);
+        PhysicsFactory.createLineBody(mPhysicsWorld, sCameraWidth + 1, -1, sCameraWidth + 1, sCameraHeight + 1, mStaticBodyFixtureDef);
+        PhysicsFactory.createLineBody(mPhysicsWorld, sCameraWidth + 1, sCameraHeight + 1, -1, sCameraHeight + 1, mStaticBodyFixtureDef);
+    }
+
+    private void initSceneTouch() {
+        Display display = getWindowManager().getDefaultDisplay();
+        DisplayMetrics metrics = new DisplayMetrics();
+        display.getMetrics(metrics);
+        float screenToSceneRatio = metrics.widthPixels / sCameraWidth;
+        mScene.setOnSceneTouchListener(new MainSceneTouchListener(mCamera, this, screenToSceneRatio));
     }
 
     private Unit createUnitForTeam(final ITextureRegion textureRegion, final ITeam unitTeam, final ITeam enemyTeam) {
