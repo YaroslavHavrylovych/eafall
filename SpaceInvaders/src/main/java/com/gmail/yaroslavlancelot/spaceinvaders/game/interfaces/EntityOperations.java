@@ -1,7 +1,6 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces;
+package com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces;
 
 import org.andengine.entity.IEntity;
-import org.andengine.entity.sprite.Sprite;
 
 import java.util.List;
 

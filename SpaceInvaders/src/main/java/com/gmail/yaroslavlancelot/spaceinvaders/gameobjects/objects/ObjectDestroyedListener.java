@@ -2,7 +2,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
 import org.andengine.entity.sprite.Sprite;
 
 /** Callback after unit killing. Used method for GameActivity class and should be placed in current class */

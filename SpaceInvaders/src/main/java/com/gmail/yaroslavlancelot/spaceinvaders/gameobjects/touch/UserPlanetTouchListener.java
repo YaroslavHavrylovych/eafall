@@ -1,13 +1,13 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch;
 
 import android.graphics.Rect;
+import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.ImageDescriptionPopup;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.Localizable;
-import org.andengine.entity.scene.Scene;
+import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.Localizable;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -47,10 +47,11 @@ public class UserPlanetTouchListener implements ISpriteTouchListener {
         // init elements
         List<ImageDescriptionPopup.PopupItem> items = new ArrayList<ImageDescriptionPopup.PopupItem>(2);
         ImageDescriptionPopup.PopupItem item;
-        // TODO use Localizable instead direct constants
-        item = createPopupItem(0, mTextureRegionHolderUtils.getElement(GameStringConstants.KEY_FIRST_BUILDING), "First Building");
+        item = createPopupItem(0, mTextureRegionHolderUtils.getElement(GameStringConstants.KEY_FIRST_BUILDING),
+                mLocalizable.getStringById(R.string.first_building));
         items.add(item);
-        item = createPopupItem(1, mTextureRegionHolderUtils.getElement(GameStringConstants.KEY_SECOND_BUILDING), "Second Building");
+        item = createPopupItem(1, mTextureRegionHolderUtils.getElement(GameStringConstants.KEY_SECOND_BUILDING),
+                mLocalizable.getStringById(R.string.second_building));
         items.add(item);
         // create popup
         ImageDescriptionPopup popup = new ImageDescriptionPopup(mVertexBufferObjectManager, mEntityOperations, mBuildingPopupRect);

@@ -6,7 +6,7 @@
     <application
             android:icon="@drawable/icon"
             android:label="@string/app_name">
-        <activity android:name=".GameActivity">
+        <activity android:name=".game.GameActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

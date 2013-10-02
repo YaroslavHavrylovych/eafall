@@ -1,6 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.utils;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.GameActivity;
+import com.gmail.yaroslavlancelot.spaceinvaders.game.GameActivity;
 
 /** Common operation with unit path */
 public class UnitPathUtil {
