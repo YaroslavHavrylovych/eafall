@@ -9,7 +9,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameloop.MoneyUpdateCycle;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.IObjectDestroyedListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.ObjectDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.HandsAttacker;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
@@ -25,11 +25,14 @@ import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TeamUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitCallbacksUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.Localizable;
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
+import org.andengine.entity.IEntity;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
@@ -55,7 +58,7 @@ import java.util.List;
  * Main game Activity. Extends {@link BaseGameActivity} class and contains main game elements.
  * Loads resources, initialize scene, engine and etc.
  */
-public class GameActivity extends BaseGameActivity {
+public class GameActivity extends BaseGameActivity implements Localizable, EntityOperations {
     /** tag, which is used for debugging purpose */
     public static final String TAG = GameActivity.class.getCanonicalName();
     /** Camera width. Width of part of the screen which is currently viewed by user */
@@ -184,6 +187,44 @@ public class GameActivity extends BaseGameActivity {
         onPopulateSceneCallback.onPopulateSceneFinished();
     }
 
+    @Override
+    public String getStringById(final int stringId) {
+        return getStringById(stringId);
+    }
+
+    @Override
+    public void detachEntity(final IEntity entity) {
+        GameActivity.this.runOnUpdateThread(new Runnable() {
+            @Override
+            public void run() {
+                mScene.detachChild(entity);
+            }
+        });
+    }
+
+    @Override
+    public void attachEntity(final IEntity entity) {
+        mScene.attachChild(entity);
+    }
+
+    @Override
+    public void attachEntities(final List<IEntity> entities) {
+        for(IEntity entity : entities)
+            mScene.attachChild(entity);
+
+    }
+
+    @Override
+    public void detachEntities(final List<IEntity> entities) {
+        GameActivity.this.runOnUpdateThread(new Runnable() {
+            @Override
+            public void run() {
+                for(IEntity entity : entities)
+                    mScene.detachChild(entity);
+            }
+        });
+    }
+
     /**
      * create static game object
      *
@@ -246,7 +287,8 @@ public class GameActivity extends BaseGameActivity {
 //                return true;
 //            }
 //        };
-        ISpriteTouchListener initiatedTeamPlanetTouchListener = new UserPlanetTouchListener(initializingTeam, getVertexBufferObjectManager(), mScene);
+        ISpriteTouchListener initiatedTeamPlanetTouchListener = new UserPlanetTouchListener(initializingTeam,
+                getVertexBufferObjectManager(), this, this);
         initiatedTeamPlanet.setOnTouchListener(initiatedTeamPlanetTouchListener);
         mScene.registerTouchArea(initiatedTeamPlanet);
     }
@@ -293,7 +335,7 @@ public class GameActivity extends BaseGameActivity {
         Unit warrior = createUnit(unitTeam.getTeamPlanet().getSpawnPointX(), unitTeam.getTeamPlanet().getSpawnPointY(), textureRegion, mScene);
         unitTeam.addObjectToTeam(warrior);
         warrior.setEnemiesUpdater(UnitCallbacksUtils.getSimpleUnitEnemiesUpdater(enemyTeam));
-        warrior.setObjectDestroyedListener(new ObjectDestroyedListener(unitTeam));
+        warrior.setObjectDestroyedListener(new ObjectDestroyedListener(unitTeam, this));
         return warrior;
     }
 
@@ -316,36 +358,5 @@ public class GameActivity extends BaseGameActivity {
         mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(unit, body, true, true));
         mUnits.add(unit);
         return unit;
-    }
-
-    private void detachUnit(final Sprite spriteObject) {
-        GameActivity.this.runOnUpdateThread(new Runnable() {
-            @Override
-            public void run() {
-                mScene.detachChild(spriteObject);
-            }
-        });
-    }
-
-    /** Callback after unit killing. Used method for GameActivity class and should be placed in current class */
-    private class ObjectDestroyedListener implements IObjectDestroyedListener {
-        /** team of listening object */
-        private ITeam mTeam;
-
-        /**
-         * used for perform operation after unit death
-         *
-         * @param team {@link com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam} of listening object
-         */
-        private ObjectDestroyedListener(ITeam team) {
-            mTeam = team;
-        }
-
-        @Override
-        public void unitDestroyed(final Sprite sprite) {
-            if (sprite instanceof Unit)
-                mTeam.removeObjectFromTeam((Unit) sprite);
-            detachUnit(sprite);
-        }
     }
 }

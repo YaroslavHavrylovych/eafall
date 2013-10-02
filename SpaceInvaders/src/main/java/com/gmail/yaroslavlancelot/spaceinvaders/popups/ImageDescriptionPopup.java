@@ -3,21 +3,23 @@ package com.gmail.yaroslavlancelot.spaceinvaders.popups;
 import android.graphics.Rect;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
-import org.andengine.entity.scene.Scene;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.SpriteMenuItem;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /** Flow popup which contains images and their descriptions */
 public class ImageDescriptionPopup {
     /** form parent activity (set in constructor) */
     private VertexBufferObjectManager mVertexBufferObjectManager;
-    /** form parent activity (set in constructor) */
-    private Scene mScene;
+    /** for attaching/detaching {@link org.andengine.entity.sprite.Sprite} */
+    private EntityOperations mEntityOperations;
     /** form parent activity (set in constructor) */
     private Rect mAreaForPopup;
     /**
@@ -25,11 +27,13 @@ public class ImageDescriptionPopup {
      * that should be displayed. Passed with attachMenuItems(items)
      */
     private List<PopupItem> mPopupItems;
+    /** showed elements */
+    private ArrayList<Sprite> mPopupShowedElements;
 
-    public ImageDescriptionPopup(VertexBufferObjectManager vertexBufferObjectManager, Scene scene, Rect rect) {
+    public ImageDescriptionPopup(VertexBufferObjectManager vertexBufferObjectManager, EntityOperations entityOperations, Rect rect) {
         mVertexBufferObjectManager = vertexBufferObjectManager;
-        mScene = scene;
         mAreaForPopup = rect;
+        mEntityOperations = entityOperations;
     }
 
     /**
@@ -39,6 +43,7 @@ public class ImageDescriptionPopup {
      */
     public void attachMenuItems(final List<PopupItem> itemsList) {
         mPopupItems = itemsList;
+        mPopupShowedElements = new ArrayList<Sprite>(itemsList.size() * 2);
     }
 
     /** show popup */
@@ -59,16 +64,17 @@ public class ImageDescriptionPopup {
         float textX = imageMenuItem.getX() + imageMenuItem.getWidth() + PopupItem.ITEM_SEPARATOR_LENGTH,
                 textY = imageMenuItem.getY() + imageMenuItem.getHeight() -
                         FontHolderUtils.getInstance().getElement(GameStringConstants.KEY_FONT_MONEY).getLineHeight();
-        Text imageDescriptionText =new Text(textX, textY,
+        Text imageDescriptionText = new Text(textX, textY,
                 FontHolderUtils.getInstance().getElement(GameStringConstants.KEY_FONT_MONEY),
                 popupItem.mItemName, mVertexBufferObjectManager);
         // attach
-        mScene.attachChild(imageMenuItem);
-        mScene.attachChild(imageDescriptionText);
+        mEntityOperations.attachEntity(imageMenuItem);
+        mEntityOperations.attachEntity(imageDescriptionText);
     }
 
     /** hide popup */
     public void hidePopup() {
+        mPopupShowedElements = null;
     }
 
     /**

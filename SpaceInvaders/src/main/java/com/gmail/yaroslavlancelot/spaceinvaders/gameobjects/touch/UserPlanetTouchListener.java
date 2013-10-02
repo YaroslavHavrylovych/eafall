@@ -5,6 +5,8 @@ import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.ImageDescriptionPopup;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.Localizable;
 import org.andengine.entity.scene.Scene;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -17,14 +19,18 @@ public class UserPlanetTouchListener implements ISpriteTouchListener {
     private ITeam mUserTeam;
     private VertexBufferObjectManager mVertexBufferObjectManager;
     private TextureRegionHolderUtils mTextureRegionHolderUtils = TextureRegionHolderUtils.getInstance();
-    private Scene mParentScene;
+    private EntityOperations mEntityOperations;
+    private Localizable mLocalizable;
     /** {@link android.graphics.Rect} in which building popup will be shown */
     private Rect mBuildingPopupRect;
 
-    public UserPlanetTouchListener(ITeam userTeam, VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
+    public UserPlanetTouchListener(ITeam userTeam, VertexBufferObjectManager vertexBufferObjectManager,
+                                   EntityOperations entityOperations, Localizable localizable) {
         mUserTeam = userTeam;
         mVertexBufferObjectManager = vertexBufferObjectManager;
-        mParentScene = scene;
+        mEntityOperations = entityOperations;
+        mLocalizable = localizable;
+
         initBuildingPopupRectForTeam(mUserTeam);
     }
 
@@ -41,12 +47,13 @@ public class UserPlanetTouchListener implements ISpriteTouchListener {
         // init elements
         List<ImageDescriptionPopup.PopupItem> items = new ArrayList<ImageDescriptionPopup.PopupItem>(2);
         ImageDescriptionPopup.PopupItem item;
+        // TODO use Localizable instead direct constants
         item = createPopupItem(0, mTextureRegionHolderUtils.getElement(GameStringConstants.KEY_FIRST_BUILDING), "First Building");
         items.add(item);
         item = createPopupItem(1, mTextureRegionHolderUtils.getElement(GameStringConstants.KEY_SECOND_BUILDING), "Second Building");
         items.add(item);
         // create popup
-        ImageDescriptionPopup popup = new ImageDescriptionPopup(mVertexBufferObjectManager, mParentScene, mBuildingPopupRect);
+        ImageDescriptionPopup popup = new ImageDescriptionPopup(mVertexBufferObjectManager, mEntityOperations, mBuildingPopupRect);
         popup.attachMenuItems(items);
         popup.showPopup();
         return true;
