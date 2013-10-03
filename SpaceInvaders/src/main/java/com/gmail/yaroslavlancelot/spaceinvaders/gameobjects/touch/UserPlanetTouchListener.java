@@ -3,11 +3,11 @@ package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch;
 import android.graphics.Rect;
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.Localizable;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.ImageDescriptionPopup;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
-import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
-import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.Localizable;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -21,8 +21,9 @@ public class UserPlanetTouchListener implements ISpriteTouchListener {
     private TextureRegionHolderUtils mTextureRegionHolderUtils = TextureRegionHolderUtils.getInstance();
     private EntityOperations mEntityOperations;
     private Localizable mLocalizable;
-    /** {@link android.graphics.Rect} in which building popup will be shown */
-    private Rect mBuildingPopupRect;
+    /** is first touch */
+    private boolean mIsFirstTouch = true;
+    private ImageDescriptionPopup mPopup;
 
     public UserPlanetTouchListener(ITeam userTeam, VertexBufferObjectManager vertexBufferObjectManager,
                                    EntityOperations entityOperations, Localizable localizable) {
@@ -30,20 +31,26 @@ public class UserPlanetTouchListener implements ISpriteTouchListener {
         mVertexBufferObjectManager = vertexBufferObjectManager;
         mEntityOperations = entityOperations;
         mLocalizable = localizable;
-
-        initBuildingPopupRectForTeam(mUserTeam);
-    }
-
-    private void initBuildingPopupRectForTeam(ITeam team) {
-        int teamPlanetX = (int) team.getTeamPlanet().getX(),
-                teamPlanetY = (int) team.getTeamPlanet().getY();
-        int buildingPopupHeight = 50, buildingPopupWidth = 60;
-        mBuildingPopupRect = new Rect(teamPlanetX, teamPlanetY - buildingPopupHeight,
-                teamPlanetX + buildingPopupWidth, teamPlanetY);
     }
 
     @Override
     public boolean onTouch(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+        if (mIsFirstTouch) {
+            mIsFirstTouch = false;
+            initBuildingPopupForTeam(mUserTeam);
+        }
+
+        if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_UP) {
+            if (mPopup.isShowing())
+                mPopup.hidePopup();
+            else
+                mPopup.showPopup();
+        }
+        return true;
+    }
+
+    private void initBuildingPopupForTeam(ITeam team) {
+        Rect buildingPopupRect = getBuildingPopupRectForTeam(team);
         // init elements
         List<ImageDescriptionPopup.PopupItem> items = new ArrayList<ImageDescriptionPopup.PopupItem>(2);
         ImageDescriptionPopup.PopupItem item;
@@ -54,13 +61,18 @@ public class UserPlanetTouchListener implements ISpriteTouchListener {
                 mLocalizable.getStringById(R.string.second_building));
         items.add(item);
         // create popup
-        ImageDescriptionPopup popup = new ImageDescriptionPopup(mVertexBufferObjectManager, mEntityOperations, mBuildingPopupRect);
-        popup.attachMenuItems(items);
-        popup.showPopup();
-        return true;
+        mPopup = new ImageDescriptionPopup(mVertexBufferObjectManager, mEntityOperations, buildingPopupRect);
+        mPopup.attachMenuItems(items);
     }
 
     private ImageDescriptionPopup.PopupItem createPopupItem(int id, ITextureRegion textureRegion, String name) {
         return new ImageDescriptionPopup.PopupItem(id, textureRegion, name);
+    }
+
+    private Rect getBuildingPopupRectForTeam(ITeam team) {
+        int teamPlanetX = (int) team.getTeamPlanet().getX(),
+                teamPlanetY = (int) team.getTeamPlanet().getY();
+        int buildingPopupHeight = 50, buildingPopupWidth = 60;
+        return new Rect(teamPlanetX, teamPlanetY - buildingPopupHeight, teamPlanetX + buildingPopupWidth, teamPlanetY);
     }
 }

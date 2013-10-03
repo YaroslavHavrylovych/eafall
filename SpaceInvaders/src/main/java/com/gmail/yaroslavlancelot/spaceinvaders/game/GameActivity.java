@@ -9,6 +9,8 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.Localizable;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameloop.MoneyUpdateCycle;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.ObjectDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.HandsAttacker;
@@ -26,8 +28,6 @@ import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TeamUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitCallbacksUtils;
-import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
-import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.Localizable;
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
@@ -187,44 +187,6 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         onPopulateSceneCallback.onPopulateSceneFinished();
     }
 
-    @Override
-    public String getStringById(final int stringId) {
-        return getStringById(stringId);
-    }
-
-    @Override
-    public void detachEntity(final IEntity entity) {
-        GameActivity.this.runOnUpdateThread(new Runnable() {
-            @Override
-            public void run() {
-                mScene.detachChild(entity);
-            }
-        });
-    }
-
-    @Override
-    public void attachEntity(final IEntity entity) {
-        mScene.attachChild(entity);
-    }
-
-    @Override
-    public void attachEntities(final List<IEntity> entities) {
-        for(IEntity entity : entities)
-            mScene.attachChild(entity);
-
-    }
-
-    @Override
-    public void detachEntities(final List<IEntity> entities) {
-        GameActivity.this.runOnUpdateThread(new Runnable() {
-            @Override
-            public void run() {
-                for(IEntity entity : entities)
-                    mScene.detachChild(entity);
-            }
-        });
-    }
-
     /**
      * create static game object
      *
@@ -298,7 +260,7 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
 
     /** init money string for  displaying to user */
     private void initMoney() {
-        mMoneyTextPrefixString = getResources().getString(R.string.money_colon);
+        mMoneyTextPrefixString = getString(R.string.money_colon);
         mMoneyText = new Text(sCameraWidth / 2 - 25, 20,
                 FontHolderUtils.getInstance().getElement(GameStringConstants.KEY_FONT_MONEY),
                 "", mMoneyTextPrefixString.length() + 10, getVertexBufferObjectManager());
@@ -329,6 +291,44 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         display.getMetrics(metrics);
         float screenToSceneRatio = metrics.widthPixels / sCameraWidth;
         mScene.setOnSceneTouchListener(new MainSceneTouchListener(mCamera, this, screenToSceneRatio));
+    }
+
+    @Override
+    public String getStringById(final int stringId) {
+        return getString(stringId);
+    }
+
+    @Override
+    public void detachEntity(final IEntity entity) {
+        GameActivity.this.runOnUpdateThread(new Runnable() {
+            @Override
+            public void run() {
+                mScene.detachChild(entity);
+            }
+        });
+    }
+
+    @Override
+    public void attachEntity(final IEntity entity) {
+        mScene.attachChild(entity);
+    }
+
+    @Override
+    public void attachEntities(final List<IEntity> entities) {
+        for (IEntity entity : entities)
+            mScene.attachChild(entity);
+
+    }
+
+    @Override
+    public void detachEntities(final List<IEntity> entities) {
+        GameActivity.this.runOnUpdateThread(new Runnable() {
+            @Override
+            public void run() {
+                for (IEntity entity : entities)
+                    mScene.detachChild(entity);
+            }
+        });
     }
 
     private Unit createUnitForTeam(final ITextureRegion textureRegion, final ITeam unitTeam, final ITeam enemyTeam) {
