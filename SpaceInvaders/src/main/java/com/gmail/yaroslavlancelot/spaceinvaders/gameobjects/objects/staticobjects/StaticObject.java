@@ -16,6 +16,8 @@ public abstract class StaticObject extends Sprite implements ISpriteTouchable {
     private ISpriteTouchListener mSpriteOnTouchListener;
     /** amount of money that brings current object */
     protected int mIncomeIncreasingValue;
+    /** how much this object is cost */
+    protected int mCost;
 
     public StaticObject(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
         super(x, y, textureRegion, vertexBufferObjectManager);
@@ -35,5 +37,9 @@ public abstract class StaticObject extends Sprite implements ISpriteTouchable {
 
     public int getObjectIncomeIncreasingValue() {
         return mIncomeIncreasingValue;
+    }
+
+    public int getObjectCost() {
+        return mCost;
     }
 }

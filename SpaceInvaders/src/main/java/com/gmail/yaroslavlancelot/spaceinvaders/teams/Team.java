@@ -16,8 +16,6 @@ public class Team implements ITeam {
     private List<ITeam> mFriendlyTeams;
     /** current team main planet */
     private PlanetStaticObject mTeamPlanet;
-    /** current team money amount */
-    private int mMoneyAmount;
 
     @SuppressWarnings("unused")
     public Team(final String teamName, final PlanetStaticObject teamPlanet, final ITeam iTeam) {
@@ -84,16 +82,16 @@ public class Team implements ITeam {
 
     @Override
     public int getMoney() {
-        return mMoneyAmount;
+        return mTeamPlanet.getMoneyAmount();
     }
 
     @Override
     public void changeMoney(final int delta) {
-        mMoneyAmount += delta;
+        mTeamPlanet.setMoneyAmount(mTeamPlanet.getMoneyAmount() + delta);
     }
 
     @Override
     public void incomeTime() {
-        mMoneyAmount += mTeamPlanet.getObjectIncomeIncreasingValue();
+        changeMoney(mTeamPlanet.getObjectIncomeIncreasingValue());
     }
 }

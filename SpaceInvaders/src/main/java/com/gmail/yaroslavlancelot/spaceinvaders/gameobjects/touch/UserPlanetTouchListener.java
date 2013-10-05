@@ -65,14 +65,27 @@ public class UserPlanetTouchListener implements ISpriteTouchListener {
         mPopup.attachMenuItems(items);
     }
 
-    private ImageDescriptionPopup.PopupItem createPopupItem(int id, ITextureRegion textureRegion, String name) {
-        return new ImageDescriptionPopup.PopupItem(id, textureRegion, name);
-    }
-
     private Rect getBuildingPopupRectForTeam(ITeam team) {
         int teamPlanetX = (int) team.getTeamPlanet().getX(),
                 teamPlanetY = (int) team.getTeamPlanet().getY();
         int buildingPopupHeight = 50, buildingPopupWidth = 60;
         return new Rect(teamPlanetX, teamPlanetY - buildingPopupHeight, teamPlanetX + buildingPopupWidth, teamPlanetY);
+    }
+
+    private ImageDescriptionPopup.PopupItem createPopupItem(int id, ITextureRegion textureRegion, String name) {
+        IItemPickListener spriteTouchListener = new IItemPickListener() {
+            @Override
+            public void itemPicked(final int buildingId) {
+                switch (buildingId) {
+                    case 0:
+                        mUserTeam.getTeamPlanet().buildFirstBuilding();
+                        break;
+                    case 1:
+                        mUserTeam.getTeamPlanet().buildSecondBuilding();
+                        break;
+                }
+            }
+        };
+        return new ImageDescriptionPopup.PopupItem(id, textureRegion, name, spriteTouchListener);
     }
 }

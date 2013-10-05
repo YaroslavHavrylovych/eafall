@@ -5,8 +5,10 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /** first building object */
 public class FirstBuildingStaticObject extends StaticObject {
+
     public FirstBuildingStaticObject(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
         super(x, y, textureRegion, vertexBufferObjectManager);
         mIncomeIncreasingValue = 5;
+        mCost = 100;
     }
 }

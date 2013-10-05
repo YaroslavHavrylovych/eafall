@@ -1,0 +1,10 @@
+apply plugin: 'android'
+
+dependencies {
+    compile project(':AndEnginePhysicsBox2DExtension')
+}
+
+android {
+    compileSdkVersion 17
+    buildToolsVersion "18.1"
+}

@@ -36,6 +36,8 @@ import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
+import org.andengine.entity.shape.IAreaShape;
+import org.andengine.entity.shape.RectangularShape;
 import org.andengine.entity.text.Text;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
@@ -182,47 +184,20 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         onCreateSceneCallback.onCreateSceneFinished(mScene);
     }
 
-    @Override
-    public void onPopulateScene(Scene scene, OnPopulateSceneCallback onPopulateSceneCallback) {
-        onPopulateSceneCallback.onPopulateSceneFinished();
+    private void initSceneTouch() {
+        Display display = getWindowManager().getDefaultDisplay();
+        DisplayMetrics metrics = new DisplayMetrics();
+        display.getMetrics(metrics);
+        float screenToSceneRatio = metrics.widthPixels / sCameraWidth;
+        mScene.setOnSceneTouchListener(new MainSceneTouchListener(mCamera, this, screenToSceneRatio));
     }
 
-    /**
-     * create static game object
-     *
-     * @param x abscissa (top left corner) of created static object
-     * @param y ordinate (top left corner) of created static object
-     * @param textureRegion static object {@link ITextureRegion} for creating new {@link StaticObject}
-     * @param key key of current static object
-     *
-     * @return newly created {@link StaticObject}
-     */
-    private StaticObject createStaticObject(float x, float y, ITextureRegion textureRegion, String key) {
-        LoggerHelper.methodInvocation(TAG, "createStaticObject");
-        StaticObject staticObjectSprite = new SunStaticObject(x, y, textureRegion, mEngine.getVertexBufferObjectManager());
-        PhysicsFactory.createCircleBody(mPhysicsWorld, staticObjectSprite, BodyDef.BodyType.StaticBody, mStaticBodyFixtureDef);
-        mScene.attachChild(staticObjectSprite);
-        mStaticObjects.put(key, staticObjectSprite);
-        return staticObjectSprite;
-    }
-
-    /**
-     * create planet game object
-     *
-     * @param x abscissa (top left corner) of created planet
-     * @param y ordinate (top left corner) of created planet
-     * @param textureRegion static object {@link ITextureRegion} for creating new {@link PlanetStaticObject}
-     * @param key key of current planet
-     *
-     * @return newly created {@link PlanetStaticObject}
-     */
-    private PlanetStaticObject createPlanet(float x, float y, ITextureRegion textureRegion, String key) {
-        LoggerHelper.methodInvocation(TAG, "createPlanet");
-        PlanetStaticObject planetStaticObject = new PlanetStaticObject(x, y, textureRegion, mEngine.getVertexBufferObjectManager());
-        PhysicsFactory.createCircleBody(mPhysicsWorld, planetStaticObject, BodyDef.BodyType.StaticBody, mStaticBodyFixtureDef);
-        mScene.attachChild(planetStaticObject);
-        mStaticObjects.put(key, planetStaticObject);
-        return planetStaticObject;
+    private void createBounds() {
+        LoggerHelper.methodInvocation(TAG, "createBounds");
+        PhysicsFactory.createLineBody(mPhysicsWorld, -1, -1, -1, sCameraHeight + 1, mStaticBodyFixtureDef);
+        PhysicsFactory.createLineBody(mPhysicsWorld, -1, -1, sCameraWidth + 1, -1, mStaticBodyFixtureDef);
+        PhysicsFactory.createLineBody(mPhysicsWorld, sCameraWidth + 1, -1, sCameraWidth + 1, sCameraHeight + 1, mStaticBodyFixtureDef);
+        PhysicsFactory.createLineBody(mPhysicsWorld, sCameraWidth + 1, sCameraHeight + 1, -1, sCameraHeight + 1, mStaticBodyFixtureDef);
     }
 
     /** should to separate red (your) from blue (pc) logic */
@@ -230,6 +205,28 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         initUser(mRedTeam, mBlueTeam);
         initBot(mBlueTeam, mRedTeam);
         initMoney();
+    }
+
+    /** init money string for  displaying to user */
+    private void initMoney() {
+        mMoneyTextPrefixString = getString(R.string.money_colon);
+        mMoneyText = new Text(sCameraWidth / 2 - 25, 20,
+                FontHolderUtils.getInstance().getElement(GameStringConstants.KEY_FONT_MONEY),
+                "", mMoneyTextPrefixString.length() + 10, getVertexBufferObjectManager());
+        mScene.attachChild(mMoneyText);
+        mScene.registerUpdateHandler(new TimerHandler(MONEY_UPDATE_TIME, true, new MoneyUpdateCycle(mTeams) {
+            @Override
+            public void postUpdate() {
+                updateMoneyTextOnScreen();
+            }
+        }));
+    }
+
+    private void updateMoneyTextOnScreen() {
+        mMoneyText.setText(TeamUtils.getMoneyString(mMoneyTextPrefixString, mRedTeam));
+    }
+
+    private void initBot(final ITeam initializingTeam, final ITeam enemyTeam) {
     }
 
     /** init planet touch listener for some team */
@@ -255,42 +252,47 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         mScene.registerTouchArea(initiatedTeamPlanet);
     }
 
-    private void initBot(final ITeam initializingTeam, final ITeam enemyTeam) {
+    /**
+     * create planet game object
+     *
+     * @param x abscissa (top left corner) of created planet
+     * @param y ordinate (top left corner) of created planet
+     * @param textureRegion static object {@link ITextureRegion} for creating new {@link PlanetStaticObject}
+     * @param key key of current planet
+     *
+     * @return newly created {@link PlanetStaticObject}
+     */
+    private PlanetStaticObject createPlanet(float x, float y, ITextureRegion textureRegion, String key) {
+        LoggerHelper.methodInvocation(TAG, "createPlanet");
+        PlanetStaticObject planetStaticObject = new PlanetStaticObject(x, y, textureRegion, mEngine.getVertexBufferObjectManager());
+        PhysicsFactory.createCircleBody(mPhysicsWorld, planetStaticObject, BodyDef.BodyType.StaticBody, mStaticBodyFixtureDef);
+        mScene.attachChild(planetStaticObject);
+        mStaticObjects.put(key, planetStaticObject);
+        return planetStaticObject;
     }
 
-    /** init money string for  displaying to user */
-    private void initMoney() {
-        mMoneyTextPrefixString = getString(R.string.money_colon);
-        mMoneyText = new Text(sCameraWidth / 2 - 25, 20,
-                FontHolderUtils.getInstance().getElement(GameStringConstants.KEY_FONT_MONEY),
-                "", mMoneyTextPrefixString.length() + 10, getVertexBufferObjectManager());
-        mScene.attachChild(mMoneyText);
-        mScene.registerUpdateHandler(new TimerHandler(MONEY_UPDATE_TIME, true, new MoneyUpdateCycle(mTeams) {
-            @Override
-            public void postUpdate() {
-                updateMoneyTextOnScreen();
-            }
-        }));
+    /**
+     * create static game object
+     *
+     * @param x abscissa (top left corner) of created static object
+     * @param y ordinate (top left corner) of created static object
+     * @param textureRegion static object {@link ITextureRegion} for creating new {@link StaticObject}
+     * @param key key of current static object
+     *
+     * @return newly created {@link StaticObject}
+     */
+    private StaticObject createStaticObject(float x, float y, ITextureRegion textureRegion, String key) {
+        LoggerHelper.methodInvocation(TAG, "createStaticObject");
+        StaticObject staticObjectSprite = new SunStaticObject(x, y, textureRegion, mEngine.getVertexBufferObjectManager());
+        PhysicsFactory.createCircleBody(mPhysicsWorld, staticObjectSprite, BodyDef.BodyType.StaticBody, mStaticBodyFixtureDef);
+        mScene.attachChild(staticObjectSprite);
+        mStaticObjects.put(key, staticObjectSprite);
+        return staticObjectSprite;
     }
 
-    private void updateMoneyTextOnScreen() {
-        mMoneyText.setText(TeamUtils.getMoneyString(mMoneyTextPrefixString, mRedTeam));
-    }
-
-    private void createBounds() {
-        LoggerHelper.methodInvocation(TAG, "createBounds");
-        PhysicsFactory.createLineBody(mPhysicsWorld, -1, -1, -1, sCameraHeight + 1, mStaticBodyFixtureDef);
-        PhysicsFactory.createLineBody(mPhysicsWorld, -1, -1, sCameraWidth + 1, -1, mStaticBodyFixtureDef);
-        PhysicsFactory.createLineBody(mPhysicsWorld, sCameraWidth + 1, -1, sCameraWidth + 1, sCameraHeight + 1, mStaticBodyFixtureDef);
-        PhysicsFactory.createLineBody(mPhysicsWorld, sCameraWidth + 1, sCameraHeight + 1, -1, sCameraHeight + 1, mStaticBodyFixtureDef);
-    }
-
-    private void initSceneTouch() {
-        Display display = getWindowManager().getDefaultDisplay();
-        DisplayMetrics metrics = new DisplayMetrics();
-        display.getMetrics(metrics);
-        float screenToSceneRatio = metrics.widthPixels / sCameraWidth;
-        mScene.setOnSceneTouchListener(new MainSceneTouchListener(mCamera, this, screenToSceneRatio));
+    @Override
+    public void onPopulateScene(Scene scene, OnPopulateSceneCallback onPopulateSceneCallback) {
+        onPopulateSceneCallback.onPopulateSceneFinished();
     }
 
     @Override
@@ -314,19 +316,18 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
     }
 
     @Override
-    public void attachEntities(final List<IEntity> entities) {
-        for (IEntity entity : entities)
-            mScene.attachChild(entity);
-
+    public void attachEntityWithTouchArea(final IAreaShape entity) {
+        mScene.attachChild(entity);
+        mScene.registerTouchArea(entity);
     }
 
     @Override
-    public void detachEntities(final List<IEntity> entities) {
+    public void detachEntityWithTouch(final IAreaShape entity) {
         GameActivity.this.runOnUpdateThread(new Runnable() {
             @Override
             public void run() {
-                for (IEntity entity : entities)
-                    mScene.detachChild(entity);
+                mScene.unregisterTouchArea(entity);
+                mScene.detachChild(entity);
             }
         });
     }
