@@ -1,13 +1,10 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects;
 
 import android.util.Log;
-
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.IObjectDestroyedListener;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitPathUtil;
-
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.sprite.Sprite;
@@ -91,7 +88,6 @@ public abstract class Unit extends Sprite {
 
         @Override
         public void onTimePassed(TimerHandler pTimerHandler) {
-            LoggerHelper.methodInvocation(TAG, "onTimePassed");
             // check for units to attack
             if (mUnitToAttack != null && mUnitToAttack.isUnitAlive() &&
                     UnitPathUtil.getDistanceBetweenPoints(getX(), getY(),

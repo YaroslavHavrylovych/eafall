@@ -1,6 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -10,6 +11,8 @@ import java.util.Map;
 
 /** represent team planet */
 public class PlanetStaticObject extends StaticObject {
+    /** tag, which is used for debugging purpose */
+    public static final String TAG = StaticObject.class.getCanonicalName();
     // unit spawn point
     private float mSpawnPointX, mSpawnPointY;
     // buildings in current planet
@@ -37,6 +40,7 @@ public class PlanetStaticObject extends StaticObject {
 
     /** build first building */
     public void buildFirstBuilding() {
+        LoggerHelper.methodInvocation(TAG, "buildFirstBuilding");
         final String key = GameStringConstants.KEY_FIRST_BUILDING;
         if (buildings.get(key) == null) {
             final FirstBuildingStaticObject staticObject = new FirstBuildingStaticObject(
@@ -44,7 +48,7 @@ public class PlanetStaticObject extends StaticObject {
                     key), getVertexBufferObjectManager());
             staticObject.setWidth(10);
             staticObject.setHeight(10);
-            buildings.put(key, new BuildingsHolder(GameStringConstants.KEY_FIRST_BUILDING, staticObject));
+            buildings.put(key, new BuildingsHolder(staticObject));
         }
         addBuilding(key);
     }
@@ -52,10 +56,14 @@ public class PlanetStaticObject extends StaticObject {
     private void addBuilding(String key) {
         BuildingsHolder holder = buildings.get(key);
         StaticObject building = buildings.get(key).mStaticObject;
+        LoggerHelper.printDebugMessage(TAG, "building creation : " + "existing money=" + mMoneyAmount
+                + ", cost=" + building.mCost);
         if (mMoneyAmount < building.mCost)
             return;
-        if(holder.mBuildingsAmount == 0)
+        if(holder.mBuildingsAmount == 0) {
+            LoggerHelper.printInformationMessage(TAG, "creating building on planet");
             attachChild(building);
+        }
         mMoneyAmount -= building.mCost;
         holder.increaseBuildingsAmount();
         mIncomeIncreasingValue += building.getObjectIncomeIncreasingValue();
@@ -63,6 +71,7 @@ public class PlanetStaticObject extends StaticObject {
 
     /** build second building */
     public void buildSecondBuilding() {
+        LoggerHelper.methodInvocation(TAG, "buildFirstBuilding");
         final String key = GameStringConstants.KEY_SECOND_BUILDING;
         if (buildings.get(key) == null) {
             StaticObject staticObject = new FirstBuildingStaticObject(16 - 3, 22f, TextureRegionHolderUtils.getInstance().getElement(
@@ -70,7 +79,7 @@ public class PlanetStaticObject extends StaticObject {
             staticObject.setWidth(10);
             staticObject.setHeight(10);
             attachChild(staticObject);
-            buildings.put(key, new BuildingsHolder(GameStringConstants.KEY_SECOND_BUILDING, staticObject));
+            buildings.put(key, new BuildingsHolder(staticObject));
         }
         addBuilding(key);
     }
@@ -84,12 +93,10 @@ public class PlanetStaticObject extends StaticObject {
     }
 
     private class BuildingsHolder {
-        private final String mKey;
         private final StaticObject mStaticObject;
         private int mBuildingsAmount;
 
-        private BuildingsHolder(String key, StaticObject staticObject) {
-            mKey = key;
+        private BuildingsHolder(StaticObject staticObject) {
             mStaticObject = staticObject;
         }
 
@@ -97,6 +104,7 @@ public class PlanetStaticObject extends StaticObject {
             mBuildingsAmount += 1;
         }
 
+        @SuppressWarnings("unused")
         public void decreaseBuildingsAmount() {
             mBuildingsAmount -= 1;
         }

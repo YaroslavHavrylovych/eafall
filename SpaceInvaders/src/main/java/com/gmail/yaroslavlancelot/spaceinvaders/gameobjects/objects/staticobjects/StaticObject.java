@@ -1,6 +1,5 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ISpriteTouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ISpriteTouchable;
 import org.andengine.entity.sprite.Sprite;
@@ -10,14 +9,12 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /** Basic class for all dynamic units in the game */
 public abstract class StaticObject extends Sprite implements ISpriteTouchable {
-    /** tag, which is used for debugging purpose */
-    public static final String TAG = StaticObject.class.getCanonicalName();
-    /** current object touch listener */
-    private ISpriteTouchListener mSpriteOnTouchListener;
     /** amount of money that brings current object */
     protected int mIncomeIncreasingValue;
     /** how much this object is cost */
     protected int mCost;
+    /** current object touch listener */
+    private ISpriteTouchListener mSpriteOnTouchListener;
 
     public StaticObject(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
         super(x, y, textureRegion, vertexBufferObjectManager);
@@ -25,13 +22,13 @@ public abstract class StaticObject extends Sprite implements ISpriteTouchable {
 
     @Override
     public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-        LoggerHelper.methodInvocation(TAG, "onAreaTouched");
-        return mSpriteOnTouchListener != null && mSpriteOnTouchListener.onTouch(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY) || super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+        return mSpriteOnTouchListener != null
+                && mSpriteOnTouchListener.onTouch(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY)
+                || super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
     }
 
     @Override
     public void setOnTouchListener(ISpriteTouchListener spriteTouchListener) {
-        LoggerHelper.methodInvocation(TAG, "setOnTouchListener");
         mSpriteOnTouchListener = spriteTouchListener;
     }
 
@@ -39,6 +36,7 @@ public abstract class StaticObject extends Sprite implements ISpriteTouchable {
         return mIncomeIncreasingValue;
     }
 
+    @SuppressWarnings("unused")
     public int getObjectCost() {
         return mCost;
     }

@@ -19,6 +19,26 @@ public final class LoggerHelper {
     }
 
     /**
+     * Print in debug some message
+     *
+     * @param tag log TAG
+     * @param message message text
+     */
+    public static void printDebugMessage(String tag, String message) {
+        Log.d(tag, message);
+    }
+
+    /**
+     * Print in information some message
+     *
+     * @param tag log TAG
+     * @param message message text
+     */
+    public static void printInformationMessage(String tag, String message) {
+        Log.v(tag, message);
+    }
+
+    /**
      * Print in verbose some message
      *
      * @param tag log TAG
@@ -27,16 +47,6 @@ public final class LoggerHelper {
     @SuppressWarnings("unused")
     public static void printVerboseMessage(String tag, String message) {
         Log.v(tag, message);
-    }
-
-    /**
-     * Print in debug some message
-     *
-     * @param tag log TAG
-     * @param message message text
-     */
-    public static void printDebugMessage(String tag, String message) {
-        Log.d(tag, message);
     }
 
     /**
