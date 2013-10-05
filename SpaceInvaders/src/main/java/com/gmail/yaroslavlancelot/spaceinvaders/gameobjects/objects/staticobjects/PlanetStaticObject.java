@@ -12,7 +12,7 @@ import java.util.Map;
 /** represent team planet */
 public class PlanetStaticObject extends StaticObject {
     /** tag, which is used for debugging purpose */
-    public static final String TAG = StaticObject.class.getCanonicalName();
+    public static final String TAG = PlanetStaticObject.class.getCanonicalName();
     // unit spawn point
     private float mSpawnPointX, mSpawnPointY;
     // buildings in current planet
@@ -71,14 +71,13 @@ public class PlanetStaticObject extends StaticObject {
 
     /** build second building */
     public void buildSecondBuilding() {
-        LoggerHelper.methodInvocation(TAG, "buildFirstBuilding");
+        LoggerHelper.methodInvocation(TAG, "buildSecondBuilding");
         final String key = GameStringConstants.KEY_SECOND_BUILDING;
         if (buildings.get(key) == null) {
             StaticObject staticObject = new FirstBuildingStaticObject(16 - 3, 22f, TextureRegionHolderUtils.getInstance().getElement(
                     key), getVertexBufferObjectManager());
             staticObject.setWidth(10);
             staticObject.setHeight(10);
-            attachChild(staticObject);
             buildings.put(key, new BuildingsHolder(staticObject));
         }
         addBuilding(key);
