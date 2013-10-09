@@ -1,10 +1,14 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameloop.UnitCreatorCycle;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.UnitFactory;
+import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.opengl.texture.region.ITextureRegion;
-import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,10 +23,16 @@ public class PlanetStaticObject extends StaticObject {
     private Map<String, BuildingsHolder> buildings = new HashMap<String, BuildingsHolder>(15);
     /** current team money amount */
     private int mMoneyAmount;
+    /** for creating new units */
+    private EntityOperations mEntityOperations;
+    /** */
+    private ITeam mPlanetTeam;
 
-    public PlanetStaticObject(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
-        super(x, y, textureRegion, vertexBufferObjectManager);
+    public PlanetStaticObject(float x, float y, ITextureRegion textureRegion, EntityOperations entityOperations, ITeam planetTeam) {
+        super(x, y, textureRegion, entityOperations.getObjectManager());
+        mEntityOperations = entityOperations;
         mIncomeIncreasingValue = 10;
+        mPlanetTeam = planetTeam;
     }
 
     public void setSpawnPoint(float spawnPointX, float spawnPointY) {
@@ -48,7 +58,7 @@ public class PlanetStaticObject extends StaticObject {
                     key), getVertexBufferObjectManager());
             staticObject.setWidth(10);
             staticObject.setHeight(10);
-            buildings.put(key, new BuildingsHolder(staticObject));
+            buildings.put(key, new BuildingsHolder(staticObject, UnitFactory.HANDS_ATTACKER));
         }
         addBuilding(key);
     }
@@ -60,12 +70,12 @@ public class PlanetStaticObject extends StaticObject {
                 + ", cost=" + building.mCost);
         if (mMoneyAmount < building.mCost)
             return;
-        if(holder.mBuildingsAmount == 0) {
+        if (holder.mBuildingsAmount == 0) {
             LoggerHelper.printInformationMessage(TAG, "creating building on planet");
             attachChild(building);
         }
-        mMoneyAmount -= building.mCost;
         holder.increaseBuildingsAmount();
+        mMoneyAmount -= building.mCost;
         mIncomeIncreasingValue += building.getObjectIncomeIncreasingValue();
     }
 
@@ -78,7 +88,7 @@ public class PlanetStaticObject extends StaticObject {
                     key), getVertexBufferObjectManager());
             staticObject.setWidth(10);
             staticObject.setHeight(10);
-            buildings.put(key, new BuildingsHolder(staticObject));
+            buildings.put(key, new BuildingsHolder(staticObject, UnitFactory.HANDS_ATTACKER));
         }
         addBuilding(key);
     }
@@ -94,18 +104,22 @@ public class PlanetStaticObject extends StaticObject {
     private class BuildingsHolder {
         private final StaticObject mStaticObject;
         private int mBuildingsAmount;
+        private UnitCreatorCycle mUnitCreatorCycle;
+        private int mUnitKey;
 
-        private BuildingsHolder(StaticObject staticObject) {
+
+        private BuildingsHolder(StaticObject staticObject, int unitKey) {
             mStaticObject = staticObject;
+            mUnitKey = unitKey;
         }
 
         public void increaseBuildingsAmount() {
+            if (mUnitCreatorCycle == null) {
+                mUnitCreatorCycle = new UnitCreatorCycle(mPlanetTeam, mEntityOperations, mUnitKey);
+                registerUpdateHandler(new TimerHandler(2, true, mUnitCreatorCycle));
+            }
             mBuildingsAmount += 1;
-        }
-
-        @SuppressWarnings("unused")
-        public void decreaseBuildingsAmount() {
-            mBuildingsAmount -= 1;
+            mUnitCreatorCycle.increaseUnitAmount();
         }
     }
 }

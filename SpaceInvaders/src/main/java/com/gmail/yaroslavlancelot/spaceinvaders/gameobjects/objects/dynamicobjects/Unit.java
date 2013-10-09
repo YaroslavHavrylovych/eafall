@@ -42,7 +42,7 @@ public abstract class Unit extends Sprite {
     /** unit path */
     protected UnitPathUtil.UnitPath mUnitPath;
 
-    public Unit(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
+    protected Unit(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
         super(x, y, textureRegion, vertexBufferObjectManager);
         registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new SimpleUnitTimerCallback()));
         mUnitPath = UnitPathUtil.getUnitPathAccordingToStartAbscissa(x);

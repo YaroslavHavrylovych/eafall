@@ -10,14 +10,12 @@ import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
-import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserPlanetTouchListener implements ISpriteTouchListener {
     private ITeam mUserTeam;
-    private VertexBufferObjectManager mVertexBufferObjectManager;
     private TextureRegionHolderUtils mTextureRegionHolderUtils = TextureRegionHolderUtils.getInstance();
     private EntityOperations mEntityOperations;
     private Localizable mLocalizable;
@@ -25,10 +23,8 @@ public class UserPlanetTouchListener implements ISpriteTouchListener {
     private boolean mIsFirstTouch = true;
     private ImageDescriptionPopup mPopup;
 
-    public UserPlanetTouchListener(ITeam userTeam, VertexBufferObjectManager vertexBufferObjectManager,
-                                   EntityOperations entityOperations, Localizable localizable) {
+    public UserPlanetTouchListener(ITeam userTeam, EntityOperations entityOperations, Localizable localizable) {
         mUserTeam = userTeam;
-        mVertexBufferObjectManager = vertexBufferObjectManager;
         mEntityOperations = entityOperations;
         mLocalizable = localizable;
     }
@@ -61,15 +57,8 @@ public class UserPlanetTouchListener implements ISpriteTouchListener {
                 mLocalizable.getStringById(R.string.second_building));
         items.add(item);
         // create popup
-        mPopup = new ImageDescriptionPopup(mVertexBufferObjectManager, mEntityOperations, buildingPopupRect);
+        mPopup = new ImageDescriptionPopup(mEntityOperations, buildingPopupRect);
         mPopup.attachMenuItems(items);
-    }
-
-    private Rect getBuildingPopupRectForTeam(ITeam team) {
-        int teamPlanetX = (int) team.getTeamPlanet().getX(),
-                teamPlanetY = (int) team.getTeamPlanet().getY();
-        int buildingPopupHeight = 50, buildingPopupWidth = 60;
-        return new Rect(teamPlanetX, teamPlanetY - buildingPopupHeight, teamPlanetX + buildingPopupWidth, teamPlanetY);
     }
 
     private ImageDescriptionPopup.PopupItem createPopupItem(int id, ITextureRegion textureRegion, String name) {
@@ -87,5 +76,12 @@ public class UserPlanetTouchListener implements ISpriteTouchListener {
             }
         };
         return new ImageDescriptionPopup.PopupItem(id, textureRegion, name, spriteTouchListener);
+    }
+
+    private Rect getBuildingPopupRectForTeam(ITeam team) {
+        int teamPlanetX = (int) team.getTeamPlanet().getX(),
+                teamPlanetY = (int) team.getTeamPlanet().getY();
+        int buildingPopupHeight = 50, buildingPopupWidth = 60;
+        return new Rect(teamPlanetX, teamPlanetY - buildingPopupHeight, teamPlanetX + buildingPopupWidth, teamPlanetY);
     }
 }

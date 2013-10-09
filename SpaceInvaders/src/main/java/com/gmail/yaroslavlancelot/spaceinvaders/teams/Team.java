@@ -12,22 +12,19 @@ public class Team implements ITeam {
     private final String mTeamName;
     /** object related to current team */
     private List<Unit> mTeamObjects;
-    /** teams friendly with current team */
-    private List<ITeam> mFriendlyTeams;
     /** current team main planet */
     private PlanetStaticObject mTeamPlanet;
+    /** */
+    private ITeam mEnemyTeam;
 
-    @SuppressWarnings("unused")
-    public Team(final String teamName, final PlanetStaticObject teamPlanet, final ITeam iTeam) {
-        this(teamName, teamPlanet);
-        addFriendlyTeam(iTeam);
+    public Team(final String teamName) {
+        mTeamObjects = new ArrayList<Unit>(20);
+        mTeamName = teamName;
     }
 
-    public Team(final String teamName, final PlanetStaticObject teamPlanet) {
-        mFriendlyTeams = new ArrayList<ITeam>(1);
-        mTeamObjects = new ArrayList<Unit>(20);
-        mTeamPlanet = teamPlanet;
-        mTeamName = teamName;
+    @Override
+    public void setTeamPlanet(final PlanetStaticObject planet) {
+        mTeamPlanet = planet;
     }
 
     @Override
@@ -41,28 +38,13 @@ public class Team implements ITeam {
     }
 
     @Override
-    public boolean isObjectInTeam(final Unit sprite) {
-        return mTeamObjects.contains(sprite);
+    public void setEnemyTeam(final ITeam enemyTeam) {
+        mEnemyTeam = enemyTeam;
     }
 
     @Override
-    public void addFriendlyTeam(final ITeam iTeam) {
-        mFriendlyTeams.add(iTeam);
-    }
-
-    @Override
-    public void removeFriendlyTeam(final ITeam iTeam) {
-        mFriendlyTeams.remove(iTeam);
-    }
-
-    @Override
-    public boolean isFriendlyTeam(final ITeam iTeam) {
-        return this.equals(iTeam) || mFriendlyTeams.contains(iTeam);
-    }
-
-    @Override
-    public List<ITeam> getFriendlyTeams() {
-        return mFriendlyTeams;
+    public ITeam getEnemyTeam() {
+        return mEnemyTeam;
     }
 
     @Override

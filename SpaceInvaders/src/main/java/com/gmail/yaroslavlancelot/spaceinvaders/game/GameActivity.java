@@ -13,8 +13,8 @@ import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.Localizable;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameloop.MoneyUpdateCycle;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.ObjectDestroyedListener;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.HandsAttacker;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.UnitFactory;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.SunStaticObject;
@@ -48,6 +48,7 @@ import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.color.Color;
 
@@ -165,18 +166,15 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         mPhysicsWorld = new PhysicsWorld(new Vector2(0, 0), false);
         mScene.registerUpdateHandler(mPhysicsWorld);
         // create Sun
-        createStaticObject(sCameraWidth / 2 - PLANET_RADIUS, sCameraHeight / 2 - PLANET_RADIUS, mTextureRegionHolderUtils.getElement(GameStringConstants.KEY_SUN), GameStringConstants.KEY_SUN);
-        // create red planet
-        mRedTeam = new Team(GameStringConstants.RED_TEAM_NAME, createPlanet(0, sCameraHeight / 2 - PLANET_RADIUS,
-                mTextureRegionHolderUtils.getElement(GameStringConstants.KEY_RED_PLANET), GameStringConstants.KEY_RED_PLANET));
-        mRedTeam.getTeamPlanet().setSpawnPoint(PLANET_RADIUS + 15, sCameraHeight / 2);
-        mTeams.add(mRedTeam);
-        // create blue planet
-        mBlueTeam = new Team(GameStringConstants.BLUE_TEAM_NAME, createPlanet(sCameraWidth - PLANET_RADIUS * 2,
-                sCameraHeight / 2 - PLANET_RADIUS,
-                mTextureRegionHolderUtils.getElement(GameStringConstants.KEY_BLUE_PLANET), GameStringConstants.KEY_BLUE_PLANET));
-        mBlueTeam.getTeamPlanet().setSpawnPoint(sCameraWidth - PLANET_RADIUS - 15, sCameraHeight / 2);
-        mTeams.add(mBlueTeam);
+        createStaticObject(sCameraWidth / 2 - PLANET_RADIUS, sCameraHeight / 2 - PLANET_RADIUS,
+                mTextureRegionHolderUtils.getElement(GameStringConstants.KEY_SUN), GameStringConstants.KEY_SUN);
+        // create teams and planets
+        createRedTeamAndPlanet();
+        createBlueTeamAndPlanet();
+
+        // set enemies
+        mRedTeam.setEnemyTeam(mBlueTeam);
+        mBlueTeam.setEnemyTeam(mRedTeam);
 
         createBounds();
         initSceneTouch();
@@ -189,6 +187,25 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
     @Override
     public void onPopulateScene(Scene scene, OnPopulateSceneCallback onPopulateSceneCallback) {
         onPopulateSceneCallback.onPopulateSceneFinished();
+    }
+
+    private void createRedTeamAndPlanet() {
+        mRedTeam = new Team(GameStringConstants.RED_TEAM_NAME);
+        mRedTeam.setTeamPlanet(createPlanet(0, sCameraHeight / 2 - PLANET_RADIUS,
+                mTextureRegionHolderUtils.getElement(GameStringConstants.KEY_RED_PLANET), GameStringConstants.KEY_RED_PLANET,
+                mRedTeam));
+        mRedTeam.getTeamPlanet().setSpawnPoint(PLANET_RADIUS + 15, sCameraHeight / 2);
+        mTeams.add(mRedTeam);
+    }
+
+    private void createBlueTeamAndPlanet() {
+        mBlueTeam = new Team(GameStringConstants.BLUE_TEAM_NAME);
+        mBlueTeam.setTeamPlanet(createPlanet(sCameraWidth - PLANET_RADIUS * 2,
+                sCameraHeight / 2 - PLANET_RADIUS,
+                mTextureRegionHolderUtils.getElement(GameStringConstants.KEY_BLUE_PLANET), GameStringConstants.KEY_BLUE_PLANET,
+                mBlueTeam));
+        mBlueTeam.getTeamPlanet().setSpawnPoint(sCameraWidth - PLANET_RADIUS - 15, sCameraHeight / 2);
+        mTeams.add(mBlueTeam);
     }
 
     /**
@@ -205,7 +222,7 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         LoggerHelper.methodInvocation(TAG, "createStaticObject");
         StaticObject staticObjectSprite = new SunStaticObject(x, y, textureRegion, mEngine.getVertexBufferObjectManager());
         PhysicsFactory.createCircleBody(mPhysicsWorld, staticObjectSprite, BodyDef.BodyType.StaticBody, mStaticBodyFixtureDef);
-        mScene.attachChild(staticObjectSprite);
+        attachEntity(staticObjectSprite);
         mStaticObjects.put(key, staticObjectSprite);
         return staticObjectSprite;
     }
@@ -217,14 +234,15 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
      * @param y ordinate (top left corner) of created planet
      * @param textureRegion static object {@link ITextureRegion} for creating new {@link PlanetStaticObject}
      * @param key key of current planet
+     * @param team new planet team
      *
      * @return newly created {@link PlanetStaticObject}
      */
-    private PlanetStaticObject createPlanet(float x, float y, ITextureRegion textureRegion, String key) {
+    private PlanetStaticObject createPlanet(float x, float y, ITextureRegion textureRegion, String key, ITeam team) {
         LoggerHelper.methodInvocation(TAG, "createPlanet");
-        PlanetStaticObject planetStaticObject = new PlanetStaticObject(x, y, textureRegion, mEngine.getVertexBufferObjectManager());
+        PlanetStaticObject planetStaticObject = new PlanetStaticObject(x, y, textureRegion, this, team);
         PhysicsFactory.createCircleBody(mPhysicsWorld, planetStaticObject, BodyDef.BodyType.StaticBody, mStaticBodyFixtureDef);
-        mScene.attachChild(planetStaticObject);
+        attachEntity(planetStaticObject);
         mStaticObjects.put(key, planetStaticObject);
         return planetStaticObject;
     }
@@ -232,37 +250,24 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
     /** should to separate red (your) from blue (pc) logic */
     private void initGameLogicAndRelatedElements() {
         LoggerHelper.methodInvocation(TAG, "initGameLogicAndRelatedElements");
-        initUser(mRedTeam, mBlueTeam);
-        initBot(mBlueTeam, mRedTeam);
+        initUser(mRedTeam);
+        initBot(mBlueTeam);
         initMoney();
     }
 
     /** init planet touch listener for some team */
-    private void initUser(final ITeam initializingTeam, final ITeam enemyTeam) {
+    private void initUser(final ITeam initializingTeam) {
         LoggerHelper.methodInvocation(TAG, "initUser");
         // create building
         final StaticObject initiatedTeamPlanet = initializingTeam.getTeamPlanet();
-//        ISpriteTouchListener initiatedTeamPlanetTouchListener = new ISpriteTouchListener() {
-//            @Override
-//            public boolean onTouch(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-//                LoggerHelper.methodInvocation(TAG, "initGameLogicAndRelatedElements.planetOnTouchListener");
-//                if (!pSceneTouchEvent.isActionUp()) return true;
-//
-//                ITextureRegion textureRegion = initializingTeam.getTeamName().equals(GameStringConstants.RED_TEAM_NAME) ?
-//                        mTextureRegionHolderUtils.getElement(GameStringConstants.KEY_RED_WARRIOR) :
-//                        mTextureRegionHolderUtils.getElement(GameStringConstants.KEY_BLUE_WARRIOR);
-//                createUnitForTeam(textureRegion, initializingTeam, enemyTeam);
-//                return true;
-//            }
-//        };
-        ISpriteTouchListener initiatedTeamPlanetTouchListener = new UserPlanetTouchListener(initializingTeam,
-                getVertexBufferObjectManager(), this, this);
+        ISpriteTouchListener initiatedTeamPlanetTouchListener
+                = new UserPlanetTouchListener(initializingTeam, this, this);
         initiatedTeamPlanet.setOnTouchListener(initiatedTeamPlanetTouchListener);
         mScene.registerTouchArea(initiatedTeamPlanet);
     }
 
     @SuppressWarnings("unused")
-    private void initBot(final ITeam initializingTeam, final ITeam enemyTeam) {
+    private void initBot(final ITeam initializingTeam) {
         LoggerHelper.methodInvocation(TAG, "initBot");
     }
 
@@ -273,7 +278,7 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         mMoneyText = new Text(sCameraWidth / 2 - 25, 20,
                 FontHolderUtils.getInstance().getElement(GameStringConstants.KEY_FONT_MONEY),
                 "", mMoneyTextPrefixString.length() + 10, getVertexBufferObjectManager());
-        mScene.attachChild(mMoneyText);
+        attachEntity(mMoneyText);
         mScene.registerUpdateHandler(new TimerHandler(MONEY_UPDATE_TIME, true, new MoneyUpdateCycle(mTeams) {
             @Override
             public void postUpdate() {
@@ -340,11 +345,25 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         });
     }
 
-    @SuppressWarnings("unused")
-    private Unit createUnitForTeam(final ITextureRegion textureRegion, final ITeam unitTeam, final ITeam enemyTeam) {
-        Unit warrior = createUnit(unitTeam.getTeamPlanet().getSpawnPointX(), unitTeam.getTeamPlanet().getSpawnPointY(), textureRegion, mScene);
+    @Override
+    public VertexBufferObjectManager getObjectManager() {
+        return getVertexBufferObjectManager();
+    }
+
+    /**
+     * create dynamic game object (e.g. warrior or some other stuff)
+     *
+     * @param unitKey key to identify which kind of unit you want to build
+     * @param unitTeam team unit of which should be created
+     *
+     * @return newly created unit
+     */
+    @Override
+    public Unit createUnitForTeam(int unitKey, final ITeam unitTeam) {
+        Unit warrior = createUnit(unitTeam.getTeamPlanet().getSpawnPointX(), unitTeam.getTeamPlanet().getSpawnPointY(),
+                unitKey, unitTeam.getTeamName());
         unitTeam.addObjectToTeam(warrior);
-        warrior.setEnemiesUpdater(UnitCallbacksUtils.getSimpleUnitEnemiesUpdater(enemyTeam));
+        warrior.setEnemiesUpdater(UnitCallbacksUtils.getSimpleUnitEnemiesUpdater(unitTeam.getEnemyTeam()));
         warrior.setObjectDestroyedListener(new ObjectDestroyedListener(unitTeam, this));
         return warrior;
     }
@@ -354,15 +373,16 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
      *
      * @param x abscissa (top left corner) of created dynamic object
      * @param y ordinate (top left corner) of created dynamic object
-     * @param textureRegion static object {@link ITextureRegion} for creating new {@link com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit}
+     * @param unitKey key to identify which kind of unit you want to build
+     * @param unitTeamName name of team, unit of which should be created
      *
      * @return newly created {@link com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit}
      */
-    private Unit createUnit(float x, float y, ITextureRegion textureRegion, Scene scene) {
+    private Unit createUnit(float x, float y, int unitKey, String unitTeamName) {
         LoggerHelper.methodInvocation(TAG, "createUnit");
-        Unit unit = new HandsAttacker(x, y, textureRegion, mEngine.getVertexBufferObjectManager());
+        Unit unit = UnitFactory.getInstance(unitKey, unitTeamName, x, y, getVertexBufferObjectManager());
         final FixtureDef playerFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f);
-        scene.attachChild(unit);
+        attachEntity(unit);
         Body body = PhysicsFactory.createCircleBody(mPhysicsWorld, unit, BodyDef.BodyType.DynamicBody, playerFixtureDef);
         unit.setBody(body);
         mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(unit, body, true, true));

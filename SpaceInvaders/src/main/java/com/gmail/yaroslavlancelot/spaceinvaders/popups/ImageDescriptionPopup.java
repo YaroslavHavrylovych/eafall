@@ -11,14 +11,11 @@ import org.andengine.entity.shape.IAreaShape;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
-import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import java.util.List;
 
 /** Flow popup which contains images and their descriptions */
 public class ImageDescriptionPopup {
-    /** form parent activity (set in constructor) */
-    private VertexBufferObjectManager mVertexBufferObjectManager;
     /** for attaching/detaching {@link org.andengine.entity.sprite.Sprite} */
     private EntityOperations mEntityOperations;
     /** form parent activity (set in constructor) */
@@ -31,8 +28,7 @@ public class ImageDescriptionPopup {
     /** represent boolean value which true if popup is showing now and false in other way */
     private boolean mIsPopupShowing;
 
-    public ImageDescriptionPopup(VertexBufferObjectManager vertexBufferObjectManager, EntityOperations entityOperations, Rect rect) {
-        mVertexBufferObjectManager = vertexBufferObjectManager;
+    public ImageDescriptionPopup(EntityOperations entityOperations, Rect rect) {
         mAreaForPopup = rect;
         mEntityOperations = entityOperations;
     }
@@ -67,7 +63,8 @@ public class ImageDescriptionPopup {
     private void attachItems(final PopupItem popupItem) {
 
         // picture
-        IMenuItem imageMenuItem = new SpriteMenuItem(popupItem.mId, popupItem.mItemTextureRegion, mVertexBufferObjectManager) {
+        IMenuItem imageMenuItem = new SpriteMenuItem(popupItem.mId, popupItem.mItemTextureRegion,
+                mEntityOperations.getObjectManager()) {
             @Override
             public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX,
                                          final float pTouchAreaLocalY) {
@@ -90,7 +87,7 @@ public class ImageDescriptionPopup {
 
                 Text(textX, textY,
                         FontHolderUtils.getInstance().getElement(GameStringConstants.KEY_FONT_MONEY),
-                        popupItem.mItemName, mVertexBufferObjectManager) {
+                        popupItem.mItemName, mEntityOperations.getObjectManager()) {
 
                     @Override
                     public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX,

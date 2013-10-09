@@ -5,7 +5,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /** unit which can attack without bullets */
 public class HandsAttacker extends Unit {
-    public HandsAttacker(final float x, final float y, final ITextureRegion textureRegion,
+    protected HandsAttacker(final float x, final float y, final ITextureRegion textureRegion,
                          final VertexBufferObjectManager vertexBufferObjectManager) {
         super(x, y, textureRegion, vertexBufferObjectManager);
     }
