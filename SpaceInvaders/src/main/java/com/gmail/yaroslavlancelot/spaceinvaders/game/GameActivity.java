@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
+import com.gmail.yaroslavlancelot.spaceinvaders.ai.SimpleBot;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.Localizable;
@@ -269,6 +270,7 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
     @SuppressWarnings("unused")
     private void initBot(final ITeam initializingTeam) {
         LoggerHelper.methodInvocation(TAG, "initBot");
+        new Thread(new SimpleBot(initializingTeam)).start();
     }
 
     /** init money string for  displaying to user */

@@ -14,7 +14,7 @@ public class Team implements ITeam {
     private List<Unit> mTeamObjects;
     /** current team main planet */
     private PlanetStaticObject mTeamPlanet;
-    /** */
+    /** team to fight with */
     private ITeam mEnemyTeam;
 
     public Team(final String teamName) {

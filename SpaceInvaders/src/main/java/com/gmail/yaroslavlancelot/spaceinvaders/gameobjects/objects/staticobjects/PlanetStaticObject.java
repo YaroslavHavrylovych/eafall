@@ -25,7 +25,7 @@ public class PlanetStaticObject extends StaticObject {
     private int mMoneyAmount;
     /** for creating new units */
     private EntityOperations mEntityOperations;
-    /** */
+    /** the team, current planet belongs to */
     private ITeam mPlanetTeam;
 
     public PlanetStaticObject(float x, float y, ITextureRegion textureRegion, EntityOperations entityOperations, ITeam planetTeam) {
