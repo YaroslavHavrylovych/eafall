@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.ai.SimpleBot;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.Localizable;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameloop.MoneyUpdateCycle;
@@ -64,12 +65,7 @@ import java.util.List;
 public class GameActivity extends BaseGameActivity implements Localizable, EntityOperations {
     /** tag, which is used for debugging purpose */
     public static final String TAG = GameActivity.class.getCanonicalName();
-    /** Camera width. Width of part of the screen which is currently viewed by user */
-    public static final int sCameraWidth = 800;
-    /** Camera height. Height of part of the screen which is currently viewed by user */
-    public static final int sCameraHeight = 480;
     public static final int MONEY_UPDATE_TIME = 3;
-    public static final int PLANET_RADIUS = 32;
     /** {@link FixtureDef} for obstacles (static bodies) */
     private final FixtureDef mStaticBodyFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f);
     /*
@@ -101,18 +97,21 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
     @Override
     public EngineOptions onCreateEngineOptions() {
         LoggerHelper.methodInvocation(TAG, "onCreateEngineOptions");
-        // init camera
-        mCamera = new SmoothCamera(0, 0, sCameraWidth, sCameraHeight, sCameraWidth, sCameraHeight, 1.0f);
-        mCamera.setBounds(0, 0, sCameraWidth, sCameraHeight);
-        mCamera.setBoundsEnabled(true);
         // multi-touch
         if (!MultiTouch.isSupported(this)) {
             LoggerHelper.printErrorMessage(TAG, "MultiTouch isn't supported");
             finish();
         }
 
+        // init camera
+        mCamera = new SmoothCamera(0, 0, SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT,
+                SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT, 1.0f);
+        mCamera.setBounds(0, 0, SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT);
+        mCamera.setBoundsEnabled(true);
+
         return new EngineOptions(
-                true, ScreenOrientation.LANDSCAPE_FIXED, new RatioResolutionPolicy(sCameraWidth, sCameraHeight), mCamera);
+                true, ScreenOrientation.LANDSCAPE_FIXED, new RatioResolutionPolicy(
+                SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT), mCamera);
     }
 
     @Override
@@ -166,10 +165,8 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         mScene.setBackground(new Background(0, 0, 0));
         mPhysicsWorld = new PhysicsWorld(new Vector2(0, 0), false);
         mScene.registerUpdateHandler(mPhysicsWorld);
-        // create Sun
-        createStaticObject(sCameraWidth / 2 - PLANET_RADIUS, sCameraHeight / 2 - PLANET_RADIUS,
-                mTextureRegionHolderUtils.getElement(GameStringConstants.KEY_SUN), GameStringConstants.KEY_SUN);
-        // create teams and planets
+        // sun and planets
+        createSun();
         createRedTeamAndPlanet();
         createBlueTeamAndPlanet();
 
@@ -192,40 +189,43 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
 
     private void createRedTeamAndPlanet() {
         mRedTeam = new Team(GameStringConstants.RED_TEAM_NAME);
-        mRedTeam.setTeamPlanet(createPlanet(0, sCameraHeight / 2 - PLANET_RADIUS,
+        mRedTeam.setTeamPlanet(createPlanet(0, (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2,
                 mTextureRegionHolderUtils.getElement(GameStringConstants.KEY_RED_PLANET), GameStringConstants.KEY_RED_PLANET,
                 mRedTeam));
-        mRedTeam.getTeamPlanet().setSpawnPoint(PLANET_RADIUS + 15, sCameraHeight / 2);
+        mRedTeam.getTeamPlanet().setSpawnPoint(SizeConstants.PLANET_DIAMETER / 2 + SizeConstants.UNIT_SIZE + 2,
+                SizeConstants.GAME_FIELD_HEIGHT / 2);
         mTeams.add(mRedTeam);
     }
 
     private void createBlueTeamAndPlanet() {
         mBlueTeam = new Team(GameStringConstants.BLUE_TEAM_NAME);
-        mBlueTeam.setTeamPlanet(createPlanet(sCameraWidth - PLANET_RADIUS * 2,
-                sCameraHeight / 2 - PLANET_RADIUS,
+        mBlueTeam.setTeamPlanet(createPlanet(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER,
+                (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2,
                 mTextureRegionHolderUtils.getElement(GameStringConstants.KEY_BLUE_PLANET), GameStringConstants.KEY_BLUE_PLANET,
                 mBlueTeam));
-        mBlueTeam.getTeamPlanet().setSpawnPoint(sCameraWidth - PLANET_RADIUS - 15, sCameraHeight / 2);
+        mBlueTeam.getTeamPlanet().setSpawnPoint(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER / 2 -
+                SizeConstants.UNIT_SIZE - 2,
+                SizeConstants.GAME_FIELD_HEIGHT / 2);
         mTeams.add(mBlueTeam);
     }
 
     /**
      * create static game object
      *
-     * @param x abscissa (top left corner) of created static object
-     * @param y ordinate (top left corner) of created static object
-     * @param textureRegion static object {@link ITextureRegion} for creating new {@link StaticObject}
-     * @param key key of current static object
-     *
-     * @return newly created {@link StaticObject}
+     * @return newly created {@link SunStaticObject}
      */
-    private StaticObject createStaticObject(float x, float y, ITextureRegion textureRegion, String key) {
-        LoggerHelper.methodInvocation(TAG, "createStaticObject");
-        StaticObject staticObjectSprite = new SunStaticObject(x, y, textureRegion, mEngine.getVertexBufferObjectManager());
-        PhysicsFactory.createCircleBody(mPhysicsWorld, staticObjectSprite, BodyDef.BodyType.StaticBody, mStaticBodyFixtureDef);
-        attachEntity(staticObjectSprite);
-        mStaticObjects.put(key, staticObjectSprite);
-        return staticObjectSprite;
+    private SunStaticObject createSun() {
+        float x = (SizeConstants.GAME_FIELD_WIDTH - SizeConstants.SUN_DIAMETER) / 2;
+        float y = (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.SUN_DIAMETER) / 2;
+        ITextureRegion textureRegion = mTextureRegionHolderUtils.getElement(GameStringConstants.KEY_SUN);
+        String key = GameStringConstants.KEY_SUN;
+
+        LoggerHelper.methodInvocation(TAG, "createSun");
+        SunStaticObject sunStaticObject = new SunStaticObject(x, y, textureRegion, mEngine.getVertexBufferObjectManager());
+        PhysicsFactory.createCircleBody(mPhysicsWorld, sunStaticObject, BodyDef.BodyType.StaticBody, mStaticBodyFixtureDef);
+        attachEntity(sunStaticObject);
+        mStaticObjects.put(key, sunStaticObject);
+        return sunStaticObject;
     }
 
     /**
@@ -267,7 +267,6 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         mScene.registerTouchArea(initiatedTeamPlanet);
     }
 
-    @SuppressWarnings("unused")
     private void initBot(final ITeam initializingTeam) {
         LoggerHelper.methodInvocation(TAG, "initBot");
         new Thread(new SimpleBot(initializingTeam)).start();
@@ -277,7 +276,7 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
     private void initMoney() {
         LoggerHelper.methodInvocation(TAG, "initMoney");
         mMoneyTextPrefixString = getString(R.string.money_colon);
-        mMoneyText = new Text(sCameraWidth / 2 - 25, 20,
+        mMoneyText = new Text(SizeConstants.GAME_FIELD_WIDTH / 2 - 25, 20,
                 FontHolderUtils.getInstance().getElement(GameStringConstants.KEY_FONT_MONEY),
                 "", mMoneyTextPrefixString.length() + 10, getVertexBufferObjectManager());
         attachEntity(mMoneyText);
@@ -295,10 +294,15 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
 
     private void createBounds() {
         LoggerHelper.methodInvocation(TAG, "createBounds");
-        PhysicsFactory.createLineBody(mPhysicsWorld, -1, -1, -1, sCameraHeight + 1, mStaticBodyFixtureDef);
-        PhysicsFactory.createLineBody(mPhysicsWorld, -1, -1, sCameraWidth + 1, -1, mStaticBodyFixtureDef);
-        PhysicsFactory.createLineBody(mPhysicsWorld, sCameraWidth + 1, -1, sCameraWidth + 1, sCameraHeight + 1, mStaticBodyFixtureDef);
-        PhysicsFactory.createLineBody(mPhysicsWorld, sCameraWidth + 1, sCameraHeight + 1, -1, sCameraHeight + 1, mStaticBodyFixtureDef);
+        PhysicsFactory.createLineBody(
+                mPhysicsWorld, -1, -1, -1, SizeConstants.GAME_FIELD_HEIGHT + 1, mStaticBodyFixtureDef);
+        PhysicsFactory.createLineBody(
+                mPhysicsWorld, -1, -1, SizeConstants.GAME_FIELD_WIDTH + 1, -1, mStaticBodyFixtureDef);
+        PhysicsFactory.createLineBody(
+                mPhysicsWorld, SizeConstants.GAME_FIELD_WIDTH + 1, -1, SizeConstants.GAME_FIELD_WIDTH + 1,
+                SizeConstants.GAME_FIELD_WIDTH + 1, mStaticBodyFixtureDef);
+        PhysicsFactory.createLineBody(mPhysicsWorld, SizeConstants.GAME_FIELD_WIDTH + 1,
+                SizeConstants.GAME_FIELD_HEIGHT + 1, -1, SizeConstants.GAME_FIELD_HEIGHT + 1, mStaticBodyFixtureDef);
     }
 
     private void initSceneTouch() {
@@ -306,7 +310,7 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         Display display = getWindowManager().getDefaultDisplay();
         DisplayMetrics metrics = new DisplayMetrics();
         display.getMetrics(metrics);
-        float screenToSceneRatio = metrics.widthPixels / sCameraWidth;
+        float screenToSceneRatio = metrics.widthPixels / SizeConstants.GAME_FIELD_WIDTH;
         mScene.setOnSceneTouchListener(new MainSceneTouchListener(mCamera, this, screenToSceneRatio));
     }
 

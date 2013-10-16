@@ -1,6 +1,5 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects;
 
-import android.util.Log;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.IObjectDestroyedListener;
@@ -17,8 +16,6 @@ import java.util.List;
 
 /** Basic class for all dynamic game units */
 public abstract class Unit extends Sprite {
-    /** tag, which is used for debugging purpose */
-    public static final String TAG = Unit.class.getCanonicalName();
     /** physics body associated with current object {@link Sprite} */
     protected Body mSimpleWarriorBody;
     /** max velocity for this unit */
@@ -138,7 +135,6 @@ public abstract class Unit extends Sprite {
             float ordinateSpeed = mMaxVelocity * distanceX / maxAbsDistance,
                     abscissaSpeed = mMaxVelocity * distanceY / maxAbsDistance;
 
-            Log.v(TAG, "xSpeed = " + ordinateSpeed + ", ySpeed = " + abscissaSpeed);
             setUnitLinearVelocity(ordinateSpeed, abscissaSpeed);
         }
 

@@ -1,6 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.utils;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.game.GameActivity;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 
 /** Common operation with unit path */
 public class UnitPathUtil {
@@ -11,11 +11,26 @@ public class UnitPathUtil {
      */
     public static final float MIN_DISTANCE_TO_SWITCH_TO_ANOTHER_POINT = 60;
     /** unit check point x coordinates if unit moves from left to right */
-    private static final float[] xArray1 = new float[]{32, 200, 400, 600, GameActivity.sCameraWidth - 32};
+    private static final float[] xArray1 = new float[]{
+            SizeConstants.PLANET_DIAMETER,
+            SizeConstants.GAME_FIELD_WIDTH / 3,
+            SizeConstants.GAME_FIELD_WIDTH / 2,
+            SizeConstants.GAME_FIELD_WIDTH / 2 + SizeConstants.GAME_FIELD_WIDTH / 3,
+            SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER / 2};
     /** unit check point x coordinates if unit moves from right to left */
-    private static final float[] yArray = new float[]{GameActivity.sCameraHeight / 2 - 32, 100, 40, 100, GameActivity.sCameraHeight / 2 - 32};
+    private static final float[] yArray = new float[]{
+            SizeConstants.GAME_FIELD_HEIGHT / 2 - SizeConstants.PLANET_DIAMETER / 2,
+            SizeConstants.GAME_FIELD_HEIGHT / 5,
+            SizeConstants.GAME_FIELD_HEIGHT / 10,
+            SizeConstants.GAME_FIELD_HEIGHT / 5,
+            SizeConstants.GAME_FIELD_HEIGHT / 2 - SizeConstants.PLANET_DIAMETER / 2};
     /** unit check point y coordinates */
-    private static final float[] xArray2 = new float[]{GameActivity.sCameraWidth - 32, 600, 400, 200, 32};
+    private static final float[] xArray2 = new float[]{
+            SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER / 2,
+            SizeConstants.GAME_FIELD_WIDTH - SizeConstants.GAME_FIELD_WIDTH / 3,
+            SizeConstants.GAME_FIELD_WIDTH / 2,
+            SizeConstants.GAME_FIELD_WIDTH / 3,
+            SizeConstants.PLANET_DIAMETER / 2};
 
     private UnitPathUtil() {
     }

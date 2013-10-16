@@ -31,7 +31,7 @@ public class UnitFactory {
         Unit unit;
         switch (unitKey) {
             case HANDS_ATTACKER: {
-                unit = new HandsAttacker(x, y, textureRegion, vertexBufferObjectManager);
+                unit = new WithoutAnimationAttacker(x, y, textureRegion, vertexBufferObjectManager);
                 return unit;
             }
         }

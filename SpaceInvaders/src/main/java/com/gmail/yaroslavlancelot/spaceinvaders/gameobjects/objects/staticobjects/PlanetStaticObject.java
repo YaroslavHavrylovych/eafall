@@ -1,6 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameloop.UnitCreatorCycle;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.UnitFactory;
@@ -22,7 +23,7 @@ public class PlanetStaticObject extends StaticObject {
     // buildings in current planet
     private Map<String, BuildingsHolder> buildings = new HashMap<String, BuildingsHolder>(15);
     /** current team money amount */
-    private int mMoneyAmount;
+    private int mMoneyAmount = 90;
     /** for creating new units */
     private EntityOperations mEntityOperations;
     /** the team, current planet belongs to */
@@ -33,6 +34,8 @@ public class PlanetStaticObject extends StaticObject {
         mEntityOperations = entityOperations;
         mIncomeIncreasingValue = 10;
         mPlanetTeam = planetTeam;
+        setWidth(SizeConstants.PLANET_DIAMETER);
+        setHeight(SizeConstants.PLANET_DIAMETER);
     }
 
     public void setSpawnPoint(float spawnPointX, float spawnPointY) {
@@ -56,8 +59,6 @@ public class PlanetStaticObject extends StaticObject {
             final FirstBuildingStaticObject staticObject = new FirstBuildingStaticObject(
                     16 - 3, 5f, TextureRegionHolderUtils.getInstance().getElement(
                     key), getVertexBufferObjectManager());
-            staticObject.setWidth(10);
-            staticObject.setHeight(10);
             buildings.put(key, new BuildingsHolder(staticObject, UnitFactory.HANDS_ATTACKER));
         }
         addBuilding(key);
@@ -86,8 +87,6 @@ public class PlanetStaticObject extends StaticObject {
         if (buildings.get(key) == null) {
             StaticObject staticObject = new FirstBuildingStaticObject(16 - 3, 22f, TextureRegionHolderUtils.getInstance().getElement(
                     key), getVertexBufferObjectManager());
-            staticObject.setWidth(10);
-            staticObject.setHeight(10);
             buildings.put(key, new BuildingsHolder(staticObject, UnitFactory.HANDS_ATTACKER));
         }
         addBuilding(key);
