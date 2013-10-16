@@ -22,8 +22,6 @@ public class PlanetStaticObject extends StaticObject {
     private float mSpawnPointX, mSpawnPointY;
     // buildings in current planet
     private Map<String, BuildingsHolder> buildings = new HashMap<String, BuildingsHolder>(15);
-    /** current team money amount */
-    private int mMoneyAmount = 90;
     /** for creating new units */
     private EntityOperations mEntityOperations;
     /** the team, current planet belongs to */
@@ -67,16 +65,16 @@ public class PlanetStaticObject extends StaticObject {
     private void addBuilding(String key) {
         BuildingsHolder holder = buildings.get(key);
         StaticObject building = buildings.get(key).mStaticObject;
-        LoggerHelper.printDebugMessage(TAG, "building creation : " + "existing money=" + mMoneyAmount
+        LoggerHelper.printDebugMessage(TAG, "building creation : " + "existing money=" + getMoneyAmount()
                 + ", cost=" + building.mCost);
-        if (mMoneyAmount < building.mCost)
+        if (getMoneyAmount() < building.mCost)
             return;
         if (holder.mBuildingsAmount == 0) {
             LoggerHelper.printInformationMessage(TAG, "creating building on planet");
             attachChild(building);
         }
         holder.increaseBuildingsAmount();
-        mMoneyAmount -= building.mCost;
+        buyBuilding(building.mCost);
         mIncomeIncreasingValue += building.getObjectIncomeIncreasingValue();
     }
 
@@ -92,12 +90,13 @@ public class PlanetStaticObject extends StaticObject {
         addBuilding(key);
     }
 
-    public int getMoneyAmount() {
-        return mMoneyAmount;
+    private int getMoneyAmount() {
+        return mPlanetTeam == null ? 0 : mPlanetTeam.getMoney();
     }
 
-    public void setMoneyAmount(final int value) {
-        mMoneyAmount = value;
+    private void buyBuilding(int cost) {
+        if(mPlanetTeam != null)
+            mPlanetTeam.changeMoney(-cost);
     }
 
     private class BuildingsHolder {
