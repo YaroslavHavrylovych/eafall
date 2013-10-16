@@ -2,6 +2,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.popups;
 
 import android.graphics.Rect;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.IItemPickListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
@@ -78,7 +79,7 @@ public class ImageDescriptionPopup {
         imageMenuItem.setX(mAreaForPopup.left);
         imageMenuItem.setY(mAreaForPopup.top + (PopupItem.ITEM_HEIGHT + PopupItem.ITEM_SEPARATOR_LENGTH) * popupItem.mId);
         imageMenuItem.setWidth(PopupItem.ITEM_IMAGE_WIDTH);
-        imageMenuItem.setHeight(PopupItem.ITEM_HEIGHT);
+        imageMenuItem.setHeight(PopupItem.ITEM_IMAGE_WIDTH);
         // text
         float textX = imageMenuItem.getX() + imageMenuItem.getWidth() + PopupItem.ITEM_SEPARATOR_LENGTH,
                 textY = imageMenuItem.getY() + imageMenuItem.getHeight() -
@@ -125,7 +126,7 @@ public class ImageDescriptionPopup {
      */
     public static class PopupItem {
         /** popup image height */
-        private static final int ITEM_HEIGHT = 20;
+        private static final int ITEM_HEIGHT = SizeConstants.MONEY_FONT_SIZE;
         /** popup image height */
         private static final int ITEM_IMAGE_WIDTH = 20;
         /** separator between elements/items */

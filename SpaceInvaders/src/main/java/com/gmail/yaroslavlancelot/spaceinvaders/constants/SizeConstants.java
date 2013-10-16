@@ -10,6 +10,7 @@ public final class SizeConstants {
     public static final int SUN_DIAMETER = 224;
     public static final int BUILDING_DIAMETER = 16;
     public static final int UNIT_SIZE = 16;
+    public static final int MONEY_FONT_SIZE = 35;
 
     private SizeConstants() {
     }

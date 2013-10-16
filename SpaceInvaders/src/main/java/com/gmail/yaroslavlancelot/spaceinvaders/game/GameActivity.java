@@ -31,6 +31,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.utils.TeamUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitCallbacksUtils;
 import org.andengine.engine.camera.SmoothCamera;
+import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
@@ -108,6 +109,7 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
                 SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT, 1.0f);
         mCamera.setBounds(0, 0, SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT);
         mCamera.setBoundsEnabled(true);
+        mCamera.setHUD(new HUD());
 
         return new EngineOptions(
                 true, ScreenOrientation.LANDSCAPE_FIXED, new RatioResolutionPolicy(
@@ -150,7 +152,7 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
 
         // font
         IFont font = FontFactory.create(this.getFontManager(), this.getTextureManager(), 256, 256,
-                Typeface.create(Typeface.DEFAULT, Typeface.BOLD), 12, Color.WHITE.hashCode());
+                Typeface.create(Typeface.DEFAULT, Typeface.BOLD), SizeConstants.MONEY_FONT_SIZE, Color.WHITE.hashCode());
         font.load();
         FontHolderUtils.getInstance().addElement(GameStringConstants.KEY_FONT_MONEY, font);
 
@@ -188,7 +190,13 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
     }
 
     private void createRedTeamAndPlanet() {
-        mRedTeam = new Team(GameStringConstants.RED_TEAM_NAME);
+        mRedTeam = new Team(GameStringConstants.RED_TEAM_NAME) {
+            @Override
+            public void changeMoney(final int delta) {
+                super.changeMoney(delta);
+                updateMoneyTextOnScreen();
+            }
+        };
         mRedTeam.setTeamPlanet(createPlanet(0, (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2,
                 mTextureRegionHolderUtils.getElement(GameStringConstants.KEY_RED_PLANET), GameStringConstants.KEY_RED_PLANET,
                 mRedTeam));
@@ -276,16 +284,14 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
     private void initMoney() {
         LoggerHelper.methodInvocation(TAG, "initMoney");
         mMoneyTextPrefixString = getString(R.string.money_colon);
-        mMoneyText = new Text(SizeConstants.GAME_FIELD_WIDTH / 2 - 25, 20,
-                FontHolderUtils.getInstance().getElement(GameStringConstants.KEY_FONT_MONEY),
-                "", mMoneyTextPrefixString.length() + 10, getVertexBufferObjectManager());
-        attachEntity(mMoneyText);
-        mScene.registerUpdateHandler(new TimerHandler(MONEY_UPDATE_TIME, true, new MoneyUpdateCycle(mTeams) {
-            @Override
-            public void postUpdate() {
-                updateMoneyTextOnScreen();
-            }
-        }));
+        int maxStringLength = mMoneyTextPrefixString.length() + 6;
+        mMoneyText = new Text(SizeConstants.GAME_FIELD_WIDTH - maxStringLength * SizeConstants.MONEY_FONT_SIZE,
+                SizeConstants.MONEY_FONT_SIZE, FontHolderUtils.getInstance().getElement(GameStringConstants.KEY_FONT_MONEY),
+                "", maxStringLength, getVertexBufferObjectManager());
+        HUD hud = mCamera.getHUD();
+        hud.attachChild(mMoneyText);
+        updateMoneyTextOnScreen();
+        hud.registerUpdateHandler(new TimerHandler(MONEY_UPDATE_TIME, true, new MoneyUpdateCycle(mTeams)));
     }
 
     private void updateMoneyTextOnScreen() {

@@ -16,6 +16,8 @@ public class Team implements ITeam {
     private PlanetStaticObject mTeamPlanet;
     /** team to fight with */
     private ITeam mEnemyTeam;
+    /** current team money amount */
+    private int mMoneyAmount = 90;
 
     public Team(final String teamName) {
         mTeamObjects = new ArrayList<Unit>(20);
@@ -64,12 +66,12 @@ public class Team implements ITeam {
 
     @Override
     public int getMoney() {
-        return mTeamPlanet.getMoneyAmount();
+        return mMoneyAmount;
     }
 
     @Override
     public void changeMoney(final int delta) {
-        mTeamPlanet.setMoneyAmount(mTeamPlanet.getMoneyAmount() + delta);
+        mMoneyAmount += delta;
     }
 
     @Override
