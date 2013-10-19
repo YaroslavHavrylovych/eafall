@@ -30,7 +30,7 @@ public class UnitPathUtil {
             SizeConstants.GAME_FIELD_WIDTH - SizeConstants.GAME_FIELD_WIDTH / 3,
             SizeConstants.GAME_FIELD_WIDTH / 2,
             SizeConstants.GAME_FIELD_WIDTH / 3,
-            SizeConstants.PLANET_DIAMETER};
+            SizeConstants.PLANET_DIAMETER / 2};
 
     private UnitPathUtil() {
     }
