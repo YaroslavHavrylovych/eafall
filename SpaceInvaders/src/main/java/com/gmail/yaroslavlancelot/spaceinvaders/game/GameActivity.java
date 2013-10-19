@@ -152,20 +152,10 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         onCreateResourcesCallback.onCreateResourcesFinished();
     }
 
-    private ITeam createUserTeam(Color teamColor, IRace teamRace, String teamName) {
-        ITeam team = new Team(teamName, teamRace) {
-            @Override
-            public void changeMoney(final int delta) {
-                super.changeMoney(delta);
-                updateMoneyTextOnScreen();
-            }
-        };
+    private ITeam createBotTeam(Color teamColor, IRace teamRace, String teamName) {
+        ITeam team = new Team(teamName, teamRace);
         team.setTeamColor(teamColor);
         return team;
-    }
-
-    private void updateMoneyTextOnScreen() {
-        mMoneyText.setText(TeamUtils.getMoneyString(mMoneyTextPrefixString, mRedTeam));
     }
 
     @Override
@@ -198,10 +188,20 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         onPopulateSceneCallback.onPopulateSceneFinished();
     }
 
-    private ITeam createBotTeam(Color teamColor, IRace teamRace, String teamName) {
-        ITeam team = new Team(teamName, teamRace);
+    private ITeam createUserTeam(Color teamColor, IRace teamRace, String teamName) {
+        ITeam team = new Team(teamName, teamRace) {
+            @Override
+            public void changeMoney(final int delta) {
+                super.changeMoney(delta);
+                updateMoneyTextOnScreen();
+            }
+        };
         team.setTeamColor(teamColor);
         return team;
+    }
+
+    private void updateMoneyTextOnScreen() {
+        mMoneyText.setText(TeamUtils.getMoneyString(mMoneyTextPrefixString, mRedTeam));
     }
 
     private void initRedTeamAndPlanet() {
@@ -395,6 +395,7 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         Unit unit = unitTeam.getTeamRace().getUnitForBuilding(unitKey, getVertexBufferObjectManager(), unitTeam.getTeamColor());
         unit.setX(unitTeam.getTeamPlanet().getSpawnPointX());
         unit.setY(unitTeam.getTeamPlanet().getSpawnPointY());
+        unit.calculateUnitPath();
         final FixtureDef playerFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f);
         attachEntity(unit);
         Body body = PhysicsFactory.createCircleBody(mPhysicsWorld, unit, BodyDef.BodyType.DynamicBody, playerFixtureDef);

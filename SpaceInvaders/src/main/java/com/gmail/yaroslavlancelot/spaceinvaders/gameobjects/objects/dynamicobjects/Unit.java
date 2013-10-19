@@ -54,7 +54,11 @@ public abstract class Unit extends Rectangle {
         attachChild(mBackground);
         registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new SimpleUnitTimerCallback()));
         attachChild(mUnitSprite);
-        mUnitPath = UnitPathUtil.getUnitPathAccordingToStartAbscissa(x);
+
+    }
+
+    public void calculateUnitPath() {
+        mUnitPath = UnitPathUtil.getUnitPathAccordingToStartAbscissa(getX());
     }
 
     @Override
