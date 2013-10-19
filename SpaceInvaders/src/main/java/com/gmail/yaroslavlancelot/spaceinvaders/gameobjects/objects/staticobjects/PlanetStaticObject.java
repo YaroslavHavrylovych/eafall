@@ -4,7 +4,6 @@ import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameloop.UnitCreatorCycle;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.UnitFactory;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
@@ -21,7 +20,7 @@ public class PlanetStaticObject extends StaticObject {
     // unit spawn point
     private float mSpawnPointX, mSpawnPointY;
     // buildings in current planet
-    private Map<String, BuildingsHolder> buildings = new HashMap<String, BuildingsHolder>(15);
+    private Map<Integer, BuildingsHolder> buildings = new HashMap<Integer, BuildingsHolder>(15);
     /** for creating new units */
     private EntityOperations mEntityOperations;
     /** the team, current planet belongs to */
@@ -52,17 +51,17 @@ public class PlanetStaticObject extends StaticObject {
     /** build first building */
     public void buildFirstBuilding() {
         LoggerHelper.methodInvocation(TAG, "buildFirstBuilding");
-        final String key = GameStringConstants.KEY_FIRST_BUILDING;
-        if (buildings.get(key) == null) {
-            final FirstBuildingStaticObject staticObject = new FirstBuildingStaticObject(
-                    16 - 3, 5f, TextureRegionHolderUtils.getInstance().getElement(
-                    key), getVertexBufferObjectManager());
-            buildings.put(key, new BuildingsHolder(staticObject, UnitFactory.HANDS_ATTACKER));
+        if (buildings.get(0) == null) {
+            final StaticObject staticObject =
+                    mPlanetTeam.getTeamRace().getBuildingById(0, getVertexBufferObjectManager());
+            staticObject.setX(16 - 3);
+            staticObject.setY(5);
+            buildings.put(0, new BuildingsHolder(staticObject, 0));
         }
-        addBuilding(key);
+        addBuilding(0);
     }
 
-    private void addBuilding(String key) {
+    private void addBuilding(int key) {
         BuildingsHolder holder = buildings.get(key);
         StaticObject building = buildings.get(key).mStaticObject;
         LoggerHelper.printDebugMessage(TAG, "building creation : " + "existing money=" + getMoneyAmount()
@@ -81,13 +80,14 @@ public class PlanetStaticObject extends StaticObject {
     /** build second building */
     public void buildSecondBuilding() {
         LoggerHelper.methodInvocation(TAG, "buildSecondBuilding");
-        final String key = GameStringConstants.KEY_SECOND_BUILDING;
-        if (buildings.get(key) == null) {
-            StaticObject staticObject = new FirstBuildingStaticObject(16 - 3, 22f, TextureRegionHolderUtils.getInstance().getElement(
-                    key), getVertexBufferObjectManager());
-            buildings.put(key, new BuildingsHolder(staticObject, UnitFactory.HANDS_ATTACKER));
+        if (buildings.get(1) == null) {
+            final StaticObject staticObject =
+                    mPlanetTeam.getTeamRace().getBuildingById(0, getVertexBufferObjectManager());
+            staticObject.setX(16 - 3);
+            staticObject.setY(22);
+            buildings.put(1, new BuildingsHolder(staticObject, 1));
         }
-        addBuilding(key);
+        addBuilding(1);
     }
 
     private int getMoneyAmount() {

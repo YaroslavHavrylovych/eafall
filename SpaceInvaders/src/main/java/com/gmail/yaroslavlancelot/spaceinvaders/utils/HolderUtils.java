@@ -19,4 +19,15 @@ public abstract class HolderUtils<T> {
     public void addElement(String id, T element) {
         textureRegionMap.put(id, element);
     }
+
+    /**
+     * check is element has been already added
+     *
+     * @param id element id
+     *
+     * @return true - if element holdered (already added) and false in other way
+     */
+    public boolean isElementExist(String id) {
+        return textureRegionMap.get(id) != null;
+    }
 }

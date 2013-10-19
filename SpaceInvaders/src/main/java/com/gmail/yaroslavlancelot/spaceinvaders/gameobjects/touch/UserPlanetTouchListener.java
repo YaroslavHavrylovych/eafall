@@ -1,12 +1,12 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch;
 
-import android.graphics.Rect;
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.Localizable;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.ImageDescriptionPopup;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -46,19 +46,26 @@ public class UserPlanetTouchListener implements ISpriteTouchListener {
     }
 
     private void initBuildingPopupForTeam(ITeam team) {
-        Rect buildingPopupRect = getBuildingPopupRectForTeam(team);
+        Area buildingPopupRect = getBuildingPopupRectForTeam(team);
         // init elements
         List<ImageDescriptionPopup.PopupItem> items = new ArrayList<ImageDescriptionPopup.PopupItem>(2);
         ImageDescriptionPopup.PopupItem item;
-        item = createPopupItem(0, mTextureRegionHolderUtils.getElement(GameStringConstants.KEY_FIRST_BUILDING),
+        item = createPopupItem(0, mTextureRegionHolderUtils.getElement(GameStringConstants.KEY_IMPERIALS_FIRST_BUILDING),
                 mLocalizable.getStringById(R.string.first_building));
         items.add(item);
-        item = createPopupItem(1, mTextureRegionHolderUtils.getElement(GameStringConstants.KEY_SECOND_BUILDING),
+        item = createPopupItem(1, mTextureRegionHolderUtils.getElement(GameStringConstants.KEY_IMPERIALS_SECOND_BUILDING),
                 mLocalizable.getStringById(R.string.second_building));
         items.add(item);
         // create popup
         mPopup = new ImageDescriptionPopup(mEntityOperations, buildingPopupRect);
         mPopup.attachMenuItems(items);
+    }
+
+    private Area getBuildingPopupRectForTeam(ITeam team) {
+        int teamPlanetX = (int) team.getTeamPlanet().getX(),
+                teamPlanetY = (int) team.getTeamPlanet().getY();
+        int buildingPopupHeight = 50, buildingPopupWidth = 60;
+        return new Area(teamPlanetX, teamPlanetY - buildingPopupHeight, teamPlanetX + buildingPopupWidth, teamPlanetY);
     }
 
     private ImageDescriptionPopup.PopupItem createPopupItem(int id, ITextureRegion textureRegion, String name) {
@@ -76,12 +83,5 @@ public class UserPlanetTouchListener implements ISpriteTouchListener {
             }
         };
         return new ImageDescriptionPopup.PopupItem(id, textureRegion, name, spriteTouchListener);
-    }
-
-    private Rect getBuildingPopupRectForTeam(ITeam team) {
-        int teamPlanetX = (int) team.getTeamPlanet().getX(),
-                teamPlanetY = (int) team.getTeamPlanet().getY();
-        int buildingPopupHeight = 50, buildingPopupWidth = 60;
-        return new Rect(teamPlanetX, teamPlanetY - buildingPopupHeight, teamPlanetX + buildingPopupWidth, teamPlanetY);
     }
 }

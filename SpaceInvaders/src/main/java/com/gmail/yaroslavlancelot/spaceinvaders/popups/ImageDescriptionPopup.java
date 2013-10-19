@@ -1,10 +1,10 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.popups;
 
-import android.graphics.Rect;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.IItemPickListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.SpriteMenuItem;
@@ -20,7 +20,7 @@ public class ImageDescriptionPopup {
     /** for attaching/detaching {@link org.andengine.entity.sprite.Sprite} */
     private EntityOperations mEntityOperations;
     /** form parent activity (set in constructor) */
-    private Rect mAreaForPopup;
+    private Area mAreaForPopup;
     /**
      * {@link com.gmail.yaroslavlancelot.spaceinvaders.popups.ImageDescriptionPopup.PopupItem}
      * that should be displayed. Passed with attachMenuItems(items)
@@ -29,8 +29,8 @@ public class ImageDescriptionPopup {
     /** represent boolean value which true if popup is showing now and false in other way */
     private boolean mIsPopupShowing;
 
-    public ImageDescriptionPopup(EntityOperations entityOperations, Rect rect) {
-        mAreaForPopup = rect;
+    public ImageDescriptionPopup(EntityOperations entityOperations, Area areaForPopup) {
+        mAreaForPopup = areaForPopup;
         mEntityOperations = entityOperations;
     }
 
