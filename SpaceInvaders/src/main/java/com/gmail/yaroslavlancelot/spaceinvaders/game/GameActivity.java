@@ -16,13 +16,14 @@ import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.Localizable;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameloop.MoneyUpdateCycle;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.ObjectDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.UnitFactory;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.SunStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ISpriteTouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.MainSceneTouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.UserPlanetTouchListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
+import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.Imperials;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.Team;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
@@ -83,9 +84,9 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
     /** all teams in current game */
     private List<ITeam> mTeams = new ArrayList<ITeam>();
     /** red team */
-    private Team mRedTeam;
+    private ITeam mRedTeam;
     /** blue team */
-    private Team mBlueTeam;
+    private ITeam mBlueTeam;
     /** game camera */
     private SmoothCamera mCamera;
     /** object, which display money status to user */
@@ -122,22 +123,14 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         mTextureRegionHolderUtils = TextureRegionHolderUtils.getInstance();
 
         //* small objects
-
-        BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(getTextureManager(), 29, 12, TextureOptions.BILINEAR);
-        // warriors
-        mTextureRegionHolderUtils.addElement(GameStringConstants.KEY_RED_WARRIOR,
-                BitmapTextureAtlasTextureRegionFactory.createFromAsset(smallObjectTexture, this, GameStringConstants.FILE_RED_WARRIOR, 0, 0));
-        mTextureRegionHolderUtils.addElement(GameStringConstants.KEY_BLUE_WARRIOR,
-                BitmapTextureAtlasTextureRegionFactory.createFromAsset(smallObjectTexture, this, GameStringConstants.FILE_BLUE_WARRIOR, 12, 0));
-        // buildings
-        mTextureRegionHolderUtils.addElement(GameStringConstants.KEY_FIRST_BUILDING,
-                BitmapTextureAtlasTextureRegionFactory.createFromAsset(smallObjectTexture, this, GameStringConstants.FILE_FIRST_BUILDING, 24, 0));
-        mTextureRegionHolderUtils.addElement(GameStringConstants.KEY_SECOND_BUILDING,
-                BitmapTextureAtlasTextureRegionFactory.createFromAsset(smallObjectTexture, this, GameStringConstants.FILE_SECOND_BUILDING, 24, 5));
-
-        // loading
-        smallObjectTexture.load();
-
+        // user
+        IRace userRace = new Imperials();
+        userRace.loadResources(getTextureManager(), this);
+        mRedTeam = createUserTeam(Color.RED, userRace, GameStringConstants.RED_TEAM_NAME);
+        // bot
+        IRace botRace = new Imperials();
+        botRace.loadResources(getTextureManager(), this);
+        mBlueTeam = createBotTeam(Color.BLUE, botRace, GameStringConstants.BLUE_TEAM_NAME);
 
         //* bigger objects
         BitmapTextureAtlas biggerObjectsTexture = new BitmapTextureAtlas(getTextureManager(), 192, 64, TextureOptions.BILINEAR);
@@ -159,6 +152,22 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         onCreateResourcesCallback.onCreateResourcesFinished();
     }
 
+    private ITeam createUserTeam(Color teamColor, IRace teamRace, String teamName) {
+        ITeam team = new Team(teamName, teamRace) {
+            @Override
+            public void changeMoney(final int delta) {
+                super.changeMoney(delta);
+                updateMoneyTextOnScreen();
+            }
+        };
+        team.setTeamColor(teamColor);
+        return team;
+    }
+
+    private void updateMoneyTextOnScreen() {
+        mMoneyText.setText(TeamUtils.getMoneyString(mMoneyTextPrefixString, mRedTeam));
+    }
+
     @Override
     public void onCreateScene(OnCreateSceneCallback onCreateSceneCallback) {
         LoggerHelper.methodInvocation(TAG, "onCreateScene");
@@ -169,8 +178,8 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         mScene.registerUpdateHandler(mPhysicsWorld);
         // sun and planets
         createSun();
-        createRedTeamAndPlanet();
-        createBlueTeamAndPlanet();
+        initRedTeamAndPlanet();
+        initBlueTeamAndPlanet();
 
         // set enemies
         mRedTeam.setEnemyTeam(mBlueTeam);
@@ -189,14 +198,13 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         onPopulateSceneCallback.onPopulateSceneFinished();
     }
 
-    private void createRedTeamAndPlanet() {
-        mRedTeam = new Team(GameStringConstants.RED_TEAM_NAME) {
-            @Override
-            public void changeMoney(final int delta) {
-                super.changeMoney(delta);
-                updateMoneyTextOnScreen();
-            }
-        };
+    private ITeam createBotTeam(Color teamColor, IRace teamRace, String teamName) {
+        ITeam team = new Team(teamName, teamRace);
+        team.setTeamColor(teamColor);
+        return team;
+    }
+
+    private void initRedTeamAndPlanet() {
         mRedTeam.setTeamPlanet(createPlanet(0, (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2,
                 mTextureRegionHolderUtils.getElement(GameStringConstants.KEY_RED_PLANET), GameStringConstants.KEY_RED_PLANET,
                 mRedTeam));
@@ -205,8 +213,7 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         mTeams.add(mRedTeam);
     }
 
-    private void createBlueTeamAndPlanet() {
-        mBlueTeam = new Team(GameStringConstants.BLUE_TEAM_NAME);
+    private void initBlueTeamAndPlanet() {
         mBlueTeam.setTeamPlanet(createPlanet(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER,
                 (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2,
                 mTextureRegionHolderUtils.getElement(GameStringConstants.KEY_BLUE_PLANET), GameStringConstants.KEY_BLUE_PLANET,
@@ -294,10 +301,6 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         hud.registerUpdateHandler(new TimerHandler(MONEY_UPDATE_TIME, true, new MoneyUpdateCycle(mTeams)));
     }
 
-    private void updateMoneyTextOnScreen() {
-        mMoneyText.setText(TeamUtils.getMoneyString(mMoneyTextPrefixString, mRedTeam));
-    }
-
     private void createBounds() {
         LoggerHelper.methodInvocation(TAG, "createBounds");
         PhysicsFactory.createLineBody(
@@ -372,8 +375,7 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
      */
     @Override
     public Unit createUnitForTeam(int unitKey, final ITeam unitTeam) {
-        Unit warrior = createUnit(unitTeam.getTeamPlanet().getSpawnPointX(), unitTeam.getTeamPlanet().getSpawnPointY(),
-                unitKey, unitTeam.getTeamName());
+        Unit warrior = createUnitCarcass(unitKey, unitTeam);
         unitTeam.addObjectToTeam(warrior);
         warrior.setEnemiesUpdater(UnitCallbacksUtils.getSimpleUnitEnemiesUpdater(unitTeam.getEnemyTeam()));
         warrior.setObjectDestroyedListener(new ObjectDestroyedListener(unitTeam, this));
@@ -383,16 +385,16 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
     /**
      * create dynamic game object (e.g. warrior or some other stuff)
      *
-     * @param x abscissa (top left corner) of created dynamic object
-     * @param y ordinate (top left corner) of created dynamic object
      * @param unitKey key to identify which kind of unit you want to build
-     * @param unitTeamName name of team, unit of which should be created
+     * @param unitTeam team unit of which should be created
      *
-     * @return newly created {@link com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit}
+     * @return newly created unit
      */
-    private Unit createUnit(float x, float y, int unitKey, String unitTeamName) {
-        LoggerHelper.methodInvocation(TAG, "createUnit");
-        Unit unit = UnitFactory.getInstance(unitKey, unitTeamName, x, y, getVertexBufferObjectManager());
+    private Unit createUnitCarcass(int unitKey, ITeam unitTeam) {
+        LoggerHelper.methodInvocation(TAG, "createUnitCarcass");
+        Unit unit = unitTeam.getTeamRace().getUnitForBuilding(unitKey, getVertexBufferObjectManager(), unitTeam.getTeamColor());
+        unit.setX(unitTeam.getTeamPlanet().getSpawnPointX());
+        unit.setY(unitTeam.getTeamPlanet().getSpawnPointY());
         final FixtureDef playerFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f);
         attachEntity(unit);
         Body body = PhysicsFactory.createCircleBody(mPhysicsWorld, unit, BodyDef.BodyType.DynamicBody, playerFixtureDef);

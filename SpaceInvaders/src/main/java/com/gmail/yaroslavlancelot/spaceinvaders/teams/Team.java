@@ -2,6 +2,8 @@ package com.gmail.yaroslavlancelot.spaceinvaders.teams;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
+import org.andengine.util.color.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +20,15 @@ public class Team implements ITeam {
     private ITeam mEnemyTeam;
     /** current team money amount */
     private int mMoneyAmount = 90;
+    /** race of current team */
+    private final IRace mTeamRace;
+    /** team color */
+    private Color mTeamColor = new Color(100, 100, 100);
 
-    public Team(final String teamName) {
+    public Team(final String teamName, IRace teamRace) {
         mTeamObjects = new ArrayList<Unit>(20);
         mTeamName = teamName;
+        mTeamRace = teamRace;
     }
 
     @Override
@@ -77,5 +84,20 @@ public class Team implements ITeam {
     @Override
     public void incomeTime() {
         changeMoney(mTeamPlanet.getObjectIncomeIncreasingValue());
+    }
+
+    @Override
+    public IRace getTeamRace() {
+        return mTeamRace;
+    }
+
+    @Override
+    public Color getTeamColor() {
+        return mTeamColor;
+    }
+
+    @Override
+    public void setTeamColor(final Color teamColor) {
+        mTeamColor = teamColor;
     }
 }

@@ -3,19 +3,22 @@ package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobje
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.IObjectDestroyedListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitPathUtil;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
+import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.color.Color;
 
 import java.util.List;
 
 /** Basic class for all dynamic game units */
-public abstract class Unit extends Sprite {
+public abstract class Unit extends Rectangle {
     /** physics body associated with current object {@link Sprite} */
     protected Body mSimpleWarriorBody;
     /** max velocity for this unit */
@@ -38,11 +41,32 @@ public abstract class Unit extends Sprite {
     protected IObjectDestroyedListener mObjectDestroyedListener;
     /** unit path */
     protected UnitPathUtil.UnitPath mUnitPath;
+    /** unit sprite */
+    protected Sprite mUnitSprite;
+    /** background unit color */
+    protected Rectangle mBackground;
 
     protected Unit(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
-        super(x, y, textureRegion, vertexBufferObjectManager);
+        super(x, y, textureRegion.getWidth(), textureRegion.getWidth(), vertexBufferObjectManager);
+        setColor(Color.TRANSPARENT);
+        mUnitSprite = new Sprite(x, y, textureRegion, vertexBufferObjectManager);
+        mBackground = new Rectangle(0, 0, 0, 0, vertexBufferObjectManager);
+        attachChild(mBackground);
         registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new SimpleUnitTimerCallback()));
+        attachChild(mUnitSprite);
         mUnitPath = UnitPathUtil.getUnitPathAccordingToStartAbscissa(x);
+    }
+
+    @Override
+    public void setWidth(final float pWidth) {
+        super.setWidth(pWidth);
+        mUnitSprite.setWidth(pWidth);
+    }
+
+    @Override
+    public void setHeight(final float pHeight) {
+        super.setHeight(pHeight);
+        mUnitSprite.setHeight(pHeight);
     }
 
     public abstract void hitUnit(int hitPower);
@@ -70,7 +94,7 @@ public abstract class Unit extends Sprite {
 
     @Override
     public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-        return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+        return mUnitSprite.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
     }
 
     public int getViewRadius() {
@@ -78,6 +102,17 @@ public abstract class Unit extends Sprite {
     }
 
     protected abstract void attackGoal();
+
+    public void setBackgroundArea(Area area) {
+        mBackground.setX(area.left);
+        mBackground.setY(area.top);
+        mBackground.setWidth(area.width);
+        mBackground.setHeight(area.height);
+    }
+
+    public void setBackgroundColor(Color color) {
+        mBackground.setColor(color);
+    }
 
     /** used for update current object in game loop */
     protected class SimpleUnitTimerCallback implements ITimerCallback {

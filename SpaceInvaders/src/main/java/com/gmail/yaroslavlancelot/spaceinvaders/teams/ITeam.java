@@ -2,6 +2,8 @@ package com.gmail.yaroslavlancelot.spaceinvaders.teams;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
+import org.andengine.util.color.Color;
 
 import java.util.List;
 
@@ -27,5 +29,11 @@ public interface ITeam {
 
     void changeMoney(int delta);
 
-    public void incomeTime();
+    void incomeTime();
+
+    IRace getTeamRace();
+
+    Color getTeamColor();
+
+    void setTeamColor(Color teamColor);
 }

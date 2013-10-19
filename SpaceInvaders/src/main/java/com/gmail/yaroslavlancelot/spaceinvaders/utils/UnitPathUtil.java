@@ -15,7 +15,7 @@ public class UnitPathUtil {
             SizeConstants.PLANET_DIAMETER,
             SizeConstants.GAME_FIELD_WIDTH / 3,
             SizeConstants.GAME_FIELD_WIDTH / 2,
-            SizeConstants.GAME_FIELD_WIDTH / 2 + SizeConstants.GAME_FIELD_WIDTH / 3,
+            SizeConstants.GAME_FIELD_WIDTH - SizeConstants.GAME_FIELD_WIDTH / 3,
             SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER / 2};
     /** unit check point x coordinates if unit moves from right to left */
     private static final float[] yArray = new float[]{
@@ -30,7 +30,7 @@ public class UnitPathUtil {
             SizeConstants.GAME_FIELD_WIDTH - SizeConstants.GAME_FIELD_WIDTH / 3,
             SizeConstants.GAME_FIELD_WIDTH / 2,
             SizeConstants.GAME_FIELD_WIDTH / 3,
-            SizeConstants.PLANET_DIAMETER / 2};
+            SizeConstants.PLANET_DIAMETER};
 
     private UnitPathUtil() {
     }
