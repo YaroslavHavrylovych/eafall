@@ -3,17 +3,14 @@ package com.gmail.yaroslavlancelot.spaceinvaders.races.imperials;
 import android.content.Context;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Higgs;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Annihilator;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.FirstImperialsBuilding;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
-import org.andengine.entity.Entity;
-import org.andengine.entity.IEntity;
-import org.andengine.entity.primitive.Rectangle;
-import org.andengine.entity.shape.IAreaShape;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
@@ -47,7 +44,7 @@ public class Imperials implements IRace {
     @Override
     public Unit getUnitForBuilding(final int buildingId, final VertexBufferObjectManager objectManager, Color teamColor) {
         Unit unit = new ImperialsFirstUnit(0, 0, TextureRegionHolderUtils.getInstance().getElement(
-                GameStringConstants.KEY_IMPERIALS_WARRIOR), objectManager);
+                GameStringConstants.KEY_IMPERIALS_WARRIOR), objectManager, new Annihilator(30), new Higgs(20));
         float width = SizeConstants.UNIT_TEAM_COLOR_INNER_SPRITE_SIZE;
         unit.setBackgroundArea(new Area(2.5f, 2.5f, width, width));
         unit.setBackgroundColor(teamColor);

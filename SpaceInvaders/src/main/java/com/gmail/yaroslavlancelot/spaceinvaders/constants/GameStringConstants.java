@@ -20,9 +20,6 @@ public final class GameStringConstants {
     public static final String BLUE_TEAM_NAME = "blue";
     /** key used to identify money font */
     public static final String KEY_FONT_MONEY = "key_money_font";
-    /** first building key */
-    public static final String KEY_IMPERIALS_FIRST_BUILDING = "imperials_first_building";
-
     /*
      *
      * Buildings keys and resources
@@ -34,6 +31,7 @@ public final class GameStringConstants {
      * Imperials
      */
     /* keys */
+    public static final String KEY_IMPERIALS_FIRST_BUILDING = "imperials_first_building";
     public static final String KEY_IMPERIALS_SECOND_BUILDING = "imperials_second_building";
     public static final String KEY_IMPERIALS_THIRD_BUILDING = "imperials_third_building";
     public static final String KEY_IMPERIALS_FOURTH_BUILDING = "imperials_fourth_building";

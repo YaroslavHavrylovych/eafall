@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects;
+package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks;
 
 import org.andengine.entity.shape.IAreaShape;
 
