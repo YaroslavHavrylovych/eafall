@@ -9,12 +9,12 @@ public abstract class Armor {
         mArmorValue = armorValue;
     }
 
-    public int getDamage(int damageValue, Damage.DamageType damageType) {
-        int realDamage = damageValue;
+    public int getDamage(Damage damage) {
+        int realDamage = getDamageAfterConsumption(damage);
         return realDamage * realDamage / (realDamage + mArmorValue) + 1;
     }
 
-    protected abstract int getDamageAfterConsumption();
+    protected abstract int getDamageAfterConsumption(Damage damage);
 
     public abstract ArmorType getArmorType();
 
