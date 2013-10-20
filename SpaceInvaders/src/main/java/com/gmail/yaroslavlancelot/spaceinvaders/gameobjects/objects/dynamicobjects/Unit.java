@@ -3,6 +3,8 @@ package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobje
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IObjectDestroyedListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Armor;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Damage;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitPathUtil;
 import org.andengine.engine.handler.timer.ITimerCallback;
@@ -27,8 +29,6 @@ public abstract class Unit extends Rectangle {
     protected float mUpdateCycleTime = .5f;
     /** unit health */
     protected int mUnitHealth = 100;
-    /** unit damage */
-    protected int mDamage = 15;
     /** attack radius of current unit */
     protected int mAttackRadius = 100;
     /** area in which unit can search for enemies */
@@ -45,8 +45,13 @@ public abstract class Unit extends Rectangle {
     protected Sprite mUnitSprite;
     /** background unit color */
     protected Rectangle mBackground;
+    /** unit damage */
+    protected Damage mUnitDamage;
+    /** unit armor */
+    protected Armor mUnitArmor;
 
-    protected Unit(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
+    protected Unit(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager,
+                   Damage unitDamage, Armor unitArmor) {
         super(x, y, textureRegion.getWidth(), textureRegion.getWidth(), vertexBufferObjectManager);
         setColor(Color.TRANSPARENT);
         mUnitSprite = new Sprite(x, y, textureRegion, vertexBufferObjectManager);
@@ -54,7 +59,8 @@ public abstract class Unit extends Rectangle {
         attachChild(mBackground);
         registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new SimpleUnitTimerCallback()));
         attachChild(mUnitSprite);
-
+        mUnitArmor = unitArmor;
+        mUnitDamage = unitDamage;
     }
 
     public void calculateUnitPath() {
@@ -73,7 +79,7 @@ public abstract class Unit extends Rectangle {
         mUnitSprite.setHeight(pHeight);
     }
 
-    public abstract void hitUnit(int hitPower);
+    public abstract void hitUnit(Damage mUnitDamage);
 
     /**
      * set physics body associated with current {@link Sprite}
