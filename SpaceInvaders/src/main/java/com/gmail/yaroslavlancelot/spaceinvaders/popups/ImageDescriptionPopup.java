@@ -1,17 +1,16 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.popups;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.IItemPickListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ISpriteTouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
-import org.andengine.entity.scene.menu.item.IMenuItem;
-import org.andengine.entity.scene.menu.item.SpriteMenuItem;
 import org.andengine.entity.shape.IAreaShape;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
-import org.andengine.opengl.texture.region.ITextureRegion;
 
 import java.util.List;
 
@@ -62,32 +61,30 @@ public class ImageDescriptionPopup {
     }
 
     private void attachItems(final PopupItem popupItem) {
-
         // picture
-        IMenuItem imageMenuItem = new SpriteMenuItem(popupItem.mId, popupItem.mItemTextureRegion,
-                mEntityOperations.getObjectManager()) {
+        popupItem.mItemStaticObject.setOnTouchListener(new ISpriteTouchListener() {
             @Override
-            public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX,
-                                         final float pTouchAreaLocalY) {
+            public boolean onTouch(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
                 if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_UP) {
                     popupItem.mItemPickListener.itemPicked(popupItem.mId);
                     return true;
                 }
                 return false;
             }
-        };
-        imageMenuItem.setX(mAreaForPopup.left);
-        imageMenuItem.setY(mAreaForPopup.top + (PopupItem.ITEM_HEIGHT + PopupItem.ITEM_SEPARATOR_LENGTH) * popupItem.mId);
-        imageMenuItem.setWidth(PopupItem.ITEM_IMAGE_WIDTH);
-        imageMenuItem.setHeight(PopupItem.ITEM_IMAGE_WIDTH);
+        });
+        popupItem.mItemStaticObject.setX(mAreaForPopup.left);
+        popupItem.mItemStaticObject.setY(
+                mAreaForPopup.top + (PopupItem.ITEM_HEIGHT + PopupItem.ITEM_SEPARATOR_LENGTH) * popupItem.mId);
+        popupItem.mItemStaticObject.setWidth(PopupItem.ITEM_IMAGE_WIDTH);
+        popupItem.mItemStaticObject.setHeight(PopupItem.ITEM_IMAGE_WIDTH);
         // text
-        float textX = imageMenuItem.getX() + imageMenuItem.getWidth() + PopupItem.ITEM_SEPARATOR_LENGTH,
-                textY = imageMenuItem.getY() + imageMenuItem.getHeight() -
-                        FontHolderUtils.getInstance().getElement(GameStringConstants.KEY_FONT_MONEY).getLineHeight();
+        float textX = popupItem.mItemStaticObject.getX() + popupItem.mItemStaticObject.getWidth() + PopupItem.ITEM_SEPARATOR_LENGTH,
+                textY = popupItem.mItemStaticObject.getY() + popupItem.mItemStaticObject.getHeight() -
+                        FontHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.KEY_FONT_MONEY).getLineHeight();
         Text imageDescriptionText = new
 
                 Text(textX, textY,
-                        FontHolderUtils.getInstance().getElement(GameStringConstants.KEY_FONT_MONEY),
+                        FontHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.KEY_FONT_MONEY),
                         popupItem.mItemName, mEntityOperations.getObjectManager()) {
 
                     @Override
@@ -101,7 +98,7 @@ public class ImageDescriptionPopup {
                     }
                 };
         // attaching
-        popupItem.mImage = imageMenuItem;
+        popupItem.mImage = popupItem.mItemStaticObject;
         popupItem.mText = imageDescriptionText;
     }
 
@@ -139,18 +136,18 @@ public class ImageDescriptionPopup {
          * {@link org.andengine.opengl.texture.region.ITextureRegion} which should be
          * displayed with current popup item
          */
-        private ITextureRegion mItemTextureRegion;
+        private StaticObject mItemStaticObject;
         private int mId;
         /** already initiated image */
         private IAreaShape mImage;
         /** already initiated text */
         private IAreaShape mText;
 
-        public PopupItem(int id, ITextureRegion itemTextureRegion, String itemName,
+        public PopupItem(int id, StaticObject itemStaticObject, String itemName,
                          IItemPickListener itemPickListener) {
             mId = id;
             mItemName = itemName;
-            mItemTextureRegion = itemTextureRegion;
+            mItemStaticObject = itemStaticObject;
             mItemPickListener = itemPickListener;
         }
 
