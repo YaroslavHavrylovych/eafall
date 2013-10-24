@@ -14,7 +14,7 @@ public class SimpleBot implements Runnable {
     public void run() {
         while (true) {
             if (mBotTeam.getMoney() >= 100)
-                mBotTeam.getTeamPlanet().buildFirstBuilding();
+                mBotTeam.getTeamPlanet().createBuildingById(0);
             try {
                 Thread.sleep(DELAY_BETWEEN_ITERATIONS);
             } catch (InterruptedException e) {

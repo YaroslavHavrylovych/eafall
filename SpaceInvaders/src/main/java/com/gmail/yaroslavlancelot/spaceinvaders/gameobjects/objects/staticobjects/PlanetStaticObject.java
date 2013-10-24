@@ -1,12 +1,10 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameloop.UnitCreatorCycle;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.opengl.texture.region.ITextureRegion;
 
@@ -48,17 +46,17 @@ public class PlanetStaticObject extends StaticObject {
         return mSpawnPointY;
     }
 
-    /** build first building */
-    public void buildFirstBuilding() {
-        LoggerHelper.methodInvocation(TAG, "buildFirstBuilding");
-        if (buildings.get(0) == null) {
+    public void createBuildingById(int buildingId) {
+        LoggerHelper.methodInvocation(TAG, "buildBuilding");
+        if (buildings.get(buildingId) == null) {
             final StaticObject staticObject =
-                    mPlanetTeam.getTeamRace().getBuildingById(0, getVertexBufferObjectManager());
-            staticObject.setX(16 - 3);
-            staticObject.setY(5);
-            buildings.put(0, new BuildingsHolder(staticObject, 0));
+                    mPlanetTeam.getTeamRace().getBuildingById(buildingId, getVertexBufferObjectManager());
+            float[] coordinates = mPlanetTeam.getTeamRace().getBuildingPositionOnThePlanet(buildingId);
+            staticObject.setX(coordinates[0]);
+            staticObject.setY(coordinates[1]);
+            buildings.put(buildingId, new BuildingsHolder(staticObject, 0));
         }
-        addBuilding(0);
+        addBuilding(buildingId);
     }
 
     private void addBuilding(int key) {
@@ -77,19 +75,6 @@ public class PlanetStaticObject extends StaticObject {
         mIncomeIncreasingValue += building.getObjectIncomeIncreasingValue();
     }
 
-    /** build second building */
-    public void buildSecondBuilding() {
-        LoggerHelper.methodInvocation(TAG, "buildSecondBuilding");
-        if (buildings.get(1) == null) {
-            final StaticObject staticObject =
-                    mPlanetTeam.getTeamRace().getBuildingById(0, getVertexBufferObjectManager());
-            staticObject.setX(16 - 3);
-            staticObject.setY(22);
-            buildings.put(1, new BuildingsHolder(staticObject, 1));
-        }
-        addBuilding(1);
-    }
-
     private int getMoneyAmount() {
         return mPlanetTeam == null ? 0 : mPlanetTeam.getMoney();
     }
@@ -103,17 +88,17 @@ public class PlanetStaticObject extends StaticObject {
         private final StaticObject mStaticObject;
         private int mBuildingsAmount;
         private UnitCreatorCycle mUnitCreatorCycle;
-        private int mUnitKey;
+        private int mBuildingId;
 
 
-        private BuildingsHolder(StaticObject staticObject, int unitKey) {
+        private BuildingsHolder(StaticObject staticObject, int buildingId) {
             mStaticObject = staticObject;
-            mUnitKey = unitKey;
+            mBuildingId = buildingId;
         }
 
         public void increaseBuildingsAmount() {
             if (mUnitCreatorCycle == null) {
-                mUnitCreatorCycle = new UnitCreatorCycle(mPlanetTeam, mEntityOperations, mUnitKey);
+                mUnitCreatorCycle = new UnitCreatorCycle(mPlanetTeam, mEntityOperations, mBuildingId);
                 registerUpdateHandler(new TimerHandler(2, true, mUnitCreatorCycle));
             }
             mBuildingsAmount += 1;

@@ -9,7 +9,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.ai.SimpleBot;
-import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.Localizable;
@@ -126,20 +126,20 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         // user
         IRace userRace = new Imperials();
         userRace.loadResources(getTextureManager(), this);
-        mRedTeam = createUserTeam(Color.RED, userRace, GameStringConstants.RED_TEAM_NAME);
+        mRedTeam = createUserTeam(Color.RED, userRace, GameStringsConstantsAndUtils.RED_TEAM_NAME);
         // bot
         IRace botRace = new Imperials();
         botRace.loadResources(getTextureManager(), this);
-        mBlueTeam = createBotTeam(Color.BLUE, botRace, GameStringConstants.BLUE_TEAM_NAME);
+        mBlueTeam = createBotTeam(Color.BLUE, botRace, GameStringsConstantsAndUtils.BLUE_TEAM_NAME);
 
         //* bigger objects
         BitmapTextureAtlas biggerObjectsTexture = new BitmapTextureAtlas(getTextureManager(), 192, 64, TextureOptions.BILINEAR);
-        mTextureRegionHolderUtils.addElement(GameStringConstants.KEY_SUN,
-                BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, this, GameStringConstants.FILE_SUN, 0, 0));
-        mTextureRegionHolderUtils.addElement(GameStringConstants.KEY_RED_PLANET,
-                BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, this, GameStringConstants.FILE_RED_PLANET, 64, 0));
-        mTextureRegionHolderUtils.addElement(GameStringConstants.KEY_BLUE_PLANET,
-                BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, this, GameStringConstants.FILE_BLUE_PLANET, 128, 0));
+        mTextureRegionHolderUtils.addElement(GameStringsConstantsAndUtils.KEY_SUN,
+                BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, this, GameStringsConstantsAndUtils.FILE_SUN, 0, 0));
+        mTextureRegionHolderUtils.addElement(GameStringsConstantsAndUtils.KEY_RED_PLANET,
+                BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, this, GameStringsConstantsAndUtils.FILE_RED_PLANET, 64, 0));
+        mTextureRegionHolderUtils.addElement(GameStringsConstantsAndUtils.KEY_BLUE_PLANET,
+                BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, this, GameStringsConstantsAndUtils.FILE_BLUE_PLANET, 128, 0));
         biggerObjectsTexture.load();
 
 
@@ -147,7 +147,7 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         IFont font = FontFactory.create(this.getFontManager(), this.getTextureManager(), 256, 256,
                 Typeface.create(Typeface.DEFAULT, Typeface.BOLD), SizeConstants.MONEY_FONT_SIZE, Color.WHITE.hashCode());
         font.load();
-        FontHolderUtils.getInstance().addElement(GameStringConstants.KEY_FONT_MONEY, font);
+        FontHolderUtils.getInstance().addElement(GameStringsConstantsAndUtils.KEY_FONT_MONEY, font);
 
         onCreateResourcesCallback.onCreateResourcesFinished();
     }
@@ -206,7 +206,7 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
 
     private void initRedTeamAndPlanet() {
         mRedTeam.setTeamPlanet(createPlanet(0, (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2,
-                mTextureRegionHolderUtils.getElement(GameStringConstants.KEY_RED_PLANET), GameStringConstants.KEY_RED_PLANET,
+                mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_RED_PLANET), GameStringsConstantsAndUtils.KEY_RED_PLANET,
                 mRedTeam));
         mRedTeam.getTeamPlanet().setSpawnPoint(SizeConstants.PLANET_DIAMETER / 2 + SizeConstants.UNIT_SIZE + 2,
                 SizeConstants.GAME_FIELD_HEIGHT / 2);
@@ -216,7 +216,7 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
     private void initBlueTeamAndPlanet() {
         mBlueTeam.setTeamPlanet(createPlanet(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER,
                 (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2,
-                mTextureRegionHolderUtils.getElement(GameStringConstants.KEY_BLUE_PLANET), GameStringConstants.KEY_BLUE_PLANET,
+                mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_BLUE_PLANET), GameStringsConstantsAndUtils.KEY_BLUE_PLANET,
                 mBlueTeam));
         mBlueTeam.getTeamPlanet().setSpawnPoint(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER / 2 -
                 SizeConstants.UNIT_SIZE - 2,
@@ -232,8 +232,8 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
     private SunStaticObject createSun() {
         float x = (SizeConstants.GAME_FIELD_WIDTH - SizeConstants.SUN_DIAMETER) / 2;
         float y = (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.SUN_DIAMETER) / 2;
-        ITextureRegion textureRegion = mTextureRegionHolderUtils.getElement(GameStringConstants.KEY_SUN);
-        String key = GameStringConstants.KEY_SUN;
+        ITextureRegion textureRegion = mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_SUN);
+        String key = GameStringsConstantsAndUtils.KEY_SUN;
 
         LoggerHelper.methodInvocation(TAG, "createSun");
         SunStaticObject sunStaticObject = new SunStaticObject(x, y, textureRegion, mEngine.getVertexBufferObjectManager());
@@ -293,7 +293,7 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         mMoneyTextPrefixString = getString(R.string.money_colon);
         int maxStringLength = mMoneyTextPrefixString.length() + 6;
         mMoneyText = new Text(SizeConstants.GAME_FIELD_WIDTH - maxStringLength * SizeConstants.MONEY_FONT_SIZE,
-                SizeConstants.MONEY_FONT_SIZE, FontHolderUtils.getInstance().getElement(GameStringConstants.KEY_FONT_MONEY),
+                SizeConstants.MONEY_FONT_SIZE, FontHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.KEY_FONT_MONEY),
                 "", maxStringLength, getVertexBufferObjectManager());
         HUD hud = mCamera.getHUD();
         hud.attachChild(mMoneyText);
