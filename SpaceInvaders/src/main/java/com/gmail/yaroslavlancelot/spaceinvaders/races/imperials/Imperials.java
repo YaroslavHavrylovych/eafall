@@ -55,8 +55,11 @@ public class Imperials implements IRace {
     }
 
     @Override
-    public StaticObject getBuildingById(final int id, final VertexBufferObjectManager objectManager) {
-        return new FirstImperialsBuilding(0, 0, mBuildingsTextureRegions.get(id), objectManager);
+    public StaticObject getBuildingById(final int id, final VertexBufferObjectManager objectManager, Color teamColor) {
+        StaticObject building = new FirstImperialsBuilding(0, 0, mBuildingsTextureRegions.get(id), objectManager);
+        building.setBackgroundArea(new Area(0f, 0f, SizeConstants.BUILDING_DIAMETER, SizeConstants.BUILDING_DIAMETER));
+        building.setBackgroundColor(teamColor);
+        return building;
     }
 
     @Override
@@ -85,6 +88,47 @@ public class Imperials implements IRace {
         loadUnits(context, textureManager);
 
         initResourcesMap();
+    }
+
+    private void loadUnits(Context context, TextureManager textureManager) {
+        TextureRegionHolderUtils utils = TextureRegionHolderUtils.getInstance();
+        BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 45, 45, TextureOptions.BILINEAR);
+        TextureRegionHolderUtils.addElementFromAssets(KEY_IMPERIALS_FIRST_BUILDING, utils, smallObjectTexture, context, 0, 0);
+        TextureRegionHolderUtils.addElementFromAssets(KEY_IMPERIALS_SECOND_BUILDING, utils, smallObjectTexture, context, 5, 0);
+        TextureRegionHolderUtils.addElementFromAssets(KEY_IMPERIALS_THIRD_BUILDING, utils, smallObjectTexture, context, 10, 0);
+        TextureRegionHolderUtils.addElementFromAssets(KEY_IMPERIALS_FOURTH_BUILDING, utils, smallObjectTexture, context, 0, 5);
+        TextureRegionHolderUtils.addElementFromAssets(KEY_IMPERIALS_FIFTH_BUILDING, utils, smallObjectTexture, context, 5, 5);
+        TextureRegionHolderUtils.addElementFromAssets(KEY_IMPERIALS_SIX_BUILDING, utils, smallObjectTexture, context, 0, 5);
+        TextureRegionHolderUtils.addElementFromAssets(KEY_IMPERIALS_SEVEN_BUILDING, utils, smallObjectTexture, context, 0, 10);
+        TextureRegionHolderUtils.addElementFromAssets(KEY_IMPERIALS_EIGHT_BUILDING, utils, smallObjectTexture, context, 5, 10);
+        smallObjectTexture.load();
+    }
+
+    private void loadBuildings(Context context, TextureManager textureManager) {
+        TextureRegionHolderUtils utils = TextureRegionHolderUtils.getInstance();
+        BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 45, 45, TextureOptions.BILINEAR);
+        TextureRegionHolderUtils.addElementFromAssets(KEY_IMPERIALS_FIRST_BUILDING, utils, smallObjectTexture, context, 0, 0);
+        TextureRegionHolderUtils.addElementFromAssets(KEY_IMPERIALS_SECOND_BUILDING, utils, smallObjectTexture, context, 5, 0);
+        TextureRegionHolderUtils.addElementFromAssets(KEY_IMPERIALS_THIRD_BUILDING, utils, smallObjectTexture, context, 10, 0);
+        TextureRegionHolderUtils.addElementFromAssets(KEY_IMPERIALS_FOURTH_BUILDING, utils, smallObjectTexture, context, 0, 5);
+        TextureRegionHolderUtils.addElementFromAssets(KEY_IMPERIALS_FIFTH_BUILDING, utils, smallObjectTexture, context, 5, 5);
+        TextureRegionHolderUtils.addElementFromAssets(KEY_IMPERIALS_SIX_BUILDING, utils, smallObjectTexture, context, 0, 5);
+        TextureRegionHolderUtils.addElementFromAssets(KEY_IMPERIALS_SEVEN_BUILDING, utils, smallObjectTexture, context, 0, 10);
+        TextureRegionHolderUtils.addElementFromAssets(KEY_IMPERIALS_EIGHT_BUILDING, utils, smallObjectTexture, context, 5, 10);
+        smallObjectTexture.load();
+    }
+
+    private void initResourcesMap() {
+        mBuildingsTextureRegions = new HashMap<Integer, ITextureRegion>(getBuildingsAmount());
+        TextureRegionHolderUtils utils = TextureRegionHolderUtils.getInstance();
+        mBuildingsTextureRegions.put(0, utils.getElement(KEY_IMPERIALS_FIRST_BUILDING));
+        mBuildingsTextureRegions.put(1, utils.getElement(KEY_IMPERIALS_SECOND_BUILDING));
+        mBuildingsTextureRegions.put(2, utils.getElement(KEY_IMPERIALS_THIRD_BUILDING));
+        mBuildingsTextureRegions.put(3, utils.getElement(KEY_IMPERIALS_FOURTH_BUILDING));
+        mBuildingsTextureRegions.put(4, utils.getElement(KEY_IMPERIALS_FIFTH_BUILDING));
+        mBuildingsTextureRegions.put(5, utils.getElement(KEY_IMPERIALS_SIX_BUILDING));
+        mBuildingsTextureRegions.put(6, utils.getElement(KEY_IMPERIALS_SEVEN_BUILDING));
+        mBuildingsTextureRegions.put(7, utils.getElement(KEY_IMPERIALS_EIGHT_BUILDING));
     }
 
     @Override
@@ -129,46 +173,5 @@ public class Imperials implements IRace {
                 throw new IllegalArgumentException("unknown building id=" + buildingId);
         }
         return ret;
-    }
-
-    private void initResourcesMap() {
-        mBuildingsTextureRegions = new HashMap<Integer, ITextureRegion>(getBuildingsAmount());
-        TextureRegionHolderUtils utils = TextureRegionHolderUtils.getInstance();
-        mBuildingsTextureRegions.put(0, utils.getElement(KEY_IMPERIALS_FIRST_BUILDING));
-        mBuildingsTextureRegions.put(1, utils.getElement(KEY_IMPERIALS_SECOND_BUILDING));
-        mBuildingsTextureRegions.put(2, utils.getElement(KEY_IMPERIALS_THIRD_BUILDING));
-        mBuildingsTextureRegions.put(3, utils.getElement(KEY_IMPERIALS_FOURTH_BUILDING));
-        mBuildingsTextureRegions.put(4, utils.getElement(KEY_IMPERIALS_FIFTH_BUILDING));
-        mBuildingsTextureRegions.put(5, utils.getElement(KEY_IMPERIALS_SIX_BUILDING));
-        mBuildingsTextureRegions.put(6, utils.getElement(KEY_IMPERIALS_SEVEN_BUILDING));
-        mBuildingsTextureRegions.put(7, utils.getElement(KEY_IMPERIALS_EIGHT_BUILDING));
-    }
-
-    private void loadBuildings(Context context, TextureManager textureManager) {
-        TextureRegionHolderUtils utils = TextureRegionHolderUtils.getInstance();
-        BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 45, 45, TextureOptions.BILINEAR);
-        TextureRegionHolderUtils.addElementFromAssets(KEY_IMPERIALS_FIRST_BUILDING, utils, smallObjectTexture, context, 0, 0);
-        TextureRegionHolderUtils.addElementFromAssets(KEY_IMPERIALS_SECOND_BUILDING, utils, smallObjectTexture, context, 5, 0);
-        TextureRegionHolderUtils.addElementFromAssets(KEY_IMPERIALS_THIRD_BUILDING, utils, smallObjectTexture, context, 10, 0);
-        TextureRegionHolderUtils.addElementFromAssets(KEY_IMPERIALS_FOURTH_BUILDING, utils, smallObjectTexture, context, 0, 5);
-        TextureRegionHolderUtils.addElementFromAssets(KEY_IMPERIALS_FIFTH_BUILDING, utils, smallObjectTexture, context, 5, 5);
-        TextureRegionHolderUtils.addElementFromAssets(KEY_IMPERIALS_SIX_BUILDING, utils, smallObjectTexture, context, 0, 5);
-        TextureRegionHolderUtils.addElementFromAssets(KEY_IMPERIALS_SEVEN_BUILDING, utils, smallObjectTexture, context, 0, 10);
-        TextureRegionHolderUtils.addElementFromAssets(KEY_IMPERIALS_EIGHT_BUILDING, utils, smallObjectTexture, context, 5, 10);
-        smallObjectTexture.load();
-    }
-
-    private void loadUnits(Context context, TextureManager textureManager) {
-        TextureRegionHolderUtils utils = TextureRegionHolderUtils.getInstance();
-        BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 45, 45, TextureOptions.BILINEAR);
-        TextureRegionHolderUtils.addElementFromAssets(KEY_IMPERIALS_FIRST_BUILDING, utils, smallObjectTexture, context, 0, 0);
-        TextureRegionHolderUtils.addElementFromAssets(KEY_IMPERIALS_SECOND_BUILDING, utils, smallObjectTexture, context, 5, 0);
-        TextureRegionHolderUtils.addElementFromAssets(KEY_IMPERIALS_THIRD_BUILDING, utils, smallObjectTexture, context, 10, 0);
-        TextureRegionHolderUtils.addElementFromAssets(KEY_IMPERIALS_FOURTH_BUILDING, utils, smallObjectTexture, context, 0, 5);
-        TextureRegionHolderUtils.addElementFromAssets(KEY_IMPERIALS_FIFTH_BUILDING, utils, smallObjectTexture, context, 5, 5);
-        TextureRegionHolderUtils.addElementFromAssets(KEY_IMPERIALS_SIX_BUILDING, utils, smallObjectTexture, context, 0, 5);
-        TextureRegionHolderUtils.addElementFromAssets(KEY_IMPERIALS_SEVEN_BUILDING, utils, smallObjectTexture, context, 0, 10);
-        TextureRegionHolderUtils.addElementFromAssets(KEY_IMPERIALS_EIGHT_BUILDING, utils, smallObjectTexture, context, 5, 10);
-        smallObjectTexture.load();
     }
 }

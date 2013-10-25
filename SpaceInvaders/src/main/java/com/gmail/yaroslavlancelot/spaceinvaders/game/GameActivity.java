@@ -26,6 +26,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.Imperials;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.Team;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TeamUtils;
@@ -133,13 +134,16 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         mBlueTeam = createBotTeam(Color.BLUE, botRace, GameStringsConstantsAndUtils.BLUE_TEAM_NAME);
 
         //* bigger objects
-        BitmapTextureAtlas biggerObjectsTexture = new BitmapTextureAtlas(getTextureManager(), 192, 64, TextureOptions.BILINEAR);
+        BitmapTextureAtlas biggerObjectsTexture = new BitmapTextureAtlas(getTextureManager(),
+                512, 512, TextureOptions.BILINEAR);
         mTextureRegionHolderUtils.addElement(GameStringsConstantsAndUtils.KEY_SUN,
                 BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, this, GameStringsConstantsAndUtils.FILE_SUN, 0, 0));
         mTextureRegionHolderUtils.addElement(GameStringsConstantsAndUtils.KEY_RED_PLANET,
-                BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, this, GameStringsConstantsAndUtils.FILE_RED_PLANET, 64, 0));
+                BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, this, GameStringsConstantsAndUtils.FILE_RED_PLANET,
+                        0, SizeConstants.SUN_DIAMETER));
         mTextureRegionHolderUtils.addElement(GameStringsConstantsAndUtils.KEY_BLUE_PLANET,
-                BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, this, GameStringsConstantsAndUtils.FILE_BLUE_PLANET, 128, 0));
+                BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, this, GameStringsConstantsAndUtils.FILE_BLUE_PLANET,
+                        SizeConstants.PLANET_DIAMETER, SizeConstants.SUN_DIAMETER));
         biggerObjectsTexture.load();
 
 

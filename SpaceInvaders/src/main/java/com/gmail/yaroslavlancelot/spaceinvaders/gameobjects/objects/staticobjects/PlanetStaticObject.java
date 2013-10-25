@@ -50,7 +50,7 @@ public class PlanetStaticObject extends StaticObject {
         LoggerHelper.methodInvocation(TAG, "buildBuilding");
         if (buildings.get(buildingId) == null) {
             final StaticObject staticObject =
-                    mPlanetTeam.getTeamRace().getBuildingById(buildingId, getVertexBufferObjectManager());
+                    mPlanetTeam.getTeamRace().getBuildingById(buildingId, getVertexBufferObjectManager(), mPlanetTeam.getTeamColor());
             float[] coordinates = mPlanetTeam.getTeamRace().getBuildingPositionOnThePlanet(buildingId);
             staticObject.setX(coordinates[0]);
             staticObject.setY(coordinates[1]);

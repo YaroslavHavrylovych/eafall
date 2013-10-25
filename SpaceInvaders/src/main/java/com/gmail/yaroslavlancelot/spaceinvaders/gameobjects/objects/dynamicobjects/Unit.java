@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IObjectDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Damage;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitPathUtil;
 import org.andengine.engine.handler.timer.ITimerCallback;
@@ -20,7 +21,7 @@ import org.andengine.util.color.Color;
 import java.util.List;
 
 /** Basic class for all dynamic game units */
-public abstract class Unit extends Rectangle {
+public abstract class Unit extends GameObject {
     /** physics body associated with current object {@link Sprite} */
     protected Body mSimpleWarriorBody;
     /** max velocity for this unit */
@@ -41,10 +42,6 @@ public abstract class Unit extends Rectangle {
     protected IObjectDestroyedListener mObjectDestroyedListener;
     /** unit path */
     protected UnitPathUtil.UnitPath mUnitPath;
-    /** unit sprite */
-    protected Sprite mUnitSprite;
-    /** background unit color */
-    protected Rectangle mBackground;
     /** unit damage */
     protected Damage mUnitDamage;
     /** unit armor */
@@ -52,31 +49,14 @@ public abstract class Unit extends Rectangle {
 
     protected Unit(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager,
                    Damage unitDamage, Armor unitArmor) {
-        super(x, y, textureRegion.getWidth(), textureRegion.getWidth(), vertexBufferObjectManager);
-        setColor(Color.TRANSPARENT);
-        mUnitSprite = new Sprite(x, y, textureRegion, vertexBufferObjectManager);
-        mBackground = new Rectangle(0, 0, 0, 0, vertexBufferObjectManager);
-        attachChild(mBackground);
+        super(x, y, textureRegion, vertexBufferObjectManager);
         registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new SimpleUnitTimerCallback()));
-        attachChild(mUnitSprite);
         mUnitArmor = unitArmor;
         mUnitDamage = unitDamage;
     }
 
     public void calculateUnitPath() {
         mUnitPath = UnitPathUtil.getUnitPathAccordingToStartAbscissa(getX());
-    }
-
-    @Override
-    public void setWidth(final float pWidth) {
-        super.setWidth(pWidth);
-        mUnitSprite.setWidth(pWidth);
-    }
-
-    @Override
-    public void setHeight(final float pHeight) {
-        super.setHeight(pHeight);
-        mUnitSprite.setHeight(pHeight);
     }
 
     public abstract void hitUnit(Damage mUnitDamage);
@@ -112,17 +92,6 @@ public abstract class Unit extends Rectangle {
     }
 
     protected abstract void attackGoal();
-
-    public void setBackgroundArea(Area area) {
-        mBackground.setX(area.left);
-        mBackground.setY(area.top);
-        mBackground.setWidth(area.width);
-        mBackground.setHeight(area.height);
-    }
-
-    public void setBackgroundColor(Color color) {
-        mBackground.setColor(color);
-    }
 
     /** used for update current object in game loop */
     protected class SimpleUnitTimerCallback implements ITimerCallback {

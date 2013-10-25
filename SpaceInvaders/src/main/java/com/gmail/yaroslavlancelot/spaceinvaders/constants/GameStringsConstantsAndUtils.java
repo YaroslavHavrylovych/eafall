@@ -1,13 +1,11 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.constants;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
-
 import java.io.File;
 
 /** game constants for game objects */
 public final class GameStringsConstantsAndUtils {
     /** sun file name */
-    public static final String FILE_SUN = "icon.png";
+    public static final String FILE_SUN = "sun.png";
     /** file name for red planet */
     public static final String FILE_RED_PLANET = "red_planet.png";
     /** file name for blue planet */
@@ -24,14 +22,6 @@ public final class GameStringsConstantsAndUtils {
     public static final String BLUE_TEAM_NAME = "blue";
     /** key used to identify money font */
     public static final String KEY_FONT_MONEY = "key_money_font";
-
-    public static String getPathToBuildings(String raceName) {
-        String separator = File.separator;
-        String path = "races" + separator + raceName.toLowerCase() + separator + "buildings" + separator;
-        LoggerHelper.printDebugMessage("asdas", path);
-        return path;
-    }
-
     /*
      * Imperials
      */
@@ -44,5 +34,11 @@ public final class GameStringsConstantsAndUtils {
      * private constructor
      */
     private GameStringsConstantsAndUtils() {
+    }
+
+    public static String getPathToBuildings(String raceName) {
+        String separator = File.separator;
+        String path = "races" + separator + raceName.toLowerCase() + separator + "buildings" + separator;
+        return path;
     }
 }

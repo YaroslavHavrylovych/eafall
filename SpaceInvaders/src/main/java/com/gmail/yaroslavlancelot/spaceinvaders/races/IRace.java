@@ -13,7 +13,7 @@ public interface IRace {
 
     int getBuildingsAmount();
 
-    StaticObject getBuildingById(int id, VertexBufferObjectManager objectManager);
+    StaticObject getBuildingById(int id, VertexBufferObjectManager objectManager, Color teamColor);
 
     Unit getUnitForBuilding(int buildingId, VertexBufferObjectManager objectManager, Color teamColor);
 

@@ -50,11 +50,17 @@ public class UserPlanetTouchListener implements ISpriteTouchListener {
                 new ArrayList<ImageDescriptionPopup.PopupItem>(race.getBuildingsAmount());
         ImageDescriptionPopup.PopupItem item;
         for (int i = 0; i < race.getBuildingsAmount(); i++) {
-            item = createPopupItem(i, race.getBuildingById(i, mEntityOperations.getObjectManager()), i + "building");
+            item = createPopupItem(i, race.getBuildingById(i, mEntityOperations.getObjectManager(), team.getTeamColor()), i + "building");
             items.add(item);
         }
         mPopup = new ImageDescriptionPopup(mEntityOperations, buildingPopupRect);
         mPopup.attachMenuItems(items);
+    }
+
+    private Area getBuildingPopupRectForTeam(ITeam team) {
+        int teamPlanetX = 0, teamPlanetY = 20;
+        int buildingPopupHeight = 50, buildingPopupWidth = 60;
+        return new Area(teamPlanetX, teamPlanetY - buildingPopupHeight, teamPlanetX + buildingPopupWidth, teamPlanetY);
     }
 
     private ImageDescriptionPopup.PopupItem createPopupItem(int id, StaticObject staticObject, String name) {
@@ -65,11 +71,5 @@ public class UserPlanetTouchListener implements ISpriteTouchListener {
             }
         };
         return new ImageDescriptionPopup.PopupItem(id, staticObject, name, spriteTouchListener);
-    }
-
-    private Area getBuildingPopupRectForTeam(ITeam team) {
-        int teamPlanetX = 0, teamPlanetY = 20;
-        int buildingPopupHeight = 50, buildingPopupWidth = 60;
-        return new Area(teamPlanetX, teamPlanetY - buildingPopupHeight, teamPlanetX + buildingPopupWidth, teamPlanetY);
     }
 }
