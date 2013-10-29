@@ -5,12 +5,12 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /** first building of imperials */
-public class FirstImperialsBuilding extends StaticObject {
+public class Building extends StaticObject {
 
-    public FirstImperialsBuilding(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
+    public Building(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager, int cost, int income) {
         super(x, y, textureRegion, vertexBufferObjectManager);
-        mIncomeIncreasingValue = 5;
-        mCost = 100;
+        mIncomeIncreasingValue = income;
+        mCost = cost;
         setWidth(SizeConstants.BUILDING_DIAMETER);
         setHeight(SizeConstants.BUILDING_DIAMETER);
     }

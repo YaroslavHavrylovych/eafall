@@ -22,13 +22,6 @@ public final class GameStringsConstantsAndUtils {
     public static final String BLUE_TEAM_NAME = "blue";
     /** key used to identify money font */
     public static final String KEY_FONT_MONEY = "key_money_font";
-    /*
-     * Imperials
-     */
-    /* keys */
-    public static final String KEY_IMPERIALS_WARRIOR = "key_simple_warrior";
-    /* resources */
-    public static final String FILE_IMPERIALS_WARRIOR = "simple_warrior.png";
 
     /**
      * private constructor
@@ -39,6 +32,12 @@ public final class GameStringsConstantsAndUtils {
     public static String getPathToBuildings(String raceName) {
         String separator = File.separator;
         String path = "races" + separator + raceName.toLowerCase() + separator + "buildings" + separator;
+        return path;
+    }
+
+    public static String getPathToUnits(String raceName) {
+        String separator = File.separator;
+        String path = "races" + separator + raceName.toLowerCase() + separator + "units" + separator;
         return path;
     }
 }

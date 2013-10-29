@@ -8,9 +8,9 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /** unit which can attack without bullets */
-public class ImperialsFirstUnit extends Unit {
-    public ImperialsFirstUnit(final float x, final float y, final ITextureRegion textureRegion,
-                              final VertexBufferObjectManager vertexBufferObjectManager, Damage unitDamage, Armor unitArmor) {
+public class ImperialsUnit extends Unit {
+    public ImperialsUnit(final float x, final float y, final ITextureRegion textureRegion,
+                         final VertexBufferObjectManager vertexBufferObjectManager, Damage unitDamage, Armor unitArmor) {
         super(x, y, textureRegion, vertexBufferObjectManager, unitDamage, unitArmor);
         setWidth(SizeConstants.UNIT_SIZE);
         setHeight(SizeConstants.UNIT_SIZE);
