@@ -26,7 +26,6 @@ import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.Imperials;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.Team;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TeamUtils;
@@ -68,7 +67,7 @@ import java.util.List;
 public class GameActivity extends BaseGameActivity implements Localizable, EntityOperations {
     /** tag, which is used for debugging purpose */
     public static final String TAG = GameActivity.class.getCanonicalName();
-    public static final int MONEY_UPDATE_TIME = 3;
+    public static final int MONEY_UPDATE_TIME = 10;
     /** {@link FixtureDef} for obstacles (static bodies) */
     private final FixtureDef mStaticBodyFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f);
     /*
@@ -396,12 +395,12 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
      */
     private Unit createUnitCarcass(int unitKey, ITeam unitTeam) {
         LoggerHelper.methodInvocation(TAG, "createUnitCarcass");
-        Unit unit = unitTeam.getTeamRace().getUnitForBuilding(unitKey, getVertexBufferObjectManager(), unitTeam.getTeamColor());
+        Unit unit = unitTeam.getTeamRace().getUnitForBuilding(unitKey, getVertexBufferObjectManager(), unitTeam.getTeamColor(), this);
         unit.setX(unitTeam.getTeamPlanet().getSpawnPointX());
         unit.setY(unitTeam.getTeamPlanet().getSpawnPointY());
         unit.calculateUnitPath();
-        final FixtureDef playerFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f);
         attachEntity(unit);
+        final FixtureDef playerFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f);
         Body body = PhysicsFactory.createCircleBody(mPhysicsWorld, unit, BodyDef.BodyType.DynamicBody, playerFixtureDef);
         unit.setBody(body);
         mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(unit, body, true, true));

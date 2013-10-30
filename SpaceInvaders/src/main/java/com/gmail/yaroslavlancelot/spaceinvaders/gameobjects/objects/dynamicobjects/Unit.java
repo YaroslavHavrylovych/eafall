@@ -6,17 +6,14 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IObjectDes
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Damage;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitPathUtil;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
-import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.color.Color;
 
 import java.util.List;
 
@@ -112,7 +109,7 @@ public abstract class Unit extends GameObject {
 
             // search for new unit to attack
             if (mEnemiesUpdater != null) {
-                List<Unit> units = mEnemiesUpdater.getEnemies(Unit.this);
+                List<Unit> units = mEnemiesUpdater.getEnemiesForUnit(Unit.this);
                 if (units != null && !units.isEmpty()) {
                     mUnitToAttack = units.get(0);
                     attackOrMove();

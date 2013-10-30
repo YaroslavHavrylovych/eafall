@@ -2,6 +2,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
+import org.andengine.engine.handler.physics.PhysicsHandler;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.shape.IAreaShape;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;

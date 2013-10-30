@@ -4,5 +4,6 @@ import java.util.List;
 
 /** callback for update unit visible enemies */
 public interface ISimpleUnitEnemiesUpdater {
-    public List<Unit> getEnemies(Unit unit);
+    public List<Unit> getEnemiesForUnit(Unit unit);
+    public List<Unit> getEnemies();
 }

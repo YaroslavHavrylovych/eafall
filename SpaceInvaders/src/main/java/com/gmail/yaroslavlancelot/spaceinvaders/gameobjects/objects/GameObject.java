@@ -51,6 +51,10 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
         mUnitSprite.setHeight(pHeight);
     }
 
+    public Color getBackgroundColor() {
+        return mBackground.getColor();
+    }
+
     public void setBackgroundColor(Color color) {
         mBackground.setColor(color);
     }

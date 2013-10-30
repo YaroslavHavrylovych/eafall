@@ -1,6 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.races;
 
 import android.content.Context;
+import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
 import org.andengine.opengl.texture.TextureManager;
@@ -15,7 +16,7 @@ public interface IRace {
 
     StaticObject getBuildingById(int id, VertexBufferObjectManager objectManager, Color teamColor);
 
-    Unit getUnitForBuilding(int buildingId, VertexBufferObjectManager objectManager, Color teamColor);
+    Unit getUnitForBuilding(int buildingId, VertexBufferObjectManager objectManager, Color teamColor, final EntityOperations entityOperations);
 
     void loadResources(TextureManager textureManager, Context context);
 

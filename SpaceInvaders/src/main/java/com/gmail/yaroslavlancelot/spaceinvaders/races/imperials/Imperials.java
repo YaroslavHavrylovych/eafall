@@ -3,6 +3,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.races.imperials;
 import android.content.Context;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Higgs;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Annihilator;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
@@ -74,9 +75,9 @@ public class Imperials implements IRace {
     }
 
     @Override
-    public Unit getUnitForBuilding(final int buildingId, final VertexBufferObjectManager objectManager, Color teamColor) {
-        Unit unit = new ImperialsUnit(0, 0, mUnitsTextureRegions.get(buildingId), objectManager,
-                new Annihilator((buildingId + 1) * 5), new Higgs((buildingId + 1) * 3));
+    public Unit getUnitForBuilding(final int buildingId, final VertexBufferObjectManager objectManager, Color teamColor, final EntityOperations entityOperations) {
+        Unit unit = new UnitWithBullets(0, 0, mUnitsTextureRegions.get(buildingId), objectManager,
+                new Annihilator((buildingId + 1) * 5), new Higgs((buildingId + 1) * 3), entityOperations);
         float width = SizeConstants.UNIT_TEAM_COLOR_INNER_SPRITE_SIZE;
         unit.setBackgroundArea(new Area(2.5f, 2.5f, width, width));
         unit.setBackgroundColor(teamColor);
