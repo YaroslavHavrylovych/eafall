@@ -15,6 +15,8 @@ public interface ITeam {
 
     PlanetStaticObject getTeamPlanet();
 
+    void removeTeamPlanet();
+
     void setTeamPlanet(PlanetStaticObject planet);
 
     ITeam getEnemyTeam();

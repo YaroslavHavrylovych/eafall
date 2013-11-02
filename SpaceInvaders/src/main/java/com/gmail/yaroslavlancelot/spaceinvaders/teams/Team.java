@@ -83,6 +83,7 @@ public class Team implements ITeam {
 
     @Override
     public void incomeTime() {
+        if (mTeamPlanet == null) return;
         changeMoney(mTeamPlanet.getObjectIncomeIncreasingValue());
     }
 
@@ -99,5 +100,10 @@ public class Team implements ITeam {
     @Override
     public void setTeamColor(final Color teamColor) {
         mTeamColor = teamColor;
+    }
+
+    @Override
+    public void removeTeamPlanet() {
+        mTeamPlanet = null;
     }
 }

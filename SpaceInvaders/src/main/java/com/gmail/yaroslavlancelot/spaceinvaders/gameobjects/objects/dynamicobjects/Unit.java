@@ -1,14 +1,12 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Damage;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitPathUtil;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -18,8 +16,6 @@ import java.util.List;
 
 /** Basic class for all dynamic game units */
 public abstract class Unit extends GameObject {
-    /** physics body associated with current object {@link Sprite} */
-    protected Body mSimpleWarriorBody;
     /** max velocity for this unit */
     protected float mMaxVelocity = 2.0f;
     /** update time for current object */
@@ -46,15 +42,6 @@ public abstract class Unit extends GameObject {
 
     public void calculateUnitPath() {
         mUnitPath = UnitPathUtil.getUnitPathAccordingToStartAbscissa(getX());
-    }
-
-    /**
-     * set physics body associated with current {@link Sprite}
-     *
-     * @param body the physics body
-     */
-    public void setBody(Body body) {
-        mSimpleWarriorBody = body;
     }
 
     public void setEnemiesUpdater(final ISimpleUnitEnemiesUpdater enemiesUpdater) {
@@ -141,7 +128,7 @@ public abstract class Unit extends GameObject {
 
         private void setUnitLinearVelocity(float x, float y) {
             final Vector2 velocity = Vector2Pool.obtain(x, y);
-            mSimpleWarriorBody.setLinearVelocity(velocity);
+            mPhysicBody.setLinearVelocity(velocity);
             Vector2Pool.recycle(velocity);
         }
     }

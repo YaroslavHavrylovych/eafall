@@ -1,16 +1,16 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks;
 
+import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
-import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
-import org.andengine.entity.shape.IAreaShape;
 
 /** Callback after unit killing. Used method for GameActivity class and should be placed in current class */
 public class ObjectDestroyedListener implements IObjectDestroyedListener {
     /** team of listening object */
-    private ITeam mTeam;
+    protected ITeam mTeam;
     /** for detaching sprites */
-    private EntityOperations mEntityOperations;
+    protected EntityOperations mEntityOperations;
 
     /**
      * used for perform operation after unit death
@@ -23,9 +23,11 @@ public class ObjectDestroyedListener implements IObjectDestroyedListener {
     }
 
     @Override
-    public void objectDestroyed(final IAreaShape sprite) {
-        if (sprite instanceof Unit)
-            mTeam.removeObjectFromTeam((Unit) sprite);
-        mEntityOperations.detachEntity(sprite);
+    public void objectDestroyed(final GameObject gameObject) {
+        if (gameObject instanceof Unit) {
+            mTeam.removeObjectFromTeam(gameObject);
+        }
+        mEntityOperations.detachPhysicsBody(gameObject);
+        mEntityOperations.detachEntity(gameObject);
     }
 }

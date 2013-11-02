@@ -1,6 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects;
 
 import android.content.Context;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IObjectDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Damage;
@@ -30,9 +31,10 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
     protected Armor mObjectArmor;
     /** callback to send message about death */
     protected IObjectDestroyedListener mObjectDestroyedListener;
+    /** physics body associated with current object {@link Sprite} */
+    protected Body mPhysicBody;
     /** current object touch listener */
     private ISpriteTouchListener mSpriteOnTouchListener;
-
 
     protected GameObject(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
         super(x, y, textureRegion.getWidth(), textureRegion.getWidth(), vertexBufferObjectManager);
@@ -110,5 +112,18 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
 
     public float getCenterY() {
         return getY() + getHeight() / 2;
+    }
+
+    public Body getBody() {
+        return mPhysicBody;
+    }
+
+    /**
+     * set physics body associated with current {@link Sprite}
+     *
+     * @param body the physics body
+     */
+    public void setBody(Body body) {
+        mPhysicBody = body;
     }
 }

@@ -56,16 +56,17 @@ public class Bullet extends Rectangle {
         }));
     }
 
+    protected boolean isOutOfBounds() {
+        return getX() < 0 || getY() < 0 || getX() > SizeConstants.GAME_FIELD_WIDTH || getY() > SizeConstants.GAME_FIELD_HEIGHT;
+    }
+
     private boolean isBulletCollied(GameObject object, Damage damage) {
+        if (object == null) return false;
         if (object.collidesWith(this)) {
             object.damageObject(damage);
             mEntityOperations.detachEntity(this);
             return true;
         }
         return false;
-    }
-
-    protected boolean isOutOfBounds() {
-        return getX() < 0 || getY() < 0 || getX() > SizeConstants.GAME_FIELD_WIDTH || getY() > SizeConstants.GAME_FIELD_HEIGHT;
     }
 }
