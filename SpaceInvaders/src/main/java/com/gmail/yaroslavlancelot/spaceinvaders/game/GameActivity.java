@@ -15,6 +15,8 @@ import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.Localizable;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameloop.MoneyUpdateCycle;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.ObjectDestroyedListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.PlanetDestroyedListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
@@ -241,7 +243,7 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
 
         LoggerHelper.methodInvocation(TAG, "createSun");
         SunStaticObject sunStaticObject = new SunStaticObject(x, y, textureRegion, mEngine.getVertexBufferObjectManager());
-        PhysicsFactory.createCircleBody(mPhysicsWorld, sunStaticObject, BodyDef.BodyType.StaticBody, mStaticBodyFixtureDef);
+        sunStaticObject.setBody(PhysicsFactory.createCircleBody(mPhysicsWorld, sunStaticObject, BodyDef.BodyType.StaticBody, mStaticBodyFixtureDef));
         attachEntity(sunStaticObject);
         mStaticObjects.put(key, sunStaticObject);
         return sunStaticObject;
@@ -261,7 +263,9 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
     private PlanetStaticObject createPlanet(float x, float y, ITextureRegion textureRegion, String key, ITeam team) {
         LoggerHelper.methodInvocation(TAG, "createPlanet");
         PlanetStaticObject planetStaticObject = new PlanetStaticObject(x, y, textureRegion, this, team);
-        PhysicsFactory.createCircleBody(mPhysicsWorld, planetStaticObject, BodyDef.BodyType.StaticBody, mStaticBodyFixtureDef);
+        planetStaticObject.setObjectDestroyedListener(new PlanetDestroyedListener(team, this));
+        Body body = PhysicsFactory.createCircleBody(mPhysicsWorld, planetStaticObject, BodyDef.BodyType.StaticBody, mStaticBodyFixtureDef);
+        planetStaticObject.setBody(body);
         attachEntity(planetStaticObject);
         mStaticObjects.put(key, planetStaticObject);
         return planetStaticObject;
@@ -362,6 +366,17 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
                 mScene.detachChild(entity);
             }
         });
+    }
+
+    @Override
+    public void detachPhysicsBody(final GameObject gameObject) {
+        if (gameObject.getBody() == null)
+            return;
+        final PhysicsConnector pc = mPhysicsWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(gameObject);
+        if (pc != null) {
+            mPhysicsWorld.unregisterPhysicsConnector(pc);
+        }
+        mPhysicsWorld.destroyBody(gameObject.getBody());
     }
 
     @Override

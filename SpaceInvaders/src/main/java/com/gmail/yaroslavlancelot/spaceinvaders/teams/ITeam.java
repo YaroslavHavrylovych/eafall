@@ -1,6 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.teams;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import org.andengine.util.color.Color;
@@ -9,19 +9,21 @@ import java.util.List;
 
 /** Player team interface */
 public interface ITeam {
-    void addObjectToTeam(Unit sprite);
+    void addObjectToTeam(GameObject object);
 
-    void removeObjectFromTeam(Unit sprite);
-
-    void setTeamPlanet(PlanetStaticObject planet);
+    void removeObjectFromTeam(GameObject object);
 
     PlanetStaticObject getTeamPlanet();
+
+    void removeTeamPlanet();
+
+    void setTeamPlanet(PlanetStaticObject planet);
 
     ITeam getEnemyTeam();
 
     void setEnemyTeam(ITeam enemyTeam);
 
-    List<Unit> getTeamUnits();
+    List<GameObject> getTeamObjects();
 
     String getTeamName();
 

@@ -3,6 +3,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjec
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameloop.UnitCreatorCycle;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Higgs;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -31,6 +32,8 @@ public class PlanetStaticObject extends StaticObject {
         mPlanetTeam = planetTeam;
         setWidth(SizeConstants.PLANET_DIAMETER);
         setHeight(SizeConstants.PLANET_DIAMETER);
+        mObjectArmor = new Higgs(2);
+        mObjectHealth = 100;
     }
 
     public void setSpawnPoint(float spawnPointX, float spawnPointY) {
@@ -72,13 +75,13 @@ public class PlanetStaticObject extends StaticObject {
         mIncomeIncreasingValue += building.getObjectIncomeIncreasingValue();
     }
 
-    private int getMoneyAmount() {
-        return mPlanetTeam == null ? 0 : mPlanetTeam.getMoney();
+    private void buyBuilding(int cost) {
+        if (mPlanetTeam != null)
+            mPlanetTeam.changeMoney(-cost);
     }
 
-    private void buyBuilding(int cost) {
-        if(mPlanetTeam != null)
-            mPlanetTeam.changeMoney(-cost);
+    private int getMoneyAmount() {
+        return mPlanetTeam == null ? 0 : mPlanetTeam.getMoney();
     }
 
     private class BuildingsHolder {

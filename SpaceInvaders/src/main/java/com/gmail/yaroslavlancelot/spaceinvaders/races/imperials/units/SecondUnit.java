@@ -29,7 +29,7 @@ public class SecondUnit extends Unit {
     protected void attackGoal() {
         Bullet bullet = new Bullet(getVertexBufferObjectManager(), mEntityOperations, getBackgroundColor());
         bullet.fire(getX() + SizeConstants.UNIT_SIZE / 2, getY() - Bullet.BULLET_SIZE,
-                mUnitToAttack.getX(), mUnitToAttack.getY(), mEnemiesUpdater, mUnitDamage);
+                mObjectToAttack.getCenterX(), mObjectToAttack.getCenterY(), mEnemiesUpdater, mObjectDamage);
 
         mEntityOperations.attachEntity(bullet);
     }

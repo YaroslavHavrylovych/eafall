@@ -1,6 +1,10 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects;
 
 import android.content.Context;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IObjectDestroyedListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Armor;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Damage;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ISpriteTouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ISpriteTouchable;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
@@ -14,25 +18,44 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
 public abstract class GameObject extends Rectangle implements ISpriteTouchable {
-    /** unit sprite */
-    protected Sprite mUnitSprite;
-    /** background unit color */
+    protected static final int sUndestroyableObjectKey = Integer.MIN_VALUE;
+    /** object sprite */
+    protected Sprite mObjectSprite;
+    /** background color */
     protected Rectangle mBackground;
+    /** game object health (it can be undestroyable) */
+    protected int mObjectHealth = sUndestroyableObjectKey;
+    /** object damage */
+    protected Damage mObjectDamage;
+    /** object armor */
+    protected Armor mObjectArmor;
+    /** callback to send message about death */
+    protected IObjectDestroyedListener mObjectDestroyedListener;
+    /** physics body associated with current object {@link Sprite} */
+    protected Body mPhysicBody;
     /** current object touch listener */
     private ISpriteTouchListener mSpriteOnTouchListener;
 
     protected GameObject(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
         super(x, y, textureRegion.getWidth(), textureRegion.getWidth(), vertexBufferObjectManager);
         setColor(Color.TRANSPARENT);
-        mUnitSprite = new Sprite(0, 0, textureRegion, vertexBufferObjectManager);
+        mObjectSprite = new Sprite(0, 0, textureRegion, vertexBufferObjectManager);
         mBackground = new Rectangle(0, 0, 0, 0, vertexBufferObjectManager);
         attachChild(mBackground);
-        attachChild(mUnitSprite);
+        attachChild(mObjectSprite);
     }
 
     protected static void loadResource(String pathToUnit, Context context, BitmapTextureAtlas textureAtlas, int x, int y) {
         TextureRegionHolderUtils.addElementFromAssets(pathToUnit, TextureRegionHolderUtils.getInstance(),
                 textureAtlas, context, x, y);
+    }
+
+    public boolean isObjectAlive() {
+        return mObjectHealth > 0 || mObjectHealth == sUndestroyableObjectKey;
+    }
+
+    public void setObjectDestroyedListener(final IObjectDestroyedListener objectDestroyedListener) {
+        mObjectDestroyedListener = objectDestroyedListener;
     }
 
     @Override
@@ -50,13 +73,22 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
     @Override
     public void setWidth(final float pWidth) {
         super.setWidth(pWidth);
-        mUnitSprite.setWidth(pWidth);
+        mObjectSprite.setWidth(pWidth);
     }
 
     @Override
     public void setHeight(final float pHeight) {
         super.setHeight(pHeight);
-        mUnitSprite.setHeight(pHeight);
+        mObjectSprite.setHeight(pHeight);
+    }
+
+    public void damageObject(final Damage damage) {
+        if (mObjectHealth == sUndestroyableObjectKey) return;
+        mObjectHealth -= mObjectArmor.getDamage(damage);
+        if (mObjectHealth < 0) {
+            if (mObjectDestroyedListener != null)
+                mObjectDestroyedListener.objectDestroyed(this);
+        }
     }
 
     public Color getBackgroundColor() {
@@ -72,5 +104,26 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
         mBackground.setY(area.top);
         mBackground.setWidth(area.width);
         mBackground.setHeight(area.height);
+    }
+
+    public float getCenterX() {
+        return getX() + getWidth() / 2;
+    }
+
+    public float getCenterY() {
+        return getY() + getHeight() / 2;
+    }
+
+    public Body getBody() {
+        return mPhysicBody;
+    }
+
+    /**
+     * set physics body associated with current {@link Sprite}
+     *
+     * @param body the physics body
+     */
+    public void setBody(Body body) {
+        mPhysicBody = body;
     }
 }
