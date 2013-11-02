@@ -1,10 +1,8 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.races.imperials;
+package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Damage;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.ISimpleUnitEnemiesUpdater;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import org.andengine.engine.handler.physics.PhysicsHandler;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -16,7 +14,7 @@ import java.util.List;
 
 public class Bullet extends Rectangle {
     public static final int BULLET_SIZE = 3;
-    /** */
+    /** for detaching entity from scene */
     private final EntityOperations mEntityOperations;
     /** update time for current object */
     protected float mUpdateCycleTime = .05f;
@@ -57,7 +55,7 @@ public class Bullet extends Rectangle {
         }));
     }
 
-    private boolean isOutOfBounds() {
+    protected boolean isOutOfBounds() {
         return getX() < 0 || getY() < 0 || getX() > SizeConstants.GAME_FIELD_WIDTH || getY() > SizeConstants.GAME_FIELD_HEIGHT;
     }
 }

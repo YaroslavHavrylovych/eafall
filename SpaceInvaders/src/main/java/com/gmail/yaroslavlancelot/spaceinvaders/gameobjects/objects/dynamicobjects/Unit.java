@@ -44,9 +44,9 @@ public abstract class Unit extends GameObject {
     /** unit armor */
     protected Armor mUnitArmor;
 
-    protected Unit(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager,
+    protected Unit(ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager,
                    Damage unitDamage, Armor unitArmor) {
-        super(x, y, textureRegion, vertexBufferObjectManager);
+        super(-100, -100, textureRegion, vertexBufferObjectManager);
         registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new SimpleUnitTimerCallback()));
         mUnitArmor = unitArmor;
         mUnitDamage = unitDamage;
@@ -55,8 +55,6 @@ public abstract class Unit extends GameObject {
     public void calculateUnitPath() {
         mUnitPath = UnitPathUtil.getUnitPathAccordingToStartAbscissa(getX());
     }
-
-    public abstract void hitUnit(Damage mUnitDamage);
 
     /**
      * set physics body associated with current {@link Sprite}
@@ -88,7 +86,17 @@ public abstract class Unit extends GameObject {
         return mViewRadius;
     }
 
-    protected abstract void attackGoal();
+    protected void attackGoal() {
+        mUnitToAttack.hitUnit(mUnitDamage);
+    }
+
+    public void hitUnit(final Damage unitDamage) {
+        mUnitHealth -= mUnitArmor.getDamage(unitDamage);
+        if (mUnitHealth < 0) {
+            if (mObjectDestroyedListener != null)
+                mObjectDestroyedListener.unitDestroyed(this);
+        }
+    }
 
     /** used for update current object in game loop */
     protected class SimpleUnitTimerCallback implements ITimerCallback {

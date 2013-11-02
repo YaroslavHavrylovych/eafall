@@ -1,11 +1,14 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects;
 
+import android.content.Context;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ISpriteTouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ISpriteTouchable;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
@@ -25,6 +28,11 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
         mBackground = new Rectangle(0, 0, 0, 0, vertexBufferObjectManager);
         attachChild(mBackground);
         attachChild(mUnitSprite);
+    }
+
+    protected static void loadResource(String pathToUnit, Context context, BitmapTextureAtlas textureAtlas, int x, int y) {
+        TextureRegionHolderUtils.addElementFromAssets(pathToUnit, TextureRegionHolderUtils.getInstance(),
+                textureAtlas, context, x, y);
     }
 
     @Override

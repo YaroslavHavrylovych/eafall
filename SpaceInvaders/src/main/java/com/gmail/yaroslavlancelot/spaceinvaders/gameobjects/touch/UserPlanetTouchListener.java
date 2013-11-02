@@ -49,8 +49,10 @@ public class UserPlanetTouchListener implements ISpriteTouchListener {
         List<ImageDescriptionPopup.PopupItem> items =
                 new ArrayList<ImageDescriptionPopup.PopupItem>(race.getBuildingsAmount());
         ImageDescriptionPopup.PopupItem item;
-        for (int i = 0; i < race.getBuildingsAmount(); i++) {
-            item = createPopupItem(i, race.getBuildingById(i, mEntityOperations.getObjectManager(), team.getTeamColor()), i + "building");
+        for (int buildingId = 0; buildingId < race.getBuildingsAmount(); buildingId++) {
+            item = createPopupItem(buildingId, race.getBuildingById(buildingId
+
+            ), buildingId + "building");
             items.add(item);
         }
         mPopup = new ImageDescriptionPopup(mEntityOperations, buildingPopupRect);

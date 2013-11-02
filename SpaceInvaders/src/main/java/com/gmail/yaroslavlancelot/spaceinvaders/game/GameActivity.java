@@ -122,15 +122,16 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         LoggerHelper.methodInvocation(TAG, "onCreateResources");
         mTextureRegionHolderUtils = TextureRegionHolderUtils.getInstance();
 
-        //* small objects
         // user
-        IRace userRace = new Imperials();
+        Color teamColor = Color.RED;
+        IRace userRace = new Imperials(getVertexBufferObjectManager(), teamColor, this);
         userRace.loadResources(getTextureManager(), this);
-        mRedTeam = createUserTeam(Color.RED, userRace, GameStringsConstantsAndUtils.RED_TEAM_NAME);
+        mRedTeam = createUserTeam(teamColor, userRace, GameStringsConstantsAndUtils.RED_TEAM_NAME);
         // bot
-        IRace botRace = new Imperials();
+        teamColor = Color.BLUE;
+        IRace botRace = new Imperials(getVertexBufferObjectManager(), teamColor, this);
         botRace.loadResources(getTextureManager(), this);
-        mBlueTeam = createBotTeam(Color.BLUE, botRace, GameStringsConstantsAndUtils.BLUE_TEAM_NAME);
+        mBlueTeam = createBotTeam(teamColor, botRace, GameStringsConstantsAndUtils.BLUE_TEAM_NAME);
 
         //* bigger objects
         BitmapTextureAtlas biggerObjectsTexture = new BitmapTextureAtlas(getTextureManager(),
@@ -395,7 +396,7 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
      */
     private Unit createUnitCarcass(int unitKey, ITeam unitTeam) {
         LoggerHelper.methodInvocation(TAG, "createUnitCarcass");
-        Unit unit = unitTeam.getTeamRace().getUnitForBuilding(unitKey, getVertexBufferObjectManager(), unitTeam.getTeamColor(), this);
+        Unit unit = unitTeam.getTeamRace().getUnitForBuilding(unitKey);
         unit.setX(unitTeam.getTeamPlanet().getSpawnPointX());
         unit.setY(unitTeam.getTeamPlanet().getSpawnPointY());
         unit.calculateUnitPath();
@@ -408,3 +409,4 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         return unit;
     }
 }
+

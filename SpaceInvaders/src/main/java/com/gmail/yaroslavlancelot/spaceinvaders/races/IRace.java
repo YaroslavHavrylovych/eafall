@@ -14,16 +14,9 @@ public interface IRace {
 
     int getBuildingsAmount();
 
-    StaticObject getBuildingById(int id, VertexBufferObjectManager objectManager, Color teamColor);
+    StaticObject getBuildingById(int buildingId);
 
-    Unit getUnitForBuilding(int buildingId, VertexBufferObjectManager objectManager, Color teamColor, final EntityOperations entityOperations);
+    Unit getUnitForBuilding(int buildingId);
 
     void loadResources(TextureManager textureManager, Context context);
-
-    /**
-     * returns buildings top left coordinates on the planet
-     * @param buildingId building id to find coordinates
-     * @return float array which contains two value. First - x position and Second - y position.
-     */
-    float[] getBuildingPositionOnThePlanet(int buildingId);
 }
