@@ -3,6 +3,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobje
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Damage;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import org.andengine.engine.handler.physics.PhysicsHandler;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -40,19 +41,28 @@ public class Bullet extends Rectangle {
                     return;
                 }
 
-                List<Unit> units = enemiesUpdater.getEnemies();
-                if (units != null && !units.isEmpty()) {
-                    for (Unit unit : units) {
-                        if (unit.collidesWith(Bullet.this)) {
-                            unit.hitUnit(damage);
-                            mEntityOperations.detachEntity(Bullet.this);
+                if (isBulletCollied(enemiesUpdater.getMainTarget(), damage))
+                    return;
+
+                List<GameObject> objects = enemiesUpdater.getEnemiesObjects();
+                if (objects != null && !objects.isEmpty()) {
+                    for (GameObject object : objects) {
+                        if (isBulletCollied(object, damage))
                             return;
-                        }
                     }
                     return;
                 }
             }
         }));
+    }
+
+    private boolean isBulletCollied(GameObject object, Damage damage) {
+        if (object.collidesWith(this)) {
+            object.damageObject(damage);
+            mEntityOperations.detachEntity(this);
+            return true;
+        }
+        return false;
     }
 
     protected boolean isOutOfBounds() {

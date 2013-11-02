@@ -23,7 +23,7 @@ public class ObjectDestroyedListener implements IObjectDestroyedListener {
     }
 
     @Override
-    public void unitDestroyed(final IAreaShape sprite) {
+    public void objectDestroyed(final IAreaShape sprite) {
         if (sprite instanceof Unit)
             mTeam.removeObjectFromTeam((Unit) sprite);
         mEntityOperations.detachEntity(sprite);

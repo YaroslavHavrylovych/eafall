@@ -1,9 +1,11 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.utils;
 
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.ISimpleUnitEnemiesUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /** for simple creating of all needed for unit listeners */
@@ -24,13 +26,19 @@ public class UnitCallbacksUtils {
         }
 
         @Override
-        public List<Unit> getEnemiesForUnit(final Unit unit) {
+        public List<GameObject> getEnemiesUnitsForUnit(final Unit unit) {
             return TeamUtils.getEnemiesForUnit(unit, mEnemyTeam);
         }
 
         @Override
-        public List<Unit> getEnemies() {
-            return mEnemyTeam.getTeamUnits();
+        public List<GameObject> getEnemiesObjects() {
+            List<GameObject> list = new ArrayList<GameObject>(mEnemyTeam.getTeamObjects());
+            return list;
+        }
+
+        @Override
+        public GameObject getMainTarget() {
+            return mEnemyTeam.getTeamPlanet();
         }
     }
 }

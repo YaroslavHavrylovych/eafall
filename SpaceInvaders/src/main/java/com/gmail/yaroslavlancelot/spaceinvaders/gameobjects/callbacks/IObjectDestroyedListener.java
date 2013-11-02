@@ -4,5 +4,5 @@ import org.andengine.entity.shape.IAreaShape;
 
 /** used for object lifecycle tracking */
 public interface IObjectDestroyedListener {
-    public void unitDestroyed(IAreaShape sprite);
+    public void objectDestroyed(IAreaShape sprite);
 }

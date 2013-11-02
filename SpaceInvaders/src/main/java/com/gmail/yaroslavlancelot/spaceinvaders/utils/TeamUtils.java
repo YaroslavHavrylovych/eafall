@@ -1,5 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.utils;
 
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 
@@ -19,10 +20,10 @@ public class TeamUtils {
      *
      * @return list of all unit enemies in the visible rect (from enemy team which pass like parameter)
      */
-    public static List<Unit> getEnemiesForUnit(final Unit unit, ITeam enemyTeam) {
-        List<Unit> enemies = enemyTeam.getTeamUnits();
-        List<Unit> enemiesInView = new ArrayList<Unit>(5);
-        for (Unit enemy : enemies) {
+    public static List<GameObject> getEnemiesForUnit(final Unit unit, ITeam enemyTeam) {
+        List<GameObject> enemies = enemyTeam.getTeamObjects();
+        List<GameObject> enemiesInView = new ArrayList<GameObject>(5);
+        for (GameObject enemy : enemies) {
             if (UnitPathUtil.getDistanceBetweenPoints(enemy.getX(), enemy.getY(),
                     unit.getX(), unit.getY()) < unit.getViewRadius())
                 enemiesInView.add(enemy);
