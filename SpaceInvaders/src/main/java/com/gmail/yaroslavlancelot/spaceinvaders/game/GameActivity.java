@@ -21,9 +21,9 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjec
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.SunStaticObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ISpriteTouchListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.BuildingsPopupShowListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ITouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.MainSceneTouchListener;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.UserPlanetTouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.Imperials;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
@@ -97,6 +97,8 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
     private TextureRegionHolderUtils mTextureRegionHolderUtils;
     /** text which displaying to user with money amount */
     private String mMoneyTextPrefixString;
+    /** main scene touch listener */
+    private MainSceneTouchListener mMainSceneTouchListener;
 
     @Override
     public EngineOptions onCreateEngineOptions() {
@@ -158,10 +160,20 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         onCreateResourcesCallback.onCreateResourcesFinished();
     }
 
-    private ITeam createBotTeam(Color teamColor, IRace teamRace, String teamName) {
-        ITeam team = new Team(teamName, teamRace);
+    private ITeam createUserTeam(Color teamColor, IRace teamRace, String teamName) {
+        ITeam team = new Team(teamName, teamRace) {
+            @Override
+            public void changeMoney(final int delta) {
+                super.changeMoney(delta);
+                updateMoneyTextOnScreen();
+            }
+        };
         team.setTeamColor(teamColor);
         return team;
+    }
+
+    private void updateMoneyTextOnScreen() {
+        mMoneyText.setText(TeamUtils.getMoneyString(mMoneyTextPrefixString, mRedTeam));
     }
 
     @Override
@@ -194,20 +206,10 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         onPopulateSceneCallback.onPopulateSceneFinished();
     }
 
-    private ITeam createUserTeam(Color teamColor, IRace teamRace, String teamName) {
-        ITeam team = new Team(teamName, teamRace) {
-            @Override
-            public void changeMoney(final int delta) {
-                super.changeMoney(delta);
-                updateMoneyTextOnScreen();
-            }
-        };
+    private ITeam createBotTeam(Color teamColor, IRace teamRace, String teamName) {
+        ITeam team = new Team(teamName, teamRace);
         team.setTeamColor(teamColor);
         return team;
-    }
-
-    private void updateMoneyTextOnScreen() {
-        mMoneyText.setText(TeamUtils.getMoneyString(mMoneyTextPrefixString, mRedTeam));
     }
 
     private void initRedTeamAndPlanet() {
@@ -283,11 +285,8 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
     private void initUser(final ITeam initializingTeam) {
         LoggerHelper.methodInvocation(TAG, "initUser");
         // create building
-        final StaticObject initiatedTeamPlanet = initializingTeam.getTeamPlanet();
-        ISpriteTouchListener initiatedTeamPlanetTouchListener
-                = new UserPlanetTouchListener(initializingTeam, this, this);
-        initiatedTeamPlanet.setOnTouchListener(initiatedTeamPlanetTouchListener);
-        mScene.registerTouchArea(initiatedTeamPlanet);
+        ITouchListener userClickScreenTouchListener = new BuildingsPopupShowListener(initializingTeam, this, this);
+        mMainSceneTouchListener.addTouchListener(userClickScreenTouchListener);
     }
 
     private void initBot(final ITeam initializingTeam) {
@@ -328,7 +327,8 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         DisplayMetrics metrics = new DisplayMetrics();
         display.getMetrics(metrics);
         float screenToSceneRatio = metrics.widthPixels / SizeConstants.GAME_FIELD_WIDTH;
-        mScene.setOnSceneTouchListener(new MainSceneTouchListener(mCamera, this, screenToSceneRatio));
+        mMainSceneTouchListener = new MainSceneTouchListener(mCamera, this, screenToSceneRatio);
+        mScene.setOnSceneTouchListener(mMainSceneTouchListener);
     }
 
     @Override
@@ -337,11 +337,12 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
     }
 
     @Override
-    public void detachEntity(final IEntity entity) {
+    public void detachEntity(final IAreaShape shapeArea) {
         GameActivity.this.runOnUpdateThread(new Runnable() {
             @Override
             public void run() {
-                mScene.detachChild(entity);
+                mScene.unregisterTouchArea(shapeArea);
+                mScene.detachChild(shapeArea);
             }
         });
     }
@@ -358,17 +359,6 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
     }
 
     @Override
-    public void detachEntityWithTouch(final IAreaShape entity) {
-        GameActivity.this.runOnUpdateThread(new Runnable() {
-            @Override
-            public void run() {
-                mScene.unregisterTouchArea(entity);
-                mScene.detachChild(entity);
-            }
-        });
-    }
-
-    @Override
     public void detachPhysicsBody(final GameObject gameObject) {
         if (gameObject.getBody() == null)
             return;
@@ -382,6 +372,25 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
     @Override
     public VertexBufferObjectManager getObjectManager() {
         return getVertexBufferObjectManager();
+    }
+
+    @Override
+    public void attachEntityWithTouchToHud(final IAreaShape entity) {
+        HUD hud = mCamera.getHUD();
+        hud.attachChild(entity);
+        hud.registerTouchArea(entity);
+    }
+
+    @Override
+    public void detachEntityFromHud(final IAreaShape entity) {
+        final HUD hud = mCamera.getHUD();
+        GameActivity.this.runOnUpdateThread(new Runnable() {
+            @Override
+            public void run() {
+                hud.unregisterTouchArea(entity);
+                hud.detachChild(entity);
+            }
+        });
     }
 
     /**

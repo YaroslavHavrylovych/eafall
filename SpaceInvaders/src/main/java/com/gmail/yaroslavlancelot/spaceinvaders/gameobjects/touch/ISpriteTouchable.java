@@ -5,7 +5,7 @@ public interface ISpriteTouchable {
     /**
      * set on touch for class
      *
-     * @param spriteTouchListener new {@link ISpriteTouchListener}
+     * @param spriteTouchListener new {@link ITouchListener}
      */
-    public void setOnTouchListener(ISpriteTouchListener spriteTouchListener);
+    public void setOnTouchListener(ITouchListener spriteTouchListener);
 }

@@ -1,7 +1,9 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch;
 
+import android.view.MotionEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.Localizable;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.ImageDescriptionPopup;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
@@ -12,33 +14,47 @@ import org.andengine.input.touch.TouchEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserPlanetTouchListener implements ISpriteTouchListener {
+public class BuildingsPopupShowListener implements ITouchListener {
     private ITeam mUserTeam;
     private EntityOperations mEntityOperations;
     private Localizable mLocalizable;
     /** is first touch */
     private boolean mIsFirstTouch = true;
     private ImageDescriptionPopup mPopup;
+    private float mActionDownX, mActionDownY;
 
-    public UserPlanetTouchListener(ITeam userTeam, EntityOperations entityOperations, Localizable localizable) {
+    public BuildingsPopupShowListener(ITeam userTeam, EntityOperations entityOperations, Localizable localizable) {
         mUserTeam = userTeam;
         mEntityOperations = entityOperations;
         mLocalizable = localizable;
     }
 
     @Override
-    public boolean onTouch(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+    public boolean onTouch(final TouchEvent pSceneTouchEvent) {
+        float motionEventX = pSceneTouchEvent.getMotionEvent().getX();
+        float motionEventY = pSceneTouchEvent.getMotionEvent().getY();
+        switch (pSceneTouchEvent.getMotionEvent().getAction()) {
+            case MotionEvent.ACTION_UP:
+                if (mActionDownX == motionEventX && mActionDownY == motionEventY)
+                    break;
+                return false;
+            case MotionEvent.ACTION_DOWN:
+                mActionDownX = motionEventX;
+                mActionDownY = motionEventY;
+            default:
+                return false;
+        }
+
         if (mIsFirstTouch) {
             mIsFirstTouch = false;
             initBuildingPopupForTeam(mUserTeam);
         }
 
-        if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_UP) {
-            if (mPopup.isShowing())
-                mPopup.hidePopup();
-            else
-                mPopup.showPopup();
-        }
+        if (mUserTeam.getTeamPlanet() == null || mPopup.isShowing())
+            mPopup.hidePopup();
+        else
+            mPopup.showPopup();
+
         return true;
     }
 
@@ -69,7 +85,9 @@ public class UserPlanetTouchListener implements ISpriteTouchListener {
         IItemPickListener spriteTouchListener = new IItemPickListener() {
             @Override
             public void itemPicked(final int buildingId) {
-                mUserTeam.getTeamPlanet().createBuildingById(buildingId);
+                PlanetStaticObject planetStaticObject = mUserTeam.getTeamPlanet();
+                if (planetStaticObject != null)
+                    mUserTeam.getTeamPlanet().createBuildingById(buildingId);
             }
         };
         return new ImageDescriptionPopup.PopupItem(id, staticObject, name, spriteTouchListener);
