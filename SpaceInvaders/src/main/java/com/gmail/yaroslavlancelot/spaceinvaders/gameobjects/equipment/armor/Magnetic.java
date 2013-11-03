@@ -13,15 +13,15 @@ public class Magnetic extends Armor {
     protected int getDamageAfterConsumption(Damage damage) {
         Damage.DamageType damageType = damage.getDamageType();
         if(damageType.equals(Damage.DamageType.ANNIHILATOR))
-            return (int) (damage.getDamageValue() * .65);
-        if(damageType.equals(Damage.DamageType.ELECTRICAL))
             return (int) (damage.getDamageValue() * .8);
+        if(damageType.equals(Damage.DamageType.ELECTRICAL))
+            return (int) (damage.getDamageValue() * .85);
         if(damageType.equals(Damage.DamageType.MAGNETIC))
             return (int) (damage.getDamageValue() * 1.05);
         if(damageType.equals(Damage.DamageType.NEUTRINO))
-            return (int) (damage.getDamageValue() * .7);
+            return (int) (damage.getDamageValue() * .9);
         if(damageType.equals(Damage.DamageType.HIGGS))
-            return (int) (damage.getDamageValue() * .7);
+            return (int) (damage.getDamageValue() * 1.0);
         throw new IllegalArgumentException("unsupported damage type");
     }
 

@@ -15,13 +15,13 @@ public class Physical extends Armor {
         if(damageType.equals(Damage.DamageType.ANNIHILATOR))
             return (int) (damage.getDamageValue() * 1.1);
         if(damageType.equals(Damage.DamageType.ELECTRICAL))
-            return (int) (damage.getDamageValue() * .7);
-        if(damageType.equals(Damage.DamageType.MAGNETIC))
             return (int) (damage.getDamageValue() * .8);
-        if(damageType.equals(Damage.DamageType.NEUTRINO))
+        if(damageType.equals(Damage.DamageType.MAGNETIC))
             return (int) (damage.getDamageValue() * .65);
+        if(damageType.equals(Damage.DamageType.NEUTRINO))
+            return (int) (damage.getDamageValue() * 1.0);
         if(damageType.equals(Damage.DamageType.HIGGS))
-            return (int) (damage.getDamageValue() * .5);
+            return (int) (damage.getDamageValue() * 1.0);
         throw new IllegalArgumentException("unsupported damage type");
     }
 
