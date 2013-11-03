@@ -5,7 +5,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IObjectDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Damage;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ISpriteTouchListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ITouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ISpriteTouchable;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
@@ -34,7 +34,7 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
     /** physics body associated with current object {@link Sprite} */
     protected Body mPhysicBody;
     /** current object touch listener */
-    private ISpriteTouchListener mSpriteOnTouchListener;
+    private ITouchListener mSpriteOnTouchListener;
 
     protected GameObject(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
         super(x, y, textureRegion.getWidth(), textureRegion.getWidth(), vertexBufferObjectManager);
@@ -59,14 +59,14 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
     }
 
     @Override
-    public void setOnTouchListener(ISpriteTouchListener spriteTouchListener) {
+    public void setOnTouchListener(ITouchListener spriteTouchListener) {
         mSpriteOnTouchListener = spriteTouchListener;
     }
 
     @Override
     public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
         return mSpriteOnTouchListener != null
-                && mSpriteOnTouchListener.onTouch(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY)
+                && mSpriteOnTouchListener.onTouch(pSceneTouchEvent)
                 || super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
     }
 

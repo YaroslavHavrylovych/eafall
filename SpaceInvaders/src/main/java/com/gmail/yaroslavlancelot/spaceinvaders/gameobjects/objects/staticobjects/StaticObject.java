@@ -1,10 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ISpriteTouchListener;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ISpriteTouchable;
-import org.andengine.entity.sprite.Sprite;
-import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 

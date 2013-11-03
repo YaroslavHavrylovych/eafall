@@ -9,13 +9,15 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /** Present common functions for unit operation */
 public interface EntityOperations {
-    public void detachEntity(IEntity entity);
+    public void detachEntity(IAreaShape entity);
 
     public void attachEntity(IEntity entity);
 
     public void attachEntityWithTouchArea(IAreaShape entity);
 
-    public void detachEntityWithTouch(IAreaShape entity);
+    public void attachEntityWithTouchToHud(IAreaShape entity);
+
+    public void detachEntityFromHud(IAreaShape entity);
 
     public void detachPhysicsBody(final GameObject gameObject);
 

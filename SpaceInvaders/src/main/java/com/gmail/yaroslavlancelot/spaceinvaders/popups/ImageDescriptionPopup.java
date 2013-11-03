@@ -5,7 +5,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.IItemPickListener;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ISpriteTouchListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ITouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
 import org.andengine.entity.shape.IAreaShape;
@@ -56,15 +56,15 @@ public class ImageDescriptionPopup {
         if (!popupItem.isItemAttached())
             attachItems(popupItem);
         // show element on screen
-        mEntityOperations.attachEntityWithTouchArea(popupItem.mImage);
-        mEntityOperations.attachEntityWithTouchArea(popupItem.mText);
+        mEntityOperations.attachEntityWithTouchToHud(popupItem.mImage);
+        mEntityOperations.attachEntityWithTouchToHud(popupItem.mText);
     }
 
     private void attachItems(final PopupItem popupItem) {
         // picture
-        popupItem.mItemStaticObject.setOnTouchListener(new ISpriteTouchListener() {
+        popupItem.mItemStaticObject.setOnTouchListener(new ITouchListener() {
             @Override
-            public boolean onTouch(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+            public boolean onTouch(final TouchEvent pSceneTouchEvent) {
                 if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_UP) {
                     popupItem.mItemPickListener.itemPicked(popupItem.mId);
                     return true;
@@ -107,8 +107,8 @@ public class ImageDescriptionPopup {
         if (!mIsPopupShowing)
             return;
         for (PopupItem popupItem : mPopupItems) {
-            mEntityOperations.detachEntityWithTouch(popupItem.mImage);
-            mEntityOperations.detachEntityWithTouch(popupItem.mText);
+            mEntityOperations.detachEntityFromHud(popupItem.mImage);
+            mEntityOperations.detachEntityFromHud(popupItem.mText);
         }
         mIsPopupShowing = false;
     }
