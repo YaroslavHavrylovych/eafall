@@ -76,9 +76,7 @@ public class BuildingsPopupShowListener implements ITouchListener {
     }
 
     private Area getBuildingPopupRectForTeam(ITeam team) {
-        int teamPlanetX = 0, teamPlanetY = 20;
-        int buildingPopupHeight = 50, buildingPopupWidth = 60;
-        return new Area(teamPlanetX, teamPlanetY - buildingPopupHeight, teamPlanetX + buildingPopupWidth, teamPlanetY);
+        return new Area(0, 0, 0, 0);
     }
 
     private ImageDescriptionPopup.PopupItem createPopupItem(int id, StaticObject staticObject, String name) {

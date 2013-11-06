@@ -13,20 +13,24 @@ import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-public class FirstUnit extends Unit {
-    public static final String KEY_IMPERIALS_FIRST_UNIT = GameStringsConstantsAndUtils.getPathToUnits(Imperials.RACE_NAME) + "imperials_first_unit.png";
+public class Superman extends Unit {
+    public static final String KEY_IMPERIALS_EIGHT_UNIT = GameStringsConstantsAndUtils.getPathToUnits(Imperials.RACE_NAME) + "imperials_eight_unit.png";
     private EntityOperations mEntityOperations;
 
-    public FirstUnit(final VertexBufferObjectManager vertexBufferObjectManager, EntityOperations entityOperations) {
-        super(TextureRegionHolderUtils.getInstance().getElement(KEY_IMPERIALS_FIRST_UNIT),
-                vertexBufferObjectManager, new Annihilator(20), new Higgs(20));
+    public Superman(final VertexBufferObjectManager vertexBufferObjectManager, EntityOperations entityOperations) {
+        super(TextureRegionHolderUtils.getInstance().getElement(KEY_IMPERIALS_EIGHT_UNIT), vertexBufferObjectManager);
+        mObjectArmor = new Higgs(10);
+        mObjectDamage = new Annihilator(60);
+        mObjectHealth = 1000;
+        mAttackRadius = 70;
+        mViewRadius = 170;
         setWidth(SizeConstants.UNIT_SIZE);
         setHeight(SizeConstants.UNIT_SIZE);
         mEntityOperations = entityOperations;
     }
 
     public static void loadResources(final Context context, final BitmapTextureAtlas textureAtlas) {
-        loadResource(KEY_IMPERIALS_FIRST_UNIT, context, textureAtlas, 0, 0);
+        loadResource(KEY_IMPERIALS_EIGHT_UNIT, context, textureAtlas, 15, 30);
     }
 
     @Override

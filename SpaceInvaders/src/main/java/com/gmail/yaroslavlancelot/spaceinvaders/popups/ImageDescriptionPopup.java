@@ -123,9 +123,9 @@ public class ImageDescriptionPopup {
      */
     public static class PopupItem {
         /** popup image height */
-        private static final int ITEM_HEIGHT = SizeConstants.MONEY_FONT_SIZE;
+        private static final int ITEM_HEIGHT = SizeConstants.BUILDING_POPUP_ELEMENT_HEIGHT;
         /** popup image height */
-        private static final int ITEM_IMAGE_WIDTH = 20;
+        private static final int ITEM_IMAGE_WIDTH = ITEM_HEIGHT;
         /** separator between elements/items */
         private static final int ITEM_SEPARATOR_LENGTH = 5;
         /** current item touched */

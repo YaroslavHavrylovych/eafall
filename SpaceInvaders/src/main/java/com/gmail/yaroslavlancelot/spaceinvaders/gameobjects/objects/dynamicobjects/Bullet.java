@@ -32,7 +32,7 @@ public class Bullet extends Rectangle {
         setY(y);
         PhysicsHandler physicsHandler = new PhysicsHandler(this);
         registerUpdateHandler(physicsHandler);
-        physicsHandler.setVelocity(goalX - x, goalY - y);
+        physicsHandler.setVelocity((goalX - x ) * 3, (goalY - y) * 3);
         registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new ITimerCallback() {
             @Override
             public void onTimePassed(final TimerHandler pTimerHandler) {

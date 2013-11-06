@@ -33,7 +33,7 @@ public class PlanetStaticObject extends StaticObject {
         setWidth(SizeConstants.PLANET_DIAMETER);
         setHeight(SizeConstants.PLANET_DIAMETER);
         mObjectArmor = new Higgs(2);
-        mObjectHealth = 100;
+        mObjectHealth = 1500;
     }
 
     public void setSpawnPoint(float spawnPointX, float spawnPointY) {
