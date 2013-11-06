@@ -4,8 +4,8 @@ package com.gmail.yaroslavlancelot.spaceinvaders.constants;
  * contains constants used in measuring game objects size
  */
 public final class SizeConstants {
-    public static final int GAME_FIELD_WIDTH = 1600;
-    public static final int GAME_FIELD_HEIGHT = 800;
+    public static final int GAME_FIELD_WIDTH = 1920;
+    public static final int GAME_FIELD_HEIGHT = 1080;
     public static final int PLANET_DIAMETER = 128;
     public static final int SUN_DIAMETER = 224;
     public static final int BUILDING_DIAMETER = 16;
@@ -16,6 +16,7 @@ public final class SizeConstants {
      */
     public static final int UNIT_TEAM_COLOR_INNER_SPRITE_SIZE = 11;
     public static final int MONEY_FONT_SIZE = 35;
+    public static final int BUILDING_POPUP_ELEMENT_HEIGHT = 60;
 
 
     private SizeConstants() {

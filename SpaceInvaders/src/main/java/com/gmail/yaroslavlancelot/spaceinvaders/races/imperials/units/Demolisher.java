@@ -4,8 +4,8 @@ import android.content.Context;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Higgs;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Annihilator;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Magnetic;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Higgs;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Bullet;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.Imperials;
@@ -13,16 +13,24 @@ import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-public class SevenUnit extends Unit {
+public class Demolisher extends Unit {
     public static final String KEY_IMPERIALS_SEVEN_UNIT = GameStringsConstantsAndUtils.getPathToUnits(Imperials.RACE_NAME) + "imperials_seven_unit.png";
     private EntityOperations mEntityOperations;
 
-    public SevenUnit(final VertexBufferObjectManager vertexBufferObjectManager, EntityOperations entityOperations) {
-        super(TextureRegionHolderUtils.getInstance().getElement(KEY_IMPERIALS_SEVEN_UNIT),
-                vertexBufferObjectManager, new Annihilator(20), new Higgs(20));
+    public Demolisher(final VertexBufferObjectManager vertexBufferObjectManager, EntityOperations entityOperations) {
+        super(TextureRegionHolderUtils.getInstance().getElement(KEY_IMPERIALS_SEVEN_UNIT), vertexBufferObjectManager);
+        mObjectArmor = new Magnetic(1);
+        mObjectDamage = new Higgs(50);
+        mObjectHealth = 200;
+        mAttackRadius = 170;
+        mViewRadius = 220;
         setWidth(SizeConstants.UNIT_SIZE);
         setHeight(SizeConstants.UNIT_SIZE);
         mEntityOperations = entityOperations;
+    }
+
+    public static void loadResources(final Context context, final BitmapTextureAtlas textureAtlas) {
+        loadResource(KEY_IMPERIALS_SEVEN_UNIT, context, textureAtlas, 0, 30);
     }
 
     @Override
@@ -32,9 +40,5 @@ public class SevenUnit extends Unit {
                 mObjectToAttack.getCenterX(), mObjectToAttack.getCenterY(), mEnemiesUpdater, mObjectDamage);
 
         mEntityOperations.attachEntity(bullet);
-    }
-
-    public static void loadResources(final Context context, final BitmapTextureAtlas textureAtlas) {
-        loadResource(KEY_IMPERIALS_SEVEN_UNIT, context, textureAtlas, 0, 30);
     }
 }

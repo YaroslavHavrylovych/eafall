@@ -1,8 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects;
 
 import com.badlogic.gdx.math.Vector2;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Armor;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Damage;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitPathUtil;
 import org.andengine.engine.handler.timer.ITimerCallback;
@@ -21,9 +19,9 @@ public abstract class Unit extends GameObject {
     /** update time for current object */
     protected float mUpdateCycleTime = .5f;
     /** attack radius of current unit */
-    protected int mAttackRadius = 100;
+    protected int mAttackRadius;
     /** area in which unit can search for enemies */
-    protected int mViewRadius = 150;
+    protected int mViewRadius;
     /** currently attacked object */
     protected GameObject mObjectToAttack;
     /** callback for using to update unit visible enemies */
@@ -31,13 +29,9 @@ public abstract class Unit extends GameObject {
     /** unit path */
     protected UnitPathUtil.UnitPath mUnitPath;
 
-    protected Unit(ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager,
-                   Damage unitDamage, Armor unitArmor) {
+    protected Unit(ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
         super(-100, -100, textureRegion, vertexBufferObjectManager);
         registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new SimpleUnitTimerCallback()));
-        mObjectArmor = unitArmor;
-        mObjectDamage = unitDamage;
-        mObjectHealth = 100;
     }
 
     public void calculateUnitPath() {
