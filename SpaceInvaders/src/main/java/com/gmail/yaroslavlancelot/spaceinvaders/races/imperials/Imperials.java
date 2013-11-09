@@ -6,11 +6,11 @@ import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.buildings.Barraks;
+import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.buildings.Barracks;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.buildings.Bunker;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.buildings.Camp;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.buildings.Laboratory;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.buildings.ShootersHall;
+import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.buildings.Laboratory;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.buildings.Tent;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.buildings.TrainingCenter;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.buildings.Workshop;
@@ -66,7 +66,7 @@ public class Imperials implements IRace {
                 building = new Tent(mObjectManager);
                 break;
             case 2:
-                building = new Barraks(mObjectManager);
+                building = new Barracks(mObjectManager);
                 break;
             case 3:
                 building = new ShootersHall(mObjectManager);
@@ -126,8 +126,7 @@ public class Imperials implements IRace {
     }
 
     private void initUnit(Unit unit) {
-        float width = SizeConstants.UNIT_TEAM_COLOR_INNER_SPRITE_SIZE;
-        unit.setBackgroundArea(new Area(2.5f, 2.5f, width, width));
+        unit.setBackgroundArea();
         unit.setBackgroundColor(mTeamColor);
     }
 
@@ -152,10 +151,10 @@ public class Imperials implements IRace {
     }
 
     private void loadBuildings(Context context, TextureManager textureManager) {
-        BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 45, 45, TextureOptions.BILINEAR);
+        BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 50, 50, TextureOptions.BILINEAR);
         Camp.loadResources(context, smallObjectTexture);
         Tent.loadResources(context, smallObjectTexture);
-        Barraks.loadResources(context, smallObjectTexture);
+        Barracks.loadResources(context, smallObjectTexture);
         ShootersHall.loadResources(context, smallObjectTexture);
         TrainingCenter.loadResources(context, smallObjectTexture);
         Workshop.loadResources(context, smallObjectTexture);
@@ -165,7 +164,7 @@ public class Imperials implements IRace {
     }
 
     private void initBuilding(StaticObject building) {
-        building.setBackgroundArea(new Area(0f, 0f, SizeConstants.BUILDING_DIAMETER, SizeConstants.BUILDING_DIAMETER));
         building.setBackgroundColor(mTeamColor);
+        building.setBackgroundArea();
     }
 }

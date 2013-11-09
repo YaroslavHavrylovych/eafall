@@ -2,11 +2,12 @@ package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects;
 
 import android.content.Context;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IObjectDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Damage;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ITouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ISpriteTouchable;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ITouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import org.andengine.entity.primitive.Rectangle;
@@ -73,12 +74,18 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
     @Override
     public void setWidth(final float pWidth) {
         super.setWidth(pWidth);
+        float multiplier = pWidth / mObjectSprite.getWidth();
+        mBackground.setX(multiplier * mBackground.getX());
+        mBackground.setWidth(multiplier * mBackground.getWidth());
         mObjectSprite.setWidth(pWidth);
     }
 
     @Override
     public void setHeight(final float pHeight) {
         super.setHeight(pHeight);
+        float multiplier = pHeight / mObjectSprite.getHeight();
+        mBackground.setY(multiplier * mBackground.getY());
+        mBackground.setHeight(multiplier * mBackground.getHeight());
         mObjectSprite.setHeight(pHeight);
     }
 
@@ -97,6 +104,11 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
 
     public void setBackgroundColor(Color color) {
         mBackground.setColor(color);
+    }
+
+    public void setBackgroundArea() {
+        setBackgroundArea(new Area(2.5f, 2.5f, SizeConstants.UNIT_TEAM_COLOR_INNER_SPRITE_SIZE,
+                SizeConstants.UNIT_TEAM_COLOR_INNER_SPRITE_SIZE));
     }
 
     public void setBackgroundArea(Area area) {

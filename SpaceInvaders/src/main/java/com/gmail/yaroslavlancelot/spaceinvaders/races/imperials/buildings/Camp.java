@@ -6,6 +6,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.CreepBuilding;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.Imperials;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -13,7 +14,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /** first building of imperials */
 public class Camp extends CreepBuilding {
-    public static final String KEY_IMPERIALS_FIRST_BUILDING = GameStringsConstantsAndUtils.getPathToBuildings(Imperials.RACE_NAME) + "imperials_first_building.png";
+    public static final String KEY_IMPERIALS_FIRST_BUILDING = GameStringsConstantsAndUtils.getPathToBuildings(Imperials.RACE_NAME) + "camp.png";
     private final static int mPosX = SizeConstants.PLANET_DIAMETER / 2 - SizeConstants.BUILDING_DIAMETER,
             mPosY = mPosX - SizeConstants.BUILDING_DIAMETER;
 
@@ -26,5 +27,10 @@ public class Camp extends CreepBuilding {
 
     public static void loadResources(final Context context, final BitmapTextureAtlas textureAtlas) {
         loadResource(KEY_IMPERIALS_FIRST_BUILDING, context, textureAtlas, 0, 0);
+    }
+
+    @Override
+    public void setBackgroundArea() {
+        setBackgroundArea(new Area(4, 4, 8, 8));
     }
 }
