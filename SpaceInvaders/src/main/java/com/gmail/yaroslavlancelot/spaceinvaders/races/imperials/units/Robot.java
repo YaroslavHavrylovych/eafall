@@ -9,12 +9,13 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.An
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Bullet;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.Imperials;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class Robot extends Unit {
-    public static final String KEY_IMPERIALS_SIX_UNIT = GameStringsConstantsAndUtils.getPathToUnits(Imperials.RACE_NAME) + "imperials_six_unit.png";
+    public static final String KEY_IMPERIALS_SIX_UNIT = GameStringsConstantsAndUtils.getPathToUnits(Imperials.RACE_NAME) + "robot.png";
     private EntityOperations mEntityOperations;
 
     public Robot(final VertexBufferObjectManager vertexBufferObjectManager, EntityOperations entityOperations) {
@@ -30,7 +31,7 @@ public class Robot extends Unit {
     }
 
     public static void loadResources(final Context context, final BitmapTextureAtlas textureAtlas) {
-        loadResource(KEY_IMPERIALS_SIX_UNIT, context, textureAtlas, 30, 15);
+        loadResource(KEY_IMPERIALS_SIX_UNIT, context, textureAtlas, 32, 16);
     }
 
     @Override
@@ -40,5 +41,10 @@ public class Robot extends Unit {
                 mObjectToAttack.getCenterX(), mObjectToAttack.getCenterY(), mEnemiesUpdater, mObjectDamage);
 
         mEntityOperations.attachEntity(bullet);
+    }
+
+    @Override
+    public void setBackgroundArea() {
+        setBackgroundArea(new Area(7, 3, 2, 8));
     }
 }

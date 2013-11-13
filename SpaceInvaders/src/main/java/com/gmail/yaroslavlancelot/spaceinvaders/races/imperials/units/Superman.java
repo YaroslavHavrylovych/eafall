@@ -9,12 +9,13 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.An
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Bullet;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.Imperials;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class Superman extends Unit {
-    public static final String KEY_IMPERIALS_EIGHT_UNIT = GameStringsConstantsAndUtils.getPathToUnits(Imperials.RACE_NAME) + "imperials_eight_unit.png";
+    public static final String KEY_IMPERIALS_EIGHT_UNIT = GameStringsConstantsAndUtils.getPathToUnits(Imperials.RACE_NAME) + "superman.png";
     private EntityOperations mEntityOperations;
 
     public Superman(final VertexBufferObjectManager vertexBufferObjectManager, EntityOperations entityOperations) {
@@ -30,7 +31,7 @@ public class Superman extends Unit {
     }
 
     public static void loadResources(final Context context, final BitmapTextureAtlas textureAtlas) {
-        loadResource(KEY_IMPERIALS_EIGHT_UNIT, context, textureAtlas, 15, 30);
+        loadResource(KEY_IMPERIALS_EIGHT_UNIT, context, textureAtlas, 16, 32);
     }
 
     @Override
@@ -40,5 +41,10 @@ public class Superman extends Unit {
                 mObjectToAttack.getCenterX(), mObjectToAttack.getCenterY(), mEnemiesUpdater, mObjectDamage);
 
         mEntityOperations.attachEntity(bullet);
+    }
+
+    @Override
+    public void setBackgroundArea() {
+        setBackgroundArea(new Area(6, 1, 4, 4));
     }
 }

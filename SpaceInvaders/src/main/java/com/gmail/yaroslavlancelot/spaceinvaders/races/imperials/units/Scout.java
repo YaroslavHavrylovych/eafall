@@ -11,12 +11,13 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.El
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Bullet;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.Imperials;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class Scout extends Unit {
-    public static final String KEY_IMPERIALS_SECOND_UNIT = GameStringsConstantsAndUtils.getPathToUnits(Imperials.RACE_NAME) + "imperials_second_unit.png";
+    public static final String KEY_IMPERIALS_SECOND_UNIT = GameStringsConstantsAndUtils.getPathToUnits(Imperials.RACE_NAME) + "scout.png";
     private EntityOperations mEntityOperations;
 
     public Scout(final VertexBufferObjectManager vertexBufferObjectManager, EntityOperations entityOperations) {
@@ -41,6 +42,11 @@ public class Scout extends Unit {
     }
 
     public static void loadResources(final Context context, final BitmapTextureAtlas textureAtlas) {
-        loadResource(KEY_IMPERIALS_SECOND_UNIT, context, textureAtlas, 15, 0);
+        loadResource(KEY_IMPERIALS_SECOND_UNIT, context, textureAtlas, 16, 0);
+    }
+
+    @Override
+    public void setBackgroundArea() {
+        setBackgroundArea(new Area(2, 8, 12, 3));
     }
 }

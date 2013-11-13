@@ -9,12 +9,13 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.An
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Bullet;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.Imperials;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class Conscript extends Unit {
-    public static final String KEY_IMPERIALS_FIRST_UNIT = GameStringsConstantsAndUtils.getPathToUnits(Imperials.RACE_NAME) + "imperials_first_unit.png";
+    public static final String KEY_IMPERIALS_FIRST_UNIT = GameStringsConstantsAndUtils.getPathToUnits(Imperials.RACE_NAME) + "conscript.png";
     private EntityOperations mEntityOperations;
 
     public Conscript(final VertexBufferObjectManager vertexBufferObjectManager, EntityOperations entityOperations) {
@@ -40,5 +41,10 @@ public class Conscript extends Unit {
                 mObjectToAttack.getCenterX(), mObjectToAttack.getCenterY(), mEnemiesUpdater, mObjectDamage);
 
         mEntityOperations.attachEntity(bullet);
+    }
+
+    @Override
+    public void setBackgroundArea() {
+        setBackgroundArea(new Area(1, 11, 14, 3));
     }
 }

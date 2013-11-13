@@ -138,7 +138,7 @@ public class Imperials implements IRace {
     }
 
     private void loadUnits(Context context, TextureManager textureManager) {
-        BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 45, 45, TextureOptions.BILINEAR);
+        BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 50, 50, TextureOptions.BILINEAR);
         Conscript.loadResources(context, smallObjectTexture);
         Scout.loadResources(context, smallObjectTexture);
         Infantrymen.loadResources(context, smallObjectTexture);
