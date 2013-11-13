@@ -54,7 +54,7 @@ public class PlanetStaticObject extends StaticObject {
         if (buildings.get(buildingId) == null) {
             final StaticObject staticObject =
                     mPlanetTeam.getTeamRace().getBuildingById(buildingId);
-            buildings.put(buildingId, new BuildingsHolder(staticObject, 0));
+            buildings.put(buildingId, new BuildingsHolder(staticObject, buildingId));
         }
         addBuilding(buildingId);
     }
@@ -88,7 +88,7 @@ public class PlanetStaticObject extends StaticObject {
         private final StaticObject mStaticObject;
         private int mBuildingsAmount;
         private UnitCreatorCycle mUnitCreatorCycle;
-        private int mBuildingId;
+        private final int mBuildingId;
 
 
         private BuildingsHolder(StaticObject staticObject, int buildingId) {

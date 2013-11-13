@@ -21,7 +21,7 @@ public class Team implements ITeam {
     /** team to fight with */
     private ITeam mEnemyTeam;
     /** current team money amount */
-    private int mMoneyAmount = 140;
+    private int mMoneyAmount = 500;
     /** team color */
     private Color mTeamColor = new Color(100, 100, 100);
 
