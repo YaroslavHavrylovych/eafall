@@ -16,6 +16,8 @@ public interface IRace {
 
     StaticObject getBuildingById(int buildingId);
 
+    int getBuildingCostById(int buildingId);
+
     Unit getUnitForBuilding(int buildingId);
 
     void loadResources(TextureManager textureManager, Context context);

@@ -33,7 +33,7 @@ public class PlanetStaticObject extends StaticObject {
         setWidth(SizeConstants.PLANET_DIAMETER);
         setHeight(SizeConstants.PLANET_DIAMETER);
         mObjectArmor = new Higgs(2);
-        mObjectHealth = 1500;
+        mObjectHealth = 3000;
     }
 
     public void setSpawnPoint(float spawnPointX, float spawnPointY) {
@@ -75,20 +75,25 @@ public class PlanetStaticObject extends StaticObject {
         mIncomeIncreasingValue += building.getObjectIncomeIncreasingValue();
     }
 
+    private int getMoneyAmount() {
+        return mPlanetTeam == null ? 0 : mPlanetTeam.getMoney();
+    }
+
     private void buyBuilding(int cost) {
         if (mPlanetTeam != null)
             mPlanetTeam.changeMoney(-cost);
     }
 
-    private int getMoneyAmount() {
-        return mPlanetTeam == null ? 0 : mPlanetTeam.getMoney();
+    public Map<Integer, BuildingsHolder> getBuildings() {
+        return buildings;
     }
 
-    private class BuildingsHolder {
+    public class BuildingsHolder {
         private final StaticObject mStaticObject;
+        private final int mBuildingId;
+        private final int mUnitCreationCycleTime = 20;
         private int mBuildingsAmount;
         private UnitCreatorCycle mUnitCreatorCycle;
-        private final int mBuildingId;
 
 
         private BuildingsHolder(StaticObject staticObject, int buildingId) {
@@ -96,13 +101,17 @@ public class PlanetStaticObject extends StaticObject {
             mBuildingId = buildingId;
         }
 
-        public void increaseBuildingsAmount() {
+        private void increaseBuildingsAmount() {
             if (mUnitCreatorCycle == null) {
                 mUnitCreatorCycle = new UnitCreatorCycle(mPlanetTeam, mEntityOperations, mBuildingId);
-                registerUpdateHandler(new TimerHandler(7, true, mUnitCreatorCycle));
+                registerUpdateHandler(new TimerHandler(mUnitCreationCycleTime, true, mUnitCreatorCycle));
             }
             mBuildingsAmount += 1;
             mUnitCreatorCycle.increaseUnitAmount();
+        }
+
+        public int getBuildingsAmount() {
+            return mBuildingsAmount;
         }
     }
 }

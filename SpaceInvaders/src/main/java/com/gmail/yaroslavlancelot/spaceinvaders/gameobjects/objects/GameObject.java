@@ -138,4 +138,16 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
     public void setBody(Body body) {
         mPhysicBody = body;
     }
+
+    public Armor getObjectArmor() {
+        return mObjectArmor;
+    }
+
+    public Damage getObjectDamage() {
+        return mObjectDamage;
+    }
+
+    public int getObjectHealth() {
+        return mObjectHealth;
+    }
 }

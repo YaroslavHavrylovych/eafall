@@ -41,13 +41,13 @@ public class Bullet extends Rectangle {
                     return;
                 }
 
-                if (isBulletCollied(enemiesUpdater.getMainTarget(), damage))
+                if (isIfBulletColliedThenHit(enemiesUpdater.getMainTarget(), damage))
                     return;
 
                 List<GameObject> objects = enemiesUpdater.getEnemiesObjects();
                 if (objects != null && !objects.isEmpty()) {
                     for (GameObject object : objects) {
-                        if (isBulletCollied(object, damage))
+                        if (isIfBulletColliedThenHit(object, damage))
                             return;
                     }
                     return;
@@ -60,7 +60,7 @@ public class Bullet extends Rectangle {
         return getX() < 0 || getY() < 0 || getX() > SizeConstants.GAME_FIELD_WIDTH || getY() > SizeConstants.GAME_FIELD_HEIGHT;
     }
 
-    private boolean isBulletCollied(GameObject object, Damage damage) {
+    private boolean isIfBulletColliedThenHit(GameObject object, Damage damage) {
         if (object == null) return false;
         if (object.collidesWith(this)) {
             object.damageObject(damage);

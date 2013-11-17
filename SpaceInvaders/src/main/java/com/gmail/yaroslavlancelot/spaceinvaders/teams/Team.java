@@ -17,11 +17,11 @@ public class Team implements ITeam {
     /** object related to current team */
     private List<GameObject> mTeamObjects;
     /** current team main planet */
-    private PlanetStaticObject mTeamPlanet;
+    private volatile PlanetStaticObject mTeamPlanet;
     /** team to fight with */
     private ITeam mEnemyTeam;
     /** current team money amount */
-    private int mMoneyAmount = 500;
+    private int mMoneyAmount = 140;
     /** team color */
     private Color mTeamColor = new Color(100, 100, 100);
 

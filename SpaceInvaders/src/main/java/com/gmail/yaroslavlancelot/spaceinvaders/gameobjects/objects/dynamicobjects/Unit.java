@@ -15,7 +15,7 @@ import java.util.List;
 /** Basic class for all dynamic game units */
 public abstract class Unit extends GameObject {
     /** max velocity for this unit */
-    protected float mMaxVelocity = 2.0f;
+    protected float mMaxVelocity = 1.5f;
     /** update time for current object */
     protected float mUpdateCycleTime = .5f;
     /** attack radius of current unit */

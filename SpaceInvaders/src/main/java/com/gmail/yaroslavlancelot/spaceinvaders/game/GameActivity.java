@@ -8,7 +8,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
-import com.gmail.yaroslavlancelot.spaceinvaders.ai.SimpleBot;
+import com.gmail.yaroslavlancelot.spaceinvaders.ai.NormalBot;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
@@ -61,6 +61,10 @@ import org.andengine.util.color.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * Main game Activity. Extends {@link BaseGameActivity} class and contains main game elements.
@@ -160,20 +164,10 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         onCreateResourcesCallback.onCreateResourcesFinished();
     }
 
-    private ITeam createUserTeam(Color teamColor, IRace teamRace, String teamName) {
-        ITeam team = new Team(teamName, teamRace) {
-            @Override
-            public void changeMoney(final int delta) {
-                super.changeMoney(delta);
-                updateMoneyTextOnScreen();
-            }
-        };
+    private ITeam createBotTeam(Color teamColor, IRace teamRace, String teamName) {
+        ITeam team = new Team(teamName, teamRace);
         team.setTeamColor(teamColor);
         return team;
-    }
-
-    private void updateMoneyTextOnScreen() {
-        mMoneyText.setText(TeamUtils.getMoneyString(mMoneyTextPrefixString, mRedTeam));
     }
 
     @Override
@@ -206,10 +200,20 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         onPopulateSceneCallback.onPopulateSceneFinished();
     }
 
-    private ITeam createBotTeam(Color teamColor, IRace teamRace, String teamName) {
-        ITeam team = new Team(teamName, teamRace);
+    private ITeam createUserTeam(Color teamColor, IRace teamRace, String teamName) {
+        ITeam team = new Team(teamName, teamRace) {
+            @Override
+            public void changeMoney(final int delta) {
+                super.changeMoney(delta);
+                updateMoneyTextOnScreen();
+            }
+        };
         team.setTeamColor(teamColor);
         return team;
+    }
+
+    private void updateMoneyTextOnScreen() {
+        mMoneyText.setText(TeamUtils.getMoneyString(mMoneyTextPrefixString, mRedTeam));
     }
 
     private void initRedTeamAndPlanet() {
@@ -289,9 +293,12 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         mMainSceneTouchListener.addTouchListener(userClickScreenTouchListener);
     }
 
+    @SuppressWarnings("unused")
     private void initBot(final ITeam initializingTeam) {
         LoggerHelper.methodInvocation(TAG, "initBot");
-        new Thread(new SimpleBot(initializingTeam)).start();
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Callable<Boolean> simpleBot = new NormalBot(initializingTeam);
+        Future<Boolean> future = executorService.submit(simpleBot);
     }
 
     /** init money string for  displaying to user */
@@ -359,22 +366,6 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
     }
 
     @Override
-    public void detachPhysicsBody(final GameObject gameObject) {
-        if (gameObject.getBody() == null)
-            return;
-        final PhysicsConnector pc = mPhysicsWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(gameObject);
-        if (pc != null) {
-            mPhysicsWorld.unregisterPhysicsConnector(pc);
-        }
-        mPhysicsWorld.destroyBody(gameObject.getBody());
-    }
-
-    @Override
-    public VertexBufferObjectManager getObjectManager() {
-        return getVertexBufferObjectManager();
-    }
-
-    @Override
     public void attachEntityWithTouchToHud(final IAreaShape entity) {
         HUD hud = mCamera.getHUD();
         hud.attachChild(entity);
@@ -391,6 +382,22 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
                 hud.detachChild(entity);
             }
         });
+    }
+
+    @Override
+    public void detachPhysicsBody(final GameObject gameObject) {
+        if (gameObject.getBody() == null)
+            return;
+        final PhysicsConnector pc = mPhysicsWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(gameObject);
+        if (pc != null) {
+            mPhysicsWorld.unregisterPhysicsConnector(pc);
+        }
+        mPhysicsWorld.destroyBody(gameObject.getBody());
+    }
+
+    @Override
+    public VertexBufferObjectManager getObjectManager() {
+        return getVertexBufferObjectManager();
     }
 
     /**

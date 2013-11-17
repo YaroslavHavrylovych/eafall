@@ -91,6 +91,11 @@ public class Imperials implements IRace {
     }
 
     @Override
+    public int getBuildingCostById(final int buildingId) {
+        return getBuildingById(buildingId).getObjectCost();
+    }
+
+    @Override
     public Unit getUnitForBuilding(final int buildingId) {
         Unit unit;
         switch (buildingId) {
