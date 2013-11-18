@@ -27,8 +27,8 @@ public class Sniper extends Unit {
         mObjectArmor = new HeavyWater(3);
         mObjectDamage = new Neutrino(50);
         mObjectHealth = 220;
-        mAttackRadius = 220;
-        mViewRadius = 320;
+        mAttackRadius = 240;
+        mViewRadius = 340;
         setWidth(SizeConstants.UNIT_SIZE);
         setHeight(SizeConstants.UNIT_SIZE);
         mEntityOperations = entityOperations;

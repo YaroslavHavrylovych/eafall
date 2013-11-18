@@ -90,7 +90,7 @@ public class MainSceneTouchListener implements IOnSceneTouchListener {
 
     /** used to perform scaling operations */
     private class MapZoomScaleGestureDetector extends ScaleGestureDetector.SimpleOnScaleGestureListener {
-        private float mMaximumZoomFactor = 2.f;
+        private float mMaximumZoomFactor = 3.f;
         private float mMinimumZoomFactor = 1.f;
 
         @Override

@@ -23,8 +23,8 @@ public class Conscript extends Unit {
         mObjectArmor = new Physical(5);
         mObjectDamage = new Annihilator(20);
         mObjectHealth = 450;
-        mAttackRadius = 50;
-        mViewRadius = 170;
+        mAttackRadius = 70;
+        mViewRadius = 190;
         setWidth(SizeConstants.UNIT_SIZE);
         setHeight(SizeConstants.UNIT_SIZE);
         mEntityOperations = entityOperations;

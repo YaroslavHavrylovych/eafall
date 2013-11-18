@@ -148,10 +148,10 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
                 BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, this, GameStringsConstantsAndUtils.FILE_SUN, 0, 0));
         mTextureRegionHolderUtils.addElement(GameStringsConstantsAndUtils.KEY_RED_PLANET,
                 BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, this, GameStringsConstantsAndUtils.FILE_RED_PLANET,
-                        0, SizeConstants.SUN_DIAMETER));
+                        0, SizeConstants.FILE_SUN_DIAMETER));
         mTextureRegionHolderUtils.addElement(GameStringsConstantsAndUtils.KEY_BLUE_PLANET,
                 BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, this, GameStringsConstantsAndUtils.FILE_BLUE_PLANET,
-                        SizeConstants.PLANET_DIAMETER, SizeConstants.SUN_DIAMETER));
+                        SizeConstants.PLANET_DIAMETER, SizeConstants.FILE_SUN_DIAMETER));
         biggerObjectsTexture.load();
 
 
@@ -164,10 +164,20 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         onCreateResourcesCallback.onCreateResourcesFinished();
     }
 
-    private ITeam createBotTeam(Color teamColor, IRace teamRace, String teamName) {
-        ITeam team = new Team(teamName, teamRace);
+    private ITeam createUserTeam(Color teamColor, IRace teamRace, String teamName) {
+        ITeam team = new Team(teamName, teamRace) {
+            @Override
+            public void changeMoney(final int delta) {
+                super.changeMoney(delta);
+                updateMoneyTextOnScreen();
+            }
+        };
         team.setTeamColor(teamColor);
         return team;
+    }
+
+    private void updateMoneyTextOnScreen() {
+        mMoneyText.setText(TeamUtils.getMoneyString(mMoneyTextPrefixString, mRedTeam));
     }
 
     @Override
@@ -200,38 +210,30 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         onPopulateSceneCallback.onPopulateSceneFinished();
     }
 
-    private ITeam createUserTeam(Color teamColor, IRace teamRace, String teamName) {
-        ITeam team = new Team(teamName, teamRace) {
-            @Override
-            public void changeMoney(final int delta) {
-                super.changeMoney(delta);
-                updateMoneyTextOnScreen();
-            }
-        };
+    private ITeam createBotTeam(Color teamColor, IRace teamRace, String teamName) {
+        ITeam team = new Team(teamName, teamRace);
         team.setTeamColor(teamColor);
         return team;
     }
 
-    private void updateMoneyTextOnScreen() {
-        mMoneyText.setText(TeamUtils.getMoneyString(mMoneyTextPrefixString, mRedTeam));
-    }
-
     private void initRedTeamAndPlanet() {
-        mRedTeam.setTeamPlanet(createPlanet(0, (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2,
+        mRedTeam.setTeamPlanet(createPlanet(0, (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2
+                + SizeConstants.ADDITION_MARGIN_FOR_PLANET,
                 mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_RED_PLANET), GameStringsConstantsAndUtils.KEY_RED_PLANET,
                 mRedTeam));
         mRedTeam.getTeamPlanet().setSpawnPoint(SizeConstants.PLANET_DIAMETER / 2 + SizeConstants.UNIT_SIZE + 2,
-                SizeConstants.GAME_FIELD_HEIGHT / 2);
+                SizeConstants.GAME_FIELD_HEIGHT / 2 + SizeConstants.ADDITION_MARGIN_FOR_PLANET);
         mTeams.add(mRedTeam);
     }
 
     private void initBlueTeamAndPlanet() {
-        mBlueTeam.setTeamPlanet(createPlanet(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER,
+        mBlueTeam.setTeamPlanet(createPlanet(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER
+                - SizeConstants.ADDITION_MARGIN_FOR_PLANET,
                 (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2,
                 mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_BLUE_PLANET), GameStringsConstantsAndUtils.KEY_BLUE_PLANET,
                 mBlueTeam));
         mBlueTeam.getTeamPlanet().setSpawnPoint(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER / 2 -
-                SizeConstants.UNIT_SIZE - 2,
+                SizeConstants.UNIT_SIZE - 2 - SizeConstants.ADDITION_MARGIN_FOR_PLANET,
                 SizeConstants.GAME_FIELD_HEIGHT / 2);
         mTeams.add(mBlueTeam);
     }

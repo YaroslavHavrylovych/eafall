@@ -25,8 +25,8 @@ public class Scout extends Unit {
         mObjectArmor = new Magnetic(2);
         mObjectDamage = new Electric(30);
         mObjectHealth = 300;
-        mAttackRadius = 70;
-        mViewRadius = 170;
+        mAttackRadius = 90;
+        mViewRadius = 190;
         setWidth(SizeConstants.UNIT_SIZE);
         setHeight(SizeConstants.UNIT_SIZE);
         mEntityOperations = entityOperations;

@@ -23,8 +23,8 @@ public class Demolisher extends Unit {
         mObjectArmor = new Magnetic(1);
         mObjectDamage = new Higgs(50);
         mObjectHealth = 200;
-        mAttackRadius = 170;
-        mViewRadius = 220;
+        mAttackRadius = 190;
+        mViewRadius = 240;
         setWidth(SizeConstants.UNIT_SIZE);
         setHeight(SizeConstants.UNIT_SIZE);
         mEntityOperations = entityOperations;

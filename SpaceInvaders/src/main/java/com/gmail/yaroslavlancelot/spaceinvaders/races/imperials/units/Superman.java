@@ -23,8 +23,8 @@ public class Superman extends Unit {
         mObjectArmor = new Higgs(10);
         mObjectDamage = new Annihilator(60);
         mObjectHealth = 1000;
-        mAttackRadius = 70;
-        mViewRadius = 170;
+        mAttackRadius = 90;
+        mViewRadius = 190;
         setWidth(SizeConstants.UNIT_SIZE);
         setHeight(SizeConstants.UNIT_SIZE);
         mEntityOperations = entityOperations;

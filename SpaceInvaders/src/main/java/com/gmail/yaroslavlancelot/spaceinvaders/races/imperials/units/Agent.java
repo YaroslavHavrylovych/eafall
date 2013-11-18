@@ -23,8 +23,8 @@ public class Agent extends Unit {
         mObjectArmor = new Electrical(5);
         mObjectDamage = new Magnetic(60);
         mObjectHealth = 400;
-        mAttackRadius = 90;
-        mViewRadius = 220;
+        mAttackRadius = 100;
+        mViewRadius = 240;
         setWidth(SizeConstants.UNIT_SIZE);
         setHeight(SizeConstants.UNIT_SIZE);
         mEntityOperations = entityOperations;

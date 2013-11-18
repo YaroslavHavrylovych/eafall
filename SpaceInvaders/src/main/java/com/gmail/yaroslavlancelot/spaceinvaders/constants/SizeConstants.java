@@ -7,7 +7,9 @@ public final class SizeConstants {
     public static final int GAME_FIELD_WIDTH = 1920;
     public static final int GAME_FIELD_HEIGHT = 1080;
     public static final int PLANET_DIAMETER = 128;
-    public static final int SUN_DIAMETER = 224;
+    public static final int ADDITION_MARGIN_FOR_PLANET = 20;
+    public static final int SUN_DIAMETER = 450;
+    public static final int FILE_SUN_DIAMETER = 224;
     public static final int BUILDING_DIAMETER = 16;
     public static final int UNIT_SIZE = 16;
     /**

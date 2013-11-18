@@ -7,9 +7,9 @@ public final class GameStringsConstantsAndUtils {
     /** sun file name */
     public static final String FILE_SUN = "sun.png";
     /** file name for red planet */
-    public static final String FILE_RED_PLANET = "red_planet.png";
+    public static final String FILE_RED_PLANET = "planet_1.png";
     /** file name for blue planet */
-    public static final String FILE_BLUE_PLANET = "blue_planet.png";
+    public static final String FILE_BLUE_PLANET = "planet_2.png";
     /** used like key for sun static object */
     public static final String KEY_SUN = "sun_key";
     /** used like key for red planet static object */

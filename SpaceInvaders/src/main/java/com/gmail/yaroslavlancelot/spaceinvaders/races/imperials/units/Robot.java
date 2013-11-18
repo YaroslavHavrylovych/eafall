@@ -23,8 +23,8 @@ public class Robot extends Unit {
         mObjectArmor = new Electrical(10);
         mObjectDamage = new Annihilator(40);
         mObjectHealth = 500;
-        mAttackRadius = 90;
-        mViewRadius = 220;
+        mAttackRadius = 110;
+        mViewRadius = 240;
         setWidth(SizeConstants.UNIT_SIZE);
         setHeight(SizeConstants.UNIT_SIZE);
         mEntityOperations = entityOperations;

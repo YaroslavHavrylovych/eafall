@@ -25,8 +25,8 @@ public class Infantrymen extends Unit {
         mObjectArmor = new Physical(10);
         mObjectDamage = new Electric(20);
         mObjectHealth = 700;
-        mAttackRadius = 50;
-        mViewRadius = 170;
+        mAttackRadius = 70;
+        mViewRadius = 190;
         setWidth(SizeConstants.UNIT_SIZE);
         setHeight(SizeConstants.UNIT_SIZE);
         mEntityOperations = entityOperations;
