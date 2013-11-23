@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Космічні Загарбники</string>
+    <string name="money_colon">Гроші : </string>
+    <string name="camp">Табір</string>
+    <string name="tent">Намет</string>
+    <string name="barracks">Бараки</string>
+    <string name="shooters_hall">Стрілецький Зал</string>
+    <string name="training_center">Тренувальний Центр</string>
+    <string name="workshop">Майстерня</string>
+    <string name="laboratory">Лабораторія</string>
+    <string name="bunker">Бункер</string>
+</resources>

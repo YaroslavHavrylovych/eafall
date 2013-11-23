@@ -36,6 +36,16 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
     protected Body mPhysicBody;
     /** current object touch listener */
     private ITouchListener mSpriteOnTouchListener;
+    /** */
+    private int mObjectStringId;
+
+    public int getObjectStringId() {
+        return mObjectStringId;
+    }
+
+    protected void setObjectStringId(int id) {
+        mObjectStringId = id;
+    }
 
     protected GameObject(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
         super(x, y, textureRegion.getWidth(), textureRegion.getWidth(), vertexBufferObjectManager);

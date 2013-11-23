@@ -2,6 +2,12 @@
 <resources>
     <string name="app_name">SpaceInvaders</string>
     <string name="money_colon">Money : </string>
-    <string name="first_building">First building</string>
-    <string name="second_building">Second building</string>
+    <string name="camp">Camp</string>
+    <string name="tent">Tent</string>
+    <string name="barracks">Barracks</string>
+    <string name="shooters_hall">ShootersHall</string>
+    <string name="training_center">TrainingCenter</string>
+    <string name="workshop">Workshop</string>
+    <string name="laboratory">Laboratory</string>
+    <string name="bunker">Bunker</string>
 </resources>

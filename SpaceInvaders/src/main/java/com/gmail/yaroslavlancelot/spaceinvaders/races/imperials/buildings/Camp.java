@@ -1,6 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.buildings;
 
 import android.content.Context;
+import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.CreepBuilding;
@@ -23,6 +24,7 @@ public class Camp extends CreepBuilding {
         mCost = 150;
         setWidth(SizeConstants.BUILDING_DIAMETER);
         setHeight(SizeConstants.BUILDING_DIAMETER);
+        setObjectStringId(R.string.camp);
     }
 
     public static void loadResources(final Context context, final BitmapTextureAtlas textureAtlas) {

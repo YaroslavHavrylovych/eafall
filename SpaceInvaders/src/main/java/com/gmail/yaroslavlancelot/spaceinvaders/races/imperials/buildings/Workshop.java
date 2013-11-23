@@ -1,6 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.buildings;
 
 import android.content.Context;
+import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.CreepBuilding;
@@ -21,6 +22,7 @@ public class Workshop extends CreepBuilding {
         mCost = 360;
         setWidth(SizeConstants.BUILDING_DIAMETER);
         setHeight(SizeConstants.BUILDING_DIAMETER);
+        setObjectStringId(R.string.workshop);
     }
 
     @Override

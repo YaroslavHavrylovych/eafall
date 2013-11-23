@@ -1,7 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.races.imperials;
 
 import android.content.Context;
-import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
@@ -9,20 +8,19 @@ import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.buildings.Barracks;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.buildings.Bunker;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.buildings.Camp;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.buildings.ShootersHall;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.buildings.Laboratory;
+import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.buildings.ShootersHall;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.buildings.Tent;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.buildings.TrainingCenter;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.buildings.Workshop;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.units.Agent;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.units.Conscript;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.units.Demolisher;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.units.Superman;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.units.Robot;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.units.Sniper;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.units.Infantrymen;
+import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.units.Robot;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.units.Scout;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
+import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.units.Sniper;
+import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.units.Superman;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
@@ -90,6 +88,11 @@ public class Imperials implements IRace {
         return building;
     }
 
+    private void initBuilding(StaticObject building) {
+        building.setBackgroundColor(mTeamColor);
+        building.setBackgroundArea();
+    }
+
     @Override
     public int getBuildingCostById(final int buildingId) {
         return getBuildingById(buildingId).getObjectCost();
@@ -130,29 +133,11 @@ public class Imperials implements IRace {
         return unit;
     }
 
-    private void initUnit(Unit unit) {
-        unit.setBackgroundArea();
-        unit.setBackgroundColor(mTeamColor);
-    }
-
     @Override
     public void loadResources(final TextureManager textureManager, final Context context) {
         loadBuildings(context, textureManager);
 
         loadUnits(context, textureManager);
-    }
-
-    private void loadUnits(Context context, TextureManager textureManager) {
-        BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 50, 50, TextureOptions.BILINEAR);
-        Conscript.loadResources(context, smallObjectTexture);
-        Scout.loadResources(context, smallObjectTexture);
-        Infantrymen.loadResources(context, smallObjectTexture);
-        Sniper.loadResources(context, smallObjectTexture);
-        Agent.loadResources(context, smallObjectTexture);
-        Robot.loadResources(context, smallObjectTexture);
-        Demolisher.loadResources(context, smallObjectTexture);
-        Superman.loadResources(context, smallObjectTexture);
-        smallObjectTexture.load();
     }
 
     private void loadBuildings(Context context, TextureManager textureManager) {
@@ -168,8 +153,21 @@ public class Imperials implements IRace {
         smallObjectTexture.load();
     }
 
-    private void initBuilding(StaticObject building) {
-        building.setBackgroundColor(mTeamColor);
-        building.setBackgroundArea();
+    private void loadUnits(Context context, TextureManager textureManager) {
+        BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 50, 50, TextureOptions.BILINEAR);
+        Conscript.loadResources(context, smallObjectTexture);
+        Scout.loadResources(context, smallObjectTexture);
+        Infantrymen.loadResources(context, smallObjectTexture);
+        Sniper.loadResources(context, smallObjectTexture);
+        Agent.loadResources(context, smallObjectTexture);
+        Robot.loadResources(context, smallObjectTexture);
+        Demolisher.loadResources(context, smallObjectTexture);
+        Superman.loadResources(context, smallObjectTexture);
+        smallObjectTexture.load();
+    }
+
+    private void initUnit(Unit unit) {
+        unit.setBackgroundArea();
+        unit.setBackgroundColor(mTeamColor);
     }
 }

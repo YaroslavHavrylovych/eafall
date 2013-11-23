@@ -3,7 +3,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.popups;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.IItemPickListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ITouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
@@ -62,7 +62,7 @@ public class ImageDescriptionPopup {
 
     private void attachItems(final PopupItem popupItem) {
         // picture
-        popupItem.mItemStaticObject.setOnTouchListener(new ITouchListener() {
+        popupItem.mItemGameObject.setOnTouchListener(new ITouchListener() {
             @Override
             public boolean onTouch(final TouchEvent pSceneTouchEvent) {
                 if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_UP) {
@@ -72,14 +72,14 @@ public class ImageDescriptionPopup {
                 return false;
             }
         });
-        popupItem.mItemStaticObject.setX(mAreaForPopup.left);
-        popupItem.mItemStaticObject.setY(
+        popupItem.mItemGameObject.setX(mAreaForPopup.left);
+        popupItem.mItemGameObject.setY(
                 mAreaForPopup.top + (PopupItem.ITEM_HEIGHT + PopupItem.ITEM_SEPARATOR_LENGTH) * popupItem.mId);
-        popupItem.mItemStaticObject.setWidth(PopupItem.ITEM_IMAGE_WIDTH);
-        popupItem.mItemStaticObject.setHeight(PopupItem.ITEM_IMAGE_WIDTH);
+        popupItem.mItemGameObject.setWidth(PopupItem.ITEM_IMAGE_WIDTH);
+        popupItem.mItemGameObject.setHeight(PopupItem.ITEM_IMAGE_WIDTH);
         // text
-        float textX = popupItem.mItemStaticObject.getX() + popupItem.mItemStaticObject.getWidth() + PopupItem.ITEM_SEPARATOR_LENGTH,
-                textY = popupItem.mItemStaticObject.getY() + popupItem.mItemStaticObject.getHeight() -
+        float textX = popupItem.mItemGameObject.getX() + popupItem.mItemGameObject.getWidth() + PopupItem.ITEM_SEPARATOR_LENGTH,
+                textY = popupItem.mItemGameObject.getY() + popupItem.mItemGameObject.getHeight() -
                         FontHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.KEY_FONT_MONEY).getLineHeight();
         Text imageDescriptionText = new
 
@@ -98,7 +98,7 @@ public class ImageDescriptionPopup {
                     }
                 };
         // attaching
-        popupItem.mImage = popupItem.mItemStaticObject;
+        popupItem.mImage = popupItem.mItemGameObject;
         popupItem.mText = imageDescriptionText;
     }
 
@@ -136,18 +136,17 @@ public class ImageDescriptionPopup {
          * {@link org.andengine.opengl.texture.region.ITextureRegion} which should be
          * displayed with current popup item
          */
-        private StaticObject mItemStaticObject;
+        private GameObject mItemGameObject;
         private int mId;
         /** already initiated image */
         private IAreaShape mImage;
         /** already initiated text */
         private IAreaShape mText;
 
-        public PopupItem(int id, StaticObject itemStaticObject, String itemName,
-                         IItemPickListener itemPickListener) {
+        public PopupItem(int id, GameObject itemGameObject, String itemName, IItemPickListener itemPickListener) {
             mId = id;
             mItemName = itemName;
-            mItemStaticObject = itemStaticObject;
+            mItemGameObject = itemGameObject;
             mItemPickListener = itemPickListener;
         }
 

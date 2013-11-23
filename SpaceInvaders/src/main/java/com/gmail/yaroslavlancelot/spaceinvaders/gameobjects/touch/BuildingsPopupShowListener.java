@@ -3,6 +3,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch;
 import android.view.MotionEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.Localizable;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.ImageDescriptionPopup;
@@ -22,6 +23,7 @@ public class BuildingsPopupShowListener implements ITouchListener {
     private boolean mIsFirstTouch = true;
     private ImageDescriptionPopup mPopup;
     private float mActionDownX, mActionDownY;
+    private int mBuildingCostStringMaxCharacters = 5;
 
     public BuildingsPopupShowListener(ITeam userTeam, EntityOperations entityOperations, Localizable localizable) {
         mUserTeam = userTeam;
@@ -66,20 +68,20 @@ public class BuildingsPopupShowListener implements ITouchListener {
                 new ArrayList<ImageDescriptionPopup.PopupItem>(race.getBuildingsAmount());
         ImageDescriptionPopup.PopupItem item;
         for (int buildingId = 0; buildingId < race.getBuildingsAmount(); buildingId++) {
-            item = createPopupItem(buildingId, race.getBuildingById(buildingId
-
-            ), buildingId + "building");
+            item = createPopupItem(buildingId, race.getBuildingById(buildingId));
             items.add(item);
         }
         mPopup = new ImageDescriptionPopup(mEntityOperations, buildingPopupRect);
         mPopup.attachMenuItems(items);
     }
 
-    private Area getBuildingPopupRectForTeam(ITeam team) {
-        return new Area(0, 0, 0, 0);
+    private ImageDescriptionPopup.PopupItem createPopupItem(int id, StaticObject staticObject) {
+        String prefix = Integer.toString(staticObject.getObjectCost()) + " : ";
+        return createPopupItem(id, staticObject, prefix +
+                mLocalizable.getStringById(staticObject.getObjectStringId()));
     }
 
-    private ImageDescriptionPopup.PopupItem createPopupItem(int id, StaticObject staticObject, String name) {
+    private ImageDescriptionPopup.PopupItem createPopupItem(int id, GameObject gameObject, String name) {
         IItemPickListener spriteTouchListener = new IItemPickListener() {
             @Override
             public void itemPicked(final int buildingId) {
@@ -88,6 +90,10 @@ public class BuildingsPopupShowListener implements ITouchListener {
                     mUserTeam.getTeamPlanet().createBuildingById(buildingId);
             }
         };
-        return new ImageDescriptionPopup.PopupItem(id, staticObject, name, spriteTouchListener);
+        return new ImageDescriptionPopup.PopupItem(id, gameObject, name, spriteTouchListener);
+    }
+
+    private Area getBuildingPopupRectForTeam(ITeam team) {
+        return new Area(0, 0, 0, 0);
     }
 }
