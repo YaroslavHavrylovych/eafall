@@ -38,8 +38,8 @@ public class NormalBot implements Callable<Boolean> {
      * @return float value, which represent how much unit2 health will be burned after fight with unit1
      */
     public static float calculateUnitEfficiency(Unit unit1, Unit unit2) {
-        int amountOfPunches1 = unit2.getObjectHealth() / getArmorDamage(unit1, unit2),
-                amountOfPunches2 = unit1.getObjectHealth() / getArmorDamage(unit2, unit1);
+        int amountOfPunches1 = unit2.getObjectCurrentHealth() / getArmorDamage(unit1, unit2),
+                amountOfPunches2 = unit1.getObjectCurrentHealth() / getArmorDamage(unit2, unit1);
         return (((float) amountOfPunches1) / amountOfPunches2);
     }
 

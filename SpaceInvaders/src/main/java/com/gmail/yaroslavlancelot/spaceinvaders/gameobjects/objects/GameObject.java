@@ -24,8 +24,12 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
     protected Sprite mObjectSprite;
     /** background color */
     protected Rectangle mBackground;
-    /** game object health (it can be undestroyable) */
-    protected int mObjectHealth = sUndestroyableObjectKey;
+    /** object health bar */
+    protected HealthBar mHealthBar;
+    /** maximum object health */
+    protected int mObjectMaximumHealth = sUndestroyableObjectKey;
+    /** game object current health (it can be undestroyable) */
+    protected int mObjectCurrentHealth = sUndestroyableObjectKey;
     /** object damage */
     protected Damage mObjectDamage;
     /** object armor */
@@ -36,16 +40,8 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
     protected Body mPhysicBody;
     /** current object touch listener */
     private ITouchListener mSpriteOnTouchListener;
-    /** */
+    /** id of the string in the string files to represent object */
     private int mObjectStringId;
-
-    public int getObjectStringId() {
-        return mObjectStringId;
-    }
-
-    protected void setObjectStringId(int id) {
-        mObjectStringId = id;
-    }
 
     protected GameObject(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
         super(x, y, textureRegion.getWidth(), textureRegion.getWidth(), vertexBufferObjectManager);
@@ -61,8 +57,31 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
                 textureAtlas, context, x, y);
     }
 
+    protected void initHealthBar() {
+        mHealthBar = new HealthBar(getVertexBufferObjectManager(), getWidth());
+        attachChild(mHealthBar.getHealthBar());
+    }
+
+    public int getObjectStringId() {
+        return mObjectStringId;
+    }
+
+    protected void setObjectStringId(int id) {
+        mObjectStringId = id;
+    }
+
+    protected void initHealth(int objectMaximumHealth) {
+        initHealth(objectMaximumHealth, objectMaximumHealth);
+    }
+
+    protected void initHealth(int objectMaximumHealth, int objectCurrentHealth) {
+        mObjectCurrentHealth = objectCurrentHealth;
+        mObjectMaximumHealth = objectMaximumHealth;
+        initHealthBar();
+    }
+
     public boolean isObjectAlive() {
-        return mObjectHealth > 0 || mObjectHealth == sUndestroyableObjectKey;
+        return mObjectCurrentHealth > 0 || mObjectCurrentHealth == sUndestroyableObjectKey;
     }
 
     public void setObjectDestroyedListener(final IObjectDestroyedListener objectDestroyedListener) {
@@ -100,12 +119,15 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
     }
 
     public void damageObject(final Damage damage) {
-        if (mObjectHealth == sUndestroyableObjectKey) return;
-        mObjectHealth -= mObjectArmor.getDamage(damage);
-        if (mObjectHealth < 0) {
+        if (mObjectCurrentHealth == sUndestroyableObjectKey) return;
+        mObjectCurrentHealth -= mObjectArmor.getDamage(damage);
+        if (mObjectCurrentHealth < 0) {
             if (mObjectDestroyedListener != null)
                 mObjectDestroyedListener.objectDestroyed(this);
+            return;
         }
+        if (mHealthBar != null)
+            mHealthBar.redrawHealthBar(mObjectMaximumHealth, mObjectCurrentHealth);
     }
 
     public Color getBackgroundColor() {
@@ -157,7 +179,11 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
         return mObjectDamage;
     }
 
-    public int getObjectHealth() {
-        return mObjectHealth;
+    public int getObjectCurrentHealth() {
+        return mObjectCurrentHealth;
+    }
+
+    public int getMaximumObjectHealth() {
+        return mObjectMaximumHealth;
     }
 }

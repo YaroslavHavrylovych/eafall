@@ -20,13 +20,13 @@ public class Superman extends Unit {
 
     public Superman(final VertexBufferObjectManager vertexBufferObjectManager, EntityOperations entityOperations) {
         super(TextureRegionHolderUtils.getInstance().getElement(KEY_IMPERIALS_EIGHT_UNIT), vertexBufferObjectManager);
-        mObjectArmor = new Higgs(10);
-        mObjectDamage = new Annihilator(60);
-        mObjectHealth = 1000;
-        mAttackRadius = 90;
-        mViewRadius = 190;
         setWidth(SizeConstants.UNIT_SIZE);
         setHeight(SizeConstants.UNIT_SIZE);
+        initHealth(1000);
+        mObjectArmor = new Higgs(10);
+        mObjectDamage = new Annihilator(60);
+        mAttackRadius = 90;
+        mViewRadius = 190;
         mEntityOperations = entityOperations;
     }
 
