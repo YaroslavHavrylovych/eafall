@@ -5,10 +5,6 @@ import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAn
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.HeavyWater;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Higgs;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Physical;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Annihilator;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Electric;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Neutrino;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Bullet;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
@@ -24,13 +20,13 @@ public class Sniper extends Unit {
 
     public Sniper(final VertexBufferObjectManager vertexBufferObjectManager, EntityOperations entityOperations) {
         super(TextureRegionHolderUtils.getInstance().getElement(KEY_IMPERIALS_FOURTH_UNIT), vertexBufferObjectManager);
-        mObjectArmor = new HeavyWater(3);
-        mObjectDamage = new Neutrino(50);
-        mObjectHealth = 220;
-        mAttackRadius = 240;
-        mViewRadius = 340;
         setWidth(SizeConstants.UNIT_SIZE);
         setHeight(SizeConstants.UNIT_SIZE);
+        initHealth(220);
+        mObjectArmor = new HeavyWater(3);
+        mObjectDamage = new Neutrino(50);
+        mAttackRadius = 240;
+        mViewRadius = 340;
         mEntityOperations = entityOperations;
     }
 

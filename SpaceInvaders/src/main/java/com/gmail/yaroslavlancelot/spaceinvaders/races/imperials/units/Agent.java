@@ -20,13 +20,13 @@ public class Agent extends Unit {
 
     public Agent(final VertexBufferObjectManager vertexBufferObjectManager, EntityOperations entityOperations) {
         super(TextureRegionHolderUtils.getInstance().getElement(KEY_IMPERIALS_FIFTH_UNIT), vertexBufferObjectManager);
-        mObjectArmor = new Electrical(5);
-        mObjectDamage = new Magnetic(60);
-        mObjectHealth = 400;
-        mAttackRadius = 100;
-        mViewRadius = 240;
         setWidth(SizeConstants.UNIT_SIZE);
         setHeight(SizeConstants.UNIT_SIZE);
+        initHealth(400);
+        mObjectArmor = new Electrical(5);
+        mObjectDamage = new Magnetic(60);
+        mAttackRadius = 100;
+        mViewRadius = 240;
         mEntityOperations = entityOperations;
     }
 

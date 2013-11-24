@@ -20,13 +20,13 @@ public class Robot extends Unit {
 
     public Robot(final VertexBufferObjectManager vertexBufferObjectManager, EntityOperations entityOperations) {
         super(TextureRegionHolderUtils.getInstance().getElement(KEY_IMPERIALS_SIX_UNIT), vertexBufferObjectManager);
-        mObjectArmor = new Electrical(10);
-        mObjectDamage = new Annihilator(40);
-        mObjectHealth = 500;
-        mAttackRadius = 110;
-        mViewRadius = 240;
         setWidth(SizeConstants.UNIT_SIZE);
         setHeight(SizeConstants.UNIT_SIZE);
+        initHealth(500);
+        mObjectArmor = new Electrical(10);
+        mObjectDamage = new Annihilator(40);
+        mAttackRadius = 110;
+        mViewRadius = 240;
         mEntityOperations = entityOperations;
     }
 

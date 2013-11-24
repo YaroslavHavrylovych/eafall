@@ -20,13 +20,13 @@ public class Conscript extends Unit {
 
     public Conscript(final VertexBufferObjectManager vertexBufferObjectManager, EntityOperations entityOperations) {
         super(TextureRegionHolderUtils.getInstance().getElement(KEY_IMPERIALS_FIRST_UNIT), vertexBufferObjectManager);
-        mObjectArmor = new Physical(5);
-        mObjectDamage = new Annihilator(20);
-        mObjectHealth = 450;
-        mAttackRadius = 70;
-        mViewRadius = 190;
         setWidth(SizeConstants.UNIT_SIZE);
         setHeight(SizeConstants.UNIT_SIZE);
+        initHealth(450);
+        mObjectArmor = new Physical(5);
+        mObjectDamage = new Annihilator(20);
+        mAttackRadius = 70;
+        mViewRadius = 190;
         mEntityOperations = entityOperations;
     }
 

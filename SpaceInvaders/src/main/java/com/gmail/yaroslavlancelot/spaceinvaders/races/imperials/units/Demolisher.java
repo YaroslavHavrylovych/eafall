@@ -20,13 +20,13 @@ public class Demolisher extends Unit {
 
     public Demolisher(final VertexBufferObjectManager vertexBufferObjectManager, EntityOperations entityOperations) {
         super(TextureRegionHolderUtils.getInstance().getElement(KEY_IMPERIALS_SEVEN_UNIT), vertexBufferObjectManager);
-        mObjectArmor = new Magnetic(1);
-        mObjectDamage = new Higgs(50);
-        mObjectHealth = 200;
-        mAttackRadius = 190;
-        mViewRadius = 240;
         setWidth(SizeConstants.UNIT_SIZE);
         setHeight(SizeConstants.UNIT_SIZE);
+        initHealth(200);
+        mObjectArmor = new Magnetic(1);
+        mObjectDamage = new Higgs(50);
+        mAttackRadius = 190;
+        mViewRadius = 240;
         mEntityOperations = entityOperations;
     }
 

@@ -4,6 +4,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameloop.UnitCreatorCycle;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Higgs;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.HealthBar;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -30,10 +31,10 @@ public class PlanetStaticObject extends StaticObject {
         mEntityOperations = entityOperations;
         mIncomeIncreasingValue = 10;
         mPlanetTeam = planetTeam;
+        mObjectArmor = new Higgs(2);
         setWidth(SizeConstants.PLANET_DIAMETER);
         setHeight(SizeConstants.PLANET_DIAMETER);
-        mObjectArmor = new Higgs(2);
-        mObjectHealth = 3000;
+        initHealth(3000);
     }
 
     public void setSpawnPoint(float spawnPointX, float spawnPointY) {
