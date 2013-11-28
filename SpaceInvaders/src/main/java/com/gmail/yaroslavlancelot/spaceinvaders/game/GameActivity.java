@@ -1,6 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.game;
 
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import com.badlogic.gdx.math.Vector2;
@@ -30,9 +31,11 @@ import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.Team;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.SoundsAndMusicUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TeamUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitCallbacksUtils;
+import org.andengine.audio.music.Music;
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -70,7 +73,7 @@ import java.util.concurrent.Future;
  * Main game Activity. Extends {@link BaseGameActivity} class and contains main game elements.
  * Loads resources, initialize scene, engine and etc.
  */
-public class GameActivity extends BaseGameActivity implements Localizable, EntityOperations {
+public class GameActivity extends BaseGameActivity implements Localizable, EntityOperations, MediaPlayer.OnPreparedListener {
     /** tag, which is used for debugging purpose */
     public static final String TAG = GameActivity.class.getCanonicalName();
     public static final int MONEY_UPDATE_TIME = 10;
@@ -103,6 +106,8 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
     private String mMoneyTextPrefixString;
     /** main scene touch listener */
     private MainSceneTouchListener mMainSceneTouchListener;
+    /** background theme */
+    private Music mBackgroundMusic;
 
     @Override
     public EngineOptions onCreateEngineOptions() {
@@ -120,9 +125,14 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         mCamera.setBoundsEnabled(true);
         mCamera.setHUD(new HUD());
 
-        return new EngineOptions(
+        EngineOptions engineOptions = new EngineOptions(
                 true, ScreenOrientation.LANDSCAPE_FIXED, new RatioResolutionPolicy(
                 SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT), mCamera);
+
+        // music
+        engineOptions.getAudioOptions().setNeedsMusic(true);
+
+        return engineOptions;
     }
 
     @Override
@@ -160,6 +170,14 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
                 Typeface.create(Typeface.DEFAULT, Typeface.BOLD), SizeConstants.MONEY_FONT_SIZE, Color.WHITE.hashCode());
         font.load();
         FontHolderUtils.getInstance().addElement(GameStringsConstantsAndUtils.KEY_FONT_MONEY, font);
+
+        // music
+        mBackgroundMusic = SoundsAndMusicUtils.getMusic(GameStringsConstantsAndUtils.getPathToBackgroundMusic() + "background_1.ogg",
+                this, mEngine.getMusicManager());
+        if (mBackgroundMusic != null) {
+            mBackgroundMusic.setLooping(true);
+            mBackgroundMusic.getMediaPlayer().setOnPreparedListener(this);
+        }
 
         onCreateResourcesCallback.onCreateResourcesFinished();
     }
@@ -214,6 +232,20 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         ITeam team = new Team(teamName, teamRace);
         team.setTeamColor(teamColor);
         return team;
+    }
+
+    @Override
+    protected synchronized void onResume() {
+        super.onResume();
+        if (mBackgroundMusic != null)
+            mBackgroundMusic.getMediaPlayer().prepareAsync();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mBackgroundMusic != null)
+            mBackgroundMusic.stop();
     }
 
     private void initRedTeamAndPlanet() {
@@ -440,6 +472,11 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(unit, body, true, true));
         mUnits.add(unit);
         return unit;
+    }
+
+    @Override
+    public void onPrepared(final MediaPlayer mp) {
+        mBackgroundMusic.play();
     }
 }
 

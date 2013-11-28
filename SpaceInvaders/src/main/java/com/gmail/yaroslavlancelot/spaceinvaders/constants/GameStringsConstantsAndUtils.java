@@ -5,11 +5,11 @@ import java.io.File;
 /** game constants for game objects */
 public final class GameStringsConstantsAndUtils {
     /** sun file name */
-    public static final String FILE_SUN = "sun.png";
+    public static final String FILE_SUN = "images/sun.png";
     /** file name for red planet */
-    public static final String FILE_RED_PLANET = "planet_1.png";
+    public static final String FILE_RED_PLANET = "images/planet_1.png";
     /** file name for blue planet */
-    public static final String FILE_BLUE_PLANET = "planet_2.png";
+    public static final String FILE_BLUE_PLANET = "images/planet_2.png";
     /** used like key for sun static object */
     public static final String KEY_SUN = "sun_key";
     /** used like key for red planet static object */
@@ -22,6 +22,7 @@ public final class GameStringsConstantsAndUtils {
     public static final String BLUE_TEAM_NAME = "blue";
     /** key used to identify money font */
     public static final String KEY_FONT_MONEY = "key_money_font";
+    public static final String sSeparator = File.separator;
 
     /**
      * private constructor
@@ -30,14 +31,17 @@ public final class GameStringsConstantsAndUtils {
     }
 
     public static String getPathToBuildings(String raceName) {
-        String separator = File.separator;
-        String path = "races" + separator + raceName.toLowerCase() + separator + "buildings" + separator;
+        String path = "images" + sSeparator  + "races" + sSeparator  + raceName.toLowerCase() + sSeparator  + "buildings" + sSeparator ;
         return path;
     }
 
     public static String getPathToUnits(String raceName) {
-        String separator = File.separator;
-        String path = "races" + separator + raceName.toLowerCase() + separator + "units" + separator;
+        String path = "images" + sSeparator  + "races" + sSeparator  + raceName.toLowerCase() + sSeparator  + "units" + sSeparator ;
+        return path;
+    }
+
+    public static String getPathToBackgroundMusic() {
+        String path = "sounds" + sSeparator  + "background" + sSeparator ;
         return path;
     }
 }
