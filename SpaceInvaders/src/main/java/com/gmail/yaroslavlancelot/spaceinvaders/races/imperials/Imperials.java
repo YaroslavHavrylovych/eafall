@@ -2,6 +2,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.races.imperials;
 
 import android.content.Context;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.SoundOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
@@ -35,12 +36,15 @@ public class Imperials implements IRace {
     private Color mTeamColor;
     private EntityOperations mEntityOperations;
     private int mBuildingsAmount = 8;
+    private SoundOperations mSoundOperations;
 
 
-    public Imperials(final VertexBufferObjectManager objectManager, Color teamColor, final EntityOperations entityOperations) {
-        this.mObjectManager = objectManager;
-        this.mTeamColor = teamColor;
-        this.mEntityOperations = entityOperations;
+    public Imperials(final VertexBufferObjectManager objectManager, Color teamColor, final EntityOperations entityOperations,
+                     final SoundOperations soundOperations) {
+        mObjectManager = objectManager;
+        mTeamColor = teamColor;
+        mEntityOperations = entityOperations;
+        mSoundOperations = soundOperations;
     }
 
     @Override
@@ -103,7 +107,7 @@ public class Imperials implements IRace {
         Unit unit;
         switch (buildingId) {
             case 0:
-                unit = new Conscript(mObjectManager, mEntityOperations);
+                unit = new Conscript(mObjectManager, mEntityOperations, mSoundOperations);
                 break;
             case 1:
                 unit = new Scout(mObjectManager, mEntityOperations);

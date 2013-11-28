@@ -31,17 +31,22 @@ public final class GameStringsConstantsAndUtils {
     }
 
     public static String getPathToBuildings(String raceName) {
-        String path = "images" + sSeparator  + "races" + sSeparator  + raceName.toLowerCase() + sSeparator  + "buildings" + sSeparator ;
+        String path = "images" + sSeparator + "races" + sSeparator + raceName.toLowerCase() + sSeparator + "buildings" + sSeparator;
         return path;
     }
 
     public static String getPathToUnits(String raceName) {
-        String path = "images" + sSeparator  + "races" + sSeparator  + raceName.toLowerCase() + sSeparator  + "units" + sSeparator ;
+        String path = "images" + sSeparator + "races" + sSeparator + raceName.toLowerCase() + sSeparator + "units" + sSeparator;
+        return path;
+    }
+
+    public static String getPathToSounds(String raceName) {
+        String path = "sounds" + sSeparator + "races" + sSeparator + raceName.toLowerCase() + sSeparator;
         return path;
     }
 
     public static String getPathToBackgroundMusic() {
-        String path = "sounds" + sSeparator  + "background" + sSeparator ;
+        String path = "sounds" + sSeparator + "game" + sSeparator;
         return path;
     }
 }

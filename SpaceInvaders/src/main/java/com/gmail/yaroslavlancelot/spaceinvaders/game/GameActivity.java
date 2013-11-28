@@ -14,6 +14,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAn
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.Localizable;
+import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.SoundOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameloop.MoneyUpdateCycle;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.ObjectDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.PlanetDestroyedListener;
@@ -36,6 +37,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.utils.TeamUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitCallbacksUtils;
 import org.andengine.audio.music.Music;
+import org.andengine.audio.sound.Sound;
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -73,7 +75,7 @@ import java.util.concurrent.Future;
  * Main game Activity. Extends {@link BaseGameActivity} class and contains main game elements.
  * Loads resources, initialize scene, engine and etc.
  */
-public class GameActivity extends BaseGameActivity implements Localizable, EntityOperations, MediaPlayer.OnPreparedListener {
+public class GameActivity extends BaseGameActivity implements Localizable, EntityOperations, MediaPlayer.OnPreparedListener, SoundOperations {
     /** tag, which is used for debugging purpose */
     public static final String TAG = GameActivity.class.getCanonicalName();
     public static final int MONEY_UPDATE_TIME = 10;
@@ -131,6 +133,7 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
 
         // music
         engineOptions.getAudioOptions().setNeedsMusic(true);
+        engineOptions.getAudioOptions().setNeedsSound(true);
 
         return engineOptions;
     }
@@ -142,12 +145,12 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
 
         // user
         Color teamColor = Color.RED;
-        IRace userRace = new Imperials(getVertexBufferObjectManager(), teamColor, this);
+        IRace userRace = new Imperials(getVertexBufferObjectManager(), teamColor, this, this);
         userRace.loadResources(getTextureManager(), this);
         mRedTeam = createUserTeam(teamColor, userRace, GameStringsConstantsAndUtils.RED_TEAM_NAME);
         // bot
         teamColor = Color.BLUE;
-        IRace botRace = new Imperials(getVertexBufferObjectManager(), teamColor, this);
+        IRace botRace = new Imperials(getVertexBufferObjectManager(), teamColor, this, this);
         botRace.loadResources(getTextureManager(), this);
         mBlueTeam = createBotTeam(teamColor, botRace, GameStringsConstantsAndUtils.BLUE_TEAM_NAME);
 
@@ -182,20 +185,10 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         onCreateResourcesCallback.onCreateResourcesFinished();
     }
 
-    private ITeam createUserTeam(Color teamColor, IRace teamRace, String teamName) {
-        ITeam team = new Team(teamName, teamRace) {
-            @Override
-            public void changeMoney(final int delta) {
-                super.changeMoney(delta);
-                updateMoneyTextOnScreen();
-            }
-        };
+    private ITeam createBotTeam(Color teamColor, IRace teamRace, String teamName) {
+        ITeam team = new Team(teamName, teamRace);
         team.setTeamColor(teamColor);
         return team;
-    }
-
-    private void updateMoneyTextOnScreen() {
-        mMoneyText.setText(TeamUtils.getMoneyString(mMoneyTextPrefixString, mRedTeam));
     }
 
     @Override
@@ -228,10 +221,20 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         onPopulateSceneCallback.onPopulateSceneFinished();
     }
 
-    private ITeam createBotTeam(Color teamColor, IRace teamRace, String teamName) {
-        ITeam team = new Team(teamName, teamRace);
+    private ITeam createUserTeam(Color teamColor, IRace teamRace, String teamName) {
+        ITeam team = new Team(teamName, teamRace) {
+            @Override
+            public void changeMoney(final int delta) {
+                super.changeMoney(delta);
+                updateMoneyTextOnScreen();
+            }
+        };
         team.setTeamColor(teamColor);
         return team;
+    }
+
+    private void updateMoneyTextOnScreen() {
+        mMoneyText.setText(TeamUtils.getMoneyString(mMoneyTextPrefixString, mRedTeam));
     }
 
     @Override
@@ -476,7 +479,12 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
 
     @Override
     public void onPrepared(final MediaPlayer mp) {
-        mBackgroundMusic.play();
+        mp.start();
+    }
+
+    @Override
+    public Sound loadSound(final String path) {
+        return SoundsAndMusicUtils.getSound(path, this, getSoundManager());
     }
 }
 
