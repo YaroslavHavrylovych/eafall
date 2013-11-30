@@ -4,6 +4,7 @@ import android.content.Context;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.SoundOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.HeavyWater;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Neutrino;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Bullet;
@@ -16,10 +17,10 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class Sniper extends Unit {
     public static final String KEY_IMPERIALS_FOURTH_UNIT = GameStringsConstantsAndUtils.getPathToUnits(Imperials.RACE_NAME) + "sniper.png";
-    private EntityOperations mEntityOperations;
+    public static final String SNIPER_FIRE_SOUND_PATH = GameStringsConstantsAndUtils.getPathToSounds(Imperials.RACE_NAME) + "neutrino_3s.ogg";
 
-    public Sniper(final VertexBufferObjectManager vertexBufferObjectManager, EntityOperations entityOperations) {
-        super(TextureRegionHolderUtils.getInstance().getElement(KEY_IMPERIALS_FOURTH_UNIT), vertexBufferObjectManager);
+    public Sniper(final EntityOperations entityOperations, final SoundOperations soundOperations) {
+        super(TextureRegionHolderUtils.getInstance().getElement(KEY_IMPERIALS_FOURTH_UNIT), soundOperations, entityOperations);
         setWidth(SizeConstants.UNIT_SIZE);
         setHeight(SizeConstants.UNIT_SIZE);
         initHealth(220);
@@ -27,7 +28,8 @@ public class Sniper extends Unit {
         mObjectDamage = new Neutrino(50);
         mAttackRadius = 240;
         mViewRadius = 340;
-        mEntityOperations = entityOperations;
+        setReloadTime(3.1);
+        initSound(SNIPER_FIRE_SOUND_PATH);
     }
 
     public static void loadResources(final Context context, final BitmapTextureAtlas textureAtlas) {
@@ -36,6 +38,9 @@ public class Sniper extends Unit {
 
     @Override
     protected void attackGoal() {
+        if (!isReloadFinished())
+            return;
+        playSound(mFireSound, mSoundOperations);
         Bullet bullet = new Bullet(getVertexBufferObjectManager(), mEntityOperations, getBackgroundColor());
         bullet.fire(getX() + SizeConstants.UNIT_SIZE / 2, getY() - Bullet.BULLET_SIZE,
                 mObjectToAttack.getCenterX(), mObjectToAttack.getCenterY(), mEnemiesUpdater, mObjectDamage);

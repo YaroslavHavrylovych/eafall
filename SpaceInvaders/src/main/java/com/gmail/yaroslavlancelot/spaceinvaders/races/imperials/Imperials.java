@@ -32,16 +32,14 @@ import org.andengine.util.color.Color;
 public class Imperials implements IRace {
     /** race name */
     public static final String RACE_NAME = "Imperials";
-    private VertexBufferObjectManager mObjectManager;
     private Color mTeamColor;
     private EntityOperations mEntityOperations;
     private int mBuildingsAmount = 8;
     private SoundOperations mSoundOperations;
 
 
-    public Imperials(final VertexBufferObjectManager objectManager, Color teamColor, final EntityOperations entityOperations,
+    public Imperials(Color teamColor, final EntityOperations entityOperations,
                      final SoundOperations soundOperations) {
-        mObjectManager = objectManager;
         mTeamColor = teamColor;
         mEntityOperations = entityOperations;
         mSoundOperations = soundOperations;
@@ -62,28 +60,28 @@ public class Imperials implements IRace {
         StaticObject building;
         switch (buildingId) {
             case 0:
-                building = new Camp(mObjectManager);
+                building = new Camp(mEntityOperations.getObjectManager());
                 break;
             case 1:
-                building = new Tent(mObjectManager);
+                building = new Tent(mEntityOperations.getObjectManager());
                 break;
             case 2:
-                building = new Barracks(mObjectManager);
+                building = new Barracks(mEntityOperations.getObjectManager());
                 break;
             case 3:
-                building = new ShootersHall(mObjectManager);
+                building = new ShootersHall(mEntityOperations.getObjectManager());
                 break;
             case 4:
-                building = new TrainingCenter(mObjectManager);
+                building = new TrainingCenter(mEntityOperations.getObjectManager());
                 break;
             case 5:
-                building = new Workshop(mObjectManager);
+                building = new Workshop(mEntityOperations.getObjectManager());
                 break;
             case 6:
-                building = new Laboratory(mObjectManager);
+                building = new Laboratory(mEntityOperations.getObjectManager());
                 break;
             case 7:
-                building = new Bunker(mObjectManager);
+                building = new Bunker(mEntityOperations.getObjectManager());
                 break;
             default:
                 throw new IllegalArgumentException("unknown building type=" + buildingId);
@@ -107,28 +105,28 @@ public class Imperials implements IRace {
         Unit unit;
         switch (buildingId) {
             case 0:
-                unit = new Conscript(mObjectManager, mEntityOperations, mSoundOperations);
+                unit = new Conscript(mEntityOperations, mSoundOperations);
                 break;
             case 1:
-                unit = new Scout(mObjectManager, mEntityOperations);
+                unit = new Scout(mEntityOperations, mSoundOperations);
                 break;
             case 2:
-                unit = new Infantrymen(mObjectManager, mEntityOperations);
+                unit = new Infantrymen(mEntityOperations, mSoundOperations);
                 break;
             case 3:
-                unit = new Sniper(mObjectManager, mEntityOperations);
+                unit = new Sniper(mEntityOperations, mSoundOperations);
                 break;
             case 4:
-                unit = new Agent(mObjectManager, mEntityOperations);
+                unit = new Agent(mEntityOperations, mSoundOperations);
                 break;
             case 5:
-                unit = new Robot(mObjectManager, mEntityOperations);
+                unit = new Robot(mEntityOperations, mSoundOperations);
                 break;
             case 6:
-                unit = new Demolisher(mObjectManager, mEntityOperations);
+                unit = new Demolisher(mEntityOperations, mSoundOperations);
                 break;
             case 7:
-                unit = new Superman(mObjectManager, mEntityOperations);
+                unit = new Superman(mEntityOperations, mSoundOperations);
                 break;
             default:
                 throw new IllegalArgumentException("unknown building type=" + buildingId);
