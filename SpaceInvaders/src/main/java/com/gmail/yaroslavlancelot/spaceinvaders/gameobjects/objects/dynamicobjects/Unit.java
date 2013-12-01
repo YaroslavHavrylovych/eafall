@@ -1,14 +1,16 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects;
 
 import com.badlogic.gdx.math.Vector2;
+import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.SoundOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitPathUtil;
+import org.andengine.audio.sound.Sound;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
-import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import java.util.List;
 
@@ -18,6 +20,8 @@ public abstract class Unit extends GameObject {
     protected float mMaxVelocity = 1.5f;
     /** update time for current object */
     protected float mUpdateCycleTime = .5f;
+    /** delay time between attacks */
+    protected double mTimeForReload = 1.5 * 1000;
     /** attack radius of current unit */
     protected int mAttackRadius;
     /** area in which unit can search for enemies */
@@ -28,14 +32,33 @@ public abstract class Unit extends GameObject {
     protected ISimpleUnitEnemiesUpdater mEnemiesUpdater;
     /** unit path */
     protected UnitPathUtil.UnitPath mUnitPath;
+    /** for sound manipulations */
+    protected SoundOperations mSoundOperations;
+    /** for creating new entities */
+    protected EntityOperations mEntityOperations;
+    /** last unit attack time */
+    private long mLastAttackTime;
+    /** unit attack sound */
+    protected Sound mFireSound;
 
-    protected Unit(ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
-        super(-100, -100, textureRegion, vertexBufferObjectManager);
+
+    protected Unit(ITextureRegion textureRegion, SoundOperations soundOperations, EntityOperations entityOperations) {
+        super(-100, -100, textureRegion, entityOperations.getObjectManager());
         registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new SimpleUnitTimerCallback()));
+        mSoundOperations = soundOperations;
+        mEntityOperations = entityOperations;
+    }
+
+    protected void initSound(String path) {
+        mFireSound = mSoundOperations.loadSound(path);
     }
 
     public void calculateUnitPath() {
         mUnitPath = UnitPathUtil.getUnitPathAccordingToStartAbscissa(getX());
+    }
+
+    public void setReloadTime(double seconds) {
+        mTimeForReload = seconds * 1000;
     }
 
     public void setEnemiesUpdater(final ISimpleUnitEnemiesUpdater enemiesUpdater) {
@@ -52,7 +75,17 @@ public abstract class Unit extends GameObject {
     }
 
     protected void attackGoal() {
+        if (!isReloadFinished())
+            return;
         mObjectToAttack.damageObject(mObjectDamage);
+    }
+
+    protected boolean isReloadFinished() {
+        long time = System.currentTimeMillis();
+        if (time - mLastAttackTime < mTimeForReload)
+            return false;
+        mLastAttackTime = time;
+        return true;
     }
 
     /** used for update current object in game loop */

@@ -4,6 +4,7 @@ import android.content.Context;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.SoundOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Electrical;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Annihilator;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Bullet;
@@ -16,10 +17,10 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class Robot extends Unit {
     public static final String KEY_IMPERIALS_SIX_UNIT = GameStringsConstantsAndUtils.getPathToUnits(Imperials.RACE_NAME) + "robot.png";
-    private EntityOperations mEntityOperations;
+    public static final String ROBOT_FIRE_SOUND_PATH = GameStringsConstantsAndUtils.getPathToSounds(Imperials.RACE_NAME) + "annihilation_1s.ogg";
 
-    public Robot(final VertexBufferObjectManager vertexBufferObjectManager, EntityOperations entityOperations) {
-        super(TextureRegionHolderUtils.getInstance().getElement(KEY_IMPERIALS_SIX_UNIT), vertexBufferObjectManager);
+    public Robot(final EntityOperations entityOperations, final SoundOperations soundOperations) {
+        super(TextureRegionHolderUtils.getInstance().getElement(KEY_IMPERIALS_SIX_UNIT), soundOperations, entityOperations);
         setWidth(SizeConstants.UNIT_SIZE);
         setHeight(SizeConstants.UNIT_SIZE);
         initHealth(500);
@@ -27,7 +28,8 @@ public class Robot extends Unit {
         mObjectDamage = new Annihilator(40);
         mAttackRadius = 110;
         mViewRadius = 240;
-        mEntityOperations = entityOperations;
+        setReloadTime(1);
+        initSound(ROBOT_FIRE_SOUND_PATH);
     }
 
     public static void loadResources(final Context context, final BitmapTextureAtlas textureAtlas) {
@@ -36,6 +38,9 @@ public class Robot extends Unit {
 
     @Override
     protected void attackGoal() {
+        if (!isReloadFinished())
+            return;
+        playSound(mFireSound, mSoundOperations);
         Bullet bullet = new Bullet(getVertexBufferObjectManager(), mEntityOperations, getBackgroundColor());
         bullet.fire(getX() + SizeConstants.UNIT_SIZE / 2, getY() - Bullet.BULLET_SIZE,
                 mObjectToAttack.getCenterX(), mObjectToAttack.getCenterY(), mEnemiesUpdater, mObjectDamage);

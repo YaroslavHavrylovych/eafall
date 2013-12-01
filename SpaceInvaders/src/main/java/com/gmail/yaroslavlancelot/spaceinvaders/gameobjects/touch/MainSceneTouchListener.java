@@ -22,9 +22,17 @@ public class MainSceneTouchListener implements IOnSceneTouchListener {
     /** if user want to move camera after taking one finger from the screen just after zoom */
     private boolean mIsInPreviousEventWasMoreThanOneFinger = false;
     /** camera width */
-    private float mCameraWidth;
+    private float mCameraMaxWidth;
     /** camera height */
-    private float mCameraHeight;
+    private float mCameraMaxHeight;
+    /** camera current width */
+    private float mCameraCurrentWidth;
+    /** camera current height */
+    private float mCameraCurrentHeight;
+    /** camera current width */
+    private float mCameraCurrentCenterX;
+    /** camera current height */
+    private float mCameraCurrentCenterY;
     /** using for handling zoo (with two fingers) events */
     private ScaleGestureDetector mMapZoomScaleGestureDetector;
     /** camera for moving */
@@ -35,9 +43,28 @@ public class MainSceneTouchListener implements IOnSceneTouchListener {
     public MainSceneTouchListener(SmoothCamera camera, Context context, float screenToSceneRatio) {
         mCamera = camera;
         mMapZoomScaleGestureDetector = new ScaleGestureDetector(context, new MapZoomScaleGestureDetector());
-        mCameraWidth = mCamera.getWidth();
-        mCameraHeight = mCamera.getHeight();
+        mCameraCurrentWidth = mCameraMaxWidth = mCamera.getWidth();
+        mCameraCurrentHeight = mCameraMaxHeight = mCamera.getHeight();
+        mCameraCurrentCenterX = mCamera.getCenterX();
+        mCameraCurrentCenterY = mCamera.getCenterY();
+
         mScreenToSceneRatio = screenToSceneRatio;
+    }
+
+    public float getCameraCurrentWidth() {
+        return mCameraCurrentWidth;
+    }
+
+    public float getCameraCurrentHeight() {
+        return mCameraCurrentHeight;
+    }
+
+    public float getCameraCurrentCenterX() {
+        return mCameraCurrentCenterX;
+    }
+
+    public float getCameraCurrentCenterY() {
+        return mCameraCurrentCenterY;
     }
 
     public void addTouchListener(ITouchListener touchListener) {
@@ -68,16 +95,19 @@ public class MainSceneTouchListener implements IOnSceneTouchListener {
                 mTouchX = motionEventX;
                 mTouchY = motionEventY;
                 break;
+            case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_MOVE:
                 float newPositionX = mCamera.getCenterX() + (mTouchX - motionEventX) / mCamera.getZoomFactor() / mScreenToSceneRatio,
                         newPositionY = mCamera.getCenterY() + (mTouchY - motionEventY) / mCamera.getZoomFactor() / mScreenToSceneRatio;
-                newPositionX = TouchUtils.stickToBorderOrLeftValue(newPositionX, 0, mCameraWidth);
-                newPositionY = TouchUtils.stickToBorderOrLeftValue(newPositionY, 0, mCameraHeight);
-                if (mTouchX != newPositionX || mTouchY != newPositionY) {
+                newPositionX = TouchUtils.stickToBorderOrLeftValue(newPositionX, 0, mCameraMaxWidth);
+                newPositionY = TouchUtils.stickToBorderOrLeftValue(newPositionY, 0, mCameraMaxHeight);
+                if (mCameraCurrentCenterX != newPositionX || mCameraCurrentCenterY != newPositionY) {
                     mCamera.setCenter(newPositionX, newPositionY);
                     mTouchX = motionEventX;
                     mTouchY = motionEventY;
+                    mCameraCurrentCenterX = newPositionX;
+                    mCameraCurrentCenterY = newPositionY;
                 }
                 break;
         }
@@ -100,6 +130,8 @@ public class MainSceneTouchListener implements IOnSceneTouchListener {
             nextZoomFactor = TouchUtils.stickToBorderOrLeftValue(nextZoomFactor, mMinimumZoomFactor, mMaximumZoomFactor);
             if (nextZoomFactor != mCamera.getZoomFactor())
                 mCamera.setZoomFactor(nextZoomFactor);
+            mCameraCurrentWidth = mCamera.getWidth();
+            mCameraCurrentWidth = mCamera.getHeight();
             return true;
         }
     }

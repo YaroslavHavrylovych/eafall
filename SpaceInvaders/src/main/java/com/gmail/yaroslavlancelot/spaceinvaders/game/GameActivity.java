@@ -145,12 +145,12 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
 
         // user
         Color teamColor = Color.RED;
-        IRace userRace = new Imperials(getVertexBufferObjectManager(), teamColor, this, this);
+        IRace userRace = new Imperials(teamColor, this, this);
         userRace.loadResources(getTextureManager(), this);
         mRedTeam = createUserTeam(teamColor, userRace, GameStringsConstantsAndUtils.RED_TEAM_NAME);
         // bot
         teamColor = Color.BLUE;
-        IRace botRace = new Imperials(getVertexBufferObjectManager(), teamColor, this, this);
+        IRace botRace = new Imperials(teamColor, this, this);
         botRace.loadResources(getTextureManager(), this);
         mBlueTeam = createBotTeam(teamColor, botRace, GameStringsConstantsAndUtils.BLUE_TEAM_NAME);
 
@@ -185,10 +185,20 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         onCreateResourcesCallback.onCreateResourcesFinished();
     }
 
-    private ITeam createBotTeam(Color teamColor, IRace teamRace, String teamName) {
-        ITeam team = new Team(teamName, teamRace);
+    private ITeam createUserTeam(Color teamColor, IRace teamRace, String teamName) {
+        ITeam team = new Team(teamName, teamRace) {
+            @Override
+            public void changeMoney(final int delta) {
+                super.changeMoney(delta);
+                updateMoneyTextOnScreen();
+            }
+        };
         team.setTeamColor(teamColor);
         return team;
+    }
+
+    private void updateMoneyTextOnScreen() {
+        mMoneyText.setText(TeamUtils.getMoneyString(mMoneyTextPrefixString, mRedTeam));
     }
 
     @Override
@@ -221,20 +231,10 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         onPopulateSceneCallback.onPopulateSceneFinished();
     }
 
-    private ITeam createUserTeam(Color teamColor, IRace teamRace, String teamName) {
-        ITeam team = new Team(teamName, teamRace) {
-            @Override
-            public void changeMoney(final int delta) {
-                super.changeMoney(delta);
-                updateMoneyTextOnScreen();
-            }
-        };
+    private ITeam createBotTeam(Color teamColor, IRace teamRace, String teamName) {
+        ITeam team = new Team(teamName, teamRace);
         team.setTeamColor(teamColor);
         return team;
-    }
-
-    private void updateMoneyTextOnScreen() {
-        mMoneyText.setText(TeamUtils.getMoneyString(mMoneyTextPrefixString, mRedTeam));
     }
 
     @Override
@@ -486,5 +486,31 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
     public Sound loadSound(final String path) {
         return SoundsAndMusicUtils.getSound(path, this, getSoundManager());
     }
-}
 
+    @Override
+    public void playSoundDependingFromPosition(final Sound sound, final float x, final float y) {
+        float width = mMainSceneTouchListener.getCameraCurrentWidth();
+        float height = mMainSceneTouchListener.getCameraCurrentHeight();
+
+        float soundSpreadMaxDistance = width / 2 + width / 5;
+        float xDistanceVector = mMainSceneTouchListener.getCameraCurrentCenterX() - x;
+        float xDistance = Math.abs(xDistanceVector);
+        float yDistance = Math.abs(mMainSceneTouchListener.getCameraCurrentCenterY() - y);
+
+        if (xDistance > soundSpreadMaxDistance || yDistance > soundSpreadMaxDistance)
+            return;
+
+        float leftVolume = 1f, rightVolume = 1f;
+
+        if (!(xDistance > width / 2 || yDistance > height / 2)) {
+            if (xDistanceVector > 0)
+                rightVolume = .5f;
+            else
+                leftVolume = .5f;
+        }
+
+        float divider = mCamera.getMaxZoomFactorChange() - mCamera.getTargetZoomFactor() + 1;
+        sound.setVolume(leftVolume / divider, rightVolume / divider);
+        sound.play();
+    }
+}

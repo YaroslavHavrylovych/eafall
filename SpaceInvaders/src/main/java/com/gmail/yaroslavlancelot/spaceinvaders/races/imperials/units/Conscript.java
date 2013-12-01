@@ -18,12 +18,10 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class Conscript extends Unit {
     public static final String CONSCRIPT_IMAGE_PATH = GameStringsConstantsAndUtils.getPathToUnits(Imperials.RACE_NAME) + "conscript.png";
-    public static final String CONSCRIPT_FIRE_SOUND_PATH = GameStringsConstantsAndUtils.getPathToSounds(Imperials.RACE_NAME) + "annihilation.ogg";
-    private EntityOperations mEntityOperations;
-    private Sound mFireSound;
+    public static final String CONSCRIPT_FIRE_SOUND_PATH = GameStringsConstantsAndUtils.getPathToSounds(Imperials.RACE_NAME) + "annihilation_1s.ogg";
 
-    public Conscript(final VertexBufferObjectManager vertexBufferObjectManager, EntityOperations entityOperations, SoundOperations soundOperations) {
-        super(TextureRegionHolderUtils.getInstance().getElement(CONSCRIPT_IMAGE_PATH), vertexBufferObjectManager);
+    public Conscript(final EntityOperations entityOperations, final SoundOperations soundOperations) {
+        super(TextureRegionHolderUtils.getInstance().getElement(CONSCRIPT_IMAGE_PATH), soundOperations, entityOperations);
         setWidth(SizeConstants.UNIT_SIZE);
         setHeight(SizeConstants.UNIT_SIZE);
         initHealth(450);
@@ -31,8 +29,8 @@ public class Conscript extends Unit {
         mObjectDamage = new Annihilator(20);
         mAttackRadius = 70;
         mViewRadius = 190;
-        mFireSound = soundOperations.loadSound(CONSCRIPT_FIRE_SOUND_PATH);
-        mEntityOperations = entityOperations;
+        setReloadTime(1.7);
+        initSound(CONSCRIPT_FIRE_SOUND_PATH);
     }
 
     public static void loadResources(final Context context, final BitmapTextureAtlas textureAtlas) {
@@ -41,8 +39,9 @@ public class Conscript extends Unit {
 
     @Override
     protected void attackGoal() {
-        if (mFireSound != null)
-            mFireSound.play();
+        if (!isReloadFinished())
+            return;
+        playSound(mFireSound, mSoundOperations);
         Bullet bullet = new Bullet(getVertexBufferObjectManager(), mEntityOperations, getBackgroundColor());
         bullet.fire(getX() + SizeConstants.UNIT_SIZE / 2, getY() - Bullet.BULLET_SIZE,
                 mObjectToAttack.getCenterX(), mObjectToAttack.getCenterY(), mEnemiesUpdater, mObjectDamage);
