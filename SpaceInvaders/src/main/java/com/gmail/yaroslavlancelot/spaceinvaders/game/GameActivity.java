@@ -489,16 +489,13 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
 
     @Override
     public void playSoundDependingFromPosition(final Sound sound, final float x, final float y) {
-        float centerX = mCamera.getCenterX(),
-                centerY = mCamera.getCenterY();
-        float width = mCamera.getWidth();
-        float height = mCamera.getHeight();
+        float width = mMainSceneTouchListener.getCameraCurrentWidth();
+        float height = mMainSceneTouchListener.getCameraCurrentHeight();
 
         float soundSpreadMaxDistance = width / 2 + width / 5;
-        float xDistanceVector = centerX - x;
-        float yDistanceVector = centerY - y;
+        float xDistanceVector = mMainSceneTouchListener.getCameraCurrentCenterX() - x;
         float xDistance = Math.abs(xDistanceVector);
-        float yDistance = Math.abs(yDistanceVector);
+        float yDistance = Math.abs(mMainSceneTouchListener.getCameraCurrentCenterY() - y);
 
         if (xDistance > soundSpreadMaxDistance || yDistance > soundSpreadMaxDistance)
             return;
