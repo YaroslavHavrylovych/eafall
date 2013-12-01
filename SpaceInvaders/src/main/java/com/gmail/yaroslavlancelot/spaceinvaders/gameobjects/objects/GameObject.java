@@ -3,6 +3,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects;
 import android.content.Context;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.SoundOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IObjectDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Damage;
@@ -10,6 +11,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ISpriteTouchab
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ITouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
+import org.andengine.audio.sound.Sound;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
@@ -57,11 +59,6 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
                 textureAtlas, context, x, y);
     }
 
-    protected void initHealthBar() {
-        mHealthBar = new HealthBar(getVertexBufferObjectManager(), getWidth());
-        attachChild(mHealthBar.getHealthBar());
-    }
-
     public int getObjectStringId() {
         return mObjectStringId;
     }
@@ -78,6 +75,18 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
         mObjectCurrentHealth = objectCurrentHealth;
         mObjectMaximumHealth = objectMaximumHealth;
         initHealthBar();
+    }
+
+    protected void initHealthBar() {
+        mHealthBar = new HealthBar(getVertexBufferObjectManager(), getWidth());
+        attachChild(mHealthBar.getHealthBar());
+    }
+
+    protected void playSound(Sound sound, SoundOperations soundOperations) {
+        if (sound == null || !sound.isLoaded())
+            return;
+
+        soundOperations.playSoundDependingFromPosition(sound, getX(), getY());
     }
 
     public boolean isObjectAlive() {

@@ -1,6 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.game;
 
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import com.badlogic.gdx.math.Vector2;
@@ -13,6 +14,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAn
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.Localizable;
+import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.SoundOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameloop.MoneyUpdateCycle;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.ObjectDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.PlanetDestroyedListener;
@@ -30,9 +32,12 @@ import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.Team;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.SoundsAndMusicUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TeamUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitCallbacksUtils;
+import org.andengine.audio.music.Music;
+import org.andengine.audio.sound.Sound;
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -70,7 +75,7 @@ import java.util.concurrent.Future;
  * Main game Activity. Extends {@link BaseGameActivity} class and contains main game elements.
  * Loads resources, initialize scene, engine and etc.
  */
-public class GameActivity extends BaseGameActivity implements Localizable, EntityOperations {
+public class GameActivity extends BaseGameActivity implements Localizable, EntityOperations, MediaPlayer.OnPreparedListener, SoundOperations {
     /** tag, which is used for debugging purpose */
     public static final String TAG = GameActivity.class.getCanonicalName();
     public static final int MONEY_UPDATE_TIME = 10;
@@ -103,6 +108,8 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
     private String mMoneyTextPrefixString;
     /** main scene touch listener */
     private MainSceneTouchListener mMainSceneTouchListener;
+    /** background theme */
+    private Music mBackgroundMusic;
 
     @Override
     public EngineOptions onCreateEngineOptions() {
@@ -120,9 +127,15 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         mCamera.setBoundsEnabled(true);
         mCamera.setHUD(new HUD());
 
-        return new EngineOptions(
+        EngineOptions engineOptions = new EngineOptions(
                 true, ScreenOrientation.LANDSCAPE_FIXED, new RatioResolutionPolicy(
                 SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT), mCamera);
+
+        // music
+        engineOptions.getAudioOptions().setNeedsMusic(true);
+        engineOptions.getAudioOptions().setNeedsSound(true);
+
+        return engineOptions;
     }
 
     @Override
@@ -132,12 +145,12 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
 
         // user
         Color teamColor = Color.RED;
-        IRace userRace = new Imperials(getVertexBufferObjectManager(), teamColor, this);
+        IRace userRace = new Imperials(teamColor, this, this);
         userRace.loadResources(getTextureManager(), this);
         mRedTeam = createUserTeam(teamColor, userRace, GameStringsConstantsAndUtils.RED_TEAM_NAME);
         // bot
         teamColor = Color.BLUE;
-        IRace botRace = new Imperials(getVertexBufferObjectManager(), teamColor, this);
+        IRace botRace = new Imperials(teamColor, this, this);
         botRace.loadResources(getTextureManager(), this);
         mBlueTeam = createBotTeam(teamColor, botRace, GameStringsConstantsAndUtils.BLUE_TEAM_NAME);
 
@@ -160,6 +173,14 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
                 Typeface.create(Typeface.DEFAULT, Typeface.BOLD), SizeConstants.MONEY_FONT_SIZE, Color.WHITE.hashCode());
         font.load();
         FontHolderUtils.getInstance().addElement(GameStringsConstantsAndUtils.KEY_FONT_MONEY, font);
+
+        // music
+        mBackgroundMusic = SoundsAndMusicUtils.getMusic(GameStringsConstantsAndUtils.getPathToBackgroundMusic() + "background_1.ogg",
+                this, mEngine.getMusicManager());
+        if (mBackgroundMusic != null) {
+            mBackgroundMusic.setLooping(true);
+            mBackgroundMusic.getMediaPlayer().setOnPreparedListener(this);
+        }
 
         onCreateResourcesCallback.onCreateResourcesFinished();
     }
@@ -214,6 +235,20 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         ITeam team = new Team(teamName, teamRace);
         team.setTeamColor(teamColor);
         return team;
+    }
+
+    @Override
+    protected synchronized void onResume() {
+        super.onResume();
+        if (mBackgroundMusic != null)
+            mBackgroundMusic.getMediaPlayer().prepareAsync();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mBackgroundMusic != null)
+            mBackgroundMusic.stop();
     }
 
     private void initRedTeamAndPlanet() {
@@ -441,5 +476,41 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         mUnits.add(unit);
         return unit;
     }
-}
 
+    @Override
+    public void onPrepared(final MediaPlayer mp) {
+        mp.start();
+    }
+
+    @Override
+    public Sound loadSound(final String path) {
+        return SoundsAndMusicUtils.getSound(path, this, getSoundManager());
+    }
+
+    @Override
+    public void playSoundDependingFromPosition(final Sound sound, final float x, final float y) {
+        float width = mMainSceneTouchListener.getCameraCurrentWidth();
+        float height = mMainSceneTouchListener.getCameraCurrentHeight();
+
+        float soundSpreadMaxDistance = width / 2 + width / 5;
+        float xDistanceVector = mMainSceneTouchListener.getCameraCurrentCenterX() - x;
+        float xDistance = Math.abs(xDistanceVector);
+        float yDistance = Math.abs(mMainSceneTouchListener.getCameraCurrentCenterY() - y);
+
+        if (xDistance > soundSpreadMaxDistance || yDistance > soundSpreadMaxDistance)
+            return;
+
+        float leftVolume = 1f, rightVolume = 1f;
+
+        if (!(xDistance > width / 2 || yDistance > height / 2)) {
+            if (xDistanceVector > 0)
+                rightVolume = .5f;
+            else
+                leftVolume = .5f;
+        }
+
+        float divider = mCamera.getMaxZoomFactorChange() - mCamera.getTargetZoomFactor() + 1;
+        sound.setVolume(leftVolume / divider, rightVolume / divider);
+        sound.play();
+    }
+}

@@ -4,6 +4,7 @@ import android.content.Context;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.SoundOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Magnetic;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Higgs;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Bullet;
@@ -16,10 +17,10 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class Demolisher extends Unit {
     public static final String KEY_IMPERIALS_SEVEN_UNIT = GameStringsConstantsAndUtils.getPathToUnits(Imperials.RACE_NAME) + "demolisher.png";
-    private EntityOperations mEntityOperations;
+    public static final String DEMOLISHER_FIRE_SOUND_PATH = GameStringsConstantsAndUtils.getPathToSounds(Imperials.RACE_NAME) + "higgs_3s.ogg";
 
-    public Demolisher(final VertexBufferObjectManager vertexBufferObjectManager, EntityOperations entityOperations) {
-        super(TextureRegionHolderUtils.getInstance().getElement(KEY_IMPERIALS_SEVEN_UNIT), vertexBufferObjectManager);
+    public Demolisher(final EntityOperations entityOperations, final SoundOperations soundOperations) {
+        super(TextureRegionHolderUtils.getInstance().getElement(KEY_IMPERIALS_SEVEN_UNIT), soundOperations, entityOperations);
         setWidth(SizeConstants.UNIT_SIZE);
         setHeight(SizeConstants.UNIT_SIZE);
         initHealth(200);
@@ -27,7 +28,8 @@ public class Demolisher extends Unit {
         mObjectDamage = new Higgs(50);
         mAttackRadius = 190;
         mViewRadius = 240;
-        mEntityOperations = entityOperations;
+        setReloadTime(3.5);
+        initSound(DEMOLISHER_FIRE_SOUND_PATH);
     }
 
     public static void loadResources(final Context context, final BitmapTextureAtlas textureAtlas) {
@@ -36,6 +38,9 @@ public class Demolisher extends Unit {
 
     @Override
     protected void attackGoal() {
+        if (!isReloadFinished())
+            return;
+        playSound(mFireSound, mSoundOperations);
         Bullet bullet = new Bullet(getVertexBufferObjectManager(), mEntityOperations, getBackgroundColor());
         bullet.fire(getX() + SizeConstants.UNIT_SIZE / 2, getY() - Bullet.BULLET_SIZE,
                 mObjectToAttack.getCenterX(), mObjectToAttack.getCenterY(), mEnemiesUpdater, mObjectDamage);
