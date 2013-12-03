@@ -71,6 +71,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="lib" level="project" />
     <orderEntry type="module" module-name="AndEngineMultiplayerExtension" exported="" />
+    <orderEntry type="module" module-name="AndEngine" />
+    <orderEntry type="module" module-name="AndEnginePhysicsBox2DExtension" />
   </component>
 </module>
 
