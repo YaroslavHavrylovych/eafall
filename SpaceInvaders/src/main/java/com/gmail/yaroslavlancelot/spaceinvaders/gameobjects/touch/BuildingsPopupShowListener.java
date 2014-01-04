@@ -1,8 +1,8 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch;
 
 import android.view.MotionEvent;
-import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
-import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.Localizable;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.Localizable;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;

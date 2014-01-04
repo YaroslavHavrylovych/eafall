@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces;
+package com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces;
 
 import org.andengine.audio.sound.Sound;
 

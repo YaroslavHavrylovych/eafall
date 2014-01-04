@@ -1,6 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameloop;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;

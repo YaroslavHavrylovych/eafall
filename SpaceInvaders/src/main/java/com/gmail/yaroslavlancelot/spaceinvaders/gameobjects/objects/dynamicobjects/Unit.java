@@ -1,8 +1,8 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects;
 
 import com.badlogic.gdx.math.Vector2;
-import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
-import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.SoundOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitPathUtil;
 import org.andengine.audio.sound.Sound;

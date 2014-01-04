@@ -1,12 +1,9 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.races;
 
 import android.content.Context;
-import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
 import org.andengine.opengl.texture.TextureManager;
-import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.color.Color;
 
 /** abstract race interface */
 public interface IRace {

@@ -1,8 +1,8 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.races.imperials;
 
 import android.content.Context;
-import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
-import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.SoundOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
@@ -25,7 +25,6 @@ import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.units.Superman;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
-import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
 /** imperials */

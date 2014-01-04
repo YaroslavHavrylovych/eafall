@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- startup screen dimensions -->
+    <dimen name="startup_screen_button_width">200dp</dimen>
+    <dimen name="startup_screen_button_height">25dp</dimen>
+    <dimen name="startup_screen_space_between_buttons">12dp</dimen>
+    <dimen name="startup_screen_top_button_margin">35dp</dimen>
+    <dimen name="startup_screen_margin_right">35dp</dimen>
+</resources>

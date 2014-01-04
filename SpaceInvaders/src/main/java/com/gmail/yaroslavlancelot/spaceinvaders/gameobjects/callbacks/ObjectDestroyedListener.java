@@ -1,6 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;

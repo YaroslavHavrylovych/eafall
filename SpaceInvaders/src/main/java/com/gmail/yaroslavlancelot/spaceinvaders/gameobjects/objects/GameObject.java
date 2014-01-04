@@ -3,7 +3,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects;
 import android.content.Context;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
-import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.SoundOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IObjectDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Damage;

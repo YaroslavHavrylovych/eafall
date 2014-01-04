@@ -3,8 +3,8 @@ package com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.units;
 import android.content.Context;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
-import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
-import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.SoundOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Physical;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Annihilator;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Bullet;
@@ -12,9 +12,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjec
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.Imperials;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
-import org.andengine.audio.sound.Sound;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
-import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class Conscript extends Unit {
     public static final String CONSCRIPT_IMAGE_PATH = GameStringsConstantsAndUtils.getPathToUnits(Imperials.RACE_NAME) + "conscript.png";

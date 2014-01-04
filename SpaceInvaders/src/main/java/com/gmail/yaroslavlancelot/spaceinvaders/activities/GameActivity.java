@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.game;
+package com.gmail.yaroslavlancelot.spaceinvaders.activities;
 
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
@@ -12,9 +12,9 @@ import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.ai.NormalBot;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
-import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
-import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.Localizable;
-import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.SoundOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.Localizable;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameloop.MoneyUpdateCycle;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.ObjectDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.PlanetDestroyedListener;
@@ -330,7 +330,6 @@ public class GameActivity extends BaseGameActivity implements Localizable, Entit
         mMainSceneTouchListener.addTouchListener(userClickScreenTouchListener);
     }
 
-    @SuppressWarnings("unused")
     private void initBot(final ITeam initializingTeam) {
         LoggerHelper.methodInvocation(TAG, "initBot");
         ExecutorService executorService = Executors.newSingleThreadExecutor();

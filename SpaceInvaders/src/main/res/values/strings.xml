@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- game types -->
+    <string name="single_game">Single game</string>
+    <string name="multiplayer_game">Multiplayer game</string>
+
+    <!-- races names -->
     <string name="app_name">SpaceInvaders</string>
     <string name="money_colon">Money : </string>
     <string name="camp">Camp</string>
@@ -10,4 +15,10 @@
     <string name="workshop">Workshop</string>
     <string name="laboratory">Laboratory</string>
     <string name="bunker">Bunker</string>
+
+    <!-- settings -->
+    <string name="settings">Settings</string>
+
+    <!-- general -->
+    <string name="exit">Exit</string>
 </resources>

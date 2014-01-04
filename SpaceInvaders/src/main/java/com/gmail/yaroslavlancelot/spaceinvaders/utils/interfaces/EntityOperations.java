@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces;
+package com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;

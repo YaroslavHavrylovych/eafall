@@ -1,10 +1,9 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
-import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameloop.UnitCreatorCycle;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Higgs;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.HealthBar;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import org.andengine.engine.handler.timer.TimerHandler;
