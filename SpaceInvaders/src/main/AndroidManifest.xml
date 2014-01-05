@@ -23,6 +23,7 @@
         </activity>
         <activity android:name=".activities.PhysicWorldGameActivity"/>
         <activity android:name=".activities.NetworkGameActivity"/>
+        <activity android:name=".activities.CreatingServerGameActivity"/>
         <activity android:name=".network.PongGameActivity"/>
     </application>
 </manifest>

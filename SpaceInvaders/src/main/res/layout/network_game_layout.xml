@@ -42,12 +42,12 @@
     <ListView
             android:id="@+id/games_list_list_view"
             android:layout_below="@id/games_list_text"
-            android:layout_above="@+id/games_list_back_button"
+            android:layout_above="@+id/back"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
     <Button
-            android:id="@id/games_list_back_button"
+            android:id="@id/back"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:layout_alignParentBottom="true"
