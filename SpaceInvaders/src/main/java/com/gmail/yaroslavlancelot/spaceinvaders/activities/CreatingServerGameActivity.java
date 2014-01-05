@@ -53,9 +53,13 @@ public class CreatingServerGameActivity extends Activity {
     }
 
     private void stopDiscoveryServer() {
-        if (mServerIp == null) return;
-        mSocketDiscoveryServer.terminate();
-        mServerIp = null;
+        if (mSocketDiscoveryServer != null) {
+            mSocketDiscoveryServer.terminate();
+            mSocketDiscoveryServer = null;
+        }
+        if (mServerIp != null) {
+            mServerIp = null;
+        }
     }
 
     private void initDiscoveryServer() {
