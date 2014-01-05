@@ -19,6 +19,7 @@ public interface EntityOperations {
 
     public void detachEntityFromHud(IAreaShape entity);
 
+    /** only if you're server. Clients doesn't have physic world */
     public void detachPhysicsBody(final GameObject gameObject);
 
     public VertexBufferObjectManager getObjectManager();

@@ -30,7 +30,7 @@ public class StartupActivity extends Activity {
         singleGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                Intent singleGameIntent = new Intent(StartupActivity.this, GameActivity.class);
+                Intent singleGameIntent = new Intent(StartupActivity.this, PhysicWorldGameActivity.class);
                 startActivity(singleGameIntent);
             }
         });

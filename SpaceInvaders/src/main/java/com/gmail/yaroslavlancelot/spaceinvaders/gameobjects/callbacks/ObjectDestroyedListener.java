@@ -5,7 +5,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 
-/** Callback after unit killing. Used method for GameActivity class and should be placed in current class */
+/** Callback after unit killing. Used method for MainOperationsBaseGameActivity class and should be placed in current class */
 public class ObjectDestroyedListener implements IObjectDestroyedListener {
     /** team of listening object */
     protected ITeam mTeam;
