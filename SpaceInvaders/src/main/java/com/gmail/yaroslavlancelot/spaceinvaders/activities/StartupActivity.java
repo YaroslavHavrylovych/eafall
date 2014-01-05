@@ -12,15 +12,22 @@ public class StartupActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.startup_layout);
         initSingleGameButton(findViewById(R.id.single_game));
+        initMultiplayerGameButton(findViewById(R.id.multiplayer_game));
         initExitButton(findViewById(R.id.exit));
     }
 
-    private void initExitButton(View exitButton) {
-        if (exitButton == null) return;
-        exitButton.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onBackPressed() {
+        StartupActivity.this.finish();
+    }
+
+    private void initMultiplayerGameButton(View singleGameButton) {
+        if (singleGameButton == null) return;
+        singleGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                StartupActivity.this.finish();
+                Intent singleGameIntent = new Intent(StartupActivity.this, NetworkGameActivity.class);
+                startActivity(singleGameIntent);
             }
         });
     }
@@ -36,8 +43,13 @@ public class StartupActivity extends Activity {
         });
     }
 
-    @Override
-    public void onBackPressed() {
-        StartupActivity.this.finish();
+    private void initExitButton(View exitButton) {
+        if (exitButton == null) return;
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                StartupActivity.this.finish();
+            }
+        });
     }
 }

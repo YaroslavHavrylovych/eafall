@@ -3,18 +3,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginRight="@dimen/startup_screen_margin_right">
+                android:layout_height="match_parent">
 
     <Button
             android:id="@+id/single_game"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/startup_screen_top_button_margin"
             android:width="@dimen/startup_screen_button_width"
-            android:height="@dimen/startup_screen_button_height"
+            android:height="@dimen/default_button_height"
+            android:textSize="@dimen/default_button_text_size"
             android:text="@string/single_game"/>
 
     <Button
@@ -22,9 +22,10 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:width="@dimen/startup_screen_button_width"
-            android:height="@dimen/startup_screen_button_height"
+            android:height="@dimen/default_button_height"
             android:layout_below="@+id/single_game"
-            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="true"
+            android:textSize="@dimen/default_button_text_size"
             android:text="@string/multiplayer_game"/>
 
     <Button
@@ -32,9 +33,10 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:width="@dimen/startup_screen_button_width"
-            android:height="@dimen/startup_screen_button_height"
-            android:layout_below="@+id/multiplayer_game"
-            android:layout_alignParentRight="true"
+            android:height="@dimen/default_button_height"
+            android:layout_below="@id/multiplayer_game"
+            android:layout_centerHorizontal="true"
+            android:textSize="@dimen/default_button_text_size"
             android:text="@string/settings"/>
 
     <Button
@@ -42,8 +44,9 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:width="@dimen/startup_screen_button_width"
-            android:height="@dimen/startup_screen_button_height"
-            android:layout_below="@+id/settings"
-            android:layout_alignParentRight="true"
+            android:height="@dimen/default_button_height"
+            android:layout_below="@id/settings"
+            android:layout_centerHorizontal="true"
+            android:textSize="@dimen/default_button_text_size"
             android:text="@string/exit"/>
 </RelativeLayout>

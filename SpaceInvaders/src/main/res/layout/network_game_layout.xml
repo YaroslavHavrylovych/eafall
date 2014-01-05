@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <LinearLayout
+            android:id="@+id/header"
+            android:layout_alignParentTop="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="2">
+
+        <Button
+                android:id="@+id/create_game"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:textSize="@dimen/default_button_text_size"
+                android:text="@string/create_game"/>
+
+        <Button
+                android:id="@+id/direct_ip"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:textSize="@dimen/default_button_text_size"
+                android:text="@string/direct_ip"/>
+    </LinearLayout>
+
+    <TextView
+            android:id="@+id/games_list_text"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_below="@+id/header"
+            android:layout_centerHorizontal="true"
+            android:textSize="@dimen/games_list_text_size"
+            android:layout_marginTop="@dimen/games_list_margin_top"
+            android:text="@string/games_list"/>
+
+    <ListView
+            android:id="@+id/games_list_list_view"
+            android:layout_below="@id/games_list_text"
+            android:layout_above="@+id/games_list_back_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    <Button
+            android:id="@id/games_list_back_button"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_alignParentBottom="true"
+            android:textSize="@dimen/default_button_text_size"
+            android:text="@string/back"/>
+</RelativeLayout>

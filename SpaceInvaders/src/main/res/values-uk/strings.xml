@@ -21,4 +21,10 @@
 
     <!-- general -->
     <string name="exit">Вихід</string>
+    <string name="back">Назад</string>
+
+    <!-- network game -->
+    <string name="create_game">Створити гру</string>
+    <string name="direct_ip">Вказати ip</string>
+    <string name="games_list">Список ігор</string>
 </resources>
