@@ -1,7 +1,7 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.client;
+package com.gmail.yaroslavlancelot.spaceinvaders.network.example.adt.messages.server;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.network.common.ICommonMessages;
-import org.andengine.extension.multiplayer.protocol.adt.message.client.ClientMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.example.common.ICommonMessages;
+import org.andengine.extension.multiplayer.protocol.adt.message.server.ServerMessage;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -9,9 +9,9 @@ import java.io.IOException;
 
 /**
  * @author Nicolas Gramlich
- * @since 12:00:31 - 21.05.2011
+ * @since 12:23:15 - 21.05.2011
  */
-public class ConnectionEstablishClientMessage extends ClientMessage implements ICommonMessages {
+public class ConnectionRejectedProtocolMissmatchServerMessage extends ServerMessage implements ICommonMessages {
     // ===========================================================
     // Constants
     // ===========================================================
@@ -27,11 +27,11 @@ public class ConnectionEstablishClientMessage extends ClientMessage implements I
     // ===========================================================
 
     @Deprecated
-    public ConnectionEstablishClientMessage() {
+    public ConnectionRejectedProtocolMissmatchServerMessage() {
 
     }
 
-    public ConnectionEstablishClientMessage(final short pProtocolVersion) {
+    public ConnectionRejectedProtocolMissmatchServerMessage(final short pProtocolVersion) {
         this.mProtocolVersion = pProtocolVersion;
     }
 
@@ -43,13 +43,17 @@ public class ConnectionEstablishClientMessage extends ClientMessage implements I
         return this.mProtocolVersion;
     }
 
+    public void setProtocolVersion(final short pProtocolVersion) {
+        this.mProtocolVersion = pProtocolVersion;
+    }
+
     // ===========================================================
     // Methods for/from SuperClass/Interfaces
     // ===========================================================
 
     @Override
     public short getFlag() {
-        return FLAG_MESSAGE_CLIENT_CONNECTION_ESTABLISH;
+        return FLAG_MESSAGE_SERVER_CONNECTION_REJECTED_PROTOCOL_MISSMATCH;
     }
 
     @Override

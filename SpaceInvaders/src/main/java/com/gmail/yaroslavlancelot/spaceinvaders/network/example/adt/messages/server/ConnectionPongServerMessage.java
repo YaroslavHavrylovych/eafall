@@ -1,17 +1,18 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server;
+package com.gmail.yaroslavlancelot.spaceinvaders.network.example.adt.messages.server;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.network.common.ICommonMessages;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.example.common.ICommonMessages;
 import org.andengine.extension.multiplayer.protocol.adt.message.server.ServerMessage;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+
 /**
  * @author Nicolas Gramlich
- * @since 12:00:31 - 21.05.2011
+ * @since 12:23:37 - 21.05.2011
  */
-public class ConnectionEstablishedServerMessage extends ServerMessage implements ICommonMessages {
+public class ConnectionPongServerMessage extends ServerMessage implements ICommonMessages {
     // ===========================================================
     // Constants
     // ===========================================================
@@ -20,17 +21,32 @@ public class ConnectionEstablishedServerMessage extends ServerMessage implements
     // Fields
     // ===========================================================
 
+    private long mTimestamp;
+
     // ===========================================================
     // Constructors
     // ===========================================================
 
-    public ConnectionEstablishedServerMessage() {
+    @Deprecated
+    public ConnectionPongServerMessage() {
 
+    }
+
+    public ConnectionPongServerMessage(final long pTimestamp) {
+        this.mTimestamp = pTimestamp;
     }
 
     // ===========================================================
     // Getter & Setter
     // ===========================================================
+
+    public long getTimestamp() {
+        return this.mTimestamp;
+    }
+
+    public void setTimestamp(long pTimestamp) {
+        this.mTimestamp = pTimestamp;
+    }
 
     // ===========================================================
     // Methods for/from SuperClass/Interfaces
@@ -38,17 +54,17 @@ public class ConnectionEstablishedServerMessage extends ServerMessage implements
 
     @Override
     public short getFlag() {
-        return FLAG_MESSAGE_SERVER_CONNECTION_ESTABLISHED;
+        return FLAG_MESSAGE_SERVER_CONNECTION_PONG;
     }
 
     @Override
     protected void onReadTransmissionData(final DataInputStream pDataInputStream) throws IOException {
-                /* Nothing to read. */
+        this.mTimestamp = pDataInputStream.readLong();
     }
 
     @Override
     protected void onWriteTransmissionData(final DataOutputStream pDataOutputStream) throws IOException {
-                /* Nothing to write. */
+        pDataOutputStream.writeLong(this.mTimestamp);
     }
 
     // ===========================================================

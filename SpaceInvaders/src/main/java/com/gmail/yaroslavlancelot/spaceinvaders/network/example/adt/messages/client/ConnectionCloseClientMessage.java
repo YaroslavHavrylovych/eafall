@@ -1,7 +1,7 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server;
+package com.gmail.yaroslavlancelot.spaceinvaders.network.example.adt.messages.client;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.network.common.ICommonMessages;
-import org.andengine.extension.multiplayer.protocol.adt.message.server.ServerMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.example.common.ICommonMessages;
+import org.andengine.extension.multiplayer.protocol.adt.message.client.ClientMessage;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -11,7 +11,7 @@ import java.io.IOException;
  * @author Nicolas Gramlich
  * @since 12:00:36 - 21.05.2011
  */
-public class ConnectionCloseServerMessage extends ServerMessage implements ICommonMessages {
+public class ConnectionCloseClientMessage extends ClientMessage implements ICommonMessages {
     // ===========================================================
     // Constants
     // ===========================================================
@@ -24,7 +24,7 @@ public class ConnectionCloseServerMessage extends ServerMessage implements IComm
     // Constructors
     // ===========================================================
 
-    public ConnectionCloseServerMessage() {
+    public ConnectionCloseClientMessage() {
 
     }
 
@@ -38,7 +38,7 @@ public class ConnectionCloseServerMessage extends ServerMessage implements IComm
 
     @Override
     public short getFlag() {
-        return FLAG_MESSAGE_SERVER_CONNECTION_CLOSE;
+        return FLAG_MESSAGE_CLIENT_CONNECTION_CLOSE;
     }
 
     @Override

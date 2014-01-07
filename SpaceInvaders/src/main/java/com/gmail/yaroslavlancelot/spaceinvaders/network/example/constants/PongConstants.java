@@ -1,7 +1,7 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.network.util.constants;
+package com.gmail.yaroslavlancelot.spaceinvaders.network.example.constants;
 
 
-import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.PaddleUserData;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.example.adt.PaddleUserData;
 
 /**
  * (c) 2010 Nicolas Gramlich 

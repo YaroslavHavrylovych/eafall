@@ -1,6 +1,6 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server;
+package com.gmail.yaroslavlancelot.spaceinvaders.network.example.adt.messages.server;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.network.common.ICommonMessages;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.example.common.ICommonMessages;
 import org.andengine.extension.multiplayer.protocol.adt.message.server.ServerMessage;
 
 import java.io.DataInputStream;
@@ -9,9 +9,9 @@ import java.io.IOException;
 
 /**
  * @author Nicolas Gramlich
- * @since 12:23:15 - 21.05.2011
+ * @since 12:00:31 - 21.05.2011
  */
-public class ConnectionRejectedProtocolMissmatchServerMessage extends ServerMessage implements ICommonMessages {
+public class ConnectionEstablishedServerMessage extends ServerMessage implements ICommonMessages {
     // ===========================================================
     // Constants
     // ===========================================================
@@ -20,32 +20,17 @@ public class ConnectionRejectedProtocolMissmatchServerMessage extends ServerMess
     // Fields
     // ===========================================================
 
-    private short mProtocolVersion;
-
     // ===========================================================
     // Constructors
     // ===========================================================
 
-    @Deprecated
-    public ConnectionRejectedProtocolMissmatchServerMessage() {
+    public ConnectionEstablishedServerMessage() {
 
-    }
-
-    public ConnectionRejectedProtocolMissmatchServerMessage(final short pProtocolVersion) {
-        this.mProtocolVersion = pProtocolVersion;
     }
 
     // ===========================================================
     // Getter & Setter
     // ===========================================================
-
-    public short getProtocolVersion() {
-        return this.mProtocolVersion;
-    }
-
-    public void setProtocolVersion(final short pProtocolVersion) {
-        this.mProtocolVersion = pProtocolVersion;
-    }
 
     // ===========================================================
     // Methods for/from SuperClass/Interfaces
@@ -53,17 +38,17 @@ public class ConnectionRejectedProtocolMissmatchServerMessage extends ServerMess
 
     @Override
     public short getFlag() {
-        return FLAG_MESSAGE_SERVER_CONNECTION_REJECTED_PROTOCOL_MISSMATCH;
+        return FLAG_MESSAGE_SERVER_CONNECTION_ESTABLISHED;
     }
 
     @Override
     protected void onReadTransmissionData(final DataInputStream pDataInputStream) throws IOException {
-        this.mProtocolVersion = pDataInputStream.readShort();
+                /* Nothing to read. */
     }
 
     @Override
     protected void onWriteTransmissionData(final DataOutputStream pDataOutputStream) throws IOException {
-        pDataOutputStream.writeShort(this.mProtocolVersion);
+                /* Nothing to write. */
     }
 
     // ===========================================================

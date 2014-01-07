@@ -4,7 +4,7 @@ import org.andengine.extension.multiplayer.protocol.server.SocketServerDiscovery
 import org.andengine.extension.multiplayer.protocol.shared.IDiscoveryData;
 
 public class SocketDiscoveryServer extends SocketServerDiscoveryServer {
-    private static final int SERVER_PORT = 8899;
+    public static final int SERVER_PORT = 8899;
     private byte[] mServerIpAddress;
 
     public SocketDiscoveryServer(byte[] ipAddress) {

@@ -1,7 +1,7 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.client;
+package com.gmail.yaroslavlancelot.spaceinvaders.network.example.adt.messages.server;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.network.util.constants.PongConstants;
-import org.andengine.extension.multiplayer.protocol.adt.message.client.ClientMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.example.constants.PongConstants;
+import org.andengine.extension.multiplayer.protocol.adt.message.server.ServerMessage;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -12,9 +12,9 @@ import java.io.IOException;
  * (c) 2011 Zynga Inc.
  * 
  * @author Nicolas Gramlich
- * @since 19:52:27 - 28.02.2011
+ * @since 19:48:32 - 28.02.2011
  */
-public class MovePaddleClientMessage extends ClientMessage implements PongConstants {
+public class UpdatePaddleServerMessage extends ServerMessage implements PongConstants {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -24,18 +24,20 @@ public class MovePaddleClientMessage extends ClientMessage implements PongConsta
 	// ===========================================================
 
 	public int mPaddleID;
+	public float mX;
 	public float mY;
 
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 
-	public MovePaddleClientMessage() {
+	public UpdatePaddleServerMessage() {
 
 	}
 
-	public MovePaddleClientMessage(final int pID, final float pY) {
-		this.mPaddleID = pID;
+	public UpdatePaddleServerMessage(final int pPaddleID, final float pX, final float pY) {
+		this.mPaddleID = pPaddleID;
+		this.mX = pX;
 		this.mY = pY;
 	}
 
@@ -43,8 +45,9 @@ public class MovePaddleClientMessage extends ClientMessage implements PongConsta
 	// Getter & Setter
 	// ===========================================================
 
-	public void setPaddleID(final int pPaddleID, final float pY) {
+	public void set(final int pPaddleID, final float pX,final float pY) {
 		this.mPaddleID = pPaddleID;
+		this.mX = pX;
 		this.mY = pY;
 	}
 
@@ -54,18 +57,20 @@ public class MovePaddleClientMessage extends ClientMessage implements PongConsta
 
 	@Override
 	public short getFlag() {
-		return FLAG_MESSAGE_CLIENT_MOVE_PADDLE;
+		return FLAG_MESSAGE_SERVER_UPDATE_PADDLE;
 	}
 
 	@Override
 	protected void onReadTransmissionData(DataInputStream pDataInputStream) throws IOException {
 		this.mPaddleID = pDataInputStream.readInt();
+		this.mX = pDataInputStream.readFloat();
 		this.mY = pDataInputStream.readFloat();
 	}
 
 	@Override
 	protected void onWriteTransmissionData(final DataOutputStream pDataOutputStream) throws IOException {
 		pDataOutputStream.writeInt(this.mPaddleID);
+		pDataOutputStream.writeFloat(this.mX);
 		pDataOutputStream.writeFloat(this.mY);
 	}
 

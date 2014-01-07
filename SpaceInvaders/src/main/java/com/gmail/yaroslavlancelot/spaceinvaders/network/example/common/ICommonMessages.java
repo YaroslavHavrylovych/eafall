@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.network.common;
+package com.gmail.yaroslavlancelot.spaceinvaders.network.example.common;
 
 /**
  * Created by yaroslav on 05.12.13.

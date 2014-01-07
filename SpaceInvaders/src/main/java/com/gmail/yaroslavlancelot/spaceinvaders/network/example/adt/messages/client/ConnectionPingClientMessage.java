@@ -1,6 +1,6 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.client;
+package com.gmail.yaroslavlancelot.spaceinvaders.network.example.adt.messages.client;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.network.common.ICommonMessages;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.example.common.ICommonMessages;
 import org.andengine.extension.multiplayer.protocol.adt.message.client.ClientMessage;
 
 import java.io.DataInputStream;
