@@ -5,14 +5,27 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.GameSocketServer;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.WaitingForPlayersServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.discovery.SocketDiscoveryServer;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
+import org.andengine.extension.multiplayer.protocol.server.SocketServerDiscoveryServer;
+import org.andengine.extension.multiplayer.protocol.server.connector.ClientConnector;
+import org.andengine.extension.multiplayer.protocol.server.connector.SocketConnectionClientConnector;
+import org.andengine.extension.multiplayer.protocol.shared.IDiscoveryData;
+import org.andengine.extension.multiplayer.protocol.shared.SocketConnection;
 import org.andengine.extension.multiplayer.protocol.util.WifiUtils;
 
+import java.io.IOException;
+import java.net.InetAddress;
+
 public class CreatingServerGameActivity extends Activity {
+    public final static String TAG = CreatingServerGameActivity.class.getCanonicalName();
     public static final int FOR_CONVERT_IP = 256;
     private SocketDiscoveryServer mSocketDiscoveryServer;
     private byte[] mServerIp;
     private TextView mServerIpTextView;
+    private GameSocketServer mSocketServer;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -35,6 +48,7 @@ public class CreatingServerGameActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        initServer();
         initDiscoveryServer();
         updateIpValue();
     }
@@ -43,6 +57,7 @@ public class CreatingServerGameActivity extends Activity {
     protected void onPause() {
         super.onPause();
         stopDiscoveryServer();
+        stopServer();
         mServerIpTextView.setVisibility(View.INVISIBLE);
     }
 
@@ -50,6 +65,7 @@ public class CreatingServerGameActivity extends Activity {
     protected void onStop() {
         super.onStop();
         stopDiscoveryServer();
+        stopServer();
     }
 
     private void stopDiscoveryServer() {
@@ -63,6 +79,7 @@ public class CreatingServerGameActivity extends Activity {
     }
 
     private void initDiscoveryServer() {
+        LoggerHelper.printDebugMessage(TAG, "init discovery server");
         mServerIp = WifiUtils.getWifiIPv4AddressRaw(this);
 
         mSocketDiscoveryServer = new SocketDiscoveryServer(mServerIp);
@@ -79,5 +96,35 @@ public class CreatingServerGameActivity extends Activity {
         }
         mServerIpTextView.setText(ipValue);
         mServerIpTextView.setVisibility(View.VISIBLE);
+        LoggerHelper.printDebugMessage(TAG, "server ip = " + ipValue);
+    }
+
+    private void initServer() {
+        mSocketServer = new GameSocketServer(SocketDiscoveryServer.SERVER_PORT, new ClientConnectorListener());
+        mSocketServer.start();
+    }
+
+    private void stopServer() {
+        if (mSocketServer != null) {
+            mSocketServer.terminate();
+            mSocketServer = null;
+        }
+    }
+
+    private class ClientConnectorListener implements SocketConnectionClientConnector.ISocketConnectionClientConnectorListener {
+        @Override
+        public void onStarted(final ClientConnector<SocketConnection> pClientConnector) {
+            LoggerHelper.printInformationMessage(TAG, "SERVER: Client connected: " + pClientConnector.getConnection().getSocket().getInetAddress().getHostAddress());
+            try {
+                mSocketServer.sendBroadcastServerMessage(new WaitingForPlayersServerMessage());
+            } catch (IOException e) {
+                LoggerHelper.printErrorMessage(TAG, "Error while sending message to client: " + e.getMessage());
+            }
+        }
+
+        @Override
+        public void onTerminated(final ClientConnector<SocketConnection> pClientConnector) {
+            LoggerHelper.printInformationMessage(TAG, "SERVER: Client disconnected: " + pClientConnector.getConnection().getSocket().getInetAddress().getHostAddress());
+        }
     }
 }

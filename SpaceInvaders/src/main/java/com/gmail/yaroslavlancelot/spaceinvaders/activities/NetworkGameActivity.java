@@ -90,7 +90,6 @@ public class NetworkGameActivity extends Activity implements
         mServerIpViewMap = new HashMap<String, View>(5);
         mServerConnectorList = new ArrayList<GameServerConnector>(5);
         //ListView
-        mServersListView.removeAllViews();
         mServersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
@@ -127,18 +126,6 @@ public class NetworkGameActivity extends Activity implements
     protected void onStop() {
         super.onStop();
         stopSocketDiscoveryClient();
-    }
-
-    @Override
-    public void onDiscovery(final SocketServerDiscoveryClient pSocketServerDiscoveryClient, final IDiscoveryData pDiscoveryData) {
-        IDiscoveryData.DefaultDiscoveryData discoveryData = (IDiscoveryData.DefaultDiscoveryData) pDiscoveryData;
-        try {
-            final String ipAddressAsString = IPUtils.ipAddressToString(discoveryData.getServerIP());
-            LoggerHelper.printInformationMessage(TAG, "DiscoveryClient: Server discovered at: " + ipAddressAsString + ":" + discoveryData.getServerPort());
-            initClient(ipAddressAsString, discoveryData.getServerPort());
-        } catch (final UnknownHostException e) {
-            LoggerHelper.printErrorMessage(TAG, "DiscoveryClient: IPException: " + e);
-        }
     }
 
     @Override
@@ -198,6 +185,18 @@ public class NetworkGameActivity extends Activity implements
             View view = getLayoutInflater().inflate(R.layout.server_item_view, null);
             mServerIpViewMap.put(serverIP, view);
             mServersListView.addView(view);
+        }
+    }
+
+    @Override
+    public void onDiscovery(final SocketServerDiscoveryClient pSocketServerDiscoveryClient, final IDiscoveryData pDiscoveryData) {
+        IDiscoveryData.DefaultDiscoveryData discoveryData = (IDiscoveryData.DefaultDiscoveryData) pDiscoveryData;
+        try {
+            final String ipAddressAsString = IPUtils.ipAddressToString(discoveryData.getServerIP());
+            LoggerHelper.printInformationMessage(TAG, "DiscoveryClient: Server discovered at: " + ipAddressAsString + ":" + discoveryData.getServerPort());
+            initClient(ipAddressAsString, discoveryData.getServerPort());
+        } catch (final UnknownHostException e) {
+            LoggerHelper.printErrorMessage(TAG, "DiscoveryClient: IPException: " + e);
         }
     }
 }
