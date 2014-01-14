@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- startup screen dimensions -->
+    <!-- startup screen -->
     <dimen name="startup_screen_button_width">200dp</dimen>
     <dimen name="startup_screen_space_between_buttons">12dp</dimen>
     <dimen name="startup_screen_top_button_margin">35dp</dimen>
 
-    <!-- network game layout -->
+    <!-- network game -->
     <dimen name="games_list_margin_top">10dp</dimen>
     <dimen name="games_list_text_size">20dp</dimen>
     <dimen name="games_list_element_height">25dp</dimen>
+    <dimen name="direct_ip_text_size">20dp</dimen>
 
     <!-- default values -->
     <dimen name="default_button_height">25dp</dimen>

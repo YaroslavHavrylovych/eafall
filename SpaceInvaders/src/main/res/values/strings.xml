@@ -22,11 +22,13 @@
     <!-- general -->
     <string name="exit">Exit</string>
     <string name="back">Back</string>
+    <string name="connect">Connect</string>
 
     <!-- network game -->
     <string name="create_game">Create game</string>
     <string name="direct_ip">Write direct ip</string>
     <string name="games_list">Games list</string>
+    <string name="ip_address">Ip address : </string>
 
     <!-- creating server -->
     <string name="your_ip_address">Your ip address : </string>

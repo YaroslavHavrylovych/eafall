@@ -1,14 +1,18 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.activities;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.GameServerConnector;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.PreGameStartCallback;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.discovery.SocketDiscoveryServer;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import org.andengine.extension.multiplayer.protocol.client.SocketServerDiscoveryClient;
 import org.andengine.extension.multiplayer.protocol.client.connector.ServerConnector;
@@ -44,6 +48,7 @@ public class NetworkGameActivity extends Activity implements
         initBackButton(findViewById(R.id.back));
         initGamesList((ListView) findViewById(R.id.games_list_list_view));
         initCreateServerButton(findViewById(R.id.create_game));
+        initDirectIpButton(findViewById(R.id.direct_ip));
     }
 
     private void initCreateServerButton(View createServerButton) {
@@ -53,6 +58,37 @@ public class NetworkGameActivity extends Activity implements
             public void onClick(final View v) {
                 Intent singleGameIntent = new Intent(NetworkGameActivity.this, CreatingServerGameActivity.class);
                 startActivity(singleGameIntent);
+            }
+        });
+    }
+
+    private void initDirectIpButton(View directIpButton) {
+        if (directIpButton == null) return;
+        directIpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                final Dialog directIpDialog = new Dialog(NetworkGameActivity.this);
+                directIpDialog.setContentView(R.layout.direct_ip_layout);
+                directIpDialog.findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(final View v) {
+                        directIpDialog.dismiss();
+                    }
+                });
+
+                directIpDialog.findViewById(R.id.connect).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(final View v) {
+                        EditText ipAddressEditText = (EditText) directIpDialog.findViewById(R.id.ip_address_edit_text);
+                        String ipAddress = ipAddressEditText.getText().toString();
+
+                        initClient(ipAddress, SocketDiscoveryServer.SERVER_PORT);
+
+                        directIpDialog.dismiss();
+                    }
+                });
+
+                directIpDialog.show();
             }
         });
     }
@@ -150,7 +186,7 @@ public class NetworkGameActivity extends Activity implements
                         mServerConnectorList.add(serverConnector);
                     }
                 } catch (final Throwable t) {
-                    Debug.e(t);
+                    LoggerHelper.printErrorMessage(TAG, t.toString());
                 }
             }
         }).start();

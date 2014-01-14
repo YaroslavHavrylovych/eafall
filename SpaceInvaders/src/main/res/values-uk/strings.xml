@@ -22,11 +22,13 @@
     <!-- general -->
     <string name="exit">Вихід</string>
     <string name="back">Назад</string>
+    <string name="connect">З’єднати</string>
 
     <!-- network game -->
     <string name="create_game">Створити гру</string>
     <string name="direct_ip">Вказати ip</string>
     <string name="games_list">Список ігор</string>
+    <string name="ip_address">Ip адреса : </string>
 
     <!-- creating server -->
     <string name="your_ip_address">Адреса Вашого сервера : </string>
