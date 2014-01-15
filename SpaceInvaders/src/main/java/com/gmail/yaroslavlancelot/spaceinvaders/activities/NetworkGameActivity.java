@@ -6,9 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.GameServerConnector;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.PreGameStartCallback;
@@ -22,14 +22,11 @@ import org.andengine.extension.multiplayer.protocol.shared.IDiscoveryData;
 import org.andengine.extension.multiplayer.protocol.shared.SocketConnection;
 import org.andengine.extension.multiplayer.protocol.util.IPUtils;
 import org.andengine.extension.multiplayer.protocol.util.WifiUtils;
-import org.andengine.util.debug.Debug;
 
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class NetworkGameActivity extends Activity implements
         SocketServerDiscoveryClient.ISocketServerDiscoveryClientListener,
@@ -38,7 +35,7 @@ public class NetworkGameActivity extends Activity implements
     public static final String TAG = NetworkGameActivity.class.getCanonicalName();
     private SocketServerDiscoveryClient mSocketServerDiscoveryClient;
     private ListView mServersListView;
-    private Map<String, View> mServerIpViewMap;
+    private ArrayAdapter<String> mArrayAdapter;
     private List<GameServerConnector> mServerConnectorList;
 
     @Override
@@ -106,6 +103,8 @@ public class NetworkGameActivity extends Activity implements
     private void initGamesList(ListView listView) {
         if (listView == null) return;
         mServersListView = listView;
+        mArrayAdapter = new ArrayAdapter<String>(this, R.layout.server_item_view, R.id.server_name);
+        mServersListView.setAdapter(mArrayAdapter);
     }
 
     @Override
@@ -123,7 +122,6 @@ public class NetworkGameActivity extends Activity implements
     }
 
     private void initSocketDiscoveryClient() throws WifiException, UnknownHostException {
-        mServerIpViewMap = new HashMap<String, View>(5);
         mServerConnectorList = new ArrayList<GameServerConnector>(5);
         //ListView
         mServersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -210,18 +208,21 @@ public class NetworkGameActivity extends Activity implements
     @Override
     public void gameStop(final String serverIP) {
         synchronized (mServersListView) {
-            View view = mServerIpViewMap.remove(serverIP);
-            mServersListView.removeView(view);
+            mArrayAdapter.remove(serverIP);
         }
     }
 
     @Override
     public void gameWaitingForPlayers(final String serverIP) {
-        synchronized (mServersListView) {
-            View view = getLayoutInflater().inflate(R.layout.server_item_view, null);
-            mServerIpViewMap.put(serverIP, view);
-            mServersListView.addView(view);
-        }
+        mServersListView.post(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (mServersListView) {
+                    mArrayAdapter.add(serverIP);
+                    mArrayAdapter.notifyDataSetChanged();
+                }
+            }
+        });
     }
 
     @Override

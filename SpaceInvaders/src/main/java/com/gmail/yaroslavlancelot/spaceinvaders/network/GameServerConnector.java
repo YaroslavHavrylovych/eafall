@@ -1,5 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.network;
 
+import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.WaitingForPlayersServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.PreGameStartCallback;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.example.adt.messages.server.ConnectionCloseServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.example.adt.messages.server.ConnectionEstablishedServerMessage;
@@ -36,7 +37,7 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
             }
         });
 
-        registerServerMessage(FLAG_MESSAGE_SERVER_GAME_START, ConnectionEstablishedServerMessage.class, new IServerMessageHandler<SocketConnection>() {
+        registerServerMessage(FLAG_MESSAGE_SERVER_GAME_START, ConnectionCloseServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
                 synchronized (mPreGameStartCallbackList) {
@@ -47,7 +48,7 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
             }
         });
 
-        registerServerMessage(FLAG_MESSAGE_SERVER_WAITING_FOR_PLAYERS, ConnectionEstablishedServerMessage.class, new IServerMessageHandler<SocketConnection>() {
+        registerServerMessage(FLAG_MESSAGE_SERVER_WAITING_FOR_PLAYERS, WaitingForPlayersServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
                 LoggerHelper.printInformationMessage(TAG, "CLIENT: server waiting for players.");

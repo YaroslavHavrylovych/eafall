@@ -116,7 +116,7 @@ public class CreatingServerGameActivity extends Activity {
         public void onStarted(final ClientConnector<SocketConnection> pClientConnector) {
             LoggerHelper.printInformationMessage(TAG, "SERVER: Client connected: " + pClientConnector.getConnection().getSocket().getInetAddress().getHostAddress());
             try {
-                mSocketServer.sendBroadcastServerMessage(new WaitingForPlayersServerMessage());
+                pClientConnector.sendServerMessage(new WaitingForPlayersServerMessage());
             } catch (IOException e) {
                 LoggerHelper.printErrorMessage(TAG, "Error while sending message to client: " + e.getMessage());
             }
