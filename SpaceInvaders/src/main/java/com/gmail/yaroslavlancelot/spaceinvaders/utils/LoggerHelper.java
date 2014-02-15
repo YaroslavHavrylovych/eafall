@@ -7,6 +7,9 @@ import android.util.Log;
  * Contains only static methods and use default android log.
  */
 public final class LoggerHelper {
+    public static final String MESSAGE_FROM_SERVER_PREFIX = "Server: ";
+    public static final String MESSAGE_FROM_CLIENT_PREFIX = "Client: ";
+
     /**
      * Print in debug notification about method invocation </br>
      * (i.e. same as you write Log.v(tag, methodName + "(params) has been invoked")
@@ -29,13 +32,33 @@ public final class LoggerHelper {
     }
 
     /**
-     * Print in information some message
+     * Print in information message
      *
      * @param tag log TAG
      * @param message message text
      */
     public static void printInformationMessage(String tag, String message) {
-        Log.v(tag, message);
+        Log.i(tag, message);
+    }
+
+    /**
+     * Print in information message from server
+     *
+     * @param tag log TAG
+     * @param message message text
+     */
+    public static void printInformationMessageFromServer(String tag, String message) {
+        printInformationMessage(tag, MESSAGE_FROM_SERVER_PREFIX + message);
+    }
+
+    /**
+     * Print in information message from client
+     *
+     * @param tag log TAG
+     * @param message message text
+     */
+    public static void printInformationMessageFromClient(String tag, String message) {
+        printInformationMessage(tag, MESSAGE_FROM_CLIENT_PREFIX + message);
     }
 
     /**
@@ -44,9 +67,28 @@ public final class LoggerHelper {
      * @param tag log TAG
      * @param message message text
      */
-    @SuppressWarnings("unused")
     public static void printVerboseMessage(String tag, String message) {
         Log.v(tag, message);
+    }
+
+    /**
+     * Print in verbose message from server
+     *
+     * @param tag log TAG
+     * @param message message text
+     */
+    public static void printVerbosMessageFromServer(String tag, String message) {
+        printVerboseMessage(tag, MESSAGE_FROM_SERVER_PREFIX + message);
+    }
+
+    /**
+     * Print in verbose message from client
+     *
+     * @param tag log TAG
+     * @param message message text
+     */
+    public static void printVerboseMessageFromClient(String tag, String message) {
+        printVerboseMessage(tag, MESSAGE_FROM_CLIENT_PREFIX + message);
     }
 
     /**

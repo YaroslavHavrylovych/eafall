@@ -24,6 +24,6 @@
         <activity android:name=".activities.PhysicWorldGameActivity"/>
         <activity android:name=".activities.NetworkGameActivity"/>
         <activity android:name=".activities.CreatingServerGameActivity"/>
-        <activity android:name=".network.example.PongGameActivity"/>
+        <activity android:name=".activities.ClientConnectedToServerActivity"/>
     </application>
 </manifest>

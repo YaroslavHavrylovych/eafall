@@ -16,6 +16,8 @@ public class ConnectionEstablishClientMessage extends ClientMessage implements I
     // Constants
     // ===========================================================
 
+    public static final short PROTOCOL_VERSION = 1;
+
     // ===========================================================
     // Fields
     // ===========================================================

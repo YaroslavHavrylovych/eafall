@@ -9,9 +9,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.GameServerConnector;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.PreGameStartCallback;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.client.ConnectionEstablishClientMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.PreGameStartCallbacksFromServer;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.connector.GameServerConnector;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.discovery.SocketDiscoveryServer;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import org.andengine.extension.multiplayer.protocol.client.SocketServerDiscoveryClient;
@@ -23,20 +25,21 @@ import org.andengine.extension.multiplayer.protocol.shared.SocketConnection;
 import org.andengine.extension.multiplayer.protocol.util.IPUtils;
 import org.andengine.extension.multiplayer.protocol.util.WifiUtils;
 
+import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NetworkGameActivity extends Activity implements
         SocketServerDiscoveryClient.ISocketServerDiscoveryClientListener,
         SocketConnectionServerConnector.ISocketConnectionServerConnectorListener,
-        PreGameStartCallback {
+        PreGameStartCallbacksFromServer {
     public static final String TAG = NetworkGameActivity.class.getCanonicalName();
     private SocketServerDiscoveryClient mSocketServerDiscoveryClient;
     private ListView mServersListView;
     private ArrayAdapter<String> mArrayAdapter;
-    private List<GameServerConnector> mServerConnectorList;
+    private Map<String, GameServerConnector> mServerConnectorMap;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -103,7 +106,7 @@ public class NetworkGameActivity extends Activity implements
     private void initGamesList(ListView listView) {
         if (listView == null) return;
         mServersListView = listView;
-        mArrayAdapter = new ArrayAdapter<String>(this, R.layout.server_item_view, R.id.server_name);
+        mArrayAdapter = new ArrayAdapter<String>(this, R.layout.server_item_view, R.id.server_ip_string);
         mServersListView.setAdapter(mArrayAdapter);
     }
 
@@ -122,12 +125,28 @@ public class NetworkGameActivity extends Activity implements
     }
 
     private void initSocketDiscoveryClient() throws WifiException, UnknownHostException {
-        mServerConnectorList = new ArrayList<GameServerConnector>(5);
+        mServerConnectorMap = new HashMap<String, GameServerConnector>(5);
         //ListView
         mServersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
-                //TODO start game
+                TextView serverIpTextView = (TextView) view.findViewById(R.id.server_ip_string);
+                GameServerConnector gameServerConnector;
+                synchronized (mServerConnectorMap) {
+                    gameServerConnector = mServerConnectorMap.remove(serverIpTextView.getText());
+                }
+                if (gameServerConnector == null) return;
+                try {
+                    gameServerConnector.sendClientMessage(new ConnectionEstablishClientMessage(ConnectionEstablishClientMessage.PROTOCOL_VERSION));
+                } catch (IOException e) {
+                    LoggerHelper.printErrorMessage(TAG, e.toString());
+                    return;
+                }
+                gameServerConnector.removePreGameStartCallbacks(NetworkGameActivity.this);
+                GameServerConnector.setGameServerConnector(gameServerConnector);
+                // start new activity
+                Intent connectedToServerActivityIntent = new Intent(NetworkGameActivity.this, ClientConnectedToServerActivity.class);
+                startActivity(connectedToServerActivityIntent);
             }
         });
         //create SocketServerDiscoveryClient
@@ -145,13 +164,13 @@ public class NetworkGameActivity extends Activity implements
         if (mSocketServerDiscoveryClient != null) {
             mSocketServerDiscoveryClient.terminate();
             mSocketServerDiscoveryClient = null;
-            if (mServerConnectorList != null) {
-                synchronized (mServerConnectorList) {
-                    for (GameServerConnector serverConnector : mServerConnectorList) {
-                        serverConnector.terminate();
+            if (mServerConnectorMap != null) {
+                synchronized (mServerConnectorMap) {
+                    for (String serverIp : mServerConnectorMap.keySet()) {
+                        mServerConnectorMap.get(serverIp).terminate();
                     }
                 }
-                mServerConnectorList = null;
+                mServerConnectorMap = null;
             }
         }
     }
@@ -177,11 +196,11 @@ public class NetworkGameActivity extends Activity implements
             @Override
             public void run() {
                 try {
-                    synchronized (mServerConnectorList) {
+                    synchronized (mServerConnectorMap) {
                         GameServerConnector serverConnector = new GameServerConnector(ipAddress, port, NetworkGameActivity.this);
                         serverConnector.addPreGameStartCallbacks(NetworkGameActivity.this);
                         serverConnector.start();
-                        mServerConnectorList.add(serverConnector);
+                        mServerConnectorMap.put(ipAddress, serverConnector);
                     }
                 } catch (final Throwable t) {
                     LoggerHelper.printErrorMessage(TAG, t.toString());

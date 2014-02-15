@@ -33,9 +33,13 @@
     <!-- creating server -->
     <string name="your_ip_address">Your ip address : </string>
     <string name="template_ip">125.125.125.125</string>
-    <string name="no_opponents">Any client connected to your server...</string>
+    <string name="no_opponents">No clients connected to your server...</string>
     <string name="your_opponent_name">Your opponent name : </string>
     <string name="your_opponent_ip">Your opponent ip : </string>
     <string name="start_game">Start game</string>
     <string name="ip_address_separator">.</string>
+    <string name="connected_client_with_ip">Connected client with ip : </string>
+
+    <!-- client connected to server -->
+    <string name="you_are_connected_to_server">You are connected to server with ip : </string>
 </resources>

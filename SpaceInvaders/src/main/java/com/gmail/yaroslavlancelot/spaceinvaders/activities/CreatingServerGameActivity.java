@@ -6,26 +6,22 @@ import android.view.View;
 import android.widget.TextView;
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.GameSocketServer;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.WaitingForPlayersServerMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.PreGameStartCallbacksFromClient;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.connector.ClientConnectorListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.discovery.SocketDiscoveryServer;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
-import org.andengine.extension.multiplayer.protocol.server.SocketServerDiscoveryServer;
-import org.andengine.extension.multiplayer.protocol.server.connector.ClientConnector;
-import org.andengine.extension.multiplayer.protocol.server.connector.SocketConnectionClientConnector;
-import org.andengine.extension.multiplayer.protocol.shared.IDiscoveryData;
-import org.andengine.extension.multiplayer.protocol.shared.SocketConnection;
 import org.andengine.extension.multiplayer.protocol.util.WifiUtils;
 
-import java.io.IOException;
-import java.net.InetAddress;
-
-public class CreatingServerGameActivity extends Activity {
+public class CreatingServerGameActivity extends Activity implements PreGameStartCallbacksFromClient {
     public final static String TAG = CreatingServerGameActivity.class.getCanonicalName();
     public static final int FOR_CONVERT_IP = 256;
     private SocketDiscoveryServer mSocketDiscoveryServer;
     private byte[] mServerIp;
     private TextView mServerIpTextView;
     private GameSocketServer mSocketServer;
+    private TextView mNoOpponentsTextView;
+    private TextView mClientConnectedTextView;
+    private TextView mClientIpTextView;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -33,6 +29,9 @@ public class CreatingServerGameActivity extends Activity {
         setContentView(R.layout.creating_server_layout);
         initBackButton(findViewById(R.id.back));
         mServerIpTextView = (TextView) findViewById(R.id.your_ip_address_value);
+        initNoOpponentsTextView(findViewById(R.id.no_opponents_text_view));
+        initClientConnectedTextView(findViewById(R.id.client_connected_text_view));
+        initClientIpTextView(findViewById(R.id.client_ip_text_view));
     }
 
     private void initBackButton(View exitButton) {
@@ -87,44 +86,57 @@ public class CreatingServerGameActivity extends Activity {
     }
 
     private void updateIpValue() {
-        String ipValue = "";
-        for (int i = 0; i < mServerIp.length; i++) {
-            ipValue += mServerIp[i] >= 0 ? mServerIp[i] : FOR_CONVERT_IP + mServerIp[i];
-            if (i < mServerIp.length - 1) {
-                ipValue += getString(R.string.ip_address_separator);
-            }
-        }
+        String ipValue = getConvertedServerIp(mServerIp);
         mServerIpTextView.setText(ipValue);
         mServerIpTextView.setVisibility(View.VISIBLE);
         LoggerHelper.printDebugMessage(TAG, "server ip = " + ipValue);
     }
 
+    private String getConvertedServerIp(byte[] serverIp) {
+        String ipValue = "";
+        for (int i = 0; i < serverIp.length; i++) {
+            ipValue += serverIp[i] >= 0 ? serverIp[i] : FOR_CONVERT_IP + serverIp[i];
+            if (i < serverIp.length - 1) {
+                ipValue += getString(R.string.ip_address_separator);
+            }
+        }
+        return ipValue;
+    }
+
     private void initServer() {
         mSocketServer = new GameSocketServer(SocketDiscoveryServer.SERVER_PORT, new ClientConnectorListener());
+        mSocketServer.addPreGameStartCallbacks(CreatingServerGameActivity.this);
         mSocketServer.start();
     }
 
     private void stopServer() {
         if (mSocketServer != null) {
+            mSocketServer.removePreGameStartCallbacks(CreatingServerGameActivity.this);
             mSocketServer.terminate();
             mSocketServer = null;
         }
     }
 
-    private class ClientConnectorListener implements SocketConnectionClientConnector.ISocketConnectionClientConnectorListener {
-        @Override
-        public void onStarted(final ClientConnector<SocketConnection> pClientConnector) {
-            LoggerHelper.printInformationMessage(TAG, "SERVER: Client connected: " + pClientConnector.getConnection().getSocket().getInetAddress().getHostAddress());
-            try {
-                pClientConnector.sendServerMessage(new WaitingForPlayersServerMessage());
-            } catch (IOException e) {
-                LoggerHelper.printErrorMessage(TAG, "Error while sending message to client: " + e.getMessage());
-            }
-        }
+    private void initNoOpponentsTextView(View view) {
+        if (view == null) return;
+        mNoOpponentsTextView = (TextView) view;
+    }
 
-        @Override
-        public void onTerminated(final ClientConnector<SocketConnection> pClientConnector) {
-            LoggerHelper.printInformationMessage(TAG, "SERVER: Client disconnected: " + pClientConnector.getConnection().getSocket().getInetAddress().getHostAddress());
-        }
+    @Override
+    public void clientConnectionEstablished(final String clientIp) {
+        mNoOpponentsTextView.setVisibility(View.GONE);
+        mClientConnectedTextView.setVisibility(View.VISIBLE);
+        mClientIpTextView.setVisibility(View.VISIBLE);
+        mClientConnectedTextView.setText(mSocketServer.getClientIp());
+    }
+
+    private void initClientConnectedTextView(View view) {
+        if (view == null) return;
+        mClientConnectedTextView = (TextView) view;
+    }
+
+    private void initClientIpTextView(View view) {
+        if (view == null) return;
+        mClientIpTextView = (TextView) view;
     }
 }
