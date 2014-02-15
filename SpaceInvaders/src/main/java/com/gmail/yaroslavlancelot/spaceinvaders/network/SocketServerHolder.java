@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.network.connector;
+package com.gmail.yaroslavlancelot.spaceinvaders.network;
 
 import org.andengine.extension.multiplayer.protocol.server.SocketServer;
 

@@ -3,7 +3,6 @@ package com.gmail.yaroslavlancelot.spaceinvaders.network.connector;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.MessagesConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.WaitingForPlayersServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.PreGameStartCallbacksFromServer;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.example.adt.messages.server.ConnectionCloseServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import org.andengine.extension.multiplayer.protocol.adt.message.server.IServerMessage;
 import org.andengine.extension.multiplayer.protocol.client.IServerMessageHandler;
@@ -26,29 +25,6 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
         super(new SocketConnection(new Socket(serverIP, serverPort)), pSocketConnectionServerConnectorListener);
         mServerIp = serverIP;
 
-        registerServerMessage(FLAG_MESSAGE_SERVER_CONNECTION_CLOSE, ConnectionCloseServerMessage.class, new IServerMessageHandler<SocketConnection>() {
-            @Override
-            public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
-                LoggerHelper.printInformationMessageFromClient(TAG, "Connection closed.");
-                synchronized (mPreGameStartCallbacksFromServerList) {
-                    for (PreGameStartCallbacksFromServer preGameStartCallbacksFromServer : mPreGameStartCallbacksFromServerList) {
-                        preGameStartCallbacksFromServer.gameStop(mServerIp);
-                    }
-                }
-            }
-        });
-
-        registerServerMessage(FLAG_MESSAGE_SERVER_GAME_START, ConnectionCloseServerMessage.class, new IServerMessageHandler<SocketConnection>() {
-            @Override
-            public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
-                synchronized (mPreGameStartCallbacksFromServerList) {
-                    for (PreGameStartCallbacksFromServer preGameStartCallbacksFromServer : mPreGameStartCallbacksFromServerList) {
-                        preGameStartCallbacksFromServer.gameStart(mServerIp);
-                    }
-                }
-            }
-        });
-
         registerServerMessage(FLAG_MESSAGE_SERVER_WAITING_FOR_PLAYERS, WaitingForPlayersServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
@@ -65,7 +41,6 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
     public String getServerIp() {
         return mServerIp;
     }
-
 
     public void addPreGameStartCallbacks(PreGameStartCallbacksFromServer preGameStartCallbacksFromServer) {
         synchronized (mPreGameStartCallbacksFromServerList) {

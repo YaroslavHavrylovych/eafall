@@ -124,10 +124,15 @@ public class CreatingServerGameActivity extends Activity implements PreGameStart
 
     @Override
     public void clientConnectionEstablished(final String clientIp) {
-        mNoOpponentsTextView.setVisibility(View.GONE);
-        mClientConnectedTextView.setVisibility(View.VISIBLE);
-        mClientIpTextView.setVisibility(View.VISIBLE);
-        mClientConnectedTextView.setText(mSocketServer.getClientIp());
+        mNoOpponentsTextView.post(new Runnable() {
+            @Override
+            public void run() {
+                mNoOpponentsTextView.setVisibility(View.GONE);
+                mClientConnectedTextView.setVisibility(View.VISIBLE);
+                mClientIpTextView.setText(mSocketServer.getClientIp());
+                mClientIpTextView.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     private void initClientConnectedTextView(View view) {
