@@ -15,6 +15,9 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Used by client to operate with server. Sending and retrieving messages.
+ */
 public class GameServerConnector extends ServerConnector<SocketConnection> implements MessagesConstants {
     public static final String TAG = GameServerConnector.class.getCanonicalName();
     private final String mServerIp;
@@ -50,7 +53,7 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
 
     public void removePreGameStartCallbacks(PreGameStartCallbacksFromServer preGameStartCallbacksFromServer) {
         synchronized (mPreGameStartCallbacksFromServerList) {
-            mPreGameStartCallbacksFromServerList.add(preGameStartCallbacksFromServer);
+            mPreGameStartCallbacksFromServerList.remove(preGameStartCallbacksFromServer);
         }
     }
 

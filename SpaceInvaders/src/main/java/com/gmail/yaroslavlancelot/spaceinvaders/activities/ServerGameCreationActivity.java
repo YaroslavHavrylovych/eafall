@@ -12,8 +12,8 @@ import com.gmail.yaroslavlancelot.spaceinvaders.network.discovery.SocketDiscover
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import org.andengine.extension.multiplayer.protocol.util.WifiUtils;
 
-public class CreatingServerGameActivity extends Activity implements PreGameStartCallbacksFromClient {
-    public final static String TAG = CreatingServerGameActivity.class.getCanonicalName();
+public class ServerGameCreationActivity extends Activity implements PreGameStartCallbacksFromClient {
+    public final static String TAG = ServerGameCreationActivity.class.getCanonicalName();
     public static final int FOR_CONVERT_IP = 256;
     private SocketDiscoveryServer mSocketDiscoveryServer;
     private byte[] mServerIp;
@@ -39,7 +39,7 @@ public class CreatingServerGameActivity extends Activity implements PreGameStart
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                CreatingServerGameActivity.this.finish();
+                ServerGameCreationActivity.this.finish();
             }
         });
     }
@@ -105,13 +105,13 @@ public class CreatingServerGameActivity extends Activity implements PreGameStart
 
     private void initServer() {
         mSocketServer = new GameSocketServer(SocketDiscoveryServer.SERVER_PORT, new ClientConnectorListener());
-        mSocketServer.addPreGameStartCallbacks(CreatingServerGameActivity.this);
+        mSocketServer.addPreGameStartCallbacks(ServerGameCreationActivity.this);
         mSocketServer.start();
     }
 
     private void stopServer() {
         if (mSocketServer != null) {
-            mSocketServer.removePreGameStartCallbacks(CreatingServerGameActivity.this);
+            mSocketServer.removePreGameStartCallbacks(ServerGameCreationActivity.this);
             mSocketServer.terminate();
             mSocketServer = null;
         }

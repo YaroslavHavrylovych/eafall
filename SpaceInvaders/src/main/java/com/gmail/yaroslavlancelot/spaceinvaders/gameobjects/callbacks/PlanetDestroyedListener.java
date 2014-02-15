@@ -4,6 +4,9 @@ import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperation
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 
+/**
+ * triggers when planet destroyed
+ */
 public class PlanetDestroyedListener extends ObjectDestroyedListener {
     public PlanetDestroyedListener(final ITeam team, final EntityOperations entityOperations) {
         super(team, entityOperations);

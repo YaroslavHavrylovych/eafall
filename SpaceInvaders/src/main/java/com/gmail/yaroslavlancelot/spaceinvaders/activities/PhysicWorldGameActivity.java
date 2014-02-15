@@ -11,17 +11,15 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobject
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.SunStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
-import org.andengine.extension.multiplayer.protocol.server.SocketServer;
-import org.andengine.extension.multiplayer.protocol.server.connector.ClientConnector;
-import org.andengine.extension.multiplayer.protocol.server.connector.SocketConnectionClientConnector;
-import org.andengine.extension.multiplayer.protocol.shared.SocketConnection;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.texture.region.ITextureRegion;
 
-import java.io.IOException;
-
+/**
+ * extends {@link com.gmail.yaroslavlancelot.spaceinvaders.activities.MainOperationsBaseGameActivity} with adding
+ * physical world capabilities to it
+ */
 public class PhysicWorldGameActivity extends MainOperationsBaseGameActivity {
     /** tag, which is used for debugging purpose */
     public static final String TAG = PhysicWorldGameActivity.class.getCanonicalName();
@@ -45,6 +43,7 @@ public class PhysicWorldGameActivity extends MainOperationsBaseGameActivity {
         onCreateSceneCallback.onCreateSceneFinished(mScene);
     }
 
+    /** bound for objects so they can't get out of the screen */
     private void createBounds() {
         LoggerHelper.methodInvocation(TAG, "createBounds");
         PhysicsFactory.createLineBody(

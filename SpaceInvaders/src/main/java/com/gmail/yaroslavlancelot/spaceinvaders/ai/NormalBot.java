@@ -7,6 +7,11 @@ import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 
 import java.util.concurrent.Callable;
 
+/**
+ * First created bot. Creates table of all units  with how one can kill another capabilities and try to
+ * build unit which will kill more your units which are not covered by other his units. If he cover all yours
+ * units with his own then will build strongest unit he have money to build.
+ */
 public class NormalBot implements Callable<Boolean> {
     public static final int DELAY_BETWEEN_ITERATIONS = 50;
     private final ITeam mBotTeam;

@@ -173,6 +173,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         onCreateResourcesCallback.onCreateResourcesFinished();
     }
 
+    /** return newly created team which can be managed by bot (not by user) */
     private ITeam createBotTeam(Color teamColor, IRace teamRace, String teamName) {
         ITeam team = new Team(teamName, teamRace);
         team.setTeamColor(teamColor);
@@ -184,6 +185,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         onPopulateSceneCallback.onPopulateSceneFinished();
     }
 
+    /** returns newly create team which can be managed by user (and bot as well) */
     private ITeam createUserTeam(Color teamColor, IRace teamRace, String teamName) {
         ITeam team = new Team(teamName, teamRace) {
             @Override
@@ -196,6 +198,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         return team;
     }
 
+    /** update money amount */
     private void updateMoneyTextOnScreen() {
         mMoneyText.setText(TeamUtils.getMoneyString(mMoneyTextPrefixString, mRedTeam));
     }
@@ -219,6 +222,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         initGameLogicAndRelatedElements();
     }
 
+    /** init red team and planet */
     private void initRedTeamAndPlanet() {
         mRedTeam.setTeamPlanet(createPlanet(0, (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2
                 + SizeConstants.ADDITION_MARGIN_FOR_PLANET,
@@ -248,6 +252,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         return planetStaticObject;
     }
 
+    /** init blue team and planet */
     private void initBlueTeamAndPlanet() {
         mBlueTeam.setTeamPlanet(createPlanet(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER
                 - SizeConstants.ADDITION_MARGIN_FOR_PLANET,
@@ -313,6 +318,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         hud.registerUpdateHandler(new TimerHandler(MONEY_UPDATE_TIME, true, new MoneyUpdateCycle(mTeams)));
     }
 
+    /** init scene touch events so user can collaborate with game by screen touches */
     private void initSceneTouch() {
         LoggerHelper.methodInvocation(TAG, "initSceneTouch");
         Display display = getWindowManager().getDefaultDisplay();

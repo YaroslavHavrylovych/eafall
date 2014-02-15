@@ -31,14 +31,26 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * activity which contains list about all available games in the network and from this activity you can perform all
+ * operations with network in this game. Like invoke server creation activity or connect to server etc.
+ */
 public class NetworkGameActivity extends Activity implements
+        // for discovering servers
         SocketServerDiscoveryClient.ISocketServerDiscoveryClientListener,
+        // for collaborate with discovered servers
         SocketConnectionServerConnector.ISocketConnectionServerConnectorListener,
+        // to handle callbacks from server
         PreGameStartCallbacksFromServer {
+
     public static final String TAG = NetworkGameActivity.class.getCanonicalName();
+    /** for discovering servers */
     private SocketServerDiscoveryClient mSocketServerDiscoveryClient;
+    /** list about all available servers */
     private ListView mServersListView;
+    /** adapter to display available servers (for list view) */
     private ArrayAdapter<String> mArrayAdapter;
+    /** all available servers will stored in this map to have access to their connectors by ip */
     private Map<String, GameServerConnector> mServerConnectorMap;
 
     @Override
@@ -56,7 +68,7 @@ public class NetworkGameActivity extends Activity implements
         createServerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                Intent singleGameIntent = new Intent(NetworkGameActivity.this, CreatingServerGameActivity.class);
+                Intent singleGameIntent = new Intent(NetworkGameActivity.this, ServerGameCreationActivity.class);
                 startActivity(singleGameIntent);
             }
         });
@@ -145,7 +157,7 @@ public class NetworkGameActivity extends Activity implements
                 gameServerConnector.removePreGameStartCallbacks(NetworkGameActivity.this);
                 GameServerConnector.setGameServerConnector(gameServerConnector);
                 // start new activity
-                Intent connectedToServerActivityIntent = new Intent(NetworkGameActivity.this, ClientConnectedToServerActivity.class);
+                Intent connectedToServerActivityIntent = new Intent(NetworkGameActivity.this, ClientWaitForGameActivity.class);
                 startActivity(connectedToServerActivityIntent);
             }
         });

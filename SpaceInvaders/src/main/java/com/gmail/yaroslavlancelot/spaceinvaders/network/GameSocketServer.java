@@ -15,6 +15,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Used by server to communicate with client. Sending and retrieving messages.
+ */
 public class GameSocketServer extends SocketServer<SocketConnectionClientConnector> implements MessagesConstants {
     public static final String TAG = GameServerConnector.class.getCanonicalName();
     private List<PreGameStartCallbacksFromClient> mPreGameStartCallbacksFromClientList = new ArrayList<PreGameStartCallbacksFromClient>(2);
@@ -35,7 +38,7 @@ public class GameSocketServer extends SocketServer<SocketConnectionClientConnect
             public void onHandleMessage(final ClientConnector<SocketConnection> pClientConnector, final IClientMessage pClientMessage) throws IOException {
                 LoggerHelper.printInformationMessageFromClient(TAG, "connection with client established");
                 synchronized (mPreGameStartCallbacksFromClientList) {
-                    for(PreGameStartCallbacksFromClient preGameStartCallbacksFromClient : mPreGameStartCallbacksFromClientList) {
+                    for (PreGameStartCallbacksFromClient preGameStartCallbacksFromClient : mPreGameStartCallbacksFromClientList) {
                         preGameStartCallbacksFromClient.clientConnectionEstablished(mClientIp);
                     }
                 }

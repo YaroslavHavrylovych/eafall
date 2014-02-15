@@ -7,15 +7,24 @@ import android.widget.TextView;
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.connector.GameServerConnector;
 
-public class ClientConnectedToServerActivity extends Activity {
+/**
+ * Client connected to server and waiting for game
+ */
+public class ClientWaitForGameActivity extends Activity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.client_connected_to_server_layout);
-        initServerIpView(findViewById(R.id.server_ip_string), GameServerConnector.getGameServerConnector().getServerIp());
+        initServerIpTextView(findViewById(R.id.server_ip_string), GameServerConnector.getGameServerConnector().getServerIp());
     }
 
-    private void initServerIpView(View view, String serverIpString) {
+    /**
+     * display server ip address (so client can know where he is connected)
+     *
+     * @param view to display server ip address
+     * @param serverIpString server ip to be shown
+     */
+    private void initServerIpTextView(View view, String serverIpString) {
         if (view == null) return;
         TextView serverIpTextView = (TextView) view;
         serverIpTextView.setText(serverIpString);

@@ -23,7 +23,7 @@
         </activity>
         <activity android:name=".activities.PhysicWorldGameActivity"/>
         <activity android:name=".activities.NetworkGameActivity"/>
-        <activity android:name=".activities.CreatingServerGameActivity"/>
-        <activity android:name=".activities.ClientConnectedToServerActivity"/>
+        <activity android:name=".activities.ServerGameCreationActivity"/>
+        <activity android:name=".activities.ClientWaitForGameActivity"/>
     </application>
 </manifest>

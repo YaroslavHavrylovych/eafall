@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 
+/**
+ * first game activity with menu etc.
+ */
 public class StartupActivity extends Activity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
