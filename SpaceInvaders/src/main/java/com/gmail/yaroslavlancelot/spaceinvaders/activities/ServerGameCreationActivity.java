@@ -1,24 +1,25 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.GameSocketServer;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.PreGameStartCallbacksFromClient;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.PreGameStart;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.connector.ClientConnectorListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.discovery.SocketDiscoveryServer;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import org.andengine.extension.multiplayer.protocol.util.WifiUtils;
 
-public class ServerGameCreationActivity extends Activity implements PreGameStartCallbacksFromClient {
+public class ServerGameCreationActivity extends Activity implements PreGameStart {
     public final static String TAG = ServerGameCreationActivity.class.getCanonicalName();
     public static final int FOR_CONVERT_IP = 256;
     private SocketDiscoveryServer mSocketDiscoveryServer;
     private byte[] mServerIp;
     private TextView mServerIpTextView;
-    private GameSocketServer mSocketServer;
+    private GameSocketServer mGameSocketServer;
     private TextView mNoOpponentsTextView;
     private TextView mClientConnectedTextView;
     private TextView mClientIpTextView;
@@ -32,6 +33,7 @@ public class ServerGameCreationActivity extends Activity implements PreGameStart
         initNoOpponentsTextView(findViewById(R.id.no_opponents_text_view));
         initClientConnectedTextView(findViewById(R.id.client_connected_text_view));
         initClientIpTextView(findViewById(R.id.client_ip_text_view));
+        initStartGameButton(findViewById(R.id.start_game));
     }
 
     private void initBackButton(View exitButton) {
@@ -40,6 +42,18 @@ public class ServerGameCreationActivity extends Activity implements PreGameStart
             @Override
             public void onClick(final View v) {
                 ServerGameCreationActivity.this.finish();
+            }
+        });
+    }
+
+    private void initStartGameButton(View startGameButton) {
+        if (startGameButton == null) return;
+        startGameButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                GameSocketServer.setGameSocketServer(mGameSocketServer);
+                Intent startServerIntent = new Intent(ServerGameCreationActivity.this, ServerGameActivity.class);
+                startActivity(startServerIntent);
             }
         });
     }
@@ -104,16 +118,16 @@ public class ServerGameCreationActivity extends Activity implements PreGameStart
     }
 
     private void initServer() {
-        mSocketServer = new GameSocketServer(SocketDiscoveryServer.SERVER_PORT, new ClientConnectorListener());
-        mSocketServer.addPreGameStartCallbacks(ServerGameCreationActivity.this);
-        mSocketServer.start();
+        mGameSocketServer = new GameSocketServer(SocketDiscoveryServer.SERVER_PORT, new ClientConnectorListener());
+        mGameSocketServer.addPreGameStartCallbacks(ServerGameCreationActivity.this);
+        mGameSocketServer.start();
     }
 
     private void stopServer() {
-        if (mSocketServer != null) {
-            mSocketServer.removePreGameStartCallbacks(ServerGameCreationActivity.this);
-            mSocketServer.terminate();
-            mSocketServer = null;
+        if (mGameSocketServer != null) {
+            mGameSocketServer.removePreGameStartCallbacks(ServerGameCreationActivity.this);
+            mGameSocketServer.terminate();
+            mGameSocketServer = null;
         }
     }
 
@@ -129,7 +143,7 @@ public class ServerGameCreationActivity extends Activity implements PreGameStart
             public void run() {
                 mNoOpponentsTextView.setVisibility(View.GONE);
                 mClientConnectedTextView.setVisibility(View.VISIBLE);
-                mClientIpTextView.setText(mSocketServer.getClientIp());
+                mClientIpTextView.setText(mGameSocketServer.getClientIp());
                 mClientIpTextView.setVisibility(View.VISIBLE);
             }
         });

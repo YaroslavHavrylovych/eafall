@@ -12,7 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.client.ConnectionEstablishClientMessage;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.PreGameStartCallbacksFromServer;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.server.PreGameStart;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.connector.GameServerConnector;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.discovery.SocketDiscoveryServer;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
@@ -35,15 +35,15 @@ import java.util.Map;
  * activity which contains list about all available games in the network and from this activity you can perform all
  * operations with network in this game. Like invoke server creation activity or connect to server etc.
  */
-public class NetworkGameActivity extends Activity implements
+public class GameServersListActivity extends Activity implements
         // for discovering servers
         SocketServerDiscoveryClient.ISocketServerDiscoveryClientListener,
         // for collaborate with discovered servers
         SocketConnectionServerConnector.ISocketConnectionServerConnectorListener,
         // to handle callbacks from server
-        PreGameStartCallbacksFromServer {
+        PreGameStart {
 
-    public static final String TAG = NetworkGameActivity.class.getCanonicalName();
+    public static final String TAG = GameServersListActivity.class.getCanonicalName();
     /** for discovering servers */
     private SocketServerDiscoveryClient mSocketServerDiscoveryClient;
     /** list about all available servers */
@@ -68,7 +68,7 @@ public class NetworkGameActivity extends Activity implements
         createServerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                Intent singleGameIntent = new Intent(NetworkGameActivity.this, ServerGameCreationActivity.class);
+                Intent singleGameIntent = new Intent(GameServersListActivity.this, ServerGameCreationActivity.class);
                 startActivity(singleGameIntent);
             }
         });
@@ -79,7 +79,7 @@ public class NetworkGameActivity extends Activity implements
         directIpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                final Dialog directIpDialog = new Dialog(NetworkGameActivity.this);
+                final Dialog directIpDialog = new Dialog(GameServersListActivity.this);
                 directIpDialog.setContentView(R.layout.direct_ip_layout);
                 directIpDialog.findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -110,7 +110,7 @@ public class NetworkGameActivity extends Activity implements
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                NetworkGameActivity.this.finish();
+                GameServersListActivity.this.finish();
             }
         });
     }
@@ -154,10 +154,10 @@ public class NetworkGameActivity extends Activity implements
                     LoggerHelper.printErrorMessage(TAG, e.toString());
                     return;
                 }
-                gameServerConnector.removePreGameStartCallbacks(NetworkGameActivity.this);
+                gameServerConnector.removePreGameStartCallbacks(GameServersListActivity.this);
                 GameServerConnector.setGameServerConnector(gameServerConnector);
                 // start new activity
-                Intent connectedToServerActivityIntent = new Intent(NetworkGameActivity.this, ClientWaitForGameActivity.class);
+                Intent connectedToServerActivityIntent = new Intent(GameServersListActivity.this, ClientWaitForGameActivity.class);
                 startActivity(connectedToServerActivityIntent);
             }
         });
@@ -170,20 +170,24 @@ public class NetworkGameActivity extends Activity implements
     protected void onPause() {
         super.onPause();
         stopSocketDiscoveryClient();
+        stopClients();
     }
 
     private void stopSocketDiscoveryClient() {
         if (mSocketServerDiscoveryClient != null) {
             mSocketServerDiscoveryClient.terminate();
             mSocketServerDiscoveryClient = null;
-            if (mServerConnectorMap != null) {
-                synchronized (mServerConnectorMap) {
-                    for (String serverIp : mServerConnectorMap.keySet()) {
-                        mServerConnectorMap.get(serverIp).terminate();
-                    }
+        }
+    }
+
+    private void stopClients() {
+        if (mServerConnectorMap != null) {
+            synchronized (mServerConnectorMap) {
+                for (String serverIp : mServerConnectorMap.keySet()) {
+                    mServerConnectorMap.get(serverIp).terminate();
                 }
-                mServerConnectorMap = null;
             }
+            mServerConnectorMap = null;
         }
     }
 
@@ -191,6 +195,7 @@ public class NetworkGameActivity extends Activity implements
     protected void onStop() {
         super.onStop();
         stopSocketDiscoveryClient();
+        stopClients();
     }
 
     @Override
@@ -209,8 +214,8 @@ public class NetworkGameActivity extends Activity implements
             public void run() {
                 try {
                     synchronized (mServerConnectorMap) {
-                        GameServerConnector serverConnector = new GameServerConnector(ipAddress, port, NetworkGameActivity.this);
-                        serverConnector.addPreGameStartCallbacks(NetworkGameActivity.this);
+                        GameServerConnector serverConnector = new GameServerConnector(ipAddress, port, GameServersListActivity.this);
+                        serverConnector.addPreGameStartCallbacks(GameServersListActivity.this);
                         serverConnector.start();
                         mServerConnectorMap.put(ipAddress, serverConnector);
                     }

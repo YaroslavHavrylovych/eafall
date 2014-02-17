@@ -29,7 +29,7 @@ public class StartupActivity extends Activity {
         singleGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                Intent singleGameIntent = new Intent(StartupActivity.this, NetworkGameActivity.class);
+                Intent singleGameIntent = new Intent(StartupActivity.this, GameServersListActivity.class);
                 startActivity(singleGameIntent);
             }
         });

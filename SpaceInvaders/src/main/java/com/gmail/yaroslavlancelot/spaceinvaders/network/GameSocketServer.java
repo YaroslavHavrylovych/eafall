@@ -1,7 +1,9 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.network;
 
+import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.client.BuildingCreatedClientMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.client.ConnectionEstablishClientMessage;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.PreGameStartCallbacksFromClient;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.InGame;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.PreGameStart;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.connector.GameServerConnector;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import org.andengine.extension.multiplayer.protocol.adt.message.client.IClientMessage;
@@ -20,8 +22,12 @@ import java.util.List;
  */
 public class GameSocketServer extends SocketServer<SocketConnectionClientConnector> implements MessagesConstants {
     public static final String TAG = GameServerConnector.class.getCanonicalName();
-    private List<PreGameStartCallbacksFromClient> mPreGameStartCallbacksFromClientList = new ArrayList<PreGameStartCallbacksFromClient>(2);
+    //TODO it should be just PreGameStart not a list
+    private List<PreGameStart> mPreGameStartList = new ArrayList<PreGameStart>(2);
     private String mClientIp;
+    //TODO it should be just InGame not a list
+    private List<InGame> mInGameList = new ArrayList<InGame>(2);
+    private static GameSocketServer sGameSocketServer;
 
     public GameSocketServer(final int pPort, final ClientConnector.IClientConnectorListener<SocketConnection> pClientConnectorListener) {
         super(pPort, pClientConnectorListener);
@@ -37,9 +43,22 @@ public class GameSocketServer extends SocketServer<SocketConnectionClientConnect
             @Override
             public void onHandleMessage(final ClientConnector<SocketConnection> pClientConnector, final IClientMessage pClientMessage) throws IOException {
                 LoggerHelper.printInformationMessageFromClient(TAG, "connection with client established");
-                synchronized (mPreGameStartCallbacksFromClientList) {
-                    for (PreGameStartCallbacksFromClient preGameStartCallbacksFromClient : mPreGameStartCallbacksFromClientList) {
-                        preGameStartCallbacksFromClient.clientConnectionEstablished(mClientIp);
+                synchronized (mPreGameStartList) {
+                    for (PreGameStart preGameStart : mPreGameStartList) {
+                        preGameStart.clientConnectionEstablished(mClientIp);
+                    }
+                }
+            }
+        });
+
+        clientConnector.registerClientMessage(FLAG_MESSAGE_CLIENT_BUILDING_CREATED, BuildingCreatedClientMessage.class, new IClientMessageHandler<SocketConnection>() {
+            @Override
+            public void onHandleMessage(final ClientConnector<SocketConnection> pClientConnector, final IClientMessage pClientMessage) throws IOException {
+                LoggerHelper.printInformationMessageFromClient(TAG, "connection with client established");
+                int buildingId = ((BuildingCreatedClientMessage) pClientMessage).getBuildingId();
+                synchronized (mInGameList) {
+                    for (InGame inGame : mInGameList) {
+                        inGame.newBuildingCreate(buildingId);
                     }
                 }
             }
@@ -53,15 +72,37 @@ public class GameSocketServer extends SocketServer<SocketConnectionClientConnect
     }
 
 
-    public void addPreGameStartCallbacks(PreGameStartCallbacksFromClient preGameStartCallbacksFromClient) {
-        synchronized (mPreGameStartCallbacksFromClientList) {
-            mPreGameStartCallbacksFromClientList.add(preGameStartCallbacksFromClient);
+    public void addPreGameStartCallbacks(PreGameStart preGameStart) {
+        synchronized (mPreGameStartList) {
+            mPreGameStartList.add(preGameStart);
         }
     }
 
-    public void removePreGameStartCallbacks(PreGameStartCallbacksFromClient preGameStartCallbacksFromClient) {
-        synchronized (mPreGameStartCallbacksFromClientList) {
-            mPreGameStartCallbacksFromClientList.add(preGameStartCallbacksFromClient);
+    public void removePreGameStartCallbacks(PreGameStart preGameStart) {
+        synchronized (mPreGameStartList) {
+            mPreGameStartList.add(preGameStart);
         }
+    }
+
+    public void addInGameCallbacks(InGame inGame) {
+        synchronized (mPreGameStartList) {
+            mInGameList.add(inGame);
+        }
+    }
+
+    public void removeInGameCallbacks(InGame inGame) {
+        synchronized (mPreGameStartList) {
+            mInGameList.remove(inGame);
+        }
+    }
+
+    public static GameSocketServer getGameSocketServer() {
+        return sGameSocketServer;
+    }
+
+    public static GameSocketServer setGameSocketServer(GameSocketServer gameSocketServer) {
+        GameSocketServer oldGameSocketServer = sGameSocketServer;
+        sGameSocketServer = gameSocketServer;
+        return oldGameSocketServer;
     }
 }

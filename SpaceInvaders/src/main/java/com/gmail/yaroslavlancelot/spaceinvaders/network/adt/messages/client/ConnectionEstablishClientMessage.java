@@ -8,42 +8,21 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class ConnectionEstablishClientMessage extends ClientMessage implements MessagesConstants {
-    // ===========================================================
-    // Constants
-    // ===========================================================
-
     public static final short PROTOCOL_VERSION = 1;
-
-    // ===========================================================
-    // Fields
-    // ===========================================================
 
     private short mProtocolVersion;
 
-    // ===========================================================
-    // Constructors
-    // ===========================================================
-
     @Deprecated
     public ConnectionEstablishClientMessage() {
-
     }
 
     public ConnectionEstablishClientMessage(final short pProtocolVersion) {
         this.mProtocolVersion = pProtocolVersion;
     }
 
-    // ===========================================================
-    // Getter & Setter
-    // ===========================================================
-
     public short getProtocolVersion() {
         return this.mProtocolVersion;
     }
-
-    // ===========================================================
-    // Methods for/from SuperClass/Interfaces
-    // ===========================================================
 
     @Override
     public short getFlag() {
@@ -59,12 +38,4 @@ public class ConnectionEstablishClientMessage extends ClientMessage implements M
     protected void onWriteTransmissionData(final DataOutputStream pDataOutputStream) throws IOException {
         pDataOutputStream.writeShort(this.mProtocolVersion);
     }
-
-    // ===========================================================
-    // Methods
-    // ===========================================================
-
-    // ===========================================================
-    // Inner and Anonymous Classes
-    // ===========================================================
 }

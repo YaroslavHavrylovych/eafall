@@ -85,7 +85,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     /** red team */
     private ITeam mRedTeam;
     /** blue team */
-    private ITeam mBlueTeam;
+    protected ITeam mBlueTeam;
     /** game camera */
     private SmoothCamera mCamera;
     /** object, which display money status to user */
