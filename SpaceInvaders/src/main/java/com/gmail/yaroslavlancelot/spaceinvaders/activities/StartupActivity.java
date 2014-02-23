@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
-import com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame.PhysicWorldGameActivity;
+import com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame.SinglePlayerGameActivity;
 
 /**
  * first game activity with menu etc.
@@ -41,7 +41,7 @@ public class StartupActivity extends Activity {
         singleGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                Intent singleGameIntent = new Intent(StartupActivity.this, PhysicWorldGameActivity.class);
+                Intent singleGameIntent = new Intent(StartupActivity.this, SinglePlayerGameActivity.class);
                 startActivity(singleGameIntent);
             }
         });

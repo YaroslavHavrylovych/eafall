@@ -1,18 +1,15 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
-import com.badlogic.gdx.math.Vector2;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.GameSocketServer;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.InGame;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
-import org.andengine.extension.physics.box2d.PhysicsWorld;
 
 /**
- * Server game. Extends physical world and will add some handlers for server actions and
- * from client.
+ * Single player game
  */
-public class ServerGameActivity extends PhysicWorldGameActivity implements InGame {
+public class SinglePlayerGameActivity extends PhysicWorldGameActivity implements InGame {
     private GameSocketServer mGameSocketServer;
 
     @Override
@@ -37,7 +34,7 @@ public class ServerGameActivity extends PhysicWorldGameActivity implements InGam
             @Override
             public void run() {
                 mGameSocketServer = GameSocketServer.getGameSocketServer();
-                mGameSocketServer.addInGameCallbacks(ServerGameActivity.this);
+                mGameSocketServer.addInGameCallbacks(SinglePlayerGameActivity.this);
             }
         });
         return super.onCreateEngineOptions();

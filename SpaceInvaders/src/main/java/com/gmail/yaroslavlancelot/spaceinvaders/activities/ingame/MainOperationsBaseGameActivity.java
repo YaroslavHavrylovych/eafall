@@ -33,6 +33,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.Localizable;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations;
 import org.andengine.audio.music.Music;
 import org.andengine.audio.sound.Sound;
+import org.andengine.engine.camera.Camera;
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -43,6 +44,7 @@ import org.andengine.entity.IEntity;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.shape.IAreaShape;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.controller.MultiTouch;
 import org.andengine.opengl.font.FontFactory;
@@ -51,6 +53,7 @@ import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.util.GLState;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.color.Color;
@@ -74,8 +77,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     /*
      * ITexture definitions
      */
-    /** currently viewed by user screen */
-    protected Scene mScene;
+    /** game scene */
+    protected Scene mGameScene;
     /** contains game obstacles and other static objects */
     private HashMap<String, StaticObject> mStaticObjects = new HashMap<String, StaticObject>();
     /** contains whole game units/warriors */
@@ -98,6 +101,11 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     private MainSceneTouchListener mMainSceneTouchListener;
     /** background theme */
     private Music mBackgroundMusic;
+    /*
+     * splash screen
+     */
+    protected Scene mSplashScene;
+    private Sprite mSplash;
 
     @Override
     public EngineOptions onCreateEngineOptions() {
@@ -126,11 +134,55 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         return engineOptions;
     }
 
+    protected abstract void changeSplashSceneWithGameScene();
+
     @Override
     public void onCreateResources(OnCreateResourcesCallback onCreateResourcesCallback) {
         LoggerHelper.methodInvocation(TAG, "onCreateResources");
+
         mTextureRegionHolderUtils = TextureRegionHolderUtils.getInstance();
 
+        BitmapTextureAtlas splashTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 128, 32, TextureOptions.DEFAULT);
+        mTextureRegionHolderUtils.addElement(GameStringsConstantsAndUtils.KEY_SPLASH_SCREEN,
+                BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+                        splashTextureAtlas, this, GameStringsConstantsAndUtils.FILE_SPLASH_SCREEN, 0, 0));
+        splashTextureAtlas.load();
+
+        onCreateResourcesCallback.onCreateResourcesFinished();
+    }
+
+    @Override
+    public void onCreateScene(final OnCreateSceneCallback onCreateSceneCallback) {
+        LoggerHelper.methodInvocation(TAG, "onCreateScene");
+
+        initSplashScene();
+        onCreateSceneCallback.onCreateSceneFinished(mSplashScene);
+
+        changeSplashSceneWithGameScene();
+    }
+
+    protected void initSplashScene()
+    {
+        mSplashScene = new Scene();
+        mSplash = new Sprite(0, 0, mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_SPLASH_SCREEN),
+                mEngine.getVertexBufferObjectManager())
+        {
+            @Override
+            protected void preDraw(GLState pGLState, Camera pCamera)
+            {
+                super.preDraw(pGLState, pCamera);
+                pGLState.enableDither();
+            }
+        };
+
+        mSplash.setScale(4f);
+        mSplash.setPosition((SizeConstants.GAME_FIELD_WIDTH - mSplash.getWidth()) * 0.5f,
+                (SizeConstants.GAME_FIELD_HEIGHT - mSplash.getHeight()) * 0.5f);
+        mSplashScene.attachChild(mSplash);
+    }
+
+    protected void onLoadGameResources() {
+        LoggerHelper.methodInvocation(TAG, "onCreateGameResources");
         // user
         Color teamColor = Color.RED;
         IRace userRace = new Imperials(teamColor, this, this);
@@ -169,8 +221,6 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
             mBackgroundMusic.setLooping(true);
             mBackgroundMusic.getMediaPlayer().setOnPreparedListener(this);
         }
-
-        onCreateResourcesCallback.onCreateResourcesFinished();
     }
 
     /** return newly created team which can be managed by bot (not by user) */
@@ -204,8 +254,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     }
 
     protected void onInitScene() {
-        mScene = new Scene();
-        mScene.setBackground(new Background(0, 0, 0));
+        mGameScene = new Scene();
+        mGameScene.setBackground(new Background(0, 0, 0));
     }
 
     protected void onInitSceneObjects() {
@@ -328,7 +378,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         display.getMetrics(metrics);
         float screenToSceneRatio = metrics.widthPixels / SizeConstants.GAME_FIELD_WIDTH;
         mMainSceneTouchListener = new MainSceneTouchListener(mCamera, this, screenToSceneRatio);
-        mScene.setOnSceneTouchListener(mMainSceneTouchListener);
+        mGameScene.setOnSceneTouchListener(mMainSceneTouchListener);
     }
 
     @Override
@@ -355,21 +405,21 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         MainOperationsBaseGameActivity.this.runOnUpdateThread(new Runnable() {
             @Override
             public void run() {
-                mScene.unregisterTouchArea(shapeArea);
-                mScene.detachChild(shapeArea);
+                mGameScene.unregisterTouchArea(shapeArea);
+                mGameScene.detachChild(shapeArea);
             }
         });
     }
 
     @Override
     public void attachEntity(final IEntity entity) {
-        mScene.attachChild(entity);
+        mGameScene.attachChild(entity);
     }
 
     @Override
     public void attachEntityWithTouchArea(final IAreaShape entity) {
-        mScene.attachChild(entity);
-        mScene.registerTouchArea(entity);
+        mGameScene.attachChild(entity);
+        mGameScene.registerTouchArea(entity);
     }
 
     @Override

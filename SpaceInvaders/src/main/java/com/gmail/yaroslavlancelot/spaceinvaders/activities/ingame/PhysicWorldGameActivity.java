@@ -20,7 +20,7 @@ import org.andengine.opengl.texture.region.ITextureRegion;
  * extends {@link MainOperationsBaseGameActivity} with adding
  * physical world capabilities to it
  */
-public class PhysicWorldGameActivity extends MainOperationsBaseGameActivity {
+public abstract class PhysicWorldGameActivity extends MainOperationsBaseGameActivity {
     /** tag, which is used for debugging purpose */
     public static final String TAG = PhysicWorldGameActivity.class.getCanonicalName();
     /** {@link com.badlogic.gdx.physics.box2d.FixtureDef} for obstacles (static bodies) */
@@ -28,19 +28,19 @@ public class PhysicWorldGameActivity extends MainOperationsBaseGameActivity {
     /** current game physics world */
     private PhysicsWorld mPhysicsWorld;
 
-    @Override
-    public void onCreateScene(final OnCreateSceneCallback onCreateSceneCallback) {
-        LoggerHelper.methodInvocation(TAG, "onCreateScene");
+    /**
+     * initialize physic world. For using in child classes without accessing private fields.
+     */
+    protected void initPhysicWorld() {
+        onLoadGameResources();
 
         onInitScene();
 
         mPhysicsWorld = new PhysicsWorld(new Vector2(0, 0), false);
-        mScene.registerUpdateHandler(mPhysicsWorld);
+        mGameScene.registerUpdateHandler(mPhysicsWorld);
 
         createBounds();
         onInitSceneObjects();
-
-        onCreateSceneCallback.onCreateSceneFinished(mScene);
     }
 
     /** bound for objects so they can't get out of the screen */

@@ -6,6 +6,8 @@ import java.io.File;
 public final class GameStringsConstantsAndUtils {
     /** sun file name */
     public static final String FILE_SUN = "images/sun.png";
+    /** splash screen file name */
+    public static final String FILE_SPLASH_SCREEN = "images/splash_screen.png";
     /** file name for red planet */
     public static final String FILE_RED_PLANET = "images/planet_1.png";
     /** file name for blue planet */
@@ -22,6 +24,8 @@ public final class GameStringsConstantsAndUtils {
     public static final String BLUE_TEAM_NAME = "blue";
     /** key used to identify money font */
     public static final String KEY_FONT_MONEY = "key_money_font";
+    /** splash screen key */
+    public static final String KEY_SPLASH_SCREEN = "key_splash_screen";
     public static final String sSeparator = File.separator;
 
     /**
