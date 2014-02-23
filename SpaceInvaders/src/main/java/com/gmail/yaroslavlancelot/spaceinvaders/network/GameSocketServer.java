@@ -72,13 +72,13 @@ public class GameSocketServer extends SocketServer<SocketConnectionClientConnect
     }
 
 
-    public void addPreGameStartCallbacks(PreGameStart preGameStart) {
+    public void addPreGameStartCallback(PreGameStart preGameStart) {
         synchronized (mPreGameStartList) {
             mPreGameStartList.add(preGameStart);
         }
     }
 
-    public void removePreGameStartCallbacks(PreGameStart preGameStart) {
+    public void removePreGameStartCallback(PreGameStart preGameStart) {
         synchronized (mPreGameStartList) {
             mPreGameStartList.add(preGameStart);
         }

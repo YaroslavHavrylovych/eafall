@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.activities;
+package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
@@ -249,6 +249,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         PlanetStaticObject planetStaticObject = new PlanetStaticObject(x, y, textureRegion, this, team);
         planetStaticObject.setObjectDestroyedListener(new PlanetDestroyedListener(team, this));
         mStaticObjects.put(key, planetStaticObject);
+        attachEntity(planetStaticObject);
         return planetStaticObject;
     }
 
@@ -278,6 +279,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
 
         SunStaticObject sunStaticObject = new SunStaticObject(x, y, textureRegion, mEngine.getVertexBufferObjectManager());
         mStaticObjects.put(key, sunStaticObject);
+        attachEntity(sunStaticObject);
         return sunStaticObject;
     }
 

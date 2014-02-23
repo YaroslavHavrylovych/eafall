@@ -154,7 +154,7 @@ public class GameServersListActivity extends Activity implements
                     LoggerHelper.printErrorMessage(TAG, e.toString());
                     return;
                 }
-                gameServerConnector.removePreGameStartCallbacks(GameServersListActivity.this);
+                gameServerConnector.removePreGameStartCallback(GameServersListActivity.this);
                 GameServerConnector.setGameServerConnector(gameServerConnector);
                 // start new activity
                 Intent connectedToServerActivityIntent = new Intent(GameServersListActivity.this, ClientWaitForGameActivity.class);
@@ -215,7 +215,7 @@ public class GameServersListActivity extends Activity implements
                 try {
                     synchronized (mServerConnectorMap) {
                         GameServerConnector serverConnector = new GameServerConnector(ipAddress, port, GameServersListActivity.this);
-                        serverConnector.addPreGameStartCallbacks(GameServersListActivity.this);
+                        serverConnector.addPreGameStartCallback(GameServersListActivity.this);
                         serverConnector.start();
                         mServerConnectorMap.put(ipAddress, serverConnector);
                     }

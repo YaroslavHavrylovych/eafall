@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.activities;
+package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.network.GameSocketServer;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.InGame;
@@ -13,13 +13,17 @@ public class ServerGameActivity extends PhysicWorldGameActivity implements InGam
 
     @Override
     public EngineOptions onCreateEngineOptions() {
-        mGameSocketServer = GameSocketServer.getGameSocketServer();
-        mGameSocketServer.addInGameCallbacks(this);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                mGameSocketServer = GameSocketServer.getGameSocketServer();
+                mGameSocketServer.addInGameCallbacks(ServerGameActivity.this);
+            }
+        });
         return super.onCreateEngineOptions();
     }
 
     @Override
-
     public void newBuildingCreate(int buildingId) {
         if (mBlueTeam != null && mBlueTeam.getTeamPlanet() != null)
             mBlueTeam.getTeamPlanet().createBuildingById(buildingId);

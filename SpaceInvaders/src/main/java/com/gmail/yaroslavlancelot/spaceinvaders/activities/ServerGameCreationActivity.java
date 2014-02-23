@@ -6,12 +6,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
+import com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame.ServerGameActivity;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.GameSocketServer;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.StartingGameServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.PreGameStart;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.connector.ClientConnectorListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.discovery.SocketDiscoveryServer;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import org.andengine.extension.multiplayer.protocol.util.WifiUtils;
+
+import java.io.IOException;
 
 public class ServerGameCreationActivity extends Activity implements PreGameStart {
     public final static String TAG = ServerGameCreationActivity.class.getCanonicalName();
@@ -52,6 +56,12 @@ public class ServerGameCreationActivity extends Activity implements PreGameStart
             @Override
             public void onClick(final View v) {
                 GameSocketServer.setGameSocketServer(mGameSocketServer);
+                try {
+                    mGameSocketServer.sendBroadcastServerMessage(new StartingGameServerMessage());
+                } catch (IOException ioException) {
+                    LoggerHelper.printErrorMessage(TAG, ioException.getMessage());
+                    return;
+                }
                 Intent startServerIntent = new Intent(ServerGameCreationActivity.this, ServerGameActivity.class);
                 startActivity(startServerIntent);
             }
@@ -119,13 +129,13 @@ public class ServerGameCreationActivity extends Activity implements PreGameStart
 
     private void initServer() {
         mGameSocketServer = new GameSocketServer(SocketDiscoveryServer.SERVER_PORT, new ClientConnectorListener());
-        mGameSocketServer.addPreGameStartCallbacks(ServerGameCreationActivity.this);
+        mGameSocketServer.addPreGameStartCallback(ServerGameCreationActivity.this);
         mGameSocketServer.start();
     }
 
     private void stopServer() {
         if (mGameSocketServer != null) {
-            mGameSocketServer.removePreGameStartCallbacks(ServerGameCreationActivity.this);
+            mGameSocketServer.removePreGameStartCallback(ServerGameCreationActivity.this);
             mGameSocketServer.terminate();
             mGameSocketServer = null;
         }

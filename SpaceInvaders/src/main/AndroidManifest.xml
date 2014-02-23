@@ -21,10 +21,11 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activities.PhysicWorldGameActivity"/>
+        <activity android:name=".activities.ingame.PhysicWorldGameActivity"/>
         <activity android:name=".activities.GameServersListActivity"/>
         <activity android:name=".activities.ServerGameCreationActivity"/>
         <activity android:name=".activities.ClientWaitForGameActivity"/>
-        <activity android:name=".activities.ServerGameActivity"/>
+        <activity android:name=".activities.ingame.ServerGameActivity"/>
+        <activity android:name=".activities.ingame.ClientGameActivity"/>
     </application>
 </manifest>

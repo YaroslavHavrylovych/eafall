@@ -1,6 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.network.connector;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.network.MessagesConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.StartingGameServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.WaitingForPlayersServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.server.PreGameStart;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
@@ -31,10 +32,22 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
         registerServerMessage(FLAG_MESSAGE_SERVER_WAITING_FOR_PLAYERS, WaitingForPlayersServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
-                LoggerHelper.printInformationMessageFromClient(TAG, "server waiting for players.");
+                LoggerHelper.printInformationMessageFromClient(TAG, "server waiting for players");
                 synchronized (mPreGameStartList) {
                     for (PreGameStart preGameStart : mPreGameStartList) {
                         preGameStart.gameWaitingForPlayers(mServerIp);
+                    }
+                }
+            }
+        });
+
+        registerServerMessage(FLAG_MESSAGE_SERVER_STARTING_GAME, StartingGameServerMessage.class, new IServerMessageHandler<SocketConnection>() {
+            @Override
+            public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
+                LoggerHelper.printInformationMessageFromClient(TAG, "starting game");
+                synchronized (mPreGameStartList) {
+                    for (PreGameStart preGameStart : mPreGameStartList) {
+                        preGameStart.gameStart(mServerIp);
                     }
                 }
             }
@@ -45,13 +58,13 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
         return mServerIp;
     }
 
-    public void addPreGameStartCallbacks(PreGameStart preGameStart) {
+    public void addPreGameStartCallback(PreGameStart preGameStart) {
         synchronized (mPreGameStartList) {
             mPreGameStartList.add(preGameStart);
         }
     }
 
-    public void removePreGameStartCallbacks(PreGameStart preGameStart) {
+    public void removePreGameStartCallback(PreGameStart preGameStart) {
         synchronized (mPreGameStartList) {
             mPreGameStartList.remove(preGameStart);
         }

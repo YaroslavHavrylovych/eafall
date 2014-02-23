@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.activities;
+package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -17,7 +17,7 @@ import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.texture.region.ITextureRegion;
 
 /**
- * extends {@link com.gmail.yaroslavlancelot.spaceinvaders.activities.MainOperationsBaseGameActivity} with adding
+ * extends {@link MainOperationsBaseGameActivity} with adding
  * physical world capabilities to it
  */
 public class PhysicWorldGameActivity extends MainOperationsBaseGameActivity {
@@ -62,7 +62,6 @@ public class PhysicWorldGameActivity extends MainOperationsBaseGameActivity {
         PlanetStaticObject planetStaticObject = super.createPlanet(x, y, textureRegion, key, team);
         Body body = PhysicsFactory.createCircleBody(mPhysicsWorld, planetStaticObject, BodyDef.BodyType.StaticBody, mStaticBodyFixtureDef);
         planetStaticObject.setBody(body);
-        attachEntity(planetStaticObject);
         return planetStaticObject;
     }
 
@@ -71,7 +70,6 @@ public class PhysicWorldGameActivity extends MainOperationsBaseGameActivity {
         LoggerHelper.methodInvocation(TAG, "createSun");
         SunStaticObject sunStaticObject = super.createSun();
         sunStaticObject.setBody(PhysicsFactory.createCircleBody(mPhysicsWorld, sunStaticObject, BodyDef.BodyType.StaticBody, mStaticBodyFixtureDef));
-        attachEntity(sunStaticObject);
         return sunStaticObject;
     }
 
