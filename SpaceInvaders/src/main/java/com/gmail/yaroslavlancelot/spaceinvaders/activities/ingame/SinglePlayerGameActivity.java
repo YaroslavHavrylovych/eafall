@@ -20,7 +20,7 @@ public class SinglePlayerGameActivity extends PhysicWorldGameActivity implements
             {
                 mEngine.unregisterUpdateHandler(pTimerHandler);
 
-                initPhysicWorld();
+                initPhysicWorld(false, false);
 
                 mSplashScene.detachSelf();
                 mEngine.setScene(mGameScene);

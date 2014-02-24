@@ -31,7 +31,7 @@ public abstract class PhysicWorldGameActivity extends MainOperationsBaseGameActi
     /**
      * initialize physic world. For using in child classes without accessing private fields.
      */
-    protected void initPhysicWorld() {
+    protected void initPhysicWorld(boolean isFirstPlanetFake, boolean isSecondPlanetFake) {
         onLoadGameResources();
 
         onInitScene();
@@ -40,7 +40,7 @@ public abstract class PhysicWorldGameActivity extends MainOperationsBaseGameActi
         mGameScene.registerUpdateHandler(mPhysicsWorld);
 
         createBounds();
-        onInitSceneObjects();
+        onInitSceneObjects(isFirstPlanetFake, isSecondPlanetFake);
     }
 
     /** bound for objects so they can't get out of the screen */
@@ -58,8 +58,8 @@ public abstract class PhysicWorldGameActivity extends MainOperationsBaseGameActi
     }
 
     @Override
-    protected PlanetStaticObject createPlanet(final float x, final float y, final ITextureRegion textureRegion, final String key, final ITeam team) {
-        PlanetStaticObject planetStaticObject = super.createPlanet(x, y, textureRegion, key, team);
+    protected PlanetStaticObject createPlanet(final float x, final float y, final ITextureRegion textureRegion, final String key, final ITeam team, boolean isFakePlanet) {
+        PlanetStaticObject planetStaticObject = super.createPlanet(x, y, textureRegion, key, team, isFakePlanet);
         Body body = PhysicsFactory.createCircleBody(mPhysicsWorld, planetStaticObject, BodyDef.BodyType.StaticBody, mStaticBodyFixtureDef);
         planetStaticObject.setBody(body);
         return planetStaticObject;

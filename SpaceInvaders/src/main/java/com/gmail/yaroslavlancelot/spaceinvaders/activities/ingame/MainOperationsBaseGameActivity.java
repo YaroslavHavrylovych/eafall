@@ -86,7 +86,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     /** all teams in current game */
     private List<ITeam> mTeams = new ArrayList<ITeam>();
     /** red team */
-    private ITeam mRedTeam;
+    protected ITeam mRedTeam;
     /** blue team */
     protected ITeam mBlueTeam;
     /** game camera */
@@ -183,16 +183,6 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
 
     protected void onLoadGameResources() {
         LoggerHelper.methodInvocation(TAG, "onCreateGameResources");
-        // user
-        Color teamColor = Color.RED;
-        IRace userRace = new Imperials(teamColor, this, this);
-        userRace.loadResources(getTextureManager(), this);
-        mRedTeam = createUserTeam(teamColor, userRace, GameStringsConstantsAndUtils.RED_TEAM_NAME);
-        // bot
-        teamColor = Color.BLUE;
-        IRace botRace = new Imperials(teamColor, this, this);
-        botRace.loadResources(getTextureManager(), this);
-        mBlueTeam = createBotTeam(teamColor, botRace, GameStringsConstantsAndUtils.BLUE_TEAM_NAME);
 
         //* bigger objects
         BitmapTextureAtlas biggerObjectsTexture = new BitmapTextureAtlas(getTextureManager(),
@@ -206,7 +196,6 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
                 BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, this, GameStringsConstantsAndUtils.FILE_BLUE_PLANET,
                         SizeConstants.PLANET_DIAMETER, SizeConstants.FILE_SUN_DIAMETER));
         biggerObjectsTexture.load();
-
 
         // font
         IFont font = FontFactory.create(this.getFontManager(), this.getTextureManager(), 256, 256,
@@ -224,7 +213,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     }
 
     /** return newly created team which can be managed by bot (not by user) */
-    private ITeam createBotTeam(Color teamColor, IRace teamRace, String teamName) {
+    protected ITeam createTeam(Color teamColor, IRace teamRace, String teamName) {
         ITeam team = new Team(teamName, teamRace);
         team.setTeamColor(teamColor);
         return team;
@@ -236,7 +225,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     }
 
     /** returns newly create team which can be managed by user (and bot as well) */
-    private ITeam createUserTeam(Color teamColor, IRace teamRace, String teamName) {
+    protected ITeam createTeamWithMoneyUpdate(Color teamColor, IRace teamRace, String teamName) {
         ITeam team = new Team(teamName, teamRace) {
             @Override
             public void changeMoney(final int delta) {
@@ -258,11 +247,11 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         mGameScene.setBackground(new Background(0, 0, 0));
     }
 
-    protected void onInitSceneObjects() {
+    protected void onInitSceneObjects(boolean isFirstPlanetFake, boolean isSecondPlanetFake) {
         // sun and planets
         createSun();
-        initRedTeamAndPlanet();
-        initBlueTeamAndPlanet();
+        initRedTeamAndPlanet(isFirstPlanetFake);
+        initBlueTeamAndPlanet(isSecondPlanetFake);
 
         // set enemies
         mRedTeam.setEnemyTeam(mBlueTeam);
@@ -273,11 +262,11 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     }
 
     /** init red team and planet */
-    private void initRedTeamAndPlanet() {
+    private void initRedTeamAndPlanet(boolean isFakePlanet) {
         mRedTeam.setTeamPlanet(createPlanet(0, (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2
                 + SizeConstants.ADDITION_MARGIN_FOR_PLANET,
                 mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_RED_PLANET), GameStringsConstantsAndUtils.KEY_RED_PLANET,
-                mRedTeam));
+                mRedTeam, isFakePlanet));
         mRedTeam.getTeamPlanet().setSpawnPoint(SizeConstants.PLANET_DIAMETER / 2 + SizeConstants.UNIT_SIZE + 2,
                 SizeConstants.GAME_FIELD_HEIGHT / 2 + SizeConstants.ADDITION_MARGIN_FOR_PLANET);
         mTeams.add(mRedTeam);
@@ -294,9 +283,9 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
      *
      * @return newly created {@link PlanetStaticObject}
      */
-    protected PlanetStaticObject createPlanet(float x, float y, ITextureRegion textureRegion, String key, ITeam team) {
+    protected PlanetStaticObject createPlanet(float x, float y, ITextureRegion textureRegion, String key, ITeam team, boolean isFakePlanet) {
         LoggerHelper.methodInvocation(TAG, "createPlanet");
-        PlanetStaticObject planetStaticObject = new PlanetStaticObject(x, y, textureRegion, this, team);
+        PlanetStaticObject planetStaticObject = new PlanetStaticObject(x, y, textureRegion, this, team, isFakePlanet);
         planetStaticObject.setObjectDestroyedListener(new PlanetDestroyedListener(team, this));
         mStaticObjects.put(key, planetStaticObject);
         attachEntity(planetStaticObject);
@@ -304,12 +293,12 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     }
 
     /** init blue team and planet */
-    private void initBlueTeamAndPlanet() {
+    private void initBlueTeamAndPlanet(boolean isFakePlanet) {
         mBlueTeam.setTeamPlanet(createPlanet(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER
                 - SizeConstants.ADDITION_MARGIN_FOR_PLANET,
                 (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2,
                 mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_BLUE_PLANET), GameStringsConstantsAndUtils.KEY_BLUE_PLANET,
-                mBlueTeam));
+                mBlueTeam, isFakePlanet));
         mBlueTeam.getTeamPlanet().setSpawnPoint(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER / 2 -
                 SizeConstants.UNIT_SIZE - 2 - SizeConstants.ADDITION_MARGIN_FOR_PLANET,
                 SizeConstants.GAME_FIELD_HEIGHT / 2);

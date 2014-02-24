@@ -1,11 +1,11 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameloop.UnitCreatorCycle;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Higgs;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.opengl.texture.region.ITextureRegion;
 
@@ -24,8 +24,10 @@ public class PlanetStaticObject extends StaticObject {
     private EntityOperations mEntityOperations;
     /** the team, current planet belongs to */
     private ITeam mPlanetTeam;
+    /** used on client side. Means that planet will only display without handling units creation logic */
+    private boolean mIsFakePlanet = false;
 
-    public PlanetStaticObject(float x, float y, ITextureRegion textureRegion, EntityOperations entityOperations, ITeam planetTeam) {
+    private PlanetStaticObject(float x, float y, ITextureRegion textureRegion, EntityOperations entityOperations, ITeam planetTeam) {
         super(x, y, textureRegion, entityOperations.getObjectManager());
         mEntityOperations = entityOperations;
         mIncomeIncreasingValue = 10;
@@ -34,6 +36,11 @@ public class PlanetStaticObject extends StaticObject {
         setWidth(SizeConstants.PLANET_DIAMETER);
         setHeight(SizeConstants.PLANET_DIAMETER);
         initHealth(3000);
+    }
+
+    public PlanetStaticObject(float x, float y, ITextureRegion textureRegion, EntityOperations entityOperations, ITeam planetTeam, boolean isFakePlanet) {
+        this(x, y, textureRegion, entityOperations, planetTeam);
+        mIsFakePlanet = isFakePlanet;
     }
 
     public void setSpawnPoint(float spawnPointX, float spawnPointY) {
@@ -62,17 +69,21 @@ public class PlanetStaticObject extends StaticObject {
     private void addBuilding(int key) {
         BuildingsHolder holder = buildings.get(key);
         StaticObject building = buildings.get(key).mStaticObject;
-        LoggerHelper.printDebugMessage(TAG, "building creation : " + "existing money=" + getMoneyAmount()
-                + ", cost=" + building.mCost);
-        if (getMoneyAmount() < building.mCost)
-            return;
-        if (holder.mBuildingsAmount == 0) {
-            LoggerHelper.printInformationMessage(TAG, "creating building on planet");
+        if (mIsFakePlanet) {
             attachChild(building);
+        } else {
+            LoggerHelper.printDebugMessage(TAG, "building creation : " + "existing money=" + getMoneyAmount()
+                    + ", cost=" + building.mCost);
+            if (getMoneyAmount() < building.mCost)
+                return;
+            if (holder.mBuildingsAmount == 0) {
+                LoggerHelper.printInformationMessage(TAG, "creating building on planet");
+                attachChild(building);
+            }
+            holder.increaseBuildingsAmount();
+            buyBuilding(building.mCost);
+            mIncomeIncreasingValue += building.getObjectIncomeIncreasingValue();
         }
-        holder.increaseBuildingsAmount();
-        buyBuilding(building.mCost);
-        mIncomeIncreasingValue += building.getObjectIncomeIncreasingValue();
     }
 
     private int getMoneyAmount() {
