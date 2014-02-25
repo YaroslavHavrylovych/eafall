@@ -21,11 +21,9 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.MainSceneTouch
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.Imperials;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
-import com.gmail.yaroslavlancelot.spaceinvaders.teams.Team;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.SoundsAndMusicUtils;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.TeamUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitCallbacksUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
@@ -84,7 +82,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     /** contains whole game units/warriors */
     private ArrayList<Unit> mUnits = new ArrayList<Unit>(50);
     /** all teams in current game */
-    private List<ITeam> mTeams = new ArrayList<ITeam>();
+    protected List<ITeam> mTeams = new ArrayList<ITeam>();
     /** red team */
     protected ITeam mRedTeam;
     /** blue team */
@@ -96,16 +94,21 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     /** hold all texture regions used in current game */
     private TextureRegionHolderUtils mTextureRegionHolderUtils;
     /** text which displaying to user with money amount */
-    private String mMoneyTextPrefixString;
+    protected String mMoneyTextPrefixString;
     /** main scene touch listener */
     private MainSceneTouchListener mMainSceneTouchListener;
     /** background theme */
     private Music mBackgroundMusic;
+    /** user static area */
+    protected HUD mHud;
     /*
      * splash screen
      */
     protected Scene mSplashScene;
     private Sprite mSplash;
+    //TODO check is textures depends on race colour
+    protected IRace redTeamUserRace;
+    protected IRace blueTeamUserRace;
 
     @Override
     public EngineOptions onCreateEngineOptions() {
@@ -184,6 +187,12 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     protected void onLoadGameResources() {
         LoggerHelper.methodInvocation(TAG, "onCreateGameResources");
 
+        //races load
+        redTeamUserRace = new Imperials(Color.RED, this, this);
+        redTeamUserRace.loadResources(getTextureManager(), this);
+        blueTeamUserRace = new Imperials(Color.BLUE, this, this);
+        blueTeamUserRace.loadResources(getTextureManager(), this);
+
         //* bigger objects
         BitmapTextureAtlas biggerObjectsTexture = new BitmapTextureAtlas(getTextureManager(),
                 512, 512, TextureOptions.BILINEAR);
@@ -212,57 +221,39 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         }
     }
 
-    /** return newly created team which can be managed by bot (not by user) */
-    protected ITeam createTeam(Color teamColor, IRace teamRace, String teamName) {
-        ITeam team = new Team(teamName, teamRace);
-        team.setTeamColor(teamColor);
-        return team;
-    }
-
     @Override
     public void onPopulateScene(Scene scene, OnPopulateSceneCallback onPopulateSceneCallback) {
         onPopulateSceneCallback.onPopulateSceneFinished();
     }
 
-    /** returns newly create team which can be managed by user (and bot as well) */
-    protected ITeam createTeamWithMoneyUpdate(Color teamColor, IRace teamRace, String teamName) {
-        ITeam team = new Team(teamName, teamRace) {
-            @Override
-            public void changeMoney(final int delta) {
-                super.changeMoney(delta);
-                updateMoneyTextOnScreen();
-            }
-        };
-        team.setTeamColor(teamColor);
-        return team;
-    }
-
     /** update money amount */
-    private void updateMoneyTextOnScreen() {
-        mMoneyText.setText(TeamUtils.getMoneyString(mMoneyTextPrefixString, mRedTeam));
+    protected void updateMoneyTextOnScreen(String value) {
+        mMoneyText.setText(value);
     }
 
-    protected void onInitScene() {
+    protected void onInitGameScene() {
         mGameScene = new Scene();
         mGameScene.setBackground(new Background(0, 0, 0));
-    }
 
-    protected void onInitSceneObjects(boolean isFirstPlanetFake, boolean isSecondPlanetFake) {
         // sun and planets
         createSun();
-        initRedTeamAndPlanet(isFirstPlanetFake);
-        initBlueTeamAndPlanet(isSecondPlanetFake);
-
-        // set enemies
-        mRedTeam.setEnemyTeam(mBlueTeam);
-        mBlueTeam.setEnemyTeam(mRedTeam);
 
         initSceneTouch();
-        initGameLogicAndRelatedElements();
+
+        initMoneyTextView();
     }
 
+    protected void onInitPlanetsSetEnemies(boolean isFirstPlanetFake, boolean isSecondPlanetFake) {
+        initTeams();
+
+        initRedTeamAndPlanet(isFirstPlanetFake);
+        initBlueTeamAndPlanet(isSecondPlanetFake);
+    }
+
+    protected abstract void initTeams();
+
     /** init red team and planet */
-    private void initRedTeamAndPlanet(boolean isFakePlanet) {
+    protected void initRedTeamAndPlanet(boolean isFakePlanet) {
         mRedTeam.setTeamPlanet(createPlanet(0, (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2
                 + SizeConstants.ADDITION_MARGIN_FOR_PLANET,
                 mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_RED_PLANET), GameStringsConstantsAndUtils.KEY_RED_PLANET,
@@ -293,7 +284,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     }
 
     /** init blue team and planet */
-    private void initBlueTeamAndPlanet(boolean isFakePlanet) {
+    protected void initBlueTeamAndPlanet(boolean isFakePlanet) {
         mBlueTeam.setTeamPlanet(createPlanet(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER
                 - SizeConstants.ADDITION_MARGIN_FOR_PLANET,
                 (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2,
@@ -322,23 +313,15 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         return sunStaticObject;
     }
 
-    /** should to separate red (your) from blue (pc) logic */
-    private void initGameLogicAndRelatedElements() {
-        LoggerHelper.methodInvocation(TAG, "initGameLogicAndRelatedElements");
-        initUser(mRedTeam);
-        initBot(mBlueTeam);
-        initMoney();
-    }
-
     /** init planet touch listener for some team */
-    private void initUser(final ITeam initializingTeam) {
+    protected void initUser(final ITeam initializingTeam) {
         LoggerHelper.methodInvocation(TAG, "initUser");
         // create building
         ITouchListener userClickScreenTouchListener = new BuildingsPopupShowListener(initializingTeam, this, this);
         mMainSceneTouchListener.addTouchListener(userClickScreenTouchListener);
     }
 
-    private void initBot(final ITeam initializingTeam) {
+    protected void initBot(final ITeam initializingTeam) {
         LoggerHelper.methodInvocation(TAG, "initBot");
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         Callable<Boolean> simpleBot = new NormalBot(initializingTeam);
@@ -346,17 +329,15 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     }
 
     /** init money string for  displaying to user */
-    private void initMoney() {
-        LoggerHelper.methodInvocation(TAG, "initMoney");
+    private void initMoneyTextView() {
+        LoggerHelper.methodInvocation(TAG, "initMoneyTextView");
         mMoneyTextPrefixString = getString(R.string.money_colon);
         int maxStringLength = mMoneyTextPrefixString.length() + 6;
         mMoneyText = new Text(SizeConstants.GAME_FIELD_WIDTH - maxStringLength * SizeConstants.MONEY_FONT_SIZE,
                 SizeConstants.MONEY_FONT_SIZE, FontHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.KEY_FONT_MONEY),
                 "", maxStringLength, getVertexBufferObjectManager());
-        HUD hud = mCamera.getHUD();
-        hud.attachChild(mMoneyText);
-        updateMoneyTextOnScreen();
-        hud.registerUpdateHandler(new TimerHandler(MONEY_UPDATE_TIME, true, new MoneyUpdateCycle(mTeams)));
+        mHud = mCamera.getHUD();
+        mHud.attachChild(mMoneyText);
     }
 
     /** init scene touch events so user can collaborate with game by screen touches */

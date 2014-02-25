@@ -14,10 +14,8 @@ public class SinglePlayerGameActivity extends PhysicWorldGameActivity implements
 
     @Override
     protected void changeSplashSceneWithGameScene() {
-        mEngine.registerUpdateHandler(new TimerHandler(3f, new ITimerCallback()
-        {
-            public void onTimePassed(final TimerHandler pTimerHandler)
-            {
+        mEngine.registerUpdateHandler(new TimerHandler(3f, new ITimerCallback() {
+            public void onTimePassed(final TimerHandler pTimerHandler) {
                 mEngine.unregisterUpdateHandler(pTimerHandler);
 
                 initPhysicWorld(false, false);
