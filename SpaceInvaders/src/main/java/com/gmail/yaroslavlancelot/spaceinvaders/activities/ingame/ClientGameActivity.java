@@ -18,30 +18,6 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity {
     }
 
     @Override
-    protected void onLoadGameResources() {
-        // user
-        IRace userRace = new Imperials(Color.RED, this, this);
-        userRace.loadResources(getTextureManager(), this);
-        mRedTeam = new Team(GameStringsConstantsAndUtils.RED_TEAM_NAME, userRace) {
-            @Override
-            public void changeMoney(final int delta) {
-                super.changeMoney(delta);
-                updateMoneyTextOnScreen(TeamUtils.getMoneyString(mMoneyTextPrefixString, this)); // this - red team
-            }
-        };
-        mRedTeam.setTeamColor(Color.RED);
-
-        // bot
-        IRace botRace = new Imperials(Color.BLUE, this, this);
-        botRace.loadResources(getTextureManager(), this);
-        mBlueTeam = new Team(GameStringsConstantsAndUtils.BLUE_TEAM_NAME, botRace);
-        mBlueTeam.setTeamColor(Color.BLUE);
-        initUser(mBlueTeam);
-
-        super.onLoadGameResources();
-    }
-
-    @Override
     protected void initTeams() {
         // user
         mRedTeam = new Team(GameStringsConstantsAndUtils.RED_TEAM_NAME, redTeamUserRace) {
@@ -52,10 +28,15 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity {
             }
         };
         mRedTeam.setTeamColor(Color.RED);
-        initUser(mRedTeam);
         // bot
         mBlueTeam = new Team(GameStringsConstantsAndUtils.BLUE_TEAM_NAME, blueTeamUserRace);
         mRedTeam.setTeamColor(Color.BLUE);
+
+        // set enemies
+        mRedTeam.setEnemyTeam(mBlueTeam);
+        mBlueTeam.setEnemyTeam(mRedTeam);
+
+        initUser(mRedTeam);
     }
 
     @Override

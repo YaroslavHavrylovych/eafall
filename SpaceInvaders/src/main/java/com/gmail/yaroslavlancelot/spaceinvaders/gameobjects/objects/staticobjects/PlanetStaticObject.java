@@ -24,7 +24,11 @@ public class PlanetStaticObject extends StaticObject {
     private EntityOperations mEntityOperations;
     /** the team, current planet belongs to */
     private ITeam mPlanetTeam;
-    /** used on client side. Means that planet will only display without handling units creation logic */
+
+    /**
+     * used on client side. Means that planet will only display without handling units creation logic and
+     * money calculation but can  calculate buildings
+     */
     private boolean mIsFakePlanet = false;
 
     private PlanetStaticObject(float x, float y, ITextureRegion textureRegion, EntityOperations entityOperations, ITeam planetTeam) {
@@ -68,9 +72,10 @@ public class PlanetStaticObject extends StaticObject {
 
     private void addBuilding(int key) {
         BuildingsHolder holder = buildings.get(key);
-        StaticObject building = buildings.get(key).mStaticObject;
+        StaticObject building = buildings.get(key).mBuilding;
         if (mIsFakePlanet) {
-            attachChild(building);
+            if (holder.mBuildingsAmount == 0)
+                attachChild(building);
         } else {
             LoggerHelper.printDebugMessage(TAG, "building creation : " + "existing money=" + getMoneyAmount()
                     + ", cost=" + building.mCost);
@@ -80,10 +85,9 @@ public class PlanetStaticObject extends StaticObject {
                 LoggerHelper.printInformationMessage(TAG, "creating building on planet");
                 attachChild(building);
             }
-            holder.increaseBuildingsAmount();
             buyBuilding(building.mCost);
-            mIncomeIncreasingValue += building.getObjectIncomeIncreasingValue();
         }
+        holder.increaseBuildingsAmount();
     }
 
     private int getMoneyAmount() {
@@ -100,22 +104,25 @@ public class PlanetStaticObject extends StaticObject {
     }
 
     public class BuildingsHolder {
-        private final StaticObject mStaticObject;
+        private final StaticObject mBuilding;
         private final int mBuildingId;
         private final int mUnitCreationCycleTime = 20;
         private int mBuildingsAmount;
         private UnitCreatorCycle mUnitCreatorCycle;
 
 
-        private BuildingsHolder(StaticObject staticObject, int buildingId) {
-            mStaticObject = staticObject;
+        private BuildingsHolder(StaticObject building, int buildingId) {
+            mBuilding = building;
             mBuildingId = buildingId;
         }
 
         private void increaseBuildingsAmount() {
-            if (mUnitCreatorCycle == null) {
-                mUnitCreatorCycle = new UnitCreatorCycle(mPlanetTeam, mEntityOperations, mBuildingId);
-                registerUpdateHandler(new TimerHandler(mUnitCreationCycleTime, true, mUnitCreatorCycle));
+            if (!mIsFakePlanet) {
+                mIncomeIncreasingValue += mBuilding.getObjectIncomeIncreasingValue();
+                if (mUnitCreatorCycle == null) {
+                    mUnitCreatorCycle = new UnitCreatorCycle(mPlanetTeam, mEntityOperations, mBuildingId);
+                    registerUpdateHandler(new TimerHandler(mUnitCreationCycleTime, true, mUnitCreatorCycle));
+                }
             }
             mBuildingsAmount += 1;
             mUnitCreatorCycle.increaseUnitAmount();
