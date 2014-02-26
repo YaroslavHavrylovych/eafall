@@ -2,8 +2,6 @@ package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.network.GameSocketServer;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.InGame;
-import org.andengine.engine.handler.timer.ITimerCallback;
-import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
 
 /**
@@ -11,20 +9,6 @@ import org.andengine.engine.options.EngineOptions;
  */
 public class SinglePlayerGameActivity extends PhysicWorldGameActivity implements InGame {
     private GameSocketServer mGameSocketServer;
-
-    @Override
-    protected void changeSplashSceneWithGameScene() {
-        mEngine.registerUpdateHandler(new TimerHandler(3f, new ITimerCallback() {
-            public void onTimePassed(final TimerHandler pTimerHandler) {
-                mEngine.unregisterUpdateHandler(pTimerHandler);
-
-                initPhysicWorld(false, false);
-
-                mSplashScene.detachSelf();
-                mEngine.setScene(mGameScene);
-            }
-        }));
-    }
 
     @Override
     public EngineOptions onCreateEngineOptions() {

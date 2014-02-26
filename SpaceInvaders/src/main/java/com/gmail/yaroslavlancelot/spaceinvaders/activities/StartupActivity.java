@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame.SinglePlayerGameActivity;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourTypes;
 
 /**
  * first game activity with menu etc.
@@ -42,6 +44,9 @@ public class StartupActivity extends Activity {
             @Override
             public void onClick(final View v) {
                 Intent singleGameIntent = new Intent(StartupActivity.this, SinglePlayerGameActivity.class);
+                singleGameIntent.
+                        putExtra(GameStringsConstantsAndUtils.RED_TEAM_NAME, TeamControlBehaviourTypes.USER_CONTROL.toString()).
+                        putExtra(GameStringsConstantsAndUtils.BLUE_TEAM_NAME, TeamControlBehaviourTypes.BOT_CONTROL.toString());
                 startActivity(singleGameIntent);
             }
         });

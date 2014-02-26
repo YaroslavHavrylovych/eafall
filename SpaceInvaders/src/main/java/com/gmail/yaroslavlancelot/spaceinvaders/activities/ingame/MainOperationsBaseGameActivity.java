@@ -1,5 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.util.DisplayMetrics;
@@ -8,7 +9,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.ai.NormalBot;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameloop.MoneyUpdateCycle;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourTypes;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.ObjectDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.PlanetDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
@@ -21,9 +22,11 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.MainSceneTouch
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.Imperials;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
+import com.gmail.yaroslavlancelot.spaceinvaders.teams.Team;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.SoundsAndMusicUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.TeamUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitCallbacksUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
@@ -34,7 +37,6 @@ import org.andengine.audio.sound.Sound;
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.engine.camera.hud.HUD;
-import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
@@ -164,15 +166,12 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         changeSplashSceneWithGameScene();
     }
 
-    protected void initSplashScene()
-    {
+    protected void initSplashScene() {
         mSplashScene = new Scene();
         mSplash = new Sprite(0, 0, mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_SPLASH_SCREEN),
-                mEngine.getVertexBufferObjectManager())
-        {
+                mEngine.getVertexBufferObjectManager()) {
             @Override
-            protected void preDraw(GLState pGLState, Camera pCamera)
-            {
+            protected void preDraw(GLState pGLState, Camera pCamera) {
                 super.preDraw(pGLState, pCamera);
                 pGLState.enableDither();
             }
@@ -243,14 +242,81 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         initMoneyTextView();
     }
 
-    protected void onInitPlanetsSetEnemies(boolean isFirstPlanetFake, boolean isSecondPlanetFake) {
+    protected void onInitPlanetsSetEnemies() {
         initTeams();
 
-        initRedTeamAndPlanet(isFirstPlanetFake);
-        initBlueTeamAndPlanet(isSecondPlanetFake);
+        Intent intent = getIntent();
+
+        // first team init
+        TeamControlBehaviourTypes team = TeamControlBehaviourTypes.valueOf(intent.getStringExtra(GameStringsConstantsAndUtils.RED_TEAM_NAME));
+        initRedTeamAndPlanet(team == TeamControlBehaviourTypes.REMOTE_CONTROL);
+
+        // second team init
+        team = TeamControlBehaviourTypes.valueOf(intent.getStringExtra(GameStringsConstantsAndUtils.BLUE_TEAM_NAME));
+        initBlueTeamAndPlanet(team == TeamControlBehaviourTypes.REMOTE_CONTROL);
     }
 
-    protected abstract void initTeams();
+    protected void initTeams() {
+        // red team
+        mRedTeam = createTeam(GameStringsConstantsAndUtils.RED_TEAM_NAME, redTeamUserRace);
+        mBlueTeam = createTeam(GameStringsConstantsAndUtils.BLUE_TEAM_NAME, blueTeamUserRace);
+
+        mRedTeam.setTeamColor(Color.RED);
+        mRedTeam.setTeamColor(Color.BLUE);
+
+        // set enemies
+        mRedTeam.setEnemyTeam(mBlueTeam);
+        mBlueTeam.setEnemyTeam(mRedTeam);
+
+        initTeam(mBlueTeam, GameStringsConstantsAndUtils.BLUE_TEAM_NAME);
+        initTeam(mRedTeam, GameStringsConstantsAndUtils.RED_TEAM_NAME);
+    }
+
+    /**
+     * initialize team (init user or bot team, or do nothing if team control from remote)
+     *
+     * @param team team to init
+     * @param teamNameInExtra team name to get control type from intent
+     */
+    private void initTeam(ITeam team, String teamNameInExtra) {
+        Intent intent = getIntent();
+        TeamControlBehaviourTypes teamType = TeamControlBehaviourTypes.valueOf(intent.getStringExtra(teamNameInExtra));
+
+        if (teamType == TeamControlBehaviourTypes.USER_CONTROL) {
+            initUser(team);
+        } else if (teamType == TeamControlBehaviourTypes.BOT_CONTROL) {
+            initBot(team);
+        } else if (teamType == TeamControlBehaviourTypes.REMOTE_CONTROL) {
+            //nothing
+        } else {
+            throw new IllegalArgumentException("unknown team type =" + teamType);
+        }
+    }
+
+    /**
+     * create new team depending on team control type which stored in extra
+     *
+     * @param teamNameInExtra team name from extra
+     * @param race team race which will be assigned to current team
+     *
+     * @return newly created team
+     */
+    private ITeam createTeam(String teamNameInExtra, IRace race) {
+        Intent intent = getIntent();
+        TeamControlBehaviourTypes teamType = TeamControlBehaviourTypes.valueOf(intent.getStringExtra(teamNameInExtra));
+
+        if (teamType == TeamControlBehaviourTypes.USER_CONTROL) {
+            return new Team(teamNameInExtra, race) {
+                @Override
+                public void changeMoney(final int delta) {
+                    super.changeMoney(delta);
+                    updateMoneyTextOnScreen(TeamUtils.getMoneyString(mMoneyTextPrefixString, this)); // this - red team
+                }
+            };
+        } else {
+            return new Team(teamNameInExtra, race);
+        }
+    }
 
     /** init red team and planet */
     protected void initRedTeamAndPlanet(boolean isFakePlanet) {

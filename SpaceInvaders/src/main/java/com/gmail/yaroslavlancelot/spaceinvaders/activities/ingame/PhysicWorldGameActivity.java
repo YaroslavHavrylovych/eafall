@@ -4,25 +4,20 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameloop.MoneyUpdateCycle;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.SunStaticObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.Imperials;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
-import com.gmail.yaroslavlancelot.spaceinvaders.teams.Team;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.TeamUtils;
+import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.texture.region.ITextureRegion;
-import org.andengine.util.color.Color;
 
 /**
  * extends {@link MainOperationsBaseGameActivity} with adding
@@ -37,32 +32,23 @@ public abstract class PhysicWorldGameActivity extends MainOperationsBaseGameActi
     private PhysicsWorld mPhysicsWorld;
 
     @Override
-    protected void initTeams() {
-        // user
-        mRedTeam = new Team(GameStringsConstantsAndUtils.RED_TEAM_NAME, redTeamUserRace) {
-            @Override
-            public void changeMoney(final int delta) {
-                super.changeMoney(delta);
-                updateMoneyTextOnScreen(TeamUtils.getMoneyString(mMoneyTextPrefixString, this)); // this - red team
+    protected void changeSplashSceneWithGameScene() {
+        mEngine.registerUpdateHandler(new TimerHandler(3f, new ITimerCallback() {
+            public void onTimePassed(final TimerHandler pTimerHandler) {
+                mEngine.unregisterUpdateHandler(pTimerHandler);
+
+                initPhysicWorld();
+
+                mSplashScene.detachSelf();
+                mEngine.setScene(mGameScene);
             }
-        };
-        mRedTeam.setTeamColor(Color.RED);
-        // bot
-        mBlueTeam = new Team(GameStringsConstantsAndUtils.BLUE_TEAM_NAME, blueTeamUserRace);
-        mRedTeam.setTeamColor(Color.BLUE);
-
-        // set enemies
-        mRedTeam.setEnemyTeam(mBlueTeam);
-        mBlueTeam.setEnemyTeam(mRedTeam);
-
-        initBot(mBlueTeam);
-        initUser(mRedTeam);
+        }));
     }
 
     /**
      * initialize physic world. For using in child classes without accessing private fields.
      */
-    protected void initPhysicWorld(boolean isFirstPlanetFake, boolean isSecondPlanetFake) {
+    protected void initPhysicWorld() {
         onLoadGameResources();
         mPhysicsWorld = new PhysicsWorld(new Vector2(0, 0), false);
 
@@ -72,7 +58,7 @@ public abstract class PhysicWorldGameActivity extends MainOperationsBaseGameActi
         mGameScene.registerUpdateHandler(mPhysicsWorld);
 
         createBounds();
-        onInitPlanetsSetEnemies(isFirstPlanetFake, isSecondPlanetFake);
+        onInitPlanetsSetEnemies();
     }
 
     /** bound for objects so they can't get out of the screen */
