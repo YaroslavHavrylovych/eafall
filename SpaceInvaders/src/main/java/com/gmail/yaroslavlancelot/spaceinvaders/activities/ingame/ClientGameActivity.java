@@ -17,12 +17,7 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity {
 
     @Override
     public EngineOptions onCreateEngineOptions() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mGameServerConnector = GameServerConnector.getGameServerConnector();
-            }
-        });
+        mGameServerConnector = GameServerConnector.getGameServerConnector();
         return super.onCreateEngineOptions();
     }
 
@@ -51,8 +46,7 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity {
     @Override
     protected void userWantCreateBuilding(final ITeam userTeam, final int buildingId) {
         try {
-            if (mGameServerConnector != null)
-                mGameServerConnector.sendClientMessage(new BuildingCreatedClientMessage(buildingId));
+            mGameServerConnector.sendClientMessage(new BuildingCreatedClientMessage(buildingId));
         } catch (IOException e) {
             LoggerHelper.printErrorMessage(TAG, e.getMessage());
         }

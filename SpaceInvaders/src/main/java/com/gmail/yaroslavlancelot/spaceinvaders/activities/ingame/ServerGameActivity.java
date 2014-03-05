@@ -15,13 +15,8 @@ public class ServerGameActivity extends PhysicWorldGameActivity implements InGam
 
     @Override
     public EngineOptions onCreateEngineOptions() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mGameSocketServer = GameSocketServer.getGameSocketServer();
-                mGameSocketServer.addInGameCallbacks(ServerGameActivity.this);
-            }
-        });
+        mGameSocketServer = GameSocketServer.getGameSocketServer();
+        mGameSocketServer.addInGameCallbacks(ServerGameActivity.this);
         return super.onCreateEngineOptions();
     }
 
