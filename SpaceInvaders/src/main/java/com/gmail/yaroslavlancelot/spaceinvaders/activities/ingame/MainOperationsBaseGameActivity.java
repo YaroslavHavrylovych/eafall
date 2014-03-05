@@ -16,7 +16,8 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjec
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.SunStaticObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.BuildingsPopupShowListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.BuildingsPopupTouchListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.IItemPickListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ITouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.MainSceneTouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
@@ -293,6 +294,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         }
     }
 
+    protected abstract void userWantCreateBuilding(ITeam userTeam, int buildingId);
+
     /**
      * create new team depending on team control type which stored in extra
      *
@@ -383,7 +386,13 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     protected void initUser(final ITeam initializingTeam) {
         LoggerHelper.methodInvocation(TAG, "initUser");
         // create building
-        ITouchListener userClickScreenTouchListener = new BuildingsPopupShowListener(initializingTeam, this, this);
+        ITouchListener userClickScreenTouchListener = new BuildingsPopupTouchListener(initializingTeam, this, this,
+                new IItemPickListener() {
+                    @Override
+                    public void itemPicked(final int itemId) {
+                        userWantCreateBuilding(initializingTeam, itemId);
+                    }
+                });
         mMainSceneTouchListener.addTouchListener(userClickScreenTouchListener);
     }
 

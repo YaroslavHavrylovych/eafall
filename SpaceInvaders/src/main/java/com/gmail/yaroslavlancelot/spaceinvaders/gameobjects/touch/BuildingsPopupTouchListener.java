@@ -15,7 +15,7 @@ import org.andengine.input.touch.TouchEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BuildingsPopupShowListener implements ITouchListener {
+public class BuildingsPopupTouchListener implements ITouchListener {
     private ITeam mUserTeam;
     private EntityOperations mEntityOperations;
     private Localizable mLocalizable;
@@ -24,11 +24,13 @@ public class BuildingsPopupShowListener implements ITouchListener {
     private ImageDescriptionPopup mPopup;
     private float mActionDownX, mActionDownY;
     private int mBuildingCostStringMaxCharacters = 5;
+    private IItemPickListener mItemPickListener;
 
-    public BuildingsPopupShowListener(ITeam userTeam, EntityOperations entityOperations, Localizable localizable) {
+    public BuildingsPopupTouchListener(ITeam userTeam, EntityOperations entityOperations, Localizable localizable, IItemPickListener itemPickListener) {
         mUserTeam = userTeam;
         mEntityOperations = entityOperations;
         mLocalizable = localizable;
+        mItemPickListener = itemPickListener;
     }
 
     @Override
@@ -85,9 +87,7 @@ public class BuildingsPopupShowListener implements ITouchListener {
         IItemPickListener spriteTouchListener = new IItemPickListener() {
             @Override
             public void itemPicked(final int buildingId) {
-                PlanetStaticObject planetStaticObject = mUserTeam.getTeamPlanet();
-                if (planetStaticObject != null)
-                    mUserTeam.getTeamPlanet().createBuildingById(buildingId);
+                mItemPickListener.itemPicked(buildingId);
             }
         };
         return new ImageDescriptionPopup.PopupItem(id, gameObject, name, spriteTouchListener);

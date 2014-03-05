@@ -60,20 +60,29 @@ public class PlanetStaticObject extends StaticObject {
         return mSpawnPointY;
     }
 
+    public void purchaseBuilding(int buildingId) {
+        createBuildingById(buildingId, false);
+    }
+
     public void createBuildingById(int buildingId) {
+        LoggerHelper.methodInvocation(TAG, "buildBuilding");
+        createBuildingById(buildingId, mIsFakePlanet);
+    }
+
+    private void createBuildingById(int buildingId, boolean isFakePlanet) {
         LoggerHelper.methodInvocation(TAG, "buildBuilding");
         if (buildings.get(buildingId) == null) {
             final StaticObject staticObject =
                     mPlanetTeam.getTeamRace().getBuildingById(buildingId);
             buildings.put(buildingId, new BuildingsHolder(staticObject, buildingId));
         }
-        addBuilding(buildingId);
+        addBuilding(buildingId, isFakePlanet);
     }
 
-    private void addBuilding(int key) {
+    private void addBuilding(int key, boolean isFakePlanet) {
         BuildingsHolder holder = buildings.get(key);
         StaticObject building = buildings.get(key).mBuilding;
-        if (mIsFakePlanet) {
+        if (isFakePlanet) {
             if (holder.mBuildingsAmount == 0)
                 attachChild(building);
         } else {
