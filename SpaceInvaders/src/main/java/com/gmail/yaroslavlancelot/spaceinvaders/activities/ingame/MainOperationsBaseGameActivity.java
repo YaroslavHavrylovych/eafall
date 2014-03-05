@@ -9,7 +9,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.ai.NormalBot;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
-import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourTypes;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.ObjectDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.PlanetDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
@@ -248,12 +248,12 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         Intent intent = getIntent();
 
         // first team init
-        TeamControlBehaviourTypes team = TeamControlBehaviourTypes.valueOf(intent.getStringExtra(GameStringsConstantsAndUtils.RED_TEAM_NAME));
-        initRedTeamAndPlanet(team == TeamControlBehaviourTypes.REMOTE_CONTROL);
+        TeamControlBehaviourType team = TeamControlBehaviourType.valueOf(intent.getStringExtra(GameStringsConstantsAndUtils.RED_TEAM_NAME));
+        initRedTeamAndPlanet(team == TeamControlBehaviourType.REMOTE_CONTROL);
 
         // second team init
-        team = TeamControlBehaviourTypes.valueOf(intent.getStringExtra(GameStringsConstantsAndUtils.BLUE_TEAM_NAME));
-        initBlueTeamAndPlanet(team == TeamControlBehaviourTypes.REMOTE_CONTROL);
+        team = TeamControlBehaviourType.valueOf(intent.getStringExtra(GameStringsConstantsAndUtils.BLUE_TEAM_NAME));
+        initBlueTeamAndPlanet(team == TeamControlBehaviourType.REMOTE_CONTROL);
     }
 
     protected void initTeams() {
@@ -280,13 +280,13 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
      */
     private void initTeam(ITeam team, String teamNameInExtra) {
         Intent intent = getIntent();
-        TeamControlBehaviourTypes teamType = TeamControlBehaviourTypes.valueOf(intent.getStringExtra(teamNameInExtra));
+        TeamControlBehaviourType teamType = TeamControlBehaviourType.valueOf(intent.getStringExtra(teamNameInExtra));
 
-        if (teamType == TeamControlBehaviourTypes.USER_CONTROL) {
+        if (teamType == TeamControlBehaviourType.USER_CONTROL) {
             initUser(team);
-        } else if (teamType == TeamControlBehaviourTypes.BOT_CONTROL) {
+        } else if (teamType == TeamControlBehaviourType.BOT_CONTROL) {
             initBot(team);
-        } else if (teamType == TeamControlBehaviourTypes.REMOTE_CONTROL) {
+        } else if (teamType == TeamControlBehaviourType.REMOTE_CONTROL) {
             //nothing
         } else {
             throw new IllegalArgumentException("unknown team type =" + teamType);
@@ -303,10 +303,10 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
      */
     private ITeam createTeam(String teamNameInExtra, IRace race) {
         Intent intent = getIntent();
-        TeamControlBehaviourTypes teamType = TeamControlBehaviourTypes.valueOf(intent.getStringExtra(teamNameInExtra));
+        TeamControlBehaviourType teamType = TeamControlBehaviourType.valueOf(intent.getStringExtra(teamNameInExtra));
 
-        if (teamType == TeamControlBehaviourTypes.USER_CONTROL) {
-            return new Team(teamNameInExtra, race) {
+        if (teamType == TeamControlBehaviourType.USER_CONTROL) {
+            return new Team(teamNameInExtra, race, teamType) {
                 @Override
                 public void changeMoney(final int delta) {
                     super.changeMoney(delta);
@@ -314,7 +314,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
                 }
             };
         } else {
-            return new Team(teamNameInExtra, race);
+            return new Team(teamNameInExtra, race, teamType);
         }
     }
 
@@ -492,11 +492,31 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
      */
     @Override
     public Unit createUnitForTeam(int unitKey, final ITeam unitTeam) {
-        Unit warrior = createUnitCarcass(unitKey, unitTeam);
-        unitTeam.addObjectToTeam(warrior);
+        Unit warrior = createAttachedUnitCarcass(unitKey, unitTeam);
+        warrior.registerUpdateHandler();
         warrior.setEnemiesUpdater(UnitCallbacksUtils.getSimpleUnitEnemiesUpdater(unitTeam.getEnemyTeam()));
-        warrior.setObjectDestroyedListener(new ObjectDestroyedListener(unitTeam, this));
+        warrior.initMovingPath();
+        unitTeam.addObjectToTeam(warrior);
         return warrior;
+    }
+
+    /**
+     * create dynamic game object (e.g. warrior or some other stuff) and attach it to game scene with coordinates
+     * which set in spawn point for unit team planet
+     *
+     * @param unitKey key to identify which kind of unit you want to build
+     * @param unitTeam team unit of which should be created
+     *
+     * @return newly created unit
+     */
+    protected Unit createAttachedUnitCarcass(int unitKey, ITeam unitTeam) {
+        LoggerHelper.methodInvocation(TAG, "createAttachedUnitCarcass");
+        Unit unit = createUnitCarcass(unitKey, unitTeam);
+        unit.setX(unitTeam.getTeamPlanet().getSpawnPointX());
+        unit.setY(unitTeam.getTeamPlanet().getSpawnPointY());
+        attachEntity(unit);
+        mUnits.add(unit);
+        return unit;
     }
 
     /**
@@ -510,11 +530,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     protected Unit createUnitCarcass(int unitKey, ITeam unitTeam) {
         LoggerHelper.methodInvocation(TAG, "createUnitCarcass");
         Unit unit = unitTeam.getTeamRace().getUnitForBuilding(unitKey);
-        unit.setX(unitTeam.getTeamPlanet().getSpawnPointX());
-        unit.setY(unitTeam.getTeamPlanet().getSpawnPointY());
-        unit.calculateUnitPath();
-        attachEntity(unit);
-        mUnits.add(unit);
+        unit.setObjectDestroyedListener(new ObjectDestroyedListener(unitTeam, this));
         return unit;
     }
 

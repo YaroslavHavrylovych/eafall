@@ -92,8 +92,8 @@ public abstract class PhysicWorldGameActivity extends MainOperationsBaseGameActi
     }
 
     @Override
-    protected Unit createUnitCarcass(final int unitKey, final ITeam unitTeam) {
-        Unit unit = super.createUnitCarcass(unitKey, unitTeam);
+    protected Unit createAttachedUnitCarcass(final int unitKey, final ITeam unitTeam) {
+        Unit unit = super.createAttachedUnitCarcass(unitKey, unitTeam);
         final FixtureDef playerFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f);
         Body body = PhysicsFactory.createCircleBody(mPhysicsWorld, unit, BodyDef.BodyType.DynamicBody, playerFixtureDef);
         unit.setBody(body);

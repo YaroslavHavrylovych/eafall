@@ -1,10 +1,10 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects;
 
 import com.badlogic.gdx.math.Vector2;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitPathUtil;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations;
 import org.andengine.audio.sound.Sound;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -44,16 +44,20 @@ public abstract class Unit extends GameObject {
 
     protected Unit(ITextureRegion textureRegion, SoundOperations soundOperations, EntityOperations entityOperations) {
         super(-100, -100, textureRegion, entityOperations.getObjectManager());
-        registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new SimpleUnitTimerCallback()));
+
         mSoundOperations = soundOperations;
         mEntityOperations = entityOperations;
+    }
+
+    public void registerUpdateHandler() {
+        registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new SimpleUnitTimerCallback()));
     }
 
     protected void initSound(String path) {
         mFireSound = mSoundOperations.loadSound(path);
     }
 
-    public void calculateUnitPath() {
+    public void initMovingPath() {
         mUnitPath = UnitPathUtil.getUnitPathAccordingToStartAbscissa(getX());
     }
 

@@ -37,8 +37,7 @@ public class Imperials implements IRace {
     private SoundOperations mSoundOperations;
 
 
-    public Imperials(Color teamColor, final EntityOperations entityOperations,
-                     final SoundOperations soundOperations) {
+    public Imperials(Color teamColor, final EntityOperations entityOperations, final SoundOperations soundOperations) {
         mTeamColor = teamColor;
         mEntityOperations = entityOperations;
         mSoundOperations = soundOperations;

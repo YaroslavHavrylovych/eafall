@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame.ServerGameActivity;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
-import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourTypes;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.GameSocketServer;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.StartingGameServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.PreGameStart;
@@ -66,8 +66,8 @@ public class ServerGameCreationActivity extends Activity implements PreGameStart
                 }
                 Intent startServerIntent = new Intent(ServerGameCreationActivity.this, ServerGameActivity.class);
                 startServerIntent.
-                        putExtra(GameStringsConstantsAndUtils.RED_TEAM_NAME, TeamControlBehaviourTypes.REMOTE_CONTROL.toString()).
-                        putExtra(GameStringsConstantsAndUtils.BLUE_TEAM_NAME, TeamControlBehaviourTypes.USER_CONTROL.toString());
+                        putExtra(GameStringsConstantsAndUtils.RED_TEAM_NAME, TeamControlBehaviourType.REMOTE_CONTROL.toString()).
+                        putExtra(GameStringsConstantsAndUtils.BLUE_TEAM_NAME, TeamControlBehaviourType.USER_CONTROL.toString());
                 startActivity(startServerIntent);
             }
         });

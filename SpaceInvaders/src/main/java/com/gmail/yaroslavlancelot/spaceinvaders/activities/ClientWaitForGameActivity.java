@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame.ClientGameActivity;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
-import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourTypes;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.server.PreGameStart;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.connector.GameServerConnector;
 
@@ -41,8 +41,8 @@ public class ClientWaitForGameActivity extends Activity implements PreGameStart 
         GameServerConnector.getGameServerConnector().removePreGameStartCallback(this);
         Intent clientGameIntent = new Intent(ClientWaitForGameActivity.this, ClientGameActivity.class);
         clientGameIntent.
-                putExtra(GameStringsConstantsAndUtils.RED_TEAM_NAME, TeamControlBehaviourTypes.USER_CONTROL.toString()).
-                putExtra(GameStringsConstantsAndUtils.BLUE_TEAM_NAME, TeamControlBehaviourTypes.REMOTE_CONTROL.toString());
+                putExtra(GameStringsConstantsAndUtils.RED_TEAM_NAME, TeamControlBehaviourType.USER_CONTROL.toString()).
+                putExtra(GameStringsConstantsAndUtils.BLUE_TEAM_NAME, TeamControlBehaviourType.REMOTE_CONTROL.toString());
         startActivity(clientGameIntent);
     }
 

@@ -1,5 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.teams;
 
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
@@ -24,11 +25,14 @@ public class Team implements ITeam {
     private int mMoneyAmount = 500;
     /** team color */
     private Color mTeamColor = new Color(100, 100, 100);
+    /** team control type */
+    private TeamControlBehaviourType mTeamControlBehaviourType;
 
-    public Team(final String teamName, IRace teamRace) {
+    public Team(final String teamName, IRace teamRace, TeamControlBehaviourType teamType) {
         mTeamObjects = new ArrayList<GameObject>(20);
         mTeamName = teamName;
         mTeamRace = teamRace;
+        mTeamControlBehaviourType = teamType;
     }
 
     @Override
@@ -105,5 +109,10 @@ public class Team implements ITeam {
     @Override
     public void removeTeamPlanet() {
         mTeamPlanet = null;
+    }
+
+    @Override
+    public TeamControlBehaviourType getTeamControlType() {
+        return mTeamControlBehaviourType;
     }
 }
