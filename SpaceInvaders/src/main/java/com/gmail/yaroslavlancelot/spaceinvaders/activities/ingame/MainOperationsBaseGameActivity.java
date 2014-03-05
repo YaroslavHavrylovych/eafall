@@ -163,6 +163,11 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
 
         initSplashScene();
         onCreateSceneCallback.onCreateSceneFinished(mSplashScene);
+    }
+
+    @Override
+    public synchronized void onGameCreated() {
+        super.onGameCreated();
 
         changeSplashSceneWithGameScene();
     }
