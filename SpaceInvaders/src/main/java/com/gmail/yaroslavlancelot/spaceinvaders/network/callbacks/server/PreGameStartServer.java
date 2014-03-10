@@ -1,8 +1,8 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client;
+package com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.server;
 
 /**
  * callback from client about game state after client connect to game but before it begins
  */
-public interface PreGameStart {
+public interface PreGameStartServer {
     void clientConnectionEstablished(String clientIp);
 }

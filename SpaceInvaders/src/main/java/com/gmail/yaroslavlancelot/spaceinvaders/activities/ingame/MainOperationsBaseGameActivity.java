@@ -62,6 +62,7 @@ import org.andengine.util.color.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -85,7 +86,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     /** contains whole game units/warriors */
     private ArrayList<Unit> mUnits = new ArrayList<Unit>(50);
     /** all teams in current game */
-    protected List<ITeam> mTeams = new ArrayList<ITeam>();
+    protected Map<String, ITeam> mTeams = new HashMap<String, ITeam>();
     /** red team */
     protected ITeam mRedTeam;
     /** blue team */
@@ -329,7 +330,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
                 mRedTeam, isFakePlanet));
         mRedTeam.getTeamPlanet().setSpawnPoint(SizeConstants.PLANET_DIAMETER / 2 + SizeConstants.UNIT_SIZE + 2,
                 SizeConstants.GAME_FIELD_HEIGHT / 2 + SizeConstants.ADDITION_MARGIN_FOR_PLANET);
-        mTeams.add(mRedTeam);
+        mTeams.put(mRedTeam.getTeamName(), mRedTeam);
     }
 
     /**
@@ -362,7 +363,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         mBlueTeam.getTeamPlanet().setSpawnPoint(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER / 2 -
                 SizeConstants.UNIT_SIZE - 2 - SizeConstants.ADDITION_MARGIN_FOR_PLANET,
                 SizeConstants.GAME_FIELD_HEIGHT / 2);
-        mTeams.add(mBlueTeam);
+        mTeams.put(mBlueTeam.getTeamName(), mBlueTeam);
     }
 
     /**

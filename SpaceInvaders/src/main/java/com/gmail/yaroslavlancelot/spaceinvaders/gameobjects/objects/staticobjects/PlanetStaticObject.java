@@ -60,26 +60,26 @@ public class PlanetStaticObject extends StaticObject {
         return mSpawnPointY;
     }
 
-    public void purchaseBuilding(int buildingId) {
-        createBuildingById(buildingId, false);
+    public boolean purchaseBuilding(int buildingId) {
+        return createBuildingById(buildingId, false);
     }
 
-    public void createBuildingById(int buildingId) {
+    public boolean createBuildingById(int buildingId) {
         LoggerHelper.methodInvocation(TAG, "buildBuilding");
-        createBuildingById(buildingId, mIsFakePlanet);
+        return createBuildingById(buildingId, mIsFakePlanet);
     }
 
-    private void createBuildingById(int buildingId, boolean isFakePlanet) {
+    private boolean createBuildingById(int buildingId, boolean isFakePlanet) {
         LoggerHelper.methodInvocation(TAG, "buildBuilding");
         if (buildings.get(buildingId) == null) {
             final StaticObject staticObject =
                     mPlanetTeam.getTeamRace().getBuildingById(buildingId);
             buildings.put(buildingId, new BuildingsHolder(staticObject, buildingId));
         }
-        addBuilding(buildingId, isFakePlanet);
+        return addBuilding(buildingId, isFakePlanet);
     }
 
-    private void addBuilding(int key, boolean isFakePlanet) {
+    private boolean addBuilding(int key, boolean isFakePlanet) {
         BuildingsHolder holder = buildings.get(key);
         StaticObject building = buildings.get(key).mBuilding;
         if (isFakePlanet) {
@@ -89,7 +89,7 @@ public class PlanetStaticObject extends StaticObject {
             LoggerHelper.printDebugMessage(TAG, "building creation : " + "existing money=" + getMoneyAmount()
                     + ", cost=" + building.mCost);
             if (getMoneyAmount() < building.mCost)
-                return;
+                return false;
             if (holder.mBuildingsAmount == 0) {
                 LoggerHelper.printInformationMessage(TAG, "creating building on planet");
                 attachChild(building);
@@ -97,6 +97,7 @@ public class PlanetStaticObject extends StaticObject {
             buyBuilding(building.mCost);
         }
         holder.increaseBuildingsAmount();
+        return true;
     }
 
     private int getMoneyAmount() {

@@ -2,6 +2,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.client.BuildingCreationClientMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.InGameClient;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.connector.GameServerConnector;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
@@ -11,13 +12,14 @@ import org.andengine.engine.options.EngineOptions;
 
 import java.io.IOException;
 
-public class ClientGameActivity extends MainOperationsBaseGameActivity {
+public class ClientGameActivity extends MainOperationsBaseGameActivity implements InGameClient {
     public final static String TAG = ClientGameActivity.class.getCanonicalName();
     private volatile GameServerConnector mGameServerConnector;
 
     @Override
     public EngineOptions onCreateEngineOptions() {
         mGameServerConnector = GameServerConnector.getGameServerConnector();
+        mGameServerConnector.addInGameCallback(this);
         return super.onCreateEngineOptions();
     }
 
@@ -55,5 +57,12 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity {
         } catch (IOException e) {
             LoggerHelper.printErrorMessage(TAG, e.getMessage());
         }
+    }
+
+    @Override
+    public void buildingCreated(final int buildingId, final String teamName) {
+        LoggerHelper.methodInvocation(TAG, "buildingCreated");
+        LoggerHelper.printDebugMessage(TAG, "buildingId=" + buildingId + ", teamName=" + teamName);
+        mTeams.get(teamName).getTeamPlanet().createBuildingById(buildingId);
     }
 }

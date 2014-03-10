@@ -9,13 +9,13 @@ import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame.ClientGameActivity;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.server.PreGameStart;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.PreGameStartClient;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.connector.GameServerConnector;
 
 /**
  * Client connected to server and waiting for game
  */
-public class ClientWaitForGameActivity extends Activity implements PreGameStart {
+public class ClientWaitForGameActivity extends Activity implements PreGameStartClient {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

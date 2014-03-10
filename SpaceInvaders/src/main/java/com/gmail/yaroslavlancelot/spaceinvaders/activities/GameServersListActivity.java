@@ -12,7 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.client.ConnectionEstablishClientMessage;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.server.PreGameStart;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.PreGameStartClient;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.connector.GameServerConnector;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.discovery.SocketDiscoveryServer;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
@@ -41,7 +41,7 @@ public class GameServersListActivity extends Activity implements
         // for collaborate with discovered servers
         SocketConnectionServerConnector.ISocketConnectionServerConnectorListener,
         // to handle callbacks from server
-        PreGameStart {
+        PreGameStartClient {
 
     public static final String TAG = GameServersListActivity.class.getCanonicalName();
     /** for discovering servers */

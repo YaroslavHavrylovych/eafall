@@ -11,7 +11,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAn
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.GameSocketServer;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.StartingGameServerMessage;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.PreGameStart;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.server.PreGameStartServer;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.connector.ClientConnectorListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.discovery.SocketDiscoveryServer;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
@@ -19,7 +19,7 @@ import org.andengine.extension.multiplayer.protocol.util.WifiUtils;
 
 import java.io.IOException;
 
-public class ServerGameCreationActivity extends Activity implements PreGameStart {
+public class ServerGameCreationActivity extends Activity implements PreGameStartServer {
     public final static String TAG = ServerGameCreationActivity.class.getCanonicalName();
     public static final int FOR_CONVERT_IP = 256;
     private SocketDiscoveryServer mSocketDiscoveryServer;
