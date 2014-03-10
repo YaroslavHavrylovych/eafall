@@ -64,6 +64,8 @@ public class ServerGameCreationActivity extends Activity implements PreGameStart
                     LoggerHelper.printErrorMessage(TAG, ioException.getMessage());
                     return;
                 }
+                mGameSocketServer.removePreGameStartCallback(ServerGameCreationActivity.this);
+                mGameSocketServer = null;
                 Intent startServerIntent = new Intent(ServerGameCreationActivity.this, ServerGameActivity.class);
                 startServerIntent.
                         putExtra(GameStringsConstantsAndUtils.RED_TEAM_NAME, TeamControlBehaviourType.REMOTE_CONTROL.toString()).
