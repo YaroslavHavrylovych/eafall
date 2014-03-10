@@ -43,6 +43,8 @@ public class GameSocketServer extends SocketServer<SocketConnectionClientConnect
             @Override
             public void onHandleMessage(final ClientConnector<SocketConnection> pClientConnector, final IClientMessage pClientMessage) throws IOException {
                 LoggerHelper.printInformationMessageFromClient(TAG, "connection with client established");
+                int protocolVersion = ((ConnectionEstablishClientMessage) pClientMessage).getProtocolVersion();
+                LoggerHelper.printDebugMessage(TAG, "protocolVersion=" + protocolVersion);
                 synchronized (mPreGameStartList) {
                     for (PreGameStart preGameStart : mPreGameStartList) {
                         preGameStart.clientConnectionEstablished(mClientIp);

@@ -24,8 +24,8 @@ public class ServerGameActivity extends PhysicWorldGameActivity implements InGam
     @Override
     public void newBuildingCreate(int buildingId) {
         LoggerHelper.methodInvocation(TAG, "newBuildingCreate");
-        if (mBlueTeam != null && mBlueTeam.getTeamPlanet() != null)
-            mBlueTeam.getTeamPlanet().purchaseBuilding(buildingId);
+        if (mRedTeam != null && mRedTeam.getTeamPlanet() != null)
+            mRedTeam.getTeamPlanet().purchaseBuilding(buildingId);
     }
 
     @Override

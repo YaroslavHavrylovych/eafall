@@ -10,6 +10,10 @@ import java.io.IOException;
 public class BuildingCreationClientMessage extends ClientMessage implements MessagesConstants {
     private int mBuildingId;
 
+    @Deprecated
+    public BuildingCreationClientMessage() {
+    }
+
     public BuildingCreationClientMessage(int buildingId) {
         mBuildingId = buildingId;
     }
