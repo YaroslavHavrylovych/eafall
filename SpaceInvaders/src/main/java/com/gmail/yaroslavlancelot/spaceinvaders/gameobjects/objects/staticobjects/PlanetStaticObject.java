@@ -134,9 +134,9 @@ public class PlanetStaticObject extends StaticObject {
                     mUnitCreatorCycle = new UnitCreatorCycle(mPlanetTeam, mEntityOperations, mBuildingId);
                     registerUpdateHandler(new TimerHandler(mUnitCreationCycleTime, true, mUnitCreatorCycle));
                 }
+                mUnitCreatorCycle.increaseUnitAmount();
             }
             mBuildingsAmount += 1;
-            mUnitCreatorCycle.increaseUnitAmount();
         }
 
         public int getBuildingsAmount() {
