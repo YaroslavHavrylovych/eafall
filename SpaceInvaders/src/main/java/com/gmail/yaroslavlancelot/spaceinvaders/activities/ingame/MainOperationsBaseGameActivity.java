@@ -142,6 +142,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
 
     protected abstract void changeSplashSceneWithGameScene();
 
+
     @Override
     public void onCreateResources(OnCreateResourcesCallback onCreateResourcesCallback) {
         LoggerHelper.methodInvocation(TAG, "onCreateResources");
@@ -165,23 +166,10 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         onCreateSceneCallback.onCreateSceneFinished(mSplashScene);
     }
 
-    @Override
-    public synchronized void onGameCreated() {
-        super.onGameCreated();
-
-        changeSplashSceneWithGameScene();
-    }
-
     protected void initSplashScene() {
         mSplashScene = new Scene();
         mSplash = new Sprite(0, 0, mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_SPLASH_SCREEN),
-                mEngine.getVertexBufferObjectManager()) {
-            @Override
-            protected void preDraw(GLState pGLState, Camera pCamera) {
-                super.preDraw(pGLState, pCamera);
-                pGLState.enableDither();
-            }
-        };
+                mEngine.getVertexBufferObjectManager());
 
         mSplash.setScale(4f);
         mSplash.setPosition((SizeConstants.GAME_FIELD_WIDTH - mSplash.getWidth()) * 0.5f,
@@ -220,6 +208,11 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         // music
         mBackgroundMusic = SoundsAndMusicUtils.getMusic(GameStringsConstantsAndUtils.getPathToBackgroundMusic() + "background_1.ogg",
                 this, mEngine.getMusicManager());
+    }
+
+    protected void startBackgroundMusic() {
+        LoggerHelper.methodInvocation(TAG, "startBackgroundMusic");
+        LoggerHelper.printInformationMessage(TAG, "mBackgroundMusic != null == " + (mBackgroundMusic != null));
         if (mBackgroundMusic != null) {
             mBackgroundMusic.setLooping(true);
             mBackgroundMusic.getMediaPlayer().setOnPreparedListener(this);
@@ -229,6 +222,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     @Override
     public void onPopulateScene(Scene scene, OnPopulateSceneCallback onPopulateSceneCallback) {
         onPopulateSceneCallback.onPopulateSceneFinished();
+
+        changeSplashSceneWithGameScene();
     }
 
     /** update money amount */
@@ -404,6 +399,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     protected void initBot(final ITeam initializingTeam) {
         LoggerHelper.methodInvocation(TAG, "initBot");
         ExecutorService executorService = Executors.newSingleThreadExecutor();
+        LoggerHelper.printDebugMessage(TAG, "bot team == null : " + (initializingTeam == null));
         Callable<Boolean> simpleBot = new NormalBot(initializingTeam);
         Future<Boolean> future = executorService.submit(simpleBot);
     }

@@ -4,6 +4,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobject
 import com.gmail.yaroslavlancelot.spaceinvaders.network.GameSocketServer;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.InGame;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import org.andengine.engine.options.EngineOptions;
 
 /**
@@ -22,12 +23,14 @@ public class ServerGameActivity extends PhysicWorldGameActivity implements InGam
 
     @Override
     public void newBuildingCreate(int buildingId) {
+        LoggerHelper.methodInvocation(TAG, "newBuildingCreate");
         if (mBlueTeam != null && mBlueTeam.getTeamPlanet() != null)
             mBlueTeam.getTeamPlanet().purchaseBuilding(buildingId);
     }
 
     @Override
     protected void userWantCreateBuilding(final ITeam userTeam, final int buildingId) {
+        LoggerHelper.printInformationMessage(TAG, "user want to create building with id=" + buildingId);
         PlanetStaticObject planetStaticObject = userTeam.getTeamPlanet();
         if (planetStaticObject != null)
             userTeam.getTeamPlanet().createBuildingById(buildingId);

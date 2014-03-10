@@ -1,7 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.client.BuildingCreatedClientMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.client.BuildingCreationClientMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.connector.GameServerConnector;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
@@ -35,18 +35,23 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity {
                 onLoadGameResources();
 
                 onInitGameScene();
-                onInitPlanetsSetEnemies();
 
                 mSplashScene.detachSelf();
                 mEngine.setScene(mGameScene);
+
+                onInitPlanetsSetEnemies();
+
+                startBackgroundMusic();
             }
         }));
     }
 
     @Override
     protected void userWantCreateBuilding(final ITeam userTeam, final int buildingId) {
+        LoggerHelper.methodInvocation(TAG, "userWantCreateBuilding");
         try {
-            mGameServerConnector.sendClientMessage(new BuildingCreatedClientMessage(buildingId));
+            mGameServerConnector.sendClientMessage(new BuildingCreationClientMessage(buildingId));
+            LoggerHelper.printInformationMessage(TAG, "send message with building=" + buildingId + " creation request");
         } catch (IOException e) {
             LoggerHelper.printErrorMessage(TAG, e.getMessage());
         }

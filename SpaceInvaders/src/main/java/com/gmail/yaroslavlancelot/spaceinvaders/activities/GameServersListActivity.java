@@ -233,7 +233,7 @@ public class GameServersListActivity extends Activity implements
 
     @Override
     public void onTerminated(final ServerConnector<SocketConnection> serverConnector) {
-        LoggerHelper.printInformationMessage(TAG, "CLIENT: Disconnected from Server.");
+        LoggerHelper.printInformationMessage(TAG, "Disconnected from Server.");
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.network;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.client.BuildingCreatedClientMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.client.BuildingCreationClientMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.client.ConnectionEstablishClientMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.InGame;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.PreGameStart;
@@ -51,11 +51,11 @@ public class GameSocketServer extends SocketServer<SocketConnectionClientConnect
             }
         });
 
-        clientConnector.registerClientMessage(FLAG_MESSAGE_CLIENT_BUILDING_CREATED, BuildingCreatedClientMessage.class, new IClientMessageHandler<SocketConnection>() {
+        clientConnector.registerClientMessage(FLAG_MESSAGE_CLIENT_WANT_CREATE_BUILDING, BuildingCreationClientMessage.class, new IClientMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ClientConnector<SocketConnection> pClientConnector, final IClientMessage pClientMessage) throws IOException {
-                LoggerHelper.printInformationMessageFromClient(TAG, "connection with client established");
-                int buildingId = ((BuildingCreatedClientMessage) pClientMessage).getBuildingId();
+                LoggerHelper.printInformationMessageFromClient(TAG, "client want to create a building");
+                int buildingId = ((BuildingCreationClientMessage) pClientMessage).getBuildingId();
                 synchronized (mInGameList) {
                     for (InGame inGame : mInGameList) {
                         inGame.newBuildingCreate(buildingId);

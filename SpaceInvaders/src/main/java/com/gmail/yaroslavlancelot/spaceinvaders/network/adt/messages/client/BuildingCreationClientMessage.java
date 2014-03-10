@@ -7,10 +7,10 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class BuildingCreatedClientMessage extends ClientMessage implements MessagesConstants {
+public class BuildingCreationClientMessage extends ClientMessage implements MessagesConstants {
     private int mBuildingId;
 
-    public BuildingCreatedClientMessage(int buildingId) {
+    public BuildingCreationClientMessage(int buildingId) {
         mBuildingId = buildingId;
     }
 
@@ -24,12 +24,12 @@ public class BuildingCreatedClientMessage extends ClientMessage implements Messa
     }
 
     @Override
-    protected void onWriteTransmissionData(final DataOutputStream pDataOutputStream) throws IOException {
-        pDataOutputStream.writeInt(mBuildingId);
+    public short getFlag() {
+        return FLAG_MESSAGE_CLIENT_WANT_CREATE_BUILDING;
     }
 
     @Override
-    public short getFlag() {
-        return 0;
+    protected void onWriteTransmissionData(final DataOutputStream pDataOutputStream) throws IOException {
+        pDataOutputStream.writeInt(mBuildingId);
     }
 }

@@ -41,6 +41,10 @@ public abstract class PhysicWorldGameActivity extends MainOperationsBaseGameActi
 
                 mSplashScene.detachSelf();
                 mEngine.setScene(mGameScene);
+
+                onInitPlanetsSetEnemies();
+
+                startBackgroundMusic();
             }
         }));
     }
@@ -58,7 +62,6 @@ public abstract class PhysicWorldGameActivity extends MainOperationsBaseGameActi
         mGameScene.registerUpdateHandler(mPhysicsWorld);
 
         createBounds();
-        onInitPlanetsSetEnemies();
     }
 
     /** bound for objects so they can't get out of the screen */
@@ -111,5 +114,4 @@ public abstract class PhysicWorldGameActivity extends MainOperationsBaseGameActi
         }
         mPhysicsWorld.destroyBody(gameObject.getBody());
     }
-
 }
