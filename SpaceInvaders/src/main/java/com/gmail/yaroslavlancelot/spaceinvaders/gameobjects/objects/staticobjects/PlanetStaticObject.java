@@ -70,7 +70,7 @@ public class PlanetStaticObject extends StaticObject {
     }
 
     private boolean createBuildingById(int buildingId, boolean isFakePlanet) {
-        LoggerHelper.methodInvocation(TAG, "buildBuilding");
+        LoggerHelper.methodInvocation(TAG, "buildBuilding. IsFakePlanet=" + isFakePlanet);
         if (buildings.get(buildingId) == null) {
             final StaticObject staticObject =
                     mPlanetTeam.getTeamRace().getBuildingById(buildingId);
@@ -127,6 +127,7 @@ public class PlanetStaticObject extends StaticObject {
         }
 
         private void increaseBuildingsAmount() {
+            LoggerHelper.methodInvocation(TAG, "increaseBuildingsAmount");
             if (!mIsFakePlanet) {
                 mIncomeIncreasingValue += mBuilding.getObjectIncomeIncreasingValue();
                 if (mUnitCreatorCycle == null) {

@@ -35,7 +35,6 @@ import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.Localizable;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations;
 import org.andengine.audio.music.Music;
 import org.andengine.audio.sound.Sound;
-import org.andengine.engine.camera.Camera;
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.options.EngineOptions;
@@ -54,14 +53,12 @@ import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
-import org.andengine.opengl.util.GLState;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.color.Color;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -251,11 +248,11 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
 
         // first team init
         TeamControlBehaviourType team = TeamControlBehaviourType.valueOf(intent.getStringExtra(GameStringsConstantsAndUtils.RED_TEAM_NAME));
-        initRedTeamAndPlanet(team == TeamControlBehaviourType.REMOTE_CONTROL);
+        initRedPlanet(team == TeamControlBehaviourType.REMOTE_CONTROL);
 
         // second team init
         team = TeamControlBehaviourType.valueOf(intent.getStringExtra(GameStringsConstantsAndUtils.BLUE_TEAM_NAME));
-        initBlueTeamAndPlanet(team == TeamControlBehaviourType.REMOTE_CONTROL);
+        initBluePlanet(team == TeamControlBehaviourType.REMOTE_CONTROL);
     }
 
     protected void initTeams() {
@@ -293,6 +290,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         } else {
             throw new IllegalArgumentException("unknown team type =" + teamType);
         }
+
+        mTeams.put(team.getTeamName(), team);
     }
 
     protected abstract void userWantCreateBuilding(ITeam userTeam, int buildingId);
@@ -323,14 +322,13 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     }
 
     /** init red team and planet */
-    protected void initRedTeamAndPlanet(boolean isFakePlanet) {
+    protected void initRedPlanet(boolean isFakePlanet) {
         mRedTeam.setTeamPlanet(createPlanet(0, (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2
                 + SizeConstants.ADDITION_MARGIN_FOR_PLANET,
                 mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_RED_PLANET), GameStringsConstantsAndUtils.KEY_RED_PLANET,
                 mRedTeam, isFakePlanet));
         mRedTeam.getTeamPlanet().setSpawnPoint(SizeConstants.PLANET_DIAMETER / 2 + SizeConstants.UNIT_SIZE + 2,
                 SizeConstants.GAME_FIELD_HEIGHT / 2 + SizeConstants.ADDITION_MARGIN_FOR_PLANET);
-        mTeams.put(mRedTeam.getTeamName(), mRedTeam);
     }
 
     /**
@@ -354,16 +352,17 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     }
 
     /** init blue team and planet */
-    protected void initBlueTeamAndPlanet(boolean isFakePlanet) {
+    protected void initBluePlanet(boolean isFakePlanet) {
         mBlueTeam.setTeamPlanet(createPlanet(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER
-                - SizeConstants.ADDITION_MARGIN_FOR_PLANET,
+                        - SizeConstants.ADDITION_MARGIN_FOR_PLANET,
                 (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2,
                 mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_BLUE_PLANET), GameStringsConstantsAndUtils.KEY_BLUE_PLANET,
-                mBlueTeam, isFakePlanet));
+                mBlueTeam, isFakePlanet
+        ));
         mBlueTeam.getTeamPlanet().setSpawnPoint(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER / 2 -
-                SizeConstants.UNIT_SIZE - 2 - SizeConstants.ADDITION_MARGIN_FOR_PLANET,
-                SizeConstants.GAME_FIELD_HEIGHT / 2);
-        mTeams.put(mBlueTeam.getTeamName(), mBlueTeam);
+                        SizeConstants.UNIT_SIZE - 2 - SizeConstants.ADDITION_MARGIN_FOR_PLANET,
+                SizeConstants.GAME_FIELD_HEIGHT / 2
+        );
     }
 
     /**
