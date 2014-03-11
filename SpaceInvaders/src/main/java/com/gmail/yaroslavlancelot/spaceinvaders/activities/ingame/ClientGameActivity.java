@@ -1,6 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.client.BuildingCreationClientMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.InGameClient;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.connector.GameServerConnector;
@@ -63,6 +64,7 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
     public void buildingCreated(final int buildingId, final String teamName) {
         LoggerHelper.methodInvocation(TAG, "buildingCreated");
         LoggerHelper.printDebugMessage(TAG, "buildingId=" + buildingId + ", teamName=" + teamName);
-        mTeams.get(teamName).getTeamPlanet().createBuildingById(buildingId);
+        PlanetStaticObject planetStaticObject = mTeams.get(teamName).getTeamPlanet();
+        planetStaticObject.createBuildingById(buildingId);
     }
 }

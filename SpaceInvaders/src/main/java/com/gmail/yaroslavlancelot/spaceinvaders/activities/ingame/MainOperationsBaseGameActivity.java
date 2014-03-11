@@ -129,7 +129,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
 
         EngineOptions engineOptions = new EngineOptions(
                 true, ScreenOrientation.LANDSCAPE_FIXED, new RatioResolutionPolicy(
-                SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT), mCamera);
+                SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT), mCamera
+        );
 
         // music
         engineOptions.getAudioOptions().setNeedsMusic(true);
@@ -150,7 +151,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         BitmapTextureAtlas splashTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 128, 32, TextureOptions.DEFAULT);
         mTextureRegionHolderUtils.addElement(GameStringsConstantsAndUtils.KEY_SPLASH_SCREEN,
                 BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-                        splashTextureAtlas, this, GameStringsConstantsAndUtils.FILE_SPLASH_SCREEN, 0, 0));
+                        splashTextureAtlas, this, GameStringsConstantsAndUtils.FILE_SPLASH_SCREEN, 0, 0)
+        );
         splashTextureAtlas.load();
 
         onCreateResourcesCallback.onCreateResourcesFinished();
@@ -191,10 +193,12 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
                 BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, this, GameStringsConstantsAndUtils.FILE_SUN, 0, 0));
         mTextureRegionHolderUtils.addElement(GameStringsConstantsAndUtils.KEY_RED_PLANET,
                 BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, this, GameStringsConstantsAndUtils.FILE_RED_PLANET,
-                        0, SizeConstants.FILE_SUN_DIAMETER));
+                        0, SizeConstants.FILE_SUN_DIAMETER)
+        );
         mTextureRegionHolderUtils.addElement(GameStringsConstantsAndUtils.KEY_BLUE_PLANET,
                 BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, this, GameStringsConstantsAndUtils.FILE_BLUE_PLANET,
-                        SizeConstants.PLANET_DIAMETER, SizeConstants.FILE_SUN_DIAMETER));
+                        SizeConstants.PLANET_DIAMETER, SizeConstants.FILE_SUN_DIAMETER)
+        );
         biggerObjectsTexture.load();
 
         // font
@@ -248,11 +252,11 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
 
         // first team init
         TeamControlBehaviourType team = TeamControlBehaviourType.valueOf(intent.getStringExtra(GameStringsConstantsAndUtils.RED_TEAM_NAME));
-        initRedPlanet(team == TeamControlBehaviourType.REMOTE_CONTROL);
+        initRedPlanet(team == TeamControlBehaviourType.REMOTE_CLIENT_CONTROL || team == TeamControlBehaviourType.USER_CLIENT_CONTROL);
 
         // second team init
         team = TeamControlBehaviourType.valueOf(intent.getStringExtra(GameStringsConstantsAndUtils.BLUE_TEAM_NAME));
-        initBluePlanet(team == TeamControlBehaviourType.REMOTE_CONTROL);
+        initBluePlanet(team == TeamControlBehaviourType.REMOTE_CLIENT_CONTROL || team == TeamControlBehaviourType.USER_CLIENT_CONTROL);
     }
 
     protected void initTeams() {
@@ -281,11 +285,13 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         Intent intent = getIntent();
         TeamControlBehaviourType teamType = TeamControlBehaviourType.valueOf(intent.getStringExtra(teamNameInExtra));
 
-        if (teamType == TeamControlBehaviourType.USER_CONTROL) {
+        if (teamType == TeamControlBehaviourType.USER_SERVER_CONTROL ||
+                teamType == TeamControlBehaviourType.USER_CLIENT_CONTROL) {
             initUser(team);
         } else if (teamType == TeamControlBehaviourType.BOT_CONTROL) {
             initBot(team);
-        } else if (teamType == TeamControlBehaviourType.REMOTE_CONTROL) {
+        } else if (teamType == TeamControlBehaviourType.REMOTE_CLIENT_CONTROL ||
+                teamType == TeamControlBehaviourType.REMOTE_SERVER_CONTROL) {
             //nothing
         } else {
             throw new IllegalArgumentException("unknown team type =" + teamType);
@@ -308,7 +314,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         Intent intent = getIntent();
         TeamControlBehaviourType teamType = TeamControlBehaviourType.valueOf(intent.getStringExtra(teamNameInExtra));
 
-        if (teamType == TeamControlBehaviourType.USER_CONTROL) {
+        if (teamType == TeamControlBehaviourType.USER_SERVER_CONTROL) {
             return new Team(teamNameInExtra, race, teamType) {
                 @Override
                 public void changeMoney(final int delta) {
@@ -324,9 +330,10 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     /** init red team and planet */
     protected void initRedPlanet(boolean isFakePlanet) {
         mRedTeam.setTeamPlanet(createPlanet(0, (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2
-                + SizeConstants.ADDITION_MARGIN_FOR_PLANET,
+                        + SizeConstants.ADDITION_MARGIN_FOR_PLANET,
                 mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_RED_PLANET), GameStringsConstantsAndUtils.KEY_RED_PLANET,
-                mRedTeam, isFakePlanet));
+                mRedTeam, isFakePlanet
+        ));
         mRedTeam.getTeamPlanet().setSpawnPoint(SizeConstants.PLANET_DIAMETER / 2 + SizeConstants.UNIT_SIZE + 2,
                 SizeConstants.GAME_FIELD_HEIGHT / 2 + SizeConstants.ADDITION_MARGIN_FOR_PLANET);
     }
@@ -392,7 +399,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
                     public void itemPicked(final int itemId) {
                         userWantCreateBuilding(initializingTeam, itemId);
                     }
-                });
+                }
+        );
         mMainSceneTouchListener.addTouchListener(userClickScreenTouchListener);
     }
 
