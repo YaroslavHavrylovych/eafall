@@ -25,28 +25,13 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
     }
 
     @Override
-    public void detachPhysicsBody(final GameObject gameObject) {
-        //no physic body at client
+    protected void initPhysicWorld() {
+        // no physic world at client side
     }
 
     @Override
-    protected void changeSplashSceneWithGameScene() {
-        mEngine.registerUpdateHandler(new TimerHandler(3f, new ITimerCallback() {
-            public void onTimePassed(final TimerHandler pTimerHandler) {
-                mEngine.unregisterUpdateHandler(pTimerHandler);
-
-                onLoadGameResources();
-
-                onInitGameScene();
-
-                mSplashScene.detachSelf();
-                mEngine.setScene(mGameScene);
-
-                onInitPlanetsSetEnemies();
-
-                startBackgroundMusic();
-            }
-        }));
+    public void detachPhysicsBody(final GameObject gameObject) {
+        //no physic body at client
     }
 
     @Override

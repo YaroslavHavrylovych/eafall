@@ -12,7 +12,6 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobject
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.SunStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
-import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
@@ -32,31 +31,16 @@ public abstract class PhysicWorldGameActivity extends MainOperationsBaseGameActi
     private PhysicsWorld mPhysicsWorld;
 
     @Override
-    protected void changeSplashSceneWithGameScene() {
-        mEngine.registerUpdateHandler(new TimerHandler(3f, new ITimerCallback() {
-            public void onTimePassed(final TimerHandler pTimerHandler) {
-                mEngine.unregisterUpdateHandler(pTimerHandler);
-
-                initPhysicWorld();
-
-                mSplashScene.detachSelf();
-                mEngine.setScene(mGameScene);
-
-                onInitPlanetsSetEnemies();
-
-                startBackgroundMusic();
-            }
-        }));
+    protected void onInitGameScene() {
+        mPhysicsWorld = new PhysicsWorld(new Vector2(0, 0), false);
+        super.onInitGameScene();
     }
 
     /**
      * initialize physic world. For using in child classes without accessing private fields.
      */
+    @Override
     protected void initPhysicWorld() {
-        onLoadGameResources();
-        mPhysicsWorld = new PhysicsWorld(new Vector2(0, 0), false);
-
-        onInitGameScene();
         mHud.registerUpdateHandler(new TimerHandler(MONEY_UPDATE_TIME, true, new MoneyUpdateCycle(mTeams)));
 
         mGameScene.registerUpdateHandler(mPhysicsWorld);

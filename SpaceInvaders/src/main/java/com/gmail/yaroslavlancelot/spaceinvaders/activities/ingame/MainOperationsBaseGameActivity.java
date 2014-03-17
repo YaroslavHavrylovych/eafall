@@ -37,6 +37,8 @@ import org.andengine.audio.music.Music;
 import org.andengine.audio.sound.Sound;
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.engine.camera.hud.HUD;
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
@@ -139,7 +141,26 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         return engineOptions;
     }
 
-    protected abstract void changeSplashSceneWithGameScene();
+    protected void changeSplashSceneWithGameScene() {
+        mEngine.registerUpdateHandler(new TimerHandler(3f, new ITimerCallback() {
+            public void onTimePassed(final TimerHandler pTimerHandler) {
+                mEngine.unregisterUpdateHandler(pTimerHandler);
+
+                onLoadGameResources();
+
+                onInitGameScene();
+
+                initPhysicWorld();
+
+                mSplashScene.detachSelf();
+                mEngine.setScene(mGameScene);
+
+                onInitPlanetsSetEnemies();
+
+                startBackgroundMusic();
+            }
+        }));
+    }
 
 
     @Override
@@ -536,6 +557,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         mUnits.add(unit);
         return unit;
     }
+
+    protected abstract void initPhysicWorld();
 
     /**
      * create dynamic game object (e.g. warrior or some other stuff)
