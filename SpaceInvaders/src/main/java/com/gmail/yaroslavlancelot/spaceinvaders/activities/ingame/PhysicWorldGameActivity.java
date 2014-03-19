@@ -3,6 +3,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameloop.MoneyUpdateCycle;
@@ -79,11 +80,12 @@ public abstract class PhysicWorldGameActivity extends MainOperationsBaseGameActi
     }
 
     @Override
-    protected Unit createAttachedUnitCarcass(final int unitKey, final ITeam unitTeam) {
-        Unit unit = super.createAttachedUnitCarcass(unitKey, unitTeam);
+    protected Unit createAndAttachUnitCarcass(final int unitKey, final ITeam unitTeam) {
+        Unit unit = super.createAndAttachUnitCarcass(unitKey, unitTeam);
         final FixtureDef playerFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f);
         Body body = PhysicsFactory.createCircleBody(mPhysicsWorld, unit, BodyDef.BodyType.DynamicBody, playerFixtureDef);
         unit.setBody(body);
+        body.setUserData(unit);
         mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(unit, body, true, true));
         return unit;
     }
@@ -97,5 +99,9 @@ public abstract class PhysicWorldGameActivity extends MainOperationsBaseGameActi
             mPhysicsWorld.unregisterPhysicsConnector(pc);
         }
         mPhysicsWorld.destroyBody(gameObject.getBody());
+    }
+
+    protected void setContactListener(ContactListener contactListener) {
+        mPhysicsWorld.setContactListener(contactListener);
     }
 }

@@ -1,8 +1,14 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Manifold;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.GameSocketServer;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.BuildingCreatedServerMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.UnitCreatedServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.server.InGameServer;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
@@ -43,9 +49,56 @@ public class ServerGameActivity extends PhysicWorldGameActivity implements InGam
                 try {
                     mGameSocketServer.sendBroadcastServerMessage(new BuildingCreatedServerMessage(buildingId, userTeam.getTeamName()));
                 } catch (IOException e) {
-                    LoggerHelper.printErrorMessage(TAG, "send message (create building on client) IOException");
+                    LoggerHelper.printErrorMessage(TAG, "send message (create building on server) IOException");
                 }
             }
         }
+    }
+
+    @Override
+    protected Unit createAndAttachUnitCarcass(final int unitKey, final ITeam unitTeam) {
+        Unit unit = super.createAndAttachUnitCarcass(unitKey, unitTeam);
+        try {
+            mGameSocketServer.sendBroadcastServerMessage(new UnitCreatedServerMessage(unitTeam.getTeamName(), unitKey,
+                    unit.getX(), unit.getY()));
+        } catch (IOException e) {
+            LoggerHelper.printErrorMessage(TAG, "send message (unit created on server) IOException");
+        }
+        return unit;
+    }
+
+    @Override
+    protected void initPhysicWorld() {
+        super.initPhysicWorld();
+        setContactListener(new ContactListener() {
+            @Override
+            public void beginContact(final Contact contact) {
+            }
+
+            @Override
+            public void endContact(final Contact contact) {
+                Object userData = contact.getFixtureA().getBody().getUserData();
+                sendUnitChanged(userData);
+                userData = contact.getFixtureB().getBody().getUserData();
+                sendUnitChanged(userData);
+            }
+
+            @Override
+            public void preSolve(final Contact contact, final Manifold oldManifold) {
+            }
+
+            @Override
+            public void postSolve(final Contact contact, final ContactImpulse impulse) {
+            }
+
+            private void sendUnitChanged(Object userObject) {
+                if (userObject == null || !(userObject instanceof Unit))
+                    return;
+
+                Unit unit = (Unit) userObject;
+
+                //TODO send to user
+            }
+        });
     }
 }

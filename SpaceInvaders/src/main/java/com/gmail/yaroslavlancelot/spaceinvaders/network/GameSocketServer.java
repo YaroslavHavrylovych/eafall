@@ -42,7 +42,7 @@ public class GameSocketServer extends SocketServer<SocketConnectionClientConnect
         clientConnector.registerClientMessage(FLAG_MESSAGE_CLIENT_CONNECTION_ESTABLISHED, ConnectionEstablishClientMessage.class, new IClientMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ClientConnector<SocketConnection> pClientConnector, final IClientMessage pClientMessage) throws IOException {
-                LoggerHelper.printInformationMessageFromClient(TAG, "connection with client established");
+                LoggerHelper.printInformationMessageInClient(TAG, "connection with client established");
                 int protocolVersion = ((ConnectionEstablishClientMessage) pClientMessage).getProtocolVersion();
                 LoggerHelper.printDebugMessage(TAG, "protocolVersion=" + protocolVersion);
                 synchronized (mPreGameStartServerList) {
@@ -56,7 +56,7 @@ public class GameSocketServer extends SocketServer<SocketConnectionClientConnect
         clientConnector.registerClientMessage(FLAG_MESSAGE_CLIENT_WANT_CREATE_BUILDING, BuildingCreationClientMessage.class, new IClientMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ClientConnector<SocketConnection> pClientConnector, final IClientMessage pClientMessage) throws IOException {
-                LoggerHelper.printInformationMessageFromClient(TAG, "client want to create a building");
+                LoggerHelper.printInformationMessageInClient(TAG, "client want to create a building");
                 int buildingId = ((BuildingCreationClientMessage) pClientMessage).getBuildingId();
                 synchronized (mInGameServerList) {
                     for (InGameServer inGameServer : mInGameServerList) {

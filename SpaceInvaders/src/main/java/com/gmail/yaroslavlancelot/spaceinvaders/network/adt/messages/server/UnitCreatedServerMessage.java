@@ -7,41 +7,56 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class BuildingCreatedServerMessage extends ServerMessage implements MessagesConstants {
-    private int mBuildingId;
+public class UnitCreatedServerMessage extends ServerMessage implements MessagesConstants {
+    private int mUnitId;
     private String mTeamName;
+    private float mX, mY;
 
     @Deprecated
-    public BuildingCreatedServerMessage() {
+    public UnitCreatedServerMessage() {
     }
 
-    public BuildingCreatedServerMessage(int buildingId, String teamName) {
-        mBuildingId = buildingId;
+    public UnitCreatedServerMessage(String teamName, int unitId, float x, float y) {
+        mUnitId = unitId;
         mTeamName = teamName;
-    }
-
-    @Override
-    public short getFlag() {
-        return FLAG_MESSAGE_SERVER_BUILDING_CREATED;
+        mX = x;
+        mY = y;
     }
 
     @Override
     protected void onReadTransmissionData(final DataInputStream pDataInputStream) throws IOException {
-        mBuildingId = pDataInputStream.readInt();
+        mUnitId = pDataInputStream.readInt();
         mTeamName = pDataInputStream.readUTF();
+        mX = pDataInputStream.readFloat();
+        mY = pDataInputStream.readFloat();
     }
 
     @Override
     protected void onWriteTransmissionData(final DataOutputStream pDataOutputStream) throws IOException {
-        pDataOutputStream.writeInt(mBuildingId);
+        pDataOutputStream.writeInt(mUnitId);
         pDataOutputStream.writeUTF(mTeamName);
+        pDataOutputStream.writeFloat(mX);
+        pDataOutputStream.writeFloat(mY);
     }
 
-    public int getBuildingId() {
-        return mBuildingId;
+    @Override
+    public short getFlag() {
+        return FLAG_MESSAGE_SERVER_UNIT_CREATED;
+    }
+
+    public float getY() {
+        return mY;
+    }
+
+    public float getX() {
+        return mX;
     }
 
     public String getTeamName() {
         return mTeamName;
+    }
+
+    public int getUnitId() {
+        return mUnitId;
     }
 }

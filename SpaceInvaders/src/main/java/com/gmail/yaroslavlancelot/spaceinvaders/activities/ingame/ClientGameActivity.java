@@ -7,8 +7,6 @@ import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.InGameC
 import com.gmail.yaroslavlancelot.spaceinvaders.network.connector.GameServerConnector;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
-import org.andengine.engine.handler.timer.ITimerCallback;
-import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
 
 import java.io.IOException;
@@ -51,5 +49,10 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
         LoggerHelper.printDebugMessage(TAG, "buildingId=" + buildingId + ", teamName=" + teamName);
         PlanetStaticObject planetStaticObject = mTeams.get(teamName).getTeamPlanet();
         planetStaticObject.createBuildingById(buildingId);
+    }
+
+    @Override
+    public void unitCreated(final String teamName, final int unitId, final float x, final float y) {
+        createAndAttachUnitCarcass(unitId, mTeams.get(teamName), x, y);
     }
 }

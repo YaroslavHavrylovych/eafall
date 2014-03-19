@@ -147,17 +147,13 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
                 mEngine.unregisterUpdateHandler(pTimerHandler);
 
                 onLoadGameResources();
-
                 onInitGameScene();
-
                 initPhysicWorld();
+                onInitPlanetsAndTeams();
+                startBackgroundMusic();
 
                 mSplashScene.detachSelf();
                 mEngine.setScene(mGameScene);
-
-                onInitPlanetsSetEnemies();
-
-                startBackgroundMusic();
             }
         }));
     }
@@ -266,7 +262,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         initMoneyTextView();
     }
 
-    protected void onInitPlanetsSetEnemies() {
+    protected void onInitPlanetsAndTeams() {
         initTeams();
 
         Intent intent = getIntent();
@@ -531,7 +527,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
      */
     @Override
     public Unit createUnitForTeam(int unitKey, final ITeam unitTeam) {
-        Unit warrior = createAttachedUnitCarcass(unitKey, unitTeam);
+        Unit warrior = createAndAttachUnitCarcass(unitKey, unitTeam);
         warrior.registerUpdateHandler();
         warrior.setEnemiesUpdater(UnitCallbacksUtils.getSimpleUnitEnemiesUpdater(unitTeam.getEnemyTeam()));
         warrior.initMovingPath();
@@ -548,11 +544,27 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
      *
      * @return newly created unit
      */
-    protected Unit createAttachedUnitCarcass(int unitKey, ITeam unitTeam) {
-        LoggerHelper.methodInvocation(TAG, "createAttachedUnitCarcass");
+    protected Unit createAndAttachUnitCarcass(int unitKey, ITeam unitTeam) {
+        return createAndAttachUnitCarcass(unitKey, unitTeam,
+                unitTeam.getTeamPlanet().getSpawnPointX(), unitTeam.getTeamPlanet().getSpawnPointY());
+    }
+
+    /**
+     * create dynamic game object (e.g. warrior or some other stuff) and attach it to game scene with coordinates
+     * which set in spawn point for unit team planet
+     *
+     * @param unitKey key to identify which kind of unit you want to build
+     * @param unitTeam team unit of which should be created
+     * @param x where unit should be positioned abscissa
+     * @param y where unit should be positioned ordinate
+     *
+     * @return newly created unit
+     */
+    protected Unit createAndAttachUnitCarcass(int unitKey, ITeam unitTeam, float x, float y) {
+        LoggerHelper.methodInvocation(TAG, "createAndAttachUnitCarcass");
         Unit unit = createUnitCarcass(unitKey, unitTeam);
-        unit.setX(unitTeam.getTeamPlanet().getSpawnPointX());
-        unit.setY(unitTeam.getTeamPlanet().getSpawnPointY());
+        unit.setX(x);
+        unit.setY(y);
         attachEntity(unit);
         mUnits.add(unit);
         return unit;

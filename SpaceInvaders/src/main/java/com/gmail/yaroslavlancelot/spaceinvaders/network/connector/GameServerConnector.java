@@ -3,6 +3,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.network.connector;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.MessagesConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.BuildingCreatedServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.StartingGameServerMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.UnitCreatedServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.WaitingForPlayersServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.InGameClient;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.PreGameStartClient;
@@ -35,7 +36,7 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
         registerServerMessage(FLAG_MESSAGE_SERVER_WAITING_FOR_PLAYERS, WaitingForPlayersServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
-                LoggerHelper.printInformationMessageFromClient(TAG, "server waiting for players");
+                LoggerHelper.printInformationMessageInClient(TAG, "server waiting for players");
                 synchronized (mPreGameStartClientList) {
                     for (PreGameStartClient preGameStartClient : mPreGameStartClientList) {
                         preGameStartClient.gameWaitingForPlayers(mServerIp);
@@ -47,7 +48,7 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
         registerServerMessage(FLAG_MESSAGE_SERVER_STARTING_GAME, StartingGameServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
-                LoggerHelper.printInformationMessageFromClient(TAG, "starting game");
+                LoggerHelper.printInformationMessageInClient(TAG, "starting game");
                 synchronized (mPreGameStartClientList) {
                     for (PreGameStartClient preGameStartClient : mPreGameStartClientList) {
                         preGameStartClient.gameStart(mServerIp);
@@ -59,11 +60,25 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
         registerServerMessage(FLAG_MESSAGE_SERVER_BUILDING_CREATED, BuildingCreatedServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
-                LoggerHelper.printInformationMessageFromClient(TAG, "building created");
+                LoggerHelper.printInformationMessageInClient(TAG, "building created");
                 BuildingCreatedServerMessage buildingCreatedServerMessage = (BuildingCreatedServerMessage) pServerMessage;
                 synchronized (mInGameClientList) {
                     for (InGameClient inGameClient : mInGameClientList) {
                         inGameClient.buildingCreated(buildingCreatedServerMessage.getBuildingId(), buildingCreatedServerMessage.getTeamName());
+                    }
+                }
+            }
+        });
+
+        registerServerMessage(FLAG_MESSAGE_SERVER_UNIT_CREATED, UnitCreatedServerMessage.class, new IServerMessageHandler<SocketConnection>() {
+            @Override
+            public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
+                LoggerHelper.printInformationMessageInClient(TAG, "unit created");
+                UnitCreatedServerMessage unitCreatedServerMessage = (UnitCreatedServerMessage) pServerMessage;
+                synchronized (mInGameClientList) {
+                    for (InGameClient inGameClient : mInGameClientList) {
+                        inGameClient.unitCreated(unitCreatedServerMessage.getTeamName(), unitCreatedServerMessage.getUnitId(),
+                                unitCreatedServerMessage.getX(), unitCreatedServerMessage.getY());
                     }
                 }
             }

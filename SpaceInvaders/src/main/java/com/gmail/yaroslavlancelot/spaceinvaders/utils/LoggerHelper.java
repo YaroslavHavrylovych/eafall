@@ -47,7 +47,7 @@ public final class LoggerHelper {
      * @param tag log TAG
      * @param message message text
      */
-    public static void printInformationMessageFromServer(String tag, String message) {
+    public static void printInformationMessageInServer(String tag, String message) {
         printInformationMessage(tag, MESSAGE_FROM_SERVER_PREFIX + message);
     }
 
@@ -57,7 +57,7 @@ public final class LoggerHelper {
      * @param tag log TAG
      * @param message message text
      */
-    public static void printInformationMessageFromClient(String tag, String message) {
+    public static void printInformationMessageInClient(String tag, String message) {
         printInformationMessage(tag, MESSAGE_FROM_CLIENT_PREFIX + message);
     }
 
@@ -77,7 +77,7 @@ public final class LoggerHelper {
      * @param tag log TAG
      * @param message message text
      */
-    public static void printVerbosMessageFromServer(String tag, String message) {
+    public static void printVerbosMessageInServer(String tag, String message) {
         printVerboseMessage(tag, MESSAGE_FROM_SERVER_PREFIX + message);
     }
 
