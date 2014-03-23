@@ -1,9 +1,9 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Damage;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
 import org.andengine.engine.handler.physics.PhysicsHandler;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -30,14 +30,15 @@ public class Bullet extends Rectangle {
                      final Damage damage) {
         setX(x);
         setY(y);
-        PhysicsHandler physicsHandler = new PhysicsHandler(this);
+        final PhysicsHandler physicsHandler = new PhysicsHandler(this);
         registerUpdateHandler(physicsHandler);
-        physicsHandler.setVelocity((goalX - x ) * 3, (goalY - y) * 3);
+        physicsHandler.setVelocity((goalX - x) * 2, (goalY - y) * 2);
         registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new ITimerCallback() {
             @Override
             public void onTimePassed(final TimerHandler pTimerHandler) {
                 if (isOutOfBounds()) {
                     mEntityOperations.detachEntity(Bullet.this);
+                    unregisterUpdateHandler(physicsHandler);
                     return;
                 }
 

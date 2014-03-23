@@ -4,10 +4,13 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IVelocityChangedListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.GameSocketServer;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.BuildingCreatedServerMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.UnitChangePositionServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.UnitCreatedServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.server.InGameServer;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
@@ -20,7 +23,7 @@ import java.io.IOException;
  * Server game. Extends physical world and will add some handlers for server actions and
  * from client.
  */
-public class ServerGameActivity extends PhysicWorldGameActivity implements InGameServer {
+public class ServerGameActivity extends PhysicWorldGameActivity implements InGameServer, IVelocityChangedListener {
     private GameSocketServer mGameSocketServer;
 
     @Override
@@ -59,11 +62,11 @@ public class ServerGameActivity extends PhysicWorldGameActivity implements InGam
     protected Unit createAndAttachUnitCarcass(final int unitKey, final ITeam unitTeam) {
         Unit unit = super.createAndAttachUnitCarcass(unitKey, unitTeam);
         try {
-            mGameSocketServer.sendBroadcastServerMessage(new UnitCreatedServerMessage(unitTeam.getTeamName(), unitKey,
-                    unit.getX(), unit.getY()));
+            mGameSocketServer.sendBroadcastServerMessage(new UnitCreatedServerMessage(unitTeam.getTeamName(), unitKey, unit));
         } catch (IOException e) {
             LoggerHelper.printErrorMessage(TAG, "send message (unit created on server) IOException");
         }
+        unit.setVelocityChangedListener(this);
         return unit;
     }
 
@@ -78,9 +81,9 @@ public class ServerGameActivity extends PhysicWorldGameActivity implements InGam
             @Override
             public void endContact(final Contact contact) {
                 Object userData = contact.getFixtureA().getBody().getUserData();
-                sendUnitChanged(userData);
+                sendUnitPositionChanged(userData);
                 userData = contact.getFixtureB().getBody().getUserData();
-                sendUnitChanged(userData);
+                sendUnitPositionChanged(userData);
             }
 
             @Override
@@ -90,15 +93,23 @@ public class ServerGameActivity extends PhysicWorldGameActivity implements InGam
             @Override
             public void postSolve(final Contact contact, final ContactImpulse impulse) {
             }
-
-            private void sendUnitChanged(Object userObject) {
-                if (userObject == null || !(userObject instanceof Unit))
-                    return;
-
-                Unit unit = (Unit) userObject;
-
-                //TODO send to user
-            }
         });
+    }
+
+    @Override
+    public void velocityChanged(final GameObject unit) {
+        try {
+            if (unit instanceof Unit)
+                mGameSocketServer.sendBroadcastServerMessage(new UnitChangePositionServerMessage((Unit) unit));
+        } catch (IOException e) {
+            LoggerHelper.printErrorMessage(TAG, "send message (unit moved on server) IOException");
+        }
+    }
+
+    private void sendUnitPositionChanged(Object userObject) {
+        if (userObject == null || !(userObject instanceof Unit))
+            return;
+
+        velocityChanged((Unit) userObject);
     }
 }

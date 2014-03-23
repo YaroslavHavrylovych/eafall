@@ -3,15 +3,17 @@ package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects;
 import android.content.Context;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IObjectDestroyedListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IVelocityChangedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Damage;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ISpriteTouchable;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ITouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations;
 import org.andengine.audio.sound.Sound;
+import org.andengine.engine.handler.physics.PhysicsHandler;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
@@ -44,6 +46,10 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
     private ITouchListener mSpriteOnTouchListener;
     /** id of the string in the string files to represent object */
     private int mObjectStringId;
+    /** if unit don't have body (e.g. on client) this handler will track object movements */
+    private PhysicsHandler mPhysicsHandler;
+    /** will trigger if object velocity changed */
+    private IVelocityChangedListener mVelocityChangedListener;
 
     protected GameObject(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
         super(x, y, textureRegion.getWidth(), textureRegion.getWidth(), vertexBufferObjectManager);
@@ -52,6 +58,10 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
         mBackground = new Rectangle(0, 0, 0, 0, vertexBufferObjectManager);
         attachChild(mBackground);
         attachChild(mObjectSprite);
+    }
+
+    public void setVelocityChangedListener(IVelocityChangedListener velocityChangedListener) {
+        mVelocityChangedListener = velocityChangedListener;
     }
 
     protected static void loadResource(String pathToUnit, Context context, BitmapTextureAtlas textureAtlas, int x, int y) {
@@ -194,5 +204,21 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
 
     public int getMaximumObjectHealth() {
         return mObjectMaximumHealth;
+    }
+
+    public void initPhysicHandler() {
+        final PhysicsHandler physicsHandler = new PhysicsHandler(this);
+        registerUpdateHandler(physicsHandler);
+        mPhysicsHandler = physicsHandler;
+    }
+
+    public void setUnitLinearVelocity(float x, float y) {
+        if (mPhysicBody == null) {
+            mPhysicsHandler.setVelocity(x, y);
+        } else {
+            mPhysicBody.setLinearVelocity(x, y);
+        }
+        if (mVelocityChangedListener != null)
+            mVelocityChangedListener.velocityChanged(GameObject.this);
     }
 }

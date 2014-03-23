@@ -1,6 +1,5 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects;
 
-import com.badlogic.gdx.math.Vector2;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitPathUtil;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
@@ -8,11 +7,11 @@ import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations
 import org.andengine.audio.sound.Sound;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
-import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 /** Basic class for all dynamic game units */
 public abstract class Unit extends GameObject {
@@ -40,6 +39,10 @@ public abstract class Unit extends GameObject {
     private long mLastAttackTime;
     /** unit attack sound */
     protected Sound mFireSound;
+    /** unique unit id */
+    private long mUnitId;
+    /** used for generation new id's */
+    private static volatile AtomicLong sUnitIdTracker = new AtomicLong(0);
 
 
     protected Unit(ITextureRegion textureRegion, SoundOperations soundOperations, EntityOperations entityOperations) {
@@ -47,6 +50,15 @@ public abstract class Unit extends GameObject {
 
         mSoundOperations = soundOperations;
         mEntityOperations = entityOperations;
+        mUnitId = sUnitIdTracker.getAndIncrement();
+    }
+
+    public void setUnitId(long id) {
+        mUnitId = id;
+    }
+
+    public long getUnitId() {
+        return mUnitId;
     }
 
     public void registerUpdateHandler() {
@@ -155,12 +167,6 @@ public abstract class Unit extends GameObject {
                     abscissaSpeed = mMaxVelocity * distanceY / maxAbsDistance;
 
             setUnitLinearVelocity(ordinateSpeed, abscissaSpeed);
-        }
-
-        private void setUnitLinearVelocity(float x, float y) {
-            final Vector2 velocity = Vector2Pool.obtain(x, y);
-            mPhysicBody.setLinearVelocity(velocity);
-            Vector2Pool.recycle(velocity);
         }
     }
 }

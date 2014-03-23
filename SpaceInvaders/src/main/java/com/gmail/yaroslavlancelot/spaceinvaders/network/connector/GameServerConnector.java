@@ -3,6 +3,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.network.connector;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.MessagesConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.BuildingCreatedServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.StartingGameServerMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.UnitChangePositionServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.UnitCreatedServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.WaitingForPlayersServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.InGameClient;
@@ -78,7 +79,20 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
                 synchronized (mInGameClientList) {
                     for (InGameClient inGameClient : mInGameClientList) {
                         inGameClient.unitCreated(unitCreatedServerMessage.getTeamName(), unitCreatedServerMessage.getUnitId(),
-                                unitCreatedServerMessage.getX(), unitCreatedServerMessage.getY());
+                                unitCreatedServerMessage.getX(), unitCreatedServerMessage.getY(), unitCreatedServerMessage.getUnitUniqueId());
+                    }
+                }
+            }
+        });
+
+        registerServerMessage(FLAG_MESSAGE_SERVER_UNIT_MOVED, UnitChangePositionServerMessage.class, new IServerMessageHandler<SocketConnection>() {
+            @Override
+            public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
+                LoggerHelper.printInformationMessageInClient(TAG, "unit moved");
+                UnitChangePositionServerMessage unitChangePositionServerMessage = (UnitChangePositionServerMessage) pServerMessage;
+                synchronized (mInGameClientList) {
+                    for (InGameClient inGameClient : mInGameClientList) {
+                        inGameClient.unitMoved(unitChangePositionServerMessage);
                     }
                 }
             }

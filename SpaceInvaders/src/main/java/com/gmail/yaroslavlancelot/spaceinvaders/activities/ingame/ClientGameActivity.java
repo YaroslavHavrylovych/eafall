@@ -1,8 +1,10 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.client.BuildingCreationClientMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.UnitChangePositionServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.InGameClient;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.connector.GameServerConnector;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
@@ -52,7 +54,22 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
     }
 
     @Override
-    public void unitCreated(final String teamName, final int unitId, final float x, final float y) {
-        createAndAttachUnitCarcass(unitId, mTeams.get(teamName), x, y);
+    public void unitCreated(final String teamName, final int unitId, final float x, final float y, long unitUniqueId) {
+        Unit unit = createAndAttachUnitCarcass(unitId, mTeams.get(teamName), x, y, unitUniqueId);
+        unit.setUnitId(unitUniqueId);
+    }
+
+    @Override
+    public void unitMoved(UnitChangePositionServerMessage unitChangePositionServerMessage) {
+        Unit unit = getUnitById(unitChangePositionServerMessage.getUnitUniqueId());
+        unit.setPosition(unitChangePositionServerMessage.getX(), unitChangePositionServerMessage.getY());
+        unit.setUnitLinearVelocity(unitChangePositionServerMessage.getVelocityX(), unitChangePositionServerMessage.getVelocityY());
+    }
+
+    @Override
+    protected Unit createAndAttachUnitCarcass(final int unitKey, final ITeam unitTeam) {
+        Unit unit = super.createAndAttachUnitCarcass(unitKey, unitTeam);
+        unit.initPhysicHandler();
+        return unit;
     }
 }

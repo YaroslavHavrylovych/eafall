@@ -59,7 +59,6 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.color.Color;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -83,7 +82,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     /** contains game obstacles and other static objects */
     private HashMap<String, StaticObject> mStaticObjects = new HashMap<String, StaticObject>();
     /** contains whole game units/warriors */
-    private ArrayList<Unit> mUnits = new ArrayList<Unit>(50);
+    private final Map<Long, Unit> mUnitsMap = new HashMap<Long, Unit>();
     /** all teams in current game */
     protected Map<String, ITeam> mTeams = new HashMap<String, ITeam>();
     /** red team */
@@ -478,6 +477,10 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
             public void run() {
                 mGameScene.unregisterTouchArea(shapeArea);
                 mGameScene.detachChild(shapeArea);
+                if (shapeArea instanceof Unit)
+                    synchronized (mUnitsMap) {
+                        mUnitsMap.remove(shapeArea);
+                    }
             }
         });
     }
@@ -566,7 +569,21 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         unit.setX(x);
         unit.setY(y);
         attachEntity(unit);
-        mUnits.add(unit);
+        synchronized (mUnitsMap) {
+            mUnitsMap.put(unit.getUnitId(), unit);
+        }
+        return unit;
+    }
+
+    protected Unit createAndAttachUnitCarcass(int unitKey, ITeam unitTeam, float x, float y, long unitUniqueId) {
+        LoggerHelper.methodInvocation(TAG, "createAndAttachUnitCarcass");
+        Unit unit = createUnitCarcass(unitKey, unitTeam);
+        unit.setX(x);
+        unit.setY(y);
+        attachEntity(unit);
+        synchronized (mUnitsMap) {
+            mUnitsMap.put(unitUniqueId, unit);
+        }
         return unit;
     }
 
@@ -585,6 +602,10 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         Unit unit = unitTeam.getTeamRace().getUnitForBuilding(unitKey);
         unit.setObjectDestroyedListener(new ObjectDestroyedListener(unitTeam, this));
         return unit;
+    }
+
+    protected Unit getUnitById(long id) {
+        return mUnitsMap.get(id);
     }
 
     @Override
