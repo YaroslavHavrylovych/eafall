@@ -42,7 +42,7 @@ public abstract class PhysicWorldGameActivity extends MainOperationsBaseGameActi
      */
     @Override
     protected void initPhysicWorld() {
-        mHud.registerUpdateHandler(new TimerHandler(MONEY_UPDATE_TIME, true, new MoneyUpdateCycle(mTeams)));
+        mHud.registerUpdateHandler(new TimerHandler(MONEY_UPDATE_TIME, true, new MoneyUpdateCycle(sTeams)));
 
         mGameScene.registerUpdateHandler(mPhysicsWorld);
 

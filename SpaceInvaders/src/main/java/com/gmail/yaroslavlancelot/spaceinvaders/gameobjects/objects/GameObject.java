@@ -218,7 +218,7 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
         } else {
             mPhysicBody.setLinearVelocity(x, y);
         }
-        if (mVelocityChangedListener != null)
-            mVelocityChangedListener.velocityChanged(GameObject.this);
+//        if (mVelocityChangedListener != null)
+//            mVelocityChangedListener.velocityChanged(GameObject.this);
     }
 }

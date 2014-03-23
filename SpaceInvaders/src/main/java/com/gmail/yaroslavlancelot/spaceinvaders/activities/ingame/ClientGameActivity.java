@@ -49,13 +49,13 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
     public void buildingCreated(final int buildingId, final String teamName) {
         LoggerHelper.methodInvocation(TAG, "buildingCreated");
         LoggerHelper.printDebugMessage(TAG, "buildingId=" + buildingId + ", teamName=" + teamName);
-        PlanetStaticObject planetStaticObject = mTeams.get(teamName).getTeamPlanet();
+        PlanetStaticObject planetStaticObject = sTeams.get(teamName).getTeamPlanet();
         planetStaticObject.createBuildingById(buildingId);
     }
 
     @Override
     public void unitCreated(final String teamName, final int unitId, final float x, final float y, long unitUniqueId) {
-        Unit unit = createAndAttachUnitCarcass(unitId, mTeams.get(teamName), x, y, unitUniqueId);
+        Unit unit = createAndAttachUnitCarcass(unitId, sTeams.get(teamName), x, y, unitUniqueId);
         unit.setUnitId(unitUniqueId);
     }
 
