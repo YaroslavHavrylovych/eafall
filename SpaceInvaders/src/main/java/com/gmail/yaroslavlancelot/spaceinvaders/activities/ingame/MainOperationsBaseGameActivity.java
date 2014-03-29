@@ -452,7 +452,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     }
 
     @Override
-    protected synchronized void onResume() {
+    protected void onResume() {
         super.onResume();
         if (mBackgroundMusic != null)
             mBackgroundMusic.getMediaPlayer().prepareAsync();
@@ -478,9 +478,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
                 mGameScene.unregisterTouchArea(shapeArea);
                 mGameScene.detachChild(shapeArea);
                 if (shapeArea instanceof Unit)
-                    synchronized (mUnitsMap) {
-                        mUnitsMap.remove(shapeArea);
-                    }
+                    mUnitsMap.remove(shapeArea);
             }
         });
     }
@@ -569,9 +567,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         unit.setX(x);
         unit.setY(y);
         attachEntity(unit);
-        synchronized (mUnitsMap) {
-            mUnitsMap.put(unit.getUnitId(), unit);
-        }
+        mUnitsMap.put(unit.getUnitId(), unit);
         return unit;
     }
 
@@ -581,9 +577,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         unit.setX(x);
         unit.setY(y);
         attachEntity(unit);
-        synchronized (mUnitsMap) {
-            mUnitsMap.put(unitUniqueId, unit);
-        }
+        mUnitsMap.put(unitUniqueId, unit);
         return unit;
     }
 

@@ -21,11 +21,17 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activities.ingame.SinglePlayerGameActivity"/>
+        <activity
+                android:name=".activities.ingame.SinglePlayerGameActivity"
+                android:screenOrientation="landscape"/>
+        <activity
+                android:name=".activities.ingame.ClientGameActivity"
+                android:screenOrientation="landscape"/>
+        <activity
+                android:name=".activities.ingame.ServerGameActivity"
+                android:screenOrientation="landscape"/>
         <activity android:name=".activities.GameServersListActivity"/>
         <activity android:name=".activities.ServerGameCreationActivity"/>
         <activity android:name=".activities.ClientWaitForGameActivity"/>
-        <activity android:name=".activities.ingame.ServerGameActivity"/>
-        <activity android:name=".activities.ingame.ClientGameActivity"/>
     </application>
 </manifest>
