@@ -59,7 +59,6 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.color.Color;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -84,8 +83,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     private HashMap<String, StaticObject> mStaticObjects = new HashMap<String, StaticObject>();
     /** contains whole game units/warriors */
     private final Map<Long, Unit> mUnitsMap = new HashMap<Long, Unit>();
-    /** all teams in current game. Static - because constructor called 2 times */
-    protected static final Map<String, ITeam> sTeams = Collections.synchronizedMap(new HashMap<String, ITeam>(2));
+    /** all teams in current game */
+    protected Map<String, ITeam> mTeams = new HashMap<String, ITeam>();
     /** red team */
     protected ITeam mRedTeam;
     /** blue team */
@@ -112,10 +111,6 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     //TODO check is textures depends on race colour
     protected IRace redTeamUserRace;
     protected IRace blueTeamUserRace;
-
-    protected MainOperationsBaseGameActivity() {
-        LoggerHelper.methodInvocation(TAG, "MainOperationsBaseGameActivity.constructor");
-    }
 
     @Override
     public EngineOptions onCreateEngineOptions() {
@@ -281,7 +276,6 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     }
 
     protected void initTeams() {
-        LoggerHelper.methodInvocation(TAG, "initTeams");
         // red team
         mRedTeam = createTeam(GameStringsConstantsAndUtils.RED_TEAM_NAME, redTeamUserRace);
         mBlueTeam = createTeam(GameStringsConstantsAndUtils.BLUE_TEAM_NAME, blueTeamUserRace);
@@ -304,25 +298,22 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
      * @param teamNameInExtra team name to get control type from intent
      */
     private void initTeam(ITeam team, String teamNameInExtra) {
-        LoggerHelper.methodInvocation(TAG, "initTeam");
         Intent intent = getIntent();
         TeamControlBehaviourType teamType = TeamControlBehaviourType.valueOf(intent.getStringExtra(teamNameInExtra));
 
         if (teamType == TeamControlBehaviourType.USER_SERVER_CONTROL ||
                 teamType == TeamControlBehaviourType.USER_CLIENT_CONTROL) {
-            initUserTouchListener(team);
+            initUser(team);
         } else if (teamType == TeamControlBehaviourType.BOT_CONTROL) {
             initBot(team);
         } else if (teamType == TeamControlBehaviourType.REMOTE_CLIENT_CONTROL ||
                 teamType == TeamControlBehaviourType.REMOTE_SERVER_CONTROL) {
             //nothing
         } else {
-            LoggerHelper.printErrorMessage(TAG, "unknown team type =" + teamType);
             throw new IllegalArgumentException("unknown team type =" + teamType);
         }
 
-        LoggerHelper.printDebugMessage(TAG, "adding new team = " + team.getTeamName());
-        sTeams.put(team.getTeamName(), team);
+        mTeams.put(team.getTeamName(), team);
     }
 
     protected abstract void userWantCreateBuilding(ITeam userTeam, int buildingId);
@@ -414,6 +405,21 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         return sunStaticObject;
     }
 
+    /** init planet touch listener for some team */
+    protected void initUser(final ITeam initializingTeam) {
+        LoggerHelper.methodInvocation(TAG, "initUser");
+        // create building
+        ITouchListener userClickScreenTouchListener = new BuildingsPopupTouchListener(initializingTeam, this, this,
+                new IItemPickListener() {
+                    @Override
+                    public void itemPicked(final int itemId) {
+                        userWantCreateBuilding(initializingTeam, itemId);
+                    }
+                }
+        );
+        mMainSceneTouchListener.addTouchListener(userClickScreenTouchListener);
+    }
+
     protected void initBot(final ITeam initializingTeam) {
         LoggerHelper.methodInvocation(TAG, "initBot");
         ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -445,31 +451,16 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         mGameScene.setOnSceneTouchListener(mMainSceneTouchListener);
     }
 
-    /** init planet touch listener for some team */
-    protected void initUserTouchListener(final ITeam initializingTeam) {
-        LoggerHelper.methodInvocation(TAG, "initUserTouchListener");
-        // create building
-        ITouchListener userClickScreenTouchListener = new BuildingsPopupTouchListener(initializingTeam, this, this,
-                new IItemPickListener() {
-                    @Override
-                    public void itemPicked(final int itemId) {
-                        userWantCreateBuilding(initializingTeam, itemId);
-                    }
-                }
-        );
-        mMainSceneTouchListener.addTouchListener(userClickScreenTouchListener);
-    }
-
-
     @Override
-    public synchronized void onResumeGame() {
-        super.onResumeGame();
+    protected synchronized void onResume() {
+        super.onResume();
         if (mBackgroundMusic != null)
             mBackgroundMusic.getMediaPlayer().prepareAsync();
     }
 
     @Override
-    public synchronized void onPauseGame() {
+    protected void onPause() {
+        super.onPause();
         if (mBackgroundMusic != null)
             mBackgroundMusic.stop();
     }
@@ -596,6 +587,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         return unit;
     }
 
+    protected abstract void initPhysicWorld();
+
     /**
      * create dynamic game object (e.g. warrior or some other stuff)
      *
@@ -614,8 +607,6 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     protected Unit getUnitById(long id) {
         return mUnitsMap.get(id);
     }
-
-    protected abstract void initPhysicWorld();
 
     @Override
     public void onPrepared(final MediaPlayer mp) {
