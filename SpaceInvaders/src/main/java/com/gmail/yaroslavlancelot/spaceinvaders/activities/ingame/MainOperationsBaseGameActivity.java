@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.util.DisplayMetrics;
 import android.view.Display;
+import com.badlogic.gdx.math.Vector2;
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.ai.NormalBot;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
@@ -48,6 +49,7 @@ import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.shape.IAreaShape;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
+import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.input.touch.controller.MultiTouch;
 import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.font.IFont;
@@ -103,6 +105,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     private Music mBackgroundMusic;
     /** user static area */
     protected HUD mHud;
+    /** current game physics world */
+    protected PhysicsWorld mPhysicsWorld;
     /*
      * splash screen
      */
@@ -133,6 +137,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
                 SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT), mCamera
         );
 
+        mPhysicsWorld = new PhysicsWorld(new Vector2(0, 0), false);
+
         // music
         engineOptions.getAudioOptions().setNeedsMusic(true);
         engineOptions.getAudioOptions().setNeedsSound(true);
@@ -141,13 +147,13 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     }
 
     protected void changeSplashSceneWithGameScene() {
-        mEngine.registerUpdateHandler(new TimerHandler(3f, new ITimerCallback() {
+        mEngine.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback() {
             public void onTimePassed(final TimerHandler pTimerHandler) {
                 mEngine.unregisterUpdateHandler(pTimerHandler);
 
                 onLoadGameResources();
                 onInitGameScene();
-                initPhysicWorld();
+                initServerPart();
                 onInitPlanetsAndTeams();
                 startBackgroundMusic();
 
@@ -259,6 +265,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         initSceneTouch();
 
         initMoneyTextView();
+        mGameScene.registerUpdateHandler(mPhysicsWorld);
     }
 
     protected void onInitPlanetsAndTeams() {
@@ -581,7 +588,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         return unit;
     }
 
-    protected abstract void initPhysicWorld();
+    protected abstract void initServerPart();
 
     /**
      * create dynamic game object (e.g. warrior or some other stuff)
@@ -602,40 +609,5 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         return mUnitsMap.get(id);
     }
 
-    @Override
-    public void onPrepared(final MediaPlayer mp) {
-        mp.start();
-    }
 
-    @Override
-    public Sound loadSound(final String path) {
-        return SoundsAndMusicUtils.getSound(path, this, getSoundManager());
-    }
-
-    @Override
-    public void playSoundDependingFromPosition(final Sound sound, final float x, final float y) {
-        float width = mMainSceneTouchListener.getCameraCurrentWidth();
-        float height = mMainSceneTouchListener.getCameraCurrentHeight();
-
-        float soundSpreadMaxDistance = width / 2 + width / 5;
-        float xDistanceVector = mMainSceneTouchListener.getCameraCurrentCenterX() - x;
-        float xDistance = Math.abs(xDistanceVector);
-        float yDistance = Math.abs(mMainSceneTouchListener.getCameraCurrentCenterY() - y);
-
-        if (xDistance > soundSpreadMaxDistance || yDistance > soundSpreadMaxDistance)
-            return;
-
-        float leftVolume = 1f, rightVolume = 1f;
-
-        if (!(xDistance > width / 2 || yDistance > height / 2)) {
-            if (xDistanceVector > 0)
-                rightVolume = .5f;
-            else
-                leftVolume = .5f;
-        }
-
-        float divider = mCamera.getMaxZoomFactorChange() - mCamera.getTargetZoomFactor() + 1;
-        sound.setVolume(leftVolume / divider, rightVolume / divider);
-        sound.play();
-    }
 }

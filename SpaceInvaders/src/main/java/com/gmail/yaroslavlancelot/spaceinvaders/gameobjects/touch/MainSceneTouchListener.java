@@ -3,6 +3,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch;
 import android.content.Context;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.ICameraCoordinates;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.entity.scene.IOnSceneTouchListener;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** main game activity touch listener */
-public class MainSceneTouchListener implements IOnSceneTouchListener {
+public class MainSceneTouchListener implements IOnSceneTouchListener, ICameraCoordinates {
     private final float mScreenToSceneRatio;
     /** previous event abscissa */
     private float mTouchY;
@@ -65,6 +66,14 @@ public class MainSceneTouchListener implements IOnSceneTouchListener {
 
     public float getCameraCurrentCenterY() {
         return mCameraCurrentCenterY;
+    }
+
+    public float getMaxZoomFactorChange() {
+        return mCamera.getMaxZoomFactorChange();
+    }
+
+    public float getTargetZoomFactor() {
+        return mCamera.getTargetZoomFactor();
     }
 
     public void addTouchListener(ITouchListener touchListener) {

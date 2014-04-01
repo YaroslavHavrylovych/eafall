@@ -1,6 +1,5 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.ContactListener;
@@ -16,7 +15,6 @@ import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
-import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.texture.region.ITextureRegion;
 
 /**
@@ -28,24 +26,13 @@ public abstract class PhysicWorldGameActivity extends MainOperationsBaseGameActi
     public static final String TAG = PhysicWorldGameActivity.class.getCanonicalName();
     /** {@link com.badlogic.gdx.physics.box2d.FixtureDef} for obstacles (static bodies) */
     private final FixtureDef mStaticBodyFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f);
-    /** current game physics world */
-    private PhysicsWorld mPhysicsWorld;
-
-    @Override
-    protected void onInitGameScene() {
-        mPhysicsWorld = new PhysicsWorld(new Vector2(0, 0), false);
-        super.onInitGameScene();
-    }
 
     /**
      * initialize physic world. For using in child classes without accessing private fields.
      */
     @Override
-    protected void initPhysicWorld() {
+    protected void initServerPart() {
         mHud.registerUpdateHandler(new TimerHandler(MONEY_UPDATE_TIME, true, new MoneyUpdateCycle(mTeams)));
-
-        mGameScene.registerUpdateHandler(mPhysicsWorld);
-
         createBounds();
     }
 

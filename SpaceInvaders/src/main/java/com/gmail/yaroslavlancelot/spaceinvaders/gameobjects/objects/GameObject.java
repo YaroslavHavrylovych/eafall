@@ -46,8 +46,6 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
     private ITouchListener mSpriteOnTouchListener;
     /** id of the string in the string files to represent object */
     private int mObjectStringId;
-    /** if unit don't have body (e.g. on client) this handler will track object movements */
-    private PhysicsHandler mPhysicsHandler;
     /** will trigger if object velocity changed */
     private IVelocityChangedListener mVelocityChangedListener;
 
@@ -206,18 +204,8 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
         return mObjectMaximumHealth;
     }
 
-    public void initPhysicHandler() {
-        final PhysicsHandler physicsHandler = new PhysicsHandler(this);
-        registerUpdateHandler(physicsHandler);
-        mPhysicsHandler = physicsHandler;
-    }
-
     public void setUnitLinearVelocity(float x, float y) {
-        if (mPhysicBody == null) {
-            mPhysicsHandler.setVelocity(x, y);
-        } else {
             mPhysicBody.setLinearVelocity(x, y);
-        }
         if (mVelocityChangedListener != null)
             mVelocityChangedListener.velocityChanged(GameObject.this);
     }

@@ -13,7 +13,7 @@ import org.andengine.engine.options.EngineOptions;
 
 import java.io.IOException;
 
-public class ClientGameActivity extends MainOperationsBaseGameActivity implements InGameClient {
+public class ClientGameActivity extends PhysicWorldGameActivity implements InGameClient {
     public final static String TAG = ClientGameActivity.class.getCanonicalName();
     private volatile GameServerConnector mGameServerConnector;
 
@@ -25,7 +25,7 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
     }
 
     @Override
-    protected void initPhysicWorld() {
+    protected void initServerPart() {
         // no physic world at client side
     }
 
@@ -69,7 +69,6 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
     @Override
     protected Unit createAndAttachUnitCarcass(final int unitKey, final ITeam unitTeam) {
         Unit unit = super.createAndAttachUnitCarcass(unitKey, unitTeam);
-        unit.initPhysicHandler();
         return unit;
     }
 }

@@ -71,8 +71,8 @@ public class ServerGameActivity extends PhysicWorldGameActivity implements InGam
     }
 
     @Override
-    protected void initPhysicWorld() {
-        super.initPhysicWorld();
+    protected void initServerPart() {
+        super.initServerPart();
         setContactListener(new ContactListener() {
             @Override
             public void beginContact(final Contact contact) {
