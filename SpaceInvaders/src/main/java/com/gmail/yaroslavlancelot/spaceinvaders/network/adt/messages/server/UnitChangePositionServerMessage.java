@@ -21,7 +21,7 @@ public class UnitChangePositionServerMessage extends ServerMessage implements Me
     public UnitChangePositionServerMessage(Unit unit) {
         mX = unit.getX();
         mY = unit.getY();
-        mUnitUniqueId = unit.getUnitId();
+        mUnitUniqueId = unit.getUnitUniqueId();
         Vector2 velocityVector = unit.getBody().getLinearVelocity();
         mVelocityX = velocityVector.x;
         mVelocityY = velocityVector.y;

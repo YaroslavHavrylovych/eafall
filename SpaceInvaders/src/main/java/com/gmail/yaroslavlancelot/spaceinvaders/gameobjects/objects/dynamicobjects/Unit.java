@@ -40,7 +40,7 @@ public abstract class Unit extends GameObject {
     /** unit attack sound */
     protected Sound mFireSound;
     /** unique unit id */
-    private long mUnitId;
+    private long mUnitUniqueId;
     /** used for generation new id's */
     private static volatile AtomicLong sUnitIdTracker = new AtomicLong(0);
 
@@ -50,15 +50,15 @@ public abstract class Unit extends GameObject {
 
         mSoundOperations = soundOperations;
         mEntityOperations = entityOperations;
-        mUnitId = sUnitIdTracker.getAndIncrement();
+        mUnitUniqueId = sUnitIdTracker.getAndIncrement();
     }
 
-    public void setUnitId(long id) {
-        mUnitId = id;
+    public void setUnitUniqueId(long id) {
+        mUnitUniqueId = id;
     }
 
-    public long getUnitId() {
-        return mUnitId;
+    public long getUnitUniqueId() {
+        return mUnitUniqueId;
     }
 
     public void registerUpdateHandler() {
@@ -66,6 +66,7 @@ public abstract class Unit extends GameObject {
     }
 
     protected void initSound(String path) {
+        //TODO null pointer here
         mFireSound = mSoundOperations.loadSound(path);
     }
 

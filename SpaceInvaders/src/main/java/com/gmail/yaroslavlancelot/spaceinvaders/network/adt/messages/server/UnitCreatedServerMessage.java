@@ -23,7 +23,7 @@ public class UnitCreatedServerMessage extends ServerMessage implements MessagesC
         mTeamName = teamName;
         mX = unit.getX();
         mY = unit.getY();
-        mUnitUniqueId = unit.getUnitId();
+        mUnitUniqueId = unit.getUnitUniqueId();
     }
 
     @Override

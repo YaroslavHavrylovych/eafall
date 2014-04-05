@@ -3,3 +3,5 @@
 build
 project.properties
 wiki
+*.iml
+local.properties

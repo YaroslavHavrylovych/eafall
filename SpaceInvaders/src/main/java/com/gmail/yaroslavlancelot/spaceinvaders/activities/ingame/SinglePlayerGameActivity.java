@@ -6,7 +6,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 /**
  * Single player game
  */
-public class SinglePlayerGameActivity extends PhysicWorldGameActivity {
+public class SinglePlayerGameActivity extends ThickClientGameActivity {
     @Override
     protected void userWantCreateBuilding(final ITeam userTeam, final int buildingId) {
         PlanetStaticObject planetStaticObject = userTeam.getTeamPlanet();

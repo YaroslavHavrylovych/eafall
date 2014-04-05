@@ -1,6 +1,5 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.client.BuildingCreationClientMessage;
@@ -9,11 +8,13 @@ import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.InGameC
 import com.gmail.yaroslavlancelot.spaceinvaders.network.connector.GameServerConnector;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
+
 import org.andengine.engine.options.EngineOptions;
+import org.andengine.extension.physics.box2d.PhysicsConnector;
 
 import java.io.IOException;
 
-public class ClientGameActivity extends PhysicWorldGameActivity implements InGameClient {
+public class ClientGameActivity extends MainOperationsBaseGameActivity implements InGameClient {
     public final static String TAG = ClientGameActivity.class.getCanonicalName();
     private volatile GameServerConnector mGameServerConnector;
 
@@ -25,13 +26,8 @@ public class ClientGameActivity extends PhysicWorldGameActivity implements InGam
     }
 
     @Override
-    protected void initServerPart() {
-        // no physic world at client side
-    }
-
-    @Override
-    public void detachPhysicsBody(final GameObject gameObject) {
-        //no physic body at client
+    protected void initThickClient() {
+        // it's thin client, so no actions
     }
 
     @Override
@@ -55,20 +51,25 @@ public class ClientGameActivity extends PhysicWorldGameActivity implements InGam
 
     @Override
     public void unitCreated(final String teamName, final int unitId, final float x, final float y, long unitUniqueId) {
-        Unit unit = createAndAttachUnitCarcass(unitId, mTeams.get(teamName), x, y, unitUniqueId);
-        unit.setUnitId(unitUniqueId);
+        LoggerHelper.printDebugMessage(TAG, "unitCreated=" + unitUniqueId + "(" + x + "," + y + ")");
+        if (unitId == 0)
+            createUnit(unitId, mTeams.get(teamName), x, y, unitUniqueId);
     }
 
     @Override
     public void unitMoved(UnitChangePositionServerMessage unitChangePositionServerMessage) {
-        Unit unit = getUnitById(unitChangePositionServerMessage.getUnitUniqueId());
-        unit.setPosition(unitChangePositionServerMessage.getX(), unitChangePositionServerMessage.getY());
+        long unitUniqueId = unitChangePositionServerMessage.getUnitUniqueId();
+        float x = unitChangePositionServerMessage.getX(),
+                y = unitChangePositionServerMessage.getY();
+        LoggerHelper.printDebugMessage(TAG, "unitCreated=" + unitUniqueId + "(" + x + "," + y + ")");
+        Unit unit = getUnitById(unitUniqueId);
+        if (unit == null) {
+            LoggerHelper.printInformationMessage(TAG, "try yo move uncreated unit");
+            return;
+        }
+        final float widthD2 = unit.getWidth() / 2;
+        final float heightD2 = unit.getHeight() / 2;
+        unit.setBodyTransform((x + widthD2) / PhysicsConnector.PIXEL_TO_METER_RATIO_DEFAULT, (y + heightD2) / PhysicsConnector.PIXEL_TO_METER_RATIO_DEFAULT);
         unit.setUnitLinearVelocity(unitChangePositionServerMessage.getVelocityX(), unitChangePositionServerMessage.getVelocityY());
-    }
-
-    @Override
-    protected Unit createAndAttachUnitCarcass(final int unitKey, final ITeam unitTeam) {
-        Unit unit = super.createAndAttachUnitCarcass(unitKey, unitTeam);
-        return unit;
     }
 }

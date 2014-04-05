@@ -23,7 +23,7 @@ import java.io.IOException;
  * Server game. Extends physical world and will add some handlers for server actions and
  * from client.
  */
-public class ServerGameActivity extends PhysicWorldGameActivity implements InGameServer, IVelocityChangedListener {
+public class ServerGameActivity extends ThickClientGameActivity implements InGameServer, IVelocityChangedListener {
     private GameSocketServer mGameSocketServer;
 
     @Override
@@ -59,8 +59,8 @@ public class ServerGameActivity extends PhysicWorldGameActivity implements InGam
     }
 
     @Override
-    protected Unit createAndAttachUnitCarcass(final int unitKey, final ITeam unitTeam) {
-        Unit unit = super.createAndAttachUnitCarcass(unitKey, unitTeam);
+    protected Unit createUnit(int unitKey, ITeam unitTeam, float x, float y, long... unitUniqueId) {
+        Unit unit = super.createUnit(unitKey, unitTeam, x, y);
         try {
             mGameSocketServer.sendBroadcastServerMessage(new UnitCreatedServerMessage(unitTeam.getTeamName(), unitKey, unit));
         } catch (IOException e) {
@@ -71,8 +71,8 @@ public class ServerGameActivity extends PhysicWorldGameActivity implements InGam
     }
 
     @Override
-    protected void initServerPart() {
-        super.initServerPart();
+    protected void initThickClient() {
+        super.initThickClient();
         setContactListener(new ContactListener() {
             @Override
             public void beginContact(final Contact contact) {

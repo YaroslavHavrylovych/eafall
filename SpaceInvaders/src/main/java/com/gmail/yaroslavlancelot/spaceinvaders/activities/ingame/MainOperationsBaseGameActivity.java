@@ -2,10 +2,13 @@ package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.media.MediaPlayer;
 import android.util.DisplayMetrics;
 import android.view.Display;
+
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.ai.NormalBot;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
@@ -13,6 +16,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.ObjectDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.PlanetDestroyedListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
@@ -27,15 +31,13 @@ import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.Team;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.SoundsAndMusicUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.MusicAndSoundsHandler;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TeamUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitCallbacksUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.Localizable;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations;
-import org.andengine.audio.music.Music;
-import org.andengine.audio.sound.Sound;
+
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.handler.timer.ITimerCallback;
@@ -49,6 +51,8 @@ import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.shape.IAreaShape;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
+import org.andengine.extension.physics.box2d.PhysicsConnector;
+import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.input.touch.controller.MultiTouch;
 import org.andengine.opengl.font.FontFactory;
@@ -72,49 +76,47 @@ import java.util.concurrent.Future;
  * Main game Activity. Extends {@link BaseGameActivity} class and contains main game elements.
  * Loads resources, initialize scene, engine and etc.
  */
-public abstract class MainOperationsBaseGameActivity extends BaseGameActivity implements Localizable, EntityOperations, MediaPlayer.OnPreparedListener, SoundOperations {
-    /** tag, which is used for debugging purpose */
+public abstract class MainOperationsBaseGameActivity extends BaseGameActivity implements Localizable, EntityOperations {
+    /**
+     * tag, which is used for debugging purpose
+     */
     public static final String TAG = MainOperationsBaseGameActivity.class.getCanonicalName();
     public static final int MONEY_UPDATE_TIME = 10;
-    /*
-     * ITexture definitions
-     */
-    /** game scene */
-    protected Scene mGameScene;
-    /** contains game obstacles and other static objects */
-    private HashMap<String, StaticObject> mStaticObjects = new HashMap<String, StaticObject>();
     /** contains whole game units/warriors */
     private final Map<Long, Unit> mUnitsMap = new HashMap<Long, Unit>();
+    /** game scene */
+    protected Scene mGameScene;
     /** all teams in current game */
     protected Map<String, ITeam> mTeams = new HashMap<String, ITeam>();
     /** red team */
     protected ITeam mRedTeam;
     /** blue team */
     protected ITeam mBlueTeam;
+    /** text which displaying to user with money amount */
+    protected String mMoneyTextPrefixString;
+    /** user static area */
+    protected HUD mHud;
+    /** current game physics world */
+    protected PhysicsWorld mPhysicsWorld;
+    /* splash screen */
+    protected Scene mSplashScene;
+    //TODO check is textures depends on race colour
+    protected IRace redTeamUserRace;
+    protected IRace blueTeamUserRace;
+    /** contains game obstacles and other static objects */
+    private HashMap<String, StaticObject> mStaticObjects = new HashMap<String, StaticObject>();
     /** game camera */
     private SmoothCamera mCamera;
     /** object, which display money status to user */
     private Text mMoneyText;
     /** hold all texture regions used in current game */
     private TextureRegionHolderUtils mTextureRegionHolderUtils;
-    /** text which displaying to user with money amount */
-    protected String mMoneyTextPrefixString;
     /** main scene touch listener */
     private MainSceneTouchListener mMainSceneTouchListener;
     /** background theme */
-    private Music mBackgroundMusic;
-    /** user static area */
-    protected HUD mHud;
-    /** current game physics world */
-    protected PhysicsWorld mPhysicsWorld;
-    /*
-     * splash screen
-     */
-    protected Scene mSplashScene;
+    private MusicAndSoundsHandler mMusicAndSoundsHandler;
+    private MusicAndSoundsHandler.BackgroundMusic mBackgroundMusic;
     private Sprite mSplash;
-    //TODO check is textures depends on race colour
-    protected IRace redTeamUserRace;
-    protected IRace blueTeamUserRace;
 
     @Override
     public EngineOptions onCreateEngineOptions() {
@@ -140,6 +142,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         mPhysicsWorld = new PhysicsWorld(new Vector2(0, 0), false);
 
         // music
+
         engineOptions.getAudioOptions().setNeedsMusic(true);
         engineOptions.getAudioOptions().setNeedsSound(true);
 
@@ -153,9 +156,10 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
 
                 onLoadGameResources();
                 onInitGameScene();
-                initServerPart();
+                initThickClient();
                 onInitPlanetsAndTeams();
-                startBackgroundMusic();
+
+                mBackgroundMusic.startBackgroundMusic();
 
                 mSplashScene.detachSelf();
                 mEngine.setScene(mGameScene);
@@ -201,11 +205,14 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
 
     protected void onLoadGameResources() {
         LoggerHelper.methodInvocation(TAG, "onCreateGameResources");
+        // music
+        mMusicAndSoundsHandler = new MusicAndSoundsHandler(getSoundManager(), MainOperationsBaseGameActivity.this);
+        mBackgroundMusic = mMusicAndSoundsHandler.new BackgroundMusic(getMusicManager());
 
         //races load
-        redTeamUserRace = new Imperials(Color.RED, this, this);
+        redTeamUserRace = new Imperials(Color.RED, this, mMusicAndSoundsHandler);
         redTeamUserRace.loadResources(getTextureManager(), this);
-        blueTeamUserRace = new Imperials(Color.BLUE, this, this);
+        blueTeamUserRace = new Imperials(Color.BLUE, this, mMusicAndSoundsHandler);
         blueTeamUserRace.loadResources(getTextureManager(), this);
 
         //* bigger objects
@@ -228,19 +235,6 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
                 Typeface.create(Typeface.DEFAULT, Typeface.BOLD), SizeConstants.MONEY_FONT_SIZE, Color.WHITE.hashCode());
         font.load();
         FontHolderUtils.getInstance().addElement(GameStringsConstantsAndUtils.KEY_FONT_MONEY, font);
-
-        // music
-        mBackgroundMusic = SoundsAndMusicUtils.getMusic(GameStringsConstantsAndUtils.getPathToBackgroundMusic() + "background_1.ogg",
-                this, mEngine.getMusicManager());
-    }
-
-    protected void startBackgroundMusic() {
-        LoggerHelper.methodInvocation(TAG, "startBackgroundMusic");
-        LoggerHelper.printInformationMessage(TAG, "mBackgroundMusic != null == " + (mBackgroundMusic != null));
-        if (mBackgroundMusic != null) {
-            mBackgroundMusic.setLooping(true);
-            mBackgroundMusic.getMediaPlayer().setOnPreparedListener(this);
-        }
     }
 
     @Override
@@ -250,7 +244,9 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         changeSplashSceneWithGameScene();
     }
 
-    /** update money amount */
+    /**
+     * update money amount
+     */
     protected void updateMoneyTextOnScreen(String value) {
         mMoneyText.setText(value);
     }
@@ -262,7 +258,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         // sun and planets
         createSun();
 
-        initSceneTouch();
+        initGameSceneTouch();
 
         initMoneyTextView();
         mGameScene.registerUpdateHandler(mPhysicsWorld);
@@ -301,7 +297,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     /**
      * initialize team (init user or bot team, or do nothing if team control from remote)
      *
-     * @param team team to init
+     * @param team            team to init
      * @param teamNameInExtra team name to get control type from intent
      */
     private void initTeam(ITeam team, String teamNameInExtra) {
@@ -310,9 +306,9 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
 
         if (teamType == TeamControlBehaviourType.USER_SERVER_CONTROL ||
                 teamType == TeamControlBehaviourType.USER_CLIENT_CONTROL) {
-            initUser(team);
+            initUserControlledTeam(team);
         } else if (teamType == TeamControlBehaviourType.BOT_CONTROL) {
-            initBot(team);
+            initBotControlledTeam(team);
         } else if (teamType == TeamControlBehaviourType.REMOTE_CLIENT_CONTROL ||
                 teamType == TeamControlBehaviourType.REMOTE_SERVER_CONTROL) {
             //nothing
@@ -325,14 +321,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
 
     protected abstract void userWantCreateBuilding(ITeam userTeam, int buildingId);
 
-    /**
-     * create new team depending on team control type which stored in extra
-     *
-     * @param teamNameInExtra team name from extra
-     * @param race team race which will be assigned to current team
-     *
-     * @return newly created team
-     */
+    /** create new team depending on team control type which stored in extra */
     private ITeam createTeam(String teamNameInExtra, IRace race) {
         Intent intent = getIntent();
         TeamControlBehaviourType teamType = TeamControlBehaviourType.valueOf(intent.getStringExtra(teamNameInExtra));
@@ -342,7 +331,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
                 @Override
                 public void changeMoney(final int delta) {
                     super.changeMoney(delta);
-                    updateMoneyTextOnScreen(TeamUtils.getMoneyString(mMoneyTextPrefixString, this)); // this - red team
+                    updateMoneyTextOnScreen(TeamUtils.getMoneyString(mMoneyTextPrefixString, this));
                 }
             };
         } else {
@@ -361,17 +350,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
                 SizeConstants.GAME_FIELD_HEIGHT / 2 + SizeConstants.ADDITION_MARGIN_FOR_PLANET);
     }
 
-    /**
-     * create planet game object
-     *
-     * @param x abscissa (top left corner) of created planet
-     * @param y ordinate (top left corner) of created planet
-     * @param textureRegion static object {@link ITextureRegion} for creating new {@link PlanetStaticObject}
-     * @param key key of current planet
-     * @param team new planet team
-     *
-     * @return newly created {@link PlanetStaticObject}
-     */
+    /** create planet game object */
     protected PlanetStaticObject createPlanet(float x, float y, ITextureRegion textureRegion, String key, ITeam team, boolean isFakePlanet) {
         LoggerHelper.methodInvocation(TAG, "createPlanet");
         PlanetStaticObject planetStaticObject = new PlanetStaticObject(x, y, textureRegion, this, team, isFakePlanet);
@@ -395,11 +374,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         );
     }
 
-    /**
-     * create static game object
-     *
-     * @return newly created {@link SunStaticObject}
-     */
+    /** create sun */
     protected SunStaticObject createSun() {
         float x = (SizeConstants.GAME_FIELD_WIDTH - SizeConstants.SUN_DIAMETER) / 2;
         float y = (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.SUN_DIAMETER) / 2;
@@ -413,8 +388,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     }
 
     /** init planet touch listener for some team */
-    protected void initUser(final ITeam initializingTeam) {
-        LoggerHelper.methodInvocation(TAG, "initUser");
+    protected void initUserControlledTeam(final ITeam initializingTeam) {
+        LoggerHelper.methodInvocation(TAG, "initUserControlledTeam");
         // create building
         ITouchListener userClickScreenTouchListener = new BuildingsPopupTouchListener(initializingTeam, this, this,
                 new IItemPickListener() {
@@ -427,8 +402,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         mMainSceneTouchListener.addTouchListener(userClickScreenTouchListener);
     }
 
-    protected void initBot(final ITeam initializingTeam) {
-        LoggerHelper.methodInvocation(TAG, "initBot");
+    protected void initBotControlledTeam(final ITeam initializingTeam) {
+        LoggerHelper.methodInvocation(TAG, "initBotControlledTeam");
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         LoggerHelper.printDebugMessage(TAG, "bot team == null : " + (initializingTeam == null));
         Callable<Boolean> simpleBot = new NormalBot(initializingTeam);
@@ -448,28 +423,29 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     }
 
     /** init scene touch events so user can collaborate with game by screen touches */
-    private void initSceneTouch() {
-        LoggerHelper.methodInvocation(TAG, "initSceneTouch");
+    private void initGameSceneTouch() {
+        LoggerHelper.methodInvocation(TAG, "initGameSceneTouch");
         Display display = getWindowManager().getDefaultDisplay();
         DisplayMetrics metrics = new DisplayMetrics();
         display.getMetrics(metrics);
         float screenToSceneRatio = metrics.widthPixels / SizeConstants.GAME_FIELD_WIDTH;
         mMainSceneTouchListener = new MainSceneTouchListener(mCamera, this, screenToSceneRatio);
         mGameScene.setOnSceneTouchListener(mMainSceneTouchListener);
+        mMusicAndSoundsHandler.setCameraCoordinates(mMainSceneTouchListener);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         if (mBackgroundMusic != null)
-            mBackgroundMusic.getMediaPlayer().prepareAsync();
+            mBackgroundMusic.startBackgroundMusic();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         if (mBackgroundMusic != null)
-            mBackgroundMusic.stop();
+            mBackgroundMusic.stopBackgroundMusic();
     }
 
     @Override
@@ -525,17 +501,11 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         return getVertexBufferObjectManager();
     }
 
-    /**
-     * create dynamic game object (e.g. warrior or some other stuff)
-     *
-     * @param unitKey key to identify which kind of unit you want to build
-     * @param unitTeam team unit of which should be created
-     *
-     * @return newly created unit
-     */
+    /** create unit and assign it for particular team */
     @Override
     public Unit createUnitForTeam(int unitKey, final ITeam unitTeam) {
-        Unit warrior = createAndAttachUnitCarcass(unitKey, unitTeam);
+        Unit warrior = createUnit(unitKey, unitTeam,
+                unitTeam.getTeamPlanet().getSpawnPointX(), unitTeam.getTeamPlanet().getSpawnPointY());
         warrior.registerUpdateHandler();
         warrior.setEnemiesUpdater(UnitCallbacksUtils.getSimpleUnitEnemiesUpdater(unitTeam.getEnemyTeam()));
         warrior.initMovingPath();
@@ -544,70 +514,50 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     }
 
     /**
-     * create dynamic game object (e.g. warrior or some other stuff) and attach it to game scene with coordinates
-     * which set in spawn point for unit team planet
-     *
-     * @param unitKey key to identify which kind of unit you want to build
-     * @param unitTeam team unit of which should be created
-     *
-     * @return newly created unit
+     * create new unit with by uniqueId for race which will be retrieved from the unitTeam.
+     * unitUniqueId will replace default value if present (will take first value if there will be few of them)
      */
-    protected Unit createAndAttachUnitCarcass(int unitKey, ITeam unitTeam) {
-        return createAndAttachUnitCarcass(unitKey, unitTeam,
-                unitTeam.getTeamPlanet().getSpawnPointX(), unitTeam.getTeamPlanet().getSpawnPointY());
-    }
-
-    /**
-     * create dynamic game object (e.g. warrior or some other stuff) and attach it to game scene with coordinates
-     * which set in spawn point for unit team planet
-     *
-     * @param unitKey key to identify which kind of unit you want to build
-     * @param unitTeam team unit of which should be created
-     * @param x where unit should be positioned abscissa
-     * @param y where unit should be positioned ordinate
-     *
-     * @return newly created unit
-     */
-    protected Unit createAndAttachUnitCarcass(int unitKey, ITeam unitTeam, float x, float y) {
-        LoggerHelper.methodInvocation(TAG, "createAndAttachUnitCarcass");
-        Unit unit = createUnitCarcass(unitKey, unitTeam);
-        unit.setX(x);
-        unit.setY(y);
-        attachEntity(unit);
-        mUnitsMap.put(unit.getUnitId(), unit);
-        return unit;
-    }
-
-    protected Unit createAndAttachUnitCarcass(int unitKey, ITeam unitTeam, float x, float y, long unitUniqueId) {
-        LoggerHelper.methodInvocation(TAG, "createAndAttachUnitCarcass");
-        Unit unit = createUnitCarcass(unitKey, unitTeam);
-        unit.setX(x);
-        unit.setY(y);
-        attachEntity(unit);
-        mUnitsMap.put(unitUniqueId, unit);
-        return unit;
-    }
-
-    protected abstract void initServerPart();
-
-    /**
-     * create dynamic game object (e.g. warrior or some other stuff)
-     *
-     * @param unitKey key to identify which kind of unit you want to build
-     * @param unitTeam team unit of which should be created
-     *
-     * @return newly created unit
-     */
-    protected Unit createUnitCarcass(int unitKey, ITeam unitTeam) {
-        LoggerHelper.methodInvocation(TAG, "createUnitCarcass");
+    protected Unit createUnit(int unitKey, ITeam unitTeam, float x, float y, long... unitUniqueId) {
         Unit unit = unitTeam.getTeamRace().getUnitForBuilding(unitKey);
         unit.setObjectDestroyedListener(new ObjectDestroyedListener(unitTeam, this));
+        unit.setPosition(x, y);
+        attachEntity(unit);
+        if (unitUniqueId.length > 0)
+            unit.setUnitUniqueId(unitUniqueId[0]);
+        mUnitsMap.put(unit.getUnitUniqueId(), unit);
+
+        // init physic body
+        final FixtureDef playerFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f);
+        BodyDef.BodyType bodyType;
+        if (unitTeam.getTeamControlType() == TeamControlBehaviourType.REMOTE_CLIENT_CONTROL ||
+                unitTeam.getTeamControlType() == TeamControlBehaviourType.REMOTE_SERVER_CONTROL) {
+            bodyType = BodyDef.BodyType.KinematicBody;
+        } else {
+            bodyType = BodyDef.BodyType.DynamicBody;
+        }
+        Body body = PhysicsFactory.createCircleBody(mPhysicsWorld, unit, bodyType, playerFixtureDef);
+        unit.setBody(body);
+        body.setUserData(unit);
+        mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(unit, body, true, true));
+
         return unit;
     }
 
+    protected abstract void initThickClient();
+
+    @Override
+    public void detachPhysicsBody(final GameObject gameObject) {
+        if (gameObject.getBody() == null)
+            return;
+        final PhysicsConnector pc = mPhysicsWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(gameObject);
+        if (pc != null) {
+            mPhysicsWorld.unregisterPhysicsConnector(pc);
+        }
+        mPhysicsWorld.destroyBody(gameObject.getBody());
+    }
+
+    /** return unit if it exist (live) by using unit unique id */
     protected Unit getUnitById(long id) {
         return mUnitsMap.get(id);
     }
-
-
 }
