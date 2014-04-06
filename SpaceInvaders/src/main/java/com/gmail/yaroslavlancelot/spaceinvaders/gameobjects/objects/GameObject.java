@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IGameObjectHealthChanged;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IObjectDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IVelocityChangedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Armor;
@@ -23,12 +24,16 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 public abstract class GameObject extends Rectangle implements ISpriteTouchable {
     protected static final int sUndestroyableObjectKey = Integer.MIN_VALUE;
     /** maximum object health */
     protected int mObjectMaximumHealth = sUndestroyableObjectKey;
     /** game object current health (it can be undestroyable) */
     protected int mObjectCurrentHealth = sUndestroyableObjectKey;
+    /** used for generation new id's */
+    private static volatile AtomicLong sGameObjectsTracker = new AtomicLong(0);
     /** object sprite */
     protected Sprite mObjectSprite;
     /** background color */
@@ -49,6 +54,10 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
     private int mObjectStringId;
     /** will trigger if object velocity changed */
     private IVelocityChangedListener mVelocityChangedListener;
+    /** will trigger if object health changed */
+    private IGameObjectHealthChanged mGameObjectHealthChangedListener;
+    /** unique unit id */
+    private long mUniqueId;
 
     protected GameObject(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
         super(x, y, textureRegion.getWidth(), textureRegion.getWidth(), vertexBufferObjectManager);
@@ -57,11 +66,24 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
         mBackground = new Rectangle(0, 0, 0, 0, vertexBufferObjectManager);
         attachChild(mBackground);
         attachChild(mObjectSprite);
+        mUniqueId = sGameObjectsTracker.getAndIncrement();
     }
 
     protected static void loadResource(String pathToUnit, Context context, BitmapTextureAtlas textureAtlas, int x, int y) {
         TextureRegionHolderUtils.addElementFromAssets(pathToUnit, TextureRegionHolderUtils.getInstance(),
                 textureAtlas, context, x, y);
+    }
+
+    public long getUnitUniqueId() {
+        return mUniqueId;
+    }
+
+    public void setUnitUniqueId(long id) {
+        mUniqueId = id;
+    }
+
+    public void setGameObjectHealthChangedListener(IGameObjectHealthChanged gameObjectHealthChangedListener) {
+        mGameObjectHealthChangedListener = gameObjectHealthChangedListener;
     }
 
     public void setVelocityChangedListener(IVelocityChangedListener velocityChangedListener) {
@@ -138,14 +160,23 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
 
     public void damageObject(final Damage damage) {
         if (mObjectCurrentHealth == sUndestroyableObjectKey) return;
-        mObjectCurrentHealth -= mObjectArmor.getDamage(damage);
+        int objectHealth = mObjectCurrentHealth - mObjectArmor.getDamage(damage);
+
+        setHealth(objectHealth);
+    }
+
+    public void setHealth(int objectHealth) {
+        mObjectCurrentHealth = objectHealth;
+        if (mGameObjectHealthChangedListener != null)
+            mGameObjectHealthChangedListener.gameObjectHealthChanged(mUniqueId, mObjectCurrentHealth);
         if (mObjectCurrentHealth < 0) {
             if (mObjectDestroyedListener != null)
                 mObjectDestroyedListener.objectDestroyed(this);
             return;
+        } else {
+            if (mHealthBar != null)
+                mHealthBar.redrawHealthBar(mObjectMaximumHealth, mObjectCurrentHealth);
         }
-        if (mHealthBar != null)
-            mHealthBar.redrawHealthBar(mObjectMaximumHealth, mObjectCurrentHealth);
     }
 
     public Color getBackgroundColor() {

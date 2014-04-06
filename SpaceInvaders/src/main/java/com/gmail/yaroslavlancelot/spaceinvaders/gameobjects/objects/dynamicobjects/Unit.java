@@ -4,6 +4,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitPathUtil;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations;
+
 import org.andengine.audio.sound.Sound;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -11,7 +12,6 @@ import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 /** Basic class for all dynamic game units */
 public abstract class Unit extends GameObject {
@@ -35,14 +35,11 @@ public abstract class Unit extends GameObject {
     protected SoundOperations mSoundOperations;
     /** for creating new entities */
     protected EntityOperations mEntityOperations;
-    /** last unit attack time */
-    private long mLastAttackTime;
     /** unit attack sound */
     protected Sound mFireSound;
-    /** unique unit id */
-    private long mUnitUniqueId;
-    /** used for generation new id's */
-    private static volatile AtomicLong sUnitIdTracker = new AtomicLong(0);
+    /** last unit attack time */
+    private long mLastAttackTime;
+    ;
 
 
     protected Unit(ITextureRegion textureRegion, SoundOperations soundOperations, EntityOperations entityOperations) {
@@ -50,15 +47,6 @@ public abstract class Unit extends GameObject {
 
         mSoundOperations = soundOperations;
         mEntityOperations = entityOperations;
-        mUnitUniqueId = sUnitIdTracker.getAndIncrement();
-    }
-
-    public void setUnitUniqueId(long id) {
-        mUnitUniqueId = id;
-    }
-
-    public long getUnitUniqueId() {
-        return mUnitUniqueId;
     }
 
     public void registerUpdateHandler() {
@@ -66,7 +54,6 @@ public abstract class Unit extends GameObject {
     }
 
     protected void initSound(String path) {
-        //TODO null pointer here
         mFireSound = mSoundOperations.loadSound(path);
     }
 

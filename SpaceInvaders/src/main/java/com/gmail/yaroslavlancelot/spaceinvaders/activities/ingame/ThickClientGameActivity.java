@@ -10,6 +10,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobject
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.SunStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
+
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -48,7 +49,8 @@ public abstract class ThickClientGameActivity extends MainOperationsBaseGameActi
     }
 
     @Override
-    protected PlanetStaticObject createPlanet(final float x, final float y, final ITextureRegion textureRegion, final String key, final ITeam team, boolean isFakePlanet) {
+    protected PlanetStaticObject createPlanet(final float x, final float y, final ITextureRegion textureRegion, final String key,
+                                              final ITeam team, boolean isFakePlanet, long... uniquesId) {
         PlanetStaticObject planetStaticObject = super.createPlanet(x, y, textureRegion, key, team, isFakePlanet);
         Body body = PhysicsFactory.createCircleBody(mPhysicsWorld, planetStaticObject, BodyDef.BodyType.StaticBody, mStaticBodyFixtureDef);
         planetStaticObject.setBody(body);

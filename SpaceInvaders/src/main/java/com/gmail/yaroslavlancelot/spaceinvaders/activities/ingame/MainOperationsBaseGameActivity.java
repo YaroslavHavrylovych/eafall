@@ -83,7 +83,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     public static final String TAG = MainOperationsBaseGameActivity.class.getCanonicalName();
     public static final int MONEY_UPDATE_TIME = 10;
     /** contains whole game units/warriors */
-    private final Map<Long, Unit> mUnitsMap = new HashMap<Long, Unit>();
+    private final Map<Long, GameObject> mGameObjectsMap = new HashMap<Long, GameObject>();
     /** game scene */
     protected Scene mGameScene;
     /** all teams in current game */
@@ -351,12 +351,15 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     }
 
     /** create planet game object */
-    protected PlanetStaticObject createPlanet(float x, float y, ITextureRegion textureRegion, String key, ITeam team, boolean isFakePlanet) {
+    protected PlanetStaticObject createPlanet(float x, float y, ITextureRegion textureRegion, String key, ITeam team, boolean isFakePlanet, long... unitUniqueId) {
         LoggerHelper.methodInvocation(TAG, "createPlanet");
         PlanetStaticObject planetStaticObject = new PlanetStaticObject(x, y, textureRegion, this, team, isFakePlanet);
         planetStaticObject.setObjectDestroyedListener(new PlanetDestroyedListener(team, this));
         mStaticObjects.put(key, planetStaticObject);
         attachEntity(planetStaticObject);
+        if (unitUniqueId.length > 0)
+            planetStaticObject.setUnitUniqueId(unitUniqueId[0]);
+        mGameObjectsMap.put(planetStaticObject.getUnitUniqueId(), planetStaticObject);
         return planetStaticObject;
     }
 
@@ -461,7 +464,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
                 mGameScene.unregisterTouchArea(shapeArea);
                 mGameScene.detachChild(shapeArea);
                 if (shapeArea instanceof Unit)
-                    mUnitsMap.remove(shapeArea);
+                    mGameObjectsMap.remove(shapeArea);
             }
         });
     }
@@ -524,7 +527,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         attachEntity(unit);
         if (unitUniqueId.length > 0)
             unit.setUnitUniqueId(unitUniqueId[0]);
-        mUnitsMap.put(unit.getUnitUniqueId(), unit);
+        mGameObjectsMap.put(unit.getUnitUniqueId(), unit);
 
         // init physic body
         final FixtureDef playerFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f);
@@ -555,7 +558,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     }
 
     /** return unit if it exist (live) by using unit unique id */
-    protected Unit getUnitById(long id) {
-        return mUnitsMap.get(id);
+    protected GameObject getGameObjectById(long id) {
+        return mGameObjectsMap.get(id);
     }
 }

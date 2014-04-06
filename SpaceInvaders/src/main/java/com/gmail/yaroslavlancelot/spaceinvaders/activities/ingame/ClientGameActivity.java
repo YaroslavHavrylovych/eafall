@@ -1,5 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.client.BuildingCreationClientMessage;
@@ -60,12 +61,23 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
         float x = unitChangePositionServerMessage.getX(),
                 y = unitChangePositionServerMessage.getY();
         LoggerHelper.printDebugMessage(TAG, "unitCreated=" + unitUniqueId + "(" + x + "," + y + ")");
-        Unit unit = getUnitById(unitUniqueId);
-        if (unit == null) {
-            LoggerHelper.printInformationMessage(TAG, "try yo move uncreated unit");
+        GameObject gameObject = getGameObjectById(unitUniqueId);
+        if (gameObject == null || !(gameObject instanceof Unit)) {
+            LoggerHelper.printInformationMessage(TAG, "try yo move uncreated unit or it's not a unit");
             return;
         }
+        Unit unit = (Unit) gameObject;
         unit.setBodyTransform(x, y);
         unit.setUnitLinearVelocity(unitChangePositionServerMessage.getVelocityX(), unitChangePositionServerMessage.getVelocityY());
+    }
+
+    @Override
+    public void gameObjectHealthChanged(long gameObjectUniqueId, int newUnitHealth) {
+        GameObject gameObject = getGameObjectById(gameObjectUniqueId);
+        if (gameObject == null) {
+            LoggerHelper.printInformationMessage(TAG, "try to change health of unexisting unit");
+            return;
+        }
+        gameObject.setHealth(newUnitHealth);
     }
 }

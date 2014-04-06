@@ -4,18 +4,22 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IGameObjectHealthChanged;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IVelocityChangedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.GameSocketServer;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.BuildingCreatedServerMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.GameObjectHealthChangedServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.UnitChangePositionServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.UnitCreatedServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.server.InGameServer;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
+
 import org.andengine.engine.options.EngineOptions;
+import org.andengine.opengl.texture.region.ITextureRegion;
 
 import java.io.IOException;
 
@@ -23,7 +27,7 @@ import java.io.IOException;
  * Server game. Extends physical world and will add some handlers for server actions and
  * from client.
  */
-public class ServerGameActivity extends ThickClientGameActivity implements InGameServer, IVelocityChangedListener {
+public class ServerGameActivity extends ThickClientGameActivity implements InGameServer, IVelocityChangedListener, IGameObjectHealthChanged {
     private GameSocketServer mGameSocketServer;
 
     @Override
@@ -39,6 +43,13 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
         if (mRedTeam != null && mRedTeam.getTeamPlanet() != null) {
             userWantCreateBuilding(mRedTeam, buildingId);
         }
+    }
+
+    @Override
+    protected PlanetStaticObject createPlanet(float x, float y, ITextureRegion textureRegion, String key, ITeam team, boolean isFakePlanet, long... uniquesId) {
+        PlanetStaticObject planetStaticObject = super.createPlanet(x, y, textureRegion, key, team, isFakePlanet, uniquesId);
+        planetStaticObject.setGameObjectHealthChangedListener(this);
+        return planetStaticObject;
     }
 
     @Override
@@ -66,6 +77,7 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
         } catch (IOException e) {
             LoggerHelper.printErrorMessage(TAG, "send message (unit created on server) IOException");
         }
+        unit.setGameObjectHealthChangedListener(this);
         unit.setVelocityChangedListener(this);
         return unit;
     }
@@ -109,7 +121,15 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
     private void sendUnitPositionChanged(Object userObject) {
         if (userObject == null || !(userObject instanceof Unit))
             return;
-
         velocityChanged((Unit) userObject);
+    }
+
+    @Override
+    public void gameObjectHealthChanged(long unitUniqueId, int newUnitHealth) {
+        try {
+            mGameSocketServer.sendBroadcastServerMessage(new GameObjectHealthChangedServerMessage(unitUniqueId, newUnitHealth));
+        } catch (IOException e) {
+            LoggerHelper.printErrorMessage(TAG, "send message (game object health changed on server) IOException");
+        }
     }
 }
