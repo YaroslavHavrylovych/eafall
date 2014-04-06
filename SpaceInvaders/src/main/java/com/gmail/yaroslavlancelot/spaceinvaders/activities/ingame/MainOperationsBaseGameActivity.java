@@ -387,6 +387,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         SunStaticObject sunStaticObject = new SunStaticObject(x, y, textureRegion, mEngine.getVertexBufferObjectManager());
         mStaticObjects.put(key, sunStaticObject);
         attachEntity(sunStaticObject);
+        mGameObjectsMap.put(sunStaticObject.getUnitUniqueId(), sunStaticObject);
         return sunStaticObject;
     }
 

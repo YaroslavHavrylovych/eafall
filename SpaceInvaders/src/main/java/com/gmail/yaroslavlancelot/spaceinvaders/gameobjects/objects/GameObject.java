@@ -172,7 +172,6 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
         if (mObjectCurrentHealth < 0) {
             if (mObjectDestroyedListener != null)
                 mObjectDestroyedListener.objectDestroyed(this);
-            return;
         } else {
             if (mHealthBar != null)
                 mHealthBar.redrawHealthBar(mObjectMaximumHealth, mObjectCurrentHealth);
