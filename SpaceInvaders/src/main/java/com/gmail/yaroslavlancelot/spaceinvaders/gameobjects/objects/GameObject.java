@@ -28,6 +28,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public abstract class GameObject extends Rectangle implements ISpriteTouchable {
     protected static final int sUndestroyableObjectKey = Integer.MIN_VALUE;
+    public static final float VELOCITY_EPSILON = 0.00000001f;
     /** maximum object health */
     protected int mObjectMaximumHealth = sUndestroyableObjectKey;
     /** game object current health (it can be undestroyable) */
@@ -58,6 +59,7 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
     private IGameObjectHealthChanged mGameObjectHealthChangedListener;
     /** unique unit id */
     private long mUniqueId;
+    private float prevVelocityX, prevVelocityY;
 
     protected GameObject(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
         super(x, y, textureRegion.getWidth(), textureRegion.getWidth(), vertexBufferObjectManager);
@@ -245,6 +247,12 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
     }
 
     public void setUnitLinearVelocity(float x, float y) {
+        if (Math.abs(prevVelocityX - x) < VELOCITY_EPSILON && Math.abs(prevVelocityY - y) < VELOCITY_EPSILON) return;
+        else {
+            prevVelocityX = x;
+            prevVelocityY = y;
+        }
+
         mPhysicBody.setLinearVelocity(x, y);
         if (mVelocityChangedListener != null)
             mVelocityChangedListener.velocityChanged(GameObject.this);

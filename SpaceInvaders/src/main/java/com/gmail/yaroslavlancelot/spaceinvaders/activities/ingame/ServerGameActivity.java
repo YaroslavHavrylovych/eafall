@@ -88,24 +88,30 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
         setContactListener(new ContactListener() {
             @Override
             public void beginContact(final Contact contact) {
+                resolveContactData(contact);
             }
 
             @Override
             public void endContact(final Contact contact) {
-                Object userData = contact.getFixtureA().getBody().getUserData();
-                sendUnitPositionChanged(userData);
-                userData = contact.getFixtureB().getBody().getUserData();
-                sendUnitPositionChanged(userData);
+                resolveContactData(contact);
             }
 
             @Override
             public void preSolve(final Contact contact, final Manifold oldManifold) {
+                resolveContactData(contact);
             }
 
             @Override
             public void postSolve(final Contact contact, final ContactImpulse impulse) {
             }
         });
+    }
+
+    private void resolveContactData(final Contact contact) {
+        Object userData = contact.getFixtureA().getBody().getUserData();
+        sendUnitPositionChanged(userData);
+        userData = contact.getFixtureB().getBody().getUserData();
+        sendUnitPositionChanged(userData);
     }
 
     @Override

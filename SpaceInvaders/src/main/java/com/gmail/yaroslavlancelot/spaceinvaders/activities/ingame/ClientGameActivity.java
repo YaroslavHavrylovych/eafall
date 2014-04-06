@@ -60,15 +60,19 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
         long unitUniqueId = unitChangePositionServerMessage.getUnitUniqueId();
         float x = unitChangePositionServerMessage.getX(),
                 y = unitChangePositionServerMessage.getY();
-        LoggerHelper.printDebugMessage(TAG, "unitCreated=" + unitUniqueId + "(" + x + "," + y + ")");
+        float velocityX = unitChangePositionServerMessage.getVelocityX(),
+                velocityY = unitChangePositionServerMessage.getVelocityY();
+        LoggerHelper.printDebugMessage(TAG, "unitMoved=" + unitUniqueId + "(" + x + "," + y + "), vel(" +
+                +velocityX + "," + velocityY + ")");
         GameObject gameObject = getGameObjectById(unitUniqueId);
         if (gameObject == null || !(gameObject instanceof Unit)) {
             LoggerHelper.printInformationMessage(TAG, "try yo move uncreated unit or it's not a unit");
             return;
         }
+
         Unit unit = (Unit) gameObject;
         unit.setBodyTransform(x, y);
-        unit.setUnitLinearVelocity(unitChangePositionServerMessage.getVelocityX(), unitChangePositionServerMessage.getVelocityY());
+        unit.setUnitLinearVelocity(velocityX, velocityY);
     }
 
     @Override
