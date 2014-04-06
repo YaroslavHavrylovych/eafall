@@ -10,7 +10,6 @@ import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 
 import org.andengine.engine.options.EngineOptions;
-import org.andengine.extension.physics.box2d.PhysicsConnector;
 
 import java.io.IOException;
 
@@ -52,8 +51,7 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
     @Override
     public void unitCreated(final String teamName, final int unitId, final float x, final float y, long unitUniqueId) {
         LoggerHelper.printDebugMessage(TAG, "unitCreated=" + unitUniqueId + "(" + x + "," + y + ")");
-        if (unitId == 0)
-            createUnit(unitId, mTeams.get(teamName), x, y, unitUniqueId);
+        createUnit(unitId, mTeams.get(teamName), x, y, unitUniqueId);
     }
 
     @Override
@@ -67,9 +65,7 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
             LoggerHelper.printInformationMessage(TAG, "try yo move uncreated unit");
             return;
         }
-        final float widthD2 = unit.getWidth() / 2;
-        final float heightD2 = unit.getHeight() / 2;
-        unit.setBodyTransform((x + widthD2) / PhysicsConnector.PIXEL_TO_METER_RATIO_DEFAULT, (y + heightD2) / PhysicsConnector.PIXEL_TO_METER_RATIO_DEFAULT);
+        unit.setBodyTransform(x, y);
         unit.setUnitLinearVelocity(unitChangePositionServerMessage.getVelocityX(), unitChangePositionServerMessage.getVelocityY());
     }
 }

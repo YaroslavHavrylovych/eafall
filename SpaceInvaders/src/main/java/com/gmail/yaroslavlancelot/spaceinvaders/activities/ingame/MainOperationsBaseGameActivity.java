@@ -529,12 +529,10 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         // init physic body
         final FixtureDef playerFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f);
         BodyDef.BodyType bodyType;
-        if (unitTeam.getTeamControlType() == TeamControlBehaviourType.REMOTE_CLIENT_CONTROL ||
-                unitTeam.getTeamControlType() == TeamControlBehaviourType.REMOTE_SERVER_CONTROL) {
+        if (unitTeam.getTeamControlType() == TeamControlBehaviourType.REMOTE_CLIENT_CONTROL)
             bodyType = BodyDef.BodyType.KinematicBody;
-        } else {
+        else
             bodyType = BodyDef.BodyType.DynamicBody;
-        }
         Body body = PhysicsFactory.createCircleBody(mPhysicsWorld, unit, bodyType, playerFixtureDef);
         unit.setBody(body);
         body.setUserData(unit);
