@@ -26,7 +26,7 @@ import org.andengine.util.color.Color;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-public abstract class GameObject extends Rectangle implements ISpriteTouchable {
+public abstract class GameObject extends IGameObject implements ISpriteTouchable {
     protected static final int sUndestroyableObjectKey = Integer.MIN_VALUE;
     public static final float VELOCITY_EPSILON = 0.00000001f;
     /** maximum object health */
@@ -47,8 +47,6 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
     protected Armor mObjectArmor;
     /** callback to send message about death */
     protected IObjectDestroyedListener mObjectDestroyedListener;
-    /** physics body associated with current object {@link Sprite} */
-    protected Body mPhysicBody;
     /** current object touch listener */
     private ITouchListener mSpriteOnTouchListener;
     /** id of the string in the string files to represent object */
@@ -208,17 +206,9 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
         return getY() + getHeight() / 2;
     }
 
+    @Override
     public Body getBody() {
         return mPhysicBody;
-    }
-
-    /**
-     * set physics body associated with current {@link Sprite}
-     *
-     * @param body the physics body
-     */
-    public void setBody(Body body) {
-        mPhysicBody = body;
     }
 
     public Armor getObjectArmor() {

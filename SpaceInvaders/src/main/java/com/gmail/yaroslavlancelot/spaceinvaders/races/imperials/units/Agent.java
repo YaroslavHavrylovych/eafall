@@ -1,10 +1,11 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.units;
 
 import android.content.Context;
+
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Electrical;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Magnetic;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Bullet;
@@ -12,6 +13,9 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjec
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.Imperials;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations;
+
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 
 public class Agent extends Unit {
@@ -33,18 +37,6 @@ public class Agent extends Unit {
 
     public static void loadResources(final Context context, final BitmapTextureAtlas textureAtlas) {
         loadResource(KEY_IMPERIALS_FIFTH_UNIT, context, textureAtlas, 16, 16);
-    }
-
-    @Override
-    protected void attackGoal() {
-        if (!isReloadFinished())
-            return;
-        playSound(mFireSound, mSoundOperations);
-        Bullet bullet = new Bullet(getVertexBufferObjectManager(), mEntityOperations, getBackgroundColor());
-        bullet.fire(getX() + SizeConstants.UNIT_SIZE / 2, getY() - Bullet.BULLET_SIZE,
-                mObjectToAttack.getCenterX(), mObjectToAttack.getCenterY(), mEnemiesUpdater, mObjectDamage);
-
-        mEntityOperations.attachEntity(bullet);
     }
 
     @Override

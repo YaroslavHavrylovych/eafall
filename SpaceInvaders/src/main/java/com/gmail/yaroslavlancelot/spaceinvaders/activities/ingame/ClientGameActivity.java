@@ -52,7 +52,7 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
     @Override
     public void unitCreated(final String teamName, final int unitId, final float x, final float y, long unitUniqueId) {
         LoggerHelper.printDebugMessage(TAG, "unitCreated=" + unitUniqueId + "(" + x + "," + y + ")");
-        createUnit(unitId, mTeams.get(teamName), x, y, unitUniqueId);
+        createThinUnit(unitId, mTeams.get(teamName), x, y, unitUniqueId);
     }
 
     @Override
@@ -83,5 +83,20 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
             return;
         }
         gameObject.setHealth(newUnitHealth);
+    }
+
+    @Override
+    public void unitFire(long gameObjectUniqueId, long attackedGameObjectUniqueId) {
+        GameObject gameObject = getGameObjectById(gameObjectUniqueId);
+        GameObject objectToAttack = getGameObjectById(attackedGameObjectUniqueId);
+        if (gameObject == null || objectToAttack == null) {
+            LoggerHelper.printErrorMessage(TAG, "one of the object in attack is not exist");
+            return;
+        }
+        if (!(gameObject instanceof Unit)) {
+            LoggerHelper.printErrorMessage(TAG, "attacker is not unit in fire operation");
+            return;
+        }
+        ((Unit) gameObject).fire(objectToAttack);
     }
 }

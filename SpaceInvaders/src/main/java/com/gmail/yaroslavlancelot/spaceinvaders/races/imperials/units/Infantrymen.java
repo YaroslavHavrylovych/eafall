@@ -1,6 +1,8 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.units;
 
 import android.content.Context;
+
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
@@ -37,10 +39,12 @@ public class Infantrymen extends Unit {
 
     @Override
     protected void attackGoal() {
+        super.attackGoal();
         if (!isReloadFinished())
             return;
         playSound(mFireSound, mSoundOperations);
-        Bullet bullet = new Bullet(getVertexBufferObjectManager(), mEntityOperations, getBackgroundColor());
+        Bullet bullet = new Bullet(getVertexBufferObjectManager(), mEntityOperations, getBackgroundColor(),
+                getBody().getType().equals(BodyDef.BodyType.KinematicBody));
         bullet.fire(getX() + SizeConstants.UNIT_SIZE / 2, getY() - Bullet.BULLET_SIZE,
                 mObjectToAttack.getCenterX(), mObjectToAttack.getCenterY(), mEnemiesUpdater, mObjectDamage);
 

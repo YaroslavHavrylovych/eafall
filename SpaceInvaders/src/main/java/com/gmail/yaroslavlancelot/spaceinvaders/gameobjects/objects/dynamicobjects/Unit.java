@@ -1,5 +1,9 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects;
 
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IUnitFireCallback;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitPathUtil;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
@@ -8,6 +12,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations
 import org.andengine.audio.sound.Sound;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
+import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
 
@@ -39,8 +44,8 @@ public abstract class Unit extends GameObject {
     protected Sound mFireSound;
     /** last unit attack time */
     private long mLastAttackTime;
-    ;
-
+    /** if fire method called it will be triggered */
+    private IUnitFireCallback mUnitFireCallback;
 
     protected Unit(ITextureRegion textureRegion, SoundOperations soundOperations, EntityOperations entityOperations) {
         super(-100, -100, textureRegion, entityOperations.getObjectManager());
@@ -48,6 +53,7 @@ public abstract class Unit extends GameObject {
         mSoundOperations = soundOperations;
         mEntityOperations = entityOperations;
     }
+
 
     public void registerUpdateHandler() {
         registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new SimpleUnitTimerCallback()));
@@ -61,12 +67,21 @@ public abstract class Unit extends GameObject {
         mUnitPath = UnitPathUtil.getUnitPathAccordingToStartAbscissa(getX());
     }
 
+    public void setUnitFireCallback(IUnitFireCallback unitFireCallback) {
+        mUnitFireCallback = unitFireCallback;
+    }
+
     public void setReloadTime(double seconds) {
         mTimeForReload = seconds * 1000;
     }
 
     public void setEnemiesUpdater(final ISimpleUnitEnemiesUpdater enemiesUpdater) {
         mEnemiesUpdater = enemiesUpdater;
+    }
+
+    public void fire(GameObject objectToAttack) {
+        mObjectToAttack = objectToAttack;
+        attackGoal();
     }
 
     @Override
@@ -79,9 +94,20 @@ public abstract class Unit extends GameObject {
     }
 
     protected void attackGoal() {
-        if (!isReloadFinished())
-            return;
-        mObjectToAttack.damageObject(mObjectDamage);
+        if (mUnitFireCallback != null)
+            mUnitFireCallback.fire(getUnitUniqueId(), mObjectToAttack.getUnitUniqueId());
+
+        playSound(mFireSound, mSoundOperations);
+        Bullet bullet = new Bullet(getVertexBufferObjectManager(), mEntityOperations, getBackgroundColor(),
+                getBody().getType().equals(BodyDef.BodyType.KinematicBody));
+        Vector2 objectPosition = getBody().getPosition();
+        Vector2 targetPosition = mObjectToAttack.getBody().getPosition();
+
+        bullet.fire(objectPosition.x + SizeConstants.UNIT_SIZE / 2 / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
+                objectPosition.y - Bullet.BULLET_SIZE / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
+                targetPosition.x, targetPosition.y, mEnemiesUpdater, mObjectDamage);
+
+        mEntityOperations.attachEntity(bullet);
     }
 
     protected boolean isReloadFinished() {

@@ -7,4 +7,5 @@ public interface InGameClient {
     void unitCreated(String teamName, int unitId, float x, float y, long uniqueId);
     void unitMoved(UnitChangePositionServerMessage unitChangePositionServerMessage);
     void gameObjectHealthChanged(long unitUniqueId, int newUnitHealth);
+    void unitFire(long gameObjectUniqueId, long attackedGameObjectUniqueId);
 }

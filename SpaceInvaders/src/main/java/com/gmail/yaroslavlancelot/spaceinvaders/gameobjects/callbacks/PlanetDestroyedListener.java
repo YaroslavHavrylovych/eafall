@@ -1,8 +1,8 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.IGameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
 
 /**
  * triggers when planet destroyed
@@ -13,7 +13,7 @@ public class PlanetDestroyedListener extends ObjectDestroyedListener {
     }
 
     @Override
-    public void objectDestroyed(final GameObject gameObject) {
+    public void objectDestroyed(final IGameObject gameObject) {
         mTeam.removeTeamPlanet();
         super.objectDestroyed(gameObject);
     }

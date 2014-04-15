@@ -32,6 +32,6 @@ public class UnitCreatorCycle implements ITimerCallback {
     @Override
     public void onTimePassed(final TimerHandler pTimerHandler) {
         for (int i = 0; i < mUnitAmount; i++)
-            mEntityOperations.createUnitForTeam(mUnitKey, mUnitTeam);
+            mEntityOperations.createThickUnit(mUnitKey, mUnitTeam);
     }
 }

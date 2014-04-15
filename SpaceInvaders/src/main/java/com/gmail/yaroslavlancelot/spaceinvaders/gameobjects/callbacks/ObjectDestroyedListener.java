@@ -1,5 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks;
 
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.IGameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
@@ -23,9 +24,9 @@ public class ObjectDestroyedListener implements IObjectDestroyedListener {
     }
 
     @Override
-    public void objectDestroyed(final GameObject gameObject) {
+    public void objectDestroyed(final IGameObject gameObject) {
         if (gameObject instanceof Unit) {
-            mTeam.removeObjectFromTeam(gameObject);
+            mTeam.removeObjectFromTeam((Unit) gameObject);
         }
         mEntityOperations.detachPhysicsBody(gameObject);
         mEntityOperations.detachEntity(gameObject);

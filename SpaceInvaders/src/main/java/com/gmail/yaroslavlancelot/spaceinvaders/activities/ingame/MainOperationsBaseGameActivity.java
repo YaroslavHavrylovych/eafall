@@ -17,6 +17,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourTy
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.ObjectDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.PlanetDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.IGameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
@@ -82,6 +83,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
      */
     public static final String TAG = MainOperationsBaseGameActivity.class.getCanonicalName();
     public static final int MONEY_UPDATE_TIME = 10;
+    public final static FixtureDef DYNAMIC_BODY_FIXTURE_DEF = PhysicsFactory.createFixtureDef(1f, 0f, 0f);
     /** contains whole game units/warriors */
     private final Map<Long, GameObject> mGameObjectsMap = new HashMap<Long, GameObject>();
     /** game scene */
@@ -505,10 +507,10 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         return getVertexBufferObjectManager();
     }
 
-    /** create unit and assign it for particular team */
+    /** create unit with body and update it's enemies and moving path */
     @Override
-    public Unit createUnitForTeam(int unitKey, final ITeam unitTeam) {
-        Unit warrior = createUnit(unitKey, unitTeam,
+    public Unit createThickUnit(int unitKey, final ITeam unitTeam) {
+        Unit warrior = createThinUnit(unitKey, unitTeam,
                 unitTeam.getTeamPlanet().getSpawnPointX(), unitTeam.getTeamPlanet().getSpawnPointY());
         warrior.registerUpdateHandler();
         warrior.setEnemiesUpdater(UnitCallbacksUtils.getSimpleUnitEnemiesUpdater(unitTeam.getEnemyTeam()));
@@ -518,37 +520,42 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     }
 
     /**
-     * create new unit with by uniqueId for race which will be retrieved from the unitTeam.
-     * unitUniqueId will replace default value if present (will take first value if there will be few of them)
+     * create unit (with physic body) in particular position and add it to team
      */
-    protected Unit createUnit(int unitKey, ITeam unitTeam, float x, float y, long... unitUniqueId) {
+    protected Unit createThinUnit(int unitKey, ITeam unitTeam, float x, float y, long... unitUniqueId) {
         Unit unit = unitTeam.getTeamRace().getUnitForBuilding(unitKey);
         unit.setObjectDestroyedListener(new ObjectDestroyedListener(unitTeam, this));
         unit.setPosition(x, y);
+        unitTeam.addObjectToTeam(unit);
         attachEntity(unit);
         if (unitUniqueId.length > 0)
             unit.setUnitUniqueId(unitUniqueId[0]);
         mGameObjectsMap.put(unit.getUnitUniqueId(), unit);
 
         // init physic body
-        final FixtureDef playerFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f);
         BodyDef.BodyType bodyType;
         if (unitTeam.getTeamControlType() == TeamControlBehaviourType.REMOTE_CLIENT_CONTROL)
             bodyType = BodyDef.BodyType.KinematicBody;
         else
             bodyType = BodyDef.BodyType.DynamicBody;
-        Body body = PhysicsFactory.createCircleBody(mPhysicsWorld, unit, bodyType, playerFixtureDef);
+        Body body = registerCircleBody(unit, bodyType, DYNAMIC_BODY_FIXTURE_DEF);
         unit.setBody(body);
         body.setUserData(unit);
-        mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(unit, body, true, true));
 
         return unit;
+    }
+
+    @Override
+    public Body registerCircleBody(IAreaShape pAreaShape, BodyDef.BodyType pBodyType, FixtureDef pFixtureDef) {
+        Body body = PhysicsFactory.createCircleBody(mPhysicsWorld, pAreaShape, pBodyType, pFixtureDef);
+        mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(pAreaShape, body, true, true));
+        return body;
     }
 
     protected abstract void initThickClient();
 
     @Override
-    public void detachPhysicsBody(final GameObject gameObject) {
+    public void detachPhysicsBody(final IGameObject gameObject) {
         if (gameObject.getBody() == null)
             return;
         final PhysicsConnector pc = mPhysicsWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(gameObject);
