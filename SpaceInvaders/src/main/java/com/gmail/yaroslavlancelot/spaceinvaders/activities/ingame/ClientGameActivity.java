@@ -94,7 +94,7 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
             return;
         }
         if (!(gameObject instanceof Unit)) {
-            LoggerHelper.printErrorMessage(TAG, "attacker is not unit in fire operation");
+            LoggerHelper.printErrorMessage(TAG, "attacker is not unit in fireFromPosition operation");
             return;
         }
         ((Unit) gameObject).fire(objectToAttack);

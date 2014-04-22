@@ -27,8 +27,8 @@ import org.andengine.util.color.Color;
 import java.util.concurrent.atomic.AtomicLong;
 
 public abstract class GameObject extends IGameObject implements ISpriteTouchable {
-    protected static final int sUndestroyableObjectKey = Integer.MIN_VALUE;
     public static final float VELOCITY_EPSILON = 0.00000001f;
+    protected static final int sUndestroyableObjectKey = Integer.MIN_VALUE;
     /** maximum object health */
     protected int mObjectMaximumHealth = sUndestroyableObjectKey;
     /** game object current health (it can be undestroyable) */
@@ -237,7 +237,8 @@ public abstract class GameObject extends IGameObject implements ISpriteTouchable
     }
 
     public void setUnitLinearVelocity(float x, float y) {
-        if (Math.abs(prevVelocityX - x) < VELOCITY_EPSILON && Math.abs(prevVelocityY - y) < VELOCITY_EPSILON) return;
+        if (Math.abs(prevVelocityX - x) < VELOCITY_EPSILON && Math.abs(prevVelocityY - y) < VELOCITY_EPSILON)
+            return;
         else {
             prevVelocityX = x;
             prevVelocityY = y;

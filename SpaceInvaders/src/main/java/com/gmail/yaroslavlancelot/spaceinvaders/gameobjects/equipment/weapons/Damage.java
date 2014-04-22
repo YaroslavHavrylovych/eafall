@@ -17,6 +17,10 @@ public abstract class Damage {
 
     public abstract DamageType getDamageType();
 
+    public void removeDamage() {
+        mDamageValue = 0;
+    }
+
     public enum DamageType {
         ANNIHILATOR, ELECTRICAL, MAGNETIC, NEUTRINO, HIGGS
     }

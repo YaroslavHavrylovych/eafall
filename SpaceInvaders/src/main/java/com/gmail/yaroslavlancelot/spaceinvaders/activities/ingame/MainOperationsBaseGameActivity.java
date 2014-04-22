@@ -8,7 +8,11 @@ import android.view.Display;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.Manifold;
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.ai.NormalBot;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
@@ -18,6 +22,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.ObjectDest
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.PlanetDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.IGameObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Bullet;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
@@ -77,13 +82,15 @@ import java.util.concurrent.Future;
  * Main game Activity. Extends {@link BaseGameActivity} class and contains main game elements.
  * Loads resources, initialize scene, engine and etc.
  */
-public abstract class MainOperationsBaseGameActivity extends BaseGameActivity implements Localizable, EntityOperations {
+public abstract class MainOperationsBaseGameActivity extends BaseGameActivity implements Localizable, EntityOperations, ContactListener {
     /**
      * tag, which is used for debugging purpose
      */
     public static final String TAG = MainOperationsBaseGameActivity.class.getCanonicalName();
     public static final int MONEY_UPDATE_TIME = 10;
     public final static FixtureDef DYNAMIC_BODY_FIXTURE_DEF = PhysicsFactory.createFixtureDef(1f, 0f, 0f);
+    /** {@link com.badlogic.gdx.physics.box2d.FixtureDef} for obstacles (static bodies) */
+    protected final FixtureDef mStaticBodyFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f);
     /** contains whole game units/warriors */
     private final Map<Long, GameObject> mGameObjectsMap = new HashMap<Long, GameObject>();
     /** game scene */
@@ -161,6 +168,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
                 initThickClient();
                 onInitPlanetsAndTeams();
 
+                mPhysicsWorld.setContactListener(MainOperationsBaseGameActivity.this);
                 mBackgroundMusic.startBackgroundMusic();
 
                 mSplashScene.detachSelf();
@@ -362,6 +370,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         if (unitUniqueId.length > 0)
             planetStaticObject.setUnitUniqueId(unitUniqueId[0]);
         mGameObjectsMap.put(planetStaticObject.getUnitUniqueId(), planetStaticObject);
+        registerCircleBody(planetStaticObject, BodyDef.BodyType.StaticBody, mStaticBodyFixtureDef);
         return planetStaticObject;
     }
 
@@ -390,6 +399,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         mStaticObjects.put(key, sunStaticObject);
         attachEntity(sunStaticObject);
         mGameObjectsMap.put(sunStaticObject.getUnitUniqueId(), sunStaticObject);
+        registerCircleBody(sunStaticObject, BodyDef.BodyType.StaticBody, mStaticBodyFixtureDef);
         return sunStaticObject;
     }
 
@@ -538,17 +548,18 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
             bodyType = BodyDef.BodyType.KinematicBody;
         else
             bodyType = BodyDef.BodyType.DynamicBody;
-        Body body = registerCircleBody(unit, bodyType, DYNAMIC_BODY_FIXTURE_DEF);
-        unit.setBody(body);
-        body.setUserData(unit);
+        registerCircleBody(unit, bodyType, DYNAMIC_BODY_FIXTURE_DEF);
 
         return unit;
     }
 
     @Override
-    public Body registerCircleBody(IAreaShape pAreaShape, BodyDef.BodyType pBodyType, FixtureDef pFixtureDef) {
-        Body body = PhysicsFactory.createCircleBody(mPhysicsWorld, pAreaShape, pBodyType, pFixtureDef);
-        mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(pAreaShape, body, true, true));
+    public Body registerCircleBody(IGameObject gameObject, BodyDef.BodyType pBodyType, FixtureDef pFixtureDef, float... transform) {
+        Body body = PhysicsFactory.createCircleBody(mPhysicsWorld, gameObject, pBodyType, pFixtureDef);
+        if (transform != null && transform.length == 3)
+            body.setTransform(transform[0], transform[1], transform[2]);
+        mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(gameObject, body, true, true));
+        gameObject.setBody(body);
         return body;
     }
 
@@ -556,17 +567,79 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
 
     @Override
     public void detachPhysicsBody(final IGameObject gameObject) {
-        if (gameObject.getBody() == null)
-            return;
-        final PhysicsConnector pc = mPhysicsWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(gameObject);
-        if (pc != null) {
-            mPhysicsWorld.unregisterPhysicsConnector(pc);
-        }
-        mPhysicsWorld.destroyBody(gameObject.getBody());
+        MainOperationsBaseGameActivity.this.runOnUpdateThread(new Runnable() {
+            @Override
+            public void run() {
+                if (gameObject.getBody() == null)
+                    return;
+                final PhysicsConnector pc = mPhysicsWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(gameObject);
+                if (pc != null) {
+                    mPhysicsWorld.unregisterPhysicsConnector(pc);
+                }
+                gameObject.getBody().setActive(false);
+                mPhysicsWorld.destroyBody(gameObject.getBody());
+            }
+        });
     }
 
     /** return unit if it exist (live) by using unit unique id */
     protected GameObject getGameObjectById(long id) {
         return mGameObjectsMap.get(id);
+    }
+
+    @Override
+    public void beginContact(Contact contact) {
+        Object firstBody = contact.getFixtureA().getBody().getUserData();
+        Object secondBody = contact.getFixtureB().getBody().getUserData();
+        if (firstBody == null || secondBody == null) return;
+        if (firstBody instanceof Bullet || secondBody instanceof Bullet)
+            attackIfBullet(firstBody, secondBody);
+    }
+
+    protected void attackIfBullet(Object firstBody, Object secondBody) {
+        if (firstBody == null || secondBody == null) return;
+        if (firstBody instanceof Bullet && secondBody instanceof Bullet) {
+            bulletsCollision((Bullet) firstBody, (Bullet) secondBody);
+            return;
+        }
+        if (firstBody instanceof Bullet) {
+            if (!((Bullet) firstBody).getAndSetFalseIsObjectAlive()) return;
+            if (secondBody instanceof GameObject)
+                ((GameObject) secondBody).damageObject(((Bullet) firstBody).getDamage());
+            else
+                return;
+            detachPhysicsBody((Bullet) firstBody);
+            detachEntity((Bullet) firstBody);
+        }
+        if (secondBody instanceof Bullet) {
+            if (!((Bullet) secondBody).getAndSetFalseIsObjectAlive()) return;
+            if (firstBody instanceof GameObject)
+                ((GameObject) firstBody).damageObject(((Bullet) secondBody).getDamage());
+            else
+                return;
+            detachPhysicsBody((Bullet) secondBody);
+            detachEntity((Bullet) secondBody);
+        }
+    }
+
+    protected void bulletsCollision(Bullet firstBody, Bullet secondBody) {
+        if (!firstBody.getAndSetFalseIsObjectAlive() || !secondBody.getAndSetFalseIsObjectAlive())
+            return;
+        detachPhysicsBody(firstBody);
+        detachPhysicsBody(secondBody);
+        detachEntity(firstBody);
+        detachEntity(secondBody);
+    }
+
+    @Override
+    public void endContact(Contact contact) {
+    }
+
+    @Override
+    public void preSolve(Contact contact, Manifold oldManifold) {
+    }
+
+    @Override
+    public void postSolve(Contact contact, ContactImpulse impulse) {
     }
 }

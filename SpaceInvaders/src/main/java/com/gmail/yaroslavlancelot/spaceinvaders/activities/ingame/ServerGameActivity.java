@@ -1,8 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
 import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IGameObjectHealthChanged;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IUnitFireCallback;
@@ -85,36 +83,17 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
         return unit;
     }
 
-    @Override
-    protected void initThickClient() {
-        super.initThickClient();
-        setContactListener(new ContactListener() {
-            @Override
-            public void beginContact(final Contact contact) {
-                resolveContactData(contact);
-            }
-
-            @Override
-            public void endContact(final Contact contact) {
-                resolveContactData(contact);
-            }
-
-            @Override
-            public void preSolve(final Contact contact, final Manifold oldManifold) {
-                resolveContactData(contact);
-            }
-
-            @Override
-            public void postSolve(final Contact contact, final ContactImpulse impulse) {
-            }
-        });
-    }
-
     private void resolveContactData(final Contact contact) {
         Object userData = contact.getFixtureA().getBody().getUserData();
-        sendUnitPositionChanged(userData);
+        if (userData != null) {
+            if (userData instanceof Unit)
+                velocityChanged((Unit) userData);
+        }
         userData = contact.getFixtureB().getBody().getUserData();
-        sendUnitPositionChanged(userData);
+        if (userData != null) {
+            if (userData instanceof Unit)
+                velocityChanged((Unit) userData);
+        }
     }
 
     @Override
@@ -125,12 +104,6 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
         } catch (IOException e) {
             LoggerHelper.printErrorMessage(TAG, "send message (unit moved on server) IOException");
         }
-    }
-
-    private void sendUnitPositionChanged(Object userObject) {
-        if (userObject == null || !(userObject instanceof Unit))
-            return;
-        velocityChanged((Unit) userObject);
     }
 
     @Override
@@ -149,5 +122,23 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
         } catch (IOException e) {
             LoggerHelper.printErrorMessage(TAG, "send message (game object health changed on server) IOException");
         }
+    }
+
+    @Override
+    public void preSolve(Contact contact, Manifold oldManifold) {
+        super.preSolve(contact, oldManifold);
+        resolveContactData(contact);
+    }
+
+    @Override
+    public void endContact(Contact contact) {
+        super.endContact(contact);
+        resolveContactData(contact);
+    }
+
+    @Override
+    public void beginContact(Contact contact) {
+        super.beginContact(contact);
+        resolveContactData(contact);
     }
 }

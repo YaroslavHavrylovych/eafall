@@ -1,6 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IUnitFireCallback;
@@ -44,7 +45,7 @@ public abstract class Unit extends GameObject {
     protected Sound mFireSound;
     /** last unit attack time */
     private long mLastAttackTime;
-    /** if fire method called it will be triggered */
+    /** if fireFromPosition method called it will be triggered */
     private IUnitFireCallback mUnitFireCallback;
 
     protected Unit(ITextureRegion textureRegion, SoundOperations soundOperations, EntityOperations entityOperations) {
@@ -80,8 +81,7 @@ public abstract class Unit extends GameObject {
     }
 
     public void fire(GameObject objectToAttack) {
-        mObjectToAttack = objectToAttack;
-        attackGoal();
+        attackGoal(objectToAttack);
     }
 
     @Override
@@ -93,19 +93,27 @@ public abstract class Unit extends GameObject {
         return mViewRadius;
     }
 
-    protected void attackGoal() {
+    @Override
+    public void setBody(Body body) {
+        super.setBody(body);
+        if (getBody().getType().equals(BodyDef.BodyType.KinematicBody)) {
+            mObjectDamage.removeDamage();
+        }
+    }
+
+    protected void attackGoal(GameObject attackedObject) {
+        if (!isReloadFinished() || attackedObject == null) return;
         if (mUnitFireCallback != null)
-            mUnitFireCallback.fire(getUnitUniqueId(), mObjectToAttack.getUnitUniqueId());
+            mUnitFireCallback.fire(getUnitUniqueId(), attackedObject.getUnitUniqueId());
 
         playSound(mFireSound, mSoundOperations);
-        Bullet bullet = new Bullet(getVertexBufferObjectManager(), mEntityOperations, getBackgroundColor(),
-                getBody().getType().equals(BodyDef.BodyType.KinematicBody));
+        Bullet bullet = new Bullet(getVertexBufferObjectManager(), mEntityOperations,
+                getBackgroundColor(), mObjectDamage);
         Vector2 objectPosition = getBody().getPosition();
-        Vector2 targetPosition = mObjectToAttack.getBody().getPosition();
 
-        bullet.fire(objectPosition.x + SizeConstants.UNIT_SIZE / 2 / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
+        bullet.fireFromPosition(objectPosition.x + SizeConstants.UNIT_SIZE / 2 / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
                 objectPosition.y - Bullet.BULLET_SIZE / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
-                targetPosition.x, targetPosition.y, mEnemiesUpdater, mObjectDamage);
+                attackedObject);
 
         mEntityOperations.attachEntity(bullet);
     }
@@ -163,7 +171,7 @@ public abstract class Unit extends GameObject {
             // check if we already can attack
             if (UnitPathUtil.getDistanceBetweenPoints(
                     getX(), getY(), mObjectToAttack.getX(), mObjectToAttack.getY()) < mAttackRadius) {
-                attackGoal();
+                attackGoal(mObjectToAttack);
                 // stay on position
                 setUnitLinearVelocity(0, 0);
             } else

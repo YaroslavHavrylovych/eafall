@@ -38,20 +38,6 @@ public class Demolisher extends Unit {
     }
 
     @Override
-    protected void attackGoal() {
-        super.attackGoal();
-        if (!isReloadFinished())
-            return;
-        playSound(mFireSound, mSoundOperations);
-        Bullet bullet = new Bullet(getVertexBufferObjectManager(), mEntityOperations, getBackgroundColor(),
-                getBody().getType().equals(BodyDef.BodyType.KinematicBody));
-        bullet.fire(getX() + SizeConstants.UNIT_SIZE / 2, getY() - Bullet.BULLET_SIZE,
-                mObjectToAttack.getCenterX(), mObjectToAttack.getCenterY(), mEnemiesUpdater, mObjectDamage);
-
-        mEntityOperations.attachEntity(bullet);
-    }
-
-    @Override
     public void setBackgroundArea() {
         setBackgroundArea(new Area(6, 6, 4, 4));
     }

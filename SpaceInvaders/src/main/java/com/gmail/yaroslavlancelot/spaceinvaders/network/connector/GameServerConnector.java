@@ -118,7 +118,7 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
         registerServerMessage(FLAG_MESSAGE_SERVER_UNIT_FIRE, UnitFireServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
-                LoggerHelper.printInformationMessageInClient(TAG, "fire on server");
+                LoggerHelper.printInformationMessageInClient(TAG, "fireFromPosition on server");
                 UnitFireServerMessage unitFireServerMessage = (UnitFireServerMessage) pServerMessage;
                 synchronized (mInGameClientList) {
                     for (InGameClient inGameClient : mInGameClientList) {

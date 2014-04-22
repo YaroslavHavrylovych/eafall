@@ -32,5 +32,5 @@ public interface EntityOperations {
 
     Unit createThickUnit(int unitKey, final ITeam unitTeam);
 
-    Body registerCircleBody(final IAreaShape pAreaShape, final BodyDef.BodyType pBodyType, final FixtureDef pFixtureDef);
+    Body registerCircleBody(final IGameObject gameObject, final BodyDef.BodyType pBodyType, final FixtureDef pFixtureDef, float... coordinates);
 }

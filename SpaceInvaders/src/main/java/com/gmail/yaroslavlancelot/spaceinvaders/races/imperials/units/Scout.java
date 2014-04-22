@@ -33,20 +33,6 @@ public class Scout extends Unit {
         initSound(SCOUT_FIRE_SOUND_PATH);
     }
 
-    @Override
-    protected void attackGoal() {
-        super.attackGoal();
-        if (!isReloadFinished())
-            return;
-        playSound(mFireSound, mSoundOperations);
-        Bullet bullet = new Bullet(getVertexBufferObjectManager(), mEntityOperations, getBackgroundColor(),
-                getBody().getType().equals(BodyDef.BodyType.KinematicBody));
-        bullet.fire(getX() + SizeConstants.UNIT_SIZE / 2, getY() - Bullet.BULLET_SIZE,
-                mObjectToAttack.getCenterX(), mObjectToAttack.getCenterY(), mEnemiesUpdater, mObjectDamage);
-
-        mEntityOperations.attachEntity(bullet);
-    }
-
     public static void loadResources(final Context context, final BitmapTextureAtlas textureAtlas) {
         loadResource(KEY_IMPERIALS_SECOND_UNIT, context, textureAtlas, 16, 0);
     }

@@ -24,5 +24,6 @@ public abstract class IGameObject extends Rectangle {
      */
     public void setBody(Body body) {
         mPhysicBody = body;
+        mPhysicBody.setUserData(this);
     }
 }
