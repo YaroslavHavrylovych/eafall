@@ -11,7 +11,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperation
 
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
-import org.andengine.extension.physics.box2d.PhysicsFactory;
+import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
@@ -21,7 +21,7 @@ public class Bullet extends IGameObject {
     public static final int BULLET_SIZE = 3;
     private static final BodyDef.BodyType sBulletBodyType = BodyDef.BodyType.DynamicBody;
     private static final float sMaxVelocity = 2.0f;
-    private static FixtureDef sBulletFixtureDef = PhysicsFactory.createFixtureDef(0f, 0f, 0f);
+    private final FixtureDef mBulletFixtureDef;
     /** for detaching entity from scene */
     private final EntityOperations mEntityOperations;
     private final AtomicBoolean mIsObjectAlive;
@@ -31,12 +31,14 @@ public class Bullet extends IGameObject {
     private float mBulletStartX, mBulletStartY;
     private Damage mDamage;
 
-    public Bullet(VertexBufferObjectManager vertexBufferObjectManager, EntityOperations entityOperations, Color color, Damage damage) {
+    public Bullet(VertexBufferObjectManager vertexBufferObjectManager, EntityOperations entityOperations,
+                  Color color, Damage damage, FixtureDef fixtureDef) {
         super(0, 0, BULLET_SIZE, BULLET_SIZE, vertexBufferObjectManager);
         setColor(color);
         mEntityOperations = entityOperations;
         mIsObjectAlive = new AtomicBoolean(true);
         mDamage = damage;
+        mBulletFixtureDef = fixtureDef;
     }
 
     public boolean getAndSetFalseIsObjectAlive() {
@@ -47,10 +49,11 @@ public class Bullet extends IGameObject {
         if (gameObject.getBody() == null) return;
         Vector2 target = gameObject.getBody().getPosition();
         float goalX = target.x, goalY = target.y;
-        mPhysicBody = mEntityOperations.registerCircleBody(this, sBulletBodyType, sBulletFixtureDef,
-                mBulletStartX = x, mBulletStartY = y, 0);
+        mBulletStartX = x * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT;
+        mBulletStartY = y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT;
+        mPhysicBody = mEntityOperations.registerCircleBody(this, sBulletBodyType, mBulletFixtureDef, x, y, 0);
         mPhysicBody.setBullet(true);
-        mMaxBulletFlyDistance = UnitPathUtil.getDistanceBetweenPoints(x, y, goalX, goalY) * 2;
+        mMaxBulletFlyDistance = UnitPathUtil.getDistanceBetweenPoints(x, y, goalX, goalY) * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT;
 
         float distanceX = goalX - x,
                 distanceY = goalY - y;

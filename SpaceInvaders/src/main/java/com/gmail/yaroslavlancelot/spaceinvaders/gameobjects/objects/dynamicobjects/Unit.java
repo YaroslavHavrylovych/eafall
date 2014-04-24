@@ -3,6 +3,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobje
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IUnitFireCallback;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
@@ -47,6 +48,8 @@ public abstract class Unit extends GameObject {
     private long mLastAttackTime;
     /** if fireFromPosition method called it will be triggered */
     private IUnitFireCallback mUnitFireCallback;
+    /** fixture def for bullets created by this unit */
+    private FixtureDef mBulletFixtureDef;
 
     protected Unit(ITextureRegion textureRegion, SoundOperations soundOperations, EntityOperations entityOperations) {
         super(-100, -100, textureRegion, entityOperations.getObjectManager());
@@ -108,7 +111,7 @@ public abstract class Unit extends GameObject {
 
         playSound(mFireSound, mSoundOperations);
         Bullet bullet = new Bullet(getVertexBufferObjectManager(), mEntityOperations,
-                getBackgroundColor(), mObjectDamage);
+                getBackgroundColor(), mObjectDamage, mBulletFixtureDef);
         Vector2 objectPosition = getBody().getPosition();
 
         bullet.fireFromPosition(objectPosition.x + SizeConstants.UNIT_SIZE / 2 / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
@@ -124,6 +127,10 @@ public abstract class Unit extends GameObject {
             return false;
         mLastAttackTime = time;
         return true;
+    }
+
+    public void setBulletFixtureDef(FixtureDef bulletFixtureDef) {
+        mBulletFixtureDef = bulletFixtureDef;
     }
 
     /** used for update current object in game loop */

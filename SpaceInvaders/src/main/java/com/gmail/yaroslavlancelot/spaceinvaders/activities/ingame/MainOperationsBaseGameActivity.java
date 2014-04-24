@@ -35,6 +35,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.Imperials;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.Team;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.CollisionCategoriesUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.MusicAndSoundsHandler;
@@ -77,6 +78,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Main game Activity. Extends {@link BaseGameActivity} class and contains main game elements.
@@ -88,9 +91,10 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
      */
     public static final String TAG = MainOperationsBaseGameActivity.class.getCanonicalName();
     public static final int MONEY_UPDATE_TIME = 10;
-    public final static FixtureDef DYNAMIC_BODY_FIXTURE_DEF = PhysicsFactory.createFixtureDef(1f, 0f, 0f);
     /** {@link com.badlogic.gdx.physics.box2d.FixtureDef} for obstacles (static bodies) */
-    protected final FixtureDef mStaticBodyFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f);
+    protected final FixtureDef mStaticBodyFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f, false,
+            CollisionCategoriesUtils.CATEGORY_STATIC_OBJECT,
+            CollisionCategoriesUtils.MASKBITS_STATIC_OBJECT, (short) 0);
     /** contains whole game units/warriors */
     private final Map<Long, GameObject> mGameObjectsMap = new HashMap<Long, GameObject>();
     /** game scene */
@@ -125,7 +129,6 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     /** background theme */
     private MusicAndSoundsHandler mMusicAndSoundsHandler;
     private MusicAndSoundsHandler.BackgroundMusic mBackgroundMusic;
-    private Sprite mSplash;
 
     @Override
     public EngineOptions onCreateEngineOptions() {
@@ -204,13 +207,13 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
 
     protected void initSplashScene() {
         mSplashScene = new Scene();
-        mSplash = new Sprite(0, 0, mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_SPLASH_SCREEN),
+        Sprite splash = new Sprite(0, 0, mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_SPLASH_SCREEN),
                 mEngine.getVertexBufferObjectManager());
 
-        mSplash.setScale(4f);
-        mSplash.setPosition((SizeConstants.GAME_FIELD_WIDTH - mSplash.getWidth()) * 0.5f,
-                (SizeConstants.GAME_FIELD_HEIGHT - mSplash.getHeight()) * 0.5f);
-        mSplashScene.attachChild(mSplash);
+        splash.setScale(4f);
+        splash.setPosition((SizeConstants.GAME_FIELD_WIDTH - splash.getWidth()) * 0.5f,
+                (SizeConstants.GAME_FIELD_HEIGHT - splash.getHeight()) * 0.5f);
+        mSplashScene.attachChild(splash);
     }
 
     protected void onLoadGameResources() {
@@ -290,8 +293,10 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
 
     protected void initTeams() {
         // red team
-        mRedTeam = createTeam(GameStringsConstantsAndUtils.RED_TEAM_NAME, redTeamUserRace);
-        mBlueTeam = createTeam(GameStringsConstantsAndUtils.BLUE_TEAM_NAME, blueTeamUserRace);
+        mRedTeam = createTeam(GameStringsConstantsAndUtils.RED_TEAM_NAME, redTeamUserRace,
+                CollisionCategoriesUtils.CATEGORY_TEAM1, CollisionCategoriesUtils.MASKBITS_TEAM1);
+        mBlueTeam = createTeam(GameStringsConstantsAndUtils.BLUE_TEAM_NAME, blueTeamUserRace,
+                CollisionCategoriesUtils.CATEGORY_TEAM2, CollisionCategoriesUtils.MASKBITS_TEAM2);
 
         mRedTeam.setTeamColor(Color.RED);
         mRedTeam.setTeamColor(Color.BLUE);
@@ -332,12 +337,12 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     protected abstract void userWantCreateBuilding(ITeam userTeam, int buildingId);
 
     /** create new team depending on team control type which stored in extra */
-    private ITeam createTeam(String teamNameInExtra, IRace race) {
+    private ITeam createTeam(String teamNameInExtra, IRace race, final short category, final short maskbits) {
         Intent intent = getIntent();
         TeamControlBehaviourType teamType = TeamControlBehaviourType.valueOf(intent.getStringExtra(teamNameInExtra));
 
         if (teamType == TeamControlBehaviourType.USER_SERVER_CONTROL) {
-            return new Team(teamNameInExtra, race, teamType) {
+            return new Team(teamNameInExtra, race, teamType, category, maskbits) {
                 @Override
                 public void changeMoney(final int delta) {
                     super.changeMoney(delta);
@@ -345,7 +350,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
                 }
             };
         } else {
-            return new Team(teamNameInExtra, race, teamType);
+            return new Team(teamNameInExtra, race, teamType, category, maskbits);
         }
     }
 
@@ -420,10 +425,16 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
 
     protected void initBotControlledTeam(final ITeam initializingTeam) {
         LoggerHelper.methodInvocation(TAG, "initBotControlledTeam");
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        LoggerHelper.printDebugMessage(TAG, "bot team == null : " + (initializingTeam == null));
-        Callable<Boolean> simpleBot = new NormalBot(initializingTeam);
-        Future<Boolean> future = executorService.submit(simpleBot);
+        final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
+        executor.schedule(new Runnable() {
+            @Override
+            public void run() {
+                ExecutorService executorService = Executors.newSingleThreadExecutor();
+                LoggerHelper.printDebugMessage(TAG, "bot team == null : " + (initializingTeam == null));
+                Callable<Boolean> simpleBot = new NormalBot(initializingTeam);
+                Future<Boolean> future = executorService.submit(simpleBot);
+            }
+        }, 2, TimeUnit.SECONDS);
     }
 
     /** init money string for  displaying to user */
@@ -537,7 +548,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         unit.setObjectDestroyedListener(new ObjectDestroyedListener(unitTeam, this));
         unit.setPosition(x, y);
         unitTeam.addObjectToTeam(unit);
-        attachEntity(unit);
+
         if (unitUniqueId.length > 0)
             unit.setUnitUniqueId(unitUniqueId[0]);
         mGameObjectsMap.put(unit.getUnitUniqueId(), unit);
@@ -548,7 +559,11 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
             bodyType = BodyDef.BodyType.KinematicBody;
         else
             bodyType = BodyDef.BodyType.DynamicBody;
-        registerCircleBody(unit, bodyType, DYNAMIC_BODY_FIXTURE_DEF);
+        registerCircleBody(unit, bodyType, unitTeam.getFixtureDefUnit());
+        unit.setBulletFixtureDef(CollisionCategoriesUtils.getBulletFixtureDefByUnitCategory(
+                unitTeam.getFixtureDefUnit().filter.categoryBits));
+
+        attachEntity(unit);
 
         return unit;
     }

@@ -1,9 +1,11 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.teams;
 
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
+
 import org.andengine.util.color.Color;
 
 import java.util.List;
@@ -16,9 +18,9 @@ public interface ITeam {
 
     PlanetStaticObject getTeamPlanet();
 
-    void removeTeamPlanet();
-
     void setTeamPlanet(PlanetStaticObject planet);
+
+    void removeTeamPlanet();
 
     ITeam getEnemyTeam();
 
@@ -41,4 +43,6 @@ public interface ITeam {
     void setTeamColor(Color teamColor);
 
     TeamControlBehaviourType getTeamControlType();
+
+    FixtureDef getFixtureDefUnit();
 }
