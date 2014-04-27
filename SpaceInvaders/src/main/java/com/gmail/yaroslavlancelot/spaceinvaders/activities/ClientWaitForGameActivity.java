@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame.ClientGameActivity;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
@@ -20,14 +21,17 @@ public class ClientWaitForGameActivity extends Activity implements PreGameStartC
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.client_connected_to_server_layout);
-        initServerIpTextView(findViewById(R.id.server_ip_string), GameServerConnector.getGameServerConnector().getServerIp());
+        GameServerConnector gameServerConnector = GameServerConnector.getGameServerConnector();
+        if (gameServerConnector == null) return;
+        String serverIp = gameServerConnector.getServerIp();
+        initServerIpTextView(findViewById(R.id.server_ip_string), serverIp);
         GameServerConnector.getGameServerConnector().addPreGameStartCallback(this);
     }
 
     /**
      * display server ip address (so client can know where he is connected)
      *
-     * @param view to display server ip address
+     * @param view           to display server ip address
      * @param serverIpString server ip to be shown
      */
     private void initServerIpTextView(View view, String serverIpString) {
