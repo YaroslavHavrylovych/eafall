@@ -1,16 +1,20 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects;
 
 import android.content.Context;
+
 import com.badlogic.gdx.physics.box2d.Body;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
-import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.SoundOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IGameObjectHealthChanged;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IObjectDestroyedListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IVelocityChangedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Damage;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ISpriteTouchable;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ITouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations;
+
 import org.andengine.audio.sound.Sound;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.sprite.Sprite;
@@ -20,30 +24,40 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
-public abstract class GameObject extends Rectangle implements ISpriteTouchable {
+import java.util.concurrent.atomic.AtomicLong;
+
+public abstract class GameObject extends IGameObject implements ISpriteTouchable {
+    public static final float VELOCITY_EPSILON = 0.00000001f;
     protected static final int sUndestroyableObjectKey = Integer.MIN_VALUE;
+    /** maximum object health */
+    protected int mObjectMaximumHealth = sUndestroyableObjectKey;
+    /** game object current health (it can be undestroyable) */
+    protected int mObjectCurrentHealth = sUndestroyableObjectKey;
+    /** used for generation new id's */
+    private static volatile AtomicLong sGameObjectsTracker = new AtomicLong(0);
     /** object sprite */
     protected Sprite mObjectSprite;
     /** background color */
     protected Rectangle mBackground;
     /** object health bar */
     protected HealthBar mHealthBar;
-    /** maximum object health */
-    protected int mObjectMaximumHealth = sUndestroyableObjectKey;
-    /** game object current health (it can be undestroyable) */
-    protected int mObjectCurrentHealth = sUndestroyableObjectKey;
     /** object damage */
     protected Damage mObjectDamage;
     /** object armor */
     protected Armor mObjectArmor;
     /** callback to send message about death */
     protected IObjectDestroyedListener mObjectDestroyedListener;
-    /** physics body associated with current object {@link Sprite} */
-    protected Body mPhysicBody;
     /** current object touch listener */
     private ITouchListener mSpriteOnTouchListener;
     /** id of the string in the string files to represent object */
     private int mObjectStringId;
+    /** will trigger if object velocity changed */
+    private IVelocityChangedListener mVelocityChangedListener;
+    /** will trigger if object health changed */
+    private IGameObjectHealthChanged mGameObjectHealthChangedListener;
+    /** unique unit id */
+    private long mUniqueId;
+    private float prevVelocityX, prevVelocityY;
 
     protected GameObject(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
         super(x, y, textureRegion.getWidth(), textureRegion.getWidth(), vertexBufferObjectManager);
@@ -52,11 +66,28 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
         mBackground = new Rectangle(0, 0, 0, 0, vertexBufferObjectManager);
         attachChild(mBackground);
         attachChild(mObjectSprite);
+        mUniqueId = sGameObjectsTracker.getAndIncrement();
     }
 
     protected static void loadResource(String pathToUnit, Context context, BitmapTextureAtlas textureAtlas, int x, int y) {
         TextureRegionHolderUtils.addElementFromAssets(pathToUnit, TextureRegionHolderUtils.getInstance(),
                 textureAtlas, context, x, y);
+    }
+
+    public long getObjectUniqueId() {
+        return mUniqueId;
+    }
+
+    public void setObjectUniqueId(long id) {
+        mUniqueId = id;
+    }
+
+    public void setGameObjectHealthChangedListener(IGameObjectHealthChanged gameObjectHealthChangedListener) {
+        mGameObjectHealthChangedListener = gameObjectHealthChangedListener;
+    }
+
+    public void setVelocityChangedListener(IVelocityChangedListener velocityChangedListener) {
+        mVelocityChangedListener = velocityChangedListener;
     }
 
     public int getObjectStringId() {
@@ -129,14 +160,28 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
 
     public void damageObject(final Damage damage) {
         if (mObjectCurrentHealth == sUndestroyableObjectKey) return;
-        mObjectCurrentHealth -= mObjectArmor.getDamage(damage);
+        int objectHealth = mObjectCurrentHealth - mObjectArmor.getDamage(damage);
+
+        setHealth(objectHealth);
+    }
+
+    /**
+     * set new {@link com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject} health.
+     * Handles object destruction if health are less then 0.
+     *
+     * @param objectHealth new health value
+     */
+    public void setHealth(int objectHealth) {
+        mObjectCurrentHealth = objectHealth;
+        if (mGameObjectHealthChangedListener != null)
+            mGameObjectHealthChangedListener.gameObjectHealthChanged(mUniqueId, mObjectCurrentHealth);
         if (mObjectCurrentHealth < 0) {
             if (mObjectDestroyedListener != null)
                 mObjectDestroyedListener.objectDestroyed(this);
-            return;
+        } else {
+            if (mHealthBar != null)
+                mHealthBar.redrawHealthBar(mObjectMaximumHealth, mObjectCurrentHealth);
         }
-        if (mHealthBar != null)
-            mHealthBar.redrawHealthBar(mObjectMaximumHealth, mObjectCurrentHealth);
     }
 
     public Color getBackgroundColor() {
@@ -167,17 +212,9 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
         return getY() + getHeight() / 2;
     }
 
+    @Override
     public Body getBody() {
         return mPhysicBody;
-    }
-
-    /**
-     * set physics body associated with current {@link Sprite}
-     *
-     * @param body the physics body
-     */
-    public void setBody(Body body) {
-        mPhysicBody = body;
     }
 
     public Armor getObjectArmor() {
@@ -194,5 +231,27 @@ public abstract class GameObject extends Rectangle implements ISpriteTouchable {
 
     public int getMaximumObjectHealth() {
         return mObjectMaximumHealth;
+    }
+
+    public void setBodyTransform(float x, float y, float... angle) {
+        float defaultAngle;
+        if (angle.length > 0) {
+            defaultAngle = angle[0];
+        } else
+            defaultAngle = mPhysicBody.getAngle();
+        mPhysicBody.setTransform(x, y, defaultAngle);
+    }
+
+    public void setUnitLinearVelocity(float x, float y) {
+        if (Math.abs(prevVelocityX - x) < VELOCITY_EPSILON && Math.abs(prevVelocityY - y) < VELOCITY_EPSILON)
+            return;
+        else {
+            prevVelocityX = x;
+            prevVelocityY = y;
+        }
+
+        mPhysicBody.setLinearVelocity(x, y);
+        if (mVelocityChangedListener != null)
+            mVelocityChangedListener.velocityChanged(GameObject.this);
     }
 }

@@ -4,15 +4,23 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjec
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 
 import java.util.concurrent.Callable;
 
+/**
+ * First created bot. Creates table of all units  with how one can kill another capabilities and try to
+ * build unit which will kill more your units which are not covered by other his units. If he cover all yours
+ * units with his own then will build strongest unit he have money to build.
+ */
 public class NormalBot implements Callable<Boolean> {
+    public static final String TAG = NormalBot.class.getCanonicalName();
     public static final int DELAY_BETWEEN_ITERATIONS = 50;
     private final ITeam mBotTeam;
     private float[][] mUnitsEfficiencyArray;
 
     public NormalBot(ITeam botTeam) {
+        LoggerHelper.methodInvocation(TAG, "NormalBot");
         mBotTeam = botTeam;
         mUnitsEfficiencyArray = calculateEfficiencyMap(botTeam.getTeamRace(), botTeam.getEnemyTeam().getTeamRace());
     }

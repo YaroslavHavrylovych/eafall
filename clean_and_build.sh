@@ -1,2 +1,2 @@
 gradle clean
-gradle build
+gradle assembleDebug 

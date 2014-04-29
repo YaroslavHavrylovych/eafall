@@ -1,10 +1,12 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.units;
 
 import android.content.Context;
+
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
-import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
-import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.SoundOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Physical;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Electric;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Bullet;
@@ -33,18 +35,6 @@ public class Infantrymen extends Unit {
 
     public static void loadResources(final Context context, final BitmapTextureAtlas textureAtlas) {
         loadResource(KEY_IMPERIALS_THIRD_UNIT, context, textureAtlas, 32, 0);
-    }
-
-    @Override
-    protected void attackGoal() {
-        if (!isReloadFinished())
-            return;
-        playSound(mFireSound, mSoundOperations);
-        Bullet bullet = new Bullet(getVertexBufferObjectManager(), mEntityOperations, getBackgroundColor());
-        bullet.fire(getX() + SizeConstants.UNIT_SIZE / 2, getY() - Bullet.BULLET_SIZE,
-                mObjectToAttack.getCenterX(), mObjectToAttack.getCenterY(), mEnemiesUpdater, mObjectDamage);
-
-        mEntityOperations.attachEntity(bullet);
     }
 
     @Override

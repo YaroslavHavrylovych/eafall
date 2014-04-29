@@ -5,23 +5,24 @@ import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 
 import java.util.List;
+import java.util.Map;
 
 /** update money amount in the game */
 public class MoneyUpdateCycle implements ITimerCallback {
-    private List<ITeam> mTeams;
+    private Map<String, ITeam> mTeams;
 
     /**
      * create new timer
      *
      * @param teams teams money of which will be updated after each iteration
      */
-    public MoneyUpdateCycle(List<ITeam> teams) {
+    public MoneyUpdateCycle(Map<String, ITeam> teams) {
         mTeams = teams;
     }
 
     @Override
     public void onTimePassed(final TimerHandler pTimerHandler) {
-        for (ITeam team : mTeams) {
+        for (ITeam team : mTeams.values()) {
             team.incomeTime();
         }
     }

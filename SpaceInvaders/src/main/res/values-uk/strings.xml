@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- game types -->
+    <string name="single_game">Одиночна гра</string>
+    <string name="multiplayer_game">Мультиплеєрна гра</string>
+
+    <!-- races names -->
     <string name="app_name">Космічні Загарбники</string>
     <string name="money_colon">Гроші : </string>
     <string name="camp">Табір</string>
@@ -10,4 +15,31 @@
     <string name="workshop">Майстерня</string>
     <string name="laboratory">Лабораторія</string>
     <string name="bunker">Бункер</string>
+
+    <!-- settings -->
+    <string name="settings">Налаштування</string>
+
+    <!-- general -->
+    <string name="exit">Вихід</string>
+    <string name="back">Назад</string>
+    <string name="connect">З’єднати</string>
+
+    <!-- network game -->
+    <string name="create_game">Створити гру</string>
+    <string name="direct_ip">Вказати ip</string>
+    <string name="games_list">Список ігор</string>
+    <string name="ip_address">Ip адреса : </string>
+
+    <!-- creating server -->
+    <string name="your_ip_address">Адреса Вашого сервера : </string>
+    <string name="template_ip">125.125.125.125</string>
+    <string name="no_opponents">Жоднен клієнт ще не під’єднався до Вашого сервера...</string>
+    <string name="your_opponent_name">Ім’я Вашого опонента : </string>
+    <string name="your_opponent_ip">Адреса Вашого опонента : </string>
+    <string name="start_game">Почати гру</string>
+    <string name="ip_address_separator">.</string>
+    <string name="connected_client_with_ip">Приєднано клієнта з адресою : </string>
+
+    <!-- client connected to server -->
+    <string name="you_are_connected_to_server">Ви під’єднані до сервера з адресою : </string>
 </resources>

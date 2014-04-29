@@ -1,12 +1,11 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
-import com.gmail.yaroslavlancelot.spaceinvaders.game.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameloop.UnitCreatorCycle;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Higgs;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.HealthBar;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.opengl.texture.region.ITextureRegion;
 
@@ -26,7 +25,13 @@ public class PlanetStaticObject extends StaticObject {
     /** the team, current planet belongs to */
     private ITeam mPlanetTeam;
 
-    public PlanetStaticObject(float x, float y, ITextureRegion textureRegion, EntityOperations entityOperations, ITeam planetTeam) {
+    /**
+     * used on client side. Means that planet will only display without handling units creation logic and
+     * money calculation but can  calculate buildings
+     */
+    private boolean mIsFakePlanet = false;
+
+    private PlanetStaticObject(float x, float y, ITextureRegion textureRegion, EntityOperations entityOperations, ITeam planetTeam) {
         super(x, y, textureRegion, entityOperations.getObjectManager());
         mEntityOperations = entityOperations;
         mIncomeIncreasingValue = 10;
@@ -35,6 +40,11 @@ public class PlanetStaticObject extends StaticObject {
         setWidth(SizeConstants.PLANET_DIAMETER);
         setHeight(SizeConstants.PLANET_DIAMETER);
         initHealth(3000);
+    }
+
+    public PlanetStaticObject(float x, float y, ITextureRegion textureRegion, EntityOperations entityOperations, ITeam planetTeam, boolean isFakePlanet) {
+        this(x, y, textureRegion, entityOperations, planetTeam);
+        mIsFakePlanet = isFakePlanet;
     }
 
     public void setSpawnPoint(float spawnPointX, float spawnPointY) {
@@ -50,30 +60,44 @@ public class PlanetStaticObject extends StaticObject {
         return mSpawnPointY;
     }
 
-    public void createBuildingById(int buildingId) {
+    public boolean purchaseBuilding(int buildingId) {
+        return createBuildingById(buildingId, false);
+    }
+
+    public boolean createBuildingById(int buildingId) {
         LoggerHelper.methodInvocation(TAG, "buildBuilding");
+        return createBuildingById(buildingId, mIsFakePlanet);
+    }
+
+    private boolean createBuildingById(int buildingId, boolean isFakePlanet) {
+        LoggerHelper.methodInvocation(TAG, "buildBuilding. IsFakePlanet=" + isFakePlanet);
         if (buildings.get(buildingId) == null) {
             final StaticObject staticObject =
                     mPlanetTeam.getTeamRace().getBuildingById(buildingId);
             buildings.put(buildingId, new BuildingsHolder(staticObject, buildingId));
         }
-        addBuilding(buildingId);
+        return addBuilding(buildingId, isFakePlanet);
     }
 
-    private void addBuilding(int key) {
+    private boolean addBuilding(int key, boolean isFakePlanet) {
         BuildingsHolder holder = buildings.get(key);
-        StaticObject building = buildings.get(key).mStaticObject;
-        LoggerHelper.printDebugMessage(TAG, "building creation : " + "existing money=" + getMoneyAmount()
-                + ", cost=" + building.mCost);
-        if (getMoneyAmount() < building.mCost)
-            return;
-        if (holder.mBuildingsAmount == 0) {
-            LoggerHelper.printInformationMessage(TAG, "creating building on planet");
-            attachChild(building);
+        StaticObject building = buildings.get(key).mBuilding;
+        if (isFakePlanet) {
+            if (holder.mBuildingsAmount == 0)
+                attachChild(building);
+        } else {
+            LoggerHelper.printDebugMessage(TAG, "building creation : " + "existing money=" + getMoneyAmount()
+                    + ", cost=" + building.mCost);
+            if (getMoneyAmount() < building.mCost)
+                return false;
+            if (holder.mBuildingsAmount == 0) {
+                LoggerHelper.printInformationMessage(TAG, "creating building on planet");
+                attachChild(building);
+            }
+            buyBuilding(building.mCost);
         }
         holder.increaseBuildingsAmount();
-        buyBuilding(building.mCost);
-        mIncomeIncreasingValue += building.getObjectIncomeIncreasingValue();
+        return true;
     }
 
     private int getMoneyAmount() {
@@ -90,25 +114,29 @@ public class PlanetStaticObject extends StaticObject {
     }
 
     public class BuildingsHolder {
-        private final StaticObject mStaticObject;
+        private final StaticObject mBuilding;
         private final int mBuildingId;
         private final int mUnitCreationCycleTime = 20;
         private int mBuildingsAmount;
         private UnitCreatorCycle mUnitCreatorCycle;
 
 
-        private BuildingsHolder(StaticObject staticObject, int buildingId) {
-            mStaticObject = staticObject;
+        private BuildingsHolder(StaticObject building, int buildingId) {
+            mBuilding = building;
             mBuildingId = buildingId;
         }
 
         private void increaseBuildingsAmount() {
-            if (mUnitCreatorCycle == null) {
-                mUnitCreatorCycle = new UnitCreatorCycle(mPlanetTeam, mEntityOperations, mBuildingId);
-                registerUpdateHandler(new TimerHandler(mUnitCreationCycleTime, true, mUnitCreatorCycle));
+            LoggerHelper.methodInvocation(TAG, "increaseBuildingsAmount");
+            if (!mIsFakePlanet) {
+                mIncomeIncreasingValue += mBuilding.getObjectIncomeIncreasingValue();
+                if (mUnitCreatorCycle == null) {
+                    mUnitCreatorCycle = new UnitCreatorCycle(mPlanetTeam, mEntityOperations, mBuildingId);
+                    registerUpdateHandler(new TimerHandler(mUnitCreationCycleTime, true, mUnitCreatorCycle));
+                }
+                mUnitCreatorCycle.increaseUnitAmount();
             }
             mBuildingsAmount += 1;
-            mUnitCreatorCycle.increaseUnitAmount();
         }
 
         public int getBuildingsAmount() {
