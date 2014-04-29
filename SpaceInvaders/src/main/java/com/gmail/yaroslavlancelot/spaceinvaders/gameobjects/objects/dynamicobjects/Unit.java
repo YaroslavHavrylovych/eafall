@@ -186,7 +186,6 @@ public abstract class Unit extends GameObject {
             // check if we already can attack
             float distanceToTarget = UnitPathUtil.getDistanceBetweenPoints(getX(), getY(), mObjectToAttack.getX(), mObjectToAttack.getY());
             if (distanceToTarget < mAttackRadius) {
-                LoggerHelper.printDebugMessage(TAG, "attacking target from distance=" + distanceToTarget);
                 attackGoal(mObjectToAttack);
                 // stay on position
                 setUnitLinearVelocity(0, 0);

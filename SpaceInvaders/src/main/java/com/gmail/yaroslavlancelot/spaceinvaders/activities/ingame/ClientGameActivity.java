@@ -58,21 +58,26 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
     @Override
     public void unitMoved(UnitChangePositionServerMessage unitChangePositionServerMessage) {
         long unitUniqueId = unitChangePositionServerMessage.getUnitUniqueId();
-        float x = unitChangePositionServerMessage.getX(),
+        final float x = unitChangePositionServerMessage.getX(),
                 y = unitChangePositionServerMessage.getY();
-        float velocityX = unitChangePositionServerMessage.getVelocityX(),
+        final float velocityX = unitChangePositionServerMessage.getVelocityX(),
                 velocityY = unitChangePositionServerMessage.getVelocityY();
         LoggerHelper.printDebugMessage(TAG, "unitMoved=" + unitUniqueId + "(" + x + "," + y + "), vel(" +
                 +velocityX + "," + velocityY + ")");
-        GameObject gameObject = getGameObjectById(unitUniqueId);
-        if (gameObject == null || !(gameObject instanceof Unit)) {
-            LoggerHelper.printInformationMessage(TAG, "try yo move uncreated unit or it's not a unit");
-            return;
-        }
+        final GameObject gameObject = getGameObjectById(unitUniqueId);
 
-        Unit unit = (Unit) gameObject;
-        unit.setBodyTransform(x, y);
-        unit.setUnitLinearVelocity(velocityX, velocityY);
+        runOnUpdateThread(new Runnable() {
+            @Override
+            public void run() {
+                if (gameObject == null || !(gameObject instanceof Unit)) {
+                    LoggerHelper.printInformationMessage(TAG, "try yo move uncreated unit or it's not a unit");
+                    return;
+                }
+                Unit unit = (Unit) gameObject;
+                unit.setBodyTransform(x, y);
+                unit.setUnitLinearVelocity(velocityX, velocityY);
+            }
+        });
     }
 
     @Override
