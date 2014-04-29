@@ -373,8 +373,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         mStaticObjects.put(key, planetStaticObject);
         attachEntity(planetStaticObject);
         if (unitUniqueId.length > 0)
-            planetStaticObject.setUnitUniqueId(unitUniqueId[0]);
-        mGameObjectsMap.put(planetStaticObject.getUnitUniqueId(), planetStaticObject);
+            planetStaticObject.setObjectUniqueId(unitUniqueId[0]);
+        mGameObjectsMap.put(planetStaticObject.getObjectUniqueId(), planetStaticObject);
         registerCircleBody(planetStaticObject, BodyDef.BodyType.StaticBody, mStaticBodyFixtureDef);
         return planetStaticObject;
     }
@@ -403,7 +403,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         SunStaticObject sunStaticObject = new SunStaticObject(x, y, textureRegion, mEngine.getVertexBufferObjectManager());
         mStaticObjects.put(key, sunStaticObject);
         attachEntity(sunStaticObject);
-        mGameObjectsMap.put(sunStaticObject.getUnitUniqueId(), sunStaticObject);
+        mGameObjectsMap.put(sunStaticObject.getObjectUniqueId(), sunStaticObject);
         registerCircleBody(sunStaticObject, BodyDef.BodyType.StaticBody, mStaticBodyFixtureDef);
         return sunStaticObject;
     }
@@ -536,7 +536,6 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         warrior.registerUpdateHandler();
         warrior.setEnemiesUpdater(UnitCallbacksUtils.getSimpleUnitEnemiesUpdater(unitTeam.getEnemyTeam()));
         warrior.initMovingPath();
-        unitTeam.addObjectToTeam(warrior);
         return warrior;
     }
 
@@ -550,8 +549,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         unitTeam.addObjectToTeam(unit);
 
         if (unitUniqueId.length > 0)
-            unit.setUnitUniqueId(unitUniqueId[0]);
-        mGameObjectsMap.put(unit.getUnitUniqueId(), unit);
+            unit.setObjectUniqueId(unitUniqueId[0]);
+        mGameObjectsMap.put(unit.getObjectUniqueId(), unit);
 
         // init physic body
         BodyDef.BodyType bodyType;

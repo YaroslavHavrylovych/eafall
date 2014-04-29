@@ -74,11 +74,11 @@ public abstract class GameObject extends IGameObject implements ISpriteTouchable
                 textureAtlas, context, x, y);
     }
 
-    public long getUnitUniqueId() {
+    public long getObjectUniqueId() {
         return mUniqueId;
     }
 
-    public void setUnitUniqueId(long id) {
+    public void setObjectUniqueId(long id) {
         mUniqueId = id;
     }
 
@@ -165,6 +165,12 @@ public abstract class GameObject extends IGameObject implements ISpriteTouchable
         setHealth(objectHealth);
     }
 
+    /**
+     * set new {@link com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject} health.
+     * Handles object destruction if health are less then 0.
+     *
+     * @param objectHealth new health value
+     */
     public void setHealth(int objectHealth) {
         mObjectCurrentHealth = objectHealth;
         if (mGameObjectHealthChangedListener != null)

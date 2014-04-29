@@ -20,7 +20,7 @@ public class TeamUtils {
      *
      * @return list of all unit enemies in the visible rect (from enemy team which pass like parameter)
      */
-    public static List<GameObject> getEnemiesForUnit(final Unit unit, ITeam enemyTeam) {
+    public static List<GameObject> getVisibleEnemiesForUnit(final Unit unit, ITeam enemyTeam) {
         List<GameObject> enemies = enemyTeam.getTeamObjects();
         List<GameObject> enemiesInView = new ArrayList<GameObject>(5);
         for (GameObject enemy : enemies) {

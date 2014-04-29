@@ -26,8 +26,8 @@ public class UnitCallbacksUtils {
         }
 
         @Override
-        public List<GameObject> getEnemiesUnitsForUnit(final Unit unit) {
-            return TeamUtils.getEnemiesForUnit(unit, mEnemyTeam);
+        public List<GameObject> getVisibleEnemiesForUnit(final Unit unit) {
+            return TeamUtils.getVisibleEnemiesForUnit(unit, mEnemyTeam);
         }
 
         @Override

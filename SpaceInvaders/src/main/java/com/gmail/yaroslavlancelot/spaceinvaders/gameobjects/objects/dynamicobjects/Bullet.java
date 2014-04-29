@@ -49,11 +49,12 @@ public class Bullet extends IGameObject {
         if (gameObject.getBody() == null) return;
         Vector2 target = gameObject.getBody().getPosition();
         float goalX = target.x, goalY = target.y;
-        mBulletStartX = x * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT;
-        mBulletStartY = y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT;
         mPhysicBody = mEntityOperations.registerCircleBody(this, sBulletBodyType, mBulletFixtureDef, x, y, 0);
         mPhysicBody.setBullet(true);
-        mMaxBulletFlyDistance = UnitPathUtil.getDistanceBetweenPoints(x, y, goalX, goalY) * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT;
+        mMaxBulletFlyDistance = UnitPathUtil.getDistanceBetweenPoints(
+                mBulletStartX = x * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
+                mBulletStartY = y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
+                gameObject.getX(), gameObject.getY());
 
         float distanceX = goalX - x,
                 distanceY = goalY - y;

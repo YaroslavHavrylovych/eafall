@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IUnitFireCallback;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitPathUtil;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations;
@@ -22,6 +23,7 @@ import java.util.List;
 
 /** Basic class for all dynamic game units */
 public abstract class Unit extends GameObject {
+    public static final String TAG = Unit.class.getCanonicalName();
     /** max velocity for this unit */
     protected float mMaxVelocity = 1.5f;
     /** update time for current object */
@@ -107,8 +109,10 @@ public abstract class Unit extends GameObject {
     protected void attackGoal(GameObject attackedObject) {
         if (!isReloadFinished() || attackedObject == null) return;
         if (mUnitFireCallback != null)
-            mUnitFireCallback.fire(getUnitUniqueId(), attackedObject.getUnitUniqueId());
+            mUnitFireCallback.fire(getObjectUniqueId(), attackedObject.getObjectUniqueId());
 
+        LoggerHelper.printDebugMessage(TAG, "unit=" + getObjectUniqueId() + "(" + getX() + "," + getY() + ")" +
+                ", attack object=" + attackedObject.getObjectUniqueId() + "(" + attackedObject.getX() + "," + attackedObject.getY() + ")");
         playSound(mFireSound, mSoundOperations);
         Bullet bullet = new Bullet(getVertexBufferObjectManager(), mEntityOperations,
                 getBackgroundColor(), mObjectDamage, mBulletFixtureDef);
@@ -152,7 +156,7 @@ public abstract class Unit extends GameObject {
 
             // search for new unit to attack
             if (mEnemiesUpdater != null) {
-                List<GameObject> units = mEnemiesUpdater.getEnemiesUnitsForUnit(Unit.this);
+                List<GameObject> units = mEnemiesUpdater.getVisibleEnemiesForUnit(Unit.this);
                 if (units != null && !units.isEmpty()) {
                     mObjectToAttack = units.get(0);
                     attackOrMove();
@@ -174,10 +178,15 @@ public abstract class Unit extends GameObject {
             moveToPoint(mTwoDimensionFloatArray[0], mTwoDimensionFloatArray[1]);
         }
 
+        /**
+         * Call it when target in view radius.
+         * This method will move unit closer to target or shoot if it in attack radius.
+         */
         private void attackOrMove() {
             // check if we already can attack
-            if (UnitPathUtil.getDistanceBetweenPoints(
-                    getX(), getY(), mObjectToAttack.getX(), mObjectToAttack.getY()) < mAttackRadius) {
+            float distanceToTarget = UnitPathUtil.getDistanceBetweenPoints(getX(), getY(), mObjectToAttack.getX(), mObjectToAttack.getY());
+            if (distanceToTarget < mAttackRadius) {
+                LoggerHelper.printDebugMessage(TAG, "attacking target from distance=" + distanceToTarget);
                 attackGoal(mObjectToAttack);
                 // stay on position
                 setUnitLinearVelocity(0, 0);
@@ -186,6 +195,7 @@ public abstract class Unit extends GameObject {
                 moveToPoint(mObjectToAttack.getX(), mObjectToAttack.getY());
         }
 
+        //TODO it's not in physics coordinates (need to be checked)
         private void moveToPoint(float x, float y) {
             float distanceX = x - getX(),
                     distanceY = y - getY();

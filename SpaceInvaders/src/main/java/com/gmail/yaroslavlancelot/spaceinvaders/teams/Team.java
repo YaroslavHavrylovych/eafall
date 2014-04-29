@@ -21,7 +21,7 @@ public class Team implements ITeam {
     /** race of current team */
     private final IRace mTeamRace;
     /** object related to current team */
-    private List<GameObject> mTeamObjects;
+    private volatile List<GameObject> mTeamObjects;
     /** current team main planet */
     private volatile PlanetStaticObject mTeamPlanet;
     /** team to fight with */

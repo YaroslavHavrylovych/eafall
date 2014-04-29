@@ -23,7 +23,7 @@ public class UnitChangePositionServerMessage extends ServerMessage implements Me
         Vector2 positionVector = unit.getBody().getPosition();
         mX = positionVector.x;
         mY = positionVector.y;
-        mUnitUniqueId = unit.getUnitUniqueId();
+        mUnitUniqueId = unit.getObjectUniqueId();
         Vector2 velocityVector = unit.getBody().getLinearVelocity();
         mVelocityX = velocityVector.x;
         mVelocityY = velocityVector.y;
