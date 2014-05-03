@@ -6,6 +6,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Higg
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
+
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.opengl.texture.region.ITextureRegion;
 
@@ -47,6 +48,7 @@ public class PlanetStaticObject extends StaticObject {
         mIsFakePlanet = isFakePlanet;
     }
 
+    /** set unit spawn point */
     public void setSpawnPoint(float spawnPointX, float spawnPointY) {
         mSpawnPointX = spawnPointX;
         mSpawnPointY = spawnPointY;
@@ -60,15 +62,18 @@ public class PlanetStaticObject extends StaticObject {
         return mSpawnPointY;
     }
 
+    /** handle logic of creating a building on a non-fake planet */
     public boolean purchaseBuilding(int buildingId) {
         return createBuildingById(buildingId, false);
     }
 
+    /** perform {@code createBuildingById} invocation with parameter of is this planet is fake */
     public boolean createBuildingById(int buildingId) {
         LoggerHelper.methodInvocation(TAG, "buildBuilding");
         return createBuildingById(buildingId, mIsFakePlanet);
     }
 
+    /** create new building object and add it to holder so then call {@code addBuilding()} */
     private boolean createBuildingById(int buildingId, boolean isFakePlanet) {
         LoggerHelper.methodInvocation(TAG, "buildBuilding. IsFakePlanet=" + isFakePlanet);
         if (buildings.get(buildingId) == null) {
@@ -79,6 +84,11 @@ public class PlanetStaticObject extends StaticObject {
         return addBuilding(buildingId, isFakePlanet);
     }
 
+    /**
+     * construction new building on the planet. If planet is fake then it will just creating building
+     * if it's first instance of particular building type in other way (if it's not first) will just
+     * increase building amount
+     */
     private boolean addBuilding(int key, boolean isFakePlanet) {
         BuildingsHolder holder = buildings.get(key);
         StaticObject building = buildings.get(key).mBuilding;
@@ -104,6 +114,7 @@ public class PlanetStaticObject extends StaticObject {
         return mPlanetTeam == null ? 0 : mPlanetTeam.getMoney();
     }
 
+    /** pay money for creating building on the planet */
     private void buyBuilding(int cost) {
         if (mPlanetTeam != null)
             mPlanetTeam.changeMoney(-cost);
@@ -113,11 +124,20 @@ public class PlanetStaticObject extends StaticObject {
         return buildings;
     }
 
+    /**
+     * holds building image (for current planet) and building id and amount of current building in the planet
+     * (for use it when income and new building creation etc)
+     */
     public class BuildingsHolder {
+        /** hold building object */
         private final StaticObject mBuilding;
+        /** hold building id */
         private final int mBuildingId;
+        /** predefine time to create a unit (now it's common for all buildings) */
         private final int mUnitCreationCycleTime = 20;
+        /** amount of current building instances on the planet */
         private int mBuildingsAmount;
+        /** contains logic of unit creation in the cycle */
         private UnitCreatorCycle mUnitCreatorCycle;
 
 
@@ -126,6 +146,7 @@ public class PlanetStaticObject extends StaticObject {
             mBuildingId = buildingId;
         }
 
+        /** contains logic of the new building creation */
         private void increaseBuildingsAmount() {
             LoggerHelper.methodInvocation(TAG, "increaseBuildingsAmount");
             if (!mIsFakePlanet) {
@@ -139,6 +160,7 @@ public class PlanetStaticObject extends StaticObject {
             mBuildingsAmount += 1;
         }
 
+        /** returns current building amount/instances on the planet */
         public int getBuildingsAmount() {
             return mBuildingsAmount;
         }

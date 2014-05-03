@@ -12,7 +12,7 @@ import org.andengine.util.color.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Player team */
+/** Player team implementation */
 public class Team implements ITeam {
     /** fixture def of the team (used for bullet creation) */
     protected final FixtureDef mFixtureDefTeamCategory;

@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
+/** extends rectangle to have physic body */
 public abstract class IGameObject extends Rectangle {
     /** physics body associated with current object {@link org.andengine.entity.sprite.Sprite} */
     protected Body mPhysicBody;

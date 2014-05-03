@@ -26,6 +26,10 @@ import org.andengine.util.color.Color;
 
 import java.util.concurrent.atomic.AtomicLong;
 
+/**
+ * each visible element on the screen which can be assigned to on or other team and can take
+ * participation in object collaboration extends this class (e.g. units, planets, sun etc)
+ */
 public abstract class GameObject extends IGameObject implements ISpriteTouchable {
     public static final float VELOCITY_EPSILON = 0.00000001f;
     protected static final int sUndestroyableObjectKey = Integer.MIN_VALUE;

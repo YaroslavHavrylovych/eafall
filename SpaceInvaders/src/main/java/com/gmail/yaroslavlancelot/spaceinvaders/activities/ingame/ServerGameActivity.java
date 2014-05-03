@@ -24,8 +24,9 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import java.io.IOException;
 
 /**
- * Server game. Extends physical world and will add some handlers for server actions and
- * from client.
+ * Server game. Extends {@link com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame.ThickClientGameActivity}
+ * with adding logic of handling client operation (messages from client) and sending message about server
+ * operations to client.
  */
 public class ServerGameActivity extends ThickClientGameActivity implements InGameServer, IVelocityChangedListener, IGameObjectHealthChanged, IUnitFireCallback {
     private GameSocketServer mGameSocketServer;

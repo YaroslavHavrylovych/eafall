@@ -14,6 +14,7 @@ import org.andengine.engine.options.EngineOptions;
 
 import java.io.IOException;
 
+/** Used in client. Handles messages from server and send it's own in react on client operations */
 public class ClientGameActivity extends MainOperationsBaseGameActivity implements InGameClient {
     public final static String TAG = ClientGameActivity.class.getCanonicalName();
     private volatile GameServerConnector mGameServerConnector;

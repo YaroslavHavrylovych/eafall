@@ -8,8 +8,8 @@ import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 
 /**
- * extends {@link MainOperationsBaseGameActivity} with adding
- * physical world capabilities to it
+ * extends {@link MainOperationsBaseGameActivity} with adding world boundaries and
+ * registering money update cycles (not used for client because all money logic handles on server)
  */
 public abstract class ThickClientGameActivity extends MainOperationsBaseGameActivity {
     /** tag, which is used for debugging purpose */
