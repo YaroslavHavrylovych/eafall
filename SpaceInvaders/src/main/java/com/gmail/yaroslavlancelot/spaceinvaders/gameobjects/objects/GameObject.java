@@ -23,6 +23,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
+import org.andengine.util.math.MathConstants;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -57,6 +58,12 @@ public abstract class GameObject extends IGameObject implements ISpriteTouchable
     private IGameObjectHealthChanged mGameObjectHealthChangedListener;
     /** unique unit id */
     private long mUniqueId;
+    /** */
+    private float mPrevAngleValue;
+    /*
+     * used for storing previous unit velocity. So we can compare and use in update loop. If velocity
+     * not changed we will not set new velocity and will not trigger velocity changed listener
+     * */
     private float prevVelocityX, prevVelocityY;
 
     protected GameObject(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
@@ -233,6 +240,7 @@ public abstract class GameObject extends IGameObject implements ISpriteTouchable
         return mObjectMaximumHealth;
     }
 
+    /** used to manually set physic body coordinates and angle body */
     public void setBodyTransform(float x, float y, float... angle) {
         float defaultAngle;
         if (angle.length > 0) {
@@ -242,6 +250,49 @@ public abstract class GameObject extends IGameObject implements ISpriteTouchable
         mPhysicBody.setTransform(x, y, defaultAngle);
     }
 
+    /**
+     * physic body will change rotation (in radiance) to point it's head to the target.
+     *
+     * @param x target abscissa coordinate
+     * @param y target ordinate coordinate
+     * @return angle value if current angle needs to be changed and null if physic body already in position
+     */
+    public float getDirection(float x, float y) {
+        boolean isAngleSet = false;
+        float newAngle = 0f;
+        // if it's one of the corner angles (dividers of pi/2)
+        if (x - getX() < VELOCITY_EPSILON) {
+            if (getY() > y) newAngle = MathConstants.PI;
+            isAngleSet = true;
+        } else if (y - getY() < VELOCITY_EPSILON) {
+            if (getX() > x) newAngle = 3 * MathConstants.PI / 2;
+            else newAngle = MathConstants.PI / 2;
+            isAngleSet = true;
+        }
+
+        if (!isAngleSet) {
+            // next till the end will calculate angle
+            float a = Math.abs(getX() - x),
+                    b = Math.abs(getY() - y),
+                    c = (float) Math.sqrt(a * a + b * b);
+
+            if (getY() < y) newAngle = a / c;
+            else newAngle = b / c;
+            newAngle = (float) Math.asin(newAngle);
+
+            if (getY() > y) {
+                if (getX() > x) newAngle -= 3 * MathConstants.PI / 2;
+                else newAngle += MathConstants.PI / 2;
+            } else if (getX() > x) newAngle += 3 * MathConstants.PI / 2;
+        }
+
+        if (mPhysicBody.getAngle() - newAngle < VELOCITY_EPSILON)
+            return newAngle;
+
+        return newAngle;
+    }
+
+    /** set physic body velocity */
     public void setUnitLinearVelocity(float x, float y) {
         if (Math.abs(prevVelocityX - x) < VELOCITY_EPSILON && Math.abs(prevVelocityY - y) < VELOCITY_EPSILON)
             return;
