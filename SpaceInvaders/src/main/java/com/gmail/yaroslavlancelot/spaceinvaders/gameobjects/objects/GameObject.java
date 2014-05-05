@@ -258,35 +258,23 @@ public abstract class GameObject extends IGameObject implements ISpriteTouchable
      * @return angle value if current angle needs to be changed and null if physic body already in position
      */
     public float getDirection(float x, float y) {
-        boolean isAngleSet = false;
-        float newAngle = 0f;
-        // if it's one of the corner angles (dividers of pi/2)
-        if (Math.abs(x - getX()) < VELOCITY_EPSILON) {
-            if (getY() > y) newAngle = MathConstants.PI;
-            isAngleSet = true;
-        } else if (Math.abs(y - getY()) < VELOCITY_EPSILON) {
-            if (getX() > x) newAngle = 3 * MathConstants.PI / 2;
-            else newAngle = MathConstants.PI / 2;
-            isAngleSet = true;
+        // next till the end will calculate angle
+        float currentX = getX(),
+                currentY = getY();
+
+        float a = Math.abs(currentX - x),
+                b = Math.abs(currentY - y);
+//                c = (float) Math.sqrt(a * a + b * b);
+
+        float newAngle = (float) Math.atan(b / a);
+
+        if (currentY < y) {
+            if (currentX > x) return 3 * MathConstants.PI / 2 - newAngle;
+            else return newAngle + MathConstants.PI / 2;
         }
 
-        if (!isAngleSet) {
-            // next till the end will calculate angle
-            float a = Math.abs(getX() - x),
-                    b = Math.abs(getY() - y),
-                    c = (float) Math.sqrt(a * a + b * b);
-
-            newAngle = (float) Math.asin(b / c);
-            if (getY() < y) {
-                if (getX() > x) newAngle = 3 * MathConstants.PI / 2 - newAngle;
-                else newAngle += MathConstants.PI / 2;
-            } else {
-                if (getX() > x) newAngle += 3 * MathConstants.PI / 2;
-                else newAngle = MathConstants.PI / 2 - newAngle;
-            }
-        }
-
-        return newAngle;
+        if (currentX > x) return newAngle + 3 * MathConstants.PI / 2;
+        return MathConstants.PI / 2 - newAngle;
     }
 
     /** set physic body velocity */
