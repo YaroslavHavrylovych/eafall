@@ -107,7 +107,8 @@ public abstract class Unit extends GameObject {
     }
 
     protected void attackGoal(GameObject attackedObject) {
-        setBodyTransform(getX(), getY(), getDirection(attackedObject.getX(), attackedObject.getY()));
+        Vector2 position = getBody().getPosition();
+        setBodyTransform(position.x, position.y, getDirection(attackedObject.getX(), attackedObject.getY()));
 
         if (!isReloadFinished() || attackedObject == null) return;
         if (mUnitFireCallback != null)
@@ -198,7 +199,8 @@ public abstract class Unit extends GameObject {
 
         //TODO it's not in physics coordinates (need to be checked)
         private void moveToPoint(float x, float y) {
-            setBodyTransform(getX(), getY(), getDirection(x, y));
+            Vector2 position = getBody().getPosition();
+            setBodyTransform(position.x, position.y, getDirection(x, y));
 
             float distanceX = x - getX(),
                     distanceY = y - getY();

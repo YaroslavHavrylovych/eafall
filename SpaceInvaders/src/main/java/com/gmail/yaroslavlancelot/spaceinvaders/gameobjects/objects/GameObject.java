@@ -261,10 +261,10 @@ public abstract class GameObject extends IGameObject implements ISpriteTouchable
         boolean isAngleSet = false;
         float newAngle = 0f;
         // if it's one of the corner angles (dividers of pi/2)
-        if (x - getX() < VELOCITY_EPSILON) {
+        if (Math.abs(x - getX()) < VELOCITY_EPSILON) {
             if (getY() > y) newAngle = MathConstants.PI;
             isAngleSet = true;
-        } else if (y - getY() < VELOCITY_EPSILON) {
+        } else if (Math.abs(y - getY()) < VELOCITY_EPSILON) {
             if (getX() > x) newAngle = 3 * MathConstants.PI / 2;
             else newAngle = MathConstants.PI / 2;
             isAngleSet = true;
@@ -276,18 +276,15 @@ public abstract class GameObject extends IGameObject implements ISpriteTouchable
                     b = Math.abs(getY() - y),
                     c = (float) Math.sqrt(a * a + b * b);
 
-            if (getY() < y) newAngle = a / c;
-            else newAngle = b / c;
-            newAngle = (float) Math.asin(newAngle);
-
-            if (getY() > y) {
-                if (getX() > x) newAngle -= 3 * MathConstants.PI / 2;
+            newAngle = (float) Math.asin(b / c);
+            if (getY() < y) {
+                if (getX() > x) newAngle = 3 * MathConstants.PI / 2 - newAngle;
                 else newAngle += MathConstants.PI / 2;
-            } else if (getX() > x) newAngle += 3 * MathConstants.PI / 2;
+            } else {
+                if (getX() > x) newAngle += 3 * MathConstants.PI / 2;
+                else newAngle = MathConstants.PI / 2 - newAngle;
+            }
         }
-
-        if (mPhysicBody.getAngle() - newAngle < VELOCITY_EPSILON)
-            return newAngle;
 
         return newAngle;
     }
