@@ -60,7 +60,6 @@ public abstract class Unit extends GameObject {
         mEntityOperations = entityOperations;
     }
 
-
     public void registerUpdateHandler() {
         registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new SimpleUnitTimerCallback()));
     }
@@ -107,9 +106,12 @@ public abstract class Unit extends GameObject {
     }
 
     protected void attackGoal(GameObject attackedObject) {
+        if (attackedObject == null) return;
+
         rotate(getDirection(attackedObject.getX(), attackedObject.getY()));
 
-        if (!isReloadFinished() || attackedObject == null) return;
+        if (!isReloadFinished()) return;
+
         if (mUnitFireCallback != null)
             mUnitFireCallback.fire(getObjectUniqueId(), attackedObject.getObjectUniqueId());
 
@@ -196,7 +198,6 @@ public abstract class Unit extends GameObject {
                 moveToPoint(mObjectToAttack.getX(), mObjectToAttack.getY());
         }
 
-        //TODO it's not in physics coordinates (need to be checked)
         private void moveToPoint(float x, float y) {
             rotate(getDirection(x, y));
 

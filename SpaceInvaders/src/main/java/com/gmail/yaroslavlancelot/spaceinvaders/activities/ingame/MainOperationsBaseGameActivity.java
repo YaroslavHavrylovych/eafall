@@ -584,6 +584,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         MainOperationsBaseGameActivity.this.runOnUpdateThread(new Runnable() {
             @Override
             public void run() {
+                //TODO set body to null after removing and sync it
                 if (gameObject.getBody() == null)
                     return;
                 final PhysicsConnector pc = mPhysicsWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(gameObject);

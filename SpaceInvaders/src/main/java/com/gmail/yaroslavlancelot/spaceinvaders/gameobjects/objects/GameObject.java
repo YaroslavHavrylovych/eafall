@@ -245,14 +245,9 @@ public abstract class GameObject extends IGameObject implements ISpriteTouchable
         return mObjectMaximumHealth;
     }
 
-    /** used to manually set physic body coordinates and angle body */
-    public void setBodyTransform(float x, float y, float... angle) {
-        float defaultAngle;
-        if (angle.length > 0) {
-            defaultAngle = angle[0];
-        } else
-            defaultAngle = mPhysicBody.getAngle();
-        mPhysicBody.setTransform(x, y, defaultAngle);
+    /** used to manually set physic body position */
+    public void setUnitPosition(float x, float y) {
+        mPhysicBody.setTransform(x, y, mPhysicBody.getAngle());
     }
 
     /** rotate all objects which hold current game object (and children) exclude health bar */
@@ -272,17 +267,25 @@ public abstract class GameObject extends IGameObject implements ISpriteTouchable
         float currentX = getX(),
                 currentY = getY();
 
-        float a = Math.abs(currentX - x),
-                b = Math.abs(currentY - y);
+        return getDirection(currentX, currentY, x, y);
+    }
+
+    /**
+     * return angle in radiance which is angle between abscissa and line from
+     * (startX, startY, x, y)
+     */
+    public static float getDirection(float startX, float startY, float x, float y) {
+        float a = Math.abs(startX - x),
+                b = Math.abs(startY - y);
 
         float newAngle = (float) Math.atan(b / a);
 
-        if (currentY < y) {
-            if (currentX > x) return 3 * MathConstants.PI / 2 - newAngle;
+        if (startY < y) {
+            if (startX > x) return 3 * MathConstants.PI / 2 - newAngle;
             else return newAngle + MathConstants.PI / 2;
         }
 
-        if (currentX > x) return newAngle + 3 * MathConstants.PI / 2;
+        if (startX > x) return newAngle + 3 * MathConstants.PI / 2;
         return MathConstants.PI / 2 - newAngle;
     }
 

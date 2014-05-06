@@ -74,7 +74,8 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
                     return;
                 }
                 Unit unit = (Unit) gameObject;
-                unit.setBodyTransform(x, y);
+                unit.setUnitPosition(x, y);
+                unit.rotate(GameObject.getDirection(0, 0, velocityX, velocityY));
                 unit.setUnitLinearVelocity(velocityX, velocityY);
             }
         });
