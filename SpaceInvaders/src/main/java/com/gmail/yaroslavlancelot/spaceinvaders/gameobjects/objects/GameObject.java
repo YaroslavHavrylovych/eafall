@@ -24,9 +24,11 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 import org.andengine.util.math.MathConstants;
+import org.andengine.util.math.MathUtils;
 
 import java.util.concurrent.atomic.AtomicLong;
 
+/** all static and dynamic objects in the game have it in parent */
 public abstract class GameObject extends IGameObject implements ISpriteTouchable {
     public static final float VELOCITY_EPSILON = 0.00000001f;
     protected static final int sUndestroyableObjectKey = Integer.MIN_VALUE;
@@ -59,7 +61,7 @@ public abstract class GameObject extends IGameObject implements ISpriteTouchable
     /** unique unit id */
     private long mUniqueId;
     /** */
-    private float mPrevAngleValue;
+    private Rectangle mBodyRectangle;
     /*
      * used for storing previous unit velocity. So we can compare and use in update loop. If velocity
      * not changed we will not set new velocity and will not trigger velocity changed listener
@@ -68,11 +70,14 @@ public abstract class GameObject extends IGameObject implements ISpriteTouchable
 
     protected GameObject(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
         super(x, y, textureRegion.getWidth(), textureRegion.getWidth(), vertexBufferObjectManager);
+        mBodyRectangle = new Rectangle(0, 0, textureRegion.getWidth(), textureRegion.getWidth(), vertexBufferObjectManager);
+        mBodyRectangle.setColor(Color.TRANSPARENT);
         setColor(Color.TRANSPARENT);
+        attachChild(mBodyRectangle);
         mObjectSprite = new Sprite(0, 0, textureRegion, vertexBufferObjectManager);
         mBackground = new Rectangle(0, 0, 0, 0, vertexBufferObjectManager);
-        attachChild(mBackground);
-        attachChild(mObjectSprite);
+        mBodyRectangle.attachChild(mBackground);
+        mBodyRectangle.attachChild(mObjectSprite);
         mUniqueId = sGameObjectsTracker.getAndIncrement();
     }
 
@@ -250,6 +255,11 @@ public abstract class GameObject extends IGameObject implements ISpriteTouchable
         mPhysicBody.setTransform(x, y, defaultAngle);
     }
 
+    /** rotate all objects which hold current game object (and children) exclude health bar */
+    public void rotate(float angle) {
+        mBodyRectangle.setRotation(MathUtils.radToDeg(angle));
+    }
+
     /**
      * physic body will change rotation (in radiance) to point it's head to the target.
      *
@@ -264,7 +274,6 @@ public abstract class GameObject extends IGameObject implements ISpriteTouchable
 
         float a = Math.abs(currentX - x),
                 b = Math.abs(currentY - y);
-//                c = (float) Math.sqrt(a * a + b * b);
 
         float newAngle = (float) Math.atan(b / a);
 
