@@ -133,7 +133,7 @@ public abstract class GameObject extends IGameObject implements ISpriteTouchable
     }
 
     public boolean isObjectAlive() {
-        return mObjectCurrentHealth > 0 || mObjectCurrentHealth == sUndestroyableObjectKey;
+        return (mObjectCurrentHealth > 0 || mObjectCurrentHealth == sUndestroyableObjectKey) && mPhysicBody != null;
     }
 
     public void setObjectDestroyedListener(final IObjectDestroyedListener objectDestroyedListener) {
@@ -222,11 +222,6 @@ public abstract class GameObject extends IGameObject implements ISpriteTouchable
 
     public float getCenterY() {
         return getY() + getHeight() / 2;
-    }
-
-    @Override
-    public Body getBody() {
-        return mPhysicBody;
     }
 
     public Armor getObjectArmor() {
