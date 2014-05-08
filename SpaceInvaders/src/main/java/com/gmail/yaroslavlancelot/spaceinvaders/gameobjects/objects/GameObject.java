@@ -2,7 +2,6 @@ package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects;
 
 import android.content.Context;
 
-import com.badlogic.gdx.physics.box2d.Body;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IGameObjectHealthChanged;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IObjectDestroyedListener;
@@ -84,6 +83,25 @@ public abstract class GameObject extends IGameObject implements ISpriteTouchable
     protected static void loadResource(String pathToUnit, Context context, BitmapTextureAtlas textureAtlas, int x, int y) {
         TextureRegionHolderUtils.addElementFromAssets(pathToUnit, TextureRegionHolderUtils.getInstance(),
                 textureAtlas, context, x, y);
+    }
+
+    /**
+     * return angle in radiance which is angle between abscissa and line from
+     * (startX, startY, x, y)
+     */
+    public static float getDirection(float startX, float startY, float x, float y) {
+        float a = Math.abs(startX - x),
+                b = Math.abs(startY - y);
+
+        float newAngle = (float) Math.atan(b / a);
+
+        if (startY < y) {
+            if (startX > x) return 3 * MathConstants.PI / 2 - newAngle;
+            else return newAngle + MathConstants.PI / 2;
+        }
+
+        if (startX > x) return newAngle + 3 * MathConstants.PI / 2;
+        return MathConstants.PI / 2 - newAngle;
     }
 
     public long getObjectUniqueId() {
@@ -246,8 +264,12 @@ public abstract class GameObject extends IGameObject implements ISpriteTouchable
     }
 
     /** rotate all objects which hold current game object (and children) exclude health bar */
-    public void rotate(float angle) {
-        mBodyRectangle.setRotation(MathUtils.radToDeg(angle));
+    public void rotate(float angleInDeg) {
+        mBodyRectangle.setRotation(angleInDeg);
+    }
+
+    public float getRotationAngle() {
+        return mBodyRectangle.getRotation();
     }
 
     /**
@@ -263,25 +285,6 @@ public abstract class GameObject extends IGameObject implements ISpriteTouchable
                 currentY = getY();
 
         return getDirection(currentX, currentY, x, y);
-    }
-
-    /**
-     * return angle in radiance which is angle between abscissa and line from
-     * (startX, startY, x, y)
-     */
-    public static float getDirection(float startX, float startY, float x, float y) {
-        float a = Math.abs(startX - x),
-                b = Math.abs(startY - y);
-
-        float newAngle = (float) Math.atan(b / a);
-
-        if (startY < y) {
-            if (startX > x) return 3 * MathConstants.PI / 2 - newAngle;
-            else return newAngle + MathConstants.PI / 2;
-        }
-
-        if (startX > x) return newAngle + 3 * MathConstants.PI / 2;
-        return MathConstants.PI / 2 - newAngle;
     }
 
     /** set physic body velocity */

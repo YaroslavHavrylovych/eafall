@@ -61,14 +61,15 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
     }
 
     @Override
-    public void unitMoved(UnitChangePositionServerMessage unitChangePositionServerMessage) {
+    public void unitMoved(final UnitChangePositionServerMessage unitChangePositionServerMessage) {
         long unitUniqueId = unitChangePositionServerMessage.getUnitUniqueId();
         final float x = unitChangePositionServerMessage.getX(),
                 y = unitChangePositionServerMessage.getY();
         final float velocityX = unitChangePositionServerMessage.getVelocityX(),
                 velocityY = unitChangePositionServerMessage.getVelocityY();
+        final float rotation = unitChangePositionServerMessage.getRotationAngle();
         LoggerHelper.printDebugMessage(TAG, "unitMoved=" + unitUniqueId + "(" + x + "," + y + "), vel(" +
-                +velocityX + "," + velocityY + ")");
+                +velocityX + "," + velocityY + "), rotation=" + rotation);
         final GameObject gameObject = getGameObjectById(unitUniqueId);
 
         runOnUpdateThread(new Runnable() {
@@ -81,8 +82,7 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
                 Unit unit = (Unit) gameObject;
                 if (!gameObject.isObjectAlive()) return;
                 unit.setUnitPosition(x, y);
-                //TODO this cause object blinking (I think need to check possible angle)
-                unit.rotate(GameObject.getDirection(0, 0, velocityX, velocityY));
+                unit.rotate(rotation);
                 unit.setUnitLinearVelocity(velocityX, velocityY);
             }
         });

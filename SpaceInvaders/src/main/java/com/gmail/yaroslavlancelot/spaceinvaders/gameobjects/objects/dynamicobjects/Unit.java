@@ -18,6 +18,7 @@ import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.util.math.MathUtils;
 
 import java.util.List;
 
@@ -108,7 +109,7 @@ public abstract class Unit extends GameObject {
     protected void attackGoal(GameObject attackedObject) {
         if (attackedObject == null) return;
 
-        rotate(getDirection(attackedObject.getX(), attackedObject.getY()));
+        rotate(MathUtils.radToDeg(getDirection(attackedObject.getX(), attackedObject.getY())));
 
         if (!isReloadFinished()) return;
 
@@ -199,7 +200,7 @@ public abstract class Unit extends GameObject {
         }
 
         private void moveToPoint(float x, float y) {
-            rotate(getDirection(x, y));
+            rotate(MathUtils.radToDeg(getDirection(x, y)));
 
             float distanceX = x - getX(),
                     distanceY = y - getY();
