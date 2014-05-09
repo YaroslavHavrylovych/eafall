@@ -2,7 +2,6 @@ package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects;
 
 import android.content.Context;
 
-import com.badlogic.gdx.physics.box2d.Body;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IGameObjectHealthChanged;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IObjectDestroyedListener;
@@ -23,6 +22,8 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
+import org.andengine.util.math.MathConstants;
+import org.andengine.util.math.MathUtils;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -61,21 +62,49 @@ public abstract class GameObject extends IGameObject implements ISpriteTouchable
     private IGameObjectHealthChanged mGameObjectHealthChangedListener;
     /** unique unit id */
     private long mUniqueId;
+    /** physic body will be assigned to this "body rectangle" (area) */
+    private Rectangle mBodyRectangle;
+    /*
+     * used for storing previous unit velocity. So we can compare and use in update loop. If velocity
+     * not changed we will not set new velocity and will not trigger velocity changed listener
+     * */
     private float prevVelocityX, prevVelocityY;
 
     protected GameObject(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
         super(x, y, textureRegion.getWidth(), textureRegion.getWidth(), vertexBufferObjectManager);
+        mBodyRectangle = new Rectangle(0, 0, textureRegion.getWidth(), textureRegion.getWidth(), vertexBufferObjectManager);
+        mBodyRectangle.setColor(Color.TRANSPARENT);
         setColor(Color.TRANSPARENT);
+        attachChild(mBodyRectangle);
         mObjectSprite = new Sprite(0, 0, textureRegion, vertexBufferObjectManager);
         mBackground = new Rectangle(0, 0, 0, 0, vertexBufferObjectManager);
-        attachChild(mBackground);
-        attachChild(mObjectSprite);
+        mBodyRectangle.attachChild(mBackground);
+        mBodyRectangle.attachChild(mObjectSprite);
         mUniqueId = sGameObjectsTracker.getAndIncrement();
     }
 
     protected static void loadResource(String pathToUnit, Context context, BitmapTextureAtlas textureAtlas, int x, int y) {
         TextureRegionHolderUtils.addElementFromAssets(pathToUnit, TextureRegionHolderUtils.getInstance(),
                 textureAtlas, context, x, y);
+    }
+
+    /**
+     * return angle in radiance which is angle between abscissa and line from
+     * (startX, startY, x, y)
+     */
+    public static float getDirection(float startX, float startY, float x, float y) {
+        float a = Math.abs(startX - x),
+                b = Math.abs(startY - y);
+
+        float newAngle = (float) Math.atan(b / a);
+
+        if (startY < y) {
+            if (startX > x) return 3 * MathConstants.PI / 2 - newAngle;
+            else return newAngle + MathConstants.PI / 2;
+        }
+
+        if (startX > x) return newAngle + 3 * MathConstants.PI / 2;
+        return MathConstants.PI / 2 - newAngle;
     }
 
     public long getObjectUniqueId() {
@@ -125,7 +154,7 @@ public abstract class GameObject extends IGameObject implements ISpriteTouchable
     }
 
     public boolean isObjectAlive() {
-        return mObjectCurrentHealth > 0 || mObjectCurrentHealth == sUndestroyableObjectKey;
+        return (mObjectCurrentHealth > 0 || mObjectCurrentHealth == sUndestroyableObjectKey) && mPhysicBody != null;
     }
 
     public void setObjectDestroyedListener(final IObjectDestroyedListener objectDestroyedListener) {
@@ -216,11 +245,6 @@ public abstract class GameObject extends IGameObject implements ISpriteTouchable
         return getY() + getHeight() / 2;
     }
 
-    @Override
-    public Body getBody() {
-        return mPhysicBody;
-    }
-
     public Armor getObjectArmor() {
         return mObjectArmor;
     }
@@ -237,15 +261,36 @@ public abstract class GameObject extends IGameObject implements ISpriteTouchable
         return mObjectMaximumHealth;
     }
 
-    public void setBodyTransform(float x, float y, float... angle) {
-        float defaultAngle;
-        if (angle.length > 0) {
-            defaultAngle = angle[0];
-        } else
-            defaultAngle = mPhysicBody.getAngle();
-        mPhysicBody.setTransform(x, y, defaultAngle);
+    /** used to manually set physic body position */
+    public void setUnitPosition(float x, float y) {
+        mPhysicBody.setTransform(x, y, mPhysicBody.getAngle());
     }
 
+    /** rotate all objects which hold current game object (and children) exclude health bar */
+    public void rotate(float angleInDeg) {
+        mBodyRectangle.setRotation(angleInDeg);
+    }
+
+    public float getRotationAngle() {
+        return mBodyRectangle.getRotation();
+    }
+
+    /**
+     * physic body will change rotation (in radiance) to point it's head to the target.
+     *
+     * @param x target abscissa coordinate
+     * @param y target ordinate coordinate
+     * @return angle value if current angle needs to be changed and null if physic body already in position
+     */
+    public float getDirection(float x, float y) {
+        // next till the end will calculate angle
+        float currentX = getX(),
+                currentY = getY();
+
+        return getDirection(currentX, currentY, x, y);
+    }
+
+    /** set physic body velocity */
     public void setUnitLinearVelocity(float x, float y) {
         if (Math.abs(prevVelocityX - x) < VELOCITY_EPSILON && Math.abs(prevVelocityY - y) < VELOCITY_EPSILON)
             return;

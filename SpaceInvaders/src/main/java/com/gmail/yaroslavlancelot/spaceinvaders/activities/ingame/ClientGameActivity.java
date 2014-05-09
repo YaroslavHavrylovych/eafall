@@ -51,20 +51,26 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
     }
 
     @Override
-    public void unitCreated(final String teamName, final int unitId, final float x, final float y, long unitUniqueId) {
+    public void unitCreated(final String teamName, final int unitId, final float x, final float y, final long unitUniqueId) {
         LoggerHelper.printDebugMessage(TAG, "unitCreated=" + unitUniqueId + "(" + x + "," + y + ")");
-        createThinUnit(unitId, mTeams.get(teamName), x, y, unitUniqueId);
+        runOnUpdateThread(new Runnable() {
+            @Override
+            public void run() {
+                createThinUnit(unitId, mTeams.get(teamName), x, y, unitUniqueId);
+            }
+        });
     }
 
     @Override
-    public void unitMoved(UnitChangePositionServerMessage unitChangePositionServerMessage) {
+    public void unitMoved(final UnitChangePositionServerMessage unitChangePositionServerMessage) {
         long unitUniqueId = unitChangePositionServerMessage.getUnitUniqueId();
         final float x = unitChangePositionServerMessage.getX(),
                 y = unitChangePositionServerMessage.getY();
         final float velocityX = unitChangePositionServerMessage.getVelocityX(),
                 velocityY = unitChangePositionServerMessage.getVelocityY();
+        final float rotation = unitChangePositionServerMessage.getRotationAngle();
         LoggerHelper.printDebugMessage(TAG, "unitMoved=" + unitUniqueId + "(" + x + "," + y + "), vel(" +
-                +velocityX + "," + velocityY + ")");
+                +velocityX + "," + velocityY + "), rotation=" + rotation);
         final GameObject gameObject = getGameObjectById(unitUniqueId);
 
         runOnUpdateThread(new Runnable() {
@@ -75,26 +81,33 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
                     return;
                 }
                 Unit unit = (Unit) gameObject;
-                unit.setBodyTransform(x, y);
+                if (!gameObject.isObjectAlive()) return;
+                unit.setUnitPosition(x, y);
+                unit.rotate(rotation);
                 unit.setUnitLinearVelocity(velocityX, velocityY);
             }
         });
     }
 
     @Override
-    public void gameObjectHealthChanged(long gameObjectUniqueId, int newUnitHealth) {
-        GameObject gameObject = getGameObjectById(gameObjectUniqueId);
+    public void gameObjectHealthChanged(long gameObjectUniqueId, final int newUnitHealth) {
+        final GameObject gameObject = getGameObjectById(gameObjectUniqueId);
         if (gameObject == null) {
             LoggerHelper.printInformationMessage(TAG, "try to change health of unexisting unit");
             return;
         }
-        gameObject.setHealth(newUnitHealth);
+        runOnUpdateThread(new Runnable() {
+            @Override
+            public void run() {
+                gameObject.setHealth(newUnitHealth);
+            }
+        });
     }
 
     @Override
     public void unitFire(long gameObjectUniqueId, long attackedGameObjectUniqueId) {
-        GameObject gameObject = getGameObjectById(gameObjectUniqueId);
-        GameObject objectToAttack = getGameObjectById(attackedGameObjectUniqueId);
+        final GameObject gameObject = getGameObjectById(gameObjectUniqueId);
+        final GameObject objectToAttack = getGameObjectById(attackedGameObjectUniqueId);
         if (gameObject == null || objectToAttack == null) {
             LoggerHelper.printErrorMessage(TAG, "one of the object in attack is not exist");
             return;
@@ -103,6 +116,13 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
             LoggerHelper.printErrorMessage(TAG, "attacker is not unit in fireFromPosition operation");
             return;
         }
-        ((Unit) gameObject).fire(objectToAttack);
+        runOnUpdateThread(new Runnable() {
+            @Override
+            public void run() {
+                Unit unit = (Unit) gameObject;
+                if (unit.isObjectAlive())
+                    unit.fire(objectToAttack);
+            }
+        });
     }
 }

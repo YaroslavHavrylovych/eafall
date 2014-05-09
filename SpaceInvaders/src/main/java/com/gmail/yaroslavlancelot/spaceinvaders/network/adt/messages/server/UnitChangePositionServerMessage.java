@@ -14,6 +14,7 @@ public class UnitChangePositionServerMessage extends ServerMessage implements Me
     private float mX, mY;
     private long mUnitUniqueId;
     private float mVelocityX, mVelocityY;
+    private float mRotationAngle;
 
     @Deprecated
     public UnitChangePositionServerMessage() {
@@ -27,6 +28,7 @@ public class UnitChangePositionServerMessage extends ServerMessage implements Me
         Vector2 velocityVector = unit.getBody().getLinearVelocity();
         mVelocityX = velocityVector.x;
         mVelocityY = velocityVector.y;
+        mRotationAngle = unit.getRotationAngle();
     }
 
     @Override
@@ -36,6 +38,7 @@ public class UnitChangePositionServerMessage extends ServerMessage implements Me
         mUnitUniqueId = pDataInputStream.readLong();
         mVelocityX = pDataInputStream.readFloat();
         mVelocityY = pDataInputStream.readFloat();
+        mRotationAngle = pDataInputStream.readFloat();
     }
 
     @Override
@@ -45,6 +48,7 @@ public class UnitChangePositionServerMessage extends ServerMessage implements Me
         pDataOutputStream.writeLong(mUnitUniqueId);
         pDataOutputStream.writeFloat(mVelocityX);
         pDataOutputStream.writeFloat(mVelocityY);
+        pDataOutputStream.writeFloat(mRotationAngle);
     }
 
     @Override
@@ -59,6 +63,8 @@ public class UnitChangePositionServerMessage extends ServerMessage implements Me
     public float getX() {
         return mX;
     }
+
+    public float getRotationAngle() { return mRotationAngle; }
 
     public long getUnitUniqueId() {
         return mUnitUniqueId;

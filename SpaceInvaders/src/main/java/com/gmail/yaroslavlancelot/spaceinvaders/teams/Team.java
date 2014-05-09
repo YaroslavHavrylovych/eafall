@@ -15,7 +15,7 @@ import java.util.List;
 /** Player team implementation */
 public class Team implements ITeam {
     /** fixture def of the team (used for bullet creation) */
-    protected final FixtureDef mFixtureDefTeamCategory;
+    protected final FixtureDef mTeamFixtureDef;
     /** current team name */
     private final String mTeamName;
     /** race of current team */
@@ -33,13 +33,12 @@ public class Team implements ITeam {
     /** team control type */
     private TeamControlBehaviourType mTeamControlBehaviourType;
 
-    public Team(final String teamName, IRace teamRace, TeamControlBehaviourType teamType, short category, short maskbits) {
+    public Team(final String teamName, IRace teamRace, TeamControlBehaviourType teamType) {
         mTeamObjects = new ArrayList<GameObject>(20);
         mTeamName = teamName;
         mTeamRace = teamRace;
         mTeamControlBehaviourType = teamType;
-        mFixtureDefTeamCategory = PhysicsFactory.createFixtureDef(1f, 0f, 0f, false,
-                category, maskbits, (short) 0);
+        mTeamFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f, false);
     }
 
     @Override
@@ -125,6 +124,12 @@ public class Team implements ITeam {
 
     @Override
     public FixtureDef getFixtureDefUnit() {
-        return mFixtureDefTeamCategory;
+        return mTeamFixtureDef;
+    }
+
+    @Override
+    public void changeFixtureDefFilter(short category, short maskBits) {
+        mTeamFixtureDef.filter.categoryBits = category;
+        mTeamFixtureDef.filter.maskBits = maskBits;
     }
 }

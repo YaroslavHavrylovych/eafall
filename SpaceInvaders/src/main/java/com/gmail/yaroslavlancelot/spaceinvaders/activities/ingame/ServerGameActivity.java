@@ -41,8 +41,8 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
     @Override
     public void newBuildingCreate(int buildingId) {
         LoggerHelper.methodInvocation(TAG, "newBuildingCreate");
-        if (mRedTeam != null && mRedTeam.getTeamPlanet() != null) {
-            userWantCreateBuilding(mRedTeam, buildingId);
+        if (mSecondTeam != null && mSecondTeam.getTeamPlanet() != null) {
+            userWantCreateBuilding(mSecondTeam, buildingId);
         }
     }
 

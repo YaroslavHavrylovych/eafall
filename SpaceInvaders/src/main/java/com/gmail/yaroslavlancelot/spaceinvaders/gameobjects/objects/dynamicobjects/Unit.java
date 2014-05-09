@@ -18,6 +18,7 @@ import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.util.math.MathUtils;
 
 import java.util.List;
 
@@ -60,7 +61,6 @@ public abstract class Unit extends GameObject {
         mEntityOperations = entityOperations;
     }
 
-
     public void registerUpdateHandler() {
         registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new SimpleUnitTimerCallback()));
     }
@@ -98,16 +98,17 @@ public abstract class Unit extends GameObject {
         return mViewRadius;
     }
 
-    @Override
-    public void setBody(Body body) {
-        super.setBody(body);
-        if (getBody().getType().equals(BodyDef.BodyType.KinematicBody)) {
-            mObjectDamage.removeDamage();
-        }
+    public void removeDamage() {
+        mObjectDamage.removeDamage();
     }
 
     protected void attackGoal(GameObject attackedObject) {
-        if (!isReloadFinished() || attackedObject == null) return;
+        if (attackedObject == null) return;
+
+        rotate(MathUtils.radToDeg(getDirection(attackedObject.getX(), attackedObject.getY())));
+
+        if (!isReloadFinished()) return;
+
         if (mUnitFireCallback != null)
             mUnitFireCallback.fire(getObjectUniqueId(), attackedObject.getObjectUniqueId());
 
@@ -194,8 +195,9 @@ public abstract class Unit extends GameObject {
                 moveToPoint(mObjectToAttack.getX(), mObjectToAttack.getY());
         }
 
-        //TODO it's not in physics coordinates (need to be checked)
         private void moveToPoint(float x, float y) {
+            rotate(MathUtils.radToDeg(getDirection(x, y)));
+
             float distanceX = x - getX(),
                     distanceY = y - getY();
             float absDistanceX = Math.abs(distanceX),

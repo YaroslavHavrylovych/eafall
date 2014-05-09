@@ -19,9 +19,9 @@ public final class GameStringsConstantsAndUtils {
     /** used like key for blue planet static object */
     public static final String KEY_BLUE_PLANET = "blue_planet_key";
     /** red team name */
-    public static final String RED_TEAM_NAME = "red";
+    public static final String SECOND_TEAM_NAME = "second_team";
     /** blue team name */
-    public static final String BLUE_TEAM_NAME = "blue";
+    public static final String FIRST_TEAM_NAME = "first_team";
     /** key used to identify money font */
     public static final String KEY_FONT_MONEY = "key_money_font";
     /** splash screen key */

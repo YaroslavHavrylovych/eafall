@@ -81,4 +81,6 @@ public interface ITeam {
 
     /** return {@link com.badlogic.gdx.physics.box2d.FixtureDef} which will be used for unit creation */
     FixtureDef getFixtureDefUnit();
+
+    void changeFixtureDefFilter(short category, short filter);
 }

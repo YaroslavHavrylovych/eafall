@@ -45,8 +45,8 @@ public class ClientWaitForGameActivity extends Activity implements PreGameStartC
         GameServerConnector.getGameServerConnector().removePreGameStartCallback(this);
         Intent clientGameIntent = new Intent(ClientWaitForGameActivity.this, ClientGameActivity.class);
         clientGameIntent.
-                putExtra(GameStringsConstantsAndUtils.RED_TEAM_NAME, TeamControlBehaviourType.USER_CLIENT_CONTROL.toString()).
-                putExtra(GameStringsConstantsAndUtils.BLUE_TEAM_NAME, TeamControlBehaviourType.REMOTE_CLIENT_CONTROL.toString());
+                putExtra(GameStringsConstantsAndUtils.SECOND_TEAM_NAME, TeamControlBehaviourType.USER_CLIENT_CONTROL.toString()).
+                putExtra(GameStringsConstantsAndUtils.FIRST_TEAM_NAME, TeamControlBehaviourType.REMOTE_CLIENT_CONTROL.toString());
         startActivity(clientGameIntent);
     }
 

@@ -94,17 +94,17 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     /** {@link com.badlogic.gdx.physics.box2d.FixtureDef} for obstacles (static bodies) */
     protected final FixtureDef mStaticBodyFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f, false,
             CollisionCategoriesUtils.CATEGORY_STATIC_OBJECT,
-            CollisionCategoriesUtils.MASKBITS_STATIC_OBJECT, (short) 0);
+            CollisionCategoriesUtils.MASKBITS_STATIC_OBJECT_THICK, (short) 0);
     /** contains whole game units/warriors */
     private final Map<Long, GameObject> mGameObjectsMap = new HashMap<Long, GameObject>();
     /** game scene */
     protected Scene mGameScene;
     /** all teams in current game */
     protected Map<String, ITeam> mTeams = new HashMap<String, ITeam>();
-    /** red team */
-    protected ITeam mRedTeam;
-    /** blue team */
-    protected ITeam mBlueTeam;
+    /** first team */
+    protected ITeam mSecondTeam;
+    /** second team */
+    protected ITeam mFirstTeam;
     /** text which displaying to user with money amount */
     protected String mMoneyTextPrefixString;
     /** user static area */
@@ -114,8 +114,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     /* splash screen */
     protected Scene mSplashScene;
     //TODO check is textures depends on race colour
-    protected IRace redTeamUserRace;
-    protected IRace blueTeamUserRace;
+    protected IRace firstTeamUserRace;
+    protected IRace secondTeamUserRace;
     /** contains game obstacles and other static objects */
     private HashMap<String, StaticObject> mStaticObjects = new HashMap<String, StaticObject>();
     /** game camera */
@@ -223,10 +223,10 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         mBackgroundMusic = mMusicAndSoundsHandler.new BackgroundMusic(getMusicManager());
 
         //races load
-        redTeamUserRace = new Imperials(Color.RED, this, mMusicAndSoundsHandler);
-        redTeamUserRace.loadResources(getTextureManager(), this);
-        blueTeamUserRace = new Imperials(Color.BLUE, this, mMusicAndSoundsHandler);
-        blueTeamUserRace.loadResources(getTextureManager(), this);
+        firstTeamUserRace = new Imperials(Color.RED, this, mMusicAndSoundsHandler);
+        firstTeamUserRace.loadResources(getTextureManager(), this);
+        secondTeamUserRace = new Imperials(Color.BLUE, this, mMusicAndSoundsHandler);
+        secondTeamUserRace.loadResources(getTextureManager(), this);
 
         //* bigger objects
         BitmapTextureAtlas biggerObjectsTexture = new BitmapTextureAtlas(getTextureManager(),
@@ -283,41 +283,38 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         Intent intent = getIntent();
 
         // first team init
-        TeamControlBehaviourType team = TeamControlBehaviourType.valueOf(intent.getStringExtra(GameStringsConstantsAndUtils.RED_TEAM_NAME));
-        initRedPlanet(team == TeamControlBehaviourType.REMOTE_CLIENT_CONTROL || team == TeamControlBehaviourType.USER_CLIENT_CONTROL);
+        TeamControlBehaviourType teamBehaviorType = TeamControlBehaviourType.valueOf(intent.getStringExtra(GameStringsConstantsAndUtils.SECOND_TEAM_NAME));
+        initFirstPlanet(teamBehaviorType == TeamControlBehaviourType.REMOTE_CLIENT_CONTROL || teamBehaviorType == TeamControlBehaviourType.USER_CLIENT_CONTROL);
 
         // second team init
-        team = TeamControlBehaviourType.valueOf(intent.getStringExtra(GameStringsConstantsAndUtils.BLUE_TEAM_NAME));
-        initBluePlanet(team == TeamControlBehaviourType.REMOTE_CLIENT_CONTROL || team == TeamControlBehaviourType.USER_CLIENT_CONTROL);
+        teamBehaviorType = TeamControlBehaviourType.valueOf(intent.getStringExtra(GameStringsConstantsAndUtils.FIRST_TEAM_NAME));
+        initSecondPlanet(teamBehaviorType == TeamControlBehaviourType.REMOTE_CLIENT_CONTROL || teamBehaviorType == TeamControlBehaviourType.USER_CLIENT_CONTROL);
     }
 
     protected void initTeams() {
         // red team
-        mRedTeam = createTeam(GameStringsConstantsAndUtils.RED_TEAM_NAME, redTeamUserRace,
-                CollisionCategoriesUtils.CATEGORY_TEAM1, CollisionCategoriesUtils.MASKBITS_TEAM1);
-        mBlueTeam = createTeam(GameStringsConstantsAndUtils.BLUE_TEAM_NAME, blueTeamUserRace,
-                CollisionCategoriesUtils.CATEGORY_TEAM2, CollisionCategoriesUtils.MASKBITS_TEAM2);
+        mSecondTeam = createTeam(GameStringsConstantsAndUtils.SECOND_TEAM_NAME, firstTeamUserRace);
+        mFirstTeam = createTeam(GameStringsConstantsAndUtils.FIRST_TEAM_NAME, secondTeamUserRace);
 
-        mRedTeam.setTeamColor(Color.RED);
-        mRedTeam.setTeamColor(Color.BLUE);
+        mSecondTeam.setTeamColor(Color.RED);
+        mSecondTeam.setTeamColor(Color.BLUE);
 
         // set enemies
-        mRedTeam.setEnemyTeam(mBlueTeam);
-        mBlueTeam.setEnemyTeam(mRedTeam);
+        mSecondTeam.setEnemyTeam(mFirstTeam);
+        mFirstTeam.setEnemyTeam(mSecondTeam);
 
-        initTeam(mBlueTeam, GameStringsConstantsAndUtils.BLUE_TEAM_NAME);
-        initTeam(mRedTeam, GameStringsConstantsAndUtils.RED_TEAM_NAME);
+        initTeam(mFirstTeam);
+        initTeam(mSecondTeam);
     }
 
     /**
      * initialize team (init user or bot team, or do nothing if team control from remote)
      *
-     * @param team            team to init
-     * @param teamNameInExtra team name to get control type from intent
+     * @param team team to init
      */
-    private void initTeam(ITeam team, String teamNameInExtra) {
-        Intent intent = getIntent();
-        TeamControlBehaviourType teamType = TeamControlBehaviourType.valueOf(intent.getStringExtra(teamNameInExtra));
+    private void initTeam(ITeam team) {
+        TeamControlBehaviourType teamType = team.getTeamControlType();
+        initTeamFixtureDef(team);
 
         if (teamType == TeamControlBehaviourType.USER_SERVER_CONTROL ||
                 teamType == TeamControlBehaviourType.USER_CLIENT_CONTROL) {
@@ -326,7 +323,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
             initBotControlledTeam(team);
         } else if (teamType == TeamControlBehaviourType.REMOTE_CLIENT_CONTROL ||
                 teamType == TeamControlBehaviourType.REMOTE_SERVER_CONTROL) {
-            //nothing
+            //nothing to do here
         } else {
             throw new IllegalArgumentException("unknown team type =" + teamType);
         }
@@ -334,15 +331,32 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         mTeams.put(team.getTeamName(), team);
     }
 
+    protected void initTeamFixtureDef(ITeam team) {
+        TeamControlBehaviourType type = team.getTeamControlType();
+        boolean isRemote = type == TeamControlBehaviourType.USER_CLIENT_CONTROL ||
+                type == TeamControlBehaviourType.REMOTE_CLIENT_CONTROL;
+        if (team.getTeamName().equals(GameStringsConstantsAndUtils.FIRST_TEAM_NAME)) {
+            if (isRemote)
+                team.changeFixtureDefFilter(CollisionCategoriesUtils.CATEGORY_TEAM1, CollisionCategoriesUtils.MASKBITS_TEAM1_THIN);
+            else
+                team.changeFixtureDefFilter(CollisionCategoriesUtils.CATEGORY_TEAM1, CollisionCategoriesUtils.MASKBITS_TEAM1_THICK);
+            return;
+        }
+        if (isRemote)
+            team.changeFixtureDefFilter(CollisionCategoriesUtils.CATEGORY_TEAM2, CollisionCategoriesUtils.MASKBITS_TEAM2_THIN);
+        else
+            team.changeFixtureDefFilter(CollisionCategoriesUtils.CATEGORY_TEAM2, CollisionCategoriesUtils.MASKBITS_TEAM2_THICK);
+    }
+
     protected abstract void userWantCreateBuilding(ITeam userTeam, int buildingId);
 
     /** create new team depending on team control type which stored in extra */
-    private ITeam createTeam(String teamNameInExtra, IRace race, final short category, final short maskbits) {
+    private ITeam createTeam(String teamNameInExtra, IRace race) {
         Intent intent = getIntent();
         TeamControlBehaviourType teamType = TeamControlBehaviourType.valueOf(intent.getStringExtra(teamNameInExtra));
 
         if (teamType == TeamControlBehaviourType.USER_SERVER_CONTROL) {
-            return new Team(teamNameInExtra, race, teamType, category, maskbits) {
+            return new Team(teamNameInExtra, race, teamType) {
                 @Override
                 public void changeMoney(final int delta) {
                     super.changeMoney(delta);
@@ -350,18 +364,18 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
                 }
             };
         } else {
-            return new Team(teamNameInExtra, race, teamType, category, maskbits);
+            return new Team(teamNameInExtra, race, teamType);
         }
     }
 
-    /** init red team and planet */
-    protected void initRedPlanet(boolean isFakePlanet) {
-        mRedTeam.setTeamPlanet(createPlanet(0, (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2
+    /** init first team and planet */
+    protected void initFirstPlanet(boolean isFakePlanet) {
+        mSecondTeam.setTeamPlanet(createPlanet(0, (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2
                         + SizeConstants.ADDITION_MARGIN_FOR_PLANET,
                 mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_RED_PLANET), GameStringsConstantsAndUtils.KEY_RED_PLANET,
-                mRedTeam, isFakePlanet
+                mSecondTeam, isFakePlanet
         ));
-        mRedTeam.getTeamPlanet().setSpawnPoint(SizeConstants.PLANET_DIAMETER / 2 + SizeConstants.UNIT_SIZE + 2,
+        mSecondTeam.getTeamPlanet().setSpawnPoint(SizeConstants.PLANET_DIAMETER / 2 + SizeConstants.UNIT_SIZE + 2,
                 SizeConstants.GAME_FIELD_HEIGHT / 2 + SizeConstants.ADDITION_MARGIN_FOR_PLANET);
     }
 
@@ -379,15 +393,15 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         return planetStaticObject;
     }
 
-    /** init blue team and planet */
-    protected void initBluePlanet(boolean isFakePlanet) {
-        mBlueTeam.setTeamPlanet(createPlanet(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER
+    /** init second team and planet */
+    protected void initSecondPlanet(boolean isFakePlanet) {
+        mFirstTeam.setTeamPlanet(createPlanet(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER
                         - SizeConstants.ADDITION_MARGIN_FOR_PLANET,
                 (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2,
                 mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_BLUE_PLANET), GameStringsConstantsAndUtils.KEY_BLUE_PLANET,
-                mBlueTeam, isFakePlanet
+                mFirstTeam, isFakePlanet
         ));
-        mBlueTeam.getTeamPlanet().setSpawnPoint(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER / 2 -
+        mFirstTeam.getTeamPlanet().setSpawnPoint(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER / 2 -
                         SizeConstants.UNIT_SIZE - 2 - SizeConstants.ADDITION_MARGIN_FOR_PLANET,
                 SizeConstants.GAME_FIELD_HEIGHT / 2
         );
@@ -553,12 +567,10 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         mGameObjectsMap.put(unit.getObjectUniqueId(), unit);
 
         // init physic body
-        BodyDef.BodyType bodyType;
-        if (unitTeam.getTeamControlType() == TeamControlBehaviourType.REMOTE_CLIENT_CONTROL)
-            bodyType = BodyDef.BodyType.KinematicBody;
-        else
-            bodyType = BodyDef.BodyType.DynamicBody;
+        BodyDef.BodyType bodyType = BodyDef.BodyType.DynamicBody;
         registerCircleBody(unit, bodyType, unitTeam.getFixtureDefUnit());
+        if (unitTeam.getTeamControlType() == TeamControlBehaviourType.REMOTE_CLIENT_CONTROL)
+            unit.removeDamage();
         unit.setBulletFixtureDef(CollisionCategoriesUtils.getBulletFixtureDefByUnitCategory(
                 unitTeam.getFixtureDefUnit().filter.categoryBits));
 
@@ -584,14 +596,14 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         MainOperationsBaseGameActivity.this.runOnUpdateThread(new Runnable() {
             @Override
             public void run() {
-                if (gameObject.getBody() == null)
-                    return;
+                Body body = gameObject.removeBody();
+                if (body == null) {return;}
                 final PhysicsConnector pc = mPhysicsWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(gameObject);
                 if (pc != null) {
                     mPhysicsWorld.unregisterPhysicsConnector(pc);
                 }
-                gameObject.getBody().setActive(false);
-                mPhysicsWorld.destroyBody(gameObject.getBody());
+                body.setActive(false);
+                mPhysicsWorld.destroyBody(body);
             }
         });
     }
