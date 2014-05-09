@@ -98,12 +98,8 @@ public abstract class Unit extends GameObject {
         return mViewRadius;
     }
 
-    @Override
-    public void setBody(Body body) {
-        super.setBody(body);
-        if (getBody().getType().equals(BodyDef.BodyType.KinematicBody)) {
-            mObjectDamage.removeDamage();
-        }
+    public void removeDamage() {
+        mObjectDamage.removeDamage();
     }
 
     protected void attackGoal(GameObject attackedObject) {

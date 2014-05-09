@@ -68,8 +68,8 @@ public class ServerGameCreationActivity extends Activity implements PreGameStart
                 mGameSocketServer = null;
                 Intent startServerIntent = new Intent(ServerGameCreationActivity.this, ServerGameActivity.class);
                 startServerIntent.
-                        putExtra(GameStringsConstantsAndUtils.RED_TEAM_NAME, TeamControlBehaviourType.REMOTE_SERVER_CONTROL.toString()).
-                        putExtra(GameStringsConstantsAndUtils.BLUE_TEAM_NAME, TeamControlBehaviourType.USER_SERVER_CONTROL.toString());
+                        putExtra(GameStringsConstantsAndUtils.SECOND_TEAM_NAME, TeamControlBehaviourType.REMOTE_SERVER_CONTROL.toString()).
+                        putExtra(GameStringsConstantsAndUtils.FIRST_TEAM_NAME, TeamControlBehaviourType.USER_SERVER_CONTROL.toString());
                 startActivity(startServerIntent);
             }
         });

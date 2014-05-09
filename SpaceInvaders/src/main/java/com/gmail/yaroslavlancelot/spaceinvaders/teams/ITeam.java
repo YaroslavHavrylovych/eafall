@@ -45,4 +45,6 @@ public interface ITeam {
     TeamControlBehaviourType getTeamControlType();
 
     FixtureDef getFixtureDefUnit();
+
+    void changeFixtureDefFilter(short category, short filter);
 }
