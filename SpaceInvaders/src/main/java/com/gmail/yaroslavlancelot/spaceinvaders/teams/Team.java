@@ -27,11 +27,13 @@ public class Team implements ITeam {
     /** team to fight with */
     private ITeam mEnemyTeam;
     /** current team money amount */
-    private int mMoneyAmount = 500;
+    private volatile int mMoneyAmount = 500;
     /** team color */
     private Color mTeamColor = new Color(100, 100, 100);
     /** team control type */
     private TeamControlBehaviourType mTeamControlBehaviourType;
+    /** triggered if money changed */
+    private IMoneyChangedCallback mMoneyChangedCallback;
 
     public Team(final String teamName, IRace teamRace, TeamControlBehaviourType teamType) {
         mTeamObjects = new ArrayList<GameObject>(20);
@@ -39,6 +41,10 @@ public class Team implements ITeam {
         mTeamRace = teamRace;
         mTeamControlBehaviourType = teamType;
         mTeamFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f, false);
+    }
+
+    public void setMoneyChangedCallback(IMoneyChangedCallback moneyChangedCallback) {
+        mMoneyChangedCallback = moneyChangedCallback;
     }
 
     @Override
@@ -89,6 +95,8 @@ public class Team implements ITeam {
     @Override
     public void changeMoney(final int delta) {
         mMoneyAmount += delta;
+        if(mMoneyChangedCallback != null)
+            mMoneyChangedCallback.moneyChanged(delta);
     }
 
     @Override
@@ -131,5 +139,14 @@ public class Team implements ITeam {
     public void changeFixtureDefFilter(short category, short maskBits) {
         mTeamFixtureDef.filter.categoryBits = category;
         mTeamFixtureDef.filter.maskBits = maskBits;
+    }
+
+    @Override
+    public void setMoney(int money) {
+        mMoneyAmount = money;
+    }
+
+    public static interface IMoneyChangedCallback {
+        void moneyChanged(int delta);
     }
 }

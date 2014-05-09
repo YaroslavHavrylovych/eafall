@@ -351,21 +351,27 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     protected abstract void userWantCreateBuilding(ITeam userTeam, int buildingId);
 
     /** create new team depending on team control type which stored in extra */
-    private ITeam createTeam(String teamNameInExtra, IRace race) {
+    protected ITeam createTeam(String teamNameInExtra, IRace race) {
         Intent intent = getIntent();
         TeamControlBehaviourType teamType = TeamControlBehaviourType.valueOf(intent.getStringExtra(teamNameInExtra));
+        Team team;
 
         if (teamType == TeamControlBehaviourType.USER_SERVER_CONTROL) {
-            return new Team(teamNameInExtra, race, teamType) {
+            team = new Team(teamNameInExtra, race, teamType);
+            updateMoneyTextOnScreen(TeamUtils.getMoneyString(mMoneyTextPrefixString, team));
+        } if(teamType == TeamControlBehaviourType.USER_CLIENT_CONTROL) {
+            team = new Team(teamNameInExtra, race, teamType) {
                 @Override
-                public void changeMoney(final int delta) {
-                    super.changeMoney(delta);
+                public void setMoney(final int money) {
+                    super.setMoney(money);
                     updateMoneyTextOnScreen(TeamUtils.getMoneyString(mMoneyTextPrefixString, this));
                 }
             };
+            updateMoneyTextOnScreen(TeamUtils.getMoneyString(mMoneyTextPrefixString, team));
         } else {
-            return new Team(teamNameInExtra, race, teamType);
+            team = new Team(teamNameInExtra, race, teamType);
         }
+        return team;
     }
 
     /** init first team and planet */

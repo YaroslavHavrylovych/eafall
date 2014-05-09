@@ -125,4 +125,11 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
             }
         });
     }
+
+    @Override
+    public void moneyChanged(String teamName, int money) {
+        ITeam team = mTeams.get(teamName);
+        if (team == null) return;
+        team.setMoney(money);
+    }
 }

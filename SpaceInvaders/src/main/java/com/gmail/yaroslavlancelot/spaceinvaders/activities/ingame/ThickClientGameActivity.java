@@ -1,8 +1,13 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameloop.MoneyUpdateCycle;
+import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
+import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
+import com.gmail.yaroslavlancelot.spaceinvaders.teams.Team;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.TeamUtils;
 
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
@@ -22,6 +27,20 @@ public abstract class ThickClientGameActivity extends MainOperationsBaseGameActi
     protected void initThickClient() {
         mHud.registerUpdateHandler(new TimerHandler(MONEY_UPDATE_TIME, true, new MoneyUpdateCycle(mTeams)));
         createBounds();
+    }
+
+    @Override
+    protected ITeam createTeam(String teamNameInExtra, IRace race) {
+        final ITeam team = super.createTeam(teamNameInExtra, race);
+        if((team instanceof Team) && (team.getTeamControlType() == TeamControlBehaviourType.USER_SERVER_CONTROL)) {
+            ((Team) team).setMoneyChangedCallback(new Team.IMoneyChangedCallback() {
+                @Override
+                public void moneyChanged(int delta) {
+                    updateMoneyTextOnScreen(TeamUtils.getMoneyString(mMoneyTextPrefixString, team));
+                }
+            });
+        }
+        return team;
     }
 
     /** bound for objects so they can't get out of the screen */

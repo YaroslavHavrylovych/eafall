@@ -3,6 +3,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.network.connector;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.MessagesConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.BuildingCreatedServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.GameObjectHealthChangedServerMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.MoneyChangedServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.StartingGameServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.UnitChangePositionServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.UnitCreatedServerMessage;
@@ -124,6 +125,19 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
                     for (InGameClient inGameClient : mInGameClientList) {
                         inGameClient.unitFire(unitFireServerMessage.getUnitUniqueId(),
                                 unitFireServerMessage.getAttackedGameObjectUniqueId());
+                    }
+                }
+            }
+        });
+
+        registerServerMessage(FLAG_MESSAGE_SERVER_MONEY_CHANGED, MoneyChangedServerMessage.class, new IServerMessageHandler<SocketConnection>() {
+            @Override
+            public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
+                LoggerHelper.printInformationMessageInClient(TAG, "money changed on server");
+                MoneyChangedServerMessage unitFireServerMessage = (MoneyChangedServerMessage) pServerMessage;
+                synchronized (mInGameClientList) {
+                    for (InGameClient inGameClient : mInGameClientList) {
+                        inGameClient.moneyChanged(unitFireServerMessage.getTeamName(), unitFireServerMessage.getMoney());
                     }
                 }
             }

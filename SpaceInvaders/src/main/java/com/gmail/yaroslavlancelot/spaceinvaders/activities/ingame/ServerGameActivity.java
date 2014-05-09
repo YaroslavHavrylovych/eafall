@@ -2,6 +2,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IGameObjectHealthChanged;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IUnitFireCallback;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IVelocityChangedListener;
@@ -11,11 +12,14 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobject
 import com.gmail.yaroslavlancelot.spaceinvaders.network.GameSocketServer;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.BuildingCreatedServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.GameObjectHealthChangedServerMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.MoneyChangedServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.UnitChangePositionServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.UnitCreatedServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.UnitFireServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.server.InGameServer;
+import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
+import com.gmail.yaroslavlancelot.spaceinvaders.teams.Team;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 
 import org.andengine.engine.options.EngineOptions;
@@ -28,7 +32,8 @@ import java.io.IOException;
  * with adding logic of handling client operation (messages from client) and sending message about server
  * operations to client.
  */
-public class ServerGameActivity extends ThickClientGameActivity implements InGameServer, IVelocityChangedListener, IGameObjectHealthChanged, IUnitFireCallback {
+public class ServerGameActivity extends ThickClientGameActivity implements InGameServer, IVelocityChangedListener,
+        IGameObjectHealthChanged, IUnitFireCallback {
     private GameSocketServer mGameSocketServer;
 
     @Override
@@ -105,6 +110,25 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
         } catch (IOException e) {
             LoggerHelper.printErrorMessage(TAG, "send message (unit moved on server) IOException");
         }
+    }
+
+    @Override
+    protected ITeam createTeam(String teamNameInExtra, IRace race) {
+        final ITeam team = super.createTeam(teamNameInExtra, race);
+        if ((team instanceof Team) && (team.getTeamControlType() == TeamControlBehaviourType.REMOTE_SERVER_CONTROL)) {
+            ((Team) team).setMoneyChangedCallback(new Team.IMoneyChangedCallback() {
+                @Override
+                public void moneyChanged(int delta) {
+                    try {
+                        mGameSocketServer.sendBroadcastServerMessage(
+                                new MoneyChangedServerMessage(team.getTeamName(), team.getMoney()));
+                    } catch (IOException e) {
+                        LoggerHelper.printErrorMessage(TAG, "send message (money changed) IOException");
+                    }
+                }
+            });
+        }
+        return team;
     }
 
     @Override

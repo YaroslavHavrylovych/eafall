@@ -8,4 +8,5 @@ public interface InGameClient {
     void unitMoved(UnitChangePositionServerMessage unitChangePositionServerMessage);
     void gameObjectHealthChanged(long unitUniqueId, int newUnitHealth);
     void unitFire(long gameObjectUniqueId, long attackedGameObjectUniqueId);
+    void moneyChanged(String teamName, int money);
 }
