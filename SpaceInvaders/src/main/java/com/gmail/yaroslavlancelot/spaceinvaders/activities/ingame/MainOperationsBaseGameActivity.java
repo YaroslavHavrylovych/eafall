@@ -218,6 +218,9 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
 
     protected void onLoadGameResources() {
         LoggerHelper.methodInvocation(TAG, "onCreateGameResources");
+        // if it's not empty from previous run
+        TextureRegionHolderUtils.getInstance().clear();
+
         // music
         mMusicAndSoundsHandler = new MusicAndSoundsHandler(getSoundManager(), MainOperationsBaseGameActivity.this);
         mBackgroundMusic = mMusicAndSoundsHandler.new BackgroundMusic(getMusicManager());
@@ -359,7 +362,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         if (teamType == TeamControlBehaviourType.USER_SERVER_CONTROL) {
             team = new Team(teamNameInExtra, race, teamType);
             updateMoneyTextOnScreen(TeamUtils.getMoneyString(mMoneyTextPrefixString, team));
-        } if(teamType == TeamControlBehaviourType.USER_CLIENT_CONTROL) {
+        }
+        if (teamType == TeamControlBehaviourType.USER_CLIENT_CONTROL) {
             team = new Team(teamNameInExtra, race, teamType) {
                 @Override
                 public void setMoney(final int money) {
