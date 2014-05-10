@@ -16,7 +16,7 @@ import org.andengine.audio.sound.SoundManager;
 
 import java.io.IOException;
 
-public class MusicAndSoundsHandler implements MediaPlayer.OnPreparedListener, SoundOperations {
+public class MusicAndSoundsHandler implements SoundOperations {
     public static final String TAG = MusicAndSoundsHandler.class.getCanonicalName();
     private SoundManager mSoundManager;
     private Context mContext;
@@ -47,11 +47,6 @@ public class MusicAndSoundsHandler implements MediaPlayer.OnPreparedListener, So
 
     public void setCameraCoordinates(ICameraCoordinates cameraCoordinates) {
         mCameraCoordinates = cameraCoordinates;
-    }
-
-    @Override
-    public void onPrepared(final MediaPlayer mp) {
-        mp.start();
     }
 
     @Override
@@ -96,18 +91,22 @@ public class MusicAndSoundsHandler implements MediaPlayer.OnPreparedListener, So
                             mContext, musicManager);
         }
 
-        public void startBackgroundMusic() {
-            LoggerHelper.methodInvocation(TAG, "startBackgroundMusic");
+        public void initBackgroundMusic() {
+            LoggerHelper.methodInvocation(TAG, "initBackgroundMusic");
             LoggerHelper.printInformationMessage(TAG, "mBackgroundMusic != null == " + (mBackgroundMusic != null));
             if (mBackgroundMusic != null && !mBackgroundMusic.isPlaying()) {
                 mBackgroundMusic.setLooping(true);
-                mBackgroundMusic.getMediaPlayer().setOnPreparedListener(MusicAndSoundsHandler.this);
             }
         }
 
-        public void stopBackgroundMusic() {
-            if (mBackgroundMusic != null)
-                mBackgroundMusic.stop();
+        public void playBackgroundMusic() {
+            if (mBackgroundMusic != null && !mBackgroundMusic.isPlaying())
+                mBackgroundMusic.resume();
+        }
+
+        public void pauseBackgroundMusic() {
+            if (mBackgroundMusic != null && mBackgroundMusic.isPlaying())
+                mBackgroundMusic.pause();
         }
     }
 }

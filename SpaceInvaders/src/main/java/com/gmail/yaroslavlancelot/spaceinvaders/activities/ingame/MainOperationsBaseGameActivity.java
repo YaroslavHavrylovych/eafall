@@ -172,7 +172,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
                 onInitPlanetsAndTeams();
 
                 mPhysicsWorld.setContactListener(MainOperationsBaseGameActivity.this);
-                mBackgroundMusic.startBackgroundMusic();
+                mBackgroundMusic.initBackgroundMusic();
+                mBackgroundMusic.playBackgroundMusic();
 
                 mSplashScene.detachSelf();
                 mEngine.setScene(mGameScene);
@@ -486,17 +487,17 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    public synchronized void onResumeGame() {
+        super.onResumeGame();
         if (mBackgroundMusic != null)
-            mBackgroundMusic.startBackgroundMusic();
+            mBackgroundMusic.playBackgroundMusic();
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    public synchronized void onPauseGame() {
+        super.onPauseGame();
         if (mBackgroundMusic != null)
-            mBackgroundMusic.stopBackgroundMusic();
+            mBackgroundMusic.pauseBackgroundMusic();
     }
 
     @Override
