@@ -12,6 +12,7 @@ public abstract class HolderUtils<T> {
 
     /** get object from internal map */
     public T getElement(String id) {
+        if (textureRegionMap == null) return null;
         return textureRegionMap.get(id);
     }
 
@@ -24,10 +25,13 @@ public abstract class HolderUtils<T> {
      * check is element has been already added
      *
      * @param id element id
-     *
      * @return true - if element holdered (already added) and false in other way
      */
     public boolean isElementExist(String id) {
         return textureRegionMap.get(id) != null;
+    }
+
+    public void clear() {
+        textureRegionMap.clear();
     }
 }
