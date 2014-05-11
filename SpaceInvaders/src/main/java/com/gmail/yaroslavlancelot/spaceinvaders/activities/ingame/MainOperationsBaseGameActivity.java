@@ -266,6 +266,10 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
      */
     protected void updateMoneyTextOnScreen(String value) {
         mMoneyText.setText(value);
+        if (mMoneyText.getX() < SizeConstants.GAME_FIELD_WIDTH / 2)
+            mMoneyText.setX(SizeConstants.MONEY_PADDING);
+        else
+            mMoneyText.setX(SizeConstants.GAME_FIELD_WIDTH - mMoneyText.getWidth() - SizeConstants.MONEY_PADDING);
     }
 
     protected void onInitGameScene() {
@@ -456,10 +460,10 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
             if (!TeamControlBehaviourType.isUserControlType(team.getTeamControlType())) continue;
             PlanetStaticObject planet = team.getTeamPlanet();
             if (planet.getX() < SizeConstants.GAME_FIELD_WIDTH / 2)
-                mMoneyText.setPosition(planet.getX(), SizeConstants.MONEY_FONT_SIZE);
+                mMoneyText.setX(SizeConstants.MONEY_PADDING);
             else
-                mMoneyText.setPosition(SizeConstants.GAME_FIELD_WIDTH - mMoneyText.getCharactersMaximum()
-                        * SizeConstants.MONEY_FONT_SIZE, SizeConstants.MONEY_FONT_SIZE);
+                mMoneyText.setX(SizeConstants.GAME_FIELD_WIDTH - mMoneyText.getWidth() - SizeConstants.MONEY_PADDING);
+            mMoneyText.setY(SizeConstants.MONEY_FONT_SIZE * 2);
 
         }
     }
