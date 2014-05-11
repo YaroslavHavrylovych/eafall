@@ -46,8 +46,8 @@ public class StartupActivity extends Activity {
             public void onClick(final View v) {
                 Intent singleGameIntent = new Intent(StartupActivity.this, SinglePlayerGameActivity.class);
                 singleGameIntent.
-                        putExtra(GameStringsConstantsAndUtils.FIRST_TEAM_NAME, TeamControlBehaviourType.USER_SERVER_CONTROL.toString()).
-                        putExtra(GameStringsConstantsAndUtils.SECOND_TEAM_NAME, TeamControlBehaviourType.BOT_CONTROL.toString());
+                        putExtra(GameStringsConstantsAndUtils.FIRST_TEAM_NAME, TeamControlBehaviourType.USER_CONTROL_ON_SERVER_SIDE.toString()).
+                        putExtra(GameStringsConstantsAndUtils.SECOND_TEAM_NAME, TeamControlBehaviourType.BOT_CONTROL_ON_SERVER_SIDE.toString());
                 startActivity(singleGameIntent);
             }
         });

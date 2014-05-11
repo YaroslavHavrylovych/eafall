@@ -326,13 +326,13 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         TeamControlBehaviourType teamType = team.getTeamControlType();
         initTeamFixtureDef(team);
 
-        if (teamType == TeamControlBehaviourType.USER_SERVER_CONTROL ||
-                teamType == TeamControlBehaviourType.USER_CLIENT_CONTROL) {
+        if (teamType == TeamControlBehaviourType.USER_CONTROL_ON_SERVER_SIDE ||
+                teamType == TeamControlBehaviourType.USER_CONTROL_ON_CLIENT_SIDE) {
             initUserControlledTeam(team);
-        } else if (teamType == TeamControlBehaviourType.BOT_CONTROL) {
+        } else if (teamType == TeamControlBehaviourType.BOT_CONTROL_ON_SERVER_SIDE) {
             initBotControlledTeam(team);
-        } else if (teamType == TeamControlBehaviourType.REMOTE_CLIENT_CONTROL ||
-                teamType == TeamControlBehaviourType.REMOTE_SERVER_CONTROL) {
+        } else if (teamType == TeamControlBehaviourType.REMOTE_CONTROL_ON_CLIENT_SIDE ||
+                teamType == TeamControlBehaviourType.REMOTE_CONTROL_ON_SERVER_SIDE) {
             //nothing to do here
         } else {
             throw new IllegalArgumentException("unknown team type =" + teamType);
@@ -365,11 +365,11 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         TeamControlBehaviourType teamType = TeamControlBehaviourType.valueOf(intent.getStringExtra(teamNameInExtra));
         Team team;
 
-        if (teamType == TeamControlBehaviourType.USER_SERVER_CONTROL) {
+        if (teamType == TeamControlBehaviourType.USER_CONTROL_ON_SERVER_SIDE) {
             team = new Team(teamNameInExtra, race, teamType);
             updateMoneyTextOnScreen(TeamUtils.getMoneyString(mMoneyTextPrefixString, team));
         }
-        if (teamType == TeamControlBehaviourType.USER_CLIENT_CONTROL) {
+        if (teamType == TeamControlBehaviourType.USER_CONTROL_ON_CLIENT_SIDE) {
             team = new Team(teamNameInExtra, race, teamType) {
                 @Override
                 public void setMoney(final int money) {
@@ -599,7 +599,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         // init physic body
         BodyDef.BodyType bodyType = BodyDef.BodyType.DynamicBody;
         registerCircleBody(unit, bodyType, unitTeam.getFixtureDefUnit());
-        if (unitTeam.getTeamControlType() == TeamControlBehaviourType.REMOTE_CLIENT_CONTROL)
+        if (unitTeam.getTeamControlType() == TeamControlBehaviourType.REMOTE_CONTROL_ON_CLIENT_SIDE)
             unit.removeDamage();
         unit.setBulletFixtureDef(CollisionCategoriesUtils.getBulletFixtureDefByUnitCategory(
                 unitTeam.getFixtureDefUnit().filter.categoryBits));

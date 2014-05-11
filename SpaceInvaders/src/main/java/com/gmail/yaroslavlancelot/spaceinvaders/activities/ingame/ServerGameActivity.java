@@ -115,7 +115,7 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
     @Override
     protected ITeam createTeam(String teamNameInExtra, IRace race) {
         final ITeam team = super.createTeam(teamNameInExtra, race);
-        if ((team instanceof Team) && (team.getTeamControlType() == TeamControlBehaviourType.REMOTE_SERVER_CONTROL)) {
+        if ((team instanceof Team) && (team.getTeamControlType() == TeamControlBehaviourType.REMOTE_CONTROL_ON_SERVER_SIDE)) {
             ((Team) team).setMoneyChangedCallback(new Team.IMoneyChangedCallback() {
                 @Override
                 public void moneyChanged(int delta) {
