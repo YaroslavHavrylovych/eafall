@@ -20,6 +20,9 @@ public final class SizeConstants {
     public static final int MONEY_FONT_SIZE = 35;
     public static final int BUILDING_POPUP_ELEMENT_HEIGHT = 60;
 
+    /** */
+    public static final int MONEY_PADDING = MONEY_FONT_SIZE * 2;
+
 
     private SizeConstants() {
     }

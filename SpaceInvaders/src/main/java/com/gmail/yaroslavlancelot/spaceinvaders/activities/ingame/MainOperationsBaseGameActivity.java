@@ -266,6 +266,10 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
      */
     protected void updateMoneyTextOnScreen(String value) {
         mMoneyText.setText(value);
+        if (mMoneyText.getX() < SizeConstants.GAME_FIELD_WIDTH / 2)
+            mMoneyText.setX(SizeConstants.MONEY_PADDING);
+        else
+            mMoneyText.setX(SizeConstants.GAME_FIELD_WIDTH - mMoneyText.getWidth() - SizeConstants.MONEY_PADDING);
     }
 
     protected void onInitGameScene() {
@@ -287,12 +291,14 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         Intent intent = getIntent();
 
         // first team init
-        TeamControlBehaviourType teamBehaviorType = TeamControlBehaviourType.valueOf(intent.getStringExtra(GameStringsConstantsAndUtils.SECOND_TEAM_NAME));
-        initFirstPlanet(teamBehaviorType == TeamControlBehaviourType.REMOTE_CLIENT_CONTROL || teamBehaviorType == TeamControlBehaviourType.USER_CLIENT_CONTROL);
+        TeamControlBehaviourType teamBehaviorType = TeamControlBehaviourType.valueOf(intent.getStringExtra(GameStringsConstantsAndUtils.FIRST_TEAM_NAME));
+        initFirstPlanet(TeamControlBehaviourType.isClientSide(teamBehaviorType));
 
         // second team init
-        teamBehaviorType = TeamControlBehaviourType.valueOf(intent.getStringExtra(GameStringsConstantsAndUtils.FIRST_TEAM_NAME));
-        initSecondPlanet(teamBehaviorType == TeamControlBehaviourType.REMOTE_CLIENT_CONTROL || teamBehaviorType == TeamControlBehaviourType.USER_CLIENT_CONTROL);
+        teamBehaviorType = TeamControlBehaviourType.valueOf(intent.getStringExtra(GameStringsConstantsAndUtils.SECOND_TEAM_NAME));
+        initSecondPlanet(TeamControlBehaviourType.isClientSide(teamBehaviorType));
+
+        positionizeMoneyText();
     }
 
     protected void initTeams() {
@@ -320,13 +326,13 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         TeamControlBehaviourType teamType = team.getTeamControlType();
         initTeamFixtureDef(team);
 
-        if (teamType == TeamControlBehaviourType.USER_SERVER_CONTROL ||
-                teamType == TeamControlBehaviourType.USER_CLIENT_CONTROL) {
+        if (teamType == TeamControlBehaviourType.USER_CONTROL_ON_SERVER_SIDE ||
+                teamType == TeamControlBehaviourType.USER_CONTROL_ON_CLIENT_SIDE) {
             initUserControlledTeam(team);
-        } else if (teamType == TeamControlBehaviourType.BOT_CONTROL) {
+        } else if (teamType == TeamControlBehaviourType.BOT_CONTROL_ON_SERVER_SIDE) {
             initBotControlledTeam(team);
-        } else if (teamType == TeamControlBehaviourType.REMOTE_CLIENT_CONTROL ||
-                teamType == TeamControlBehaviourType.REMOTE_SERVER_CONTROL) {
+        } else if (teamType == TeamControlBehaviourType.REMOTE_CONTROL_ON_CLIENT_SIDE ||
+                teamType == TeamControlBehaviourType.REMOTE_CONTROL_ON_SERVER_SIDE) {
             //nothing to do here
         } else {
             throw new IllegalArgumentException("unknown team type =" + teamType);
@@ -337,8 +343,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
 
     protected void initTeamFixtureDef(ITeam team) {
         TeamControlBehaviourType type = team.getTeamControlType();
-        boolean isRemote = type == TeamControlBehaviourType.USER_CLIENT_CONTROL ||
-                type == TeamControlBehaviourType.REMOTE_CLIENT_CONTROL;
+        boolean isRemote = TeamControlBehaviourType.isClientSide(type);
         if (team.getTeamName().equals(GameStringsConstantsAndUtils.FIRST_TEAM_NAME)) {
             if (isRemote)
                 team.changeFixtureDefFilter(CollisionCategoriesUtils.CATEGORY_TEAM1, CollisionCategoriesUtils.MASKBITS_TEAM1_THIN);
@@ -360,11 +365,11 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         TeamControlBehaviourType teamType = TeamControlBehaviourType.valueOf(intent.getStringExtra(teamNameInExtra));
         Team team;
 
-        if (teamType == TeamControlBehaviourType.USER_SERVER_CONTROL) {
+        if (teamType == TeamControlBehaviourType.USER_CONTROL_ON_SERVER_SIDE) {
             team = new Team(teamNameInExtra, race, teamType);
             updateMoneyTextOnScreen(TeamUtils.getMoneyString(mMoneyTextPrefixString, team));
         }
-        if (teamType == TeamControlBehaviourType.USER_CLIENT_CONTROL) {
+        if (teamType == TeamControlBehaviourType.USER_CONTROL_ON_CLIENT_SIDE) {
             team = new Team(teamNameInExtra, race, teamType) {
                 @Override
                 public void setMoney(final int money) {
@@ -380,14 +385,18 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     }
 
     /** init first team and planet */
-    protected void initFirstPlanet(boolean isFakePlanet) {
-        mSecondTeam.setTeamPlanet(createPlanet(0, (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2
-                        + SizeConstants.ADDITION_MARGIN_FOR_PLANET,
-                mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_RED_PLANET), GameStringsConstantsAndUtils.KEY_RED_PLANET,
+    protected void initSecondPlanet(boolean isFakePlanet) {
+        mSecondTeam.setTeamPlanet(createPlanet(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER
+                        - SizeConstants.ADDITION_MARGIN_FOR_PLANET,
+                (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2,
+                mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_RED_PLANET),
+                GameStringsConstantsAndUtils.KEY_RED_PLANET,
                 mSecondTeam, isFakePlanet
         ));
-        mSecondTeam.getTeamPlanet().setSpawnPoint(SizeConstants.PLANET_DIAMETER / 2 + SizeConstants.UNIT_SIZE + 2,
-                SizeConstants.GAME_FIELD_HEIGHT / 2 + SizeConstants.ADDITION_MARGIN_FOR_PLANET);
+        mSecondTeam.getTeamPlanet().setSpawnPoint(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER / 2 -
+                        SizeConstants.UNIT_SIZE - 2 - SizeConstants.ADDITION_MARGIN_FOR_PLANET,
+                SizeConstants.GAME_FIELD_HEIGHT / 2
+        );
     }
 
     /** create planet game object */
@@ -405,17 +414,15 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     }
 
     /** init second team and planet */
-    protected void initSecondPlanet(boolean isFakePlanet) {
-        mFirstTeam.setTeamPlanet(createPlanet(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER
-                        - SizeConstants.ADDITION_MARGIN_FOR_PLANET,
-                (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2,
-                mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_BLUE_PLANET), GameStringsConstantsAndUtils.KEY_BLUE_PLANET,
+    protected void initFirstPlanet(boolean isFakePlanet) {
+        mFirstTeam.setTeamPlanet(createPlanet(0, (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2
+                        + SizeConstants.ADDITION_MARGIN_FOR_PLANET,
+                mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_BLUE_PLANET),
+                GameStringsConstantsAndUtils.KEY_BLUE_PLANET,
                 mFirstTeam, isFakePlanet
         ));
-        mFirstTeam.getTeamPlanet().setSpawnPoint(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER / 2 -
-                        SizeConstants.UNIT_SIZE - 2 - SizeConstants.ADDITION_MARGIN_FOR_PLANET,
-                SizeConstants.GAME_FIELD_HEIGHT / 2
-        );
+        mFirstTeam.getTeamPlanet().setSpawnPoint(SizeConstants.PLANET_DIAMETER / 2 + SizeConstants.UNIT_SIZE + 2,
+                SizeConstants.GAME_FIELD_HEIGHT / 2 + SizeConstants.ADDITION_MARGIN_FOR_PLANET);
     }
 
     /** create sun */
@@ -448,6 +455,19 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         mMainSceneTouchListener.addTouchListener(userClickScreenTouchListener);
     }
 
+    private void positionizeMoneyText() {
+        for (ITeam team : mTeams.values()) {
+            if (!TeamControlBehaviourType.isUserControlType(team.getTeamControlType())) continue;
+            PlanetStaticObject planet = team.getTeamPlanet();
+            if (planet.getX() < SizeConstants.GAME_FIELD_WIDTH / 2)
+                mMoneyText.setX(SizeConstants.MONEY_PADDING);
+            else
+                mMoneyText.setX(SizeConstants.GAME_FIELD_WIDTH - mMoneyText.getWidth() - SizeConstants.MONEY_PADDING);
+            mMoneyText.setY(SizeConstants.MONEY_FONT_SIZE * 2);
+
+        }
+    }
+
     protected void initBotControlledTeam(final ITeam initializingTeam) {
         LoggerHelper.methodInvocation(TAG, "initBotControlledTeam");
         final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
@@ -467,8 +487,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         LoggerHelper.methodInvocation(TAG, "initMoneyTextView");
         mMoneyTextPrefixString = getString(R.string.money_colon);
         int maxStringLength = mMoneyTextPrefixString.length() + 6;
-        mMoneyText = new Text(SizeConstants.GAME_FIELD_WIDTH - maxStringLength * SizeConstants.MONEY_FONT_SIZE,
-                SizeConstants.MONEY_FONT_SIZE, FontHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.KEY_FONT_MONEY),
+        mMoneyText = new Text(0f, 0f, FontHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.KEY_FONT_MONEY),
                 "", maxStringLength, getVertexBufferObjectManager());
         mHud = mCamera.getHUD();
         mHud.attachChild(mMoneyText);
@@ -580,7 +599,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         // init physic body
         BodyDef.BodyType bodyType = BodyDef.BodyType.DynamicBody;
         registerCircleBody(unit, bodyType, unitTeam.getFixtureDefUnit());
-        if (unitTeam.getTeamControlType() == TeamControlBehaviourType.REMOTE_CLIENT_CONTROL)
+        if (unitTeam.getTeamControlType() == TeamControlBehaviourType.REMOTE_CONTROL_ON_CLIENT_SIDE)
             unit.removeDamage();
         unit.setBulletFixtureDef(CollisionCategoriesUtils.getBulletFixtureDefByUnitCategory(
                 unitTeam.getFixtureDefUnit().filter.categoryBits));
