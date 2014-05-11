@@ -382,13 +382,17 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
 
     /** init first team and planet */
     protected void initSecondPlanet(boolean isFakePlanet) {
-        mSecondTeam.setTeamPlanet(createPlanet(0, (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2
-                        + SizeConstants.ADDITION_MARGIN_FOR_PLANET,
-                mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_RED_PLANET), GameStringsConstantsAndUtils.KEY_RED_PLANET,
+        mSecondTeam.setTeamPlanet(createPlanet(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER
+                        - SizeConstants.ADDITION_MARGIN_FOR_PLANET,
+                (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2,
+                mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_RED_PLANET),
+                GameStringsConstantsAndUtils.KEY_RED_PLANET,
                 mSecondTeam, isFakePlanet
         ));
-        mSecondTeam.getTeamPlanet().setSpawnPoint(SizeConstants.PLANET_DIAMETER / 2 + SizeConstants.UNIT_SIZE + 2,
-                SizeConstants.GAME_FIELD_HEIGHT / 2 + SizeConstants.ADDITION_MARGIN_FOR_PLANET);
+        mSecondTeam.getTeamPlanet().setSpawnPoint(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER / 2 -
+                        SizeConstants.UNIT_SIZE - 2 - SizeConstants.ADDITION_MARGIN_FOR_PLANET,
+                SizeConstants.GAME_FIELD_HEIGHT / 2
+        );
     }
 
     /** create planet game object */
@@ -407,16 +411,14 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
 
     /** init second team and planet */
     protected void initFirstPlanet(boolean isFakePlanet) {
-        mFirstTeam.setTeamPlanet(createPlanet(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER
-                        - SizeConstants.ADDITION_MARGIN_FOR_PLANET,
-                (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2,
-                mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_BLUE_PLANET), GameStringsConstantsAndUtils.KEY_BLUE_PLANET,
+        mFirstTeam.setTeamPlanet(createPlanet(0, (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2
+                        + SizeConstants.ADDITION_MARGIN_FOR_PLANET,
+                mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_BLUE_PLANET),
+                GameStringsConstantsAndUtils.KEY_BLUE_PLANET,
                 mFirstTeam, isFakePlanet
         ));
-        mFirstTeam.getTeamPlanet().setSpawnPoint(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER / 2 -
-                        SizeConstants.UNIT_SIZE - 2 - SizeConstants.ADDITION_MARGIN_FOR_PLANET,
-                SizeConstants.GAME_FIELD_HEIGHT / 2
-        );
+        mFirstTeam.getTeamPlanet().setSpawnPoint(SizeConstants.PLANET_DIAMETER / 2 + SizeConstants.UNIT_SIZE + 2,
+                SizeConstants.GAME_FIELD_HEIGHT / 2 + SizeConstants.ADDITION_MARGIN_FOR_PLANET);
     }
 
     /** create sun */
