@@ -287,12 +287,14 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         Intent intent = getIntent();
 
         // first team init
-        TeamControlBehaviourType teamBehaviorType = TeamControlBehaviourType.valueOf(intent.getStringExtra(GameStringsConstantsAndUtils.SECOND_TEAM_NAME));
-        initFirstPlanet(teamBehaviorType == TeamControlBehaviourType.REMOTE_CLIENT_CONTROL || teamBehaviorType == TeamControlBehaviourType.USER_CLIENT_CONTROL);
+        TeamControlBehaviourType teamBehaviorType = TeamControlBehaviourType.valueOf(intent.getStringExtra(GameStringsConstantsAndUtils.FIRST_TEAM_NAME));
+        initFirstPlanet(TeamControlBehaviourType.isClientSide(teamBehaviorType));
 
         // second team init
-        teamBehaviorType = TeamControlBehaviourType.valueOf(intent.getStringExtra(GameStringsConstantsAndUtils.FIRST_TEAM_NAME));
-        initSecondPlanet(teamBehaviorType == TeamControlBehaviourType.REMOTE_CLIENT_CONTROL || teamBehaviorType == TeamControlBehaviourType.USER_CLIENT_CONTROL);
+        teamBehaviorType = TeamControlBehaviourType.valueOf(intent.getStringExtra(GameStringsConstantsAndUtils.SECOND_TEAM_NAME));
+        initSecondPlanet(TeamControlBehaviourType.isClientSide(teamBehaviorType));
+
+        positionizeMoneyText();
     }
 
     protected void initTeams() {
@@ -337,8 +339,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
 
     protected void initTeamFixtureDef(ITeam team) {
         TeamControlBehaviourType type = team.getTeamControlType();
-        boolean isRemote = type == TeamControlBehaviourType.USER_CLIENT_CONTROL ||
-                type == TeamControlBehaviourType.REMOTE_CLIENT_CONTROL;
+        boolean isRemote = TeamControlBehaviourType.isClientSide(type);
         if (team.getTeamName().equals(GameStringsConstantsAndUtils.FIRST_TEAM_NAME)) {
             if (isRemote)
                 team.changeFixtureDefFilter(CollisionCategoriesUtils.CATEGORY_TEAM1, CollisionCategoriesUtils.MASKBITS_TEAM1_THIN);
@@ -380,7 +381,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     }
 
     /** init first team and planet */
-    protected void initFirstPlanet(boolean isFakePlanet) {
+    protected void initSecondPlanet(boolean isFakePlanet) {
         mSecondTeam.setTeamPlanet(createPlanet(0, (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2
                         + SizeConstants.ADDITION_MARGIN_FOR_PLANET,
                 mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_RED_PLANET), GameStringsConstantsAndUtils.KEY_RED_PLANET,
@@ -405,7 +406,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     }
 
     /** init second team and planet */
-    protected void initSecondPlanet(boolean isFakePlanet) {
+    protected void initFirstPlanet(boolean isFakePlanet) {
         mFirstTeam.setTeamPlanet(createPlanet(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER
                         - SizeConstants.ADDITION_MARGIN_FOR_PLANET,
                 (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2,
@@ -448,6 +449,19 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         mMainSceneTouchListener.addTouchListener(userClickScreenTouchListener);
     }
 
+    private void positionizeMoneyText() {
+        for (ITeam team : mTeams.values()) {
+            if (!TeamControlBehaviourType.isUserControlType(team.getTeamControlType())) continue;
+            PlanetStaticObject planet = team.getTeamPlanet();
+            if (planet.getX() < SizeConstants.GAME_FIELD_WIDTH / 2)
+                mMoneyText.setPosition(planet.getX(), SizeConstants.MONEY_FONT_SIZE);
+            else
+                mMoneyText.setPosition(SizeConstants.GAME_FIELD_WIDTH - mMoneyText.getCharactersMaximum()
+                        * SizeConstants.MONEY_FONT_SIZE, SizeConstants.MONEY_FONT_SIZE);
+
+        }
+    }
+
     protected void initBotControlledTeam(final ITeam initializingTeam) {
         LoggerHelper.methodInvocation(TAG, "initBotControlledTeam");
         final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
@@ -467,8 +481,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         LoggerHelper.methodInvocation(TAG, "initMoneyTextView");
         mMoneyTextPrefixString = getString(R.string.money_colon);
         int maxStringLength = mMoneyTextPrefixString.length() + 6;
-        mMoneyText = new Text(SizeConstants.GAME_FIELD_WIDTH - maxStringLength * SizeConstants.MONEY_FONT_SIZE,
-                SizeConstants.MONEY_FONT_SIZE, FontHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.KEY_FONT_MONEY),
+        mMoneyText = new Text(0f, 0f, FontHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.KEY_FONT_MONEY),
                 "", maxStringLength, getVertexBufferObjectManager());
         mHud = mCamera.getHUD();
         mHud.attachChild(mMoneyText);

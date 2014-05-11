@@ -21,4 +21,14 @@ public enum TeamControlBehaviourType {
     USER_CLIENT_CONTROL,
     /** point that team controlled remotely and it's client side */
     REMOTE_CLIENT_CONTROL;
+
+    /** returns true if type parameter is team type controlled by user (remote or local) */
+    public static boolean isUserControlType(TeamControlBehaviourType type) {
+        return type == TeamControlBehaviourType.USER_SERVER_CONTROL || type == TeamControlBehaviourType.USER_CLIENT_CONTROL;
+    }
+
+    /** return true if type parameter corresponding to client side */
+    public static boolean isClientSide(TeamControlBehaviourType type) {
+        return type == TeamControlBehaviourType.REMOTE_CLIENT_CONTROL || type == TeamControlBehaviourType.USER_CLIENT_CONTROL;
+    }
 }
