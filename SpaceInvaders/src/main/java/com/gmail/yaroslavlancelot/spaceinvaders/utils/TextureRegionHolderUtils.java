@@ -1,6 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.utils;
 
 import android.content.Context;
+
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -21,16 +22,34 @@ public class TextureRegionHolderUtils extends HolderUtils<ITextureRegion> {
     /**
      * add element to texture atlas and add it to {@link com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils}
      *
-     * @param key path to file. Used like element key for {@link com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils}.
-     * @param utils instance of {@link com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils}
+     * @param key          path to file. Used like element key for {@link com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils}.
+     * @param utils        instance of {@link com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils}
      * @param textureAtlas texture atlas to load texture
-     * @param context app context
-     * @param x x position to which texture should be load
-     * @param y y position to which texture should be load
+     * @param context      app context
+     * @param x            x position to which texture should be load
+     * @param y            y position to which texture should be load
      */
     public static void addElementFromAssets(String key, TextureRegionHolderUtils utils,
                                             BitmapTextureAtlas textureAtlas, Context context, int x, int y) {
         if (!utils.isElementExist(key))
             utils.addElement(key, BitmapTextureAtlasTextureRegionFactory.createFromAsset(textureAtlas, context, key, x, y));
+    }
+
+    /**
+     * add element to texture atlas and add it to {@link com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils}
+     *
+     * @param key          path to file. Used like element key for {@link com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils}.
+     * @param utils        instance of {@link com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils}
+     * @param textureAtlas texture atlas to load texture
+     * @param context      app context
+     * @param x            x position to which texture should be load
+     * @param y            y position to which texture should be load
+     * @param columns columns for tiled images
+     * @param rows rows for tiled images
+     */
+    public static void addTiledElementFromAssets(String key, TextureRegionHolderUtils utils,
+                                                 BitmapTextureAtlas textureAtlas, Context context, int x, int y, int columns, int rows) {
+        if (!utils.isElementExist(key))
+            utils.addElement(key, BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(textureAtlas, context, key, x, y, columns, rows));
     }
 }

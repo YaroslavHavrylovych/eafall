@@ -8,6 +8,8 @@ public final class GameStringsConstantsAndUtils {
     public static final String FILE_SUN = "images/sun.png";
     /** splash screen file name */
     public static final String FILE_SPLASH_SCREEN = "images/splash_screen.png";
+    /** buildings popup item background */
+    public static final String FILE_POPUP_BACKGROUND_ITEM = "images/background_popup_item.png";
     /** file name for red planet */
     public static final String FILE_RED_PLANET = "images/planet_1.png";
     /** file name for blue planet */

@@ -13,4 +13,14 @@ public class Area {
         this.width = width;
         this.height = height;
     }
+
+    public boolean contains(float x, float y) {
+        return left < (left + width) && top < (top + height)  // check for empty first
+                && x >= left && x < (left + width) && y >= top && y < (top + height);
+    }
+
+    @Override
+    public String toString() {
+        return "area : [" + (int)left + "," + (int)top + "," + (int)(left + width) + "," + (int)(top + height) + "]";
+    }
 }

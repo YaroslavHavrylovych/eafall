@@ -1,20 +1,23 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch;
 
 import android.view.MotionEvent;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.Localizable;
+
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.ImageDescriptionPopup;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.PopupItemBackgroundSprite;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.Localizable;
+
 import org.andengine.input.touch.TouchEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/** screen was touched (not move or scroll) and popup should appear */
 public class BuildingsPopupTouchListener implements ITouchListener {
     private ITeam mUserTeam;
     private EntityOperations mEntityOperations;
@@ -90,7 +93,8 @@ public class BuildingsPopupTouchListener implements ITouchListener {
                 mItemPickListener.itemPicked(buildingId);
             }
         };
-        return new ImageDescriptionPopup.PopupItem(id, gameObject, name, spriteTouchListener);
+        return new ImageDescriptionPopup.PopupItem(id, gameObject, name, spriteTouchListener,
+                new PopupItemBackgroundSprite(mEntityOperations.getObjectManager()));
     }
 
     private Area getBuildingPopupRectForTeam(ITeam team) {

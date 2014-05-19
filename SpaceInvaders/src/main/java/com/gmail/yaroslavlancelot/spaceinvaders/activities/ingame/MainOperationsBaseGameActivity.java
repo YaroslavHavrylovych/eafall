@@ -31,6 +31,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.BuildingsPopup
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.IItemPickListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ITouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.MainSceneTouchListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.PopupItemBackgroundSprite;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.Imperials;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
@@ -231,6 +232,9 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         firstTeamUserRace.loadResources(getTextureManager(), this);
         secondTeamUserRace = new Imperials(Color.BLUE, this, mMusicAndSoundsHandler);
         secondTeamUserRace.loadResources(getTextureManager(), this);
+
+        // other loader
+        PopupItemBackgroundSprite.loadResources(this, getTextureManager());
 
         //* bigger objects
         BitmapTextureAtlas biggerObjectsTexture = new BitmapTextureAtlas(getTextureManager(),
@@ -479,7 +483,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
                 Callable<Boolean> simpleBot = new NormalBot(initializingTeam);
                 Future<Boolean> future = executorService.submit(simpleBot);
             }
-        }, 2, TimeUnit.SECONDS);
+        }, 1, TimeUnit.SECONDS);
     }
 
     /** init money string for  displaying to user */
@@ -490,6 +494,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         mMoneyText = new Text(0f, 0f, FontHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.KEY_FONT_MONEY),
                 "", maxStringLength, getVertexBufferObjectManager());
         mHud = mCamera.getHUD();
+        mHud.setTouchAreaBindingOnActionDownEnabled(true);
         mHud.attachChild(mMoneyText);
     }
 

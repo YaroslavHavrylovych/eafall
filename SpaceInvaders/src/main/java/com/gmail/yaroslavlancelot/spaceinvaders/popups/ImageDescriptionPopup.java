@@ -2,15 +2,16 @@ package com.gmail.yaroslavlancelot.spaceinvaders.popups;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.IItemPickListener;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ITouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
+
 import org.andengine.entity.shape.IAreaShape;
+import org.andengine.entity.shape.IShape;
 import org.andengine.entity.text.Text;
-import org.andengine.input.touch.TouchEvent;
 
 import java.util.List;
 
@@ -56,50 +57,42 @@ public class ImageDescriptionPopup {
         if (!popupItem.isItemAttached())
             attachItems(popupItem);
         // show element on screen
-        mEntityOperations.attachEntityWithTouchToHud(popupItem.mImage);
-        mEntityOperations.attachEntityWithTouchToHud(popupItem.mText);
+        mEntityOperations.attachEntityWithTouchToHud(popupItem.mBackground);
     }
 
     private void attachItems(final PopupItem popupItem) {
+        // background
+        final PopupItemBackgroundSprite background = popupItem.mBackground;
+        background.setX(mAreaForPopup.left);
+        background.setY(mAreaForPopup.top + PopupItem.ITEM_HEIGHT * popupItem.mId);
+        background.setWidth(SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_WIDTH);
+        background.setHeight(SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT);
         // picture
-        popupItem.mItemGameObject.setOnTouchListener(new ITouchListener() {
-            @Override
-            public boolean onTouch(final TouchEvent pSceneTouchEvent) {
-                if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_UP) {
-                    popupItem.mItemPickListener.itemPicked(popupItem.mId);
-                    return true;
-                }
-                return false;
-            }
-        });
-        popupItem.mItemGameObject.setX(mAreaForPopup.left);
-        popupItem.mItemGameObject.setY(
-                mAreaForPopup.top + (PopupItem.ITEM_HEIGHT + PopupItem.ITEM_SEPARATOR_LENGTH) * popupItem.mId);
+        popupItem.mItemGameObject.setPosition(5f, 10f);
         popupItem.mItemGameObject.setWidth(PopupItem.ITEM_IMAGE_WIDTH);
         popupItem.mItemGameObject.setHeight(PopupItem.ITEM_IMAGE_WIDTH);
+        background.setOnTouchListener(new TouchUtils.CustomTouchListener(new Area(background.getX(), background.getY(), background.getWidth(), background.getHeight())) {
+            @Override
+            public void click() { popupItem.mItemPickListener.itemPicked(popupItem.mId); }
+
+            @Override
+            public void unPress() { background.unpress(); }
+
+            @Override
+            public void press() { background.press(); }
+        });
+        background.attachChild(popupItem.mItemGameObject);
         // text
-        float textX = popupItem.mItemGameObject.getX() + popupItem.mItemGameObject.getWidth() + PopupItem.ITEM_SEPARATOR_LENGTH,
-                textY = popupItem.mItemGameObject.getY() + popupItem.mItemGameObject.getHeight() -
+        float textX = popupItem.mItemGameObject.getWidth() + PopupItem.ITEM_SEPARATOR_LENGTH,
+                textY = popupItem.mItemGameObject.getHeight() -
                         FontHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.KEY_FONT_MONEY).getLineHeight();
-        Text imageDescriptionText = new
-
-                Text(textX, textY,
-                        FontHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.KEY_FONT_MONEY),
-                        popupItem.mItemName, mEntityOperations.getObjectManager()) {
-
-                    @Override
-                    public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX,
-                                                 final float pTouchAreaLocalY) {
-                        if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_UP) {
-                            popupItem.mItemPickListener.itemPicked(popupItem.mId);
-                            return true;
-                        }
-                        return false;
-                    }
-                };
+        Text imageDescriptionText = new Text(textX, textY,
+                FontHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.KEY_FONT_MONEY),
+                popupItem.mItemName, mEntityOperations.getObjectManager());
+        background.attachChild(imageDescriptionText);
         // attaching
-        popupItem.mImage = popupItem.mItemGameObject;
         popupItem.mText = imageDescriptionText;
+        popupItem.mBackground = background;
     }
 
     /** hide popup */
@@ -107,8 +100,7 @@ public class ImageDescriptionPopup {
         if (!mIsPopupShowing)
             return;
         for (PopupItem popupItem : mPopupItems) {
-            mEntityOperations.detachEntityFromHud(popupItem.mImage);
-            mEntityOperations.detachEntityFromHud(popupItem.mText);
+            mEntityOperations.detachEntityFromHud(popupItem.mBackground);
         }
         mIsPopupShowing = false;
     }
@@ -138,20 +130,22 @@ public class ImageDescriptionPopup {
          */
         private GameObject mItemGameObject;
         private int mId;
-        /** already initiated image */
-        private IAreaShape mImage;
         /** already initiated text */
         private IAreaShape mText;
+        /** background image */
+        private PopupItemBackgroundSprite mBackground;
 
-        public PopupItem(int id, GameObject itemGameObject, String itemName, IItemPickListener itemPickListener) {
+        public PopupItem(int id, GameObject itemGameObject, String itemName, IItemPickListener itemPickListener,
+                         PopupItemBackgroundSprite background) {
             mId = id;
             mItemName = itemName;
             mItemGameObject = itemGameObject;
             mItemPickListener = itemPickListener;
+            mBackground = background;
         }
 
         private boolean isItemAttached() {
-            return mImage != null && mText != null;
+            return mText != null;
         }
     }
 }
