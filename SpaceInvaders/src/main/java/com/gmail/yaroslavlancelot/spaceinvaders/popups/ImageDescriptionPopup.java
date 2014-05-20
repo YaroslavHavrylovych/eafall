@@ -10,8 +10,9 @@ import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
 
 import org.andengine.entity.shape.IAreaShape;
-import org.andengine.entity.shape.IShape;
 import org.andengine.entity.text.Text;
+import org.andengine.opengl.font.FontUtils;
+import org.andengine.opengl.font.IFont;
 
 import java.util.List;
 
@@ -19,8 +20,6 @@ import java.util.List;
 public class ImageDescriptionPopup {
     /** for attaching/detaching {@link org.andengine.entity.sprite.Sprite} */
     private EntityOperations mEntityOperations;
-    /** form parent activity (set in constructor) */
-    private Area mAreaForPopup;
     /**
      * {@link com.gmail.yaroslavlancelot.spaceinvaders.popups.ImageDescriptionPopup.PopupItem}
      * that should be displayed. Passed with attachMenuItems(items)
@@ -28,9 +27,18 @@ public class ImageDescriptionPopup {
     private List<PopupItem> mPopupItems;
     /** represent boolean value which true if popup is showing now and false in other way */
     private boolean mIsPopupShowing;
+    /** popup text font */
+    private IFont mFont = FontHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.KEY_FONT_MONEY);
+    /** used for settings x offset for text in popup element (same for all items) */
+    private float mTextAbscissaPadding = SizeConstants.BUILDING_POPUP_ELEMENT_HEIGHT
+            + 2 * SizeConstants.BUILDING_POPUP_IMAGE_PADDING;
+    /** used for settings y offset for text in popup element (same for all items) */
+    private float mTextOrdinatePadding = SizeConstants.BUILDING_POPUP_ELEMENT_HEIGHT
+            + SizeConstants.BUILDING_POPUP_IMAGE_PADDING - mFont.getLineHeight();
+    /** popup width which can be changed with call {@code recalculatePopupBoundaries()} */
+    private float mPopupWidth;
 
-    public ImageDescriptionPopup(EntityOperations entityOperations, Area areaForPopup) {
-        mAreaForPopup = areaForPopup;
+    public ImageDescriptionPopup(EntityOperations entityOperations) {
         mEntityOperations = entityOperations;
     }
 
@@ -43,6 +51,19 @@ public class ImageDescriptionPopup {
         mPopupItems = itemsList;
     }
 
+    public void recalculatePopupBoundaries() {
+        if (mPopupItems == null || mPopupItems.isEmpty()) return;
+
+        float lengthWithoutText = SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT
+                + SizeConstants.BUILDING_POPUP_AFTER_TEXT_PADDING;
+
+        float maxTextLength = 0f;
+        for (PopupItem popupItem : mPopupItems)
+            maxTextLength = Math.max(FontUtils.measureText(mFont, popupItem.mItemName), maxTextLength);
+
+        mPopupWidth = lengthWithoutText + maxTextLength;
+    }
+
     /** show popup */
     public void showPopup() {
         if (mIsPopupShowing)
@@ -50,6 +71,16 @@ public class ImageDescriptionPopup {
         for (PopupItem item : mPopupItems)
             showItem(item);
         mIsPopupShowing = true;
+    }
+
+    /** hide popup */
+    public void hidePopup() {
+        if (!mIsPopupShowing)
+            return;
+        for (PopupItem popupItem : mPopupItems) {
+            mEntityOperations.detachEntityFromHud(popupItem.mBackground);
+        }
+        mIsPopupShowing = false;
     }
 
     /** show one popup item */
@@ -63,12 +94,11 @@ public class ImageDescriptionPopup {
     private void attachItems(final PopupItem popupItem) {
         // background
         final PopupItemBackgroundSprite background = popupItem.mBackground;
-        background.setX(mAreaForPopup.left);
-        background.setY(mAreaForPopup.top + SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT * popupItem.mId);
-        background.setWidth(SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_WIDTH);
+        background.setPosition(0, SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT * popupItem.mId);
+        background.setWidth(mPopupWidth);
         background.setHeight(SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT);
         // picture
-        popupItem.mItemGameObject.setPosition(10f, 10f);
+        popupItem.mItemGameObject.setPosition(SizeConstants.BUILDING_POPUP_IMAGE_PADDING, SizeConstants.BUILDING_POPUP_IMAGE_PADDING);
         popupItem.mItemGameObject.setWidth(PopupItem.ITEM_IMAGE_WIDTH);
         popupItem.mItemGameObject.setHeight(PopupItem.ITEM_IMAGE_WIDTH);
         background.setOnTouchListener(new TouchUtils.CustomTouchListener(new Area(background.getX(), background.getY(), background.getWidth(), background.getHeight())) {
@@ -83,26 +113,12 @@ public class ImageDescriptionPopup {
         });
         background.attachChild(popupItem.mItemGameObject);
         // text
-        float textX = popupItem.mItemGameObject.getWidth() + PopupItem.ITEM_SEPARATOR_LENGTH,
-                textY = popupItem.mItemGameObject.getHeight() -
-                        FontHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.KEY_FONT_MONEY).getLineHeight();
-        Text imageDescriptionText = new Text(textX, textY,
-                FontHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.KEY_FONT_MONEY),
+        Text imageDescriptionText = new Text(mTextAbscissaPadding, mTextOrdinatePadding, mFont,
                 popupItem.mItemName, mEntityOperations.getObjectManager());
         background.attachChild(imageDescriptionText);
         // attaching
         popupItem.mText = imageDescriptionText;
         popupItem.mBackground = background;
-    }
-
-    /** hide popup */
-    public void hidePopup() {
-        if (!mIsPopupShowing)
-            return;
-        for (PopupItem popupItem : mPopupItems) {
-            mEntityOperations.detachEntityFromHud(popupItem.mBackground);
-        }
-        mIsPopupShowing = false;
     }
 
     public boolean isShowing() {
@@ -118,8 +134,6 @@ public class ImageDescriptionPopup {
         private static final int ITEM_HEIGHT = SizeConstants.BUILDING_POPUP_ELEMENT_HEIGHT;
         /** popup image height */
         private static final int ITEM_IMAGE_WIDTH = ITEM_HEIGHT;
-        /** separator between elements/items */
-        private static final int ITEM_SEPARATOR_LENGTH = 5;
         /** current item touched */
         private final IItemPickListener mItemPickListener;
         /** description for image of current element */
