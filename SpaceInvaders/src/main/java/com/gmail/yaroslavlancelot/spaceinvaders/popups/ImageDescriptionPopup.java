@@ -64,11 +64,11 @@ public class ImageDescriptionPopup {
         // background
         final PopupItemBackgroundSprite background = popupItem.mBackground;
         background.setX(mAreaForPopup.left);
-        background.setY(mAreaForPopup.top + PopupItem.ITEM_HEIGHT * popupItem.mId);
+        background.setY(mAreaForPopup.top + SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT * popupItem.mId);
         background.setWidth(SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_WIDTH);
         background.setHeight(SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT);
         // picture
-        popupItem.mItemGameObject.setPosition(5f, 10f);
+        popupItem.mItemGameObject.setPosition(10f, 10f);
         popupItem.mItemGameObject.setWidth(PopupItem.ITEM_IMAGE_WIDTH);
         popupItem.mItemGameObject.setHeight(PopupItem.ITEM_IMAGE_WIDTH);
         background.setOnTouchListener(new TouchUtils.CustomTouchListener(new Area(background.getX(), background.getY(), background.getWidth(), background.getHeight())) {
