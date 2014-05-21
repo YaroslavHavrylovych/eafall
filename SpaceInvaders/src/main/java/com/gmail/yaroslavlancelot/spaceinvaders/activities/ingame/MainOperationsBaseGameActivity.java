@@ -21,7 +21,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourTy
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.ObjectDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.PlanetDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.IGameObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.RectangleWithBody;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Bullet;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
@@ -615,7 +615,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     }
 
     @Override
-    public Body registerCircleBody(IGameObject gameObject, BodyDef.BodyType pBodyType, FixtureDef pFixtureDef, float... transform) {
+    public Body registerCircleBody(RectangleWithBody gameObject, BodyDef.BodyType pBodyType, FixtureDef pFixtureDef, float... transform) {
         Body body = PhysicsFactory.createCircleBody(mPhysicsWorld, gameObject, pBodyType, pFixtureDef);
         if (transform != null && transform.length == 3)
             body.setTransform(transform[0], transform[1], transform[2]);
@@ -627,7 +627,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     protected abstract void initThickClient();
 
     @Override
-    public void detachPhysicsBody(final IGameObject gameObject) {
+    public void detachPhysicsBody(final RectangleWithBody gameObject) {
         MainOperationsBaseGameActivity.this.runOnUpdateThread(new Runnable() {
             @Override
             public void run() {

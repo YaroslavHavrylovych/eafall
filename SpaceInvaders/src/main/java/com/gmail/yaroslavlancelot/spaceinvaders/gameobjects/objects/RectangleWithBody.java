@@ -6,11 +6,11 @@ import org.andengine.entity.primitive.Rectangle;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /** extends rectangle to have physic body */
-public abstract class IGameObject extends Rectangle {
+public abstract class RectangleWithBody extends Rectangle {
     /** physics body associated with current object {@link org.andengine.entity.sprite.Sprite} */
     protected volatile Body mPhysicBody;
 
-    protected IGameObject(float pX, float pY, float pWidth, float pHeight, VertexBufferObjectManager pVertexBufferObjectManager) {
+    protected RectangleWithBody(float pX, float pY, float pWidth, float pHeight, VertexBufferObjectManager pVertexBufferObjectManager) {
         super(pX, pY, pWidth, pHeight, pVertexBufferObjectManager);
     }
 

@@ -23,7 +23,6 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 import org.andengine.util.math.MathConstants;
-import org.andengine.util.math.MathUtils;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -31,7 +30,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * each visible element on the screen which can be assigned to on or other team and can take
  * participation in object collaboration extends this class (e.g. units, planets, sun etc)
  */
-public abstract class GameObject extends IGameObject implements ISpriteTouchable {
+public abstract class GameObject extends RectangleWithBody implements ISpriteTouchable {
     public static final float VELOCITY_EPSILON = 0.00000001f;
     protected static final int sUndestroyableObjectKey = Integer.MIN_VALUE;
     /** maximum object health */

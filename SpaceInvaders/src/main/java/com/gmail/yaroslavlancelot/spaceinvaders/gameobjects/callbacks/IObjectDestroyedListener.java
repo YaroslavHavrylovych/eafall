@@ -1,8 +1,8 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.IGameObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.RectangleWithBody;
 
 /** used for object lifecycle tracking */
 public interface IObjectDestroyedListener {
-    public void objectDestroyed(IGameObject gameObject);
+    public void objectDestroyed(RectangleWithBody gameObject);
 }
