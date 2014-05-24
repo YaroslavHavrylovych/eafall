@@ -54,8 +54,6 @@ public final class TouchUtils {
                 case TouchEvent.ACTION_MOVE:
                 case TouchEvent.ACTION_OUTSIDE:
                 case TouchEvent.ACTION_CANCEL: {
-                    LoggerHelper.printDebugMessage(TouchUtils.class.getCanonicalName(), "move or cancel or etc [" + (int) event.getX() +
-                            "," + (int) +event.getY() + "," + mArea);
                     if (mIsOutOfBoundMoveHappens) break;
                     if (!mArea.contains(event.getX(), event.getY())) {
                         mIsItClickEvent = false;

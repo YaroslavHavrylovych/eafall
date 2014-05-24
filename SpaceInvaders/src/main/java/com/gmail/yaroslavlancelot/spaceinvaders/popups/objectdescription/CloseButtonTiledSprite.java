@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings;
+package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription;
 
 import android.content.Context;
 
@@ -12,16 +12,15 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-/** represent popup item background */
-public class BuildingsListItemBackgroundSprite extends ButtonTiledSprite {
-    public BuildingsListItemBackgroundSprite(VertexBufferObjectManager vertexBufferObjectManager) {
-        super(0f, 0f, (ITiledTextureRegion) TextureRegionHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.FILE_POPUP_BACKGROUND_ITEM),
+public class CloseButtonTiledSprite extends ButtonTiledSprite {
+    public CloseButtonTiledSprite(VertexBufferObjectManager vertexBufferObjectManager) {
+        super(0f, 0f, (ITiledTextureRegion) TextureRegionHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.FILE_DESCRIPTION_POPUP_CROSS),
                 vertexBufferObjectManager);
     }
 
     public static void loadResources(Context context, TextureManager textureManager) {
-        BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 1200, 100, TextureOptions.BILINEAR);
-        TextureRegionHolderUtils.addTiledElementFromAssets(GameStringsConstantsAndUtils.FILE_POPUP_BACKGROUND_ITEM,
+        BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 50, 25, TextureOptions.BILINEAR);
+        TextureRegionHolderUtils.addTiledElementFromAssets(GameStringsConstantsAndUtils.FILE_DESCRIPTION_POPUP_CROSS,
                 TextureRegionHolderUtils.getInstance(), smallObjectTexture, context, 0, 0, 2, 1);
         smallObjectTexture.load();
     }

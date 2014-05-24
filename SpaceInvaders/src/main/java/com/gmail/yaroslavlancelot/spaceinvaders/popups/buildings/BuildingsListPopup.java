@@ -88,7 +88,8 @@ public class BuildingsListPopup {
         if (!popupItem.isItemAttached())
             attachItems(popupItem);
         // show element on screen
-        mEntityOperations.attachEntityWithTouchToHud(popupItem.mBackground);
+        mEntityOperations.attachEntityToHud(popupItem.mBackground);
+        mEntityOperations.registerHudTouch(popupItem.mBackground);
     }
 
     private void attachItems(final PopupItem popupItem) {

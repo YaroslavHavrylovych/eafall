@@ -3,8 +3,10 @@ package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch;
 import android.content.Context;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
+
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.ICameraCoordinates;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
+
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
@@ -121,8 +123,10 @@ public class MainSceneTouchListener implements IOnSceneTouchListener, ICameraCoo
                 break;
         }
 
-        for (ITouchListener touchListener : mSceneClickListeners)
-            touchListener.onTouch(pSceneTouchEvent);
+        for (ITouchListener touchListener : mSceneClickListeners) {
+            if (touchListener.onTouch(pSceneTouchEvent))
+                return true;
+        }
 
         return true;
     }

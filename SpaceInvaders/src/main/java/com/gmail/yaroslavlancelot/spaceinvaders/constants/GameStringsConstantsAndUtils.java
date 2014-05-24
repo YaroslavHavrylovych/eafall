@@ -12,6 +12,8 @@ public final class GameStringsConstantsAndUtils {
     public static final String FILE_POPUP_BACKGROUND_ITEM = "images/background_popup_item.png";
     /** description popup background */
     public static final String FILE_DESCRIPTION_POPUP_BACKGROUND = "images/description_popup_background.png";
+    /** description popup cross (for closing) */
+    public static final String FILE_DESCRIPTION_POPUP_CROSS = "images/cross_close.png";
     /** file name for red planet */
     public static final String FILE_RED_PLANET = "images/planet_1.png";
     /** file name for blue planet */

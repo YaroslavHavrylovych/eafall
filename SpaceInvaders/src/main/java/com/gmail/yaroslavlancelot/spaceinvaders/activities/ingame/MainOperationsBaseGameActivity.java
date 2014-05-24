@@ -32,7 +32,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.IItemPickListe
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ITouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.MainSceneTouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.BuildingsListItemBackgroundSprite;
-import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.CompositeSprite;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.DescriptionPopupCompositeSprite;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.Imperials;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
@@ -236,7 +236,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
 
         // other loader
         BuildingsListItemBackgroundSprite.loadResources(this, getTextureManager());
-        CompositeSprite.loadResources(this, getTextureManager());
+        DescriptionPopupCompositeSprite.loadResources(this, getTextureManager());
 
         //* bigger objects
         BitmapTextureAtlas biggerObjectsTexture = new BitmapTextureAtlas(getTextureManager(),
@@ -450,16 +450,15 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     /** init planet touch listener for some team */
     protected void initUserControlledTeam(final ITeam initializingTeam) {
         LoggerHelper.methodInvocation(TAG, "initUserControlledTeam");
-        // create building
-        ITouchListener userClickScreenTouchListener = new BuildingsPopupTouchListener(initializingTeam, this, this,
+        // building popup
+        mMainSceneTouchListener.addTouchListener(new BuildingsPopupTouchListener(initializingTeam, this, this,
                 new IItemPickListener() {
                     @Override
                     public void itemPicked(final int itemId) {
-                        CompositeSprite.getInstance().show(initializingTeam.getTeamRace().getBuildingById(itemId)); //userWantCreateBuilding(initializingTeam, itemId);
+                        DescriptionPopupCompositeSprite.getInstance().show(initializingTeam.getTeamRace().getBuildingById(itemId)); //userWantCreateBuilding(initializingTeam, itemId);
                     }
                 }
-        );
-        mMainSceneTouchListener.addTouchListener(userClickScreenTouchListener);
+        ));
     }
 
     private void positionizeMoneyText() {
@@ -503,7 +502,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     private void initHud() {
         mHud = mCamera.getHUD();
         mHud.setTouchAreaBindingOnActionDownEnabled(true);
-        attachEntity(CompositeSprite.init(getVertexBufferObjectManager()));
+        attachEntityToHud(DescriptionPopupCompositeSprite.init(this));
     }
 
     /** init scene touch events so user can collaborate with game by screen touches */
@@ -562,9 +561,14 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     }
 
     @Override
-    public void attachEntityWithTouchToHud(final IAreaShape entity) {
+    public void attachEntityToHud(final IAreaShape entity) {
         HUD hud = mCamera.getHUD();
         hud.attachChild(entity);
+    }
+
+    @Override
+    public void registerHudTouch(IAreaShape entity) {
+        HUD hud = mCamera.getHUD();
         hud.registerTouchArea(entity);
     }
 

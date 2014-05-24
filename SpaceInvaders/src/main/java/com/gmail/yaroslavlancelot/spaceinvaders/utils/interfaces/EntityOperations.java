@@ -18,7 +18,9 @@ public interface EntityOperations {
 
     void attachEntityWithTouchArea(IAreaShape entity);
 
-    void attachEntityWithTouchToHud(IAreaShape entity);
+    public void attachEntityToHud(final IAreaShape entity);
+
+    public void registerHudTouch(final IAreaShape entity);
 
     void detachEntityFromHud(IAreaShape entity);
 

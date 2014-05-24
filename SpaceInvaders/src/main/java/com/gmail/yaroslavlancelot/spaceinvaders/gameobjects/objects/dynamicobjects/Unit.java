@@ -112,7 +112,7 @@ public abstract class Unit extends GameObject {
         if (mUnitFireCallback != null)
             mUnitFireCallback.fire(getObjectUniqueId(), attackedObject.getObjectUniqueId());
 
-        LoggerHelper.printDebugMessage(TAG, "unit=" + getObjectUniqueId() + "(" + getX() + "," + getY() + ")" +
+        LoggerHelper.printVerboseMessage(TAG, "unit=" + getObjectUniqueId() + "(" + getX() + "," + getY() + ")" +
                 ", attack object=" + attackedObject.getObjectUniqueId() + "(" + attackedObject.getX() + "," + attackedObject.getY() + ")");
         playSound(mFireSound, mSoundOperations);
         Bullet bullet = new Bullet(getVertexBufferObjectManager(), mEntityOperations,
