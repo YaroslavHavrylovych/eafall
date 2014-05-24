@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.popups;
+package com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings;
 
 import android.content.Context;
 
@@ -16,11 +16,11 @@ import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /** represent popup item background */
-public class PopupItemBackgroundSprite extends TiledSprite implements ISpriteTouchable {
+public class BuildingsListItemBackgroundSprite extends TiledSprite implements ISpriteTouchable {
     /** current object touch listener */
     private ITouchListener mSpriteOnTouchListener;
 
-    public PopupItemBackgroundSprite(VertexBufferObjectManager vertexBufferObjectManager) {
+    public BuildingsListItemBackgroundSprite(VertexBufferObjectManager vertexBufferObjectManager) {
         super(0f, 0f, (ITiledTextureRegion) TextureRegionHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.FILE_POPUP_BACKGROUND_ITEM),
                 vertexBufferObjectManager);
     }

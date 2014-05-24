@@ -31,7 +31,8 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.BuildingsPopup
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.IItemPickListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ITouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.MainSceneTouchListener;
-import com.gmail.yaroslavlancelot.spaceinvaders.popups.PopupItemBackgroundSprite;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.BuildingsListItemBackgroundSprite;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.CompositeSprite;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.Imperials;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
@@ -234,7 +235,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         secondTeamUserRace.loadResources(getTextureManager(), this);
 
         // other loader
-        PopupItemBackgroundSprite.loadResources(this, getTextureManager());
+        BuildingsListItemBackgroundSprite.loadResources(this, getTextureManager());
+        CompositeSprite.loadResources(this, getTextureManager());
 
         //* bigger objects
         BitmapTextureAtlas biggerObjectsTexture = new BitmapTextureAtlas(getTextureManager(),
@@ -284,6 +286,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         createSun();
 
         initGameSceneTouch();
+        initHud();
 
         initMoneyTextView();
         mGameScene.registerUpdateHandler(mPhysicsWorld);
@@ -452,7 +455,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
                 new IItemPickListener() {
                     @Override
                     public void itemPicked(final int itemId) {
-                        userWantCreateBuilding(initializingTeam, itemId);
+                        CompositeSprite.getInstance().show(initializingTeam.getTeamRace().getBuildingById(itemId)); //userWantCreateBuilding(initializingTeam, itemId);
                     }
                 }
         );
@@ -493,9 +496,14 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         int maxStringLength = mMoneyTextPrefixString.length() + 6;
         mMoneyText = new Text(0f, 0f, FontHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.KEY_FONT_MONEY),
                 "", maxStringLength, getVertexBufferObjectManager());
+        mHud.attachChild(mMoneyText);
+    }
+
+    /** init hud */
+    private void initHud() {
         mHud = mCamera.getHUD();
         mHud.setTouchAreaBindingOnActionDownEnabled(true);
-        mHud.attachChild(mMoneyText);
+        attachEntity(CompositeSprite.init(getVertexBufferObjectManager()));
     }
 
     /** init scene touch events so user can collaborate with game by screen touches */
