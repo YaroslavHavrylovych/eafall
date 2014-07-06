@@ -64,6 +64,11 @@ public class BuildingsPopupTouchListener implements ITouchListener {
         return true;
     }
 
+    public void hide() {
+        if (mUserTeam.getTeamPlanet() == null || mPopup.isShowing())
+            mPopup.hidePopup();
+    }
+
     private void initBuildingPopupForTeam(ITeam team) {
         IRace race = team.getTeamRace();
         // init elements

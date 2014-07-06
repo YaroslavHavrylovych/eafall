@@ -29,7 +29,6 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobject
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.SunStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.BuildingsPopupTouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.IItemPickListener;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ITouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.MainSceneTouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.BuildingsListItemBackgroundSprite;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.DescriptionPopupCompositeSprite;
@@ -451,14 +450,16 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     protected void initUserControlledTeam(final ITeam initializingTeam) {
         LoggerHelper.methodInvocation(TAG, "initUserControlledTeam");
         // building popup
-        mMainSceneTouchListener.addTouchListener(new BuildingsPopupTouchListener(initializingTeam, this, this,
+        final BuildingsPopupTouchListener buildingsPopupTouchListener = new BuildingsPopupTouchListener(initializingTeam, this, this,
                 new IItemPickListener() {
                     @Override
                     public void itemPicked(final int itemId) {
                         DescriptionPopupCompositeSprite.getInstance().show(initializingTeam.getTeamRace().getBuildingById(itemId)); //userWantCreateBuilding(initializingTeam, itemId);
                     }
                 }
-        ));
+        );
+        mMainSceneTouchListener.addTouchListener(DescriptionPopupCompositeSprite.getInstance());
+        mMainSceneTouchListener.addTouchListener(buildingsPopupTouchListener);
     }
 
     private void positionizeMoneyText() {
@@ -502,7 +503,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     private void initHud() {
         mHud = mCamera.getHUD();
         mHud.setTouchAreaBindingOnActionDownEnabled(true);
-        attachEntityToHud(DescriptionPopupCompositeSprite.init(this));
+        attachEntityWithTouchToHud(DescriptionPopupCompositeSprite.init(this));
     }
 
     /** init scene touch events so user can collaborate with game by screen touches */
@@ -561,9 +562,10 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     }
 
     @Override
-    public void attachEntityToHud(final IAreaShape entity) {
+    public void attachEntityWithTouchToHud(final IAreaShape entity) {
         HUD hud = mCamera.getHUD();
         hud.attachChild(entity);
+        hud.registerTouchArea(entity);
     }
 
     @Override

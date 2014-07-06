@@ -88,6 +88,12 @@ public class MainSceneTouchListener implements IOnSceneTouchListener, ICameraCoo
 
     @Override
     public boolean onSceneTouchEvent(final Scene pScene, final TouchEvent pSceneTouchEvent) {
+        // check if it's click not on empty screen but on some hud element
+        for (ITouchListener touchListener : mSceneClickListeners) {
+            if (touchListener.onTouch(pSceneTouchEvent))
+                return true;
+        }
+
         //zoom
         mMapZoomScaleGestureDetector.onTouchEvent(pSceneTouchEvent.getMotionEvent());
         if (pSceneTouchEvent.getMotionEvent().getPointerCount() >= 2)
@@ -100,6 +106,7 @@ public class MainSceneTouchListener implements IOnSceneTouchListener, ICameraCoo
             mIsInPreviousEventWasMoreThanOneFinger = false;
             return true;
         }
+
         // moving
         switch (pSceneTouchEvent.getMotionEvent().getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -121,11 +128,6 @@ public class MainSceneTouchListener implements IOnSceneTouchListener, ICameraCoo
                     mCameraCurrentCenterY = newPositionY;
                 }
                 break;
-        }
-
-        for (ITouchListener touchListener : mSceneClickListeners) {
-            if (touchListener.onTouch(pSceneTouchEvent))
-                return true;
         }
 
         return true;

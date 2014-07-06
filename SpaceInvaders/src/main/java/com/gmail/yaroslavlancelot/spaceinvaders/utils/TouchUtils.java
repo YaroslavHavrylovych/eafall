@@ -62,8 +62,6 @@ public final class TouchUtils {
                     }
                     break;
                 }
-                default:
-                    LoggerHelper.printDebugMessage(TouchUtils.class.getCanonicalName(), "asdfagjkhfdaljghla");
             }
             return true;
         }

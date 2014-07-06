@@ -31,7 +31,7 @@ public final class SizeConstants {
     public static final int BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT = BUILDING_POPUP_ELEMENT_HEIGHT + 2 * BUILDING_POPUP_IMAGE_PADDING;
 
     /** DESCRIPTION POPUP */
-    public static final int DESCRIPTION_POPUP_TOP_BORDER_HEIGHT = 40;
+    public static final int DESCRIPTION_POPUP_TOP_BORDER_SIZE = 40;
     public static final int DESCRIPTION_POPUP_CROSS_SIZE = 25;
 
     private SizeConstants() {
