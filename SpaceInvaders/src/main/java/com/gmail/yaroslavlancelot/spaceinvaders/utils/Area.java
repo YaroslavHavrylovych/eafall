@@ -21,6 +21,6 @@ public class Area {
 
     @Override
     public String toString() {
-        return "area : [" + (int)left + "," + (int)top + "," + (int)(left + width) + "," + (int)(top + height) + "]";
+        return "area : [" + (int) left + "," + (int) top + "," + (int) (left + width) + "," + (int) (top + height) + "]";
     }
 }

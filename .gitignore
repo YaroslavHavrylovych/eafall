@@ -4,4 +4,5 @@ build
 project.properties
 wiki
 *.iml
+spaceinvaders.iml
 local.properties

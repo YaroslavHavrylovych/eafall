@@ -21,7 +21,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourTy
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.ObjectDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.PlanetDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.IGameObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.RectangleWithBody;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Bullet;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
@@ -29,9 +29,9 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobject
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.SunStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.BuildingsPopupTouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.IItemPickListener;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ITouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.MainSceneTouchListener;
-import com.gmail.yaroslavlancelot.spaceinvaders.popups.PopupItemBackgroundSprite;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.BuildingsListItemBackgroundSprite;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.DescriptionPopupCompositeSprite;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.Imperials;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
@@ -234,7 +234,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         secondTeamUserRace.loadResources(getTextureManager(), this);
 
         // other loader
-        PopupItemBackgroundSprite.loadResources(this, getTextureManager());
+        BuildingsListItemBackgroundSprite.loadResources(this, getTextureManager());
+        DescriptionPopupCompositeSprite.loadResources(this, getTextureManager());
 
         //* bigger objects
         BitmapTextureAtlas biggerObjectsTexture = new BitmapTextureAtlas(getTextureManager(),
@@ -284,6 +285,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         createSun();
 
         initGameSceneTouch();
+        initHud();
 
         initMoneyTextView();
         mGameScene.registerUpdateHandler(mPhysicsWorld);
@@ -447,16 +449,18 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     /** init planet touch listener for some team */
     protected void initUserControlledTeam(final ITeam initializingTeam) {
         LoggerHelper.methodInvocation(TAG, "initUserControlledTeam");
-        // create building
-        ITouchListener userClickScreenTouchListener = new BuildingsPopupTouchListener(initializingTeam, this, this,
+        // building popup
+        final BuildingsPopupTouchListener buildingsPopupTouchListener = new BuildingsPopupTouchListener(initializingTeam, this, this,
                 new IItemPickListener() {
                     @Override
                     public void itemPicked(final int itemId) {
+                        DescriptionPopupCompositeSprite.getInstance().show(initializingTeam.getTeamRace().getBuildingById(itemId));
                         userWantCreateBuilding(initializingTeam, itemId);
                     }
                 }
         );
-        mMainSceneTouchListener.addTouchListener(userClickScreenTouchListener);
+        mMainSceneTouchListener.addTouchListener(DescriptionPopupCompositeSprite.getInstance());
+        mMainSceneTouchListener.addTouchListener(buildingsPopupTouchListener);
     }
 
     private void positionizeMoneyText() {
@@ -493,9 +497,14 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         int maxStringLength = mMoneyTextPrefixString.length() + 6;
         mMoneyText = new Text(0f, 0f, FontHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.KEY_FONT_MONEY),
                 "", maxStringLength, getVertexBufferObjectManager());
+        mHud.attachChild(mMoneyText);
+    }
+
+    /** init hud */
+    private void initHud() {
         mHud = mCamera.getHUD();
         mHud.setTouchAreaBindingOnActionDownEnabled(true);
-        mHud.attachChild(mMoneyText);
+        attachEntityWithTouchToHud(DescriptionPopupCompositeSprite.init(this));
     }
 
     /** init scene touch events so user can collaborate with game by screen touches */
@@ -561,6 +570,12 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     }
 
     @Override
+    public void registerHudTouch(IAreaShape entity) {
+        HUD hud = mCamera.getHUD();
+        hud.registerTouchArea(entity);
+    }
+
+    @Override
     public void detachEntityFromHud(final IAreaShape entity) {
         final HUD hud = mCamera.getHUD();
         MainOperationsBaseGameActivity.this.runOnUpdateThread(new Runnable() {
@@ -615,7 +630,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     }
 
     @Override
-    public Body registerCircleBody(IGameObject gameObject, BodyDef.BodyType pBodyType, FixtureDef pFixtureDef, float... transform) {
+    public Body registerCircleBody(RectangleWithBody gameObject, BodyDef.BodyType pBodyType, FixtureDef pFixtureDef, float... transform) {
         Body body = PhysicsFactory.createCircleBody(mPhysicsWorld, gameObject, pBodyType, pFixtureDef);
         if (transform != null && transform.length == 3)
             body.setTransform(transform[0], transform[1], transform[2]);
@@ -627,7 +642,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     protected abstract void initThickClient();
 
     @Override
-    public void detachPhysicsBody(final IGameObject gameObject) {
+    public void detachPhysicsBody(final RectangleWithBody gameObject) {
         MainOperationsBaseGameActivity.this.runOnUpdateThread(new Runnable() {
             @Override
             public void run() {

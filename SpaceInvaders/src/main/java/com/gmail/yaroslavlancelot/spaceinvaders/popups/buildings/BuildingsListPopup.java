@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.popups;
+package com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
@@ -17,11 +17,11 @@ import org.andengine.opengl.font.IFont;
 import java.util.List;
 
 /** Flow popup which contains images and their descriptions */
-public class ImageDescriptionPopup {
+public class BuildingsListPopup {
     /** for attaching/detaching {@link org.andengine.entity.sprite.Sprite} */
     private EntityOperations mEntityOperations;
     /**
-     * {@link com.gmail.yaroslavlancelot.spaceinvaders.popups.ImageDescriptionPopup.PopupItem}
+     * {@link BuildingsListPopup.PopupItem}
      * that should be displayed. Passed with attachMenuItems(items)
      */
     private List<PopupItem> mPopupItems;
@@ -38,7 +38,7 @@ public class ImageDescriptionPopup {
     /** popup width which can be changed with call {@code recalculatePopupBoundaries()} */
     private float mPopupWidth;
 
-    public ImageDescriptionPopup(EntityOperations entityOperations) {
+    public BuildingsListPopup(EntityOperations entityOperations) {
         mEntityOperations = entityOperations;
     }
 
@@ -93,7 +93,7 @@ public class ImageDescriptionPopup {
 
     private void attachItems(final PopupItem popupItem) {
         // background
-        final PopupItemBackgroundSprite background = popupItem.mBackground;
+        final BuildingsListItemBackgroundSprite background = popupItem.mBackground;
         background.setPosition(0, SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT * popupItem.mId);
         background.setWidth(mPopupWidth);
         background.setHeight(SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT);
@@ -103,7 +103,7 @@ public class ImageDescriptionPopup {
         popupItem.mItemGameObject.setHeight(PopupItem.ITEM_IMAGE_WIDTH);
         background.setOnTouchListener(new TouchUtils.CustomTouchListener(new Area(background.getX(), background.getY(), background.getWidth(), background.getHeight())) {
             @Override
-            public void click() { popupItem.mItemPickListener.itemPicked(popupItem.mId); }
+            public void click() {popupItem.mItemPickListener.itemPicked(popupItem.mId); }
 
             @Override
             public void unPress() { background.unpress(); }
@@ -126,7 +126,7 @@ public class ImageDescriptionPopup {
     }
 
     /**
-     * {@link com.gmail.yaroslavlancelot.spaceinvaders.popups.ImageDescriptionPopup} building block.
+     * {@link BuildingsListPopup} building block.
      * Store popup item information.
      */
     public static class PopupItem {
@@ -147,10 +147,10 @@ public class ImageDescriptionPopup {
         /** already initiated text */
         private IAreaShape mText;
         /** background image */
-        private PopupItemBackgroundSprite mBackground;
+        private BuildingsListItemBackgroundSprite mBackground;
 
         public PopupItem(int id, GameObject itemGameObject, String itemName, IItemPickListener itemPickListener,
-                         PopupItemBackgroundSprite background) {
+                         BuildingsListItemBackgroundSprite background) {
             mId = id;
             mItemName = itemName;
             mItemGameObject = itemGameObject;

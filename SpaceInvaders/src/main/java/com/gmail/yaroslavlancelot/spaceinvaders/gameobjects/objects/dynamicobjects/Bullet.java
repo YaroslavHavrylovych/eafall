@@ -5,7 +5,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Damage;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.IGameObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.RectangleWithBody;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitPathUtil;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
 
@@ -17,7 +17,7 @@ import org.andengine.util.color.Color;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class Bullet extends IGameObject {
+public class Bullet extends RectangleWithBody {
     public static final int BULLET_SIZE = 3;
     private static final BodyDef.BodyType sBulletBodyType = BodyDef.BodyType.DynamicBody;
     private static final float sMaxVelocity = 2.0f;
@@ -45,7 +45,7 @@ public class Bullet extends IGameObject {
         return mIsObjectAlive.getAndSet(false);
     }
 
-    public void fireFromPosition(float x, float y, IGameObject gameObject) {
+    public void fireFromPosition(float x, float y, RectangleWithBody gameObject) {
         if (gameObject.getBody() == null) return;
         Vector2 target = gameObject.getBody().getPosition();
         float goalX = target.x, goalY = target.y;

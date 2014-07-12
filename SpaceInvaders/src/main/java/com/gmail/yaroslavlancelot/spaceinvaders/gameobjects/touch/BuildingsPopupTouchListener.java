@@ -4,8 +4,8 @@ import android.view.MotionEvent;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.popups.ImageDescriptionPopup;
-import com.gmail.yaroslavlancelot.spaceinvaders.popups.PopupItemBackgroundSprite;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.BuildingsListItemBackgroundSprite;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.BuildingsListPopup;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
@@ -23,7 +23,7 @@ public class BuildingsPopupTouchListener implements ITouchListener {
     private Localizable mLocalizable;
     /** is first touch */
     private boolean mIsFirstTouch = true;
-    private ImageDescriptionPopup mPopup;
+    private BuildingsListPopup mPopup;
     private float mActionDownX, mActionDownY;
     private int mBuildingCostStringMaxCharacters = 5;
     private IItemPickListener mItemPickListener;
@@ -64,35 +64,40 @@ public class BuildingsPopupTouchListener implements ITouchListener {
         return true;
     }
 
+    public void hide() {
+        if (mUserTeam.getTeamPlanet() == null || mPopup.isShowing())
+            mPopup.hidePopup();
+    }
+
     private void initBuildingPopupForTeam(ITeam team) {
         IRace race = team.getTeamRace();
         // init elements
-        List<ImageDescriptionPopup.PopupItem> items =
-                new ArrayList<ImageDescriptionPopup.PopupItem>(race.getBuildingsAmount());
-        ImageDescriptionPopup.PopupItem item;
+        List<BuildingsListPopup.PopupItem> items =
+                new ArrayList<BuildingsListPopup.PopupItem>(race.getBuildingsAmount());
+        BuildingsListPopup.PopupItem item;
         for (int buildingId = 0; buildingId < race.getBuildingsAmount(); buildingId++) {
             item = createPopupItem(buildingId, race.getBuildingById(buildingId));
             items.add(item);
         }
-        mPopup = new ImageDescriptionPopup(mEntityOperations);
+        mPopup = new BuildingsListPopup(mEntityOperations);
         mPopup.attachMenuItems(items);
         mPopup.recalculatePopupBoundaries();
     }
 
-    private ImageDescriptionPopup.PopupItem createPopupItem(int id, StaticObject staticObject) {
+    private BuildingsListPopup.PopupItem createPopupItem(int id, StaticObject staticObject) {
         String prefix = Integer.toString(staticObject.getObjectCost()) + " : ";
         return createPopupItem(id, staticObject, prefix +
                 mLocalizable.getStringById(staticObject.getObjectStringId()));
     }
 
-    private ImageDescriptionPopup.PopupItem createPopupItem(int id, GameObject gameObject, String name) {
+    private BuildingsListPopup.PopupItem createPopupItem(int id, GameObject gameObject, String name) {
         IItemPickListener spriteTouchListener = new IItemPickListener() {
             @Override
             public void itemPicked(final int buildingId) {
                 mItemPickListener.itemPicked(buildingId);
             }
         };
-        return new ImageDescriptionPopup.PopupItem(id, gameObject, name, spriteTouchListener,
-                new PopupItemBackgroundSprite(mEntityOperations.getObjectManager()));
+        return new BuildingsListPopup.PopupItem(id, gameObject, name, spriteTouchListener,
+                new BuildingsListItemBackgroundSprite(mEntityOperations.getObjectManager()));
     }
 }
