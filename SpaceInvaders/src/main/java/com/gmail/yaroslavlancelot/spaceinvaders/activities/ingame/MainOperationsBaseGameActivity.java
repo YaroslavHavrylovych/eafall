@@ -454,7 +454,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
                 new IItemPickListener() {
                     @Override
                     public void itemPicked(final int itemId) {
-                        DescriptionPopupCompositeSprite.getInstance().show(initializingTeam.getTeamRace().getBuildingById(itemId)); //userWantCreateBuilding(initializingTeam, itemId);
+                        DescriptionPopupCompositeSprite.getInstance().show(initializingTeam.getTeamRace().getBuildingById(itemId));
+                        userWantCreateBuilding(initializingTeam, itemId);
                     }
                 }
         );
