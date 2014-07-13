@@ -4,6 +4,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateCircleBodyEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities.DetachEntityEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Damage;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.RectangleWithBody;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitPathUtil;
@@ -16,6 +18,8 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import de.greenrobot.event.EventBus;
 
 public class Bullet extends RectangleWithBody {
     public static final int BULLET_SIZE = 3;
@@ -49,7 +53,8 @@ public class Bullet extends RectangleWithBody {
         if (gameObject.getBody() == null) return;
         Vector2 target = gameObject.getBody().getPosition();
         float goalX = target.x, goalY = target.y;
-        mPhysicBody = mEntityOperations.registerCircleBody(this, sBulletBodyType, mBulletFixtureDef, x, y, 0);
+        EventBus.getDefault().post(new CreateCircleBodyEvent(this, sBulletBodyType, mBulletFixtureDef, x, y, 0));
+
         mPhysicBody.setBullet(true);
         mMaxBulletFlyDistance = UnitPathUtil.getDistanceBetweenPoints(
                 mBulletStartX = x * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
@@ -75,7 +80,7 @@ public class Bullet extends RectangleWithBody {
                     if (isBulletOutOfRange()) {
                         mIsObjectAlive.set(false);
                         unregisterUpdateHandler(pTimerHandler);
-                        mEntityOperations.detachEntity(Bullet.this);
+                        EventBus.getDefault().post(new DetachEntityEvent(Bullet.this));
                     }
                 }
             }
@@ -86,12 +91,12 @@ public class Bullet extends RectangleWithBody {
         mPhysicBody.setLinearVelocity(ordinateSpeed, abscissaSpeed);
     }
 
-    public Damage getDamage() {
-        return mDamage;
-    }
-
     protected boolean isBulletOutOfRange() {
         return getX() < 0 || getY() < 0 || getX() > SizeConstants.GAME_FIELD_WIDTH || getY() > SizeConstants.GAME_FIELD_HEIGHT ||
                 UnitPathUtil.getDistanceBetweenPoints(getX(), getY(), mBulletStartX, mBulletStartY) > mMaxBulletFlyDistance;
+    }
+
+    public Damage getDamage() {
+        return mDamage;
     }
 }

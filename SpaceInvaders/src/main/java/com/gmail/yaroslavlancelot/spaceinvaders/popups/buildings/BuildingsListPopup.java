@@ -2,6 +2,8 @@ package com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities.AttachEntityEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities.DetachEntityEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.IItemPickListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
@@ -15,6 +17,8 @@ import org.andengine.opengl.font.FontUtils;
 import org.andengine.opengl.font.IFont;
 
 import java.util.List;
+
+import de.greenrobot.event.EventBus;
 
 /** Flow popup which contains images and their descriptions */
 public class BuildingsListPopup {
@@ -78,7 +82,9 @@ public class BuildingsListPopup {
         if (!mIsPopupShowing)
             return;
         for (PopupItem popupItem : mPopupItems) {
-            mEntityOperations.detachEntityFromHud(popupItem.mBackground);
+            DetachEntityEvent detachEntityEvent = new DetachEntityEvent(popupItem.mBackground, true);
+            detachEntityEvent.setWithBody(false);
+            EventBus.getDefault().post(detachEntityEvent);
         }
         mIsPopupShowing = false;
     }
@@ -88,7 +94,7 @@ public class BuildingsListPopup {
         if (!popupItem.isItemAttached())
             attachItems(popupItem);
         // show element on screen
-        mEntityOperations.attachEntityWithTouchToHud(popupItem.mBackground);
+        EventBus.getDefault().post(new AttachEntityEvent(popupItem.mBackground, true));
     }
 
     private void attachItems(final PopupItem popupItem) {

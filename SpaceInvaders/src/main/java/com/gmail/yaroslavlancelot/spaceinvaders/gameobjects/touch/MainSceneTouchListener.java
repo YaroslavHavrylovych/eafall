@@ -78,7 +78,7 @@ public class MainSceneTouchListener implements IOnSceneTouchListener, ICameraCoo
         return mCamera.getTargetZoomFactor();
     }
 
-    public void addTouchListener(ITouchListener touchListener) {
+    public void registerTouchListener(ITouchListener touchListener) {
         mSceneClickListeners.add(touchListener);
     }
 

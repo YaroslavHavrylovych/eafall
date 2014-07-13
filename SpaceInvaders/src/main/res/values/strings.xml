@@ -6,7 +6,7 @@
 
     <!-- races names -->
     <string name="app_name">SpaceInvaders</string>
-    <string name="money_colon">Money : </string>
+    <string name="money_value_prefix">Money : </string>
     <string name="camp">Camp</string>
     <string name="tent">Tent</string>
     <string name="barracks">Barracks</string>

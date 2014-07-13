@@ -1,10 +1,9 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities.AttachEntityEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IUnitFireCallback;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
@@ -21,6 +20,8 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.util.math.MathUtils;
 
 import java.util.List;
+
+import de.greenrobot.event.EventBus;
 
 /** Basic class for all dynamic game units */
 public abstract class Unit extends GameObject {
@@ -123,7 +124,7 @@ public abstract class Unit extends GameObject {
                 objectPosition.y - Bullet.BULLET_SIZE / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
                 attackedObject);
 
-        mEntityOperations.attachEntity(bullet);
+        EventBus.getDefault().post(new AttachEntityEvent(bullet));
     }
 
     protected boolean isReloadFinished() {

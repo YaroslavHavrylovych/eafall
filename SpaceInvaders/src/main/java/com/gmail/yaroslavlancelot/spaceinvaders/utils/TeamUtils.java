@@ -15,9 +15,8 @@ public class TeamUtils {
     /**
      * Create and return list of enemies from enemy team in visible area for unit
      *
-     * @param unit unit enemies of whom should to be returned in the list
+     * @param unit      unit enemies of whom should to be returned in the list
      * @param enemyTeam unfriendly team for unit
-     *
      * @return list of all unit enemies in the visible rect (from enemy team which pass like parameter)
      */
     public static List<GameObject> getVisibleEnemiesForUnit(final Unit unit, ITeam enemyTeam) {
@@ -29,10 +28,5 @@ public class TeamUtils {
                 enemiesInView.add(enemy);
         }
         return enemiesInView;
-    }
-
-    /** common money string template */
-    public static String getMoneyString(String prefix, ITeam team) {
-        return prefix + team.getMoney();
     }
 }

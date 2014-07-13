@@ -46,10 +46,14 @@ public class CollisionCategoriesUtils {
     private volatile static FixtureDef sFixtureDefBullet2 = PhysicsFactory.createFixtureDef(1f, 0f, 0f, false,
             CollisionCategoriesUtils.CATEGORY_BULLET_TEAM2,
             CollisionCategoriesUtils.MASKBITS_BULLET_TEAM2, (short) 0);
-
     public static FixtureDef getBulletFixtureDefByUnitCategory(short category) {
         if (category == CATEGORY_TEAM1)
             return sFixtureDefBullet1;
         return sFixtureDefBullet2;
     }
+
+    /** {@link com.badlogic.gdx.physics.box2d.FixtureDef} for obstacles (static bodies) */
+    public final static FixtureDef STATIC_BODY_FIXTURE_DEF = PhysicsFactory.createFixtureDef(1f, 0f, 0f, false,
+            CATEGORY_STATIC_OBJECT,
+            MASKBITS_STATIC_OBJECT_THICK, (short) 0);
 }

@@ -1,9 +1,12 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks;
 
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities.DetachEntityEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.RectangleWithBody;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
+
+import de.greenrobot.event.EventBus;
 
 /** Callback after unit killing. Used method for MainOperationsBaseGameActivity class and should be placed in current class */
 public class ObjectDestroyedListener implements IObjectDestroyedListener {
@@ -27,7 +30,6 @@ public class ObjectDestroyedListener implements IObjectDestroyedListener {
         if (gameObject instanceof Unit) {
             mTeam.removeObjectFromTeam((Unit) gameObject);
         }
-        mEntityOperations.detachPhysicsBody(gameObject);
-        mEntityOperations.detachEntity(gameObject);
+        EventBus.getDefault().post(new DetachEntityEvent(gameObject));
     }
 }

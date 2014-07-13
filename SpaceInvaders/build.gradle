@@ -1,7 +1,12 @@
 apply plugin: 'android'
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     compile project(':AndEngineMultiplayerExtension')
+    compile 'de.greenrobot:eventbus:2.2.1'
 }
 
 android {

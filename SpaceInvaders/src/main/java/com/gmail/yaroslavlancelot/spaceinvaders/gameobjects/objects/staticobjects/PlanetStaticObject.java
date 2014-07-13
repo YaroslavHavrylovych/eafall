@@ -152,7 +152,7 @@ public class PlanetStaticObject extends StaticObject {
             if (!mIsFakePlanet) {
                 mIncomeIncreasingValue += mBuilding.getObjectIncomeIncreasingValue();
                 if (mUnitCreatorCycle == null) {
-                    mUnitCreatorCycle = new UnitCreatorCycle(mPlanetTeam, mEntityOperations, mBuildingId);
+                    mUnitCreatorCycle = new UnitCreatorCycle(mPlanetTeam.getTeamName(), mBuildingId);
                     registerUpdateHandler(new TimerHandler(mUnitCreationCycleTime, true, mUnitCreatorCycle));
                 }
                 mUnitCreatorCycle.increaseUnitAmount();

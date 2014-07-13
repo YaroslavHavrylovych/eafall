@@ -2,6 +2,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.teams;
 
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.MoneyUpdatedEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
@@ -11,6 +12,9 @@ import org.andengine.util.color.Color;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import de.greenrobot.event.EventBus;
 
 /** Player team implementation */
 public class Team implements ITeam {
@@ -27,13 +31,13 @@ public class Team implements ITeam {
     /** team to fight with */
     private ITeam mEnemyTeam;
     /** current team money amount */
-    private volatile int mMoneyAmount = 500;
+    private volatile int mMoneyAmount;
     /** team color */
     private Color mTeamColor = new Color(100, 100, 100);
     /** team control type */
     private TeamControlBehaviourType mTeamControlBehaviourType;
-    /** triggered if money changed */
-    private IMoneyChangedCallback mMoneyChangedCallback;
+    private final AtomicBoolean mIsFirstIncome = new AtomicBoolean(true);
+    public final int INIT_MONEY_VALUE = 500;
 
     public Team(final String teamName, IRace teamRace, TeamControlBehaviourType teamType) {
         mTeamObjects = new ArrayList<GameObject>(20);
@@ -41,10 +45,6 @@ public class Team implements ITeam {
         mTeamRace = teamRace;
         mTeamControlBehaviourType = teamType;
         mTeamFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f, false);
-    }
-
-    public void setMoneyChangedCallback(IMoneyChangedCallback moneyChangedCallback) {
-        mMoneyChangedCallback = moneyChangedCallback;
     }
 
     @Override
@@ -94,14 +94,16 @@ public class Team implements ITeam {
 
     @Override
     public void changeMoney(final int delta) {
-        mMoneyAmount += delta;
-        if(mMoneyChangedCallback != null)
-            mMoneyChangedCallback.moneyChanged(delta);
+        setMoney(mMoneyAmount + delta);
     }
 
     @Override
     public void incomeTime() {
         if (mTeamPlanet == null) return;
+        if (mIsFirstIncome.getAndSet(false)) {
+            changeMoney(INIT_MONEY_VALUE);
+            return;
+        }
         changeMoney(mTeamPlanet.getObjectIncomeIncreasingValue());
     }
 
@@ -144,9 +146,6 @@ public class Team implements ITeam {
     @Override
     public void setMoney(int money) {
         mMoneyAmount = money;
-    }
-
-    public static interface IMoneyChangedCallback {
-        void moneyChanged(int delta);
+        EventBus.getDefault().post(new MoneyUpdatedEvent(getTeamName(), mMoneyAmount));
     }
 }

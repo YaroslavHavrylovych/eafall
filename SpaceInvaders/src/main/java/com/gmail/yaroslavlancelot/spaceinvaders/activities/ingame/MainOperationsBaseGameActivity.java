@@ -18,6 +18,11 @@ import com.gmail.yaroslavlancelot.spaceinvaders.ai.NormalBot;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateCircleBodyEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateUnitEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities.AbstractEntityEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities.AttachEntityEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities.DetachEntityEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.ObjectDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.PlanetDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
@@ -28,7 +33,6 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobject
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.SunStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.BuildingsPopupTouchListener;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.IItemPickListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.MainSceneTouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.BuildingsListItemBackgroundSprite;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.DescriptionPopupCompositeSprite;
@@ -40,11 +44,11 @@ import com.gmail.yaroslavlancelot.spaceinvaders.utils.CollisionCategoriesUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.MusicAndSoundsHandler;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.TeamUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitCallbacksUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.Localizable;
+import com.gmail.yaroslavlancelot.spaceinvaders.visualelements.text.MoneyText;
 
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.engine.camera.hud.HUD;
@@ -53,12 +57,10 @@ import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
-import org.andengine.entity.IEntity;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.shape.IAreaShape;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.entity.text.Text;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
@@ -82,6 +84,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import de.greenrobot.event.EventBus;
+
 /**
  * Main game Activity. Extends {@link BaseGameActivity} class and contains main game elements.
  * Loads resources, initialize scene, engine and etc.
@@ -91,11 +95,6 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
      * tag, which is used for debugging purpose
      */
     public static final String TAG = MainOperationsBaseGameActivity.class.getCanonicalName();
-    public static final int MONEY_UPDATE_TIME = 10;
-    /** {@link com.badlogic.gdx.physics.box2d.FixtureDef} for obstacles (static bodies) */
-    protected final FixtureDef mStaticBodyFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f, false,
-            CollisionCategoriesUtils.CATEGORY_STATIC_OBJECT,
-            CollisionCategoriesUtils.MASKBITS_STATIC_OBJECT_THICK, (short) 0);
     /** contains whole game units/warriors */
     private final Map<Long, GameObject> mGameObjectsMap = new HashMap<Long, GameObject>();
     /** game scene */
@@ -106,8 +105,6 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     protected ITeam mSecondTeam;
     /** second team */
     protected ITeam mFirstTeam;
-    /** text which displaying to user with money amount */
-    protected String mMoneyTextPrefixString;
     /** user static area */
     protected HUD mHud;
     /** current game physics world */
@@ -121,8 +118,6 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     private HashMap<String, StaticObject> mStaticObjects = new HashMap<String, StaticObject>();
     /** game camera */
     private SmoothCamera mCamera;
-    /** object, which display money status to user */
-    private Text mMoneyText;
     /** hold all texture regions used in current game */
     private TextureRegionHolderUtils mTextureRegionHolderUtils;
     /** main scene touch listener */
@@ -162,27 +157,6 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         return engineOptions;
     }
 
-    protected void changeSplashSceneWithGameScene() {
-        mEngine.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback() {
-            public void onTimePassed(final TimerHandler pTimerHandler) {
-                mEngine.unregisterUpdateHandler(pTimerHandler);
-
-                onLoadGameResources();
-                onInitGameScene();
-                initThickClient();
-                onInitPlanetsAndTeams();
-
-                mPhysicsWorld.setContactListener(MainOperationsBaseGameActivity.this);
-                mBackgroundMusic.initBackgroundMusic();
-                mBackgroundMusic.playBackgroundMusic();
-
-                mSplashScene.detachSelf();
-                mEngine.setScene(mGameScene);
-            }
-        }));
-    }
-
-
     @Override
     public void onCreateResources(OnCreateResourcesCallback onCreateResourcesCallback) {
         LoggerHelper.methodInvocation(TAG, "onCreateResources");
@@ -216,6 +190,35 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         splash.setPosition((SizeConstants.GAME_FIELD_WIDTH - splash.getWidth()) * 0.5f,
                 (SizeConstants.GAME_FIELD_HEIGHT - splash.getHeight()) * 0.5f);
         mSplashScene.attachChild(splash);
+    }
+
+    @Override
+    public void onPopulateScene(Scene scene, OnPopulateSceneCallback onPopulateSceneCallback) {
+        onPopulateSceneCallback.onPopulateSceneFinished();
+
+        changeSplashSceneWithGameScene();
+    }
+
+    protected void changeSplashSceneWithGameScene() {
+        mEngine.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback() {
+            public void onTimePassed(final TimerHandler pTimerHandler) {
+                mEngine.unregisterUpdateHandler(pTimerHandler);
+
+                onLoadGameResources();
+                onInitGameScene();
+                initThickClient();
+                onInitPlanetsAndTeams();
+
+                mPhysicsWorld.setContactListener(MainOperationsBaseGameActivity.this);
+                mBackgroundMusic.initBackgroundMusic();
+                mBackgroundMusic.playBackgroundMusic();
+
+                mSplashScene.detachSelf();
+                mEngine.setScene(mGameScene);
+
+                EventBus.getDefault().register(MainOperationsBaseGameActivity.this);
+            }
+        }));
     }
 
     protected void onLoadGameResources() {
@@ -259,24 +262,6 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         FontHolderUtils.getInstance().addElement(GameStringsConstantsAndUtils.KEY_FONT_MONEY, font);
     }
 
-    @Override
-    public void onPopulateScene(Scene scene, OnPopulateSceneCallback onPopulateSceneCallback) {
-        onPopulateSceneCallback.onPopulateSceneFinished();
-
-        changeSplashSceneWithGameScene();
-    }
-
-    /**
-     * update money amount
-     */
-    protected void updateMoneyTextOnScreen(String value) {
-        mMoneyText.setText(value);
-        if (mMoneyText.getX() < SizeConstants.GAME_FIELD_WIDTH / 2)
-            mMoneyText.setX(SizeConstants.MONEY_PADDING);
-        else
-            mMoneyText.setX(SizeConstants.GAME_FIELD_WIDTH - mMoneyText.getWidth() - SizeConstants.MONEY_PADDING);
-    }
-
     protected void onInitGameScene() {
         mGameScene = new Scene();
         mGameScene.setBackground(new Background(0, 0, 0));
@@ -287,7 +272,6 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         initGameSceneTouch();
         initHud();
 
-        initMoneyTextView();
         mGameScene.registerUpdateHandler(mPhysicsWorld);
     }
 
@@ -304,7 +288,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         teamBehaviorType = TeamControlBehaviourType.valueOf(intent.getStringExtra(GameStringsConstantsAndUtils.SECOND_TEAM_NAME));
         initSecondPlanet(TeamControlBehaviourType.isClientSide(teamBehaviorType));
 
-        positionizeMoneyText();
+        initMoneyText();
     }
 
     protected void initTeams() {
@@ -369,25 +353,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     protected ITeam createTeam(String teamNameInExtra, IRace race) {
         Intent intent = getIntent();
         TeamControlBehaviourType teamType = TeamControlBehaviourType.valueOf(intent.getStringExtra(teamNameInExtra));
-        Team team;
-
-        if (teamType == TeamControlBehaviourType.USER_CONTROL_ON_SERVER_SIDE) {
-            team = new Team(teamNameInExtra, race, teamType);
-            updateMoneyTextOnScreen(TeamUtils.getMoneyString(mMoneyTextPrefixString, team));
-        }
-        if (teamType == TeamControlBehaviourType.USER_CONTROL_ON_CLIENT_SIDE) {
-            team = new Team(teamNameInExtra, race, teamType) {
-                @Override
-                public void setMoney(final int money) {
-                    super.setMoney(money);
-                    updateMoneyTextOnScreen(TeamUtils.getMoneyString(mMoneyTextPrefixString, this));
-                }
-            };
-            updateMoneyTextOnScreen(TeamUtils.getMoneyString(mMoneyTextPrefixString, team));
-        } else {
-            team = new Team(teamNameInExtra, race, teamType);
-        }
-        return team;
+        return new Team(teamNameInExtra, race, teamType);
     }
 
     /** init first team and planet */
@@ -415,7 +381,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         if (unitUniqueId.length > 0)
             planetStaticObject.setObjectUniqueId(unitUniqueId[0]);
         mGameObjectsMap.put(planetStaticObject.getObjectUniqueId(), planetStaticObject);
-        registerCircleBody(planetStaticObject, BodyDef.BodyType.StaticBody, mStaticBodyFixtureDef);
+        onEvent(new CreateCircleBodyEvent(planetStaticObject));
         return planetStaticObject;
     }
 
@@ -442,7 +408,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         mStaticObjects.put(key, sunStaticObject);
         attachEntity(sunStaticObject);
         mGameObjectsMap.put(sunStaticObject.getObjectUniqueId(), sunStaticObject);
-        registerCircleBody(sunStaticObject, BodyDef.BodyType.StaticBody, mStaticBodyFixtureDef);
+        onEvent(new CreateCircleBodyEvent(sunStaticObject));
         return sunStaticObject;
     }
 
@@ -450,29 +416,23 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     protected void initUserControlledTeam(final ITeam initializingTeam) {
         LoggerHelper.methodInvocation(TAG, "initUserControlledTeam");
         // building popup
-        final BuildingsPopupTouchListener buildingsPopupTouchListener = new BuildingsPopupTouchListener(initializingTeam, this, this,
-                new IItemPickListener() {
-                    @Override
-                    public void itemPicked(final int itemId) {
-                        DescriptionPopupCompositeSprite.getInstance().show(initializingTeam.getTeamRace().getBuildingById(itemId));
-                        userWantCreateBuilding(initializingTeam, itemId);
-                    }
-                }
-        );
-        mMainSceneTouchListener.addTouchListener(DescriptionPopupCompositeSprite.getInstance());
-        mMainSceneTouchListener.addTouchListener(buildingsPopupTouchListener);
+        mMainSceneTouchListener.registerTouchListener(DescriptionPopupCompositeSprite.getInstance());
+        mMainSceneTouchListener.registerTouchListener(BuildingsPopupTouchListener.init(initializingTeam, this, this));
     }
 
-    private void positionizeMoneyText() {
+    /** move money text position on screen depending on planets position */
+    private void initMoneyText() {
+        LoggerHelper.methodInvocation(TAG, "initMoneyText");
         for (ITeam team : mTeams.values()) {
             if (!TeamControlBehaviourType.isUserControlType(team.getTeamControlType())) continue;
-            PlanetStaticObject planet = team.getTeamPlanet();
-            if (planet.getX() < SizeConstants.GAME_FIELD_WIDTH / 2)
-                mMoneyText.setX(SizeConstants.MONEY_PADDING);
-            else
-                mMoneyText.setX(SizeConstants.GAME_FIELD_WIDTH - mMoneyText.getWidth() - SizeConstants.MONEY_PADDING);
-            mMoneyText.setY(SizeConstants.MONEY_FONT_SIZE * 2);
-
+            LoggerHelper.methodInvocation(TAG, "init money text for " + team.getTeamName() + " team");
+            /*
+                Object, which display money value to user. Only one such money text present in the screen
+                because one device can't be used by multiple users to play.
+            */
+            MoneyText moneyText = new MoneyText(team.getTeamName(), getString(R.string.money_value_prefix),
+                    team.getTeamPlanet().getX(), getVertexBufferObjectManager());
+            mHud.attachChild(moneyText);
         }
     }
 
@@ -490,21 +450,11 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         }, 1, TimeUnit.SECONDS);
     }
 
-    /** init money string for  displaying to user */
-    private void initMoneyTextView() {
-        LoggerHelper.methodInvocation(TAG, "initMoneyTextView");
-        mMoneyTextPrefixString = getString(R.string.money_colon);
-        int maxStringLength = mMoneyTextPrefixString.length() + 6;
-        mMoneyText = new Text(0f, 0f, FontHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.KEY_FONT_MONEY),
-                "", maxStringLength, getVertexBufferObjectManager());
-        mHud.attachChild(mMoneyText);
-    }
-
     /** init hud */
     private void initHud() {
         mHud = mCamera.getHUD();
         mHud.setTouchAreaBindingOnActionDownEnabled(true);
-        attachEntityWithTouchToHud(DescriptionPopupCompositeSprite.init(this));
+        DescriptionPopupCompositeSprite.init(this, mHud);
     }
 
     /** init scene touch events so user can collaborate with game by screen touches */
@@ -538,63 +488,55 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         return getString(stringId);
     }
 
-    @Override
-    public void detachEntity(final IAreaShape shapeArea) {
+    @SuppressWarnings("unused")
+    /** really used by {@link de.greenrobot.event.EventBus} */
+    public void onEvent(final AbstractEntityEvent abstractEntityEvent) {
+        final IAreaShape entity = abstractEntityEvent.getEntity();
+        final Scene scene = abstractEntityEvent.hud() ? mCamera.getHUD() : mGameScene;
+        if (abstractEntityEvent instanceof DetachEntityEvent) {
+            detachEntity(entity, scene, ((DetachEntityEvent) abstractEntityEvent).withBody());
+        } else if (abstractEntityEvent instanceof AttachEntityEvent) {
+            attachEntity(entity, scene);
+        }
+    }
+
+    /** detach entity from scene (hud or game scene) */
+    private void detachEntity(final IAreaShape entity, final Scene scene, final boolean withBody) {
         MainOperationsBaseGameActivity.this.runOnUpdateThread(new Runnable() {
             @Override
             public void run() {
-                mGameScene.unregisterTouchArea(shapeArea);
-                mGameScene.detachChild(shapeArea);
-                if (shapeArea instanceof Unit)
-                    mGameObjectsMap.remove(shapeArea);
+                if (withBody) {
+                    ((RectangleWithBody) entity).removeBody(mPhysicsWorld);
+                }
+                scene.unregisterTouchArea(entity);
+                scene.detachChild(entity);
+                if (entity instanceof Unit)
+                    mGameObjectsMap.remove(((Unit) entity).getObjectUniqueId());
             }
         });
     }
 
-    @Override
-    public void attachEntity(final IEntity entity) {
-        mGameScene.attachChild(entity);
-    }
-
-    @Override
-    public void attachEntityWithTouchArea(final IAreaShape entity) {
-        mGameScene.attachChild(entity);
-        mGameScene.registerTouchArea(entity);
-    }
-
-    @Override
-    public void attachEntityWithTouchToHud(final IAreaShape entity) {
-        HUD hud = mCamera.getHUD();
-        hud.attachChild(entity);
-        hud.registerTouchArea(entity);
-    }
-
-    @Override
-    public void registerHudTouch(IAreaShape entity) {
-        HUD hud = mCamera.getHUD();
-        hud.registerTouchArea(entity);
-    }
-
-    @Override
-    public void detachEntityFromHud(final IAreaShape entity) {
-        final HUD hud = mCamera.getHUD();
+    /** attach entity to scene (hud or game scene) */
+    private void attachEntity(final IAreaShape entity, final Scene scene) {
         MainOperationsBaseGameActivity.this.runOnUpdateThread(new Runnable() {
             @Override
             public void run() {
-                hud.unregisterTouchArea(entity);
-                hud.detachChild(entity);
+                scene.attachChild(entity);
+                scene.registerTouchArea(entity);
             }
         });
     }
 
-    @Override
-    public VertexBufferObjectManager getObjectManager() {
-        return getVertexBufferObjectManager();
+    @SuppressWarnings("unused")
+    /** really used by {@link de.greenrobot.event.EventBus} */
+    public void onEvent(final CreateUnitEvent abstractEntityEvent) {
+        int unitKey = abstractEntityEvent.getKey();
+        final ITeam team = mTeams.get(abstractEntityEvent.getTeamName());
+        createUnit(unitKey, team);
     }
 
     /** create unit with body and update it's enemies and moving path */
-    @Override
-    public Unit createThickUnit(int unitKey, final ITeam unitTeam) {
+    protected Unit createUnit(int unitKey, final ITeam unitTeam) {
         Unit warrior = createThinUnit(unitKey, unitTeam,
                 unitTeam.getTeamPlanet().getSpawnPointX(), unitTeam.getTeamPlanet().getSpawnPointY());
         warrior.registerUpdateHandler();
@@ -606,7 +548,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     /**
      * create unit (with physic body) in particular position and add it to team
      */
-    protected Unit createThinUnit(int unitKey, ITeam unitTeam, float x, float y, long... unitUniqueId) {
+    protected Unit createThinUnit(int unitKey, ITeam unitTeam, float x, float y, long...
+            unitUniqueId) {
         Unit unit = unitTeam.getTeamRace().getUnitForBuilding(unitKey);
         unit.setObjectDestroyedListener(new ObjectDestroyedListener(unitTeam, this));
         unit.setPosition(x, y);
@@ -618,7 +561,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
 
         // init physic body
         BodyDef.BodyType bodyType = BodyDef.BodyType.DynamicBody;
-        registerCircleBody(unit, bodyType, unitTeam.getFixtureDefUnit());
+        onEvent(new CreateCircleBodyEvent(unit, bodyType, unitTeam.getFixtureDefUnit()));
         if (unitTeam.getTeamControlType() == TeamControlBehaviourType.REMOTE_CONTROL_ON_CLIENT_SIDE)
             unit.removeDamage();
         unit.setBulletFixtureDef(CollisionCategoriesUtils.getBulletFixtureDefByUnitCategory(
@@ -629,34 +572,31 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         return unit;
     }
 
-    @Override
-    public Body registerCircleBody(RectangleWithBody gameObject, BodyDef.BodyType pBodyType, FixtureDef pFixtureDef, float... transform) {
-        Body body = PhysicsFactory.createCircleBody(mPhysicsWorld, gameObject, pBodyType, pFixtureDef);
-        if (transform != null && transform.length == 3)
-            body.setTransform(transform[0], transform[1], transform[2]);
+    @SuppressWarnings("unused")
+    /** really used by {@link de.greenrobot.event.EventBus} */
+    public void onEvent(final CreateCircleBodyEvent createCircleBodyEvent) {
+        RectangleWithBody gameObject = createCircleBodyEvent.getGameObject();
+        BodyDef.BodyType bodyType = createCircleBodyEvent.getBodyType();
+        FixtureDef fixtureDef = createCircleBodyEvent.getFixtureDef();
+        Body body = PhysicsFactory.createCircleBody(mPhysicsWorld, gameObject, bodyType, fixtureDef);
+        if (createCircleBodyEvent.isCustomBodyTransform()) {
+            body.setTransform(createCircleBodyEvent.getX(), createCircleBodyEvent.getY(), createCircleBodyEvent.getAngle());
+        }
         mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(gameObject, body, true, true));
         gameObject.setBody(body);
-        return body;
+    }
+
+    /** attach entity to game scene */
+    private void attachEntity(final IAreaShape entity) {
+        attachEntity(entity, mGameScene);
+    }
+
+    @Override
+    public VertexBufferObjectManager getObjectManager() {
+        return getVertexBufferObjectManager();
     }
 
     protected abstract void initThickClient();
-
-    @Override
-    public void detachPhysicsBody(final RectangleWithBody gameObject) {
-        MainOperationsBaseGameActivity.this.runOnUpdateThread(new Runnable() {
-            @Override
-            public void run() {
-                Body body = gameObject.removeBody();
-                if (body == null) {return;}
-                final PhysicsConnector pc = mPhysicsWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(gameObject);
-                if (pc != null) {
-                    mPhysicsWorld.unregisterPhysicsConnector(pc);
-                }
-                body.setActive(false);
-                mPhysicsWorld.destroyBody(body);
-            }
-        });
-    }
 
     /** return unit if it exist (live) by using unit unique id */
     protected GameObject getGameObjectById(long id) {
@@ -675,36 +615,30 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     protected void attackIfBullet(Object firstBody, Object secondBody) {
         if (firstBody == null || secondBody == null) return;
         if (firstBody instanceof Bullet && secondBody instanceof Bullet) {
-            bulletsCollision((Bullet) firstBody, (Bullet) secondBody);
+            bulletColliedWithBullet((Bullet) firstBody, (Bullet) secondBody);
             return;
         }
         if (firstBody instanceof Bullet) {
-            if (!((Bullet) firstBody).getAndSetFalseIsObjectAlive()) return;
-            if (secondBody instanceof GameObject)
-                ((GameObject) secondBody).damageObject(((Bullet) firstBody).getDamage());
-            else
-                return;
-            detachPhysicsBody((Bullet) firstBody);
-            detachEntity((Bullet) firstBody);
-        }
-        if (secondBody instanceof Bullet) {
-            if (!((Bullet) secondBody).getAndSetFalseIsObjectAlive()) return;
-            if (firstBody instanceof GameObject)
-                ((GameObject) firstBody).damageObject(((Bullet) secondBody).getDamage());
-            else
-                return;
-            detachPhysicsBody((Bullet) secondBody);
-            detachEntity((Bullet) secondBody);
+            bulletColliedWithObject((Bullet) firstBody, secondBody);
+        } else if (secondBody instanceof Bullet) {
+            bulletColliedWithObject((Bullet) secondBody, firstBody);
         }
     }
 
-    protected void bulletsCollision(Bullet firstBody, Bullet secondBody) {
+    protected void bulletColliedWithBullet(Bullet firstBody, Bullet secondBody) {
         if (!firstBody.getAndSetFalseIsObjectAlive() || !secondBody.getAndSetFalseIsObjectAlive())
             return;
-        detachPhysicsBody(firstBody);
-        detachPhysicsBody(secondBody);
-        detachEntity(firstBody);
-        detachEntity(secondBody);
+        EventBus.getDefault().post(new DetachEntityEvent(firstBody));
+        EventBus.getDefault().post(new DetachEntityEvent(secondBody));
+    }
+
+    private void bulletColliedWithObject(Bullet bullet, Object object) {
+        if (!bullet.getAndSetFalseIsObjectAlive()) return;
+        if (object instanceof GameObject)
+            ((GameObject) object).damageObject(bullet.getDamage());
+        else
+            return;
+        EventBus.getDefault().post(new DetachEntityEvent(bullet));
     }
 
     @Override

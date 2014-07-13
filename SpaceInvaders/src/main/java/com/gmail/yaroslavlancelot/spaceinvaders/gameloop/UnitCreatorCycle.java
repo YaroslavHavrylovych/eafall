@@ -1,23 +1,22 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameloop;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateUnitEvent;
 
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * Handles how much unit to create and make it.
  */
 public class UnitCreatorCycle implements ITimerCallback {
     private final int mUnitKey;
-    private final EntityOperations mEntityOperations;
-    private final ITeam mUnitTeam;
+    private final String mTeamName;
     private volatile int mUnitAmount;
 
-    public UnitCreatorCycle(ITeam unitTeam, EntityOperations entityOperations, int unitKey) {
-        mUnitTeam = unitTeam;
-        mEntityOperations = entityOperations;
+    public UnitCreatorCycle(String teamName, int unitKey) {
+        mTeamName = teamName;
         mUnitKey = unitKey;
     }
 
@@ -32,7 +31,8 @@ public class UnitCreatorCycle implements ITimerCallback {
 
     @Override
     public void onTimePassed(final TimerHandler pTimerHandler) {
-        for (int i = 0; i < mUnitAmount; i++)
-            mEntityOperations.createThickUnit(mUnitKey, mUnitTeam);
+        for (int i = 0; i < mUnitAmount; i++) {
+            EventBus.getDefault().post(new CreateUnitEvent(mUnitKey, mTeamName));
+        }
     }
 }

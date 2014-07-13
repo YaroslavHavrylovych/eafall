@@ -3,6 +3,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.MoneyUpdatedEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IGameObjectHealthChanged;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IUnitFireCallback;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IVelocityChangedListener;
@@ -17,9 +18,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.Unit
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.UnitCreatedServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.UnitFireServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.server.InGameServer;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
-import com.gmail.yaroslavlancelot.spaceinvaders.teams.Team;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 
 import org.andengine.engine.options.EngineOptions;
@@ -76,8 +75,9 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
     }
 
     @Override
-    protected Unit createThinUnit(int unitKey, ITeam unitTeam, float x, float y, long... unitUniqueId) {
-        Unit unit = super.createThinUnit(unitKey, unitTeam, x, y);
+    protected Unit createUnit(int unitKey, ITeam unitTeam) {
+        Unit unit = super.createUnit(unitKey, unitTeam);
+
         try {
             mGameSocketServer.sendBroadcastServerMessage(new UnitCreatedServerMessage(unitTeam.getTeamName(), unitKey, unit));
         } catch (IOException e) {
@@ -86,6 +86,7 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
         unit.setGameObjectHealthChangedListener(this);
         unit.setVelocityChangedListener(this);
         unit.setUnitFireCallback(this);
+
         return unit;
     }
 
@@ -110,25 +111,6 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
         } catch (IOException e) {
             LoggerHelper.printErrorMessage(TAG, "send message (unit moved on server) IOException");
         }
-    }
-
-    @Override
-    protected ITeam createTeam(String teamNameInExtra, IRace race) {
-        final ITeam team = super.createTeam(teamNameInExtra, race);
-        if ((team instanceof Team) && (team.getTeamControlType() == TeamControlBehaviourType.REMOTE_CONTROL_ON_SERVER_SIDE)) {
-            ((Team) team).setMoneyChangedCallback(new Team.IMoneyChangedCallback() {
-                @Override
-                public void moneyChanged(int delta) {
-                    try {
-                        mGameSocketServer.sendBroadcastServerMessage(
-                                new MoneyChangedServerMessage(team.getTeamName(), team.getMoney()));
-                    } catch (IOException e) {
-                        LoggerHelper.printErrorMessage(TAG, "send message (money changed) IOException");
-                    }
-                }
-            });
-        }
-        return team;
     }
 
     @Override
@@ -165,5 +147,18 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
     public void beginContact(Contact contact) {
         super.beginContact(contact);
         resolveContactData(contact);
+    }
+
+    @SuppressWarnings("unused")
+    /** really used by {@link de.greenrobot.event.EventBus} */
+    public void onEvent(MoneyUpdatedEvent moneyUpdatedEvent) {
+        TeamControlBehaviourType behaviourType =
+                mTeams.get(moneyUpdatedEvent.getTeamName()).getTeamControlType();
+        try {
+            mGameSocketServer.sendBroadcastServerMessage(new MoneyChangedServerMessage(
+                    moneyUpdatedEvent.getTeamName(), moneyUpdatedEvent.getMoney()));
+        } catch (IOException e) {
+            LoggerHelper.printErrorMessage(TAG, "send message (money changed) IOException");
+        }
     }
 }

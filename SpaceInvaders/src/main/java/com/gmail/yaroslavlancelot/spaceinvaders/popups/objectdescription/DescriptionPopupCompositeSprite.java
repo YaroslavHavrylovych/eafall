@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.ShowBuildingDescriptionEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ITouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
@@ -11,12 +12,15 @@ import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
 
+import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * Contains elements which together create elements description (e.g. it's image, characteristics etc)
@@ -28,24 +32,73 @@ public class DescriptionPopupCompositeSprite extends Sprite implements Redraw, I
     private static volatile DescriptionPopupCompositeSprite sDescriptionPopupCompositeSprite;
     private GameObject mGameObject;
     private CloseButtonTiledSprite mCloseSprite;
+    private Scene mScene;
 
-    private DescriptionPopupCompositeSprite(VertexBufferObjectManager pVertexBufferObjectManager) {
+    private DescriptionPopupCompositeSprite(VertexBufferObjectManager pVertexBufferObjectManager, Scene scene) {
         super(0, 0,
                 TextureRegionHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.FILE_DESCRIPTION_POPUP_BACKGROUND),
                 pVertexBufferObjectManager);
         recreateArea(new Area(0, SizeConstants.GAME_FIELD_HEIGHT / 2,
                 SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT / 2));
+        mScene = scene;
+
+        mScene.attachChild(this);
+        mScene.registerTouchArea(this);
+
+        hide();
+
+        EventBus.getDefault().register(this);
     }
 
-    public static DescriptionPopupCompositeSprite getInstance() {
+    public void recreateArea(Area area) {
+        setPosition(area.left, area.top);
+        setWidth(area.width);
+        setHeight(area.height);
+    }
+
+    public void hide() {
+        setVisible(false);
+        setIgnoreUpdate(true);
+    }
+
+    public static synchronized DescriptionPopupCompositeSprite getInstance() {
         return sDescriptionPopupCompositeSprite;
     }
 
-    public static DescriptionPopupCompositeSprite init(EntityOperations entityOperations) {
-        sDescriptionPopupCompositeSprite = new DescriptionPopupCompositeSprite(entityOperations.getObjectManager());
-        sDescriptionPopupCompositeSprite.initCross(entityOperations);
-        sDescriptionPopupCompositeSprite.hide();
+    public static synchronized DescriptionPopupCompositeSprite init(EntityOperations entityOperations, Scene scene) {
+        sDescriptionPopupCompositeSprite =
+                new DescriptionPopupCompositeSprite(entityOperations.getObjectManager(), scene);
+
+        sDescriptionPopupCompositeSprite.initCross();
         return sDescriptionPopupCompositeSprite;
+    }
+
+    private void initCross() {
+        mCloseSprite = new CloseButtonTiledSprite(getVertexBufferObjectManager());
+        mCloseSprite.setPosition(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.DESCRIPTION_POPUP_TOP_BORDER_SIZE * 4,
+                (SizeConstants.DESCRIPTION_POPUP_TOP_BORDER_SIZE - SizeConstants.DESCRIPTION_POPUP_CROSS_SIZE) / 2);
+        mCloseSprite.setWidth(SizeConstants.DESCRIPTION_POPUP_TOP_BORDER_SIZE * 4);
+        mCloseSprite.setHeight(SizeConstants.DESCRIPTION_POPUP_TOP_BORDER_SIZE * 4);
+        mCloseSprite.setOnTouchListener(new TouchUtils.CustomTouchListener(new Area(getX() + mCloseSprite.getX(),
+                getY() + mCloseSprite.getY(), mCloseSprite.getWidth(), mCloseSprite.getHeight())) {
+            @Override
+            public void click() {
+                hide();
+            }
+
+            @Override
+            public void unPress() {
+                mCloseSprite.unpress();
+            }
+
+            @Override
+            public void press() {
+                mCloseSprite.press();
+            }
+        });
+
+        mScene.registerTouchArea(mCloseSprite);
+        attachChild(mCloseSprite);
     }
 
     public static void loadResources(Context context, TextureManager textureManager) {
@@ -58,14 +111,10 @@ public class DescriptionPopupCompositeSprite extends Sprite implements Redraw, I
         CloseButtonTiledSprite.loadResources(context, textureManager);
     }
 
-    public void recreateArea(Area area) {
-        setPosition(area.left, area.top);
-        setWidth(area.width);
-        setHeight(area.height);
-    }
-
-    @Override
-    public void redraw() {
+    @SuppressWarnings("unused")
+    /** really used by {@link de.greenrobot.event.EventBus} */
+    public void onEvent(final ShowBuildingDescriptionEvent showBuildingDescriptionEvent) {
+        show(null);
     }
 
     public void show(GameObject gameObject) {
@@ -73,30 +122,8 @@ public class DescriptionPopupCompositeSprite extends Sprite implements Redraw, I
         setIgnoreUpdate(false);
     }
 
-    public void hide() {
-        setVisible(false);
-        setIgnoreUpdate(true);
-    }
-
-    private void initCross(EntityOperations entityOperations) {
-        mCloseSprite = new CloseButtonTiledSprite(entityOperations.getObjectManager());
-        mCloseSprite.setPosition(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.DESCRIPTION_POPUP_TOP_BORDER_SIZE * 4,
-                (SizeConstants.DESCRIPTION_POPUP_TOP_BORDER_SIZE - SizeConstants.DESCRIPTION_POPUP_CROSS_SIZE) / 2);
-        mCloseSprite.setWidth(SizeConstants.DESCRIPTION_POPUP_TOP_BORDER_SIZE * 4);
-        mCloseSprite.setHeight(SizeConstants.DESCRIPTION_POPUP_TOP_BORDER_SIZE * 4);
-        mCloseSprite.setOnTouchListener(new TouchUtils.CustomTouchListener(new Area(getX() + mCloseSprite.getX(),
-                getY() + mCloseSprite.getY(), mCloseSprite.getWidth(), mCloseSprite.getHeight())) {
-            @Override
-            public void click() { hide(); }
-
-            @Override
-            public void unPress() { mCloseSprite.unpress(); }
-
-            @Override
-            public void press() { mCloseSprite.press(); }
-        });
-        entityOperations.registerHudTouch(mCloseSprite);
-        attachChild(mCloseSprite);
+    @Override
+    public void redraw() {
     }
 
     @Override

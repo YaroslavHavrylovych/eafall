@@ -6,7 +6,7 @@
 
     <!-- races names -->
     <string name="app_name">Космічні Загарбники</string>
-    <string name="money_colon">Гроші : </string>
+    <string name="money_value_prefix">Гроші : </string>
     <string name="camp">Табір</string>
     <string name="tent">Намет</string>
     <string name="barracks">Бараки</string>

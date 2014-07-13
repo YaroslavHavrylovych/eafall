@@ -2,6 +2,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch;
 
 import android.view.MotionEvent;
 
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.ShowBuildingDescriptionEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.BuildingsListItemBackgroundSprite;
@@ -16,8 +17,11 @@ import org.andengine.input.touch.TouchEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.greenrobot.event.EventBus;
+
 /** screen was touched (not move or scroll) and popup should appear */
 public class BuildingsPopupTouchListener implements ITouchListener {
+    private static volatile BuildingsPopupTouchListener sBuildingsPopupTouchListener;
     private ITeam mUserTeam;
     private EntityOperations mEntityOperations;
     private Localizable mLocalizable;
@@ -26,13 +30,19 @@ public class BuildingsPopupTouchListener implements ITouchListener {
     private BuildingsListPopup mPopup;
     private float mActionDownX, mActionDownY;
     private int mBuildingCostStringMaxCharacters = 5;
-    private IItemPickListener mItemPickListener;
 
-    public BuildingsPopupTouchListener(ITeam userTeam, EntityOperations entityOperations, Localizable localizable, IItemPickListener itemPickListener) {
+    private BuildingsPopupTouchListener(ITeam userTeam, EntityOperations entityOperations, Localizable localizable) {
         mUserTeam = userTeam;
         mEntityOperations = entityOperations;
         mLocalizable = localizable;
-        mItemPickListener = itemPickListener;
+    }
+
+    public static synchronized BuildingsPopupTouchListener getInstance() {
+        return sBuildingsPopupTouchListener;
+    }
+
+    public static synchronized BuildingsPopupTouchListener init(ITeam userTeam, EntityOperations entityOperations, Localizable localizable) {
+        return sBuildingsPopupTouchListener = new BuildingsPopupTouchListener(userTeam, entityOperations, localizable);
     }
 
     @Override
@@ -64,11 +74,6 @@ public class BuildingsPopupTouchListener implements ITouchListener {
         return true;
     }
 
-    public void hide() {
-        if (mUserTeam.getTeamPlanet() == null || mPopup.isShowing())
-            mPopup.hidePopup();
-    }
-
     private void initBuildingPopupForTeam(ITeam team) {
         IRace race = team.getTeamRace();
         // init elements
@@ -94,10 +99,15 @@ public class BuildingsPopupTouchListener implements ITouchListener {
         IItemPickListener spriteTouchListener = new IItemPickListener() {
             @Override
             public void itemPicked(final int buildingId) {
-                mItemPickListener.itemPicked(buildingId);
+                EventBus.getDefault().post(new ShowBuildingDescriptionEvent());
             }
         };
         return new BuildingsListPopup.PopupItem(id, gameObject, name, spriteTouchListener,
                 new BuildingsListItemBackgroundSprite(mEntityOperations.getObjectManager()));
+    }
+
+    public void hide() {
+        if (mUserTeam.getTeamPlanet() == null || mPopup.isShowing())
+            mPopup.hidePopup();
     }
 }

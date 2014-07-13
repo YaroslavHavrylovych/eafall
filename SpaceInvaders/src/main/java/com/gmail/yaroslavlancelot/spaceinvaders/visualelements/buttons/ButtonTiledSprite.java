@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.buttons;
+package com.gmail.yaroslavlancelot.spaceinvaders.visualelements.buttons;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ISpriteTouchable;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ITouchListener;

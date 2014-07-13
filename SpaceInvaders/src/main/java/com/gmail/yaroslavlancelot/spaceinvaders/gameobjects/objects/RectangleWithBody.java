@@ -3,6 +3,8 @@ package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects;
 import com.badlogic.gdx.physics.box2d.Body;
 
 import org.andengine.entity.primitive.Rectangle;
+import org.andengine.extension.physics.box2d.PhysicsConnector;
+import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /** extends rectangle to have physic body */
@@ -28,11 +30,23 @@ public abstract class RectangleWithBody extends Rectangle {
         mPhysicBody.setUserData(this);
     }
 
-    public synchronized Body removeBody() {
+    private Body removeBody() {
         if (mPhysicBody == null) return null;
         Body body = mPhysicBody;
         mPhysicBody = null;
         body.setUserData(null);
         return body;
+    }
+
+    public synchronized void removeBody(PhysicsWorld physicsWorld) {
+        Body body = removeBody();
+        if (body == null) return;
+        final PhysicsConnector pc = physicsWorld.getPhysicsConnectorManager()
+                .findPhysicsConnectorByShape(this);
+        if (pc != null) {
+            physicsWorld.unregisterPhysicsConnector(pc);
+        }
+        body.setActive(false);
+        physicsWorld.destroyBody(body);
     }
 }
