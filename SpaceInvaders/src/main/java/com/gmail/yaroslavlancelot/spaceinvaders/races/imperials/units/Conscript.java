@@ -6,23 +6,22 @@ import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAn
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Physical;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Annihilator;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.UpdatableGameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.Imperials;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations;
 
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
+import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class Conscript extends Unit implements UpdatableGameObject<Conscript> {
     public static final String CONSCRIPT_IMAGE_PATH = GameStringsConstantsAndUtils.getPathToUnits(Imperials.RACE_NAME) + "conscript.png";
     public static final String CONSCRIPT_FIRE_SOUND_PATH = GameStringsConstantsAndUtils.getPathToSounds(Imperials.RACE_NAME) + "annihilation_1s.ogg";
 
-    public Conscript(final EntityOperations entityOperations, final SoundOperations soundOperations) {
-        super(TextureRegionHolderUtils.getInstance().getElement(CONSCRIPT_IMAGE_PATH), soundOperations, entityOperations);
+    public Conscript(final VertexBufferObjectManager objectManager, final SoundOperations soundOperations) {
+        super(TextureRegionHolderUtils.getInstance().getElement(CONSCRIPT_IMAGE_PATH), soundOperations, objectManager);
         setWidth(SizeConstants.UNIT_SIZE);
         setHeight(SizeConstants.UNIT_SIZE);
         initHealth(450);

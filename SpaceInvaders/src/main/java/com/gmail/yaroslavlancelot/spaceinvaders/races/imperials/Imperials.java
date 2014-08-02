@@ -1,7 +1,8 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.races.imperials;
 
 import android.content.Context;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
+
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.LocaleImpl;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
@@ -25,6 +26,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.units.Superman;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
+import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
 /** imperials */
@@ -32,14 +34,13 @@ public class Imperials implements IRace {
     /** race name */
     public static final String RACE_NAME = "Imperials";
     private Color mTeamColor;
-    private EntityOperations mEntityOperations;
+    private VertexBufferObjectManager mObjectManager;
     private int mBuildingsAmount = 8;
     private SoundOperations mSoundOperations;
 
-
-    public Imperials(Color teamColor, final EntityOperations entityOperations, final SoundOperations soundOperations) {
+    public Imperials(Color teamColor, final VertexBufferObjectManager objectManager, final SoundOperations soundOperations) {
         mTeamColor = teamColor;
-        mEntityOperations = entityOperations;
+        mObjectManager = objectManager;
         mSoundOperations = soundOperations;
     }
 
@@ -58,34 +59,43 @@ public class Imperials implements IRace {
         StaticObject building;
         switch (buildingId) {
             case 0:
-                building = new Camp(mEntityOperations.getObjectManager());
+                building = new Camp(mObjectManager);
                 break;
             case 1:
-                building = new Tent(mEntityOperations.getObjectManager());
+                building = new Tent(mObjectManager);
                 break;
             case 2:
-                building = new Barracks(mEntityOperations.getObjectManager());
+                building = new Barracks(mObjectManager);
                 break;
             case 3:
-                building = new ShootersHall(mEntityOperations.getObjectManager());
+                building = new ShootersHall(mObjectManager);
                 break;
             case 4:
-                building = new TrainingCenter(mEntityOperations.getObjectManager());
+                building = new TrainingCenter(mObjectManager);
                 break;
             case 5:
-                building = new Workshop(mEntityOperations.getObjectManager());
+                building = new Workshop(mObjectManager);
                 break;
             case 6:
-                building = new Laboratory(mEntityOperations.getObjectManager());
+                building = new Laboratory(mObjectManager);
                 break;
             case 7:
-                building = new Bunker(mEntityOperations.getObjectManager());
+                building = new Bunker(mObjectManager);
                 break;
             default:
                 throw new IllegalArgumentException("unknown building type=" + buildingId);
         }
         initBuilding(building);
         return building;
+    }
+
+    @Override
+    public String[] getBuildingsNames() {
+        String[] result = new String[getBuildingsAmount()];
+        for(int i = 0; i < getBuildingsAmount(); i++) {
+            result[i] = LocaleImpl.getInstance().getStringById(getBuildingById(i).getObjectStringId());
+        }
+        return result;
     }
 
     private void initBuilding(StaticObject building) {
@@ -103,28 +113,28 @@ public class Imperials implements IRace {
         Unit unit;
         switch (buildingId) {
             case 0:
-                unit = new Conscript(mEntityOperations, mSoundOperations);
+                unit = new Conscript(mObjectManager, mSoundOperations);
                 break;
             case 1:
-                unit = new Scout(mEntityOperations, mSoundOperations);
+                unit = new Scout(mObjectManager, mSoundOperations);
                 break;
             case 2:
-                unit = new Infantrymen(mEntityOperations, mSoundOperations);
+                unit = new Infantrymen(mObjectManager, mSoundOperations);
                 break;
             case 3:
-                unit = new Sniper(mEntityOperations, mSoundOperations);
+                unit = new Sniper(mObjectManager, mSoundOperations);
                 break;
             case 4:
-                unit = new Agent(mEntityOperations, mSoundOperations);
+                unit = new Agent(mObjectManager, mSoundOperations);
                 break;
             case 5:
-                unit = new Robot(mEntityOperations, mSoundOperations);
+                unit = new Robot(mObjectManager, mSoundOperations);
                 break;
             case 6:
-                unit = new Demolisher(mEntityOperations, mSoundOperations);
+                unit = new Demolisher(mObjectManager, mSoundOperations);
                 break;
             case 7:
-                unit = new Superman(mEntityOperations, mSoundOperations);
+                unit = new Superman(mObjectManager, mSoundOperations);
                 break;
             default:
                 throw new IllegalArgumentException("unknown building type=" + buildingId);

@@ -5,10 +5,10 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameloop.UnitCreatorCycle;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Higgs;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
 
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,8 +21,6 @@ public class PlanetStaticObject extends StaticObject {
     private float mSpawnPointX, mSpawnPointY;
     // buildings in current planet
     private Map<Integer, BuildingsHolder> buildings = new HashMap<Integer, BuildingsHolder>(15);
-    /** for creating new units */
-    private EntityOperations mEntityOperations;
     /** the team, current planet belongs to */
     private ITeam mPlanetTeam;
 
@@ -32,20 +30,19 @@ public class PlanetStaticObject extends StaticObject {
      */
     private boolean mIsFakePlanet = false;
 
-    private PlanetStaticObject(float x, float y, ITextureRegion textureRegion, EntityOperations entityOperations, ITeam planetTeam) {
-        super(x, y, textureRegion, entityOperations.getObjectManager());
-        mEntityOperations = entityOperations;
+    public PlanetStaticObject(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager objectManager, ITeam planetTeam, boolean isFakePlanet) {
+        this(x, y, textureRegion, objectManager, planetTeam);
+        mIsFakePlanet = isFakePlanet;
+    }
+
+    private PlanetStaticObject(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager objectManager, ITeam planetTeam) {
+        super(x, y, textureRegion, objectManager);
         mIncomeIncreasingValue = 10;
         mPlanetTeam = planetTeam;
         mObjectArmor = new Higgs(2);
         setWidth(SizeConstants.PLANET_DIAMETER);
         setHeight(SizeConstants.PLANET_DIAMETER);
         initHealth(3000);
-    }
-
-    public PlanetStaticObject(float x, float y, ITextureRegion textureRegion, EntityOperations entityOperations, ITeam planetTeam, boolean isFakePlanet) {
-        this(x, y, textureRegion, entityOperations, planetTeam);
-        mIsFakePlanet = isFakePlanet;
     }
 
     /** set unit spawn point */
@@ -65,12 +62,6 @@ public class PlanetStaticObject extends StaticObject {
     /** handle logic of creating a building on a non-fake planet */
     public boolean purchaseBuilding(int buildingId) {
         return createBuildingById(buildingId, false);
-    }
-
-    /** perform {@code createBuildingById} invocation with parameter of is this planet is fake */
-    public boolean createBuildingById(int buildingId) {
-        LoggerHelper.methodInvocation(TAG, "buildBuilding");
-        return createBuildingById(buildingId, mIsFakePlanet);
     }
 
     /** create new building object and add it to holder so then call {@code addBuilding()} */
@@ -118,6 +109,12 @@ public class PlanetStaticObject extends StaticObject {
     private void buyBuilding(int cost) {
         if (mPlanetTeam != null)
             mPlanetTeam.changeMoney(-cost);
+    }
+
+    /** perform {@code createBuildingById} invocation with parameter of is this planet is fake */
+    public boolean createBuildingById(int buildingId) {
+        LoggerHelper.methodInvocation(TAG, "buildBuilding");
+        return createBuildingById(buildingId, mIsFakePlanet);
     }
 
     public Map<Integer, BuildingsHolder> getBuildings() {

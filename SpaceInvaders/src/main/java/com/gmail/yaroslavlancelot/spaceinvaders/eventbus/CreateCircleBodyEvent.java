@@ -3,7 +3,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.eventbus;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.RectangleWithBody;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.CollisionCategoriesUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.CollisionCategoriesConstants;
 
 /** holds data needed for registering body in PhysicWorld */
 public class CreateCircleBodyEvent {
@@ -20,7 +20,7 @@ public class CreateCircleBodyEvent {
 
     /** used for registering static circle body */
     public CreateCircleBodyEvent(RectangleWithBody gameObject) {
-        this(gameObject, BodyDef.BodyType.StaticBody, CollisionCategoriesUtils.STATIC_BODY_FIXTURE_DEF);
+        this(gameObject, BodyDef.BodyType.StaticBody, CollisionCategoriesConstants.STATIC_BODY_FIXTURE_DEF);
     }
 
     public CreateCircleBodyEvent(RectangleWithBody gameObject, BodyDef.BodyType bodyType, FixtureDef fixtureDef) {

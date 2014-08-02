@@ -4,7 +4,6 @@ import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities.DetachEntityEv
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.RectangleWithBody;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
 
 import de.greenrobot.event.EventBus;
 
@@ -12,17 +11,14 @@ import de.greenrobot.event.EventBus;
 public class ObjectDestroyedListener implements IObjectDestroyedListener {
     /** team of listening object */
     protected ITeam mTeam;
-    /** for detaching sprites */
-    protected EntityOperations mEntityOperations;
 
     /**
      * used for perform operation after unit death
      *
      * @param team {@link com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam} of listening object
      */
-    public ObjectDestroyedListener(ITeam team, EntityOperations entityOperations) {
+    public ObjectDestroyedListener(ITeam team) {
         mTeam = team;
-        mEntityOperations = entityOperations;
     }
 
     @Override

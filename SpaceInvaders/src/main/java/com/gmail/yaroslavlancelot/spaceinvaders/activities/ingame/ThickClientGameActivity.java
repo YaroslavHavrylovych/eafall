@@ -2,7 +2,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameloop.MoneyUpdateCycle;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.CollisionCategoriesUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.CollisionCategoriesConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -30,15 +30,15 @@ public abstract class ThickClientGameActivity extends MainOperationsBaseGameActi
         LoggerHelper.methodInvocation(TAG, "createBounds");
         PhysicsFactory.createLineBody(
                 mPhysicsWorld, -1, -1, -1, SizeConstants.GAME_FIELD_HEIGHT + 1,
-                CollisionCategoriesUtils.STATIC_BODY_FIXTURE_DEF);
+                CollisionCategoriesConstants.STATIC_BODY_FIXTURE_DEF);
         PhysicsFactory.createLineBody(
                 mPhysicsWorld, -1, -1, SizeConstants.GAME_FIELD_WIDTH + 1, -1,
-                CollisionCategoriesUtils.STATIC_BODY_FIXTURE_DEF);
+                CollisionCategoriesConstants.STATIC_BODY_FIXTURE_DEF);
         PhysicsFactory.createLineBody(
                 mPhysicsWorld, SizeConstants.GAME_FIELD_WIDTH + 1, -1, SizeConstants.GAME_FIELD_WIDTH + 1,
-                SizeConstants.GAME_FIELD_WIDTH + 1, CollisionCategoriesUtils.STATIC_BODY_FIXTURE_DEF);
+                SizeConstants.GAME_FIELD_WIDTH + 1, CollisionCategoriesConstants.STATIC_BODY_FIXTURE_DEF);
         PhysicsFactory.createLineBody(mPhysicsWorld, SizeConstants.GAME_FIELD_WIDTH + 1,
                 SizeConstants.GAME_FIELD_HEIGHT + 1, -1, SizeConstants.GAME_FIELD_HEIGHT + 1,
-                CollisionCategoriesUtils.STATIC_BODY_FIXTURE_DEF);
+                CollisionCategoriesConstants.STATIC_BODY_FIXTURE_DEF);
     }
 }

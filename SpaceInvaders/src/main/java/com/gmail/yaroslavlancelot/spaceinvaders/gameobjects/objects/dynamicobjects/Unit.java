@@ -8,7 +8,6 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IUnitFireC
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitPathUtil;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations;
 
 import org.andengine.audio.sound.Sound;
@@ -17,6 +16,7 @@ import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.math.MathUtils;
 
 import java.util.List;
@@ -44,8 +44,6 @@ public abstract class Unit extends GameObject {
     protected UnitPathUtil.UnitPath mUnitPath;
     /** for sound manipulations */
     protected SoundOperations mSoundOperations;
-    /** for creating new entities */
-    protected EntityOperations mEntityOperations;
     /** unit attack sound */
     protected Sound mFireSound;
     /** last unit attack time */
@@ -55,11 +53,10 @@ public abstract class Unit extends GameObject {
     /** fixture def for bullets created by this unit */
     private FixtureDef mBulletFixtureDef;
 
-    protected Unit(ITextureRegion textureRegion, SoundOperations soundOperations, EntityOperations entityOperations) {
-        super(-100, -100, textureRegion, entityOperations.getObjectManager());
+    protected Unit(ITextureRegion textureRegion, SoundOperations soundOperations, VertexBufferObjectManager objectManager) {
+        super(-100, -100, textureRegion, objectManager);
 
         mSoundOperations = soundOperations;
-        mEntityOperations = entityOperations;
     }
 
     public void registerUpdateHandler() {
@@ -90,19 +87,6 @@ public abstract class Unit extends GameObject {
         attackGoal(objectToAttack);
     }
 
-    @Override
-    public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-        return mObjectSprite.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
-    }
-
-    public int getViewRadius() {
-        return mViewRadius;
-    }
-
-    public void removeDamage() {
-        mObjectDamage.removeDamage();
-    }
-
     protected void attackGoal(GameObject attackedObject) {
         if (attackedObject == null) return;
 
@@ -116,8 +100,7 @@ public abstract class Unit extends GameObject {
         LoggerHelper.printVerboseMessage(TAG, "unit=" + getObjectUniqueId() + "(" + getX() + "," + getY() + ")" +
                 ", attack object=" + attackedObject.getObjectUniqueId() + "(" + attackedObject.getX() + "," + attackedObject.getY() + ")");
         playSound(mFireSound, mSoundOperations);
-        Bullet bullet = new Bullet(getVertexBufferObjectManager(), mEntityOperations,
-                getBackgroundColor(), mObjectDamage, mBulletFixtureDef);
+        Bullet bullet = new Bullet(getVertexBufferObjectManager(), getBackgroundColor(), mObjectDamage, mBulletFixtureDef);
         Vector2 objectPosition = getBody().getPosition();
 
         bullet.fireFromPosition(objectPosition.x + SizeConstants.UNIT_SIZE / 2 / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
@@ -133,6 +116,19 @@ public abstract class Unit extends GameObject {
             return false;
         mLastAttackTime = time;
         return true;
+    }
+
+    @Override
+    public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+        return mObjectSprite.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+    }
+
+    public int getViewRadius() {
+        return mViewRadius;
+    }
+
+    public void removeDamage() {
+        mObjectDamage.removeDamage();
     }
 
     public void setBulletFixtureDef(FixtureDef bulletFixtureDef) {

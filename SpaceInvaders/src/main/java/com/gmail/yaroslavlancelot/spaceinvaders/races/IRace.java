@@ -11,6 +11,8 @@ public interface IRace {
 
     int getBuildingsAmount();
 
+    String[] getBuildingsNames();
+
     StaticObject getBuildingById(int buildingId);
 
     int getBuildingCostById(int buildingId);

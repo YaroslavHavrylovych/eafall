@@ -1,18 +1,13 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.util.DisplayMetrics;
 import android.view.Display;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.Manifold;
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.ai.NormalBot;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
@@ -20,34 +15,32 @@ import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateCircleBodyEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateUnitEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.GameLoadedEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities.AbstractEntityEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities.AttachEntityEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities.DetachEntityEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.GameObjectsContactListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.ObjectDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.PlanetDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.RectangleWithBody;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Bullet;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.SunStaticObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.BuildingsPopupTouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.MainSceneTouchListener;
-import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.BuildingsListItemBackgroundSprite;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.BuildingsPopup;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.DescriptionPopupCompositeSprite;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.Imperials;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.Team;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.CollisionCategoriesUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.CollisionCategoriesConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.MusicAndSoundsHandler;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitCallbacksUtils;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.Localizable;
 import com.gmail.yaroslavlancelot.spaceinvaders.visualelements.text.MoneyText;
 
 import org.andengine.engine.camera.SmoothCamera;
@@ -57,6 +50,8 @@ import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
+import org.andengine.entity.IEntity;
+import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.shape.IAreaShape;
@@ -65,24 +60,15 @@ import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.input.touch.controller.MultiTouch;
-import org.andengine.opengl.font.FontFactory;
-import org.andengine.opengl.font.IFont;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
-import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.color.Color;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import de.greenrobot.event.EventBus;
 
@@ -90,7 +76,7 @@ import de.greenrobot.event.EventBus;
  * Main game Activity. Extends {@link BaseGameActivity} class and contains main game elements.
  * Loads resources, initialize scene, engine and etc.
  */
-public abstract class MainOperationsBaseGameActivity extends BaseGameActivity implements Localizable, EntityOperations, ContactListener {
+public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     /**
      * tag, which is used for debugging purpose
      */
@@ -109,6 +95,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     protected HUD mHud;
     /** current game physics world */
     protected PhysicsWorld mPhysicsWorld;
+    /** game objects contact listener */
+    protected GameObjectsContactListener mContactListener;
     /* splash screen */
     protected Scene mSplashScene;
     //TODO check is textures depends on race colour
@@ -150,7 +138,6 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         mPhysicsWorld = new PhysicsWorld(new Vector2(0, 0), false);
 
         // music
-
         engineOptions.getAudioOptions().setNeedsMusic(true);
         engineOptions.getAudioOptions().setNeedsSound(true);
 
@@ -209,7 +196,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
                 initThickClient();
                 onInitPlanetsAndTeams();
 
-                mPhysicsWorld.setContactListener(MainOperationsBaseGameActivity.this);
+                mPhysicsWorld.setContactListener(mContactListener = new GameObjectsContactListener());
                 mBackgroundMusic.initBackgroundMusic();
                 mBackgroundMusic.playBackgroundMusic();
 
@@ -217,6 +204,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
                 mEngine.setScene(mGameScene);
 
                 EventBus.getDefault().register(MainOperationsBaseGameActivity.this);
+                EventBus.getDefault().post(new GameLoadedEvent());
             }
         }));
     }
@@ -230,36 +218,20 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         mMusicAndSoundsHandler = new MusicAndSoundsHandler(getSoundManager(), MainOperationsBaseGameActivity.this);
         mBackgroundMusic = mMusicAndSoundsHandler.new BackgroundMusic(getMusicManager());
 
-        //races load
-        firstTeamUserRace = new Imperials(Color.RED, this, mMusicAndSoundsHandler);
+        //races loadGeneralGameTextures
+        firstTeamUserRace = new Imperials(Color.RED, getVertexBufferObjectManager(), mMusicAndSoundsHandler);
         firstTeamUserRace.loadResources(getTextureManager(), this);
-        secondTeamUserRace = new Imperials(Color.BLUE, this, mMusicAndSoundsHandler);
+        secondTeamUserRace = new Imperials(Color.BLUE, getVertexBufferObjectManager(), mMusicAndSoundsHandler);
         secondTeamUserRace.loadResources(getTextureManager(), this);
 
         // other loader
-        BuildingsListItemBackgroundSprite.loadResources(this, getTextureManager());
+        BuildingsPopup.loadResource(this, getTextureManager());
         DescriptionPopupCompositeSprite.loadResources(this, getTextureManager());
 
-        //* bigger objects
-        BitmapTextureAtlas biggerObjectsTexture = new BitmapTextureAtlas(getTextureManager(),
-                512, 512, TextureOptions.BILINEAR);
-        mTextureRegionHolderUtils.addElement(GameStringsConstantsAndUtils.KEY_SUN,
-                BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, this, GameStringsConstantsAndUtils.FILE_SUN, 0, 0));
-        mTextureRegionHolderUtils.addElement(GameStringsConstantsAndUtils.KEY_RED_PLANET,
-                BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, this, GameStringsConstantsAndUtils.FILE_RED_PLANET,
-                        0, SizeConstants.FILE_SUN_DIAMETER)
-        );
-        mTextureRegionHolderUtils.addElement(GameStringsConstantsAndUtils.KEY_BLUE_PLANET,
-                BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, this, GameStringsConstantsAndUtils.FILE_BLUE_PLANET,
-                        SizeConstants.PLANET_DIAMETER, SizeConstants.FILE_SUN_DIAMETER)
-        );
-        biggerObjectsTexture.load();
+        TextureRegionHolderUtils.loadGeneralGameTextures(this, getTextureManager());
 
         // font
-        IFont font = FontFactory.create(this.getFontManager(), this.getTextureManager(), 256, 256,
-                Typeface.create(Typeface.DEFAULT, Typeface.BOLD), SizeConstants.MONEY_FONT_SIZE, Color.WHITE.hashCode());
-        font.load();
-        FontHolderUtils.getInstance().addElement(GameStringsConstantsAndUtils.KEY_FONT_MONEY, font);
+        FontHolderUtils.loadGameFonts(getFontManager(), getTextureManager());
     }
 
     protected void onInitGameScene() {
@@ -336,15 +308,15 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         boolean isRemote = TeamControlBehaviourType.isClientSide(type);
         if (team.getTeamName().equals(GameStringsConstantsAndUtils.FIRST_TEAM_NAME)) {
             if (isRemote)
-                team.changeFixtureDefFilter(CollisionCategoriesUtils.CATEGORY_TEAM1, CollisionCategoriesUtils.MASKBITS_TEAM1_THIN);
+                team.changeFixtureDefFilter(CollisionCategoriesConstants.CATEGORY_TEAM1, CollisionCategoriesConstants.MASKBITS_TEAM1_THIN);
             else
-                team.changeFixtureDefFilter(CollisionCategoriesUtils.CATEGORY_TEAM1, CollisionCategoriesUtils.MASKBITS_TEAM1_THICK);
+                team.changeFixtureDefFilter(CollisionCategoriesConstants.CATEGORY_TEAM1, CollisionCategoriesConstants.MASKBITS_TEAM1_THICK);
             return;
         }
         if (isRemote)
-            team.changeFixtureDefFilter(CollisionCategoriesUtils.CATEGORY_TEAM2, CollisionCategoriesUtils.MASKBITS_TEAM2_THIN);
+            team.changeFixtureDefFilter(CollisionCategoriesConstants.CATEGORY_TEAM2, CollisionCategoriesConstants.MASKBITS_TEAM2_THIN);
         else
-            team.changeFixtureDefFilter(CollisionCategoriesUtils.CATEGORY_TEAM2, CollisionCategoriesUtils.MASKBITS_TEAM2_THICK);
+            team.changeFixtureDefFilter(CollisionCategoriesConstants.CATEGORY_TEAM2, CollisionCategoriesConstants.MASKBITS_TEAM2_THICK);
     }
 
     protected abstract void userWantCreateBuilding(ITeam userTeam, int buildingId);
@@ -374,8 +346,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     /** create planet game object */
     protected PlanetStaticObject createPlanet(float x, float y, ITextureRegion textureRegion, String key, ITeam team, boolean isFakePlanet, long... unitUniqueId) {
         LoggerHelper.methodInvocation(TAG, "createPlanet");
-        PlanetStaticObject planetStaticObject = new PlanetStaticObject(x, y, textureRegion, this, team, isFakePlanet);
-        planetStaticObject.setObjectDestroyedListener(new PlanetDestroyedListener(team, this));
+        PlanetStaticObject planetStaticObject = new PlanetStaticObject(x, y, textureRegion, getVertexBufferObjectManager(), team, isFakePlanet);
+        planetStaticObject.setObjectDestroyedListener(new PlanetDestroyedListener(team));
         mStaticObjects.put(key, planetStaticObject);
         attachEntity(planetStaticObject);
         if (unitUniqueId.length > 0)
@@ -417,7 +389,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         LoggerHelper.methodInvocation(TAG, "initUserControlledTeam");
         // building popup
         mMainSceneTouchListener.registerTouchListener(DescriptionPopupCompositeSprite.getInstance());
-        mMainSceneTouchListener.registerTouchListener(BuildingsPopupTouchListener.init(initializingTeam, this, this));
+        BuildingsPopup.init(initializingTeam, getVertexBufferObjectManager());
+        mMainSceneTouchListener.registerTouchListener(BuildingsPopup.getInstance());
     }
 
     /** move money text position on screen depending on planets position */
@@ -438,23 +411,14 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
 
     protected void initBotControlledTeam(final ITeam initializingTeam) {
         LoggerHelper.methodInvocation(TAG, "initBotControlledTeam");
-        final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
-        executor.schedule(new Runnable() {
-            @Override
-            public void run() {
-                ExecutorService executorService = Executors.newSingleThreadExecutor();
-                LoggerHelper.printDebugMessage(TAG, "bot team == null : " + (initializingTeam == null));
-                Callable<Boolean> simpleBot = new NormalBot(initializingTeam);
-                Future<Boolean> future = executorService.submit(simpleBot);
-            }
-        }, 1, TimeUnit.SECONDS);
+        new Thread(new NormalBot(initializingTeam)).start();
     }
 
     /** init hud */
     private void initHud() {
         mHud = mCamera.getHUD();
         mHud.setTouchAreaBindingOnActionDownEnabled(true);
-        DescriptionPopupCompositeSprite.init(this, mHud);
+        DescriptionPopupCompositeSprite.init(getVertexBufferObjectManager(), mHud);
     }
 
     /** init scene touch events so user can collaborate with game by screen touches */
@@ -483,30 +447,38 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
             mBackgroundMusic.pauseBackgroundMusic();
     }
 
-    @Override
-    public String getStringById(final int stringId) {
-        return getString(stringId);
-    }
-
     @SuppressWarnings("unused")
     /** really used by {@link de.greenrobot.event.EventBus} */
     public void onEvent(final AbstractEntityEvent abstractEntityEvent) {
         final IAreaShape entity = abstractEntityEvent.getEntity();
         final Scene scene = abstractEntityEvent.hud() ? mCamera.getHUD() : mGameScene;
         if (abstractEntityEvent instanceof DetachEntityEvent) {
-            detachEntity(entity, scene, ((DetachEntityEvent) abstractEntityEvent).withBody());
+            DetachEntityEvent detachEntityEvent = (DetachEntityEvent) abstractEntityEvent;
+            detachEntity(entity, scene,
+                    entity instanceof RectangleWithBody && detachEntityEvent.withBody(),
+                    detachEntityEvent.isUnregisterChildrenTouch());
         } else if (abstractEntityEvent instanceof AttachEntityEvent) {
-            attachEntity(entity, scene);
+            attachEntity(entity, scene, ((AttachEntityEvent) abstractEntityEvent).isRegisterChildrenTouch());
         }
     }
 
     /** detach entity from scene (hud or game scene) */
-    private void detachEntity(final IAreaShape entity, final Scene scene, final boolean withBody) {
+    private void detachEntity(final IAreaShape entity, final Scene scene,
+                              final boolean withBody, final boolean unregisterChildrenTouch) {
         MainOperationsBaseGameActivity.this.runOnUpdateThread(new Runnable() {
             @Override
             public void run() {
                 if (withBody) {
                     ((RectangleWithBody) entity).removeBody(mPhysicsWorld);
+                }
+                if (unregisterChildrenTouch) {
+                    LoggerHelper.printDebugMessage(TAG, "detach : entity.getChildCount()=" + entity.getChildCount());
+                    for (int i = 0; i < entity.getChildCount(); i++) {
+                        IEntity child = entity.getChildByIndex(i);
+                        if (child instanceof ITouchArea) {
+                            scene.unregisterTouchArea((ITouchArea) child);
+                        }
+                    }
                 }
                 scene.unregisterTouchArea(entity);
                 scene.detachChild(entity);
@@ -517,10 +489,19 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     }
 
     /** attach entity to scene (hud or game scene) */
-    private void attachEntity(final IAreaShape entity, final Scene scene) {
+    private void attachEntity(final IAreaShape entity, final Scene scene, final boolean registerChildrenTouch) {
         MainOperationsBaseGameActivity.this.runOnUpdateThread(new Runnable() {
             @Override
             public void run() {
+                if (registerChildrenTouch) {
+                    LoggerHelper.printDebugMessage(TAG, "attach : entity.getChildCount()=" + entity.getChildCount());
+                    for (int i = 0; i < entity.getChildCount(); i++) {
+                        IEntity child = entity.getChildByIndex(i);
+                        if (child instanceof ITouchArea) {
+                            scene.registerTouchArea((ITouchArea) child);
+                        }
+                    }
+                }
                 scene.attachChild(entity);
                 scene.registerTouchArea(entity);
             }
@@ -551,7 +532,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     protected Unit createThinUnit(int unitKey, ITeam unitTeam, float x, float y, long...
             unitUniqueId) {
         Unit unit = unitTeam.getTeamRace().getUnitForBuilding(unitKey);
-        unit.setObjectDestroyedListener(new ObjectDestroyedListener(unitTeam, this));
+        unit.setObjectDestroyedListener(new ObjectDestroyedListener(unitTeam));
         unit.setPosition(x, y);
         unitTeam.addObjectToTeam(unit);
 
@@ -564,7 +545,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
         onEvent(new CreateCircleBodyEvent(unit, bodyType, unitTeam.getFixtureDefUnit()));
         if (unitTeam.getTeamControlType() == TeamControlBehaviourType.REMOTE_CONTROL_ON_CLIENT_SIDE)
             unit.removeDamage();
-        unit.setBulletFixtureDef(CollisionCategoriesUtils.getBulletFixtureDefByUnitCategory(
+        unit.setBulletFixtureDef(CollisionCategoriesConstants.getBulletFixtureDefByUnitCategory(
                 unitTeam.getFixtureDefUnit().filter.categoryBits));
 
         attachEntity(unit);
@@ -588,12 +569,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
 
     /** attach entity to game scene */
     private void attachEntity(final IAreaShape entity) {
-        attachEntity(entity, mGameScene);
-    }
-
-    @Override
-    public VertexBufferObjectManager getObjectManager() {
-        return getVertexBufferObjectManager();
+        attachEntity(entity, mGameScene, false);
     }
 
     protected abstract void initThickClient();
@@ -601,55 +577,5 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity im
     /** return unit if it exist (live) by using unit unique id */
     protected GameObject getGameObjectById(long id) {
         return mGameObjectsMap.get(id);
-    }
-
-    @Override
-    public void beginContact(Contact contact) {
-        Object firstBody = contact.getFixtureA().getBody().getUserData();
-        Object secondBody = contact.getFixtureB().getBody().getUserData();
-        if (firstBody == null || secondBody == null) return;
-        if (firstBody instanceof Bullet || secondBody instanceof Bullet)
-            attackIfBullet(firstBody, secondBody);
-    }
-
-    protected void attackIfBullet(Object firstBody, Object secondBody) {
-        if (firstBody == null || secondBody == null) return;
-        if (firstBody instanceof Bullet && secondBody instanceof Bullet) {
-            bulletColliedWithBullet((Bullet) firstBody, (Bullet) secondBody);
-            return;
-        }
-        if (firstBody instanceof Bullet) {
-            bulletColliedWithObject((Bullet) firstBody, secondBody);
-        } else if (secondBody instanceof Bullet) {
-            bulletColliedWithObject((Bullet) secondBody, firstBody);
-        }
-    }
-
-    protected void bulletColliedWithBullet(Bullet firstBody, Bullet secondBody) {
-        if (!firstBody.getAndSetFalseIsObjectAlive() || !secondBody.getAndSetFalseIsObjectAlive())
-            return;
-        EventBus.getDefault().post(new DetachEntityEvent(firstBody));
-        EventBus.getDefault().post(new DetachEntityEvent(secondBody));
-    }
-
-    private void bulletColliedWithObject(Bullet bullet, Object object) {
-        if (!bullet.getAndSetFalseIsObjectAlive()) return;
-        if (object instanceof GameObject)
-            ((GameObject) object).damageObject(bullet.getDamage());
-        else
-            return;
-        EventBus.getDefault().post(new DetachEntityEvent(bullet));
-    }
-
-    @Override
-    public void endContact(Contact contact) {
-    }
-
-    @Override
-    public void preSolve(Contact contact, Manifold oldManifold) {
-    }
-
-    @Override
-    public void postSolve(Contact contact, ContactImpulse impulse) {
     }
 }

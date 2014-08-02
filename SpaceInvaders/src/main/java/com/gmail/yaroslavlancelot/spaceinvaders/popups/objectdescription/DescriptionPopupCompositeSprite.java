@@ -10,7 +10,6 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ITouchListener
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
 
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
@@ -34,10 +33,10 @@ public class DescriptionPopupCompositeSprite extends Sprite implements Redraw, I
     private CloseButtonTiledSprite mCloseSprite;
     private Scene mScene;
 
-    private DescriptionPopupCompositeSprite(VertexBufferObjectManager pVertexBufferObjectManager, Scene scene) {
+    private DescriptionPopupCompositeSprite(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         super(0, 0,
                 TextureRegionHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.FILE_DESCRIPTION_POPUP_BACKGROUND),
-                pVertexBufferObjectManager);
+                vertexBufferObjectManager);
         recreateArea(new Area(0, SizeConstants.GAME_FIELD_HEIGHT / 2,
                 SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT / 2));
         mScene = scene;
@@ -65,9 +64,9 @@ public class DescriptionPopupCompositeSprite extends Sprite implements Redraw, I
         return sDescriptionPopupCompositeSprite;
     }
 
-    public static synchronized DescriptionPopupCompositeSprite init(EntityOperations entityOperations, Scene scene) {
+    public static synchronized DescriptionPopupCompositeSprite init(VertexBufferObjectManager objectManager, Scene scene) {
         sDescriptionPopupCompositeSprite =
-                new DescriptionPopupCompositeSprite(entityOperations.getObjectManager(), scene);
+                new DescriptionPopupCompositeSprite(objectManager, scene);
 
         sDescriptionPopupCompositeSprite.initCross();
         return sDescriptionPopupCompositeSprite;

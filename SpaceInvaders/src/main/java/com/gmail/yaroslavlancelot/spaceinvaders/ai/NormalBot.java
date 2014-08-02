@@ -6,14 +6,12 @@ import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 
-import java.util.concurrent.Callable;
-
 /**
  * First created bot. Creates table of all units  with how one can kill another capabilities and try to
  * build unit which will kill more your units which are not covered by other his units. If he cover all yours
  * units with his own then will build strongest unit he have money to build.
  */
-public class NormalBot implements Callable<Boolean> {
+public class NormalBot implements Runnable {
     public static final String TAG = NormalBot.class.getCanonicalName();
     public static final int DELAY_BETWEEN_ITERATIONS = 50;
     private final ITeam mBotTeam;
@@ -42,7 +40,6 @@ public class NormalBot implements Callable<Boolean> {
      *
      * @param unit1 attacker
      * @param unit2 defender
-     *
      * @return float value, which represent how much unit2 health will be burned after fight with unit1
      */
     public static float calculateUnitEfficiency(Unit unit1, Unit unit2) {
@@ -56,13 +53,13 @@ public class NormalBot implements Callable<Boolean> {
     }
 
     @Override
-    public Boolean call() throws Exception {
+    public void run() {
         while (mBotTeam.getTeamPlanet() != null) {
             delay();
             synchronized (mBotTeam.getTeamPlanet()) {
                 // win
                 if (mBotTeam.getEnemyTeam().getTeamPlanet() == null) {
-                    return true;
+                    return;
                 }
 
                 // start of the game
@@ -92,13 +89,30 @@ public class NormalBot implements Callable<Boolean> {
                 }
             }
         }
-        return false;
     }
 
-    private boolean isAllCovered(int[] array) {
-        for (int i = 0; i < array.length; i++)
-            if (array[i] > 0) return false;
-        return true;
+    private void delay() {
+        try {
+            Thread.sleep(DELAY_BETWEEN_ITERATIONS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void buildFirstBuilding() {
+        int money = mBotTeam.getMoney();
+        if (money <= 0) return;
+        int income = mBotTeam.getTeamPlanet().getObjectIncomeIncreasingValue();
+        int coolestBuildingBotCanBuildId = 0;
+        for (int i = 0; i < mBotTeam.getTeamRace().getBuildingsAmount(); i++) {
+            if (money + income >= mBotTeam.getTeamRace().getBuildingCostById(coolestBuildingBotCanBuildId)) {
+                coolestBuildingBotCanBuildId++;
+            }
+        }
+        if (coolestBuildingBotCanBuildId <= 0) {
+            return;
+        }
+        mBotTeam.getTeamPlanet().createBuildingById(coolestBuildingBotCanBuildId - 1);
     }
 
     private int[] getUncoveredBuildings(ITeam team, float[][] efficiencyArray) {
@@ -126,31 +140,10 @@ public class NormalBot implements Callable<Boolean> {
         return buildingsOfRace2;
     }
 
-    private int[] getBuildings(ITeam team) {
-        int[] buildings = new int[team.getTeamRace().getBuildingsAmount()];
-        for (int i = 0; i < buildings.length; i++) {
-            PlanetStaticObject.BuildingsHolder buildingsHolder = team.getTeamPlanet().getBuildings().get(new Integer(i));
-            buildings[i] = buildingsHolder == null ? 0 : buildingsHolder.getBuildingsAmount();
-        }
-        return buildings;
-    }
-
-    private void delay() {
-        try {
-            Thread.sleep(DELAY_BETWEEN_ITERATIONS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void buildFirstBuilding() {
-        int money = mBotTeam.getMoney();
-        int income = mBotTeam.getTeamPlanet().getObjectIncomeIncreasingValue();
-        int coolestBuildingBotCanBuildId = 0;
-        for (int i = 0; i < mBotTeam.getTeamRace().getBuildingsAmount(); i++)
-            if (money + income >= mBotTeam.getTeamRace().getBuildingCostById(coolestBuildingBotCanBuildId))
-                coolestBuildingBotCanBuildId++;
-        mBotTeam.getTeamPlanet().createBuildingById(coolestBuildingBotCanBuildId - 1);
+    private boolean isAllCovered(int[] array) {
+        for (int i = 0; i < array.length; i++)
+            if (array[i] > 0) return false;
+        return true;
     }
 
     private int getBuildingIdToCreate(ITeam team, float[][] efficiencyArray, int[] uncoveredBuildings) {
@@ -177,5 +170,14 @@ public class NormalBot implements Callable<Boolean> {
             }
         }
         return minValueId;
+    }
+
+    private int[] getBuildings(ITeam team) {
+        int[] buildings = new int[team.getTeamRace().getBuildingsAmount()];
+        for (int i = 0; i < buildings.length; i++) {
+            PlanetStaticObject.BuildingsHolder buildingsHolder = team.getTeamPlanet().getBuildings().get(new Integer(i));
+            buildings[i] = buildingsHolder == null ? 0 : buildingsHolder.getBuildingsAmount();
+        }
+        return buildings;
     }
 }

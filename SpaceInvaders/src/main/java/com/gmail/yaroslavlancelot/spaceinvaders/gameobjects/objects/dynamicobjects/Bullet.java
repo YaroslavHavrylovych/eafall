@@ -9,7 +9,6 @@ import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities.DetachEntityEv
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Damage;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.RectangleWithBody;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitPathUtil;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.EntityOperations;
 
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -26,8 +25,6 @@ public class Bullet extends RectangleWithBody {
     private static final BodyDef.BodyType sBulletBodyType = BodyDef.BodyType.DynamicBody;
     private static final float sMaxVelocity = 2.0f;
     private final FixtureDef mBulletFixtureDef;
-    /** for detaching entity from scene */
-    private final EntityOperations mEntityOperations;
     private final AtomicBoolean mIsObjectAlive;
     /** update time for current object */
     protected float mUpdateCycleTime = .5f;
@@ -35,11 +32,9 @@ public class Bullet extends RectangleWithBody {
     private float mBulletStartX, mBulletStartY;
     private Damage mDamage;
 
-    public Bullet(VertexBufferObjectManager vertexBufferObjectManager, EntityOperations entityOperations,
-                  Color color, Damage damage, FixtureDef fixtureDef) {
+    public Bullet(VertexBufferObjectManager vertexBufferObjectManager, Color color, Damage damage, FixtureDef fixtureDef) {
         super(0, 0, BULLET_SIZE, BULLET_SIZE, vertexBufferObjectManager);
         setColor(color);
-        mEntityOperations = entityOperations;
         mIsObjectAlive = new AtomicBoolean(true);
         mDamage = damage;
         mBulletFixtureDef = fixtureDef;

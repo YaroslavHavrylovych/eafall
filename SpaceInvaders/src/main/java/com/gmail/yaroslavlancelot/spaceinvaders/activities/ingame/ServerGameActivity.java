@@ -1,9 +1,10 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
 import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.Manifold;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.GameLoadedEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.MoneyUpdatedEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.GameObjectsContactListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IGameObjectHealthChanged;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IUnitFireCallback;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IVelocityChangedListener;
@@ -43,21 +44,6 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
     }
 
     @Override
-    public void newBuildingCreate(int buildingId) {
-        LoggerHelper.methodInvocation(TAG, "newBuildingCreate");
-        if (mSecondTeam != null && mSecondTeam.getTeamPlanet() != null) {
-            userWantCreateBuilding(mSecondTeam, buildingId);
-        }
-    }
-
-    @Override
-    protected PlanetStaticObject createPlanet(float x, float y, ITextureRegion textureRegion, String key, ITeam team, boolean isFakePlanet, long... uniquesId) {
-        PlanetStaticObject planetStaticObject = super.createPlanet(x, y, textureRegion, key, team, isFakePlanet, uniquesId);
-        planetStaticObject.setGameObjectHealthChangedListener(this);
-        return planetStaticObject;
-    }
-
-    @Override
     protected void userWantCreateBuilding(final ITeam userTeam, final int buildingId) {
         LoggerHelper.printInformationMessage(TAG, "user want to create building with id=" + buildingId);
         PlanetStaticObject planetStaticObject = userTeam.getTeamPlanet();
@@ -75,6 +61,13 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
     }
 
     @Override
+    protected PlanetStaticObject createPlanet(float x, float y, ITextureRegion textureRegion, String key, ITeam team, boolean isFakePlanet, long... uniquesId) {
+        PlanetStaticObject planetStaticObject = super.createPlanet(x, y, textureRegion, key, team, isFakePlanet, uniquesId);
+        planetStaticObject.setGameObjectHealthChangedListener(this);
+        return planetStaticObject;
+    }
+
+    @Override
     protected Unit createUnit(int unitKey, ITeam unitTeam) {
         Unit unit = super.createUnit(unitKey, unitTeam);
 
@@ -88,6 +81,43 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
         unit.setUnitFireCallback(this);
 
         return unit;
+    }
+
+    @Override
+    public void newBuildingCreate(int buildingId) {
+        LoggerHelper.methodInvocation(TAG, "newBuildingCreate");
+        if (mSecondTeam != null && mSecondTeam.getTeamPlanet() != null) {
+            userWantCreateBuilding(mSecondTeam, buildingId);
+        }
+    }
+
+    @Override
+    public void gameObjectHealthChanged(long unitUniqueId, int newUnitHealth) {
+        try {
+            mGameSocketServer.sendBroadcastServerMessage(new GameObjectHealthChangedServerMessage(unitUniqueId, newUnitHealth));
+        } catch (IOException e) {
+            LoggerHelper.printErrorMessage(TAG, "send message (game object health changed on server) IOException");
+        }
+    }
+
+    @Override
+    public void fire(long gameObjectUniqueId, long attackedGameObjectUniqueId) {
+        try {
+            mGameSocketServer.sendBroadcastServerMessage(new UnitFireServerMessage(gameObjectUniqueId, attackedGameObjectUniqueId));
+        } catch (IOException e) {
+            LoggerHelper.printErrorMessage(TAG, "send message (game object health changed on server) IOException");
+        }
+    }
+
+    @SuppressWarnings("unused")
+    /** really used by {@link de.greenrobot.event.EventBus} */
+    public void onEvent(final GameLoadedEvent gameLoadedEvent) {
+        mContactListener.setContactCallback(new GameObjectsContactListener.ContactCallback() {
+            @Override
+            public void contact(Contact contact) {
+                resolveContactData(contact);
+            }
+        });
     }
 
     private void resolveContactData(final Contact contact) {
@@ -111,42 +141,6 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
         } catch (IOException e) {
             LoggerHelper.printErrorMessage(TAG, "send message (unit moved on server) IOException");
         }
-    }
-
-    @Override
-    public void gameObjectHealthChanged(long unitUniqueId, int newUnitHealth) {
-        try {
-            mGameSocketServer.sendBroadcastServerMessage(new GameObjectHealthChangedServerMessage(unitUniqueId, newUnitHealth));
-        } catch (IOException e) {
-            LoggerHelper.printErrorMessage(TAG, "send message (game object health changed on server) IOException");
-        }
-    }
-
-    @Override
-    public void fire(long gameObjectUniqueId, long attackedGameObjectUniqueId) {
-        try {
-            mGameSocketServer.sendBroadcastServerMessage(new UnitFireServerMessage(gameObjectUniqueId, attackedGameObjectUniqueId));
-        } catch (IOException e) {
-            LoggerHelper.printErrorMessage(TAG, "send message (game object health changed on server) IOException");
-        }
-    }
-
-    @Override
-    public void preSolve(Contact contact, Manifold oldManifold) {
-        super.preSolve(contact, oldManifold);
-        resolveContactData(contact);
-    }
-
-    @Override
-    public void endContact(Contact contact) {
-        super.endContact(contact);
-        resolveContactData(contact);
-    }
-
-    @Override
-    public void beginContact(Contact contact) {
-        super.beginContact(contact);
-        resolveContactData(contact);
     }
 
     @SuppressWarnings("unused")
