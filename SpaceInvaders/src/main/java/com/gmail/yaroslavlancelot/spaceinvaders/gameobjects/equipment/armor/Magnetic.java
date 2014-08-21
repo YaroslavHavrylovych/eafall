@@ -14,7 +14,7 @@ public class Magnetic extends Armor {
         Damage.DamageType damageType = damage.getDamageType();
         if(damageType.equals(Damage.DamageType.ANNIHILATOR))
             return (int) (damage.getDamageValue() * .8);
-        if(damageType.equals(Damage.DamageType.ELECTRICAL))
+        if(damageType.equals(Damage.DamageType.ELECTRIC))
             return (int) (damage.getDamageValue() * .85);
         if(damageType.equals(Damage.DamageType.MAGNETIC))
             return (int) (damage.getDamageValue() * 1.05);

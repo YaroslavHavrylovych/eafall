@@ -12,15 +12,15 @@ public class Electrical extends Armor {
     @Override
     protected int getDamageAfterConsumption(Damage damage) {
         Damage.DamageType damageType = damage.getDamageType();
-        if(damageType.equals(Damage.DamageType.ANNIHILATOR))
+        if (damageType.equals(Damage.DamageType.ANNIHILATOR))
             return (int) (damage.getDamageValue() * .7);
-        if(damageType.equals(Damage.DamageType.ELECTRICAL))
+        if (damageType.equals(Damage.DamageType.ELECTRIC))
             return (int) (damage.getDamageValue() * 1.0);
-        if(damageType.equals(Damage.DamageType.MAGNETIC))
+        if (damageType.equals(Damage.DamageType.MAGNETIC))
             return (int) (damage.getDamageValue() * .8);
-        if(damageType.equals(Damage.DamageType.NEUTRINO))
+        if (damageType.equals(Damage.DamageType.NEUTRINO))
             return (int) (damage.getDamageValue() * .9);
-        if(damageType.equals(Damage.DamageType.HIGGS))
+        if (damageType.equals(Damage.DamageType.HIGGS))
             return (int) (damage.getDamageValue() * 1.0);
         throw new IllegalArgumentException("unsupported damage type");
     }

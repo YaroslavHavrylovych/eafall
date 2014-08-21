@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="units">
+        <xs:complexType>
+            <xs:sequence>
+
+                <xs:element name="unit" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="health" type="xs:positiveInteger"/>
+                            <xs:element name="armor" type="xs:string"/>
+                            <xs:element name="armor_value" type="xs:positiveInteger"/>
+                            <xs:element name="damage" type="xs:string"/>
+                            <xs:element name="damage_value" type="xs:positiveInteger"/>
+                            <xs:element name="attack_radius" type="xs:positiveInteger"/>
+                            <xs:element name="view_radius" type="xs:positiveInteger"/>
+                            <xs:element name="reload_time" type="xs:double"/>
+                            <xs:element name="sound" type="xs:string"/>
+                            <xs:element name="team_color_area">
+                                <xs:complexType>
+                                    <xs:sequence maxOccurs="1" minOccurs="1">
+                                        <xs:element name="x" type="xs:float"/>
+                                        <xs:element name="y" type="xs:float"/>
+                                        <xs:element name="width" type="xs:float"/>
+                                        <xs:element name="height" type="xs:float"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="name" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

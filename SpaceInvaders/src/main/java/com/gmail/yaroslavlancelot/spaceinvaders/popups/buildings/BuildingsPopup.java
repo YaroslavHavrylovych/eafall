@@ -162,19 +162,20 @@ public class BuildingsPopup extends Rectangle implements ITouchListener {
         private void initTouch() {
             setOnTouchListener(new TouchUtils.CustomTouchListener(new Area(getX(), getY(), getWidth(), getHeight())) {
                 @Override
+                public void press() {
+                    BuildingsPopupItem.this.press();
+                }
+
+                @Override
                 public void click() {
                     LoggerHelper.printDebugMessage(TAG, "show description");
+                    unPress();
                     EventBus.getDefault().post(new ShowBuildingDescriptionEvent());
                 }
 
                 @Override
                 public void unPress() {
                     BuildingsPopupItem.this.unpress();
-                }
-
-                @Override
-                public void press() {
-                    BuildingsPopupItem.this.press();
                 }
             });
         }
@@ -183,7 +184,9 @@ public class BuildingsPopup extends Rectangle implements ITouchListener {
     /** touch anywhere where you can see free space on the screen to show the popup */
     private class TouchListener extends TouchUtils.CustomTouchListener {
         public TouchListener() {
-            super(new Area(0, 0, SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT));
+            super(new Area(SizeConstants.GAME_FIELD_WIDTH / 2 - SizeConstants.SUN_DIAMETER / 2,
+                    SizeConstants.GAME_FIELD_HEIGHT / 2 - SizeConstants.SUN_DIAMETER / 2,
+                    SizeConstants.SUN_DIAMETER, SizeConstants.SUN_DIAMETER));
         }
 
         @Override

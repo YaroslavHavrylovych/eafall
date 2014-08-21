@@ -28,6 +28,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjec
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.SunStaticObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ITouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.MainSceneTouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.BuildingsPopup;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.DescriptionPopupCompositeSprite;
@@ -59,6 +60,7 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
+import org.andengine.input.touch.TouchEvent;
 import org.andengine.input.touch.controller.MultiTouch;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
@@ -260,8 +262,25 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         teamBehaviorType = TeamControlBehaviourType.valueOf(intent.getStringExtra(GameStringsConstantsAndUtils.SECOND_TEAM_NAME));
         initSecondPlanet(TeamControlBehaviourType.isClientSide(teamBehaviorType));
 
+        initBuildingsPopupInvocation();
         initMoneyText();
     }
+
+    private void initBuildingsPopupInvocation() {
+        for (ITeam team : mTeams.values()) {
+            if (team.getTeamControlType() == TeamControlBehaviourType.USER_CONTROL_ON_SERVER_SIDE ||
+                    team.getTeamControlType() == TeamControlBehaviourType.USER_CONTROL_ON_CLIENT_SIDE) {
+                BuildingsPopup.init(team, getVertexBufferObjectManager());
+                mStaticObjects.get(GameStringsConstantsAndUtils.KEY_SUN).setOnTouchListener(new ITouchListener() {
+                    @Override
+                    public boolean onTouch(TouchEvent pSceneTouchEvent) {
+                        return BuildingsPopup.getInstance().onTouch(pSceneTouchEvent);
+                    }
+                });
+            }
+        }
+    }
+
 
     protected void initTeams() {
         // red team
@@ -288,16 +307,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         TeamControlBehaviourType teamType = team.getTeamControlType();
         initTeamFixtureDef(team);
 
-        if (teamType == TeamControlBehaviourType.USER_CONTROL_ON_SERVER_SIDE ||
-                teamType == TeamControlBehaviourType.USER_CONTROL_ON_CLIENT_SIDE) {
-            initUserControlledTeam(team);
-        } else if (teamType == TeamControlBehaviourType.BOT_CONTROL_ON_SERVER_SIDE) {
+        if (teamType == TeamControlBehaviourType.BOT_CONTROL_ON_SERVER_SIDE) {
             initBotControlledTeam(team);
-        } else if (teamType == TeamControlBehaviourType.REMOTE_CONTROL_ON_CLIENT_SIDE ||
-                teamType == TeamControlBehaviourType.REMOTE_CONTROL_ON_SERVER_SIDE) {
-            //nothing to do here
-        } else {
-            throw new IllegalArgumentException("unknown team type =" + teamType);
         }
 
         mTeams.put(team.getTeamName(), team);
@@ -384,15 +395,6 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         return sunStaticObject;
     }
 
-    /** init planet touch listener for some team */
-    protected void initUserControlledTeam(final ITeam initializingTeam) {
-        LoggerHelper.methodInvocation(TAG, "initUserControlledTeam");
-        // building popup
-        mMainSceneTouchListener.registerTouchListener(DescriptionPopupCompositeSprite.getInstance());
-        BuildingsPopup.init(initializingTeam, getVertexBufferObjectManager());
-        mMainSceneTouchListener.registerTouchListener(BuildingsPopup.getInstance());
-    }
-
     /** move money text position on screen depending on planets position */
     private void initMoneyText() {
         LoggerHelper.methodInvocation(TAG, "initMoneyText");
@@ -419,6 +421,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         mHud = mCamera.getHUD();
         mHud.setTouchAreaBindingOnActionDownEnabled(true);
         DescriptionPopupCompositeSprite.init(getVertexBufferObjectManager(), mHud);
+        mMainSceneTouchListener.registerTouchListener(DescriptionPopupCompositeSprite.getInstance());
     }
 
     /** init scene touch events so user can collaborate with game by screen touches */

@@ -3,7 +3,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Damage;
 
 public class HeavyWater extends Armor {
-    public static final ArmorType ARMOR_TYPE = ArmorType.HEAVY_WATER_SHIELDM;
+    public static final ArmorType ARMOR_TYPE = ArmorType.HEAVY_WATER_SHIELD;
 
     public HeavyWater(final int armorValue) {
         super(armorValue);
@@ -14,7 +14,7 @@ public class HeavyWater extends Armor {
         Damage.DamageType damageType = damage.getDamageType();
         if(damageType.equals(Damage.DamageType.ANNIHILATOR))
             return (int) (damage.getDamageValue() * .65);
-        if(damageType.equals(Damage.DamageType.ELECTRICAL))
+        if(damageType.equals(Damage.DamageType.ELECTRIC))
             return (int) (damage.getDamageValue() * .95);
         if(damageType.equals(Damage.DamageType.MAGNETIC))
             return (int) (damage.getDamageValue() * .7);

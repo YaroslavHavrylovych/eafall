@@ -7,6 +7,7 @@ repositories {
 dependencies {
     compile project(':AndEngineMultiplayerExtension')
     compile 'de.greenrobot:eventbus:2.2.1'
+    compile fileTree(dir: 'libs', include: ['*.jar'])
 }
 
 android {

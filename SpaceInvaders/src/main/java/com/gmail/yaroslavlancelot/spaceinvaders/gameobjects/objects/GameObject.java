@@ -82,28 +82,9 @@ public abstract class GameObject extends RectangleWithBody implements ISpriteTou
         mUniqueId = sGameObjectsTracker.getAndIncrement();
     }
 
-    protected static void loadResource(String pathToUnit, Context context, BitmapTextureAtlas textureAtlas, int x, int y) {
-        TextureRegionHolderUtils.addElementFromAssets(pathToUnit, TextureRegionHolderUtils.getInstance(),
+    public static void loadResource(String pathToImage, Context context, BitmapTextureAtlas textureAtlas, int x, int y) {
+        TextureRegionHolderUtils.addElementFromAssets(pathToImage, TextureRegionHolderUtils.getInstance(),
                 textureAtlas, context, x, y);
-    }
-
-    /**
-     * return angle in radiance which is angle between abscissa and line from
-     * (startX, startY, x, y)
-     */
-    public static float getDirection(float startX, float startY, float x, float y) {
-        float a = Math.abs(startX - x),
-                b = Math.abs(startY - y);
-
-        float newAngle = (float) Math.atan(b / a);
-
-        if (startY < y) {
-            if (startX > x) return 3 * MathConstants.PI / 2 - newAngle;
-            else return newAngle + MathConstants.PI / 2;
-        }
-
-        if (startX > x) return newAngle + 3 * MathConstants.PI / 2;
-        return MathConstants.PI / 2 - newAngle;
     }
 
     public long getObjectUniqueId() {
@@ -287,6 +268,25 @@ public abstract class GameObject extends RectangleWithBody implements ISpriteTou
                 currentY = getY();
 
         return getDirection(currentX, currentY, x, y);
+    }
+
+    /**
+     * return angle in radiance which is angle between abscissa and line from
+     * (startX, startY, x, y)
+     */
+    public static float getDirection(float startX, float startY, float x, float y) {
+        float a = Math.abs(startX - x),
+                b = Math.abs(startY - y);
+
+        float newAngle = (float) Math.atan(b / a);
+
+        if (startY < y) {
+            if (startX > x) return 3 * MathConstants.PI / 2 - newAngle;
+            else return newAngle + MathConstants.PI / 2;
+        }
+
+        if (startX > x) return newAngle + 3 * MathConstants.PI / 2;
+        return MathConstants.PI / 2 - newAngle;
     }
 
     /** set physic body velocity */

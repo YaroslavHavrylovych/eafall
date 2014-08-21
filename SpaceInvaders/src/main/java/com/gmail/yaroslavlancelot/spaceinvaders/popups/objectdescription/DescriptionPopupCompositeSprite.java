@@ -82,6 +82,7 @@ public class DescriptionPopupCompositeSprite extends Sprite implements Redraw, I
                 getY() + mCloseSprite.getY(), mCloseSprite.getWidth(), mCloseSprite.getHeight())) {
             @Override
             public void click() {
+                unPress();
                 hide();
             }
 
@@ -127,6 +128,6 @@ public class DescriptionPopupCompositeSprite extends Sprite implements Redraw, I
 
     @Override
     public boolean onTouch(TouchEvent pSceneTouchEvent) {
-        return contains(pSceneTouchEvent.getX(), pSceneTouchEvent.getY());
+        return isVisible() && contains(pSceneTouchEvent.getX(), pSceneTouchEvent.getY());
     }
 }

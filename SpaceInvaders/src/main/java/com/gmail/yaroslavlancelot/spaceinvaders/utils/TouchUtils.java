@@ -29,6 +29,8 @@ public final class TouchUtils {
         private boolean mIsOutOfBoundMoveHappens;
         /** used to find out is you move in bounds or not */
         private Area mArea;
+        private boolean mActionDownPresent;
+
 
         /** parameters description you can see in javadoc to fields of this class */
         public CustomTouchListener(Area area) {
@@ -41,39 +43,56 @@ public final class TouchUtils {
                 case TouchEvent.ACTION_DOWN: {
                     mIsItClickEvent = true;
                     mIsOutOfBoundMoveHappens = false;
+                    mActionDownPresent = true;
                     press();
-                    break;
+                    return true;
                 }
                 case TouchEvent.ACTION_UP: {
-                    if (!mIsOutOfBoundMoveHappens)
-                        unPress();
-                    if (mIsItClickEvent)
+                    if (!mActionDownPresent) {
+                        return false;
+                    }
+                    mActionDownPresent = false;
+                    if (mIsItClickEvent) {
                         click();
-                    break;
+                    }
+                    return true;
                 }
                 case TouchEvent.ACTION_MOVE:
                 case TouchEvent.ACTION_OUTSIDE:
                 case TouchEvent.ACTION_CANCEL: {
-                    if (mIsOutOfBoundMoveHappens) break;
-                    if (!mArea.contains(event.getX(), event.getY())) {
+                    if (!mActionDownPresent) {
+                        return false;
+                    }
+                    if (mIsOutOfBoundMoveHappens) {
+                        return false;
+                    }
+                    if (isTouchOutOfBound(event)) {
                         mIsItClickEvent = false;
                         mIsOutOfBoundMoveHappens = true;
                         unPress();
+                        return false;
                     }
-                    break;
+                    return true;
                 }
             }
-            return true;
+            return false;
+        }
+
+        /** element was pressed callback */
+        public void press() {
         }
 
         /** callback after click on element happens. User touch down and up finger on element without cancelling or move outside */
-        public void click() {}
+        public void click() {
+        }
+
+        private boolean isTouchOutOfBound(final TouchEvent event) {
+            return !mArea.contains(event.getX(), event.getY());
+        }
 
         /** callback after user press element but then cancel press with moving outside of the element borders */
-        public void unPress() {}
-
-        /** element was pressed callback */
-        public void press() {}
+        public void unPress() {
+        }
     }
 }
 

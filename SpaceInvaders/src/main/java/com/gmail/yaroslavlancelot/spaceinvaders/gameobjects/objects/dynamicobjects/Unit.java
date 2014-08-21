@@ -15,8 +15,6 @@ import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 import org.andengine.input.touch.TouchEvent;
-import org.andengine.opengl.texture.region.ITextureRegion;
-import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.math.MathUtils;
 
 import java.util.List;
@@ -24,7 +22,7 @@ import java.util.List;
 import de.greenrobot.event.EventBus;
 
 /** Basic class for all dynamic game units */
-public abstract class Unit extends GameObject {
+public class Unit extends GameObject {
     public static final String TAG = Unit.class.getCanonicalName();
     /** max velocity for this unit */
     protected float mMaxVelocity = 1.5f;
@@ -53,18 +51,31 @@ public abstract class Unit extends GameObject {
     /** fixture def for bullets created by this unit */
     private FixtureDef mBulletFixtureDef;
 
-    protected Unit(ITextureRegion textureRegion, SoundOperations soundOperations, VertexBufferObjectManager objectManager) {
-        super(-100, -100, textureRegion, objectManager);
-
-        mSoundOperations = soundOperations;
+    /** create unit from appropriate builder */
+    public Unit(UnitBuilder unitBuilder) {
+        super(-100, -100, unitBuilder.getTextureRegion(), unitBuilder.getObjectManager());
+        mSoundOperations = unitBuilder.getSoundOperations();
+        setWidth(unitBuilder.getWidth());
+        setHeight(unitBuilder.getHeight());
+        initHealth(unitBuilder.getHealth());
+        mObjectArmor = unitBuilder.getArmor();
+        mObjectDamage = unitBuilder.getDamage();
+        mAttackRadius = unitBuilder.getAttackRadius();
+        mViewRadius = unitBuilder.getViewRadius();
+        setReloadTime(unitBuilder.getReloadTime());
+        initSound(unitBuilder.getSoundPath());
     }
 
-    public void registerUpdateHandler() {
-        registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new SimpleUnitTimerCallback()));
+    public void setReloadTime(double seconds) {
+        mTimeForReload = seconds * 1000;
     }
 
     protected void initSound(String path) {
         mFireSound = mSoundOperations.loadSound(path);
+    }
+
+    public void registerUpdateHandler() {
+        registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new SimpleUnitTimerCallback()));
     }
 
     public void initMovingPath() {
@@ -73,10 +84,6 @@ public abstract class Unit extends GameObject {
 
     public void setUnitFireCallback(IUnitFireCallback unitFireCallback) {
         mUnitFireCallback = unitFireCallback;
-    }
-
-    public void setReloadTime(double seconds) {
-        mTimeForReload = seconds * 1000;
     }
 
     public void setEnemiesUpdater(final ISimpleUnitEnemiesUpdater enemiesUpdater) {

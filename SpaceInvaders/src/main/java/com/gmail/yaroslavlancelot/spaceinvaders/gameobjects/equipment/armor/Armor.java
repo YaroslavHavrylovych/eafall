@@ -23,6 +23,6 @@ public abstract class Armor {
     public abstract ArmorType getArmorType();
 
     public enum ArmorType {
-        PHYSICAL, ELECTRICAL, MAGNETIC, HEAVY_WATER_SHIELDM, HIGGS_SHIELD
+        PHYSICAL, ELECTRICAL, MAGNETIC, HEAVY_WATER_SHIELD, HIGGS_SHIELD
     }
 }

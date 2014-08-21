@@ -70,12 +70,12 @@ public class MainSceneTouchListener implements IOnSceneTouchListener, ICameraCoo
         return mCameraCurrentCenterY;
     }
 
-    public float getMaxZoomFactorChange() {
-        return mCamera.getMaxZoomFactorChange();
-    }
-
     public float getTargetZoomFactor() {
         return mCamera.getTargetZoomFactor();
+    }
+
+    public float getMaxZoomFactorChange() {
+        return mCamera.getMaxZoomFactorChange();
     }
 
     public void registerTouchListener(ITouchListener touchListener) {
@@ -90,8 +90,9 @@ public class MainSceneTouchListener implements IOnSceneTouchListener, ICameraCoo
     public boolean onSceneTouchEvent(final Scene pScene, final TouchEvent pSceneTouchEvent) {
         // check if it's click not on empty screen but on some hud element
         for (ITouchListener touchListener : mSceneClickListeners) {
-            if (touchListener.onTouch(pSceneTouchEvent))
+            if (touchListener.onTouch(pSceneTouchEvent)) {
                 return true;
+            }
         }
 
         //zoom

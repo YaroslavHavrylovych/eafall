@@ -2,9 +2,11 @@ package com.gmail.yaroslavlancelot.spaceinvaders.races.imperials;
 
 import android.content.Context;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.LocaleImpl;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations;
+import com.gmail.yaroslavlancelot.spaceinvaders.R;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.UnitDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.loading.UnitListLoader;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.buildings.Barracks;
@@ -15,28 +17,30 @@ import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.buildings.Shoote
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.buildings.Tent;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.buildings.TrainingCenter;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.buildings.Workshop;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.units.Agent;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.units.Conscript;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.units.Demolisher;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.units.Infantrymen;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.units.Robot;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.units.Scout;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.units.Sniper;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.units.Superman;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.LocaleImpl;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations;
+
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
+import org.simpleframework.xml.core.Persister;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /** imperials */
 public class Imperials implements IRace {
+    public static final String TAG = Imperials.class.getCanonicalName();
     /** race name */
     public static final String RACE_NAME = "Imperials";
     private Color mTeamColor;
     private VertexBufferObjectManager mObjectManager;
     private int mBuildingsAmount = 8;
     private SoundOperations mSoundOperations;
+    private List<UnitDummy> mUnitDummies;
 
     public Imperials(Color teamColor, final VertexBufferObjectManager objectManager, final SoundOperations soundOperations) {
         mTeamColor = teamColor;
@@ -52,6 +56,15 @@ public class Imperials implements IRace {
     @Override
     public int getBuildingsAmount() {
         return mBuildingsAmount;
+    }
+
+    @Override
+    public String[] getBuildingsNames() {
+        String[] result = new String[getBuildingsAmount()];
+        for (int i = 0; i < getBuildingsAmount(); i++) {
+            result[i] = LocaleImpl.getInstance().getStringById(getBuildingById(i).getObjectStringId());
+        }
+        return result;
     }
 
     @Override
@@ -90,56 +103,16 @@ public class Imperials implements IRace {
     }
 
     @Override
-    public String[] getBuildingsNames() {
-        String[] result = new String[getBuildingsAmount()];
-        for(int i = 0; i < getBuildingsAmount(); i++) {
-            result[i] = LocaleImpl.getInstance().getStringById(getBuildingById(i).getObjectStringId());
-        }
-        return result;
-    }
-
-    private void initBuilding(StaticObject building) {
-        building.setBackgroundColor(mTeamColor);
-        building.setBackgroundArea();
-    }
-
-    @Override
     public int getBuildingCostById(final int buildingId) {
         return getBuildingById(buildingId).getObjectCost();
     }
 
     @Override
     public Unit getUnitForBuilding(final int buildingId) {
-        Unit unit;
-        switch (buildingId) {
-            case 0:
-                unit = new Conscript(mObjectManager, mSoundOperations);
-                break;
-            case 1:
-                unit = new Scout(mObjectManager, mSoundOperations);
-                break;
-            case 2:
-                unit = new Infantrymen(mObjectManager, mSoundOperations);
-                break;
-            case 3:
-                unit = new Sniper(mObjectManager, mSoundOperations);
-                break;
-            case 4:
-                unit = new Agent(mObjectManager, mSoundOperations);
-                break;
-            case 5:
-                unit = new Robot(mObjectManager, mSoundOperations);
-                break;
-            case 6:
-                unit = new Demolisher(mObjectManager, mSoundOperations);
-                break;
-            case 7:
-                unit = new Superman(mObjectManager, mSoundOperations);
-                break;
-            default:
-                throw new IllegalArgumentException("unknown building type=" + buildingId);
-        }
-        initUnit(unit);
+        UnitDummy dummy = mUnitDummies.get(buildingId);
+        Unit unit = dummy.constructUnit(mObjectManager, mSoundOperations);
+        unit.setBackgroundArea(dummy.getTeamColorArea());
+        unit.setBackgroundColor(mTeamColor);
         return unit;
     }
 
@@ -164,20 +137,38 @@ public class Imperials implements IRace {
     }
 
     private void loadUnits(Context context, TextureManager textureManager) {
-        BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 50, 50, TextureOptions.BILINEAR);
-        Conscript.loadResources(context, smallObjectTexture);
-        Scout.loadResources(context, smallObjectTexture);
-        Infantrymen.loadResources(context, smallObjectTexture);
-        Sniper.loadResources(context, smallObjectTexture);
-        Agent.loadResources(context, smallObjectTexture);
-        Robot.loadResources(context, smallObjectTexture);
-        Demolisher.loadResources(context, smallObjectTexture);
-        Superman.loadResources(context, smallObjectTexture);
+        UnitListLoader unitListLoader = null;
+        try {
+            unitListLoader = new Persister().read(UnitListLoader.class, context.getResources().openRawResource(R.raw.units));
+        } catch (Exception e) {
+            LoggerHelper.printErrorMessage(TAG, "Reading file (units) exception = " + e.getMessage());
+        }
+
+        if (unitListLoader == null) return;
+
+        int unitsAmount = unitListLoader.getList().size();
+        mUnitDummies = new ArrayList<UnitDummy>(unitsAmount);
+
+        int textureManagerElementsInLine = (int) Math.round(Math.sqrt(unitsAmount) + 1);
+        int size = textureManagerElementsInLine * SizeConstants.UNIT_SIZE;
+
+        BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(
+                textureManager, size, size, TextureOptions.BILINEAR);
+
+        UnitDummy unitDummy;
+        int n, m;
+        for (int i = 0; i < unitsAmount; i++) {
+            unitDummy = new UnitDummy(unitListLoader.getList().get(i));
+            n = (i % textureManagerElementsInLine) * unitDummy.getWidth();
+            m = (i / textureManagerElementsInLine) * unitDummy.getHeight();
+            unitDummy.loadResources(context, smallObjectTexture, n, m);
+            mUnitDummies.add(unitDummy);
+        }
         smallObjectTexture.load();
     }
 
-    private void initUnit(Unit unit) {
-        unit.setBackgroundArea();
-        unit.setBackgroundColor(mTeamColor);
+    private void initBuilding(StaticObject building) {
+        building.setBackgroundColor(mTeamColor);
+        building.setBackgroundArea();
     }
 }
