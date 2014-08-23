@@ -79,4 +79,14 @@ public class CreepBuildingDummy {
     public int getCost() {
         return mBuildingLoader.cost;
     }
+
+    public ITextureRegion getTextureRegion() {
+        return mTextureRegion;
+    }
+
+    public int getNameId() {
+        Context context = SpaceInvadersApplication.getContext();
+        return context.getResources().getIdentifier(
+                mBuildingLoader.name, "string", context.getApplicationInfo().packageName);
+    }
 }

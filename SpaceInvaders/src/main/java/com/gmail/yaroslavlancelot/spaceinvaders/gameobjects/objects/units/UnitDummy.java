@@ -107,4 +107,6 @@ public class UnitDummy {
     public Area getTeamColorArea() {
         return mTeamColorArea;
     }
+
+
 }

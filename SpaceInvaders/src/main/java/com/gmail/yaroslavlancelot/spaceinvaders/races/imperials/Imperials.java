@@ -157,4 +157,14 @@ public class Imperials implements IRace {
         }
         return ret;
     }
+
+    @Override
+    public UnitDummy getUnitDummy(int unitId) {
+        return mUnitDummies.get(unitId);
+    }
+
+    @Override
+    public CreepBuildingDummy getBuildingDummy(int buildingId) {
+        return mCreepBuildingDummies.get(buildingId);
+    }
 }
