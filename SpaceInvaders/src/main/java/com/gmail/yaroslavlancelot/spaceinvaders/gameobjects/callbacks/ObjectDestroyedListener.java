@@ -2,7 +2,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities.DetachEntityEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.RectangleWithBody;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 
 import de.greenrobot.event.EventBus;

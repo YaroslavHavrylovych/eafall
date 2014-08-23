@@ -2,7 +2,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.utils;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.ISimpleUnitEnemiesUpdater;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Unit;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 
 import java.util.ArrayList;

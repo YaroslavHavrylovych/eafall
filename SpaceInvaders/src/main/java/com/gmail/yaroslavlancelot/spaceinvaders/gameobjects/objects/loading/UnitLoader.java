@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.loading;
+package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;

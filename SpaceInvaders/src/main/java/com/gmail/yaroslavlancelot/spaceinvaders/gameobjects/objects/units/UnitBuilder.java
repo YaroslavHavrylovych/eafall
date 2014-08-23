@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects;
+package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Damage;

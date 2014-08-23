@@ -7,7 +7,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.ShowBuildingDescriptionEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities.AttachEntityEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities.DetachEntityEvent;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.CreepBuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ITouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
@@ -20,6 +20,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.visualelements.buttons.ButtonTiledSprite;
 
 import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.font.FontUtils;
@@ -115,7 +116,7 @@ public class BuildingsPopup extends Rectangle implements ITouchListener {
 
     /** represent popup item */
     private static class BuildingsPopupItem extends ButtonTiledSprite {
-        private StaticObject mStaticObject;
+        private Sprite mStaticObject;
         private Text mText;
 
         private BuildingsPopupItem(IRace race, int objectId, float x, float y, float width, float height, VertexBufferObjectManager vertexBufferObjectManager) {
@@ -123,20 +124,16 @@ public class BuildingsPopup extends Rectangle implements ITouchListener {
                     vertexBufferObjectManager);
             setWidth(width);
             setHeight(height);
-            initStaticObject(race, objectId);
-            initText(mStaticObject);
+
+            CreepBuildingDummy dummy = race.getBuildingDummy(objectId);
+            mStaticObject = new Sprite(SizeConstants.BUILDING_POPUP_IMAGE_PADDING, SizeConstants.BUILDING_POPUP_IMAGE_PADDING,
+                    ITEM_IMAGE_WIDTH, ITEM_IMAGE_HEIGHT, dummy.getTextureRegion(), getVertexBufferObjectManager());
+
+            initText(dummy.getNameId(), dummy.getCost());
         }
 
-        private void initStaticObject(IRace race, int objectId) {
-            mStaticObject = race.getBuildingById(objectId);
-            mStaticObject.setPosition(SizeConstants.BUILDING_POPUP_IMAGE_PADDING, SizeConstants.BUILDING_POPUP_IMAGE_PADDING);
-            mStaticObject.setHeight(ITEM_IMAGE_HEIGHT);
-            mStaticObject.setWidth(ITEM_IMAGE_WIDTH);
-        }
-
-        private void initText(StaticObject staticObject) {
-            String textString = sNumberFormat.format(staticObject.getObjectCost()) +
-                    LocaleImpl.getInstance().getStringById(staticObject.getObjectStringId());
+        private void initText(int objectNameId, int cost) {
+            String textString = sNumberFormat.format(cost) + LocaleImpl.getInstance().getStringById(objectNameId);
             IFont font = FontHolderUtils.getInstance().getElement(FONT);
             mText = new Text(SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT,
                     SizeConstants.BUILDING_POPUP_ELEMENT_HEIGHT + SizeConstants.BUILDING_POPUP_IMAGE_PADDING - font.getLineHeight(),
