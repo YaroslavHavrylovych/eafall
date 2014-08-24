@@ -13,6 +13,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.ai.NormalBot;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateBuildingEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateCircleBodyEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateUnitEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.GameLoadedEvent;
@@ -24,14 +25,14 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.ObjectDest
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.PlanetDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.RectangleWithBody;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.SunStaticObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ITouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.MainSceneTouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.BuildingsPopup;
-import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.DescriptionPopupCompositeSprite;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.DescriptionPopup;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.Imperials;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
@@ -228,7 +229,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
 
         // other loader
         BuildingsPopup.loadResource(this, getTextureManager());
-        DescriptionPopupCompositeSprite.loadResources(this, getTextureManager());
+        DescriptionPopup.loadResources(this, getTextureManager());
 
         TextureRegionHolderUtils.loadGeneralGameTextures(this, getTextureManager());
 
@@ -330,8 +331,6 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
             team.changeFixtureDefFilter(CollisionCategoriesConstants.CATEGORY_TEAM2, CollisionCategoriesConstants.MASKBITS_TEAM2_THICK);
     }
 
-    protected abstract void userWantCreateBuilding(ITeam userTeam, int buildingId);
-
     /** create new team depending on team control type which stored in extra */
     protected ITeam createTeam(String teamNameInExtra, IRace race) {
         Intent intent = getIntent();
@@ -420,8 +419,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     private void initHud() {
         mHud = mCamera.getHUD();
         mHud.setTouchAreaBindingOnActionDownEnabled(true);
-        DescriptionPopupCompositeSprite.init(getVertexBufferObjectManager(), mHud);
-        mMainSceneTouchListener.registerTouchListener(DescriptionPopupCompositeSprite.getInstance());
+        DescriptionPopup.init(getVertexBufferObjectManager(), mHud);
+        mMainSceneTouchListener.registerTouchListener(DescriptionPopup.getInstance().getPopupSprite());
     }
 
     /** init scene touch events so user can collaborate with game by screen touches */
@@ -510,6 +509,14 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
             }
         });
     }
+
+    @SuppressWarnings("unused")
+    /** really used by {@link de.greenrobot.event.EventBus} */
+    public void onEvent(final CreateBuildingEvent createBuildingEvent) {
+        userWantCreateBuilding(mTeams.get(createBuildingEvent.getTeamName()), createBuildingEvent.getKey());
+    }
+
+    protected abstract void userWantCreateBuilding(ITeam userTeam, int buildingId);
 
     @SuppressWarnings("unused")
     /** really used by {@link de.greenrobot.event.EventBus} */

@@ -13,8 +13,9 @@ import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class CloseButtonTiledSprite extends ButtonTiledSprite {
-    public CloseButtonTiledSprite(VertexBufferObjectManager vertexBufferObjectManager) {
-        super(0f, 0f, (ITiledTextureRegion) TextureRegionHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.FILE_DESCRIPTION_POPUP_CROSS),
+    public CloseButtonTiledSprite(VertexBufferObjectManager vertexBufferObjectManager, float size) {
+        super(0f, 0f, size, size,
+                (ITiledTextureRegion) TextureRegionHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.FILE_DESCRIPTION_POPUP_CROSS),
                 vertexBufferObjectManager);
     }
 

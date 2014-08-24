@@ -1,8 +1,8 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.client.BuildingCreationClientMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.UnitChangePositionServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.InGameClient;
@@ -27,19 +27,19 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
     }
 
     @Override
-    protected void initThickClient() {
-        // it's thin client, so no actions
-    }
-
-    @Override
     protected void userWantCreateBuilding(final ITeam userTeam, final int buildingId) {
         LoggerHelper.methodInvocation(TAG, "userWantCreateBuilding");
         try {
-            mGameServerConnector.sendClientMessage(new BuildingCreationClientMessage(buildingId));
-            LoggerHelper.printInformationMessage(TAG, "send message with building=" + buildingId + " creation request");
+            mGameServerConnector.sendClientMessage(new BuildingCreationClientMessage(userTeam.getTeamName(), buildingId));
+            LoggerHelper.printInformationMessage(TAG, "send building request team= " + userTeam.getTeamName() + ", building=" + buildingId + "");
         } catch (IOException e) {
             LoggerHelper.printErrorMessage(TAG, e.getMessage());
         }
+    }
+
+    @Override
+    protected void initThickClient() {
+        // it's thin client, so no actions
     }
 
     @Override

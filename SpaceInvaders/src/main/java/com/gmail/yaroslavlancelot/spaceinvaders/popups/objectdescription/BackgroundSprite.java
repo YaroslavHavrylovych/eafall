@@ -1,0 +1,128 @@
+package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription;
+
+import android.content.Context;
+
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ITouchListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
+
+import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.scene.Scene;
+import org.andengine.entity.shape.RectangularShape;
+import org.andengine.entity.sprite.Sprite;
+import org.andengine.input.touch.TouchEvent;
+import org.andengine.opengl.texture.TextureManager;
+import org.andengine.opengl.texture.TextureOptions;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
+import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.vbo.VertexBufferObjectManager;
+
+/** background sprite for description popup */
+public class BackgroundSprite extends Sprite implements ITouchListener {
+    private static final String TAG = BackgroundSprite.class.getCanonicalName();
+    private CloseButtonTiledSprite mCloseSprite;
+    /** left side sprite (show descript object image) in it's area */
+    private Sprite mObjectImage;
+    /** descript object image */
+    private RectangularShape mImageShape;
+    /** descript object description area */
+    private RectangularShape mDescriptionShape;
+    /** descript object addition information field */
+    private RectangularShape mAdditionalShape;
+
+
+    BackgroundSprite(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
+        super(0, 0,
+                TextureRegionHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.FILE_DESCRIPTION_POPUP_BACKGROUND),
+                vertexBufferObjectManager);
+        recreateArea(new Area(0, SizeConstants.DESCRIPTION_POPUP_HEIGHT,
+                SizeConstants.GAME_FIELD_WIDTH, SizeConstants.DESCRIPTION_POPUP_HEIGHT));
+        scene.attachChild(this);
+        scene.registerTouchArea(this);
+
+        initCross(scene);
+        initAreas();
+        hide();
+    }
+
+    private void recreateArea(Area area) {
+        setPosition(area.left, area.top);
+        setWidth(area.width);
+        setHeight(area.height);
+    }
+
+    /** popup closing button */
+    private void initCross(Scene scene) {
+        mCloseSprite = new CloseButtonTiledSprite(getVertexBufferObjectManager(),
+                SizeConstants.DESCRIPTION_POPUP_CROSS_SIZE);
+        mCloseSprite.setPosition(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.DESCRIPTION_POPUP_CROSS_SIZE
+                        - SizeConstants.DESCRIPTION_POPUP_CROSS_PADDING,
+                SizeConstants.DESCRIPTION_POPUP_CROSS_PADDING);
+        mCloseSprite.setOnTouchListener(new TouchUtils.CustomTouchListener(new Area(getX() + mCloseSprite.getX(),
+                getY() + mCloseSprite.getY(), mCloseSprite.getWidth(), mCloseSprite.getHeight())) {
+            @Override
+            public void press() {
+                mCloseSprite.press();
+            }
+
+            @Override
+            public void click() {
+                unPress();
+                hide();
+            }
+
+            @Override
+            public void unPress() {
+                mCloseSprite.unpress();
+            }
+        });
+
+        scene.registerTouchArea(mCloseSprite);
+        attachChild(mCloseSprite);
+    }
+
+    private void initAreas() {
+        // descript image area
+        int padding = SizeConstants.DESCRIPTION_POPUP_OBJECT_IMAGE_PADDING;
+        int size = SizeConstants.DESCRIPTION_POPUP_HEIGHT - 2 * padding;
+        mImageShape = new Rectangle(padding, padding, size, size, getVertexBufferObjectManager());
+        mImageShape.setAlpha(0);
+        attachChild(mImageShape);
+    }
+
+    void hide() {
+        setVisible(false);
+        setIgnoreUpdate(true);
+    }
+
+    public static void loadResources(Context context, TextureManager textureManager) {
+        //background
+        BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 1920, 540, TextureOptions.BILINEAR);
+        TextureRegionHolderUtils.addElementFromAssets(GameStringsConstantsAndUtils.FILE_DESCRIPTION_POPUP_BACKGROUND,
+                TextureRegionHolderUtils.getInstance(), smallObjectTexture, context, 0, 0);
+        smallObjectTexture.load();
+
+        CloseButtonTiledSprite.loadResources(context, textureManager);
+    }
+
+    void attachNewImage(ITextureRegion textureRegion) {
+        if (mObjectImage != null)
+            mImageShape.detachChild(mObjectImage);
+        mObjectImage = new Sprite(0, 0, mImageShape.getWidth(), mImageShape.getHeight(),
+                textureRegion, getVertexBufferObjectManager());
+        mImageShape.attachChild(mObjectImage);
+    }
+
+    void show() {
+        setVisible(true);
+        setIgnoreUpdate(false);
+    }
+
+    @Override
+    public boolean onTouch(TouchEvent pSceneTouchEvent) {
+        return isVisible() && contains(pSceneTouchEvent.getX(), pSceneTouchEvent.getY());
+    }
+}

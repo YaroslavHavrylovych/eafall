@@ -17,6 +17,10 @@ public abstract class ButtonTiledSprite extends TiledSprite implements ISpriteTo
         super(pX, pY, pTiledTextureRegion, pVertexBufferObjectManager);
     }
 
+    protected ButtonTiledSprite(float pX, float pY, float pWidth, float pHeight, ITiledTextureRegion pTiledTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager) {
+        super(pX, pY, pWidth, pHeight, pTiledTextureRegion, pVertexBufferObjectManager);
+    }
+
     public void press() {
         setCurrentTileIndex(1);
     }
