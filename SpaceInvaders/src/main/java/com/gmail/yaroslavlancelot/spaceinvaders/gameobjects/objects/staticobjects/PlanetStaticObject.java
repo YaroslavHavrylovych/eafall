@@ -117,6 +117,12 @@ public class PlanetStaticObject extends StaticObject {
         return createBuildingById(buildingId, mIsFakePlanet);
     }
 
+    public int getBuildingAmount(int buildingId) {
+        BuildingsHolder holder = buildings.get(buildingId);
+        if (holder == null) return 0;
+        return holder.getBuildingsAmount();
+    }
+
     public Map<Integer, BuildingsHolder> getBuildings() {
         return buildings;
     }

@@ -19,7 +19,7 @@ public class FontHolderUtils extends HolderUtils<IFont> {
     private FontHolderUtils() {
     }
 
-    public static void loadGameFonts(FontManager fontManager, TextureManager textureManager) {
+    public static void loadGeneralGameFonts(FontManager fontManager, TextureManager textureManager) {
         IFont font = FontFactory.create(fontManager, textureManager, 256, 256,
                 Typeface.create(Typeface.DEFAULT, Typeface.BOLD), SizeConstants.MONEY_FONT_SIZE, Color.WHITE.hashCode());
         font.load();

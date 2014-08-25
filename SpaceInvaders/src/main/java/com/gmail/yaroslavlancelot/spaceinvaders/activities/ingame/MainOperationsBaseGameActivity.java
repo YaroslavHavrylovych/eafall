@@ -234,7 +234,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         TextureRegionHolderUtils.loadGeneralGameTextures(this, getTextureManager());
 
         // font
-        FontHolderUtils.loadGameFonts(getFontManager(), getTextureManager());
+        FontHolderUtils.loadGeneralGameFonts(getFontManager(), getTextureManager());
+        DescriptionPopup.loadFonts(getFontManager(), getTextureManager());
     }
 
     protected void onInitGameScene() {

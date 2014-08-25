@@ -6,6 +6,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.ShowBuildin
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.CreepBuildingDummy;
 
 import org.andengine.entity.scene.Scene;
+import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
@@ -46,6 +47,10 @@ public class DescriptionPopup {
         BackgroundSprite.loadResources(context, textureManager);
     }
 
+    public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
+        BackgroundSprite.loadFonts(fontManager, textureManager);
+    }
+
     @SuppressWarnings("unused")
     /** really used by {@link de.greenrobot.event.EventBus} */
     public void onEvent(final ShowBuildingDescriptionEvent showBuildingDescriptionEvent) {
@@ -54,7 +59,7 @@ public class DescriptionPopup {
         }
         CreepBuildingDummy dummy = showBuildingDescriptionEvent.mCreepBuildingDummy;
         mObjectNameId = dummy.getNameId();
-        mBackgroundSprite.attachNewImage(dummy.getTextureRegion());
+        mBackgroundSprite.updateObjectImage(dummy.getTextureRegion(), showBuildingDescriptionEvent.mAmount);
         mBackgroundSprite.show();
     }
 

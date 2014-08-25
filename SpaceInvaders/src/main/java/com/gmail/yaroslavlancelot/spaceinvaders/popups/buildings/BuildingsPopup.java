@@ -87,7 +87,7 @@ public class BuildingsPopup extends Rectangle implements ITouchListener {
         // init elements
         float width = getWidth();
         for (int buildingId = 0; buildingId < race.getBuildingsAmount(); buildingId++) {
-            BuildingsPopupItem item = new BuildingsPopupItem(mTeam.getTeamRace(), buildingId,
+            BuildingsPopupItem item = new BuildingsPopupItem(mTeam, buildingId,
                     0, buildingId * POPUP_ELEMENT_HEIGHT, width, POPUP_ELEMENT_HEIGHT,
                     getVertexBufferObjectManager());
             mItems.add(item.init());
@@ -119,14 +119,16 @@ public class BuildingsPopup extends Rectangle implements ITouchListener {
         private Sprite mStaticObject;
         private Text mText;
         private CreepBuildingDummy mCreepBuildingDummy;
+        private ITeam mTeam;
+        private int mObjectId;
 
-        private BuildingsPopupItem(IRace race, int objectId, float x, float y, float width, float height, VertexBufferObjectManager vertexBufferObjectManager) {
+        private BuildingsPopupItem(ITeam team, int objectId, float x, float y, float width, float height, VertexBufferObjectManager vertexBufferObjectManager) {
             super(x, y, (ITiledTextureRegion) TextureRegionHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.FILE_POPUP_BACKGROUND_ITEM),
                     vertexBufferObjectManager);
             setWidth(width);
             setHeight(height);
 
-            CreepBuildingDummy dummy = mCreepBuildingDummy = race.getBuildingDummy(objectId);
+            CreepBuildingDummy dummy = mCreepBuildingDummy = (mTeam = team).getTeamRace().getBuildingDummy((mObjectId = objectId));
             mStaticObject = new Sprite(SizeConstants.BUILDING_POPUP_IMAGE_PADDING, SizeConstants.BUILDING_POPUP_IMAGE_PADDING,
                     ITEM_IMAGE_WIDTH, ITEM_IMAGE_HEIGHT, dummy.getTextureRegion(), getVertexBufferObjectManager());
 
@@ -168,7 +170,8 @@ public class BuildingsPopup extends Rectangle implements ITouchListener {
                 public void click() {
                     LoggerHelper.printDebugMessage(TAG, "show description");
                     unPress();
-                    EventBus.getDefault().post(new ShowBuildingDescriptionEvent(mCreepBuildingDummy));
+                    EventBus.getDefault().post(new ShowBuildingDescriptionEvent(
+                            mCreepBuildingDummy, mTeam.getTeamPlanet().getBuildingAmount(mObjectId)));
                 }
 
                 @Override

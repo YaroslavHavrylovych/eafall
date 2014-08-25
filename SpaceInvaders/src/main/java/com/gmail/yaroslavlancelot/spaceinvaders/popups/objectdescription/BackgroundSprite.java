@@ -14,6 +14,7 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.RectangularShape;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
@@ -26,6 +27,8 @@ public class BackgroundSprite extends Sprite implements ITouchListener {
     private CloseButtonTiledSprite mCloseSprite;
     /** left side sprite (show descript object image) in it's area */
     private Sprite mObjectImage;
+    /** */
+    private AmountDrawer mAmountDrawer;
     /** descript object image */
     private RectangularShape mImageShape;
     /** descript object description area */
@@ -45,6 +48,8 @@ public class BackgroundSprite extends Sprite implements ITouchListener {
 
         initCross(scene);
         initAreas();
+        mAmountDrawer = new AmountDrawer(vertexBufferObjectManager);
+
         hide();
     }
 
@@ -98,7 +103,7 @@ public class BackgroundSprite extends Sprite implements ITouchListener {
         setIgnoreUpdate(true);
     }
 
-    public static void loadResources(Context context, TextureManager textureManager) {
+    static void loadResources(Context context, TextureManager textureManager) {
         //background
         BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 1920, 540, TextureOptions.BILINEAR);
         TextureRegionHolderUtils.addElementFromAssets(GameStringsConstantsAndUtils.FILE_DESCRIPTION_POPUP_BACKGROUND,
@@ -108,12 +113,23 @@ public class BackgroundSprite extends Sprite implements ITouchListener {
         CloseButtonTiledSprite.loadResources(context, textureManager);
     }
 
-    void attachNewImage(ITextureRegion textureRegion) {
+    static void loadFonts(FontManager fontManager, TextureManager textureManager) {
+        //amount font
+        AmountDrawer.loadFonts(fontManager, textureManager);
+    }
+
+    void updateObjectImage(ITextureRegion textureRegion, int amount) {
         if (mObjectImage != null)
             mImageShape.detachChild(mObjectImage);
         mObjectImage = new Sprite(0, 0, mImageShape.getWidth(), mImageShape.getHeight(),
                 textureRegion, getVertexBufferObjectManager());
         mImageShape.attachChild(mObjectImage);
+        updateAmountImage(amount);
+    }
+
+    private void updateAmountImage(int value) {
+        mAmountDrawer.setText(value);
+        mAmountDrawer.draw(mImageShape);
     }
 
     void show() {
