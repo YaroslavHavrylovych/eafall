@@ -2,9 +2,9 @@ package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription;
 
 import android.content.Context;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.visualelements.buttons.ButtonTiledSprite;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.visualelements.buttons.ButtonTiledSprite;
 
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
@@ -12,6 +12,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
+/** cross which used as close button in {@code DescriptionPopup} */
 public class CloseButtonTiledSprite extends ButtonTiledSprite {
     public CloseButtonTiledSprite(VertexBufferObjectManager vertexBufferObjectManager, float size) {
         super(0f, 0f, size, size,

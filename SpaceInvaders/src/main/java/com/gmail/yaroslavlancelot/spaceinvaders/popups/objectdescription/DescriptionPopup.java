@@ -13,29 +13,45 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import de.greenrobot.event.EventBus;
 
 /**
- * Contains elements which together create elements description (e.g. it's image, characteristics etc)
- * You can see it in the bottom of the screen after you tap on unit or building to build.
- * Contains element image and characteristics.
+ * Handle logic of redrawing and showing/hiding description popup.
+ * Appears in the bottom of the screen when you want to create a building
+ * or see unit (other object) characteristics.
  */
 public class DescriptionPopup {
     public static final String TAG = DescriptionPopup.class.getCanonicalName();
+    /** Single instance. Each object to display redraw content as it needs. */
     private static volatile DescriptionPopup sDescriptionPopup;
+    /** scene to which popup attached */
     private Scene mScene;
     /** for not redraw already displayed object */
     private int mObjectNameId = Integer.MIN_VALUE;
-
+    /** general elements of the popup (background sprite, close button, description image) */
     private BackgroundSprite mBackgroundSprite;
 
+    /**
+     * single instance that's why it's private constructor
+     *
+     * @param vertexBufferObjectManager object manager to create inner elements
+     * @param scene                     popup will be attached to this scene
+     */
     private DescriptionPopup(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         mScene = scene;
         mBackgroundSprite = new BackgroundSprite(vertexBufferObjectManager, scene);
         EventBus.getDefault().register(this);
     }
 
+    /** singleton */
     public static synchronized DescriptionPopup getInstance() {
         return sDescriptionPopup;
     }
 
+    /**
+     * init this class so you can get its instance (singleton)
+     *
+     * @param objectManager object manager to create inner elements
+     * @param scene         popup will be attached to this scene
+     * @return
+     */
     public static synchronized DescriptionPopup init(VertexBufferObjectManager objectManager, Scene scene) {
         sDescriptionPopup =
                 new DescriptionPopup(objectManager, scene);

@@ -101,6 +101,7 @@ public class PlanetStaticObject extends StaticObject {
         return true;
     }
 
+    /** returns money amount (from team to which current planet belongs) */
     private int getMoneyAmount() {
         return mPlanetTeam == null ? 0 : mPlanetTeam.getMoney();
     }
@@ -117,6 +118,7 @@ public class PlanetStaticObject extends StaticObject {
         return createBuildingById(buildingId, mIsFakePlanet);
     }
 
+    /** get buildings amount for passed building type */
     public int getBuildingAmount(int buildingId) {
         BuildingsHolder holder = buildings.get(buildingId);
         if (holder == null) return 0;

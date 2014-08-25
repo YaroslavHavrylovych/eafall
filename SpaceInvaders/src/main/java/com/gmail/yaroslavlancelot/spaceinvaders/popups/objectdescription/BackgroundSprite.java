@@ -21,14 +21,24 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-/** background sprite for description popup */
+/**
+ * Background sprite for description popup.
+ * Contains all operation to draw this popup.
+ * Used by handler {@code DescriptionPopup} to step-by-step display popup on screen.
+ * Generally this sprite with inner elements IS popup but handler contains logic
+ * to redraw it and display correctly.
+ */
 public class BackgroundSprite extends Sprite implements ITouchListener {
     private static final String TAG = BackgroundSprite.class.getCanonicalName();
+    /** will hide popup from the screen */
     private CloseButtonTiledSprite mCloseSprite;
     /** left side sprite (show descript object image) in it's area */
     private Sprite mObjectImage;
-    /** */
+    /** basically used for display buildings amount on building image */
     private AmountDrawer mAmountDrawer;
+
+    // next three guys/field are just split popup on display areas
+
     /** descript object image */
     private RectangularShape mImageShape;
     /** descript object description area */
@@ -36,6 +46,7 @@ public class BackgroundSprite extends Sprite implements ITouchListener {
     /** descript object addition information field */
     private RectangularShape mAdditionalShape;
 
+    //
 
     BackgroundSprite(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         super(0, 0,
@@ -89,6 +100,11 @@ public class BackgroundSprite extends Sprite implements ITouchListener {
         attachChild(mCloseSprite);
     }
 
+    /**
+     * init popup areas (basically 3 : image, description and addition information).
+     * This areas will be used to pass to different {@code Drawer}'s so they know where
+     * to draw existing stuff.
+     */
     private void initAreas() {
         // descript image area
         int padding = SizeConstants.DESCRIPTION_POPUP_OBJECT_IMAGE_PADDING;
@@ -98,6 +114,7 @@ public class BackgroundSprite extends Sprite implements ITouchListener {
         attachChild(mImageShape);
     }
 
+    /** hide sprite/popup with inner elements */
     void hide() {
         setVisible(false);
         setIgnoreUpdate(true);
@@ -118,6 +135,7 @@ public class BackgroundSprite extends Sprite implements ITouchListener {
         AmountDrawer.loadFonts(fontManager, textureManager);
     }
 
+    /** updates descript object image (with it's amount value which used e.g. with buildings) */
     void updateObjectImage(ITextureRegion textureRegion, int amount) {
         if (mObjectImage != null)
             mImageShape.detachChild(mObjectImage);
@@ -127,11 +145,13 @@ public class BackgroundSprite extends Sprite implements ITouchListener {
         updateAmountImage(amount);
     }
 
+    /** updates amount image (basically used to display existing buildings amount) */
     private void updateAmountImage(int value) {
         mAmountDrawer.setText(value);
         mAmountDrawer.draw(mImageShape);
     }
 
+    /** show sprite/popup */
     void show() {
         setVisible(true);
         setIgnoreUpdate(false);

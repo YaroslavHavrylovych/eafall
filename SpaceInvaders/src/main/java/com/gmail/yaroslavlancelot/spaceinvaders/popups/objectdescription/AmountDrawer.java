@@ -15,7 +15,7 @@ import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
-/** display amount */
+/** used basically for display buildings number in description popup */
 public class AmountDrawer implements Drawer {
     private static final String sAmountFontKey = "key_objects_amount_font";
     private final Text mText;
@@ -34,7 +34,7 @@ public class AmountDrawer implements Drawer {
         mBackground.attachChild(mText);
     }
 
-    /** set background size according to text value */
+    /** change background size according to text value (new value - new size) */
     private void initBackground() {
         float width = mText.getWidth() + 2 * SizeConstants.DESCRIPTION_POPUP_AMOUNT_TEXT_PADDING;
         float height = mText.getHeight() + 2 * SizeConstants.DESCRIPTION_POPUP_AMOUNT_TEXT_PADDING;
@@ -51,10 +51,12 @@ public class AmountDrawer implements Drawer {
         FontHolderUtils.getInstance().addElement(sAmountFontKey, font);
     }
 
+    /** will invoke {@code setText(String)} */
     void setText(int value) {
         setText(Integer.toString(value));
     }
 
+    /** set new value in amount text and redraw background */
     void setText(String value) {
         String oldValue = mText.getText().toString();
         if (value.equalsIgnoreCase(oldValue)) {
