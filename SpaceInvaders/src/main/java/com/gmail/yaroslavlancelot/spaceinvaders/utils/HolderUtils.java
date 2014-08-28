@@ -5,20 +5,20 @@ import java.util.Map;
 
 /** {@link java.util.Map} wrapper. Simplified it's usage */
 public abstract class HolderUtils<T> {
-    private Map<String, T> textureRegionMap = new HashMap<String, T>(15);
+    private Map<String, T> holderMap = new HashMap<String, T>(15);
 
     protected HolderUtils() {
     }
 
     /** get object from internal map */
     public T getElement(String id) {
-        if (textureRegionMap == null) return null;
-        return textureRegionMap.get(id);
+        if (holderMap == null) return null;
+        return holderMap.get(id);
     }
 
     /** put object into internal map */
     public void addElement(String id, T element) {
-        textureRegionMap.put(id, element);
+        holderMap.put(id, element);
     }
 
     /**
@@ -28,10 +28,10 @@ public abstract class HolderUtils<T> {
      * @return true - if element holdered (already added) and false in other way
      */
     public boolean isElementExist(String id) {
-        return textureRegionMap.get(id) != null;
+        return holderMap.get(id) != null;
     }
 
     public void clear() {
-        textureRegionMap.clear();
+        holderMap.clear();
     }
 }
