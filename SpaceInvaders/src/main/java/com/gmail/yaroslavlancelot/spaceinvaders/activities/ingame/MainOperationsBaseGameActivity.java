@@ -222,9 +222,9 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         mBackgroundMusic = mMusicAndSoundsHandler.new BackgroundMusic(getMusicManager());
 
         //races loadGeneralGameTextures
-        firstTeamUserRace = new Imperials(Color.RED, getVertexBufferObjectManager(), mMusicAndSoundsHandler);
+        firstTeamUserRace = new Imperials(getVertexBufferObjectManager(), mMusicAndSoundsHandler);
         firstTeamUserRace.loadResources(getTextureManager(), this);
-        secondTeamUserRace = new Imperials(Color.BLUE, getVertexBufferObjectManager(), mMusicAndSoundsHandler);
+        secondTeamUserRace = new Imperials(getVertexBufferObjectManager(), mMusicAndSoundsHandler);
         secondTeamUserRace.loadResources(getTextureManager(), this);
 
         // other loader
@@ -542,7 +542,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
      */
     protected Unit createThinUnit(int unitKey, ITeam unitTeam, float x, float y, long...
             unitUniqueId) {
-        Unit unit = unitTeam.getTeamRace().getUnitForBuilding(unitKey);
+        Unit unit = unitTeam.getTeamRace().getUnitForBuilding(unitKey, unitTeam.getTeamColor());
         unit.setObjectDestroyedListener(new ObjectDestroyedListener(unitTeam));
         unit.setPosition(x, y);
         unitTeam.addObjectToTeam(unit);

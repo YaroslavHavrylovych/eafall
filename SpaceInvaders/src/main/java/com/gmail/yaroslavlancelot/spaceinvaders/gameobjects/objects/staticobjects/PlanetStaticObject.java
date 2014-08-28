@@ -69,7 +69,7 @@ public class PlanetStaticObject extends StaticObject {
         LoggerHelper.methodInvocation(TAG, "buildBuilding. IsFakePlanet=" + isFakePlanet);
         if (buildings.get(buildingId) == null) {
             final StaticObject staticObject =
-                    mPlanetTeam.getTeamRace().getBuildingById(buildingId);
+                    mPlanetTeam.getTeamRace().getBuildingById(buildingId, mPlanetTeam.getTeamColor());
             buildings.put(buildingId, new BuildingsHolder(staticObject, buildingId));
         }
         return addBuilding(buildingId, isFakePlanet);

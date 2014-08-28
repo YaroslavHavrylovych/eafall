@@ -33,6 +33,8 @@ public class CreepBuildingDummy {
     private BuildingLoader mBuildingLoader;
     /** unit texture region (do not create it each time when u want to create unit) */
     private ITextureRegion mTextureRegion;
+    /** building name */
+    private int mBuildingStringId;
 
     public CreepBuildingDummy(BuildingLoader buildingLoader) {
         mBuildingLoader = buildingLoader;
@@ -43,6 +45,10 @@ public class CreepBuildingDummy {
         TeamColorArea area = mBuildingLoader.team_color_area;
         mTeamColorArea = new Area(area.x, area.y, area.width, area.height);
         mBuildingLoader.team_color_area = null;
+
+        Context context = SpaceInvadersApplication.getContext();
+        mBuildingStringId = context.getResources().getIdentifier(
+                mBuildingLoader.name, "string", context.getApplicationInfo().packageName);
     }
 
     public void loadResources(Context context, BitmapTextureAtlas textureAtlas, int x, int y) {
@@ -53,13 +59,11 @@ public class CreepBuildingDummy {
     public CreepBuilding constructBuilding(VertexBufferObjectManager objectManager) {
         BuildingBuilder buildingBuilder = new BuildingBuilder(mTextureRegion, objectManager);
 
-        Context context = SpaceInvadersApplication.getContext();
         buildingBuilder.setCost(mBuildingLoader.cost)
                 .setWidth(mWidth)
                 .setHeight(mHeight)
                 .setPosition(mBuildingLoader.position_x, mBuildingLoader.position_y)
-                .setObjectStringId(context.getResources().getIdentifier(
-                        mBuildingLoader.name, "string", context.getApplicationInfo().packageName));
+                .setObjectStringId(mBuildingStringId);
 
         return new CreepBuilding(buildingBuilder);
     }
@@ -85,8 +89,6 @@ public class CreepBuildingDummy {
     }
 
     public int getNameId() {
-        Context context = SpaceInvadersApplication.getContext();
-        return context.getResources().getIdentifier(
-                mBuildingLoader.name, "string", context.getApplicationInfo().packageName);
+        return mBuildingStringId;
     }
 }

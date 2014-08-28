@@ -1,7 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.ai;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.UnitDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
@@ -15,7 +15,7 @@ public class NormalBot implements Runnable {
     public static final String TAG = NormalBot.class.getCanonicalName();
     public static final int DELAY_BETWEEN_ITERATIONS = 50;
     private final ITeam mBotTeam;
-    private float[][] mUnitsEfficiencyArray;
+    private final float[][] mUnitsEfficiencyArray;
 
     public NormalBot(ITeam botTeam) {
         LoggerHelper.methodInvocation(TAG, "NormalBot");
@@ -30,7 +30,7 @@ public class NormalBot implements Runnable {
         for (int i = 0; i < race1BuildingsAmount; i++) {
             unitsEfficiencyMap[i] = new float[race2BuildingsAmount];
             for (int j = 0; j < race2BuildingsAmount; j++)
-                unitsEfficiencyMap[i][j] = calculateUnitEfficiency(race1.getUnitForBuilding(i), race2.getUnitForBuilding(j));
+                unitsEfficiencyMap[i][j] = calculateUnitEfficiency(race1.getUnitDummy(i), race2.getUnitDummy(j));
         }
         return unitsEfficiencyMap;
     }
@@ -42,14 +42,14 @@ public class NormalBot implements Runnable {
      * @param unit2 defender
      * @return float value, which represent how much unit2 health will be burned after fight with unit1
      */
-    public static float calculateUnitEfficiency(Unit unit1, Unit unit2) {
-        int amountOfPunches1 = unit2.getObjectCurrentHealth() / getArmorDamage(unit1, unit2),
-                amountOfPunches2 = unit1.getObjectCurrentHealth() / getArmorDamage(unit2, unit1);
+    public static float calculateUnitEfficiency(UnitDummy unit1, UnitDummy unit2) {
+        int amountOfPunches1 = unit2.getHealth() / getArmorDamage(unit1, unit2),
+                amountOfPunches2 = unit1.getHealth() / getArmorDamage(unit2, unit1);
         return (((float) amountOfPunches1) / amountOfPunches2);
     }
 
-    private static int getArmorDamage(Unit unit1, Unit unit2) {
-        return unit1.getObjectArmor().getDamage(unit2.getObjectDamage());
+    private static int getArmorDamage(UnitDummy unit1, UnitDummy unit2) {
+        return unit1.getUnitArmor().getDamage(unit2.getDamage());
     }
 
     @Override
@@ -69,7 +69,7 @@ public class NormalBot implements Runnable {
                 }
 
                 // money amount is very low
-                if (mBotTeam.getMoney() < mBotTeam.getTeamRace().getBuildingById(0).getObjectCost())
+                if (mBotTeam.getMoney() < mBotTeam.getTeamRace().getBuildingCostById(0))
                     continue;
 
                 /*
@@ -163,7 +163,7 @@ public class NormalBot implements Runnable {
             for (int j = 1; efficiencyComparingWithMoneyCost[i] < uncoveredBuildings[firstUncoveredBuildingId]; j++) {
                 result = efficiencyArray[i][firstUncoveredBuildingId] * j;
             }
-            efficiencyComparingWithMoneyCost[i] = result * team.getTeamRace().getBuildingById(i).getObjectCost();
+            efficiencyComparingWithMoneyCost[i] = result * team.getTeamRace().getBuildingCostById(i);
             if (efficiencyComparingWithMoneyCost[i] < minValue) {
                 minValue = efficiencyComparingWithMoneyCost[i];
                 minValueId = i;
