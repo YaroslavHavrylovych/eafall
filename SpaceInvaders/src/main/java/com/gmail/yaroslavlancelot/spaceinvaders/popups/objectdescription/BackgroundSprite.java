@@ -5,6 +5,7 @@ import android.content.Context;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ITouchListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.DescriptionUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
@@ -18,7 +19,6 @@ import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
-import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /**
@@ -32,10 +32,6 @@ public class BackgroundSprite extends Sprite implements ITouchListener {
     private static final String TAG = BackgroundSprite.class.getCanonicalName();
     /** will hide popup from the screen */
     private CloseButtonTiledSprite mCloseSprite;
-    /** left side sprite (show descript object image) in it's area */
-    private Sprite mObjectImage;
-    /** basically used for display buildings amount on building image */
-    private AmountDrawer mAmountDrawer;
 
     // next three guys/field are just split popup on display areas
 
@@ -44,7 +40,7 @@ public class BackgroundSprite extends Sprite implements ITouchListener {
     /** descript object description area */
     private RectangularShape mDescriptionShape;
     /** descript object addition information field */
-    private RectangularShape mAdditionalShape;
+    private RectangularShape mAdditionalInformationShape;
 
     //
 
@@ -59,7 +55,6 @@ public class BackgroundSprite extends Sprite implements ITouchListener {
 
         initCross(scene);
         initAreas();
-        mAmountDrawer = new AmountDrawer(vertexBufferObjectManager);
 
         hide();
     }
@@ -135,22 +130,6 @@ public class BackgroundSprite extends Sprite implements ITouchListener {
         AmountDrawer.loadFonts(fontManager, textureManager);
     }
 
-    /** updates descript object image (with it's amount value which used e.g. with buildings) */
-    void updateObjectImage(ITextureRegion textureRegion, int amount) {
-        if (mObjectImage != null)
-            mImageShape.detachChild(mObjectImage);
-        mObjectImage = new Sprite(0, 0, mImageShape.getWidth(), mImageShape.getHeight(),
-                textureRegion, getVertexBufferObjectManager());
-        mImageShape.attachChild(mObjectImage);
-        updateAmountImage(amount);
-    }
-
-    /** updates amount image (basically used to display existing buildings amount) */
-    private void updateAmountImage(int value) {
-        mAmountDrawer.setText(value);
-        mAmountDrawer.draw(mImageShape);
-    }
-
     /** show sprite/popup */
     void show() {
         setVisible(true);
@@ -160,5 +139,11 @@ public class BackgroundSprite extends Sprite implements ITouchListener {
     @Override
     public boolean onTouch(TouchEvent pSceneTouchEvent) {
         return isVisible() && contains(pSceneTouchEvent.getX(), pSceneTouchEvent.getY());
+    }
+
+    public void updateDescription(DescriptionUpdater updater, int objectId, String raceName, String teamName) {
+        updater.updateImage(mImageShape, objectId, raceName, teamName);
+        updater.updateDescription(mDescriptionShape, objectId, raceName, teamName);
+        updater.updateAdditionInfo(mAdditionalInformationShape, objectId, raceName, teamName);
     }
 }

@@ -20,9 +20,8 @@ public class AmountDrawer implements Drawer {
     private static final String sAmountFontKey = "key_objects_amount_font";
     private final Text mText;
     private final RectangularShape mBackground;
-    private RectangularShape mDrawArea;
 
-    AmountDrawer(VertexBufferObjectManager objectManager) {
+    public AmountDrawer(VertexBufferObjectManager objectManager) {
         mText = new Text(SizeConstants.DESCRIPTION_POPUP_AMOUNT_TEXT_PADDING,
                 SizeConstants.DESCRIPTION_POPUP_AMOUNT_TEXT_PADDING,
                 FontHolderUtils.getInstance().getElement(sAmountFontKey), "*", objectManager);
@@ -57,7 +56,7 @@ public class AmountDrawer implements Drawer {
     }
 
     /** set new value in amount text and redraw background */
-    void setText(String value) {
+    public void setText(String value) {
         String oldValue = mText.getText().toString();
         if (value.equalsIgnoreCase(oldValue)) {
             return;
@@ -68,11 +67,15 @@ public class AmountDrawer implements Drawer {
 
     @Override
     public void draw(RectangularShape area) {
-        if (mDrawArea != null) {
-            mDrawArea.detachChild(mBackground);
-        }
-        mDrawArea = area;
         mBackground.setX(area.getWidth() - mBackground.getWidth());
-        mDrawArea.attachChild(mBackground);
+        attachTo(area);
+    }
+
+    private void attachTo(RectangularShape area) {
+        area.attachChild(mBackground);
+    }
+
+    public void detach() {
+        mBackground.detachSelf();
     }
 }

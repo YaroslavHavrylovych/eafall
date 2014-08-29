@@ -3,7 +3,8 @@ package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription;
 import android.content.Context;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.ShowBuildingDescriptionEvent;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.CreepBuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.BuildingDescriptionUpdater;
+import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.Imperials;
 
 import org.andengine.entity.scene.Scene;
 import org.andengine.opengl.font.FontManager;
@@ -21,12 +22,12 @@ public class DescriptionPopup {
     public static final String TAG = DescriptionPopup.class.getCanonicalName();
     /** Single instance. Each object to display redraw content as it needs. */
     private static volatile DescriptionPopup sDescriptionPopup;
-    /** scene to which popup attached */
-    private Scene mScene;
     /** for not redraw already displayed object */
-    private int mObjectNameId = Integer.MIN_VALUE;
+    private int mObjectId = Integer.MIN_VALUE;
     /** general elements of the popup (background sprite, close button, description image) */
     private BackgroundSprite mBackgroundSprite;
+    /** */
+    private BuildingDescriptionUpdater mBuildingDescriptionUpdater;
 
     /**
      * single instance that's why it's private constructor
@@ -35,8 +36,8 @@ public class DescriptionPopup {
      * @param scene                     popup will be attached to this scene
      */
     private DescriptionPopup(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
-        mScene = scene;
         mBackgroundSprite = new BackgroundSprite(vertexBufferObjectManager, scene);
+        mBuildingDescriptionUpdater = new BuildingDescriptionUpdater(vertexBufferObjectManager);
         EventBus.getDefault().register(this);
     }
 
@@ -70,12 +71,12 @@ public class DescriptionPopup {
     @SuppressWarnings("unused")
     /** really used by {@link de.greenrobot.event.EventBus} */
     public void onEvent(final ShowBuildingDescriptionEvent showBuildingDescriptionEvent) {
-        if (mObjectNameId == showBuildingDescriptionEvent.mCreepBuildingDummy.getNameId()) {
+        if (mObjectId == showBuildingDescriptionEvent.mBuildingId) {
             return;
         }
-        CreepBuildingDummy dummy = showBuildingDescriptionEvent.mCreepBuildingDummy;
-        mObjectNameId = dummy.getNameId();
-        mBackgroundSprite.updateObjectImage(dummy.getTextureRegion(), showBuildingDescriptionEvent.mAmount);
+        mBuildingDescriptionUpdater.clear();
+        mObjectId = showBuildingDescriptionEvent.mBuildingId;
+        mBackgroundSprite.updateDescription(mBuildingDescriptionUpdater, mObjectId, Imperials.RACE_NAME, "");
         mBackgroundSprite.show();
     }
 

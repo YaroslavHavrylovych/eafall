@@ -171,7 +171,7 @@ public class BuildingsPopup extends Rectangle implements ITouchListener {
                     LoggerHelper.printDebugMessage(TAG, "show description");
                     unPress();
                     EventBus.getDefault().post(new ShowBuildingDescriptionEvent(
-                            mCreepBuildingDummy, mTeam.getTeamPlanet().getBuildingAmount(mObjectId)));
+                            mObjectId, mTeam.getTeamPlanet().getBuildingAmount(mObjectId)));
                 }
 
                 @Override

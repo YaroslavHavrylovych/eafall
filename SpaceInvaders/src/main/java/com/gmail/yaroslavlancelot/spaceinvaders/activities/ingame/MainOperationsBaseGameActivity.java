@@ -34,7 +34,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.MainSceneTouch
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.BuildingsPopup;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.DescriptionPopup;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.RaceHolder;
+import com.gmail.yaroslavlancelot.spaceinvaders.races.RacesHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.Imperials;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.Team;
@@ -224,7 +224,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
 
         //races loadGeneralGameTextures
         IRace race = new Imperials(getVertexBufferObjectManager(), mMusicAndSoundsHandler);
-        RaceHolder.getInstance().addElement(Imperials.RACE_NAME, race);
+        RacesHolder.getInstance().addElement(Imperials.RACE_NAME, race);
         firstTeamUserRace = secondTeamUserRace = race;
         secondTeamUserRace.loadResources(getTextureManager(), this);
 
