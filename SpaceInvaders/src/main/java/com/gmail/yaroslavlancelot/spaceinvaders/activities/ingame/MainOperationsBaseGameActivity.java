@@ -103,7 +103,6 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     protected GameObjectsContactListener mContactListener;
     /* splash screen */
     protected Scene mSplashScene;
-    //TODO check is textures depends on race colour
     protected IRace firstTeamUserRace;
     protected IRace secondTeamUserRace;
     /** contains game obstacles and other static objects */
@@ -126,6 +125,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
             LoggerHelper.printErrorMessage(TAG, "MultiTouch isn't supported");
             finish();
         }
+
+        GameObject.clearCounter();
 
         // init camera
         mCamera = new SmoothCamera(0, 0, SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT,
@@ -215,8 +216,6 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
 
     protected void onLoadGameResources() {
         LoggerHelper.methodInvocation(TAG, "onCreateGameResources");
-        // if it's not empty from previous run
-        TextureRegionHolderUtils.getInstance().clear();
 
         // music
         mMusicAndSoundsHandler = new MusicAndSoundsHandler(getSoundManager(), MainOperationsBaseGameActivity.this);

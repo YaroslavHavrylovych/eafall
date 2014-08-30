@@ -38,7 +38,7 @@ public abstract class GameObject extends RectangleWithBody implements ISpriteTou
     /** game object current health (it can be undestroyable) */
     protected int mObjectCurrentHealth = sUndestroyableObjectKey;
     /** used for generation new id's */
-    private static volatile AtomicLong sGameObjectsTracker = new AtomicLong(0);
+    private static final AtomicLong sGameObjectsTracker = new AtomicLong(0);
     /** object sprite */
     protected Sprite mObjectSprite;
     /** background color */
@@ -80,6 +80,10 @@ public abstract class GameObject extends RectangleWithBody implements ISpriteTou
         mBodyRectangle.attachChild(mBackground);
         mBodyRectangle.attachChild(mObjectSprite);
         mUniqueId = sGameObjectsTracker.getAndIncrement();
+    }
+
+    public static void clearCounter() {
+        sGameObjectsTracker.set(0);
     }
 
     public static void loadResource(String pathToImage, Context context, BitmapTextureAtlas textureAtlas, int x, int y) {

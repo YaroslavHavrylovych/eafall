@@ -1,5 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.utils;
 
+import com.gmail.yaroslavlancelot.spaceinvaders.races.RacesHolder;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,6 +10,18 @@ public abstract class HolderUtils<T> {
     private Map<String, T> holderMap = new HashMap<String, T>(15);
 
     protected HolderUtils() {
+    }
+
+    /** clear all static holders */
+    public static void clearMemory() {
+        RacesHolder.getInstance().clear();
+        TextureRegionHolderUtils.getInstance().clear();
+        FontHolderUtils.getInstance().clear();
+    }
+
+    public void clear() {
+        if (holderMap != null)
+            holderMap.clear();
     }
 
     /** get object from internal map */
@@ -29,9 +43,5 @@ public abstract class HolderUtils<T> {
      */
     public boolean isElementExist(String id) {
         return holderMap.get(id) != null;
-    }
-
-    public void clear() {
-        holderMap.clear();
     }
 }

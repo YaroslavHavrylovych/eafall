@@ -1,6 +1,5 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,7 +12,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourTy
 /**
  * first game activity with menu etc.
  */
-public class StartupActivity extends Activity {
+public class StartupActivity extends BaseNonGameActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,17 +27,6 @@ public class StartupActivity extends Activity {
         StartupActivity.this.finish();
     }
 
-    private void initMultiplayerGameButton(View singleGameButton) {
-        if (singleGameButton == null) return;
-        singleGameButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                Intent singleGameIntent = new Intent(StartupActivity.this, GameServersListActivity.class);
-                startActivity(singleGameIntent);
-            }
-        });
-    }
-
     private void initSingleGameButton(View singleGameButton) {
         if (singleGameButton == null) return;
         singleGameButton.setOnClickListener(new View.OnClickListener() {
@@ -48,6 +36,17 @@ public class StartupActivity extends Activity {
                 singleGameIntent.
                         putExtra(GameStringsConstantsAndUtils.FIRST_TEAM_NAME, TeamControlBehaviourType.USER_CONTROL_ON_SERVER_SIDE.toString()).
                         putExtra(GameStringsConstantsAndUtils.SECOND_TEAM_NAME, TeamControlBehaviourType.BOT_CONTROL_ON_SERVER_SIDE.toString());
+                startActivity(singleGameIntent);
+            }
+        });
+    }
+
+    private void initMultiplayerGameButton(View singleGameButton) {
+        if (singleGameButton == null) return;
+        singleGameButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                Intent singleGameIntent = new Intent(StartupActivity.this, GameServersListActivity.class);
                 startActivity(singleGameIntent);
             }
         });
