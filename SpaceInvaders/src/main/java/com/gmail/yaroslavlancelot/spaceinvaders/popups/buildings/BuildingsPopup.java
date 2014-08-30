@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
-import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.ShowBuildingDescriptionEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities.AttachEntityEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities.DetachEntityEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.CreepBuildingDummy;
@@ -118,7 +118,6 @@ public class BuildingsPopup extends Rectangle implements ITouchListener {
     private static class BuildingsPopupItem extends ButtonTiledSprite {
         private Sprite mStaticObject;
         private Text mText;
-        private CreepBuildingDummy mCreepBuildingDummy;
         private ITeam mTeam;
         private int mObjectId;
 
@@ -128,7 +127,7 @@ public class BuildingsPopup extends Rectangle implements ITouchListener {
             setWidth(width);
             setHeight(height);
 
-            CreepBuildingDummy dummy = mCreepBuildingDummy = (mTeam = team).getTeamRace().getBuildingDummy((mObjectId = objectId));
+            CreepBuildingDummy dummy = (mTeam = team).getTeamRace().getBuildingDummy((mObjectId = objectId));
             mStaticObject = new Sprite(SizeConstants.BUILDING_POPUP_IMAGE_PADDING, SizeConstants.BUILDING_POPUP_IMAGE_PADDING,
                     ITEM_IMAGE_WIDTH, ITEM_IMAGE_HEIGHT, dummy.getTextureRegion(), getVertexBufferObjectManager());
 
@@ -170,8 +169,7 @@ public class BuildingsPopup extends Rectangle implements ITouchListener {
                 public void click() {
                     LoggerHelper.printDebugMessage(TAG, "show description");
                     unPress();
-                    EventBus.getDefault().post(new ShowBuildingDescriptionEvent(
-                            mObjectId, mTeam.getTeamPlanet().getBuildingAmount(mObjectId)));
+                    EventBus.getDefault().post(new BuildingDescriptionShowEvent(mObjectId, mTeam.getTeamName()));
                 }
 
                 @Override

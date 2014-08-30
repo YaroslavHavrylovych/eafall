@@ -1,10 +1,13 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.AmountDrawer;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.RacesHolder;
+import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
+import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
 
 import org.andengine.entity.shape.RectangularShape;
+import org.andengine.opengl.font.FontManager;
+import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
@@ -18,10 +21,16 @@ public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
         mAmountDrawer = new AmountDrawer(vertexBufferObjectManager);
     }
 
+    public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
+        //amount font
+        AmountDrawer.loadFonts(fontManager, textureManager);
+    }
+
     @Override
     public void updateImage(RectangularShape drawArea, int objectId, String raceName, String teamName) {
         super.updateImage(drawArea, objectId, raceName, teamName);
-        updateBuildingsAmount(0);
+        ITeam team = TeamsHolder.getInstance().getElement(teamName);
+        updateBuildingsAmount(team.getTeamPlanet().getBuildingAmount(objectId));
     }
 
     @Override

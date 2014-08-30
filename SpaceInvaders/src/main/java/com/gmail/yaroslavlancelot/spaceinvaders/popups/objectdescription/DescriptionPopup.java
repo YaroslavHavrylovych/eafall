@@ -2,9 +2,10 @@ package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription;
 
 import android.content.Context;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.ShowBuildingDescriptionEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.BuildingDescriptionUpdater;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.Imperials;
+import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
+import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
 
 import org.andengine.entity.scene.Scene;
 import org.andengine.opengl.font.FontManager;
@@ -26,7 +27,7 @@ public class DescriptionPopup {
     private int mObjectId = Integer.MIN_VALUE;
     /** general elements of the popup (background sprite, close button, description image) */
     private BackgroundSprite mBackgroundSprite;
-    /** */
+    /** building updater */
     private BuildingDescriptionUpdater mBuildingDescriptionUpdater;
 
     /**
@@ -66,17 +67,20 @@ public class DescriptionPopup {
 
     public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
         BackgroundSprite.loadFonts(fontManager, textureManager);
+        BuildingDescriptionUpdater.loadFonts(fontManager, textureManager);
     }
 
     @SuppressWarnings("unused")
     /** really used by {@link de.greenrobot.event.EventBus} */
-    public void onEvent(final ShowBuildingDescriptionEvent showBuildingDescriptionEvent) {
-        if (mObjectId == showBuildingDescriptionEvent.mBuildingId) {
+    public void onEvent(final BuildingDescriptionShowEvent buildingDescriptionShowEvent) {
+        if (mObjectId == buildingDescriptionShowEvent.getObjectId()) {
             return;
         }
         mBuildingDescriptionUpdater.clear();
-        mObjectId = showBuildingDescriptionEvent.mBuildingId;
-        mBackgroundSprite.updateDescription(mBuildingDescriptionUpdater, mObjectId, Imperials.RACE_NAME, "");
+        mObjectId = buildingDescriptionShowEvent.getObjectId();
+        ITeam team = TeamsHolder.getInstance().getElement(buildingDescriptionShowEvent.getTeamName());
+        mBackgroundSprite.updateDescription(mBuildingDescriptionUpdater, mObjectId,
+                team.getTeamRace().getRaceName(), team.getTeamName());
         mBackgroundSprite.show();
     }
 

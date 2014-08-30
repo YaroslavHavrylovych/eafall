@@ -115,7 +115,7 @@ public class BackgroundSprite extends Sprite implements ITouchListener {
         setIgnoreUpdate(true);
     }
 
-    static void loadResources(Context context, TextureManager textureManager) {
+    public static void loadResources(Context context, TextureManager textureManager) {
         //background
         BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 1920, 540, TextureOptions.BILINEAR);
         TextureRegionHolderUtils.addElementFromAssets(GameStringsConstantsAndUtils.FILE_DESCRIPTION_POPUP_BACKGROUND,
@@ -125,9 +125,7 @@ public class BackgroundSprite extends Sprite implements ITouchListener {
         CloseButtonTiledSprite.loadResources(context, textureManager);
     }
 
-    static void loadFonts(FontManager fontManager, TextureManager textureManager) {
-        //amount font
-        AmountDrawer.loadFonts(fontManager, textureManager);
+    public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
     }
 
     /** show sprite/popup */

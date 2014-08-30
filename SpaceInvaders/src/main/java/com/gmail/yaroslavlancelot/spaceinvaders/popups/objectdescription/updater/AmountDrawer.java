@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription;
+package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater;
 
 import android.graphics.Typeface;
 
@@ -16,7 +16,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
 /** used basically for display buildings number in description popup */
-public class AmountDrawer implements Drawer {
+public class AmountDrawer {
     private static final String sAmountFontKey = "key_objects_amount_font";
     private final Text mText;
     private final RectangularShape mBackground;
@@ -41,7 +41,7 @@ public class AmountDrawer implements Drawer {
         mBackground.setHeight(height);
     }
 
-    static void loadFonts(FontManager fontManager, TextureManager textureManager) {
+    public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
         //amount font
         IFont font = FontFactory.create(fontManager, textureManager, 256, 256,
                 Typeface.create(Typeface.DEFAULT, Typeface.BOLD),
@@ -65,7 +65,6 @@ public class AmountDrawer implements Drawer {
         initBackground();
     }
 
-    @Override
     public void draw(RectangularShape area) {
         mBackground.setX(area.getWidth() - mBackground.getWidth());
         attachTo(area);
