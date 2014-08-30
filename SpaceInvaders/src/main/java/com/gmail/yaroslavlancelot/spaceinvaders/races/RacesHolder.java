@@ -4,7 +4,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.utils.HolderUtils;
 
 /** you can get race instance from here */
 public class RacesHolder extends HolderUtils<IRace> {
-    /** current class instance (singleton realization) */
+    /** current class instance (singleton implementation) */
     private final static RacesHolder sInstance = new RacesHolder();
 
     private RacesHolder() {

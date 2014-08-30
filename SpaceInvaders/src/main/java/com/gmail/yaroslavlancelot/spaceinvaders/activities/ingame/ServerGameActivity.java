@@ -21,6 +21,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.Unit
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.UnitFireServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.server.InGameServer;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
+import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 
 import org.andengine.engine.options.EngineOptions;
@@ -140,7 +141,7 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
     /** really used by {@link de.greenrobot.event.EventBus} */
     public void onEvent(MoneyUpdatedEvent moneyUpdatedEvent) {
         TeamControlBehaviourType behaviourType =
-                mTeams.get(moneyUpdatedEvent.getTeamName()).getTeamControlType();
+                TeamsHolder.getInstance().getElement(moneyUpdatedEvent.getTeamName()).getTeamControlType();
         try {
             mGameSocketServer.sendBroadcastServerMessage(new MoneyChangedServerMessage(
                     moneyUpdatedEvent.getTeamName(), moneyUpdatedEvent.getMoney()));

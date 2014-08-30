@@ -38,6 +38,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.races.RacesHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.Imperials;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.Team;
+import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.CollisionCategoriesConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
@@ -89,8 +90,6 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     private final Map<Long, GameObject> mGameObjectsMap = new HashMap<Long, GameObject>();
     /** game scene */
     protected Scene mGameScene;
-    /** all teams in current game */
-    protected Map<String, ITeam> mTeams = new HashMap<String, ITeam>();
     /** first team */
     protected ITeam mSecondTeam;
     /** second team */
@@ -103,8 +102,6 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     protected GameObjectsContactListener mContactListener;
     /* splash screen */
     protected Scene mSplashScene;
-    protected IRace firstTeamUserRace;
-    protected IRace secondTeamUserRace;
     /** contains game obstacles and other static objects */
     private HashMap<String, StaticObject> mStaticObjects = new HashMap<String, StaticObject>();
     /** game camera */
@@ -222,10 +219,10 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         mBackgroundMusic = mMusicAndSoundsHandler.new BackgroundMusic(getMusicManager());
 
         //races loadGeneralGameTextures
-        IRace race = new Imperials(getVertexBufferObjectManager(), mMusicAndSoundsHandler);
-        RacesHolder.getInstance().addElement(Imperials.RACE_NAME, race);
-        firstTeamUserRace = secondTeamUserRace = race;
-        secondTeamUserRace.loadResources(getTextureManager(), this);
+        RacesHolder.getInstance().addElement(Imperials.RACE_NAME, new Imperials(getVertexBufferObjectManager(), mMusicAndSoundsHandler));
+        for (IRace race : RacesHolder.getInstance().getElements()) {
+            race.loadResources(getTextureManager(), this);
+        }
 
         // other loader
         BuildingsPopup.loadResource(this, getTextureManager());
@@ -269,7 +266,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     }
 
     private void initBuildingsPopupInvocation() {
-        for (ITeam team : mTeams.values()) {
+        for (ITeam team : TeamsHolder.getInstance().getElements()) {
             if (team.getTeamControlType() == TeamControlBehaviourType.USER_CONTROL_ON_SERVER_SIDE ||
                     team.getTeamControlType() == TeamControlBehaviourType.USER_CONTROL_ON_CLIENT_SIDE) {
                 BuildingsPopup.init(team, getVertexBufferObjectManager());
@@ -286,8 +283,9 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
 
     protected void initTeams() {
         // red team
-        mSecondTeam = createTeam(GameStringsConstantsAndUtils.SECOND_TEAM_NAME, firstTeamUserRace);
-        mFirstTeam = createTeam(GameStringsConstantsAndUtils.FIRST_TEAM_NAME, secondTeamUserRace);
+        IRace race = RacesHolder.getInstance().getElement(Imperials.RACE_NAME);
+        mSecondTeam = createTeam(GameStringsConstantsAndUtils.SECOND_TEAM_NAME, race);
+        mFirstTeam = createTeam(GameStringsConstantsAndUtils.FIRST_TEAM_NAME, race);
 
         mSecondTeam.setTeamColor(Color.RED);
         mSecondTeam.setTeamColor(Color.BLUE);
@@ -313,7 +311,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
             initBotControlledTeam(team);
         }
 
-        mTeams.put(team.getTeamName(), team);
+        TeamsHolder.getInstance().addElement(team.getTeamName(), team);
     }
 
     protected void initTeamFixtureDef(ITeam team) {
@@ -398,7 +396,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     /** move money text position on screen depending on planets position */
     private void initMoneyText() {
         LoggerHelper.methodInvocation(TAG, "initMoneyText");
-        for (ITeam team : mTeams.values()) {
+        for (ITeam team : TeamsHolder.getInstance().getElements()) {
             if (!TeamControlBehaviourType.isUserControlType(team.getTeamControlType())) continue;
             LoggerHelper.methodInvocation(TAG, "init money text for " + team.getTeamName() + " team");
             /*
@@ -514,7 +512,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     @SuppressWarnings("unused")
     /** really used by {@link de.greenrobot.event.EventBus} */
     public void onEvent(final CreateBuildingEvent createBuildingEvent) {
-        userWantCreateBuilding(mTeams.get(createBuildingEvent.getTeamName()), createBuildingEvent.getKey());
+        userWantCreateBuilding(TeamsHolder.getInstance().getElement(createBuildingEvent.getTeamName()), createBuildingEvent.getKey());
     }
 
     protected abstract void userWantCreateBuilding(ITeam userTeam, int buildingId);
@@ -523,7 +521,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     /** really used by {@link de.greenrobot.event.EventBus} */
     public void onEvent(final CreateUnitEvent abstractEntityEvent) {
         int unitKey = abstractEntityEvent.getKey();
-        final ITeam team = mTeams.get(abstractEntityEvent.getTeamName());
+        final ITeam team = TeamsHolder.getInstance().getElement(abstractEntityEvent.getTeamName());
         createUnit(unitKey, team);
     }
 

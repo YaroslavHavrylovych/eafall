@@ -8,6 +8,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.Unit
 import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.InGameClient;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.connector.GameServerConnector;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
+import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 
 import org.andengine.engine.options.EngineOptions;
@@ -46,7 +47,7 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
     public void buildingCreated(final int buildingId, final String teamName) {
         LoggerHelper.methodInvocation(TAG, "buildingCreated");
         LoggerHelper.printDebugMessage(TAG, "buildingId=" + buildingId + ", teamName=" + teamName);
-        PlanetStaticObject planetStaticObject = mTeams.get(teamName).getTeamPlanet();
+        PlanetStaticObject planetStaticObject = TeamsHolder.getInstance().getElement(teamName).getTeamPlanet();
         planetStaticObject.createBuildingById(buildingId);
     }
 
@@ -56,7 +57,7 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
         runOnUpdateThread(new Runnable() {
             @Override
             public void run() {
-                createThinUnit(unitId, mTeams.get(teamName), x, y, unitUniqueId);
+                createThinUnit(unitId, TeamsHolder.getInstance().getElement(teamName), x, y, unitUniqueId);
             }
         });
     }
@@ -128,7 +129,7 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
 
     @Override
     public void moneyChanged(String teamName, int money) {
-        ITeam team = mTeams.get(teamName);
+        ITeam team = TeamsHolder.getInstance().getElement(teamName);
         if (team == null) return;
         team.setMoney(money);
     }

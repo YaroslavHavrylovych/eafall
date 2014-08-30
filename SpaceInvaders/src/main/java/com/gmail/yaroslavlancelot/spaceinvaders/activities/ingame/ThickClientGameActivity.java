@@ -21,7 +21,7 @@ public abstract class ThickClientGameActivity extends MainOperationsBaseGameActi
      */
     @Override
     protected void initThickClient() {
-        mHud.registerUpdateHandler(new TimerHandler(MoneyUpdateCycle.MONEY_UPDATE_TIME, true, new MoneyUpdateCycle(mTeams)));
+        mHud.registerUpdateHandler(new TimerHandler(MoneyUpdateCycle.MONEY_UPDATE_TIME, true, new MoneyUpdateCycle()));
         createBounds();
     }
 
