@@ -42,4 +42,7 @@
 
     <!-- client connected to server -->
     <string name="you_are_connected_to_server">You are connected to server with ip : </string>
+
+    <!-- description popup -->
+    <string name="build">Build</string>
 </resources>

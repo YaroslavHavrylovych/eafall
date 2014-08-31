@@ -2,7 +2,9 @@ package com.gmail.yaroslavlancelot.spaceinvaders.visualelements.buttons;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ISpriteTouchable;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ITouchListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
 
+import org.andengine.entity.IEntity;
 import org.andengine.entity.sprite.TiledSprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
@@ -19,6 +21,17 @@ public abstract class ButtonTiledSprite extends TiledSprite implements ISpriteTo
 
     protected ButtonTiledSprite(float pX, float pY, float pWidth, float pHeight, ITiledTextureRegion pTiledTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager) {
         super(pX, pY, pWidth, pHeight, pTiledTextureRegion, pVertexBufferObjectManager);
+    }
+
+    public Area getTouchArea() {
+        float x = 0, y = 0;
+        IEntity entity = this;
+        while (entity != null) {
+            x += entity.getX();
+            y += entity.getY();
+            entity = entity.getParent();
+        }
+        return new Area(x, y, getWidth(), getHeight());
     }
 
     public void press() {

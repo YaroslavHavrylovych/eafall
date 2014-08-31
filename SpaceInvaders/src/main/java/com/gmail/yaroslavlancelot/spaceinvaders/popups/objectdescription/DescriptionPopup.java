@@ -38,7 +38,7 @@ public class DescriptionPopup {
      */
     private DescriptionPopup(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         mBackgroundSprite = new BackgroundSprite(vertexBufferObjectManager, scene);
-        mBuildingDescriptionUpdater = new BuildingDescriptionUpdater(vertexBufferObjectManager);
+        mBuildingDescriptionUpdater = new BuildingDescriptionUpdater(vertexBufferObjectManager, scene);
         EventBus.getDefault().register(this);
     }
 
@@ -63,6 +63,7 @@ public class DescriptionPopup {
 
     public static void loadResources(Context context, TextureManager textureManager) {
         BackgroundSprite.loadResources(context, textureManager);
+        BuildingDescriptionUpdater.loadResources(context, textureManager);
     }
 
     public static void loadFonts(FontManager fontManager, TextureManager textureManager) {

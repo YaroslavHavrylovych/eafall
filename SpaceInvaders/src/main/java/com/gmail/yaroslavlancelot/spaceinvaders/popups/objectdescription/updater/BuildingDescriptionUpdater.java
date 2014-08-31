@@ -1,29 +1,73 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater;
 
+import android.content.Context;
+
+import com.gmail.yaroslavlancelot.spaceinvaders.R;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateBuildingEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.RacesHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.LocaleImpl;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.visualelements.buttons.GameButton;
 
+import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.RectangularShape;
 import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
+import de.greenrobot.event.EventBus;
+
 /** updates buildings */
 public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
+    private static final int sNoValue = Integer.MIN_VALUE;
+    private volatile int mBuildingId = sNoValue;
+    private volatile String mTeamName = "";
     /** basically used for display buildings amount on building image */
     private AmountDrawer mAmountDrawer;
+    private GameButton mBuildButton;
 
-    public BuildingDescriptionUpdater(VertexBufferObjectManager vertexBufferObjectManager) {
+    public BuildingDescriptionUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         super(vertexBufferObjectManager);
         mAmountDrawer = new AmountDrawer(vertexBufferObjectManager);
+        initBuildButton(vertexBufferObjectManager, scene);
+    }
+
+    private void initBuildButton(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
+        mBuildButton = new GameButton(vertexBufferObjectManager, 200, 70, 10, 10);
+        mBuildButton.setText(LocaleImpl.getInstance().getStringById(R.string.build));
+        mBuildButton.setOnTouchListener(
+                new TouchUtils.CustomTouchListener(mBuildButton.getTouchArea()) {
+                    @Override
+                    public void press() {
+                        mBuildButton.press();
+                    }
+
+                    @Override
+                    public void click() {
+                        unPress();
+                        EventBus.getDefault().post(new CreateBuildingEvent(mTeamName, mBuildingId));
+                    }
+
+                    @Override
+                    public void unPress() {
+                        mBuildButton.unpress();
+                    }
+                });
+        scene.registerTouchArea(mBuildButton);
     }
 
     public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
         //amount font
         AmountDrawer.loadFonts(fontManager, textureManager);
+        GameButton.loadFonts(fontManager, textureManager);
+    }
+
+    public static void loadResources(Context context, TextureManager textureManager) {
+        GameButton.loadResources(context, textureManager);
     }
 
     @Override
@@ -31,6 +75,8 @@ public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
         super.updateImage(drawArea, objectId, raceName, teamName);
         ITeam team = TeamsHolder.getInstance().getElement(teamName);
         updateBuildingsAmount(team.getTeamPlanet().getBuildingAmount(objectId));
+        mBuildingId = objectId;
+        mTeamName = teamName;
     }
 
     @Override
@@ -46,7 +92,7 @@ public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
 
     @Override
     public void updateDescription(RectangularShape drawArea, int objectId, String raceName, String teamName) {
-
+        drawArea.attachChild(mBuildButton);
     }
 
     @Override
@@ -57,7 +103,11 @@ public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
     @Override
     public void clear() {
         mAmountDrawer.detach();
-        if (mObjectImage != null)
+        mBuildButton.detachSelf();
+        if (mObjectImage != null) {
             mObjectImage.detachSelf();
+        }
+        mBuildingId = sNoValue;
+        mTeamName = "";
     }
 }

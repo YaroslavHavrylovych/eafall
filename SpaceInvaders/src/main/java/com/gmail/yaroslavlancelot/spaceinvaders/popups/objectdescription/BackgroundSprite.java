@@ -48,7 +48,7 @@ public class BackgroundSprite extends Sprite implements ITouchListener {
         super(0, 0,
                 TextureRegionHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.FILE_DESCRIPTION_POPUP_BACKGROUND),
                 vertexBufferObjectManager);
-        recreateArea(new Area(0, SizeConstants.DESCRIPTION_POPUP_HEIGHT,
+        recreateArea(new Area(0, SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.DESCRIPTION_POPUP_HEIGHT,
                 SizeConstants.GAME_FIELD_WIDTH, SizeConstants.DESCRIPTION_POPUP_HEIGHT));
         scene.attachChild(this);
         scene.registerTouchArea(this);
@@ -107,6 +107,14 @@ public class BackgroundSprite extends Sprite implements ITouchListener {
         mImageShape = new Rectangle(padding, padding, size, size, getVertexBufferObjectManager());
         mImageShape.setAlpha(0);
         attachChild(mImageShape);
+        // object description area
+        padding = SizeConstants.DESCRIPTION_POPUP_OBJECT_IMAGE_PADDING;
+        int height = SizeConstants.DESCRIPTION_POPUP_HEIGHT - 2 * padding;
+        int width = 400;
+        mDescriptionShape = new Rectangle(mImageShape.getX() + mImageShape.getWidth() + padding, padding,
+                width, height, getVertexBufferObjectManager());
+        mDescriptionShape.setAlpha(0);
+        attachChild(mDescriptionShape);
     }
 
     /** hide sprite/popup with inner elements */
