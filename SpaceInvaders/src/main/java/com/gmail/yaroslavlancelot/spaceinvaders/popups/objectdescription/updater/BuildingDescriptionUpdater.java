@@ -29,35 +29,18 @@ public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
     /** basically used for display buildings amount on building image */
     private AmountDrawer mAmountDrawer;
     private GameButton mBuildButton;
+    private Scene mScene;
 
     public BuildingDescriptionUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         super(vertexBufferObjectManager);
+        mScene = scene;
         mAmountDrawer = new AmountDrawer(vertexBufferObjectManager);
-        initBuildButton(vertexBufferObjectManager, scene);
+        initBuildButton(vertexBufferObjectManager);
     }
 
-    private void initBuildButton(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
+    private void initBuildButton(VertexBufferObjectManager vertexBufferObjectManager) {
         mBuildButton = new GameButton(vertexBufferObjectManager, 200, 70, 10, 10);
         mBuildButton.setText(LocaleImpl.getInstance().getStringById(R.string.build));
-        mBuildButton.setOnTouchListener(
-                new TouchUtils.CustomTouchListener(mBuildButton.getTouchArea()) {
-                    @Override
-                    public void press() {
-                        mBuildButton.press();
-                    }
-
-                    @Override
-                    public void click() {
-                        unPress();
-                        EventBus.getDefault().post(new CreateBuildingEvent(mTeamName, mBuildingId));
-                    }
-
-                    @Override
-                    public void unPress() {
-                        mBuildButton.unpress();
-                    }
-                });
-        scene.registerTouchArea(mBuildButton);
     }
 
     public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
@@ -109,5 +92,29 @@ public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
         }
         mBuildingId = sNoValue;
         mTeamName = "";
+    }
+
+    @Override
+    public void initDescriptionArea(float offsetX, float offsetY) {
+        mBuildButton.setOnTouchListener(
+                new TouchUtils.CustomTouchListener(mBuildButton.getTouchArea(offsetX, offsetY)) {
+                    @Override
+                    public void press() {
+                        mBuildButton.press();
+                    }
+
+                    @Override
+                    public void click() {
+                        unPress();
+                        EventBus.getDefault().post(new CreateBuildingEvent(mTeamName, mBuildingId));
+                    }
+
+                    @Override
+                    public void unPress() {
+                        mBuildButton.unpress();
+                    }
+                });
+        mScene.registerTouchArea(mBuildButton);
+        mScene = null;
     }
 }

@@ -39,6 +39,7 @@ public class DescriptionPopup {
     private DescriptionPopup(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         mBackgroundSprite = new BackgroundSprite(vertexBufferObjectManager, scene);
         mBuildingDescriptionUpdater = new BuildingDescriptionUpdater(vertexBufferObjectManager, scene);
+        mBackgroundSprite.initDescription(mBuildingDescriptionUpdater);
         EventBus.getDefault().register(this);
     }
 
@@ -52,7 +53,6 @@ public class DescriptionPopup {
      *
      * @param objectManager object manager to create inner elements
      * @param scene         popup will be attached to this scene
-     * @return
      */
     public static synchronized DescriptionPopup init(VertexBufferObjectManager objectManager, Scene scene) {
         sDescriptionPopup =

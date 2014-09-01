@@ -24,7 +24,11 @@ public abstract class ButtonTiledSprite extends TiledSprite implements ISpriteTo
     }
 
     public Area getTouchArea() {
-        float x = 0, y = 0;
+        return getTouchArea(0, 0);
+    }
+
+    public Area getTouchArea(float offsetX, float offsetY) {
+        float x = offsetX, y = offsetY;
         IEntity entity = this;
         while (entity != null) {
             x += entity.getX();

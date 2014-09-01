@@ -147,6 +147,10 @@ public class BackgroundSprite extends Sprite implements ITouchListener {
         return isVisible() && contains(pSceneTouchEvent.getX(), pSceneTouchEvent.getY());
     }
 
+    public void initDescription(DescriptionUpdater updater) {
+        updater.initDescriptionArea(getX() + mDescriptionShape.getX(), getY() + mDescriptionShape.getY());
+    }
+
     public void updateDescription(DescriptionUpdater updater, int objectId, String raceName, String teamName) {
         updater.updateImage(mImageShape, objectId, raceName, teamName);
         updater.updateDescription(mDescriptionShape, objectId, raceName, teamName);
