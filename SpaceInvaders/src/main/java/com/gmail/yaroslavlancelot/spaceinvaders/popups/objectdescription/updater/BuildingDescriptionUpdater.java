@@ -3,6 +3,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.update
 import android.content.Context;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.BuildingsAmountChangedEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateBuildingEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.RacesHolder;
@@ -32,13 +33,14 @@ public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
     private GameButton mBuildButton;
     private Scene mScene;
     /** image for addition information */
-    private Sprite mAdditionDesriptionObjectImage;
+    private Sprite mAdditionDescriptionObjectImage;
 
     public BuildingDescriptionUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         super(vertexBufferObjectManager);
         mScene = scene;
         mAmountDrawer = new AmountDrawer(vertexBufferObjectManager);
         initBuildButton(vertexBufferObjectManager);
+        EventBus.getDefault().register(this);
     }
 
     private void initBuildButton(VertexBufferObjectManager vertexBufferObjectManager) {
@@ -54,6 +56,16 @@ public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
 
     public static void loadResources(Context context, TextureManager textureManager) {
         GameButton.loadResources(context, textureManager);
+    }
+
+    @SuppressWarnings("unused")
+    /** really used by {@link de.greenrobot.event.EventBus} */
+    public void onEvent(final BuildingsAmountChangedEvent buildingsAmountChangedEvent) {
+        if (!mTeamName.equals(buildingsAmountChangedEvent.getTeamName())
+                || mBuildingId != buildingsAmountChangedEvent.getKey()) {
+            return;
+        }
+        mAmountDrawer.setText(buildingsAmountChangedEvent.getNewBuildingsAmount());
     }
 
     @Override
@@ -72,7 +84,7 @@ public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
     }
 
     private void updateBuildingsAmount(int buildingsAmount) {
-        mAmountDrawer.setText(Integer.toString(buildingsAmount));
+        mAmountDrawer.setText(buildingsAmount);
         mAmountDrawer.draw(mObjectImage);
     }
 
@@ -83,12 +95,12 @@ public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
 
     @Override
     public void updateAdditionInfo(RectangularShape drawArea, int objectId, String raceName, String teamName) {
-        if (mAdditionDesriptionObjectImage != null) {
-            mAdditionDesriptionObjectImage.detachSelf();
+        if (mAdditionDescriptionObjectImage != null) {
+            mAdditionDescriptionObjectImage.detachSelf();
         }
-        mAdditionDesriptionObjectImage = new Sprite(0, 0, drawArea.getWidth(), drawArea.getHeight(),
+        mAdditionDescriptionObjectImage = new Sprite(0, 0, drawArea.getWidth(), drawArea.getHeight(),
                 getAdditionalInformationImage(objectId, raceName), mVertexBufferObjectManager);
-        drawArea.attachChild(mAdditionDesriptionObjectImage);
+        drawArea.attachChild(mAdditionDescriptionObjectImage);
     }
 
     protected ITextureRegion getAdditionalInformationImage(int objectId, String raceName) {
@@ -104,9 +116,9 @@ public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
             mObjectImage.detachSelf();
             mObjectImage = null;
         }
-        if (mAdditionDesriptionObjectImage != null) {
-            mAdditionDesriptionObjectImage.detachSelf();
-            mAdditionDesriptionObjectImage = null;
+        if (mAdditionDescriptionObjectImage != null) {
+            mAdditionDescriptionObjectImage.detachSelf();
+            mAdditionDescriptionObjectImage = null;
         }
         mBuildingId = sNoValue;
         mTeamName = "";

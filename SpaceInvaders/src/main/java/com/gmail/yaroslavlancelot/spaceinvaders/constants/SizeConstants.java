@@ -41,7 +41,8 @@ public final class SizeConstants {
     public static final int DESCRIPTION_POPUP_CROSS_SIZE = 100;
     // amount text
     public static final int DESCRIPTION_POPUP_AMOUNT_FONT_SIZE = 90;
-    public static final int DESCRIPTION_POPUP_AMOUNT_TEXT_PADDING = 5;
+    public static final int DESCRIPTION_POPUP_AMOUNT_TEXT_PADDING_VERTICAL = 5;
+    public static final int DESCRIPTION_POPUP_AMOUNT_TEXT_PADDING_HORIZONTAL = 15;
     // addition area
     public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_HEIGHT =
             DESCRIPTION_POPUP_HEIGHT - DESCRIPTION_POPUP_CROSS_SIZE

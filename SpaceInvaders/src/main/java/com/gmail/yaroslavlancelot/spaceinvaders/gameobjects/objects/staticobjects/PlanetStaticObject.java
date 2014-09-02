@@ -1,6 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.BuildingsAmountChangedEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameloop.UnitCreatorCycle;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Higgs;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
@@ -12,6 +13,8 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import de.greenrobot.event.EventBus;
 
 /** represent team planet */
 public class PlanetStaticObject extends StaticObject {
@@ -163,6 +166,7 @@ public class PlanetStaticObject extends StaticObject {
                 mUnitCreatorCycle.increaseUnitAmount();
             }
             mBuildingsAmount += 1;
+            EventBus.getDefault().post(new BuildingsAmountChangedEvent(mPlanetTeam.getTeamName(), mBuildingId, mBuildingsAmount));
         }
 
         /** returns current building amount/instances on the planet */

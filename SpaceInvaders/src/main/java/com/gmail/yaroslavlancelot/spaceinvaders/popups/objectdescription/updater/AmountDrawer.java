@@ -22,23 +22,25 @@ public class AmountDrawer {
     private final RectangularShape mBackground;
 
     public AmountDrawer(VertexBufferObjectManager objectManager) {
-        mText = new Text(SizeConstants.DESCRIPTION_POPUP_AMOUNT_TEXT_PADDING,
-                SizeConstants.DESCRIPTION_POPUP_AMOUNT_TEXT_PADDING,
+        mText = new Text(0, 0,
                 FontHolderUtils.getInstance().getElement(sAmountFontKey), "*", objectManager);
 
         mBackground = new Rectangle(0, 0, 0, 0, objectManager);
-        initBackground();
         mBackground.setColor(1, 0, 0);
+        initBackground();
 
         mBackground.attachChild(mText);
     }
 
     /** change background size according to text value (new value - new size) */
     private void initBackground() {
-        float width = mText.getWidth() + 2 * SizeConstants.DESCRIPTION_POPUP_AMOUNT_TEXT_PADDING;
-        float height = mText.getHeight() + 2 * SizeConstants.DESCRIPTION_POPUP_AMOUNT_TEXT_PADDING;
+        mText.setPosition(0, 0);
+        float width = mText.getWidth() + 2 * SizeConstants.DESCRIPTION_POPUP_AMOUNT_TEXT_PADDING_HORIZONTAL;
+        float height = mText.getHeight() + 2 * SizeConstants.DESCRIPTION_POPUP_AMOUNT_TEXT_PADDING_VERTICAL;
+        width = width < height ? height : width;
         mBackground.setWidth(width);
         mBackground.setHeight(height);
+        mText.setPosition(mBackground.getWidth() / 2 - mText.getWidth() / 2, SizeConstants.DESCRIPTION_POPUP_AMOUNT_TEXT_PADDING_VERTICAL);
     }
 
     public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
@@ -51,12 +53,12 @@ public class AmountDrawer {
     }
 
     /** will invoke {@code setText(String)} */
-    void setText(int value) {
+    public void setText(int value) {
         setText(Integer.toString(value));
     }
 
     /** set new value in amount text and redraw background */
-    public void setText(String value) {
+    private void setText(String value) {
         String oldValue = mText.getText().toString();
         if (value.equalsIgnoreCase(oldValue)) {
             return;
