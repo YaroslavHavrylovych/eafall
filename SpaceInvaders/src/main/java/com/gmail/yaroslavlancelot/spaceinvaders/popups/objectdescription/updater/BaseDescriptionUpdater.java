@@ -17,8 +17,9 @@ public abstract class BaseDescriptionUpdater implements DescriptionUpdater {
 
     @Override
     public void updateImage(RectangularShape drawArea, int objectId, String raceName, String teamName) {
-        if (mObjectImage != null)
+        if (mObjectImage != null) {
             drawArea.detachChild(mObjectImage);
+        }
         mObjectImage = new Sprite(0, 0, drawArea.getWidth(), drawArea.getHeight(),
                 getDescriptionImage(objectId, raceName), mVertexBufferObjectManager);
         drawArea.attachChild(mObjectImage);

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.BuildingDescriptionUpdater;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.DescriptionUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
 
@@ -37,10 +38,22 @@ public class DescriptionPopup {
      * @param scene                     popup will be attached to this scene
      */
     private DescriptionPopup(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
-        mBackgroundSprite = new BackgroundSprite(vertexBufferObjectManager, scene);
         mBuildingDescriptionUpdater = new BuildingDescriptionUpdater(vertexBufferObjectManager, scene);
-        mBackgroundSprite.initDescription(mBuildingDescriptionUpdater);
+        initBackgroundSprite(vertexBufferObjectManager, scene, mBuildingDescriptionUpdater);
         EventBus.getDefault().register(this);
+    }
+
+    private void initBackgroundSprite(VertexBufferObjectManager vertexBufferObjectManager, Scene scene, final DescriptionUpdater... updaters) {
+        mBackgroundSprite = new BackgroundSprite(vertexBufferObjectManager, scene) {
+            @Override
+            void hide() {
+                super.hide();
+                for (DescriptionUpdater updater : updaters) {
+                    updater.clear();
+                }
+            }
+        };
+        mBackgroundSprite.initDescription(mBuildingDescriptionUpdater);
     }
 
     /** singleton */

@@ -49,7 +49,7 @@ public class BackgroundSprite extends Sprite implements ITouchListener {
                 TextureRegionHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.FILE_DESCRIPTION_POPUP_BACKGROUND),
                 vertexBufferObjectManager);
         recreateArea(new Area(0, SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.DESCRIPTION_POPUP_HEIGHT,
-                SizeConstants.GAME_FIELD_WIDTH, SizeConstants.DESCRIPTION_POPUP_HEIGHT));
+                SizeConstants.DESCRIPTION_POPUP_WIDTH, SizeConstants.DESCRIPTION_POPUP_HEIGHT));
         scene.attachChild(this);
         scene.registerTouchArea(this);
 
@@ -69,7 +69,7 @@ public class BackgroundSprite extends Sprite implements ITouchListener {
     private void initCross(Scene scene) {
         mCloseSprite = new CloseButtonTiledSprite(getVertexBufferObjectManager(),
                 SizeConstants.DESCRIPTION_POPUP_CROSS_SIZE);
-        mCloseSprite.setPosition(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.DESCRIPTION_POPUP_CROSS_SIZE
+        mCloseSprite.setPosition(SizeConstants.DESCRIPTION_POPUP_WIDTH - SizeConstants.DESCRIPTION_POPUP_CROSS_SIZE
                         - SizeConstants.DESCRIPTION_POPUP_CROSS_PADDING,
                 SizeConstants.DESCRIPTION_POPUP_CROSS_PADDING);
         mCloseSprite.setOnTouchListener(new TouchUtils.CustomTouchListener(new Area(getX() + mCloseSprite.getX(),
@@ -102,15 +102,27 @@ public class BackgroundSprite extends Sprite implements ITouchListener {
      */
     private void initAreas() {
         // descript image area
-        int padding = SizeConstants.DESCRIPTION_POPUP_OBJECT_IMAGE_PADDING;
+        int padding = SizeConstants.DESCRIPTION_POPUP_PADDING;
         int size = SizeConstants.DESCRIPTION_POPUP_HEIGHT - 2 * padding;
         mImageShape = new Rectangle(padding, padding, size, size, getVertexBufferObjectManager());
         mImageShape.setAlpha(0);
         attachChild(mImageShape);
+        // addition information area
+        int paddingX = SizeConstants.DESCRIPTION_POPUP_WIDTH
+                - SizeConstants.DESCRIPTION_POPUP_ADDITIONAL_AREA_WIDTH
+                - SizeConstants.DESCRIPTION_POPUP_PADDING;
+        int paddingY = SizeConstants.DESCRIPTION_POPUP_HEIGHT
+                - SizeConstants.DESCRIPTION_POPUP_ADDITIONAL_AREA_HEIGHT
+                - SizeConstants.DESCRIPTION_POPUP_PADDING;
+        mAdditionalInformationShape = new Rectangle(paddingX, paddingY,
+                SizeConstants.DESCRIPTION_POPUP_ADDITIONAL_AREA_WIDTH,
+                SizeConstants.DESCRIPTION_POPUP_ADDITIONAL_AREA_HEIGHT, getVertexBufferObjectManager());
+        mAdditionalInformationShape.setAlpha(0);
+        attachChild(mAdditionalInformationShape);
         // object description area
-        padding = SizeConstants.DESCRIPTION_POPUP_OBJECT_IMAGE_PADDING;
         int height = SizeConstants.DESCRIPTION_POPUP_HEIGHT - 2 * padding;
-        int width = 400;
+        float width = SizeConstants.DESCRIPTION_POPUP_WIDTH - mAdditionalInformationShape.getWidth()
+                - mImageShape.getWidth() - 4 * padding;
         mDescriptionShape = new Rectangle(mImageShape.getX() + mImageShape.getWidth() + padding, padding,
                 width, height, getVertexBufferObjectManager());
         mDescriptionShape.setAlpha(0);

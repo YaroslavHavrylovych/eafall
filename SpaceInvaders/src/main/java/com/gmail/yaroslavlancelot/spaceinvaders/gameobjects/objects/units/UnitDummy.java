@@ -124,4 +124,8 @@ public class UnitDummy {
     public Armor getUnitArmor() {
         return mUnitArmor;
     }
+
+    public ITextureRegion getTextureRegion() {
+        return mTextureRegion;
+    }
 }

@@ -14,6 +14,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.visualelements.buttons.GameButto
 
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.RectangularShape;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -30,6 +31,8 @@ public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
     private AmountDrawer mAmountDrawer;
     private GameButton mBuildButton;
     private Scene mScene;
+    /** image for addition information */
+    private Sprite mAdditionDesriptionObjectImage;
 
     public BuildingDescriptionUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         super(vertexBufferObjectManager);
@@ -80,7 +83,17 @@ public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
 
     @Override
     public void updateAdditionInfo(RectangularShape drawArea, int objectId, String raceName, String teamName) {
+        if (mAdditionDesriptionObjectImage != null) {
+            mAdditionDesriptionObjectImage.detachSelf();
+        }
+        mAdditionDesriptionObjectImage = new Sprite(0, 0, drawArea.getWidth(), drawArea.getHeight(),
+                getAdditionalInformationImage(objectId, raceName), mVertexBufferObjectManager);
+        drawArea.attachChild(mAdditionDesriptionObjectImage);
+    }
 
+    protected ITextureRegion getAdditionalInformationImage(int objectId, String raceName) {
+        IRace race = RacesHolder.getInstance().getElement(raceName);
+        return race.getUnitDummy(objectId).getTextureRegion();
     }
 
     @Override
@@ -89,6 +102,11 @@ public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
         mBuildButton.detachSelf();
         if (mObjectImage != null) {
             mObjectImage.detachSelf();
+            mObjectImage = null;
+        }
+        if (mAdditionDesriptionObjectImage != null) {
+            mAdditionDesriptionObjectImage.detachSelf();
+            mAdditionDesriptionObjectImage = null;
         }
         mBuildingId = sNoValue;
         mTeamName = "";
