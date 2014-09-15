@@ -17,7 +17,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.utils.LocaleImpl;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
-import com.gmail.yaroslavlancelot.spaceinvaders.visualelements.buttons.ButtonTiledSprite;
+import com.gmail.yaroslavlancelot.spaceinvaders.visualelements.sprite.TouchableTiledSprite;
 
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.sprite.Sprite;
@@ -115,7 +115,7 @@ public class BuildingsPopup extends Rectangle implements ITouchListener {
     }
 
     /** represent popup item */
-    private static class BuildingsPopupItem extends ButtonTiledSprite {
+    private static class BuildingsPopupItem extends TouchableTiledSprite {
         private Sprite mStaticObject;
         private Text mText;
         private ITeam mTeam;

@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater;
+package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building;
 
 import android.graphics.Typeface;
 
@@ -58,7 +58,7 @@ public class AmountDrawer {
     }
 
     /** set new value in amount text and redraw background */
-    private void setText(String value) {
+    public void setText(String value) {
         String oldValue = mText.getText().toString();
         if (value.equalsIgnoreCase(oldValue)) {
             return;

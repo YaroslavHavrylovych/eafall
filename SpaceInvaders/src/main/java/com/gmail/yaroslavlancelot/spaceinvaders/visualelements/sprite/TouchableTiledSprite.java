@@ -1,25 +1,30 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.visualelements.buttons;
+package com.gmail.yaroslavlancelot.spaceinvaders.visualelements.sprite;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ISpriteTouchable;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ITouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
 
 import org.andengine.entity.IEntity;
+import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.TiledSprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-/** contains base logic for creating buttons */
-public abstract class ButtonTiledSprite extends TiledSprite implements ISpriteTouchable {
+/**
+ * Extend {@link org.andengine.entity.sprite.TiledSprite}
+ * to implement {@link com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ISpriteTouchable}.
+ * Custom touch listener can be used with this Sprite.
+ */
+public abstract class TouchableTiledSprite extends TiledSprite implements ISpriteTouchable {
     /** current object touch listener */
     protected ITouchListener mSpriteOnTouchListener;
 
-    public ButtonTiledSprite(float pX, float pY, ITiledTextureRegion pTiledTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager) {
+    public TouchableTiledSprite(float pX, float pY, ITiledTextureRegion pTiledTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager) {
         super(pX, pY, pTiledTextureRegion, pVertexBufferObjectManager);
     }
 
-    protected ButtonTiledSprite(float pX, float pY, float pWidth, float pHeight, ITiledTextureRegion pTiledTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager) {
+    protected TouchableTiledSprite(float pX, float pY, float pWidth, float pHeight, ITiledTextureRegion pTiledTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager) {
         super(pX, pY, pWidth, pHeight, pTiledTextureRegion, pVertexBufferObjectManager);
     }
 
@@ -55,5 +60,11 @@ public abstract class ButtonTiledSprite extends TiledSprite implements ISpriteTo
     @Override
     public void setOnTouchListener(ITouchListener spriteTouchListener) {
         mSpriteOnTouchListener = spriteTouchListener;
+    }
+
+    /** invoke {@code detachSelf} method with unregister touch even from scene */
+    public boolean detachSelf(Scene scene) {
+        scene.unregisterTouchArea(this);
+        return super.detachSelf();
     }
 }

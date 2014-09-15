@@ -15,7 +15,4 @@ public interface DescriptionUpdater {
 
     /** clear description popup */
     void clear();
-
-    /** currently use it for getting drawArea coordinates to register touch areas on screen */
-    void initDescriptionArea(float offsetX, float offsetY);
 }

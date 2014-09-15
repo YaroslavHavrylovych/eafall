@@ -28,10 +28,10 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
  * Generally this sprite with inner elements IS popup but handler contains logic
  * to redraw it and display correctly.
  */
-public class BackgroundSprite extends Sprite implements ITouchListener {
-    private static final String TAG = BackgroundSprite.class.getCanonicalName();
+public class DescriptionPopupBackgroundSprite extends Sprite implements ITouchListener {
+    private static final String TAG = DescriptionPopupBackgroundSprite.class.getCanonicalName();
     /** will hide popup from the screen */
-    private CloseButtonTiledSprite mCloseSprite;
+    private CloseTouchableTiledSprite mCloseSprite;
 
     // next three guys/field are just split popup on display areas
 
@@ -44,7 +44,7 @@ public class BackgroundSprite extends Sprite implements ITouchListener {
 
     //
 
-    BackgroundSprite(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
+    DescriptionPopupBackgroundSprite(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         super(0, 0,
                 TextureRegionHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.FILE_DESCRIPTION_POPUP_BACKGROUND),
                 vertexBufferObjectManager);
@@ -67,7 +67,7 @@ public class BackgroundSprite extends Sprite implements ITouchListener {
 
     /** popup closing button */
     private void initCross(Scene scene) {
-        mCloseSprite = new CloseButtonTiledSprite(getVertexBufferObjectManager(),
+        mCloseSprite = new CloseTouchableTiledSprite(getVertexBufferObjectManager(),
                 SizeConstants.DESCRIPTION_POPUP_CROSS_SIZE);
         mCloseSprite.setPosition(SizeConstants.DESCRIPTION_POPUP_WIDTH - SizeConstants.DESCRIPTION_POPUP_CROSS_SIZE
                         - SizeConstants.DESCRIPTION_POPUP_CROSS_PADDING,
@@ -142,7 +142,7 @@ public class BackgroundSprite extends Sprite implements ITouchListener {
                 TextureRegionHolderUtils.getInstance(), smallObjectTexture, context, 0, 0);
         smallObjectTexture.load();
 
-        CloseButtonTiledSprite.loadResources(context, textureManager);
+        CloseTouchableTiledSprite.loadResources(context, textureManager);
     }
 
     public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
@@ -157,10 +157,6 @@ public class BackgroundSprite extends Sprite implements ITouchListener {
     @Override
     public boolean onTouch(TouchEvent pSceneTouchEvent) {
         return isVisible() && contains(pSceneTouchEvent.getX(), pSceneTouchEvent.getY());
-    }
-
-    public void initDescription(DescriptionUpdater updater) {
-        updater.initDescriptionArea(getX() + mDescriptionShape.getX(), getY() + mDescriptionShape.getY());
     }
 
     public void updateDescription(DescriptionUpdater updater, int objectId, String raceName, String teamName) {

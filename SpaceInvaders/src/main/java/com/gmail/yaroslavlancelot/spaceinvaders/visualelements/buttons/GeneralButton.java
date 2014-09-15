@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.visualelements.sprite.TouchableTiledSprite;
 
 import org.andengine.entity.text.Text;
 import org.andengine.opengl.font.FontFactory;
@@ -20,16 +21,16 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
 /** for using in whole application */
-public class GameButton extends ButtonTiledSprite {
+public class GeneralButton extends TouchableTiledSprite {
     private final static String sFontSizeKey = "game_button_phont_size_key";
     private final static int sFontSize = 50;
     private Text mText;
 
-    public GameButton(VertexBufferObjectManager vertexBufferObjectManager, float width, float height) {
+    public GeneralButton(VertexBufferObjectManager vertexBufferObjectManager, float width, float height) {
         this(vertexBufferObjectManager, width, height, 0, 0);
     }
 
-    public GameButton(VertexBufferObjectManager vertexBufferObjectManager, float width, float height, float x, float y) {
+    public GeneralButton(VertexBufferObjectManager vertexBufferObjectManager, float width, float height, float x, float y) {
         super(x, y, width, height,
                 (ITiledTextureRegion) TextureRegionHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.FILE_GAME_BUTTON),
                 vertexBufferObjectManager);

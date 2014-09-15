@@ -3,8 +3,10 @@ package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription;
 import android.content.Context;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.BuildingDescriptionShowEvent;
-import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.BuildingDescriptionUpdater;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.UnitDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.DescriptionUpdater;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building.BuildingDescriptionUpdater;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.unit.UnitsDescriptionUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
 
@@ -24,12 +26,12 @@ public class DescriptionPopup {
     public static final String TAG = DescriptionPopup.class.getCanonicalName();
     /** Single instance. Each object to display redraw content as it needs. */
     private static volatile DescriptionPopup sDescriptionPopup;
-    /** for not redraw already displayed object */
-    private int mObjectId = Integer.MIN_VALUE;
     /** general elements of the popup (background sprite, close button, description image) */
-    private BackgroundSprite mBackgroundSprite;
+    private DescriptionPopupBackgroundSprite mDescriptionPopupBackgroundSprite;
     /** building updater */
     private BuildingDescriptionUpdater mBuildingDescriptionUpdater;
+    /** unit updater */
+    private UnitsDescriptionUpdater mUnitsDescriptionUpdater;
 
     /**
      * single instance that's why it's private constructor
@@ -39,12 +41,13 @@ public class DescriptionPopup {
      */
     private DescriptionPopup(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         mBuildingDescriptionUpdater = new BuildingDescriptionUpdater(vertexBufferObjectManager, scene);
-        initBackgroundSprite(vertexBufferObjectManager, scene, mBuildingDescriptionUpdater);
+        mUnitsDescriptionUpdater = new UnitsDescriptionUpdater(vertexBufferObjectManager, scene);
+        initBackgroundSprite(vertexBufferObjectManager, scene, mBuildingDescriptionUpdater, mUnitsDescriptionUpdater);
         EventBus.getDefault().register(this);
     }
 
     private void initBackgroundSprite(VertexBufferObjectManager vertexBufferObjectManager, Scene scene, final DescriptionUpdater... updaters) {
-        mBackgroundSprite = new BackgroundSprite(vertexBufferObjectManager, scene) {
+        mDescriptionPopupBackgroundSprite = new DescriptionPopupBackgroundSprite(vertexBufferObjectManager, scene) {
             @Override
             void hide() {
                 super.hide();
@@ -53,7 +56,6 @@ public class DescriptionPopup {
                 }
             }
         };
-        mBackgroundSprite.initDescription(mBuildingDescriptionUpdater);
     }
 
     /** singleton */
@@ -75,30 +77,47 @@ public class DescriptionPopup {
     }
 
     public static void loadResources(Context context, TextureManager textureManager) {
-        BackgroundSprite.loadResources(context, textureManager);
+        DescriptionPopupBackgroundSprite.loadResources(context, textureManager);
         BuildingDescriptionUpdater.loadResources(context, textureManager);
     }
 
     public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
-        BackgroundSprite.loadFonts(fontManager, textureManager);
+        DescriptionPopupBackgroundSprite.loadFonts(fontManager, textureManager);
         BuildingDescriptionUpdater.loadFonts(fontManager, textureManager);
     }
 
     @SuppressWarnings("unused")
     /** really used by {@link de.greenrobot.event.EventBus} */
     public void onEvent(final BuildingDescriptionShowEvent buildingDescriptionShowEvent) {
-        if (mObjectId == buildingDescriptionShowEvent.getObjectId()) {
-            return;
-        }
-        mBuildingDescriptionUpdater.clear();
-        mObjectId = buildingDescriptionShowEvent.getObjectId();
+        onEvent();
+        int objectId = buildingDescriptionShowEvent.getObjectId();
         ITeam team = TeamsHolder.getInstance().getElement(buildingDescriptionShowEvent.getTeamName());
-        mBackgroundSprite.updateDescription(mBuildingDescriptionUpdater, mObjectId,
+        mDescriptionPopupBackgroundSprite.updateDescription(mBuildingDescriptionUpdater, objectId,
                 team.getTeamRace().getRaceName(), team.getTeamName());
-        mBackgroundSprite.show();
+        mDescriptionPopupBackgroundSprite.show();
     }
 
-    public BackgroundSprite getPopupSprite() {
-        return mBackgroundSprite;
+    private void onEvent() {
+        clear();
+    }
+
+    private void clear() {
+        mBuildingDescriptionUpdater.clear();
+        mUnitsDescriptionUpdater.clear();
+    }
+
+    @SuppressWarnings("unused")
+    /** really used by {@link de.greenrobot.event.EventBus} */
+    public void onEvent(final UnitDescriptionShowEvent unitDescriptionShowEvent) {
+        onEvent();
+        int objectId = unitDescriptionShowEvent.getUnitId();
+        ITeam team = TeamsHolder.getInstance().getElement(unitDescriptionShowEvent.getTeamName());
+        mDescriptionPopupBackgroundSprite.updateDescription(mUnitsDescriptionUpdater, objectId,
+                team.getTeamRace().getRaceName(), team.getTeamName());
+        mDescriptionPopupBackgroundSprite.show();
+    }
+
+    public DescriptionPopupBackgroundSprite getPopupSprite() {
+        return mDescriptionPopupBackgroundSprite;
     }
 }
