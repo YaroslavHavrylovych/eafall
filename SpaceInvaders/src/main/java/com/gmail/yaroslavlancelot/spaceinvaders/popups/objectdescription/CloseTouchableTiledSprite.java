@@ -4,8 +4,8 @@ import android.content.Context;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
-import com.gmail.yaroslavlancelot.spaceinvaders.visualelements.sprite.TouchableTiledSprite;
 
+import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
@@ -13,11 +13,13 @@ import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /** cross which used as close button in {@code DescriptionPopup} */
-public class CloseTouchableTiledSprite extends TouchableTiledSprite {
+public class CloseTouchableTiledSprite extends ButtonSprite {
     public CloseTouchableTiledSprite(VertexBufferObjectManager vertexBufferObjectManager, float size) {
-        super(0f, 0f, size, size,
+        super(0f, 0f,
                 (ITiledTextureRegion) TextureRegionHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.FILE_DESCRIPTION_POPUP_CROSS),
                 vertexBufferObjectManager);
+        setWidth(size);
+        setHeight(size);
     }
 
     public static void loadResources(Context context, TextureManager textureManager) {

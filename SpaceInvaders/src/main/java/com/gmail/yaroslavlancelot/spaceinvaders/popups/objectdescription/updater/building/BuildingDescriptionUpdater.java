@@ -13,11 +13,12 @@ import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LocaleImpl;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
-import com.gmail.yaroslavlancelot.spaceinvaders.visualelements.buttons.GeneralButton;
-import com.gmail.yaroslavlancelot.spaceinvaders.visualelements.sprite.TouchableSprite;
+import com.gmail.yaroslavlancelot.spaceinvaders.visualelements.buttons.TextButton;
 
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.RectangularShape;
+import org.andengine.entity.sprite.ButtonSprite;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -32,9 +33,9 @@ public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
     private volatile String mTeamName = "";
     /** basically used for display buildings amount on building image */
     private AmountDrawer mAmountDrawer;
-    private GeneralButton mBuildButton;
+    private TextButton mBuildButton;
     /** image for addition information */
-    private TouchableSprite mAdditionDescriptionObjectImage;
+    private Sprite mAdditionDescriptionImage;
 
     public BuildingDescriptionUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         super(vertexBufferObjectManager, scene);
@@ -44,18 +45,18 @@ public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
     }
 
     private void initBuildButton(VertexBufferObjectManager vertexBufferObjectManager) {
-        mBuildButton = new GeneralButton(vertexBufferObjectManager, 200, 70, 10, 10);
+        mBuildButton = new TextButton(vertexBufferObjectManager, 200, 70, 10, 10);
         mBuildButton.setText(LocaleImpl.getInstance().getStringById(R.string.build));
     }
 
     public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
         //amount font
         AmountDrawer.loadFonts(fontManager, textureManager);
-        GeneralButton.loadFonts(fontManager, textureManager);
+        TextButton.loadFonts(fontManager, textureManager);
     }
 
     public static void loadResources(Context context, TextureManager textureManager) {
-        GeneralButton.loadResources(context, textureManager);
+        TextButton.loadResources(context, textureManager);
     }
 
     @SuppressWarnings("unused")
@@ -89,9 +90,9 @@ public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
         super.clear();
         mAmountDrawer.detach();
         mBuildButton.detachSelf(mScene);
-        if (mAdditionDescriptionObjectImage != null) {
-            mAdditionDescriptionObjectImage.detachSelf(mScene);
-            mAdditionDescriptionObjectImage = null;
+        if (mAdditionDescriptionImage != null) {
+            mAdditionDescriptionImage.detachSelf(mScene);
+            mAdditionDescriptionImage = null;
         }
         mBuildingId = sNoValue;
         mTeamName = "";
@@ -105,44 +106,32 @@ public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
     @Override
     public void updateDescription(RectangularShape drawArea, int objectId, String raceName, String teamName) {
         drawArea.attachChild(mBuildButton);
-        mBuildButton.setOnTouchListener(
-                new TouchUtils.CustomTouchListener(mBuildButton.getTouchArea()) {
-                    @Override
-                    public void press() {
-                        mBuildButton.press();
-                    }
-
-                    @Override
-                    public void click() {
-                        unPress();
-                        EventBus.getDefault().post(new CreateBuildingEvent(mTeamName, mBuildingId));
-                    }
-
-                    @Override
-                    public void unPress() {
-                        mBuildButton.unpress();
-                    }
-                });
+        mBuildButton.setOnClickListener(new ButtonSprite.OnClickListener() {
+            @Override
+            public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                EventBus.getDefault().post(new CreateBuildingEvent(mTeamName, mBuildingId));
+            }
+        });
         mScene.registerTouchArea(mBuildButton);
     }
 
     @Override
     public void updateAdditionInfo(RectangularShape drawArea, final int objectId, String raceName, final String teamName) {
-        if (mAdditionDescriptionObjectImage != null) {
-            mAdditionDescriptionObjectImage.detachSelf();
+        if (mAdditionDescriptionImage != null) {
+            mAdditionDescriptionImage.detachSelf();
         }
-        mAdditionDescriptionObjectImage = new TouchableSprite(0, 0, drawArea.getWidth(), drawArea.getHeight(),
+        mAdditionDescriptionImage = new Sprite(0, 0, drawArea.getWidth(), drawArea.getHeight(),
                 getAdditionalInformationImage(objectId, raceName), mVertexBufferObjectManager);
-        drawArea.attachChild(mAdditionDescriptionObjectImage);
-        mAdditionDescriptionObjectImage.setOnTouchListener(
-                new TouchUtils.CustomTouchListener(mAdditionDescriptionObjectImage.getTouchArea()) {
+        drawArea.attachChild(mAdditionDescriptionImage);
+        mAdditionDescriptionImage.setTouchCallback(
+                new TouchUtils.CustomTouchListener(mAdditionDescriptionImage.getTouchArea()) {
                     @Override
                     public void click() {
                         super.click();
                         EventBus.getDefault().post(new UnitDescriptionShowEvent(objectId, teamName));
                     }
                 });
-        mScene.registerTouchArea(mAdditionDescriptionObjectImage);
+        mScene.registerTouchArea(mAdditionDescriptionImage);
     }
 
     protected ITextureRegion getAdditionalInformationImage(int objectId, String raceName) {

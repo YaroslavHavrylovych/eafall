@@ -1,6 +1,7 @@
 package org.andengine.entity.shape;
 
 import org.andengine.engine.camera.Camera;
+import org.andengine.entity.IEntity;
 import org.andengine.entity.primitive.Line;
 import org.andengine.opengl.shader.ShaderProgram;
 import org.andengine.util.algorithm.collision.RectangularShapeCollisionChecker;
@@ -8,7 +9,7 @@ import org.andengine.util.algorithm.collision.RectangularShapeCollisionChecker;
 /**
  * (c) 2010 Nicolas Gramlich
  * (c) 2011 Zynga Inc.
- * 
+ *
  * @author Nicolas Gramlich
  * @since 11:37:50 - 04.04.2010
  */
@@ -129,6 +130,28 @@ public abstract class RectangularShape extends Shape implements IAreaShape {
 	// ===========================================================
 	// Methods
 	// ===========================================================
+    /**
+     * return position of the {@link org.andengine.entity.shape.RectangularShape}
+     * on the screen with width and height of the shape
+     */
+    public Area getTouchArea() {
+        return getTouchArea(0, 0);
+    }
+
+    /**
+     * return position of the {@link org.andengine.entity.shape.RectangularShape}
+     * on the screen with adding offset coordinates
+     */
+    public Area getTouchArea(float offsetX, float offsetY) {
+        float x = offsetX, y = offsetY;
+        IEntity entity = this;
+        while (entity != null) {
+            x += entity.getX();
+            y += entity.getY();
+            entity = entity.getParent();
+        }
+        return new Area(x, y, getWidth(), getHeight());
+    }
 
 	public void resetRotationCenter() {
 		this.mRotationCenterX = this.mWidth * 0.5f;

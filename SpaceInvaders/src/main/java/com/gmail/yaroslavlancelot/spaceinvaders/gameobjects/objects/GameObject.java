@@ -8,16 +8,13 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IObjectDes
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IVelocityChangedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Damage;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ISpriteTouchable;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ITouchListener;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations;
 
 import org.andengine.audio.sound.Sound;
 import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.shape.Area;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -30,7 +27,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * each visible element on the screen which can be assigned to on or other team and can take
  * participation in object collaboration extends this class (e.g. units, planets, sun etc)
  */
-public abstract class GameObject extends RectangleWithBody implements ISpriteTouchable {
+public abstract class GameObject extends RectangleWithBody {
     public static final float VELOCITY_EPSILON = 0.00000001f;
     protected static final int sUndestroyableObjectKey = Integer.MIN_VALUE;
     /** maximum object health */
@@ -51,8 +48,6 @@ public abstract class GameObject extends RectangleWithBody implements ISpriteTou
     protected Armor mObjectArmor;
     /** callback to send message about death */
     protected IObjectDestroyedListener mObjectDestroyedListener;
-    /** current object touch listener */
-    private ITouchListener mSpriteOnTouchListener;
     /** id of the string in the string files to represent object */
     private int mObjectStringId;
     /** will trigger if object velocity changed */
@@ -143,18 +138,6 @@ public abstract class GameObject extends RectangleWithBody implements ISpriteTou
 
     public void setObjectDestroyedListener(final IObjectDestroyedListener objectDestroyedListener) {
         mObjectDestroyedListener = objectDestroyedListener;
-    }
-
-    @Override
-    public void setOnTouchListener(ITouchListener spriteTouchListener) {
-        mSpriteOnTouchListener = spriteTouchListener;
-    }
-
-    @Override
-    public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-        return mSpriteOnTouchListener != null
-                && mSpriteOnTouchListener.onTouch(pSceneTouchEvent)
-                || super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
     }
 
     @Override

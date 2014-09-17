@@ -8,21 +8,19 @@ import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.BuildingDes
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities.AttachEntityEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities.DetachEntityEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.CreepBuildingDummy;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ITouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LocaleImpl;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
-import com.gmail.yaroslavlancelot.spaceinvaders.visualelements.sprite.TouchableTiledSprite;
 
 import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.shape.Area;
+import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
-import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.font.FontUtils;
 import org.andengine.opengl.font.IFont;
 import org.andengine.opengl.texture.TextureManager;
@@ -39,7 +37,7 @@ import java.util.List;
 
 import de.greenrobot.event.EventBus;
 
-public class BuildingsPopup extends Rectangle implements ITouchListener {
+public class BuildingsPopup extends Rectangle {
     public static final String TAG = BuildingsPopup.class.getCanonicalName();
     /** buildings popup element height */
     private static final int POPUP_ELEMENT_HEIGHT = SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT;
@@ -54,7 +52,6 @@ public class BuildingsPopup extends Rectangle implements ITouchListener {
     private static volatile BuildingsPopup sInstance;
     /** represent boolean value which true if popup is showing now and false in other way */
     private boolean mIsPopupShowing;
-    private ITouchListener mTouchListener;
     private ITeam mTeam;
     private List<BuildingsPopupItem> mItems;
 
@@ -64,7 +61,7 @@ public class BuildingsPopup extends Rectangle implements ITouchListener {
                 vertexBufferObjectManager);
         setColor(Color.WHITE);
         initBuildingPopupForTeam(mTeam = team);
-        mTouchListener = new TouchListener();
+        setTouchCallback(new TouchListener());
     }
 
     public static float calculatePopupWidth(ITeam team) {
@@ -109,13 +106,8 @@ public class BuildingsPopup extends Rectangle implements ITouchListener {
         BuildingsPopupItem.loadResources(context, textureManager);
     }
 
-    @Override
-    public boolean onTouch(TouchEvent pSceneTouchEvent) {
-        return mTouchListener.onTouch(pSceneTouchEvent);
-    }
-
     /** represent popup item */
-    private static class BuildingsPopupItem extends TouchableTiledSprite {
+    private static class BuildingsPopupItem extends ButtonSprite {
         private Sprite mStaticObject;
         private Text mText;
         private ITeam mTeam;
@@ -153,30 +145,15 @@ public class BuildingsPopup extends Rectangle implements ITouchListener {
             attachChild(mStaticObject);
             attachChild(mText);
 
-            initTouch();
-
-            return this;
-        }
-
-        private void initTouch() {
-            setOnTouchListener(new TouchUtils.CustomTouchListener(new Area(getX(), getY(), getWidth(), getHeight())) {
+            setOnClickListener(new OnClickListener() {
                 @Override
-                public void press() {
-                    BuildingsPopupItem.this.press();
-                }
-
-                @Override
-                public void click() {
-                    LoggerHelper.printDebugMessage(TAG, "show description");
-                    unPress();
+                public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                    LoggerHelper.printDebugMessage(TAG, "show building description");
                     EventBus.getDefault().post(new BuildingDescriptionShowEvent(mObjectId, mTeam.getTeamName()));
                 }
-
-                @Override
-                public void unPress() {
-                    BuildingsPopupItem.this.unpress();
-                }
             });
+
+            return this;
         }
     }
 

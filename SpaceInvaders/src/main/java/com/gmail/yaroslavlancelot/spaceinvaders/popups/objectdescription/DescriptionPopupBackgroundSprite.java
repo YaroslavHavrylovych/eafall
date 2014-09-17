@@ -4,15 +4,18 @@ import android.content.Context;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ITouchListener;
+
+import org.andengine.entity.shape.ITouchCallback;
+
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.DescriptionUpdater;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
+import org.andengine.entity.shape.Area;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
 
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.RectangularShape;
+import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.font.FontManager;
@@ -28,7 +31,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
  * Generally this sprite with inner elements IS popup but handler contains logic
  * to redraw it and display correctly.
  */
-public class DescriptionPopupBackgroundSprite extends Sprite implements ITouchListener {
+public class DescriptionPopupBackgroundSprite extends Sprite {
     private static final String TAG = DescriptionPopupBackgroundSprite.class.getCanonicalName();
     /** will hide popup from the screen */
     private CloseTouchableTiledSprite mCloseSprite;
@@ -72,22 +75,10 @@ public class DescriptionPopupBackgroundSprite extends Sprite implements ITouchLi
         mCloseSprite.setPosition(SizeConstants.DESCRIPTION_POPUP_WIDTH - SizeConstants.DESCRIPTION_POPUP_CROSS_SIZE
                         - SizeConstants.DESCRIPTION_POPUP_CROSS_PADDING,
                 SizeConstants.DESCRIPTION_POPUP_CROSS_PADDING);
-        mCloseSprite.setOnTouchListener(new TouchUtils.CustomTouchListener(new Area(getX() + mCloseSprite.getX(),
-                getY() + mCloseSprite.getY(), mCloseSprite.getWidth(), mCloseSprite.getHeight())) {
+        mCloseSprite.setOnClickListener(new ButtonSprite.OnClickListener() {
             @Override
-            public void press() {
-                mCloseSprite.press();
-            }
-
-            @Override
-            public void click() {
-                unPress();
+            public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
                 hide();
-            }
-
-            @Override
-            public void unPress() {
-                mCloseSprite.unpress();
             }
         });
 
@@ -155,8 +146,8 @@ public class DescriptionPopupBackgroundSprite extends Sprite implements ITouchLi
     }
 
     @Override
-    public boolean onTouch(TouchEvent pSceneTouchEvent) {
-        return isVisible() && contains(pSceneTouchEvent.getX(), pSceneTouchEvent.getY());
+    public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float touchAreaLocalX, float touchAreaLocalY) {
+        return isVisible() && super.onAreaTouched(pSceneTouchEvent, touchAreaLocalX, touchAreaLocalY);
     }
 
     public void updateDescription(DescriptionUpdater updater, int objectId, String raceName, String teamName) {

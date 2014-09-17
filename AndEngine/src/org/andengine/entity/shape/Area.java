@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.utils;
+package org.andengine.entity.shape;
 
 public class Area {
     public final float left;

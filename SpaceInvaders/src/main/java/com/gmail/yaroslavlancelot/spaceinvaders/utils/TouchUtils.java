@@ -1,6 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.utils;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ITouchListener;
+import org.andengine.entity.shape.Area;
+import org.andengine.entity.shape.ITouchCallback;
 
 import org.andengine.input.touch.TouchEvent;
 
@@ -22,7 +23,7 @@ public final class TouchUtils {
      * TouchListener which contains stub for some common methods. Like press or click happens, or
      * un-press happens (user move finger out of element in pressed state)  on touchable element.
      */
-    public static class CustomTouchListener implements ITouchListener {
+    public static class CustomTouchListener implements ITouchCallback {
         /** contains is that's click event or not (just press down and up (up - out of border) */
         private boolean mIsItClickEvent;
         /** contains true if between press event and up event action move(out of bounds)/outside or cancel event happens */
@@ -38,7 +39,7 @@ public final class TouchUtils {
         }
 
         @Override
-        public boolean onTouch(final TouchEvent event) {
+        public boolean onAreaTouched(final TouchEvent event, float touchAreaLocalX, float touchAreaLocalY) {
             switch (event.getAction()) {
                 case TouchEvent.ACTION_DOWN: {
                     mIsItClickEvent = true;

@@ -29,7 +29,9 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobject
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.SunStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.ITouchListener;
+
+import org.andengine.entity.shape.ITouchCallback;
+
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.MainSceneTouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.BuildingsPopup;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.DescriptionPopup;
@@ -270,10 +272,10 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
             if (team.getTeamControlType() == TeamControlBehaviourType.USER_CONTROL_ON_SERVER_SIDE ||
                     team.getTeamControlType() == TeamControlBehaviourType.USER_CONTROL_ON_CLIENT_SIDE) {
                 BuildingsPopup.init(team, getVertexBufferObjectManager());
-                mStaticObjects.get(GameStringsConstantsAndUtils.KEY_SUN).setOnTouchListener(new ITouchListener() {
+                mStaticObjects.get(GameStringsConstantsAndUtils.KEY_SUN).setTouchCallback(new ITouchCallback() {
                     @Override
-                    public boolean onTouch(TouchEvent pSceneTouchEvent) {
-                        return BuildingsPopup.getInstance().onTouch(pSceneTouchEvent);
+                    public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float touchAreaLocalX, float touchAreaLocalY) {
+                        return BuildingsPopup.getInstance().onAreaTouched(pSceneTouchEvent, touchAreaLocalX, touchAreaLocalY);
                     }
                 });
             }

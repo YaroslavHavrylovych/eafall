@@ -9,7 +9,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.BuildingLoader;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.TeamColorArea;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.Imperials;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.Area;
+import org.andengine.entity.shape.Area;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
