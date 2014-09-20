@@ -86,6 +86,12 @@ public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
     }
 
     @Override
+    protected String getDescribedObjectName(int objectId, String raceName) {
+        return LocaleImpl.getInstance().getStringById
+                (RacesHolder.getInstance().getElement(raceName).getBuildingDummy(objectId).getNameId());
+    }
+
+    @Override
     public void clear() {
         super.clear();
         mAmountDrawer.detach();

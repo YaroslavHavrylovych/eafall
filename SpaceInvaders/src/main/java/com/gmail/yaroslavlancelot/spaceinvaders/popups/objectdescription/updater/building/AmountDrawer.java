@@ -1,5 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building;
 
+import android.graphics.Color;
 import android.graphics.Typeface;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
@@ -13,7 +14,6 @@ import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.font.IFont;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.color.Color;
 
 /** used basically for display buildings number in description popup */
 public class AmountDrawer {
@@ -23,7 +23,7 @@ public class AmountDrawer {
 
     public AmountDrawer(VertexBufferObjectManager objectManager) {
         mText = new Text(0, 0,
-                FontHolderUtils.getInstance().getElement(sAmountFontKey), "*", objectManager);
+                FontHolderUtils.getInstance().getElement(sAmountFontKey), "*", 20, objectManager);
 
         mBackground = new Rectangle(0, 0, 0, 0, objectManager);
         mBackground.setColor(1, 0, 0);
@@ -47,7 +47,7 @@ public class AmountDrawer {
         //amount font
         IFont font = FontFactory.create(fontManager, textureManager, 256, 256,
                 Typeface.create(Typeface.DEFAULT, Typeface.BOLD),
-                SizeConstants.DESCRIPTION_POPUP_AMOUNT_FONT_SIZE, Color.WHITE.hashCode());
+                SizeConstants.DESCRIPTION_POPUP_AMOUNT_FONT_SIZE, Color.WHITE);
         font.load();
         FontHolderUtils.getInstance().addElement(sAmountFontKey, font);
     }

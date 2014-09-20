@@ -22,6 +22,11 @@ public class UnitsDescriptionUpdater extends BaseDescriptionUpdater {
     }
 
     @Override
+    protected String getDescribedObjectName(int objectId, String raceName) {
+        return RacesHolder.getInstance().getElement(raceName).getUnitDummy(objectId).getName();
+    }
+
+    @Override
     public void updateDescription(RectangularShape drawArea, int objectId, String raceName, String teamName) {
 
     }

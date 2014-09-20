@@ -15,10 +15,10 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.TeamColorArea;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.UnitLoader;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.Imperials;
-import org.andengine.entity.shape.Area;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations;
 
+import org.andengine.entity.shape.Area;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -127,5 +127,9 @@ public class UnitDummy {
 
     public ITextureRegion getTextureRegion() {
         return mTextureRegion;
+    }
+
+    public String getName() {
+        return mUnitLoader.name;
     }
 }

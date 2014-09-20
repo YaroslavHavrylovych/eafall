@@ -1,24 +1,26 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
-
-import org.andengine.entity.shape.ITouchCallback;
-
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.DescriptionUpdater;
-import org.andengine.entity.shape.Area;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
 
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.Scene;
+import org.andengine.entity.shape.Area;
 import org.andengine.entity.shape.RectangularShape;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.font.FontManager;
+import org.andengine.opengl.font.IFont;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
@@ -33,11 +35,14 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
  */
 public class DescriptionPopupBackgroundSprite extends Sprite {
     private static final String TAG = DescriptionPopupBackgroundSprite.class.getCanonicalName();
+    /** font key */
+    private static final String sDescriptionFontKey = "key_objects_description_object_name_text_font";
+    /** described object name */
+    protected Text mObjectNameText;
     /** will hide popup from the screen */
     private CloseTouchableTiledSprite mCloseSprite;
 
     // next three guys/field are just split popup on display areas
-
     /** descript object image */
     private RectangularShape mImageShape;
     /** descript object description area */
@@ -110,11 +115,15 @@ public class DescriptionPopupBackgroundSprite extends Sprite {
                 SizeConstants.DESCRIPTION_POPUP_ADDITIONAL_AREA_HEIGHT, getVertexBufferObjectManager());
         mAdditionalInformationShape.setAlpha(0);
         attachChild(mAdditionalInformationShape);
+        // init described object name text
+        initObjectNameText(padding);
         // object description area
-        int height = SizeConstants.DESCRIPTION_POPUP_HEIGHT - 2 * padding;
+        int objectNameTextHeight = Math.round(mObjectNameText.getHeight() + 1);
+        int height = SizeConstants.DESCRIPTION_POPUP_HEIGHT - 3 * padding - objectNameTextHeight;
         float width = SizeConstants.DESCRIPTION_POPUP_WIDTH - mAdditionalInformationShape.getWidth()
                 - mImageShape.getWidth() - 4 * padding;
-        mDescriptionShape = new Rectangle(mImageShape.getX() + mImageShape.getWidth() + padding, padding,
+        mDescriptionShape = new Rectangle(mImageShape.getX() + mImageShape.getWidth() + padding,
+                padding + objectNameTextHeight,
                 width, height, getVertexBufferObjectManager());
         mDescriptionShape.setAlpha(0);
         attachChild(mDescriptionShape);
@@ -124,6 +133,12 @@ public class DescriptionPopupBackgroundSprite extends Sprite {
     void hide() {
         setVisible(false);
         setIgnoreUpdate(true);
+    }
+
+    private void initObjectNameText(int padding) {
+        mObjectNameText = new Text(0, padding, FontHolderUtils.getInstance().getElement(sDescriptionFontKey),
+                "", 20, getVertexBufferObjectManager());
+        attachChild(mObjectNameText);
     }
 
     public static void loadResources(Context context, TextureManager textureManager) {
@@ -137,6 +152,12 @@ public class DescriptionPopupBackgroundSprite extends Sprite {
     }
 
     public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
+        //described object name font
+        IFont font = FontFactory.create(fontManager, textureManager, 256, 256,
+                Typeface.create(Typeface.DEFAULT, Typeface.BOLD),
+                70f, Color.BLUE);
+        font.load();
+        FontHolderUtils.getInstance().addElement(sDescriptionFontKey, font);
     }
 
     /** show sprite/popup */
@@ -154,5 +175,12 @@ public class DescriptionPopupBackgroundSprite extends Sprite {
         updater.updateImage(mImageShape, objectId, raceName, teamName);
         updater.updateDescription(mDescriptionShape, objectId, raceName, teamName);
         updater.updateAdditionInfo(mAdditionalInformationShape, objectId, raceName, teamName);
+        updateObjectNameText(updater, objectId, raceName);
+    }
+
+    private void updateObjectNameText(DescriptionUpdater updater, int objectId, String raceName) {
+        updater.updateObjectNameText(mObjectNameText, objectId, raceName);
+        mObjectNameText.setX(mDescriptionShape.getX() + mDescriptionShape.getWidth() / 2
+                - mObjectNameText.getWidth() / 2);
     }
 }

@@ -3,6 +3,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.update
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.RectangularShape;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.text.Text;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
@@ -32,8 +33,13 @@ public abstract class BaseDescriptionUpdater implements DescriptionUpdater {
         drawArea.attachChild(mObjectImage);
     }
 
-    /** return description image */
-    protected abstract ITextureRegion getDescriptionImage(int objectId, String raceName);
+    @Override
+    public void updateObjectNameText(Text text, int objectId, String raceName) {
+        text.setText(getDescribedObjectName(objectId, raceName));
+    }
+
+    /** return description object name {@link java.lang.String} */
+    protected abstract String getDescribedObjectName(int objectId, String raceName);
 
     @Override
     public void clear() {
@@ -42,4 +48,7 @@ public abstract class BaseDescriptionUpdater implements DescriptionUpdater {
             mObjectImage = null;
         }
     }
+
+    /** return description image */
+    protected abstract ITextureRegion getDescriptionImage(int objectId, String raceName);
 }
