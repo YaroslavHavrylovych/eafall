@@ -3,7 +3,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.update
 import org.andengine.entity.shape.RectangularShape;
 import org.andengine.entity.text.Text;
 
-/** used for update object description */
+/** used for update object description popup */
 public interface DescriptionUpdater {
     /** update object image */
     void updateImage(RectangularShape drawArea, int objectId, String raceName, String teamName);

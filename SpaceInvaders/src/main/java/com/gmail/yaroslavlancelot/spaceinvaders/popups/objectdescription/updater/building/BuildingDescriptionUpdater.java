@@ -26,13 +26,14 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import de.greenrobot.event.EventBus;
 
-/** updates buildings */
+/** updates buildings description popup */
 public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
     private static final int sNoValue = Integer.MIN_VALUE;
     private volatile int mBuildingId = sNoValue;
     private volatile String mTeamName = "";
     /** basically used for display buildings amount on building image */
     private AmountDrawer mAmountDrawer;
+    /** press to create a building */
     private TextButton mBuildButton;
     /** image for addition information */
     private Sprite mAdditionDescriptionImage;
@@ -45,7 +46,7 @@ public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
     }
 
     private void initBuildButton(VertexBufferObjectManager vertexBufferObjectManager) {
-        mBuildButton = new TextButton(vertexBufferObjectManager, 200, 70, 10, 10);
+        mBuildButton = new TextButton(vertexBufferObjectManager, 200, 70);
         mBuildButton.setText(LocaleImpl.getInstance().getStringById(R.string.build));
     }
 
@@ -79,13 +80,6 @@ public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
     }
 
     @Override
-    protected ITextureRegion getDescriptionImage(int objectId, String raceName) {
-        mScene.registerTouchArea(mBuildButton);
-        IRace race = RacesHolder.getInstance().getElement(raceName);
-        return race.getBuildingDummy(objectId).getTextureRegion();
-    }
-
-    @Override
     protected String getDescribedObjectName(int objectId, String raceName) {
         return LocaleImpl.getInstance().getStringById
                 (RacesHolder.getInstance().getElement(raceName).getBuildingDummy(objectId).getNameId());
@@ -104,6 +98,12 @@ public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
         mTeamName = "";
     }
 
+    @Override
+    protected ITextureRegion getDescriptionImage(int objectId, String raceName) {
+        IRace race = RacesHolder.getInstance().getElement(raceName);
+        return race.getBuildingDummy(objectId).getTextureRegion();
+    }
+
     private void updateBuildingsAmount(int buildingsAmount) {
         mAmountDrawer.setText(buildingsAmount);
         mAmountDrawer.draw(mObjectImage);
@@ -111,6 +111,7 @@ public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
 
     @Override
     public void updateDescription(RectangularShape drawArea, int objectId, String raceName, String teamName) {
+        mBuildButton.setPosition(0, drawArea.getHeight() - mBuildButton.getHeight());
         drawArea.attachChild(mBuildButton);
         mBuildButton.setOnClickListener(new ButtonSprite.OnClickListener() {
             @Override

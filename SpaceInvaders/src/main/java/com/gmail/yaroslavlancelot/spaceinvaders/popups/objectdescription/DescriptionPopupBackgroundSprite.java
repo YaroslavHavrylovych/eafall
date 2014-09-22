@@ -119,7 +119,7 @@ public class DescriptionPopupBackgroundSprite extends Sprite {
         initObjectNameText(padding);
         // object description area
         int objectNameTextHeight = Math.round(mObjectNameText.getHeight() + 1);
-        int height = SizeConstants.DESCRIPTION_POPUP_HEIGHT - 3 * padding - objectNameTextHeight;
+        int height = SizeConstants.DESCRIPTION_POPUP_HEIGHT - 2 * padding - objectNameTextHeight;
         float width = SizeConstants.DESCRIPTION_POPUP_WIDTH - mAdditionalInformationShape.getWidth()
                 - mImageShape.getWidth() - 4 * padding;
         mDescriptionShape = new Rectangle(mImageShape.getX() + mImageShape.getWidth() + padding,
