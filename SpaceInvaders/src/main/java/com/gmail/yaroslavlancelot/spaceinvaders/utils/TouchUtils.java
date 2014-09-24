@@ -1,8 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.utils;
 
-import org.andengine.entity.shape.Area;
 import org.andengine.entity.shape.ITouchCallback;
-
+import org.andengine.entity.shape.RectangularShape;
 import org.andengine.input.touch.TouchEvent;
 
 /** Helping functions to work with touch events */
@@ -19,80 +18,65 @@ public final class TouchUtils {
         return value;
     }
 
+    public static interface OnClickListener {
+        void onClick();
+    }
+
     /**
      * TouchListener which contains stub for some common methods. Like press or click happens, or
      * un-press happens (user move finger out of element in pressed state)  on touchable element.
      */
     public static class CustomTouchListener implements ITouchCallback {
-        /** contains is that's click event or not (just press down and up (up - out of border) */
+        /** true if current touch is simple click (just press down and up) */
         private boolean mIsItClickEvent;
-        /** contains true if between press event and up event action move(out of bounds)/outside or cancel event happens */
-        private boolean mIsOutOfBoundMoveHappens;
         /** used to find out is you move in bounds or not */
-        private Area mArea;
-        private boolean mActionDownPresent;
+        private RectangularShape mObject;
 
 
         /** parameters description you can see in javadoc to fields of this class */
-        public CustomTouchListener(Area area) {
-            mArea = area;
+        public CustomTouchListener(RectangularShape object) {
+            mObject = object;
         }
 
         @Override
         public boolean onAreaTouched(final TouchEvent event, float touchAreaLocalX, float touchAreaLocalY) {
-            switch (event.getAction()) {
-                case TouchEvent.ACTION_DOWN: {
-                    mIsItClickEvent = true;
-                    mIsOutOfBoundMoveHappens = false;
-                    mActionDownPresent = true;
-                    press();
-                    return true;
-                }
-                case TouchEvent.ACTION_UP: {
-                    if (!mActionDownPresent) {
-                        return false;
-                    }
-                    mActionDownPresent = false;
-                    if (mIsItClickEvent) {
-                        click();
-                    }
-                    return true;
-                }
-                case TouchEvent.ACTION_MOVE:
-                case TouchEvent.ACTION_OUTSIDE:
-                case TouchEvent.ACTION_CANCEL: {
-                    if (!mActionDownPresent) {
-                        return false;
-                    }
-                    if (mIsOutOfBoundMoveHappens) {
-                        return false;
-                    }
-                    if (isTouchOutOfBound(event)) {
-                        mIsItClickEvent = false;
-                        mIsOutOfBoundMoveHappens = true;
-                        unPress();
-                        return false;
-                    }
-                    return true;
-                }
+            if (event.isActionDown()) {
+                press();
+            } else if (event.isActionCancel() || !contains(touchAreaLocalX, touchAreaLocalY)) {
+                unPress();
+            } else if (event.isActionUp() && mIsItClickEvent) {
+                click();
             }
-            return false;
+            return true;
         }
 
         /** element was pressed callback */
         public void press() {
+            mIsItClickEvent = true;
         }
 
-        /** callback after click on element happens. User touch down and up finger on element without cancelling or move outside */
-        public void click() {
-        }
-
-        private boolean isTouchOutOfBound(final TouchEvent event) {
-            return !mArea.contains(event.getX(), event.getY());
+        /**
+         * check that {@link com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils.CustomTouchListener#mObject}
+         * contains x and y coordinates
+         *
+         * @return true if object visible and x and y both more then zero less then object
+         * width and height
+         */
+        private boolean contains(float x, float y) {
+            if (!mObject.isVisible()) {
+                return false;
+            }
+            return x > 0 && y > 0 && x < mObject.getWidth() && y < mObject.getHeight();
         }
 
         /** callback after user press element but then cancel press with moving outside of the element borders */
         public void unPress() {
+            mIsItClickEvent = false;
+        }
+
+        /** callback after click on element happens. User touch down and up finger on element without cancelling or move outside */
+        public void click() {
+            unPress();
         }
     }
 }

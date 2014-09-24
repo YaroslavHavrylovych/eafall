@@ -1,6 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.visualelements.buttons;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
@@ -18,7 +19,6 @@ import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.color.Color;
 
 /** for using in whole application */
 public class TextButton extends ButtonSprite {
@@ -56,7 +56,7 @@ public class TextButton extends ButtonSprite {
     public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
         IFont font = FontFactory.create(fontManager, textureManager, 256, 256,
                 Typeface.create(Typeface.DEFAULT, Typeface.BOLD),
-                sFontSize, Color.WHITE.hashCode());
+                sFontSize, Color.WHITE);
         font.load();
         FontHolderUtils.getInstance().addElement(sFontSizeKey, font);
     }

@@ -42,4 +42,13 @@
 
     <!-- client connected to server -->
     <string name="you_are_connected_to_server">Ви під’єднані до сервера з адресою : </string>
+
+    <!-- description popup -->
+    <string name="build">Побудувати</string>
+
+    <!-- description popup -->
+    <string name="description_cost">Ціна :</string>
+    <string name="description_produce">Створює :</string>
+    <string name="description_unit_producing_time">Час створення юніта :</string>
+    <string name="description_upgrade">Апгрейд :</string>
 </resources>

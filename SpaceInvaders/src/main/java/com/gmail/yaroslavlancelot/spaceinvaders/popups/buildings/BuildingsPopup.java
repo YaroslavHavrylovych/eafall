@@ -17,7 +17,6 @@ import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
 
 import org.andengine.entity.primitive.Rectangle;
-import org.andengine.entity.shape.Area;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
@@ -160,9 +159,7 @@ public class BuildingsPopup extends Rectangle {
     /** touch anywhere where you can see free space on the screen to show the popup */
     private class TouchListener extends TouchUtils.CustomTouchListener {
         public TouchListener() {
-            super(new Area(SizeConstants.GAME_FIELD_WIDTH / 2 - SizeConstants.SUN_DIAMETER / 2,
-                    SizeConstants.GAME_FIELD_HEIGHT / 2 - SizeConstants.SUN_DIAMETER / 2,
-                    SizeConstants.SUN_DIAMETER, SizeConstants.SUN_DIAMETER));
+            super(BuildingsPopup.this);
         }
 
         @Override

@@ -45,4 +45,10 @@
 
     <!-- description popup -->
     <string name="build">Build</string>
+
+    <!-- description popup -->
+    <string name="description_cost">Cost :</string>
+    <string name="description_produce">Produce :</string>
+    <string name="description_unit_producing_time">Unit producing time :</string>
+    <string name="description_upgrade">Upgrade :</string>
 </resources>

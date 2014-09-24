@@ -37,6 +37,8 @@ public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
     private TextButton mBuildButton;
     /** image for addition information */
     private Sprite mAdditionDescriptionImage;
+    /** building description object (update description area which u pass to it) */
+//TODO finish this    private BuildingDescriptionObject mBuildingDescriptionObject;
 
     public BuildingDescriptionUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         super(vertexBufferObjectManager, scene);
@@ -131,7 +133,7 @@ public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
                 getAdditionalInformationImage(objectId, raceName), mVertexBufferObjectManager);
         drawArea.attachChild(mAdditionDescriptionImage);
         mAdditionDescriptionImage.setTouchCallback(
-                new TouchUtils.CustomTouchListener(mAdditionDescriptionImage.getTouchArea()) {
+                new TouchUtils.CustomTouchListener(mAdditionDescriptionImage) {
                     @Override
                     public void click() {
                         super.click();
