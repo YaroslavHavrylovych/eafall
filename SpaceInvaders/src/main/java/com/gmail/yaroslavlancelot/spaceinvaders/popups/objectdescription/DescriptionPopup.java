@@ -4,12 +4,12 @@ import android.content.Context;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.UnitDescriptionShowEvent;
-import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.BaseDescriptionUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.DescriptionUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building.BuildingDescriptionUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.unit.UnitsDescriptionUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
+import com.gmail.yaroslavlancelot.spaceinvaders.visualelements.text.Link;
 
 import org.andengine.entity.scene.Scene;
 import org.andengine.opengl.font.FontManager;
@@ -85,6 +85,8 @@ public class DescriptionPopup {
     public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
         DescriptionPopupBackgroundSprite.loadFonts(fontManager, textureManager);
         BuildingDescriptionUpdater.loadFonts(fontManager, textureManager);
+        DescriptionText.loadFonts(fontManager, textureManager);
+        Link.loadFonts(fontManager, textureManager);
     }
 
     @SuppressWarnings("unused")

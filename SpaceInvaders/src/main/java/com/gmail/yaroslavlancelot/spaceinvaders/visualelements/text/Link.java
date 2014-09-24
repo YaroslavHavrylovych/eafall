@@ -10,6 +10,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
 import org.andengine.entity.text.Text;
 import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.font.FontManager;
+import org.andengine.opengl.font.FontUtils;
 import org.andengine.opengl.font.IFont;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;

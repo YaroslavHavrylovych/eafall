@@ -12,6 +12,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.Locale;
 import com.gmail.yaroslavlancelot.spaceinvaders.visualelements.text.Link;
 
+import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.RectangularShape;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
@@ -23,6 +24,7 @@ import de.greenrobot.event.EventBus;
  */
 public class BuildingDescriptionObject {
     private final int mBetweenDescriptionLinesSpace = 5;
+    private final int mSpace = 6;
     private DescriptionText mCostText;
     private DescriptionText mCostValue;
     private DescriptionText mProducedUnitText;
@@ -34,47 +36,55 @@ public class BuildingDescriptionObject {
     public BuildingDescriptionObject(VertexBufferObjectManager vertexBufferObjectManager) {
         Locale locale = LocaleImpl.getInstance();
         // cost
-        mCostText = new DescriptionText(0, DescriptionText.sFontSize,
-                locale.getStringById(R.string.description_cost) + " ", vertexBufferObjectManager);
-        mCostValue = new DescriptionText(0, mCostText.getWidth(), vertexBufferObjectManager);
+        mCostText = new DescriptionText(0, 0,
+                locale.getStringById(R.string.description_cost), vertexBufferObjectManager);
+        mCostValue = new DescriptionText(mCostText.getWidth() + mSpace, 0, vertexBufferObjectManager);
         // produce
         mProducedUnitText = new DescriptionText(0, DescriptionText.sFontSize + mBetweenDescriptionLinesSpace,
-                locale.getStringById(R.string.description_produce) + " ", vertexBufferObjectManager);
-        mProducedUnitLink = new Link(mProducedUnitText.getWidth(), mProducedUnitText.getY(), vertexBufferObjectManager);
+                locale.getStringById(R.string.description_produce), vertexBufferObjectManager);
+        mProducedUnitLink = new Link(mProducedUnitText.getWidth() + mSpace, mProducedUnitText.getY(), vertexBufferObjectManager);
         // unit creation time
         mUnitCreationTimeText = new DescriptionText(0, 2 * (DescriptionText.sFontSize + mBetweenDescriptionLinesSpace),
-                locale.getStringById(R.string.description_unit_producing_time) + " ", vertexBufferObjectManager);
-        mUnitCreationTimeValue = new DescriptionText(mUnitCreationTimeText.getWidth(), mUnitCreationTimeText.getY(), "8", vertexBufferObjectManager);
+                locale.getStringById(R.string.description_unit_producing_time), vertexBufferObjectManager);
+        mUnitCreationTimeValue = new DescriptionText(mUnitCreationTimeText.getWidth() + mSpace, mUnitCreationTimeText.getY(),
+                "8", vertexBufferObjectManager);
         // upgrade
         mUpgradeText = new DescriptionText(0, 3 * (DescriptionText.sFontSize + mBetweenDescriptionLinesSpace),
-                locale.getStringById(R.string.description_upgrade) + " ", vertexBufferObjectManager);
+                locale.getStringById(R.string.description_upgrade), vertexBufferObjectManager);
     }
 
     /** update description values (e.g. new building appear) */
-    public void updateDescription(RectangularShape drawArea, final int objectId, final String raceName) {
+    public void updateDescription(RectangularShape drawArea, final int objectId,
+                                  final String raceName, final String teamName) {
+        attach(drawArea);
         IRace race = RacesHolder.getInstance().getElement(raceName);
         CreepBuildingDummy dummy = race.getBuildingDummy(objectId);
-        mCostText.setText(Integer.toString(dummy.getCost()));
+        // cost
+        mCostValue.setText(Integer.toString(dummy.getCost()));
         // produced unit
         UnitDummy unitDummy = race.getUnitDummy(objectId);
         mProducedUnitLink.setText(unitDummy.getName());
         mProducedUnitLink.setOnClickListener(new TouchUtils.OnClickListener() {
             @Override
             public void onClick() {
-                EventBus.getDefault().post(new UnitDescriptionShowEvent(objectId, raceName));
+                EventBus.getDefault().post(new UnitDescriptionShowEvent(objectId, teamName));
             }
         });
     }
 
     /** attaches object to the area */
     private void attach(RectangularShape drawArea) {
-        mCostText.detachSelf();
-        mCostValue.detachSelf();
-        mProducedUnitText.detachSelf();
-        mProducedUnitLink.detachSelf();
-        mUnitCreationTimeText.detachSelf();
-        mUnitCreationTimeValue.detachSelf();
-        mUpgradeText.detachSelf();
+        drawArea.attachChild(mCostText);
+        drawArea.attachChild(mCostValue);
+        drawArea.attachChild(mProducedUnitText);
+        drawArea.attachChild(mProducedUnitLink);
+        drawArea.attachChild(mUnitCreationTimeText);
+        drawArea.attachChild(mUnitCreationTimeValue);
+        drawArea.attachChild(mUpgradeText);
+    }
+
+    public void initTouches(Scene scene) {
+        scene.registerTouchArea(mProducedUnitLink);
     }
 
     /** detaches objects */

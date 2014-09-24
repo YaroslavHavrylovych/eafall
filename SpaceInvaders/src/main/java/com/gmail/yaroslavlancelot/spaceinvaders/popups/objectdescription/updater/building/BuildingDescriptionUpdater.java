@@ -38,12 +38,13 @@ public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
     /** image for addition information */
     private Sprite mAdditionDescriptionImage;
     /** building description object (update description area which u pass to it) */
-//TODO finish this    private BuildingDescriptionObject mBuildingDescriptionObject;
+    private BuildingDescriptionObject mBuildingDescriptionObject;
 
     public BuildingDescriptionUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         super(vertexBufferObjectManager, scene);
         mAmountDrawer = new AmountDrawer(vertexBufferObjectManager);
         initBuildButton(vertexBufferObjectManager);
+        mBuildingDescriptionObject = new BuildingDescriptionObject(vertexBufferObjectManager);
         EventBus.getDefault().register(this);
     }
 
@@ -96,6 +97,7 @@ public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
             mAdditionDescriptionImage.detachSelf(mScene);
             mAdditionDescriptionImage = null;
         }
+        mBuildingDescriptionObject.clearDescription();
         mBuildingId = sNoValue;
         mTeamName = "";
     }
@@ -113,6 +115,10 @@ public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
 
     @Override
     public void updateDescription(RectangularShape drawArea, int objectId, String raceName, String teamName) {
+        //description
+        mBuildingDescriptionObject.updateDescription(drawArea, objectId, raceName, teamName);
+        mBuildingDescriptionObject.initTouches(mScene);
+        //buttons
         mBuildButton.setPosition(0, drawArea.getHeight() - mBuildButton.getHeight());
         drawArea.attachChild(mBuildButton);
         mBuildButton.setOnClickListener(new ButtonSprite.OnClickListener() {

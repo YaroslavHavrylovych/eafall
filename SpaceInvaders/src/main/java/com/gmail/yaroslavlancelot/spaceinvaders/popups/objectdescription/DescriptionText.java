@@ -9,6 +9,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
 import org.andengine.entity.text.Text;
 import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.font.FontManager;
+import org.andengine.opengl.font.FontUtils;
 import org.andengine.opengl.font.IFont;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -24,12 +25,13 @@ public class DescriptionText extends Text {
 
     public DescriptionText(float x, float y, CharSequence text, VertexBufferObjectManager vertexBufferObjectManager) {
         super(x, y, FontHolderUtils.getInstance().getElement(sFontSizeKey), text, 30, vertexBufferObjectManager);
+        setWidth(FontUtils.measureText(FontHolderUtils.getInstance().getElement(sFontSizeKey), text) + 15);
     }
 
     public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
         IFont font = FontFactory.create(fontManager, textureManager, 256, 256,
                 Typeface.create(Typeface.DEFAULT, Typeface.BOLD),
-                sFontSize, Color.CYAN);
+                sFontSize, Color.WHITE);
         font.load();
         FontHolderUtils.getInstance().addElement(sFontSizeKey, font);
     }
