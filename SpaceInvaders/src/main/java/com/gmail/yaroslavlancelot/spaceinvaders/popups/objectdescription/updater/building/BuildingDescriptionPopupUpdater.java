@@ -50,7 +50,7 @@ public class BuildingDescriptionPopupUpdater extends BaseDescriptionPopupUpdater
 
     private void initBuildButton(VertexBufferObjectManager vertexBufferObjectManager) {
         mBuildButton = new TextButton(vertexBufferObjectManager, 200, 70);
-        mBuildButton.setText(LocaleImpl.getInstance().getStringById(R.string.build));
+        mBuildButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_build));
     }
 
     public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
