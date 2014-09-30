@@ -5,6 +5,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.UnitDescrip
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.CreepBuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.UnitDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.DescriptionText;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.DescriptionPopupUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.RacesHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LocaleImpl;
@@ -22,18 +23,23 @@ import de.greenrobot.event.EventBus;
  * writes building description on given area (p.s. only description popup). Knows about other
  * buttons (e.g. build button) on the description popup so place text with knowing of this.
  */
-public class BuildingDescriptionObject {
-    private final int mBetweenDescriptionLinesSpace = 5;
-    private final int mSpace = 6;
+public class BuildingDescriptionAreaUpdater implements DescriptionPopupUpdater.DescriptionAreaUpdater {
+    /* constants */
+    private final static int mBetweenDescriptionLinesSpace = 5;
+    private final static int mSpace = 6;
+
+    /* static description text */
     private DescriptionText mCostText;
-    private DescriptionText mCostValue;
     private DescriptionText mProducedUnitText;
     private DescriptionText mUnitCreationTimeText;
-    private DescriptionText mUnitCreationTimeValue;
     private DescriptionText mUpgradeText;
+
+    /* values changed with each #updateDescription call */
+    private DescriptionText mCostValue;
+    private DescriptionText mUnitCreationTimeValue;
     private Link mProducedUnitLink;
 
-    public BuildingDescriptionObject(VertexBufferObjectManager vertexBufferObjectManager) {
+    public BuildingDescriptionAreaUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         Locale locale = LocaleImpl.getInstance();
         // cost
         mCostText = new DescriptionText(0, 0,
@@ -51,9 +57,13 @@ public class BuildingDescriptionObject {
         // upgrade
         mUpgradeText = new DescriptionText(0, 3 * (DescriptionText.sFontSize + mBetweenDescriptionLinesSpace),
                 locale.getStringById(R.string.description_upgrade), vertexBufferObjectManager);
+
+        // touch
+        scene.registerTouchArea(mProducedUnitLink);
     }
 
     /** update description values (e.g. new building appear) */
+    @Override
     public void updateDescription(RectangularShape drawArea, final int objectId,
                                   final String raceName, final String teamName) {
         attach(drawArea);
@@ -83,11 +93,7 @@ public class BuildingDescriptionObject {
         drawArea.attachChild(mUpgradeText);
     }
 
-    public void initTouches(Scene scene) {
-        scene.registerTouchArea(mProducedUnitLink);
-    }
-
-    /** detaches objects */
+    @Override
     public void clearDescription() {
         mCostText.detachSelf();
         mCostValue.detachSelf();

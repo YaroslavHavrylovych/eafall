@@ -13,4 +13,9 @@ dependencies {
 android {
     compileSdkVersion 19
     buildToolsVersion "19.1.0"
+
+    defaultConfig {
+        testInstrumentationRunner "com.gmail.yaroslavlancelot.spaceinvaders.DefaultInstrumentationTestRunner"
+        testApplicationId "com.gmail.yaroslavlancelot.spaceinvaders"
+    }
 }

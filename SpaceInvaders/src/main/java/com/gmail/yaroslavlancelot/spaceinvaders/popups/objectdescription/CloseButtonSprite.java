@@ -13,8 +13,8 @@ import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /** cross which used as close button in {@code DescriptionPopup} */
-public class CloseTouchableTiledSprite extends ButtonSprite {
-    public CloseTouchableTiledSprite(VertexBufferObjectManager vertexBufferObjectManager, float size) {
+public class CloseButtonSprite extends ButtonSprite {
+    public CloseButtonSprite(VertexBufferObjectManager vertexBufferObjectManager, float size) {
         super(0f, 0f,
                 (ITiledTextureRegion) TextureRegionHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.FILE_DESCRIPTION_POPUP_CROSS),
                 vertexBufferObjectManager);

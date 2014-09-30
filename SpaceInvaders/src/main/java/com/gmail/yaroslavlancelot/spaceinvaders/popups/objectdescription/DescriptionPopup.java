@@ -4,9 +4,9 @@ import android.content.Context;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.UnitDescriptionShowEvent;
-import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.DescriptionUpdater;
-import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building.BuildingDescriptionUpdater;
-import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.unit.UnitsDescriptionUpdater;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.DescriptionPopupUpdater;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building.BuildingDescriptionPopupUpdater;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.unit.UnitsDescriptionPopupUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.visualelements.text.Link;
@@ -30,9 +30,9 @@ public class DescriptionPopup {
     /** general elements of the popup (background sprite, close button, description image) */
     private DescriptionPopupBackgroundSprite mDescriptionPopupBackgroundSprite;
     /** building updater */
-    private BuildingDescriptionUpdater mBuildingDescriptionUpdater;
+    private BuildingDescriptionPopupUpdater mBuildingDescriptionUpdater;
     /** unit updater */
-    private UnitsDescriptionUpdater mUnitsDescriptionUpdater;
+    private UnitsDescriptionPopupUpdater mUnitsDescriptionUpdater;
 
     /**
      * single instance that's why it's private constructor
@@ -41,18 +41,18 @@ public class DescriptionPopup {
      * @param scene                     popup will be attached to this scene
      */
     private DescriptionPopup(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
-        mBuildingDescriptionUpdater = new BuildingDescriptionUpdater(vertexBufferObjectManager, scene);
-        mUnitsDescriptionUpdater = new UnitsDescriptionUpdater(vertexBufferObjectManager, scene);
+        mBuildingDescriptionUpdater = new BuildingDescriptionPopupUpdater(vertexBufferObjectManager, scene);
+        mUnitsDescriptionUpdater = new UnitsDescriptionPopupUpdater(vertexBufferObjectManager, scene);
         initBackgroundSprite(vertexBufferObjectManager, scene, mBuildingDescriptionUpdater, mUnitsDescriptionUpdater);
         EventBus.getDefault().register(this);
     }
 
-    private void initBackgroundSprite(VertexBufferObjectManager vertexBufferObjectManager, Scene scene, final DescriptionUpdater... updaters) {
+    private void initBackgroundSprite(VertexBufferObjectManager vertexBufferObjectManager, Scene scene, final DescriptionPopupUpdater... updaters) {
         mDescriptionPopupBackgroundSprite = new DescriptionPopupBackgroundSprite(vertexBufferObjectManager, scene) {
             @Override
             void hide() {
                 super.hide();
-                for (DescriptionUpdater updater : updaters) {
+                for (DescriptionPopupUpdater updater : updaters) {
                     updater.clear();
                 }
             }
@@ -79,12 +79,12 @@ public class DescriptionPopup {
 
     public static void loadResources(Context context, TextureManager textureManager) {
         DescriptionPopupBackgroundSprite.loadResources(context, textureManager);
-        BuildingDescriptionUpdater.loadResources(context, textureManager);
+        BuildingDescriptionPopupUpdater.loadResources(context, textureManager);
     }
 
     public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
         DescriptionPopupBackgroundSprite.loadFonts(fontManager, textureManager);
-        BuildingDescriptionUpdater.loadFonts(fontManager, textureManager);
+        BuildingDescriptionPopupUpdater.loadFonts(fontManager, textureManager);
         DescriptionText.loadFonts(fontManager, textureManager);
         Link.loadFonts(fontManager, textureManager);
     }

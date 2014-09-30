@@ -6,7 +6,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.BuildingsAmountChangedEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateBuildingEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.UnitDescriptionShowEvent;
-import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.BaseDescriptionUpdater;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.BaseDescriptionPopupUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.RacesHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
@@ -27,7 +27,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import de.greenrobot.event.EventBus;
 
 /** updates buildings description popup */
-public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
+public class BuildingDescriptionPopupUpdater extends BaseDescriptionPopupUpdater {
     private static final int sNoValue = Integer.MIN_VALUE;
     private volatile int mBuildingId = sNoValue;
     private volatile String mTeamName = "";
@@ -38,13 +38,13 @@ public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
     /** image for addition information */
     private Sprite mAdditionDescriptionImage;
     /** building description object (update description area which u pass to it) */
-    private BuildingDescriptionObject mBuildingDescriptionObject;
+    private DescriptionAreaUpdater mDescriptionAreaUpdater;
 
-    public BuildingDescriptionUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
+    public BuildingDescriptionPopupUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         super(vertexBufferObjectManager, scene);
         mAmountDrawer = new AmountDrawer(vertexBufferObjectManager);
         initBuildButton(vertexBufferObjectManager);
-        mBuildingDescriptionObject = new BuildingDescriptionObject(vertexBufferObjectManager);
+        mDescriptionAreaUpdater = new BuildingDescriptionAreaUpdater(vertexBufferObjectManager, scene);
         EventBus.getDefault().register(this);
     }
 
@@ -97,7 +97,7 @@ public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
             mAdditionDescriptionImage.detachSelf(mScene);
             mAdditionDescriptionImage = null;
         }
-        mBuildingDescriptionObject.clearDescription();
+        mDescriptionAreaUpdater.clearDescription();
         mBuildingId = sNoValue;
         mTeamName = "";
     }
@@ -116,8 +116,7 @@ public class BuildingDescriptionUpdater extends BaseDescriptionUpdater {
     @Override
     public void updateDescription(RectangularShape drawArea, int objectId, String raceName, String teamName) {
         //description
-        mBuildingDescriptionObject.updateDescription(drawArea, objectId, raceName, teamName);
-        mBuildingDescriptionObject.initTouches(mScene);
+        mDescriptionAreaUpdater.updateDescription(drawArea, objectId, raceName, teamName);
         //buttons
         mBuildButton.setPosition(0, drawArea.getHeight() - mBuildButton.getHeight());
         drawArea.attachChild(mBuildButton);

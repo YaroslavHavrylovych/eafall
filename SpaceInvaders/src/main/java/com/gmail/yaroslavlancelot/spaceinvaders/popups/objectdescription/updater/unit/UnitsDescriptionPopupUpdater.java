@@ -1,6 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.unit;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.BaseDescriptionUpdater;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.BaseDescriptionPopupUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.RacesHolder;
 
@@ -10,8 +10,8 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /** present particular unit in description popup */
-public class UnitsDescriptionUpdater extends BaseDescriptionUpdater {
-    public UnitsDescriptionUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
+public class UnitsDescriptionPopupUpdater extends BaseDescriptionPopupUpdater {
+    public UnitsDescriptionPopupUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         super(vertexBufferObjectManager, scene);
     }
 

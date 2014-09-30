@@ -6,7 +6,7 @@ import android.graphics.Typeface;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
-import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.DescriptionUpdater;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.DescriptionPopupUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 
@@ -40,7 +40,7 @@ public class DescriptionPopupBackgroundSprite extends Sprite {
     /** described object name */
     protected Text mObjectNameText;
     /** will hide popup from the screen */
-    private CloseTouchableTiledSprite mCloseSprite;
+    private CloseButtonSprite mCloseSprite;
 
     // next three guys/field are just split popup on display areas
     /** descript object image */
@@ -75,7 +75,7 @@ public class DescriptionPopupBackgroundSprite extends Sprite {
 
     /** popup closing button */
     private void initCross(Scene scene) {
-        mCloseSprite = new CloseTouchableTiledSprite(getVertexBufferObjectManager(),
+        mCloseSprite = new CloseButtonSprite(getVertexBufferObjectManager(),
                 SizeConstants.DESCRIPTION_POPUP_CROSS_SIZE);
         mCloseSprite.setPosition(SizeConstants.DESCRIPTION_POPUP_WIDTH - SizeConstants.DESCRIPTION_POPUP_CROSS_SIZE
                         - SizeConstants.DESCRIPTION_POPUP_CROSS_PADDING,
@@ -148,7 +148,7 @@ public class DescriptionPopupBackgroundSprite extends Sprite {
                 TextureRegionHolderUtils.getInstance(), smallObjectTexture, context, 0, 0);
         smallObjectTexture.load();
 
-        CloseTouchableTiledSprite.loadResources(context, textureManager);
+        CloseButtonSprite.loadResources(context, textureManager);
     }
 
     public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
@@ -171,14 +171,14 @@ public class DescriptionPopupBackgroundSprite extends Sprite {
         return isVisible() && super.onAreaTouched(pSceneTouchEvent, touchAreaLocalX, touchAreaLocalY);
     }
 
-    public void updateDescription(DescriptionUpdater updater, int objectId, String raceName, String teamName) {
+    public void updateDescription(DescriptionPopupUpdater updater, int objectId, String raceName, String teamName) {
         updater.updateImage(mImageShape, objectId, raceName, teamName);
         updater.updateDescription(mDescriptionShape, objectId, raceName, teamName);
         updater.updateAdditionInfo(mAdditionalInformationShape, objectId, raceName, teamName);
         updateObjectNameText(updater, objectId, raceName);
     }
 
-    private void updateObjectNameText(DescriptionUpdater updater, int objectId, String raceName) {
+    private void updateObjectNameText(DescriptionPopupUpdater updater, int objectId, String raceName) {
         updater.updateObjectNameText(mObjectNameText, objectId, raceName);
         mObjectNameText.setX(mDescriptionShape.getX() + mDescriptionShape.getWidth() / 2
                 - mObjectNameText.getWidth() / 2);
