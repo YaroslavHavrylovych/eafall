@@ -36,7 +36,7 @@ public class UnitDescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
         Text text = createDescriptionText(0, R.string.description_building, vertexBufferObjectManager);
         mUnitBuildingNameLink = createLink(text.getWidth(), text.getY(), vertexBufferObjectManager);
         // unit health
-        text = createDescriptionText(1, R.string.description_produce, vertexBufferObjectManager);
+        text = createDescriptionText(1, R.string.description_health, vertexBufferObjectManager);
         mUnitHealth = createDescriptionText(text.getWidth() + mSpace, text.getY(), vertexBufferObjectManager);
         // unit speed
         text = createDescriptionText(2, R.string.description_speed, vertexBufferObjectManager);
