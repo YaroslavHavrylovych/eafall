@@ -55,6 +55,10 @@ public abstract class BaseDescriptionAreaUpdater implements DescriptionPopupUpda
                 LocaleImpl.getInstance().getStringById(stringId), objectManager);
     }
 
+    protected DescriptionText createDescriptionText(float x, float y, VertexBufferObjectManager objectManager) {
+        return createDescriptionText(x, y, "", objectManager);
+    }
+
     protected DescriptionText createDescriptionText(float x, float y, String value, VertexBufferObjectManager objectManager) {
         DescriptionText text;
         if (value.isEmpty()) {

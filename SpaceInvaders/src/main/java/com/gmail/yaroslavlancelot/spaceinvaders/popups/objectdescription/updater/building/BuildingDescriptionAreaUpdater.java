@@ -33,7 +33,7 @@ public class BuildingDescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
     public BuildingDescriptionAreaUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         // cost
         Text text = createDescriptionText(0, R.string.description_cost, vertexBufferObjectManager);
-        mCostValue = createDescriptionText(text.getWidth() + mSpace, 0, "", vertexBufferObjectManager);
+        mCostValue = createDescriptionText(text.getWidth() + mSpace, 0, vertexBufferObjectManager);
         // produce
         text = createDescriptionText(1, R.string.description_produce, vertexBufferObjectManager);
         mProducedUnitLink = createLink(text.getWidth(), text.getY(), vertexBufferObjectManager);

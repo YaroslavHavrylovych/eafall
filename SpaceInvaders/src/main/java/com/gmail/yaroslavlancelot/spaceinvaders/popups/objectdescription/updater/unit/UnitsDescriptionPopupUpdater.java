@@ -11,8 +11,23 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /** present particular unit in description popup */
 public class UnitsDescriptionPopupUpdater extends BaseDescriptionPopupUpdater {
+    /** unit description object (update description area which u pass to it) */
+    private DescriptionAreaUpdater mDescriptionAreaUpdater;
+
     public UnitsDescriptionPopupUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         super(vertexBufferObjectManager, scene);
+        mDescriptionAreaUpdater = new UnitDescriptionAreaUpdater(vertexBufferObjectManager, scene);
+    }
+
+    @Override
+    protected String getDescribedObjectName(int objectId, String raceName) {
+        return RacesHolder.getInstance().getElement(raceName).getUnitDummy(objectId).getName();
+    }
+
+    @Override
+    public void clear() {
+        super.clear();
+        mDescriptionAreaUpdater.clearDescription();
     }
 
     @Override
@@ -22,13 +37,9 @@ public class UnitsDescriptionPopupUpdater extends BaseDescriptionPopupUpdater {
     }
 
     @Override
-    protected String getDescribedObjectName(int objectId, String raceName) {
-        return RacesHolder.getInstance().getElement(raceName).getUnitDummy(objectId).getName();
-    }
-
-    @Override
     public void updateDescription(RectangularShape drawArea, int objectId, String raceName, String teamName) {
-
+        //description
+        mDescriptionAreaUpdater.updateDescription(drawArea, objectId, raceName, teamName);
     }
 
     @Override
