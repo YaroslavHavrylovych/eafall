@@ -1,13 +1,14 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.client.BuildingCreationClientMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.UnitChangePositionServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.InGameClient;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.connector.GameServerConnector;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
+import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 
 import org.andengine.engine.options.EngineOptions;
@@ -27,26 +28,26 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
     }
 
     @Override
-    protected void initThickClient() {
-        // it's thin client, so no actions
-    }
-
-    @Override
     protected void userWantCreateBuilding(final ITeam userTeam, final int buildingId) {
         LoggerHelper.methodInvocation(TAG, "userWantCreateBuilding");
         try {
-            mGameServerConnector.sendClientMessage(new BuildingCreationClientMessage(buildingId));
-            LoggerHelper.printInformationMessage(TAG, "send message with building=" + buildingId + " creation request");
+            mGameServerConnector.sendClientMessage(new BuildingCreationClientMessage(userTeam.getTeamName(), buildingId));
+            LoggerHelper.printInformationMessage(TAG, "send building request team= " + userTeam.getTeamName() + ", building=" + buildingId + "");
         } catch (IOException e) {
             LoggerHelper.printErrorMessage(TAG, e.getMessage());
         }
     }
 
     @Override
+    protected void initThickClient() {
+        // it's thin client, so no actions
+    }
+
+    @Override
     public void buildingCreated(final int buildingId, final String teamName) {
         LoggerHelper.methodInvocation(TAG, "buildingCreated");
         LoggerHelper.printDebugMessage(TAG, "buildingId=" + buildingId + ", teamName=" + teamName);
-        PlanetStaticObject planetStaticObject = mTeams.get(teamName).getTeamPlanet();
+        PlanetStaticObject planetStaticObject = TeamsHolder.getInstance().getElement(teamName).getTeamPlanet();
         planetStaticObject.createBuildingById(buildingId);
     }
 
@@ -56,7 +57,7 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
         runOnUpdateThread(new Runnable() {
             @Override
             public void run() {
-                createThinUnit(unitId, mTeams.get(teamName), x, y, unitUniqueId);
+                createThinUnit(unitId, TeamsHolder.getInstance().getElement(teamName), x, y, unitUniqueId);
             }
         });
     }
@@ -128,7 +129,7 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
 
     @Override
     public void moneyChanged(String teamName, int money) {
-        ITeam team = mTeams.get(teamName);
+        ITeam team = TeamsHolder.getInstance().getElement(teamName);
         if (team == null) return;
         team.setMoney(money);
     }

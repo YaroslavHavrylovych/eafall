@@ -32,14 +32,12 @@ public class Imperials implements IRace {
     public static final String TAG = Imperials.class.getCanonicalName();
     /** race name */
     public static final String RACE_NAME = "Imperials";
-    private Color mTeamColor;
     private VertexBufferObjectManager mObjectManager;
     private SoundOperations mSoundOperations;
     private List<UnitDummy> mUnitDummies;
     private List<CreepBuildingDummy> mCreepBuildingDummies;
 
-    public Imperials(Color teamColor, final VertexBufferObjectManager objectManager, final SoundOperations soundOperations) {
-        mTeamColor = teamColor;
+    public Imperials(final VertexBufferObjectManager objectManager, final SoundOperations soundOperations) {
         mObjectManager = objectManager;
         mSoundOperations = soundOperations;
     }
@@ -58,17 +56,17 @@ public class Imperials implements IRace {
     public String[] getBuildingsNames() {
         String[] result = new String[getBuildingsAmount()];
         for (int i = 0; i < getBuildingsAmount(); i++) {
-            result[i] = LocaleImpl.getInstance().getStringById(getBuildingById(i).getObjectStringId());
+            result[i] = LocaleImpl.getInstance().getStringById(mCreepBuildingDummies.get(i).getNameId());
         }
         return result;
     }
 
     @Override
-    public StaticObject getBuildingById(final int buildingId) {
+    public StaticObject getBuildingById(final int buildingId, Color teamColor) {
         CreepBuildingDummy dummy = mCreepBuildingDummies.get(buildingId);
         CreepBuilding unit = dummy.constructBuilding(mObjectManager);
         unit.setBackgroundArea(dummy.getTeamColorArea());
-        unit.setBackgroundColor(mTeamColor);
+        unit.setBackgroundColor(teamColor);
         return unit;
     }
 
@@ -78,11 +76,11 @@ public class Imperials implements IRace {
     }
 
     @Override
-    public Unit getUnitForBuilding(final int buildingId) {
+    public Unit getUnitForBuilding(final int buildingId, Color teamColor) {
         UnitDummy dummy = mUnitDummies.get(buildingId);
         Unit unit = dummy.constructUnit(mObjectManager, mSoundOperations);
         unit.setBackgroundArea(dummy.getTeamColorArea());
-        unit.setBackgroundColor(mTeamColor);
+        unit.setBackgroundColor(teamColor);
         return unit;
     }
 

@@ -1,6 +1,5 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.activities;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,12 +9,14 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.client.ConnectionEstablishClientMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.PreGameStartClient;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.connector.GameServerConnector;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.discovery.SocketDiscoveryServer;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
+
 import org.andengine.extension.multiplayer.protocol.client.SocketServerDiscoveryClient;
 import org.andengine.extension.multiplayer.protocol.client.connector.ServerConnector;
 import org.andengine.extension.multiplayer.protocol.client.connector.SocketConnectionServerConnector;
@@ -35,7 +36,7 @@ import java.util.Map;
  * activity which contains list about all available games in the network and from this activity you can perform all
  * operations with network in this game. Like invoke server creation activity or connect to server etc.
  */
-public class GameServersListActivity extends Activity implements
+public class GameServersListActivity extends BaseNonGameActivity implements
         // for discovering servers
         SocketServerDiscoveryClient.ISocketServerDiscoveryClientListener,
         // for collaborate with discovered servers
@@ -61,6 +62,23 @@ public class GameServersListActivity extends Activity implements
         initGamesList((ListView) findViewById(R.id.games_list_list_view));
         initCreateServerButton(findViewById(R.id.create_game));
         initDirectIpButton(findViewById(R.id.direct_ip));
+    }
+
+    private void initBackButton(View exitButton) {
+        if (exitButton == null) return;
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                GameServersListActivity.this.finish();
+            }
+        });
+    }
+
+    private void initGamesList(ListView listView) {
+        if (listView == null) return;
+        mServersListView = listView;
+        mArrayAdapter = new ArrayAdapter<String>(this, R.layout.server_item_view, R.id.server_ip_string);
+        mServersListView.setAdapter(mArrayAdapter);
     }
 
     private void initCreateServerButton(View createServerButton) {
@@ -105,21 +123,54 @@ public class GameServersListActivity extends Activity implements
         });
     }
 
-    private void initBackButton(View exitButton) {
-        if (exitButton == null) return;
-        exitButton.setOnClickListener(new View.OnClickListener() {
+    private void initClient(final String ipAddress, final int port) {
+        new Thread(new Runnable() {
             @Override
-            public void onClick(final View v) {
-                GameServersListActivity.this.finish();
+            public void run() {
+                try {
+                    synchronized (mServerConnectorMap) {
+                        GameServerConnector serverConnector = new GameServerConnector(ipAddress, port, GameServersListActivity.this);
+                        serverConnector.addPreGameStartCallback(GameServersListActivity.this);
+                        serverConnector.start();
+                        mServerConnectorMap.put(ipAddress, serverConnector);
+                    }
+                } catch (final Throwable t) {
+                    LoggerHelper.printErrorMessage(TAG, t.toString());
+                }
             }
-        });
+        }).start();
     }
 
-    private void initGamesList(ListView listView) {
-        if (listView == null) return;
-        mServersListView = listView;
-        mArrayAdapter = new ArrayAdapter<String>(this, R.layout.server_item_view, R.id.server_ip_string);
-        mServersListView.setAdapter(mArrayAdapter);
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopSocketDiscoveryClient();
+        stopClients();
+    }
+
+    private void stopSocketDiscoveryClient() {
+        if (mSocketServerDiscoveryClient != null) {
+            mSocketServerDiscoveryClient.terminate();
+            mSocketServerDiscoveryClient = null;
+        }
+    }
+
+    private void stopClients() {
+        if (mServerConnectorMap != null) {
+            synchronized (mServerConnectorMap) {
+                for (String serverIp : mServerConnectorMap.keySet()) {
+                    mServerConnectorMap.get(serverIp).terminate();
+                }
+            }
+            mServerConnectorMap = null;
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        stopSocketDiscoveryClient();
+        stopClients();
     }
 
     @Override
@@ -167,66 +218,6 @@ public class GameServersListActivity extends Activity implements
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        stopSocketDiscoveryClient();
-        stopClients();
-    }
-
-    private void stopSocketDiscoveryClient() {
-        if (mSocketServerDiscoveryClient != null) {
-            mSocketServerDiscoveryClient.terminate();
-            mSocketServerDiscoveryClient = null;
-        }
-    }
-
-    private void stopClients() {
-        if (mServerConnectorMap != null) {
-            synchronized (mServerConnectorMap) {
-                for (String serverIp : mServerConnectorMap.keySet()) {
-                    mServerConnectorMap.get(serverIp).terminate();
-                }
-            }
-            mServerConnectorMap = null;
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        stopSocketDiscoveryClient();
-        stopClients();
-    }
-
-    @Override
-    public void onTimeout(final SocketServerDiscoveryClient socketServerDiscoveryClient, final SocketTimeoutException socketTimeoutException) {
-        LoggerHelper.printErrorMessage(TAG, "DiscoveryClient: Timeout: " + socketTimeoutException);
-    }
-
-    @Override
-    public void onException(final SocketServerDiscoveryClient socketServerDiscoveryClient, final Throwable throwable) {
-        LoggerHelper.printErrorMessage(TAG, "DiscoveryClient: Exception: " + throwable);
-    }
-
-    private void initClient(final String ipAddress, final int port) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    synchronized (mServerConnectorMap) {
-                        GameServerConnector serverConnector = new GameServerConnector(ipAddress, port, GameServersListActivity.this);
-                        serverConnector.addPreGameStartCallback(GameServersListActivity.this);
-                        serverConnector.start();
-                        mServerConnectorMap.put(ipAddress, serverConnector);
-                    }
-                } catch (final Throwable t) {
-                    LoggerHelper.printErrorMessage(TAG, t.toString());
-                }
-            }
-        }).start();
-    }
-
-    @Override
     public void onStarted(final ServerConnector<SocketConnection> serverConnector) {
         LoggerHelper.printInformationMessage(TAG, "CLIENT: Connected to server.");
     }
@@ -271,5 +262,15 @@ public class GameServersListActivity extends Activity implements
         } catch (final UnknownHostException e) {
             LoggerHelper.printErrorMessage(TAG, "DiscoveryClient: IPException: " + e);
         }
+    }
+
+    @Override
+    public void onTimeout(final SocketServerDiscoveryClient socketServerDiscoveryClient, final SocketTimeoutException socketTimeoutException) {
+        LoggerHelper.printErrorMessage(TAG, "DiscoveryClient: Timeout: " + socketTimeoutException);
+    }
+
+    @Override
+    public void onException(final SocketServerDiscoveryClient socketServerDiscoveryClient, final Throwable throwable) {
+        LoggerHelper.printErrorMessage(TAG, "DiscoveryClient: Exception: " + throwable);
     }
 }

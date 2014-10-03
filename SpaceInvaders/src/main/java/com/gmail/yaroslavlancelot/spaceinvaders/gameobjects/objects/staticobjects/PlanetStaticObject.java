@@ -1,6 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.BuildingsAmountChangedEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameloop.UnitCreatorCycle;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Higgs;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
@@ -12,6 +13,8 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import de.greenrobot.event.EventBus;
 
 /** represent team planet */
 public class PlanetStaticObject extends StaticObject {
@@ -69,7 +72,7 @@ public class PlanetStaticObject extends StaticObject {
         LoggerHelper.methodInvocation(TAG, "buildBuilding. IsFakePlanet=" + isFakePlanet);
         if (buildings.get(buildingId) == null) {
             final StaticObject staticObject =
-                    mPlanetTeam.getTeamRace().getBuildingById(buildingId);
+                    mPlanetTeam.getTeamRace().getBuildingById(buildingId, mPlanetTeam.getTeamColor());
             buildings.put(buildingId, new BuildingsHolder(staticObject, buildingId));
         }
         return addBuilding(buildingId, isFakePlanet);
@@ -101,6 +104,7 @@ public class PlanetStaticObject extends StaticObject {
         return true;
     }
 
+    /** returns money amount (from team to which current planet belongs) */
     private int getMoneyAmount() {
         return mPlanetTeam == null ? 0 : mPlanetTeam.getMoney();
     }
@@ -115,6 +119,13 @@ public class PlanetStaticObject extends StaticObject {
     public boolean createBuildingById(int buildingId) {
         LoggerHelper.methodInvocation(TAG, "buildBuilding");
         return createBuildingById(buildingId, mIsFakePlanet);
+    }
+
+    /** get buildings amount for passed building type */
+    public int getBuildingAmount(int buildingId) {
+        BuildingsHolder holder = buildings.get(buildingId);
+        if (holder == null) return 0;
+        return holder.getBuildingsAmount();
     }
 
     public Map<Integer, BuildingsHolder> getBuildings() {
@@ -155,6 +166,7 @@ public class PlanetStaticObject extends StaticObject {
                 mUnitCreatorCycle.increaseUnitAmount();
             }
             mBuildingsAmount += 1;
+            EventBus.getDefault().post(new BuildingsAmountChangedEvent(mPlanetTeam.getTeamName(), mBuildingId, mBuildingsAmount));
         }
 
         /** returns current building amount/instances on the planet */

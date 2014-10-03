@@ -1,6 +1,5 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -16,7 +15,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.network.connector.GameServerConn
 /**
  * Client connected to server and waiting for game
  */
-public class ClientWaitForGameActivity extends Activity implements PreGameStartClient {
+public class ClientWaitForGameActivity extends BaseNonGameActivity implements PreGameStartClient {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

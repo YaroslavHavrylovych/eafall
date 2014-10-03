@@ -10,6 +10,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
+import org.andengine.entity.shape.ITouchCallback;
 import org.andengine.input.touch.TouchEvent;
 
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class MainSceneTouchListener implements IOnSceneTouchListener, ICameraCoo
     /** camera for moving */
     private SmoothCamera mCamera;
     /** additional touch listeners that will be invoked after this touch listener finish it's work handling */
-    private List<ITouchListener> mSceneClickListeners = new ArrayList<ITouchListener>(2);
+    private List<ITouchCallback> mSceneClickListeners = new ArrayList<ITouchCallback>(2);
 
     public MainSceneTouchListener(SmoothCamera camera, Context context, float screenToSceneRatio) {
         mCamera = camera;
@@ -78,7 +79,7 @@ public class MainSceneTouchListener implements IOnSceneTouchListener, ICameraCoo
         return mCamera.getMaxZoomFactorChange();
     }
 
-    public void registerTouchListener(ITouchListener touchListener) {
+    public void registerTouchListener(ITouchCallback touchListener) {
         mSceneClickListeners.add(touchListener);
     }
 
@@ -89,8 +90,8 @@ public class MainSceneTouchListener implements IOnSceneTouchListener, ICameraCoo
     @Override
     public boolean onSceneTouchEvent(final Scene pScene, final TouchEvent pSceneTouchEvent) {
         // check if it's click not on empty screen but on some hud element
-        for (ITouchListener touchListener : mSceneClickListeners) {
-            if (touchListener.onTouch(pSceneTouchEvent)) {
+        for (ITouchCallback touchListener : mSceneClickListeners) {
+            if (touchListener.onAreaTouched(pSceneTouchEvent, 0, 0)) {
                 return true;
             }
         }

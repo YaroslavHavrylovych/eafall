@@ -2,6 +2,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateBuildingEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.GameLoadedEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.MoneyUpdatedEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.GameObjectsContactListener;
@@ -9,8 +10,8 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IGameObjec
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IUnitFireCallback;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IVelocityChangedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.GameSocketServer;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.BuildingCreatedServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.GameObjectHealthChangedServerMessage;
@@ -20,6 +21,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.Unit
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.UnitFireServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.server.InGameServer;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
+import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 
 import org.andengine.engine.options.EngineOptions;
@@ -84,14 +86,6 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
     }
 
     @Override
-    public void newBuildingCreate(int buildingId) {
-        LoggerHelper.methodInvocation(TAG, "newBuildingCreate");
-        if (mSecondTeam != null && mSecondTeam.getTeamPlanet() != null) {
-            userWantCreateBuilding(mSecondTeam, buildingId);
-        }
-    }
-
-    @Override
     public void gameObjectHealthChanged(long unitUniqueId, int newUnitHealth) {
         try {
             mGameSocketServer.sendBroadcastServerMessage(new GameObjectHealthChangedServerMessage(unitUniqueId, newUnitHealth));
@@ -147,7 +141,7 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
     /** really used by {@link de.greenrobot.event.EventBus} */
     public void onEvent(MoneyUpdatedEvent moneyUpdatedEvent) {
         TeamControlBehaviourType behaviourType =
-                mTeams.get(moneyUpdatedEvent.getTeamName()).getTeamControlType();
+                TeamsHolder.getInstance().getElement(moneyUpdatedEvent.getTeamName()).getTeamControlType();
         try {
             mGameSocketServer.sendBroadcastServerMessage(new MoneyChangedServerMessage(
                     moneyUpdatedEvent.getTeamName(), moneyUpdatedEvent.getMoney()));

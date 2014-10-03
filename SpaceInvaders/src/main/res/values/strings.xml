@@ -42,4 +42,22 @@
 
     <!-- client connected to server -->
     <string name="you_are_connected_to_server">You are connected to server with ip : </string>
+
+    <!-- description popup -->
+
+    <!-- buildings -->
+    <string name="description_build">Build</string>
+    <string name="description_cost">Cost :</string>
+    <string name="description_produce">Produce :</string>
+    <string name="description_unit_producing_time">Unit producing time :</string>
+    <string name="description_upgrade">Upgrade :</string>
+
+    <!-- units -->
+    <string name="description_building">Building :</string>
+    <string name="description_speed">Speed :</string>
+    <string name="description_health">Health :</string>
+    <string name="description_reload_time">Reload time :</string>
+    <string name="description_unique">Unique :</string>
+    <string name="description_attack">A</string>
+    <string name="description_defence">D</string>
 </resources>

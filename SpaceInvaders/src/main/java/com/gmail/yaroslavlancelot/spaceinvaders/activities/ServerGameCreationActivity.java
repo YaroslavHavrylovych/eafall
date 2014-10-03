@@ -1,10 +1,10 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame.ServerGameActivity;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
@@ -15,11 +15,12 @@ import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.server.PreGame
 import com.gmail.yaroslavlancelot.spaceinvaders.network.connector.ClientConnectorListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.discovery.SocketDiscoveryServer;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
+
 import org.andengine.extension.multiplayer.protocol.util.WifiUtils;
 
 import java.io.IOException;
 
-public class ServerGameCreationActivity extends Activity implements PreGameStartServer {
+public class ServerGameCreationActivity extends BaseNonGameActivity implements PreGameStartServer {
     public final static String TAG = ServerGameCreationActivity.class.getCanonicalName();
     public static final int FOR_CONVERT_IP = 256;
     private SocketDiscoveryServer mSocketDiscoveryServer;
@@ -52,6 +53,21 @@ public class ServerGameCreationActivity extends Activity implements PreGameStart
         });
     }
 
+    private void initNoOpponentsTextView(View view) {
+        if (view == null) return;
+        mNoOpponentsTextView = (TextView) view;
+    }
+
+    private void initClientConnectedTextView(View view) {
+        if (view == null) return;
+        mClientConnectedTextView = (TextView) view;
+    }
+
+    private void initClientIpTextView(View view) {
+        if (view == null) return;
+        mClientIpTextView = (TextView) view;
+    }
+
     private void initStartGameButton(View startGameButton) {
         if (startGameButton == null) return;
         startGameButton.setOnClickListener(new View.OnClickListener() {
@@ -73,14 +89,6 @@ public class ServerGameCreationActivity extends Activity implements PreGameStart
                 startActivity(startServerIntent);
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        initServer();
-        initDiscoveryServer();
-        updateIpValue();
     }
 
     @Override
@@ -106,6 +114,28 @@ public class ServerGameCreationActivity extends Activity implements PreGameStart
         if (mServerIp != null) {
             mServerIp = null;
         }
+    }
+
+    private void stopServer() {
+        if (mGameSocketServer != null) {
+            mGameSocketServer.removePreGameStartCallback(ServerGameCreationActivity.this);
+            mGameSocketServer.terminate();
+            mGameSocketServer = null;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initServer();
+        initDiscoveryServer();
+        updateIpValue();
+    }
+
+    private void initServer() {
+        mGameSocketServer = new GameSocketServer(SocketDiscoveryServer.SERVER_PORT, new ClientConnectorListener());
+        mGameSocketServer.addPreGameStartCallback(ServerGameCreationActivity.this);
+        mGameSocketServer.start();
     }
 
     private void initDiscoveryServer() {
@@ -134,25 +164,6 @@ public class ServerGameCreationActivity extends Activity implements PreGameStart
         return ipValue;
     }
 
-    private void initServer() {
-        mGameSocketServer = new GameSocketServer(SocketDiscoveryServer.SERVER_PORT, new ClientConnectorListener());
-        mGameSocketServer.addPreGameStartCallback(ServerGameCreationActivity.this);
-        mGameSocketServer.start();
-    }
-
-    private void stopServer() {
-        if (mGameSocketServer != null) {
-            mGameSocketServer.removePreGameStartCallback(ServerGameCreationActivity.this);
-            mGameSocketServer.terminate();
-            mGameSocketServer = null;
-        }
-    }
-
-    private void initNoOpponentsTextView(View view) {
-        if (view == null) return;
-        mNoOpponentsTextView = (TextView) view;
-    }
-
     @Override
     public void clientConnectionEstablished(final String clientIp) {
         mNoOpponentsTextView.post(new Runnable() {
@@ -164,15 +175,5 @@ public class ServerGameCreationActivity extends Activity implements PreGameStart
                 mClientIpTextView.setVisibility(View.VISIBLE);
             }
         });
-    }
-
-    private void initClientConnectedTextView(View view) {
-        if (view == null) return;
-        mClientConnectedTextView = (TextView) view;
-    }
-
-    private void initClientIpTextView(View view) {
-        if (view == null) return;
-        mClientIpTextView = (TextView) view;
     }
 }

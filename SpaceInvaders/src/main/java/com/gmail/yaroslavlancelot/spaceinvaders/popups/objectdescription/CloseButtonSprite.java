@@ -2,20 +2,24 @@ package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription;
 
 import android.content.Context;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.visualelements.buttons.ButtonTiledSprite;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 
+import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-public class CloseButtonTiledSprite extends ButtonTiledSprite {
-    public CloseButtonTiledSprite(VertexBufferObjectManager vertexBufferObjectManager) {
-        super(0f, 0f, (ITiledTextureRegion) TextureRegionHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.FILE_DESCRIPTION_POPUP_CROSS),
+/** cross which used as close button in {@code DescriptionPopup} */
+public class CloseButtonSprite extends ButtonSprite {
+    public CloseButtonSprite(VertexBufferObjectManager vertexBufferObjectManager, float size) {
+        super(0f, 0f,
+                (ITiledTextureRegion) TextureRegionHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.FILE_DESCRIPTION_POPUP_CROSS),
                 vertexBufferObjectManager);
+        setWidth(size);
+        setHeight(size);
     }
 
     public static void loadResources(Context context, TextureManager textureManager) {

@@ -2,6 +2,7 @@ package org.andengine.entity.shape;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.Entity;
+import org.andengine.entity.scene.Scene;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.shader.ShaderProgram;
 import org.andengine.opengl.texture.ITexture;
@@ -14,11 +15,11 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 /**
  * (c) 2010 Nicolas Gramlich
  * (c) 2011 Zynga Inc.
- * 
+ *
  * @author Nicolas Gramlich
  * @since 11:51:27 - 13.03.2010
  */
-public abstract class Shape extends Entity implements IShape {
+public abstract class Shape extends Entity implements IShape, ITouchListener {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -33,8 +34,9 @@ public abstract class Shape extends Entity implements IShape {
 	protected boolean mBlendingEnabled = false;
 
 	protected ShaderProgram mShaderProgram;
+    private ITouchCallback mTouchCallback;
 
-	// ===========================================================
+    // ===========================================================
 	// Constructors
 	// ===========================================================
 
@@ -105,7 +107,17 @@ public abstract class Shape extends Entity implements IShape {
 
 	protected abstract void onUpdateVertices();
 
-	@Override
+    @Override
+    public void setTouchCallback(ITouchCallback touchCallback) {
+        mTouchCallback = touchCallback;
+    }
+
+    @Override
+    public void removeTouchCallback() {
+        mTouchCallback = null;
+    }
+
+    @Override
 	protected void preDraw(final GLState pGLState, final Camera pCamera) {
 		if(this.mBlendingEnabled) {
 			pGLState.enableBlend();
@@ -122,7 +134,7 @@ public abstract class Shape extends Entity implements IShape {
 
 	@Override
 	public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-		return false;
+        return (mTouchCallback != null && mTouchCallback.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY));
 	}
 
 	@Override
@@ -146,6 +158,11 @@ public abstract class Shape extends Entity implements IShape {
 	// ===========================================================
 	// Methods
 	// ===========================================================
+    /** invoke {@code detachSelf} method with unregister touch even from scene */
+    public boolean detachSelf(Scene scene) {
+        scene.unregisterTouchArea(this);
+        return detachSelf();
+    }
 
 	protected void initBlendFunction(final ITextureRegion pTextureRegion) {
 		this.initBlendFunction(pTextureRegion.getTexture());
