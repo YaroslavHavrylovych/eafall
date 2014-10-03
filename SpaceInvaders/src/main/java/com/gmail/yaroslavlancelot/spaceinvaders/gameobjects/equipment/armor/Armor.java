@@ -18,6 +18,10 @@ public abstract class Armor {
         return realDamage * realDamage / (realDamage + mArmorValue) + 1;
     }
 
+    public int getArmorValue() {
+        return mArmorValue;
+    }
+
     protected abstract int getDamageAfterConsumption(Damage damage);
 
     public abstract ArmorType getArmorType();

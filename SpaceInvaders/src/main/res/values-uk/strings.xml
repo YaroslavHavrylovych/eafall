@@ -58,4 +58,6 @@
     <string name="description_health">Здоров’я :</string>
     <string name="description_reload_time">Час перезарядки :</string>
     <string name="description_unique">Особливе :</string>
+    <string name="description_attack">А</string>
+    <string name="description_defence">З</string>
 </resources>

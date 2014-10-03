@@ -13,10 +13,13 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 public class UnitsDescriptionPopupUpdater extends BaseDescriptionPopupUpdater {
     /** unit description object (update description area which u pass to it) */
     private DescriptionAreaUpdater mDescriptionAreaUpdater;
+    /** updates unit addition information area */
+    private DescriptionAreaUpdater mAdditionInformationAreaUpdater;
 
     public UnitsDescriptionPopupUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         super(vertexBufferObjectManager, scene);
         mDescriptionAreaUpdater = new UnitDescriptionAreaUpdater(vertexBufferObjectManager, scene);
+        mAdditionInformationAreaUpdater = new UnitAdditionalAreaUpdater(vertexBufferObjectManager, scene);
     }
 
     @Override
@@ -28,6 +31,7 @@ public class UnitsDescriptionPopupUpdater extends BaseDescriptionPopupUpdater {
     public void clear() {
         super.clear();
         mDescriptionAreaUpdater.clearDescription();
+        mAdditionInformationAreaUpdater.clearDescription();
     }
 
     @Override
@@ -44,6 +48,6 @@ public class UnitsDescriptionPopupUpdater extends BaseDescriptionPopupUpdater {
 
     @Override
     public void updateAdditionInfo(RectangularShape drawArea, int objectId, String raceName, String teamName) {
-
+        mAdditionInformationAreaUpdater.updateDescription(drawArea, objectId, raceName, teamName);
     }
 }

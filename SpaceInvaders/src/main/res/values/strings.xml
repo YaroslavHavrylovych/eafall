@@ -58,4 +58,6 @@
     <string name="description_health">Health :</string>
     <string name="description_reload_time">Reload time :</string>
     <string name="description_unique">Unique :</string>
+    <string name="description_attack">A</string>
+    <string name="description_defence">D</string>
 </resources>
