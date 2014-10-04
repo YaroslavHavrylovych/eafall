@@ -14,7 +14,6 @@ import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LocaleImpl;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
 
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.sprite.ButtonSprite;
@@ -60,7 +59,8 @@ public class BuildingsPopup extends Rectangle {
                 vertexBufferObjectManager);
         setColor(Color.WHITE);
         initBuildingPopupForTeam(mTeam = team);
-        setTouchCallback(new TouchListener());
+        setX(SizeConstants.GAME_FIELD_WIDTH / 2 - getWidth() / 2);
+        setY(SizeConstants.GAME_FIELD_HEIGHT - getHeight());
     }
 
     public static float calculatePopupWidth(ITeam team) {
@@ -103,6 +103,18 @@ public class BuildingsPopup extends Rectangle {
 
     public static void loadResource(Context context, TextureManager textureManager) {
         BuildingsPopupItem.loadResources(context, textureManager);
+    }
+
+    /** will show or hide popup depending on current state */
+    public void triggerPopup() {
+        LoggerHelper.printDebugMessage(TAG, "show popup = " + !mIsPopupShowing);
+        if (mIsPopupShowing) {
+            EventBus.getDefault().post(new DetachEntityEvent(BuildingsPopup.this, true, true));
+            mIsPopupShowing = false;
+        } else {
+            EventBus.getDefault().post(new AttachEntityEvent(BuildingsPopup.this, true, true));
+            mIsPopupShowing = true;
+        }
     }
 
     /** represent popup item */
@@ -148,30 +160,12 @@ public class BuildingsPopup extends Rectangle {
                 @Override
                 public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
                     LoggerHelper.printDebugMessage(TAG, "show building description");
+                    BuildingsPopup.getInstance().triggerPopup();
                     EventBus.getDefault().post(new BuildingDescriptionShowEvent(mObjectId, mTeam.getTeamName()));
                 }
             });
 
             return this;
-        }
-    }
-
-    /** touch anywhere where you can see free space on the screen to show the popup */
-    private class TouchListener extends TouchUtils.CustomTouchListener {
-        public TouchListener() {
-            super(BuildingsPopup.this);
-        }
-
-        @Override
-        public synchronized void click() {
-            LoggerHelper.printDebugMessage(TAG, "show popup = " + !mIsPopupShowing);
-            if (mIsPopupShowing) {
-                EventBus.getDefault().post(new DetachEntityEvent(BuildingsPopup.this, true, true));
-                mIsPopupShowing = false;
-            } else {
-                EventBus.getDefault().post(new AttachEntityEvent(BuildingsPopup.this, true, true));
-                mIsPopupShowing = true;
-            }
         }
     }
 }

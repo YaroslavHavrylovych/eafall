@@ -29,11 +29,9 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobject
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.SunStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
-
-import org.andengine.entity.shape.ITouchCallback;
-
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.MainSceneTouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.BuildingsPopup;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.ShowBuildingsPopupButtonSprite;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.DescriptionPopup;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.RacesHolder;
@@ -65,7 +63,6 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
-import org.andengine.input.touch.TouchEvent;
 import org.andengine.input.touch.controller.MultiTouch;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
@@ -228,6 +225,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
 
         // other loader
         BuildingsPopup.loadResource(this, getTextureManager());
+        ShowBuildingsPopupButtonSprite.loadResources(this, getTextureManager());
         DescriptionPopup.loadResources(this, getTextureManager());
 
         TextureRegionHolderUtils.loadGeneralGameTextures(this, getTextureManager());
@@ -263,8 +261,14 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         teamBehaviorType = TeamControlBehaviourType.valueOf(intent.getStringExtra(GameStringsConstantsAndUtils.SECOND_TEAM_NAME));
         initSecondPlanet(TeamControlBehaviourType.isClientSide(teamBehaviorType));
 
-        initBuildingsPopupInvocation();
         initMoneyText();
+        initBuildingsPopupInvocation();
+        initDescriptionPopup();
+    }
+
+    private void initDescriptionPopup() {
+        DescriptionPopup.init(getVertexBufferObjectManager(), mHud);
+        mMainSceneTouchListener.registerTouchListener(DescriptionPopup.getInstance().getPopupSprite());
     }
 
     private void initBuildingsPopupInvocation() {
@@ -272,12 +276,9 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
             if (team.getTeamControlType() == TeamControlBehaviourType.USER_CONTROL_ON_SERVER_SIDE ||
                     team.getTeamControlType() == TeamControlBehaviourType.USER_CONTROL_ON_CLIENT_SIDE) {
                 BuildingsPopup.init(team, getVertexBufferObjectManager());
-                mStaticObjects.get(GameStringsConstantsAndUtils.KEY_SUN).setTouchCallback(new ITouchCallback() {
-                    @Override
-                    public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float touchAreaLocalX, float touchAreaLocalY) {
-                        return BuildingsPopup.getInstance().onAreaTouched(pSceneTouchEvent, touchAreaLocalX, touchAreaLocalY);
-                    }
-                });
+                ShowBuildingsPopupButtonSprite button = new ShowBuildingsPopupButtonSprite(getVertexBufferObjectManager());
+                mHud.attachChild(button);
+                mHud.registerTouchArea(button);
             }
         }
     }
@@ -405,8 +406,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
                 Object, which display money value to user. Only one such money text present in the screen
                 because one device can't be used by multiple users to play.
             */
-            MoneyText moneyText = new MoneyText(team.getTeamName(), getString(R.string.money_value_prefix),
-                    team.getTeamPlanet().getX(), getVertexBufferObjectManager());
+            MoneyText moneyText = new MoneyText(team.getTeamName(),
+                    getString(R.string.money_value_prefix), getVertexBufferObjectManager());
             mHud.attachChild(moneyText);
         }
     }
@@ -420,8 +421,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     private void initHud() {
         mHud = mCamera.getHUD();
         mHud.setTouchAreaBindingOnActionDownEnabled(true);
-        DescriptionPopup.init(getVertexBufferObjectManager(), mHud);
-        mMainSceneTouchListener.registerTouchListener(DescriptionPopup.getInstance().getPopupSprite());
+        mHud.setOnAreaTouchTraversalFrontToBack();
     }
 
     /** init scene touch events so user can collaborate with game by screen touches */
