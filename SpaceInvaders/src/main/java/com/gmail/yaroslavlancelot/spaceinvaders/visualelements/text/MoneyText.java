@@ -18,14 +18,13 @@ public class MoneyText extends Text {
     /** team, money of which will be displayed */
     private String mTeamName;
 
-    //TODO with time float x should change to boolean (just left or right planet)
-    public MoneyText(String teamName, String prefix, float x, VertexBufferObjectManager pVertexBufferObjectManager) {
-        super(0f, SizeConstants.MONEY_FONT_SIZE * 2,
+    public MoneyText(String teamName, String prefix, VertexBufferObjectManager pVertexBufferObjectManager) {
+        super(0, SizeConstants.MONEY_FONT_SIZE * 2,
                 FontHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.KEY_FONT_MONEY),
                 generateTextString(prefix, 0), prefix.length() + 6, pVertexBufferObjectManager);
         mMoneyValuePrefix = prefix;
         mTeamName = teamName;
-        moveTextBaseOnPlanetPosition(x);
+        setX(SizeConstants.GAME_FIELD_WIDTH / 2 - getWidth() / 2);
         EventBus.getDefault().register(this);
     }
 
@@ -39,21 +38,10 @@ public class MoneyText extends Text {
     @Override
     public void setText(CharSequence pText) throws OutOfCharactersException {
         super.setText(pText);
-        if (getX() < SizeConstants.GAME_FIELD_WIDTH / 2)
-            setX(SizeConstants.MONEY_PADDING);
-        else
-            setX(SizeConstants.GAME_FIELD_WIDTH - getWidth() - SizeConstants.MONEY_PADDING);
+        setX(SizeConstants.GAME_FIELD_WIDTH / 2 - getWidth() / 2);
     }
 
     private static String generateTextString(String prefix, int money) {
         return prefix + money;
-    }
-
-    private void moveTextBaseOnPlanetPosition(float x) {
-        if (x < SizeConstants.GAME_FIELD_WIDTH / 2) {
-            setX(SizeConstants.MONEY_PADDING);
-        } else {
-            setX(SizeConstants.GAME_FIELD_WIDTH - getWidth() - SizeConstants.MONEY_PADDING);
-        }
     }
 }
