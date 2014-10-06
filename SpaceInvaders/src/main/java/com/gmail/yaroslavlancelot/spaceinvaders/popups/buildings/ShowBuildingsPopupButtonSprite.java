@@ -23,13 +23,7 @@ public class ShowBuildingsPopupButtonSprite extends ButtonSprite {
         int size = SizeConstants.BUILDING_POPUP_INVOCATION_BUTTON_SIZE;
         setWidth(size);
         setHeight(size);
-        setAlpha(.3f);
-        setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                BuildingsPopup.getInstance().triggerPopup();
-            }
-        });
+        setAlpha(.6f);
     }
 
     public static void loadResources(Context context, TextureManager textureManager) {

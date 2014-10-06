@@ -59,6 +59,7 @@ import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.shape.IAreaShape;
+import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
@@ -275,8 +276,25 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         for (ITeam team : TeamsHolder.getInstance().getElements()) {
             if (team.getTeamControlType() == TeamControlBehaviourType.USER_CONTROL_ON_SERVER_SIDE ||
                     team.getTeamControlType() == TeamControlBehaviourType.USER_CONTROL_ON_CLIENT_SIDE) {
-                BuildingsPopup.init(team, getVertexBufferObjectManager());
+                final BuildingsPopup buildingsPopup = new BuildingsPopup(team, getVertexBufferObjectManager()) {
+                    @Override
+                    public void detachScene() {
+                        mHud.clearChildScene();
+                    }
+
+                    @Override
+                    public void attachScene() {
+                        mHud.setChildScene(this);
+                    }
+                };
+                buildingsPopup.setCamera(mCamera);
                 ShowBuildingsPopupButtonSprite button = new ShowBuildingsPopupButtonSprite(getVertexBufferObjectManager());
+                button.setOnClickListener(new ButtonSprite.OnClickListener() {
+                    @Override
+                    public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                        buildingsPopup.triggerPopup();
+                    }
+                });
                 mHud.attachChild(button);
                 mHud.registerTouchArea(button);
             }

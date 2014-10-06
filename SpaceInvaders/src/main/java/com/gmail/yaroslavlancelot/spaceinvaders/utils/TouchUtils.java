@@ -1,5 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.utils;
 
+import org.andengine.entity.scene.IOnSceneTouchListener;
+import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.ITouchCallback;
 import org.andengine.entity.shape.RectangularShape;
 import org.andengine.input.touch.TouchEvent;
@@ -75,6 +77,35 @@ public final class TouchUtils {
         }
 
         /** callback after click on element happens. User touch down and up finger on element without cancelling or move outside */
+        public void click() {
+            unPress();
+        }
+    }
+
+    public static class SceneTouchListener implements IOnSceneTouchListener {
+        /** true if current touch is simple click (just press down and up) */
+        private boolean mIsItClickEvent;
+
+        @Override
+        public boolean onSceneTouchEvent(Scene pScene, TouchEvent event) {
+            if (event.isActionDown()) {
+                press();
+            } else if (event.isActionCancel()) {
+                unPress();
+            } else if (event.isActionUp() && mIsItClickEvent) {
+                click();
+            }
+            return true;
+        }
+
+        public void press() {
+            mIsItClickEvent = true;
+        }
+
+        public void unPress() {
+            mIsItClickEvent = false;
+        }
+
         public void click() {
             unPress();
         }
