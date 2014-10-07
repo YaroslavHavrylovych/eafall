@@ -2,16 +2,18 @@ package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription;
 
 import android.content.Context;
 
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.UnitDescriptionShowEvent;
-import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.DescriptionPopupUpdater;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.PopupHud;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building.BuildingDescriptionPopupUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.unit.UnitsDescriptionPopupUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.visualelements.text.Link;
 
-import org.andengine.entity.scene.Scene;
+import org.andengine.entity.primitive.Rectangle;
 import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -23,10 +25,8 @@ import de.greenrobot.event.EventBus;
  * Appears in the bottom of the screen when you want to create a building
  * or see unit (other object) characteristics.
  */
-public class DescriptionPopup {
-    public static final String TAG = DescriptionPopup.class.getCanonicalName();
-    /** Single instance. Each object to display redraw content as it needs. */
-    private static volatile DescriptionPopup sDescriptionPopup;
+public abstract class DescriptionPopupHud extends PopupHud {
+    public static final String TAG = DescriptionPopupHud.class.getCanonicalName();
     /** general elements of the popup (background sprite, close button, description image) */
     private DescriptionPopupBackgroundSprite mDescriptionPopupBackgroundSprite;
     /** building updater */
@@ -38,43 +38,23 @@ public class DescriptionPopup {
      * single instance that's why it's private constructor
      *
      * @param vertexBufferObjectManager object manager to create inner elements
-     * @param scene                     popup will be attached to this scene
      */
-    private DescriptionPopup(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
-        mBuildingDescriptionUpdater = new BuildingDescriptionPopupUpdater(vertexBufferObjectManager, scene);
-        mUnitsDescriptionUpdater = new UnitsDescriptionPopupUpdater(vertexBufferObjectManager, scene);
-        initBackgroundSprite(vertexBufferObjectManager, scene, mBuildingDescriptionUpdater, mUnitsDescriptionUpdater);
+    public DescriptionPopupHud(VertexBufferObjectManager vertexBufferObjectManager) {
+        mPopupRectangle = new Rectangle(0, SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.DESCRIPTION_POPUP_HEIGHT,
+                SizeConstants.GAME_FIELD_WIDTH, SizeConstants.DESCRIPTION_POPUP_HEIGHT, vertexBufferObjectManager);
+
+        mBuildingDescriptionUpdater = new BuildingDescriptionPopupUpdater(vertexBufferObjectManager, this);
+        mUnitsDescriptionUpdater = new UnitsDescriptionPopupUpdater(vertexBufferObjectManager, this);
+
+        mPopupRectangle.setTouchCallback(TouchUtils.EmptyTouch.getInstance());
+        initBackgroundSprite(vertexBufferObjectManager);
         EventBus.getDefault().register(this);
     }
 
-    private void initBackgroundSprite(VertexBufferObjectManager vertexBufferObjectManager, Scene scene, final DescriptionPopupUpdater... updaters) {
-        mDescriptionPopupBackgroundSprite = new DescriptionPopupBackgroundSprite(vertexBufferObjectManager, scene) {
-            @Override
-            void hide() {
-                super.hide();
-                for (DescriptionPopupUpdater updater : updaters) {
-                    updater.clear();
-                }
-            }
-        };
-    }
-
-    /** singleton */
-    public static synchronized DescriptionPopup getInstance() {
-        return sDescriptionPopup;
-    }
-
-    /**
-     * init this class so you can get its instance (singleton)
-     *
-     * @param objectManager object manager to create inner elements
-     * @param scene         popup will be attached to this scene
-     */
-    public static synchronized DescriptionPopup init(VertexBufferObjectManager objectManager, Scene scene) {
-        sDescriptionPopup =
-                new DescriptionPopup(objectManager, scene);
-
-        return sDescriptionPopup;
+    private void initBackgroundSprite(VertexBufferObjectManager vertexBufferObjectManager) {
+        mDescriptionPopupBackgroundSprite = new DescriptionPopupBackgroundSprite(
+                mPopupRectangle.getWidth(), mPopupRectangle.getHeight(), vertexBufferObjectManager);
+        mPopupRectangle.attachChild(mDescriptionPopupBackgroundSprite);
     }
 
     public static void loadResources(Context context, TextureManager textureManager) {
@@ -97,7 +77,7 @@ public class DescriptionPopup {
         ITeam team = TeamsHolder.getInstance().getElement(buildingDescriptionShowEvent.getTeamName());
         mDescriptionPopupBackgroundSprite.updateDescription(mBuildingDescriptionUpdater, objectId,
                 team.getTeamRace().getRaceName(), team.getTeamName());
-        mDescriptionPopupBackgroundSprite.show();
+        showPopup();
     }
 
     private void onEvent() {
@@ -117,10 +97,6 @@ public class DescriptionPopup {
         ITeam team = TeamsHolder.getInstance().getElement(unitDescriptionShowEvent.getTeamName());
         mDescriptionPopupBackgroundSprite.updateDescription(mUnitsDescriptionUpdater, objectId,
                 team.getTeamRace().getRaceName(), team.getTeamName());
-        mDescriptionPopupBackgroundSprite.show();
-    }
-
-    public DescriptionPopupBackgroundSprite getPopupSprite() {
-        return mDescriptionPopupBackgroundSprite;
+        showPopup();
     }
 }

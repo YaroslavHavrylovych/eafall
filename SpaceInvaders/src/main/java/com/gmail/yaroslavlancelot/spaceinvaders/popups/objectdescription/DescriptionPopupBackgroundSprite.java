@@ -11,10 +11,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 
 import org.andengine.entity.primitive.Rectangle;
-import org.andengine.entity.scene.Scene;
-import org.andengine.entity.shape.Area;
 import org.andengine.entity.shape.RectangularShape;
-import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
@@ -39,8 +36,6 @@ public class DescriptionPopupBackgroundSprite extends Sprite {
     private static final String sDescriptionFontKey = "key_objects_description_object_name_text_font";
     /** described object name */
     protected Text mObjectNameText;
-    /** will hide popup from the screen */
-    private CloseButtonSprite mCloseSprite;
 
     // next three guys/field are just split popup on display areas
     /** descript object image */
@@ -52,43 +47,12 @@ public class DescriptionPopupBackgroundSprite extends Sprite {
 
     //
 
-    DescriptionPopupBackgroundSprite(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
-        super(0, 0,
+    DescriptionPopupBackgroundSprite(float width, float height, VertexBufferObjectManager vertexBufferObjectManager) {
+        super(0, 0, width, height,
                 TextureRegionHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.FILE_DESCRIPTION_POPUP_BACKGROUND),
                 vertexBufferObjectManager);
-        recreateArea(new Area(0, SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.DESCRIPTION_POPUP_HEIGHT,
-                SizeConstants.DESCRIPTION_POPUP_WIDTH, SizeConstants.DESCRIPTION_POPUP_HEIGHT));
-        scene.attachChild(this);
-        scene.registerTouchArea(this);
 
-        initCross(scene);
         initAreas();
-
-        hide();
-    }
-
-    private void recreateArea(Area area) {
-        setPosition(area.left, area.top);
-        setWidth(area.width);
-        setHeight(area.height);
-    }
-
-    /** popup closing button */
-    private void initCross(Scene scene) {
-        mCloseSprite = new CloseButtonSprite(getVertexBufferObjectManager(),
-                SizeConstants.DESCRIPTION_POPUP_CROSS_SIZE);
-        mCloseSprite.setPosition(SizeConstants.DESCRIPTION_POPUP_WIDTH - SizeConstants.DESCRIPTION_POPUP_CROSS_SIZE
-                        - SizeConstants.DESCRIPTION_POPUP_CROSS_PADDING,
-                SizeConstants.DESCRIPTION_POPUP_CROSS_PADDING);
-        mCloseSprite.setOnClickListener(new ButtonSprite.OnClickListener() {
-            @Override
-            public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                hide();
-            }
-        });
-
-        scene.registerTouchArea(mCloseSprite);
-        attachChild(mCloseSprite);
     }
 
     /**
@@ -129,12 +93,6 @@ public class DescriptionPopupBackgroundSprite extends Sprite {
         attachChild(mDescriptionShape);
     }
 
-    /** hide sprite/popup with inner elements */
-    void hide() {
-        setVisible(false);
-        setIgnoreUpdate(true);
-    }
-
     private void initObjectNameText(int padding) {
         mObjectNameText = new Text(0, padding, FontHolderUtils.getInstance().getElement(sDescriptionFontKey),
                 "", 20, getVertexBufferObjectManager());
@@ -158,12 +116,6 @@ public class DescriptionPopupBackgroundSprite extends Sprite {
                 70f, Color.BLUE);
         font.load();
         FontHolderUtils.getInstance().addElement(sDescriptionFontKey, font);
-    }
-
-    /** show sprite/popup */
-    void show() {
-        setVisible(true);
-        setIgnoreUpdate(false);
     }
 
     @Override

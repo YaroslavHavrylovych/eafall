@@ -30,9 +30,9 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobject
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.SunStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.MainSceneTouchListener;
-import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.BuildingsPopup;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.BuildingsPopupHud;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.ShowBuildingsPopupButtonSprite;
-import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.DescriptionPopup;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.DescriptionPopupHud;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.RacesHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.Imperials;
@@ -225,15 +225,15 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         }
 
         // other loader
-        BuildingsPopup.loadResource(this, getTextureManager());
+        BuildingsPopupHud.loadResource(this, getTextureManager());
         ShowBuildingsPopupButtonSprite.loadResources(this, getTextureManager());
-        DescriptionPopup.loadResources(this, getTextureManager());
+        DescriptionPopupHud.loadResources(this, getTextureManager());
 
         TextureRegionHolderUtils.loadGeneralGameTextures(this, getTextureManager());
 
         // font
         FontHolderUtils.loadGeneralGameFonts(getFontManager(), getTextureManager());
-        DescriptionPopup.loadFonts(getFontManager(), getTextureManager());
+        DescriptionPopupHud.loadFonts(getFontManager(), getTextureManager());
     }
 
     protected void onInitGameScene() {
@@ -268,31 +268,41 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     }
 
     private void initDescriptionPopup() {
-        DescriptionPopup.init(getVertexBufferObjectManager(), mHud);
-        mMainSceneTouchListener.registerTouchListener(DescriptionPopup.getInstance().getPopupSprite());
+        DescriptionPopupHud descriptionPopupHud = new DescriptionPopupHud(getVertexBufferObjectManager()) {
+            @Override
+            public void detachPopup() {
+                mHud.clearChildScene();
+            }
+
+            @Override
+            public void attachPopup() {
+                mHud.setChildScene(this);
+            }
+        };
+        descriptionPopupHud.setCamera(mCamera);
     }
 
     private void initBuildingsPopupInvocation() {
         for (ITeam team : TeamsHolder.getInstance().getElements()) {
             if (team.getTeamControlType() == TeamControlBehaviourType.USER_CONTROL_ON_SERVER_SIDE ||
                     team.getTeamControlType() == TeamControlBehaviourType.USER_CONTROL_ON_CLIENT_SIDE) {
-                final BuildingsPopup buildingsPopup = new BuildingsPopup(team, getVertexBufferObjectManager()) {
+                final BuildingsPopupHud buildingsPopupHud = new BuildingsPopupHud(team.getTeamName(), getVertexBufferObjectManager()) {
                     @Override
-                    public void detachScene() {
+                    public void detachPopup() {
                         mHud.clearChildScene();
                     }
 
                     @Override
-                    public void attachScene() {
+                    public void attachPopup() {
                         mHud.setChildScene(this);
                     }
                 };
-                buildingsPopup.setCamera(mCamera);
+                buildingsPopupHud.setCamera(mCamera);
                 ShowBuildingsPopupButtonSprite button = new ShowBuildingsPopupButtonSprite(getVertexBufferObjectManager());
                 button.setOnClickListener(new ButtonSprite.OnClickListener() {
                     @Override
                     public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                        buildingsPopup.triggerPopup();
+                        buildingsPopupHud.triggerPopup();
                     }
                 });
                 mHud.attachChild(button);

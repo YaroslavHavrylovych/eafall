@@ -37,9 +37,6 @@ public final class SizeConstants {
     public static final int DESCRIPTION_POPUP_WIDTH = SizeConstants.GAME_FIELD_WIDTH;
     public static final int DESCRIPTION_POPUP_PADDING = 70;
     public static final int DESCRIPTION_POPUP_TEXT_SIZE = 40;
-    // cross
-    public static final int DESCRIPTION_POPUP_CROSS_PADDING = 5;
-    public static final int DESCRIPTION_POPUP_CROSS_SIZE = 100;
     // amount text
     public static final int DESCRIPTION_POPUP_AMOUNT_FONT_SIZE = 90;
     public static final int DESCRIPTION_POPUP_AMOUNT_TEXT_PADDING_VERTICAL = 5;

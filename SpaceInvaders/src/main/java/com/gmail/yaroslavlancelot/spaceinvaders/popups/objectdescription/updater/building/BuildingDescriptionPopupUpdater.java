@@ -15,6 +15,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.utils.LocaleImpl;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.visualelements.buttons.TextButton;
 
+import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.RectangularShape;
 import org.andengine.entity.sprite.ButtonSprite;
@@ -23,6 +24,7 @@ import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.color.Color;
 
 import de.greenrobot.event.EventBus;
 
@@ -39,18 +41,28 @@ public class BuildingDescriptionPopupUpdater extends BaseDescriptionPopupUpdater
     private Sprite mAdditionDescriptionImage;
     /** building description object (update description area which u pass to it) */
     private DescriptionAreaUpdater mDescriptionAreaUpdater;
+    /** used only for intercept touch event on addition information area */
+    private Rectangle mAdditionInfoRectangle;
 
     public BuildingDescriptionPopupUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         super(vertexBufferObjectManager, scene);
         mAmountDrawer = new AmountDrawer(vertexBufferObjectManager);
-        initBuildButton(vertexBufferObjectManager);
         mDescriptionAreaUpdater = new BuildingDescriptionAreaUpdater(vertexBufferObjectManager, scene);
+        initBuildButton(vertexBufferObjectManager);
+        initAdditionInformationArea();
         EventBus.getDefault().register(this);
     }
 
     private void initBuildButton(VertexBufferObjectManager vertexBufferObjectManager) {
         mBuildButton = new TextButton(vertexBufferObjectManager, 200, 70);
         mBuildButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_build));
+        mScene.registerTouchArea(mBuildButton);
+    }
+
+    private void initAdditionInformationArea() {
+        mAdditionInfoRectangle = new Rectangle(0, 0, 10, 10, mVertexBufferObjectManager);
+        mAdditionInfoRectangle.setColor(Color.TRANSPARENT);
+        mScene.registerTouchArea(mAdditionInfoRectangle);
     }
 
     public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
@@ -92,10 +104,11 @@ public class BuildingDescriptionPopupUpdater extends BaseDescriptionPopupUpdater
     public void clear() {
         super.clear();
         mAmountDrawer.detach();
-        mBuildButton.detachSelf(mScene);
+        mBuildButton.detachSelf();
         if (mAdditionDescriptionImage != null) {
             mAdditionDescriptionImage.detachSelf(mScene);
             mAdditionDescriptionImage = null;
+            mAdditionInfoRectangle.detachSelf();
         }
         mDescriptionAreaUpdater.clearDescription();
         mBuildingId = sNoValue;
@@ -126,18 +139,20 @@ public class BuildingDescriptionPopupUpdater extends BaseDescriptionPopupUpdater
                 EventBus.getDefault().post(new CreateBuildingEvent(mTeamName, mBuildingId));
             }
         });
-        mScene.registerTouchArea(mBuildButton);
     }
 
     @Override
     public void updateAdditionInfo(RectangularShape drawArea, final int objectId, String raceName, final String teamName) {
         if (mAdditionDescriptionImage != null) {
             mAdditionDescriptionImage.detachSelf();
+            mAdditionInfoRectangle.detachSelf();
         }
         mAdditionDescriptionImage = new Sprite(0, 0, drawArea.getWidth(), drawArea.getHeight(),
                 getAdditionalInformationImage(objectId, raceName), mVertexBufferObjectManager);
-        drawArea.attachChild(mAdditionDescriptionImage);
-        mAdditionDescriptionImage.setTouchCallback(
+
+        mAdditionInfoRectangle.setWidth(drawArea.getWidth());
+        mAdditionInfoRectangle.setHeight(drawArea.getHeight());
+        mAdditionInfoRectangle.setTouchCallback(
                 new TouchUtils.CustomTouchListener(mAdditionDescriptionImage) {
                     @Override
                     public void click() {
@@ -145,7 +160,8 @@ public class BuildingDescriptionPopupUpdater extends BaseDescriptionPopupUpdater
                         EventBus.getDefault().post(new UnitDescriptionShowEvent(objectId, teamName));
                     }
                 });
-        mScene.registerTouchArea(mAdditionDescriptionImage);
+        mAdditionInfoRectangle.attachChild(mAdditionDescriptionImage);
+        drawArea.attachChild(mAdditionInfoRectangle);
     }
 
     protected ITextureRegion getAdditionalInformationImage(int objectId, String raceName) {

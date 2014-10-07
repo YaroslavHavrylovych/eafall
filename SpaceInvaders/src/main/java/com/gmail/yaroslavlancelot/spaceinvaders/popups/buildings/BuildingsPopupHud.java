@@ -6,17 +6,16 @@ import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAn
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.CreepBuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.PopupHud;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
+import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LocaleImpl;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
 
-import org.andengine.engine.camera.hud.HUD;
 import org.andengine.entity.primitive.Rectangle;
-import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
@@ -35,8 +34,8 @@ import java.util.List;
 
 import de.greenrobot.event.EventBus;
 
-public abstract class BuildingsPopup extends HUD {
-    public static final String TAG = BuildingsPopup.class.getCanonicalName();
+public abstract class BuildingsPopupHud extends PopupHud {
+    public static final String TAG = BuildingsPopupHud.class.getCanonicalName();
     /** buildings popup element height */
     private static final int POPUP_ELEMENT_HEIGHT = SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT;
     /** popup image height */
@@ -47,34 +46,23 @@ public abstract class BuildingsPopup extends HUD {
     private static final NumberFormat sNumberFormat = new DecimalFormat(sNumberFormatTemplate);
     /** popup text font */
     private static String FONT = GameStringsConstantsAndUtils.KEY_FONT_MONEY;
-    /** represent boolean value which true if popup is showing now and false in other way */
-    private boolean mIsPopupShowing;
-    /** */
-    private ITeam mTeam;
-    /** */
+    /** building of this team popup is showing */
+    private final String mTeamName;
+    /** popup items (buildings) */
     private List<BuildingsPopupItem> mItems;
-    /** area for popup (all other area is transparent) */
-    private Rectangle mPopupRectangle;
 
-    public BuildingsPopup(ITeam team, VertexBufferObjectManager vertexBufferObjectManager) {
-        setBackgroundEnabled(false);
-        setTouchAreaBindingOnActionDownEnabled(true);
-        setOnAreaTouchTraversalFrontToBack();
+    public BuildingsPopupHud(String teamName, VertexBufferObjectManager vertexBufferObjectManager) {
+        ITeam team = TeamsHolder.getInstance().getElement(teamName);
+        int buildingsAmount = team.getTeamRace().getBuildingsAmount();
 
         mPopupRectangle = new Rectangle(0, 0, calculatePopupWidth(team),
-                SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT * team.getTeamRace().getBuildingsAmount(),
+                SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT * buildingsAmount,
                 vertexBufferObjectManager);
-        initBuildingPopupForTeam(mTeam = team);
+
+        mTeamName = team.getTeamName();
+        initBuildingPopupForTeam(mTeamName);
         mPopupRectangle.setX(SizeConstants.GAME_FIELD_WIDTH / 2 - mPopupRectangle.getWidth() / 2);
         mPopupRectangle.setY(SizeConstants.GAME_FIELD_HEIGHT - mPopupRectangle.getHeight());
-
-        setOnSceneTouchListener(new TouchUtils.SceneTouchListener() {
-            @Override
-            public void click() {
-                super.click();
-                hide();
-            }
-        });
     }
 
     public static float calculatePopupWidth(ITeam team) {
@@ -91,34 +79,19 @@ public abstract class BuildingsPopup extends HUD {
         return lengthWithoutText + maxTextLength + additionLength;
     }
 
-    private void initBuildingPopupForTeam(ITeam team) {
+    private void initBuildingPopupForTeam(String teamName) {
+        ITeam team = TeamsHolder.getInstance().getElement(teamName);
         IRace race = team.getTeamRace();
         mItems = new ArrayList<BuildingsPopupItem>(team.getTeamRace().getBuildingsAmount());
         // init elements
         float width = mPopupRectangle.getWidth();
         for (int buildingId = 0; buildingId < race.getBuildingsAmount(); buildingId++) {
-            BuildingsPopupItem item = new BuildingsPopupItem(mTeam, buildingId,
-                    0, buildingId * POPUP_ELEMENT_HEIGHT, width, POPUP_ELEMENT_HEIGHT,
-                    mPopupRectangle.getVertexBufferObjectManager());
+            BuildingsPopupItem item = new BuildingsPopupItem(buildingId,
+                    0, buildingId * POPUP_ELEMENT_HEIGHT, width, POPUP_ELEMENT_HEIGHT);
             mItems.add(item.init());
             mPopupRectangle.attachChild(item);
         }
     }
-
-    private synchronized void hide() {
-        if (!mIsPopupShowing) {
-            return;
-        }
-        detachScene();
-        for (int i = 0; i < mPopupRectangle.getChildCount(); i++) {
-            unregisterTouchArea((ITouchArea) mPopupRectangle.getChildByIndex(i));
-        }
-        detachChild(mPopupRectangle);
-        unregisterTouchArea(mPopupRectangle);
-        mIsPopupShowing = false;
-    }
-
-    public abstract void detachScene();
 
     public static void loadResource(Context context, TextureManager textureManager) {
         BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 1200, 100, TextureOptions.BILINEAR);
@@ -127,45 +100,31 @@ public abstract class BuildingsPopup extends HUD {
         smallObjectTexture.load();
     }
 
-    /** will show or hide popup depending on current state */
+    /** will showPopup or hidePopup popup depending on current state */
     public synchronized void triggerPopup() {
-        LoggerHelper.printDebugMessage(TAG, "show popup = " + !mIsPopupShowing);
+        LoggerHelper.printDebugMessage(TAG, "showPopup popup = " + !mIsPopupShowing);
         if (mIsPopupShowing) {
-            hide();
+            hidePopup();
         } else {
-            show();
+            showPopup();
         }
     }
-
-    private synchronized void show() {
-        if (mIsPopupShowing) {
-            return;
-        }
-        attachScene();
-        for (int i = 0; i < mPopupRectangle.getChildCount(); i++) {
-            registerTouchArea((ITouchArea) mPopupRectangle.getChildByIndex(i));
-        }
-        attachChild(mPopupRectangle);
-        registerTouchArea(mPopupRectangle);
-        mIsPopupShowing = true;
-    }
-
-    public abstract void attachScene();
 
     /** represent popup item */
     private class BuildingsPopupItem extends ButtonSprite {
         private Sprite mStaticObject;
         private Text mText;
-        private ITeam mTeam;
         private int mObjectId;
 
-        private BuildingsPopupItem(ITeam team, int objectId, float x, float y, float width, float height, VertexBufferObjectManager vertexBufferObjectManager) {
-            super(x, y, (ITiledTextureRegion) TextureRegionHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.FILE_POPUP_BACKGROUND_ITEM),
-                    vertexBufferObjectManager);
+        private BuildingsPopupItem(int objectId, float x, float y, float width, float height) {
+            super(x, y,
+                    (ITiledTextureRegion) TextureRegionHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.FILE_POPUP_BACKGROUND_ITEM),
+                    mPopupRectangle.getVertexBufferObjectManager());
             setWidth(width);
             setHeight(height);
 
-            CreepBuildingDummy dummy = (mTeam = team).getTeamRace().getBuildingDummy((mObjectId = objectId));
+            CreepBuildingDummy dummy = (TeamsHolder.getInstance().getElement(mTeamName))
+                    .getTeamRace().getBuildingDummy((mObjectId = objectId));
             mStaticObject = new Sprite(SizeConstants.BUILDING_POPUP_IMAGE_PADDING, SizeConstants.BUILDING_POPUP_IMAGE_PADDING,
                     ITEM_IMAGE_WIDTH, ITEM_IMAGE_HEIGHT, dummy.getTextureRegion(), getVertexBufferObjectManager());
 
@@ -187,11 +146,11 @@ public abstract class BuildingsPopup extends HUD {
             setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                    LoggerHelper.printDebugMessage(TAG, "show building description");
+                    LoggerHelper.printDebugMessage(TAG, "showPopup building description");
                     if (mIsPopupShowing) {
-                        hide();
+                        hidePopup();
                     }
-                    EventBus.getDefault().post(new BuildingDescriptionShowEvent(mObjectId, mTeam.getTeamName()));
+                    EventBus.getDefault().post(new BuildingDescriptionShowEvent(mObjectId, mTeamName));
                 }
             });
 

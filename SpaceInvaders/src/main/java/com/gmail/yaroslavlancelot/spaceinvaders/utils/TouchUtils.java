@@ -20,6 +20,20 @@ public final class TouchUtils {
         return value;
     }
 
+    /** touch listener that always return true */
+    public static enum EmptyTouch implements ITouchCallback {
+        INSTANCE;
+
+        public static EmptyTouch getInstance() {
+            return INSTANCE;
+        }
+
+        @Override
+        public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float touchAreaLocalX, float touchAreaLocalY) {
+            return true;
+        }
+    }
+
     public static interface OnClickListener {
         void onClick();
     }

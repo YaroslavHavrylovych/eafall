@@ -13,7 +13,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
  */
 public abstract class BaseDescriptionPopupUpdater implements DescriptionPopupUpdater {
     protected final VertexBufferObjectManager mVertexBufferObjectManager;
-    /** left side sprite (show descript object image) in it's area */
+    /** left side sprite (showPopup descript object image) in it's area */
     protected Sprite mObjectImage;
     /** used by children classes */
     protected Scene mScene;

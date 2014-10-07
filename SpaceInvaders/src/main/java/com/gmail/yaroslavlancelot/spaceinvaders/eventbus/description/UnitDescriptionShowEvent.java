@@ -1,6 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description;
 
-/** show unit in description popup */
+/** showPopup unit in description popup */
 public class UnitDescriptionShowEvent {
     private int mUnitId;
     private String mTeamName;
