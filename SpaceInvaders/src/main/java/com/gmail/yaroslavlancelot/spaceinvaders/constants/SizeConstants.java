@@ -11,7 +11,7 @@ public final class SizeConstants {
     public static final int ADDITION_MARGIN_FOR_PLANET = 20;
     public static final int SUN_DIAMETER = 450;
     public static final int FILE_SUN_DIAMETER = 224;
-    public static final int BUILDING_DIAMETER = 16;
+    public static final int BUILDING_SIZE = 16;
     public static final int UNIT_SIZE = 16;
 
     /*
@@ -29,6 +29,7 @@ public final class SizeConstants {
     public static final int BUILDING_POPUP_IMAGE_PADDING = 10;
     public static final int BUILDING_POPUP_AFTER_TEXT_PADDING = 10;
     public static final int BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT = BUILDING_POPUP_ELEMENT_HEIGHT + 2 * BUILDING_POPUP_IMAGE_PADDING;
+    public static final int BUILDING_POPUP_BACKGROUND_ITEM_WIDTH = 600;
 
 
     /** description popup */

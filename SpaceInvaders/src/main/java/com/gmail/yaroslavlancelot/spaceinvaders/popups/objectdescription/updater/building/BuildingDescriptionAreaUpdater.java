@@ -2,7 +2,8 @@ package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.update
 
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.UnitDescriptionShowEvent;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.CreepBuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.CreepBuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.UnitDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.DescriptionText;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.BaseDescriptionAreaUpdater;
@@ -49,20 +50,23 @@ public class BuildingDescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
 
     /** update description values (e.g. new building appear) */
     @Override
-    public void updateDescription(RectangularShape drawArea, final int objectId,
+    public void updateDescription(RectangularShape drawArea, Object objectId,
                                   final String raceName, final String teamName) {
+        BuildingId buildingId = (BuildingId) objectId;
         attach(drawArea);
         IRace race = RacesHolder.getInstance().getElement(raceName);
-        CreepBuildingDummy dummy = race.getBuildingDummy(objectId);
+        CreepBuildingDummy dummy = race.getBuildingDummy(buildingId);
         // cost
-        mCostValue.setText(Integer.toString(dummy.getCost()));
+        mCostValue.setText(Integer.toString(dummy.getCost(buildingId.getUpgrade())));
         // produced unit
-        UnitDummy unitDummy = race.getUnitDummy(objectId);
+
+        final int unitId = dummy.getUnitId(buildingId.getUpgrade());
+        UnitDummy unitDummy = race.getUnitDummy(unitId);
         mProducedUnitLink.setText(unitDummy.getName());
         mProducedUnitLink.setOnClickListener(new TouchUtils.OnClickListener() {
             @Override
             public void onClick() {
-                EventBus.getDefault().post(new UnitDescriptionShowEvent(objectId, teamName));
+                EventBus.getDefault().post(new UnitDescriptionShowEvent(unitId, teamName));
             }
         });
     }

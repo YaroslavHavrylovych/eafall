@@ -23,8 +23,8 @@ public class UnitsDescriptionPopupUpdater extends BaseDescriptionPopupUpdater {
     }
 
     @Override
-    protected String getDescribedObjectName(int objectId, String raceName) {
-        return RacesHolder.getInstance().getElement(raceName).getUnitDummy(objectId).getName();
+    protected String getDescribedObjectName(Object objectId, String raceName) {
+        return RacesHolder.getInstance().getElement(raceName).getUnitDummy((Integer) objectId).getName();
     }
 
     @Override
@@ -35,19 +35,19 @@ public class UnitsDescriptionPopupUpdater extends BaseDescriptionPopupUpdater {
     }
 
     @Override
-    protected ITextureRegion getDescriptionImage(int objectId, String raceName) {
+    protected ITextureRegion getDescriptionImage(Object objectId, String raceName) {
         IRace race = RacesHolder.getInstance().getElement(raceName);
-        return race.getUnitDummy(objectId).getTextureRegion();
+        return race.getUnitDummy((Integer) objectId).getTextureRegion();
     }
 
     @Override
-    public void updateDescription(RectangularShape drawArea, int objectId, String raceName, String teamName) {
+    public void updateDescription(RectangularShape drawArea, Object objectId, String raceName, String teamName) {
         //description
         mDescriptionAreaUpdater.updateDescription(drawArea, objectId, raceName, teamName);
     }
 
     @Override
-    public void updateAdditionInfo(RectangularShape drawArea, int objectId, String raceName, String teamName) {
+    public void updateAdditionInfo(RectangularShape drawArea, Object objectId, String raceName, String teamName) {
         mAdditionInformationAreaUpdater.updateDescription(drawArea, objectId, raceName, teamName);
     }
 }

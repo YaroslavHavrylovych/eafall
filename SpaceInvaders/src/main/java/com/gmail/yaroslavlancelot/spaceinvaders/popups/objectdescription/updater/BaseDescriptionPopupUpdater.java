@@ -24,7 +24,7 @@ public abstract class BaseDescriptionPopupUpdater implements DescriptionPopupUpd
     }
 
     @Override
-    public void updateImage(RectangularShape drawArea, int objectId, String raceName, String teamName) {
+    public void updateImage(RectangularShape drawArea, Object objectId, String raceName, String teamName) {
         if (mObjectImage != null) {
             drawArea.detachChild(mObjectImage);
         }
@@ -34,12 +34,12 @@ public abstract class BaseDescriptionPopupUpdater implements DescriptionPopupUpd
     }
 
     @Override
-    public void updateObjectNameText(Text text, int objectId, String raceName) {
+    public void updateObjectNameText(Text text, Object objectId, String raceName) {
         text.setText(getDescribedObjectName(objectId, raceName));
     }
 
     /** return description object name {@link java.lang.String} */
-    protected abstract String getDescribedObjectName(int objectId, String raceName);
+    protected abstract String getDescribedObjectName(Object objectId, String raceName);
 
     @Override
     public void clear() {
@@ -50,5 +50,5 @@ public abstract class BaseDescriptionPopupUpdater implements DescriptionPopupUpd
     }
 
     /** return description image */
-    protected abstract ITextureRegion getDescriptionImage(int objectId, String raceName);
+    protected abstract ITextureRegion getDescriptionImage(Object objectId, String raceName);
 }

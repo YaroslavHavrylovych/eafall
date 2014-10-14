@@ -5,6 +5,7 @@ import android.content.Context;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.UnitDescriptionShowEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.PopupHud;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building.BuildingDescriptionPopupUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.unit.UnitsDescriptionPopupUpdater;
@@ -73,9 +74,9 @@ public abstract class DescriptionPopupHud extends PopupHud {
     /** really used by {@link de.greenrobot.event.EventBus} */
     public void onEvent(final BuildingDescriptionShowEvent buildingDescriptionShowEvent) {
         onEvent();
-        int objectId = buildingDescriptionShowEvent.getObjectId();
+        BuildingId buildingId = buildingDescriptionShowEvent.getObjectId();
         ITeam team = TeamsHolder.getInstance().getElement(buildingDescriptionShowEvent.getTeamName());
-        mDescriptionPopupBackgroundSprite.updateDescription(mBuildingDescriptionUpdater, objectId,
+        mDescriptionPopupBackgroundSprite.updateDescription(mBuildingDescriptionUpdater, buildingId,
                 team.getTeamRace().getRaceName(), team.getTeamName());
         showPopup();
     }
@@ -95,7 +96,7 @@ public abstract class DescriptionPopupHud extends PopupHud {
         onEvent();
         int objectId = unitDescriptionShowEvent.getUnitId();
         ITeam team = TeamsHolder.getInstance().getElement(unitDescriptionShowEvent.getTeamName());
-        mDescriptionPopupBackgroundSprite.updateDescription(mUnitsDescriptionUpdater, objectId,
+        mDescriptionPopupBackgroundSprite.updateDescription(mUnitsDescriptionUpdater, Integer.valueOf(objectId),
                 team.getTeamRace().getRaceName(), team.getTeamName());
         showPopup();
     }

@@ -36,10 +36,10 @@ public class UnitAdditionalAreaUpdater extends BaseDescriptionAreaUpdater {
     }
 
     @Override
-    public void updateDescription(RectangularShape drawArea, int objectId, String raceName, String teamName) {
+    public void updateDescription(RectangularShape drawArea, Object objectId, String raceName, String teamName) {
         attach(drawArea);
         IRace race = RacesHolder.getInstance().getElement(raceName);
-        UnitDummy dummy = race.getUnitDummy(objectId);
+        UnitDummy dummy = race.getUnitDummy((Integer) objectId);
         Damage damage = dummy.getDamage();
         mAttack.setText(damage.getDamageValue() + " " + damage.getDamageType());
         Armor defence = dummy.getUnitArmor();

@@ -10,6 +10,10 @@ public class TeamsHolder extends HolderUtils<ITeam> {
     private TeamsHolder() {
     }
 
+    public static ITeam getTeam(String teamName) {
+        return getInstance().getElement(teamName);
+    }
+
     public static TeamsHolder getInstance() {
         return sInstance;
     }

@@ -2,7 +2,8 @@ package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.update
 
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.BuildingDescriptionShowEvent;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.CreepBuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.CreepBuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.UnitDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.DescriptionText;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.BaseDescriptionAreaUpdater;
@@ -53,17 +54,18 @@ public class UnitDescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
     }
 
     @Override
-    public void updateDescription(RectangularShape drawArea, final int objectId, String raceName, final String teamName) {
+    public void updateDescription(RectangularShape drawArea, Object objectId, String raceName, final String teamName) {
         attach(drawArea);
         IRace race = RacesHolder.getInstance().getElement(raceName);
-        UnitDummy dummy = race.getUnitDummy(objectId);
+        UnitDummy dummy = race.getUnitDummy((Integer) objectId);
         // building name
-        CreepBuildingDummy buildingDummy = race.getBuildingDummy(objectId);
-        mUnitBuildingNameLink.setText(LocaleImpl.getInstance().getStringById(buildingDummy.getNameId()));
+        final BuildingId buildingId = BuildingId.makeId(10, 0);
+        CreepBuildingDummy buildingDummy = race.getBuildingDummy(buildingId);
+        mUnitBuildingNameLink.setText(LocaleImpl.getInstance().getStringById(buildingDummy.getStringId()));
         mUnitBuildingNameLink.setOnClickListener(new TouchUtils.OnClickListener() {
             @Override
             public void onClick() {
-                EventBus.getDefault().post(new BuildingDescriptionShowEvent(objectId, teamName));
+                EventBus.getDefault().post(new BuildingDescriptionShowEvent(buildingId, teamName));
             }
         });
         // static text

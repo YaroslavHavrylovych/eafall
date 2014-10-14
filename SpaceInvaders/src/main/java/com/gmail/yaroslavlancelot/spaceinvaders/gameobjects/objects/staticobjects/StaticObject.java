@@ -1,6 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
+
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
@@ -15,12 +16,20 @@ public abstract class StaticObject extends GameObject {
         super(x, y, textureRegion, vertexBufferObjectManager);
     }
 
-    public int getObjectIncomeIncreasingValue() {
+    public int getIncome() {
         return mIncomeIncreasingValue;
     }
 
+    protected void setIncome(int incomeIncreasingValue) {
+        mIncomeIncreasingValue = incomeIncreasingValue;
+    }
+
     @SuppressWarnings("unused")
-    public int getObjectCost() {
+    public int getCost() {
         return mCost;
+    }
+
+    protected void setCost(int cost) {
+        mCost = cost;
     }
 }

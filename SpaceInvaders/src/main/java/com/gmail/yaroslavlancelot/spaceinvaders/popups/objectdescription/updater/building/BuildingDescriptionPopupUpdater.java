@@ -5,7 +5,10 @@ import android.content.Context;
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.BuildingsAmountChangedEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateBuildingEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.UpgradeBuildingEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.UnitDescriptionShowEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.CreepBuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.BaseDescriptionPopupUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.RacesHolder;
@@ -30,13 +33,15 @@ import de.greenrobot.event.EventBus;
 
 /** updates buildings description popup */
 public class BuildingDescriptionPopupUpdater extends BaseDescriptionPopupUpdater {
-    private static final int sNoValue = Integer.MIN_VALUE;
-    private volatile int mBuildingId = sNoValue;
+    private static final BuildingId sNoValue = null;
+    private volatile BuildingId mBuildingId = sNoValue;
     private volatile String mTeamName = "";
     /** basically used for display buildings amount on building image */
     private AmountDrawer mAmountDrawer;
     /** press to create a building */
     private TextButton mBuildButton;
+    /** press to upgrade building (if such exist) */
+    private TextButton mUpgradeButton;
     /** image for addition information */
     private Sprite mAdditionDescriptionImage;
     /** building description object (update description area which u pass to it) */
@@ -48,15 +53,20 @@ public class BuildingDescriptionPopupUpdater extends BaseDescriptionPopupUpdater
         super(vertexBufferObjectManager, scene);
         mAmountDrawer = new AmountDrawer(vertexBufferObjectManager);
         mDescriptionAreaUpdater = new BuildingDescriptionAreaUpdater(vertexBufferObjectManager, scene);
-        initBuildButton(vertexBufferObjectManager);
+        initBuildUpgradeButtons(vertexBufferObjectManager);
         initAdditionInformationArea();
         EventBus.getDefault().register(this);
     }
 
-    private void initBuildButton(VertexBufferObjectManager vertexBufferObjectManager) {
-        mBuildButton = new TextButton(vertexBufferObjectManager, 200, 70);
-        mBuildButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_build));
+    private void initBuildUpgradeButtons(VertexBufferObjectManager vertexBufferObjectManager) {
+        //build
+        mBuildButton = new TextButton(vertexBufferObjectManager, 300, 70);
+        mBuildButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_build_button));
         mScene.registerTouchArea(mBuildButton);
+        //upgrade
+        mUpgradeButton = new TextButton(vertexBufferObjectManager, 300, 70);
+        mUpgradeButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_upgrade_button));
+        mScene.registerTouchArea(mUpgradeButton);
     }
 
     private void initAdditionInformationArea() {
@@ -79,25 +89,25 @@ public class BuildingDescriptionPopupUpdater extends BaseDescriptionPopupUpdater
     /** really used by {@link de.greenrobot.event.EventBus} */
     public void onEvent(final BuildingsAmountChangedEvent buildingsAmountChangedEvent) {
         if (!mTeamName.equals(buildingsAmountChangedEvent.getTeamName())
-                || mBuildingId != buildingsAmountChangedEvent.getKey()) {
+                || !mBuildingId.equals(buildingsAmountChangedEvent.getBuildingId())) {
             return;
         }
         mAmountDrawer.setText(buildingsAmountChangedEvent.getNewBuildingsAmount());
     }
 
     @Override
-    public void updateImage(RectangularShape drawArea, int objectId, String raceName, String teamName) {
+    public void updateImage(RectangularShape drawArea, Object objectId, String raceName, String teamName) {
         super.updateImage(drawArea, objectId, raceName, teamName);
         ITeam team = TeamsHolder.getInstance().getElement(teamName);
-        updateBuildingsAmount(team.getTeamPlanet().getBuildingAmount(objectId));
-        mBuildingId = objectId;
+        mBuildingId = (BuildingId) objectId;
+        updateBuildingsAmount(team.getTeamPlanet().getBuildingsAmount(mBuildingId.getId()));
         mTeamName = teamName;
     }
 
     @Override
-    protected String getDescribedObjectName(int objectId, String raceName) {
+    protected String getDescribedObjectName(Object objectId, String raceName) {
         return LocaleImpl.getInstance().getStringById
-                (RacesHolder.getInstance().getElement(raceName).getBuildingDummy(objectId).getNameId());
+                (RacesHolder.getInstance().getElement(raceName).getBuildingDummy((BuildingId) objectId).getStringId());
     }
 
     @Override
@@ -105,6 +115,7 @@ public class BuildingDescriptionPopupUpdater extends BaseDescriptionPopupUpdater
         super.clear();
         mAmountDrawer.detach();
         mBuildButton.detachSelf();
+        mUpgradeButton.detachSelf();
         if (mAdditionDescriptionImage != null) {
             mAdditionDescriptionImage.detachSelf(mScene);
             mAdditionDescriptionImage = null;
@@ -116,9 +127,10 @@ public class BuildingDescriptionPopupUpdater extends BaseDescriptionPopupUpdater
     }
 
     @Override
-    protected ITextureRegion getDescriptionImage(int objectId, String raceName) {
+    protected ITextureRegion getDescriptionImage(Object objectId, String raceName) {
         IRace race = RacesHolder.getInstance().getElement(raceName);
-        return race.getBuildingDummy(objectId).getTextureRegion();
+        BuildingId buildingId = (BuildingId) objectId;
+        return race.getBuildingDummy(buildingId).getTextureRegionArray(buildingId.getUpgrade());
     }
 
     private void updateBuildingsAmount(int buildingsAmount) {
@@ -127,10 +139,10 @@ public class BuildingDescriptionPopupUpdater extends BaseDescriptionPopupUpdater
     }
 
     @Override
-    public void updateDescription(RectangularShape drawArea, int objectId, String raceName, String teamName) {
+    public void updateDescription(RectangularShape drawArea, Object objectId, String raceName, String teamName) {
         //description
         mDescriptionAreaUpdater.updateDescription(drawArea, objectId, raceName, teamName);
-        //buttons
+        //button build
         mBuildButton.setPosition(0, drawArea.getHeight() - mBuildButton.getHeight());
         drawArea.attachChild(mBuildButton);
         mBuildButton.setOnClickListener(new ButtonSprite.OnClickListener() {
@@ -139,10 +151,19 @@ public class BuildingDescriptionPopupUpdater extends BaseDescriptionPopupUpdater
                 EventBus.getDefault().post(new CreateBuildingEvent(mTeamName, mBuildingId));
             }
         });
+        //button upgrade
+        mUpgradeButton.setPosition(mBuildButton.getX() + mBuildButton.getWidth() + 20, mBuildButton.getY());
+        drawArea.attachChild(mUpgradeButton);
+        mUpgradeButton.setOnClickListener(new ButtonSprite.OnClickListener() {
+            @Override
+            public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                EventBus.getDefault().post(new UpgradeBuildingEvent(mTeamName, mBuildingId));
+            }
+        });
     }
 
     @Override
-    public void updateAdditionInfo(RectangularShape drawArea, final int objectId, String raceName, final String teamName) {
+    public void updateAdditionInfo(RectangularShape drawArea, Object objectId, String raceName, final String teamName) {
         if (mAdditionDescriptionImage != null) {
             mAdditionDescriptionImage.detachSelf();
             mAdditionInfoRectangle.detachSelf();
@@ -152,20 +173,27 @@ public class BuildingDescriptionPopupUpdater extends BaseDescriptionPopupUpdater
 
         mAdditionInfoRectangle.setWidth(drawArea.getWidth());
         mAdditionInfoRectangle.setHeight(drawArea.getHeight());
+
+        BuildingId buildingId = (BuildingId) objectId;
+        CreepBuildingDummy dummy = TeamsHolder.getTeam(teamName).getTeamRace().getBuildingDummy(buildingId);
+        final int unitId = dummy.getUnitId(buildingId.getUpgrade());
         mAdditionInfoRectangle.setTouchCallback(
                 new TouchUtils.CustomTouchListener(mAdditionDescriptionImage) {
                     @Override
                     public void click() {
                         super.click();
-                        EventBus.getDefault().post(new UnitDescriptionShowEvent(objectId, teamName));
+                        EventBus.getDefault().post(new UnitDescriptionShowEvent(unitId, teamName));
                     }
                 });
         mAdditionInfoRectangle.attachChild(mAdditionDescriptionImage);
         drawArea.attachChild(mAdditionInfoRectangle);
     }
 
-    protected ITextureRegion getAdditionalInformationImage(int objectId, String raceName) {
-        IRace race = RacesHolder.getInstance().getElement(raceName);
-        return race.getUnitDummy(objectId).getTextureRegion();
+    protected ITextureRegion getAdditionalInformationImage(Object objectId, String raceName) {
+        IRace race = RacesHolder.getRace(raceName);
+        BuildingId buildingId = (BuildingId) objectId;
+        CreepBuildingDummy dummy = race.getBuildingDummy(buildingId);
+        final int unitId = dummy.getUnitId(buildingId.getUpgrade());
+        return race.getUnitDummy(unitId).getTextureRegion();
     }
 }

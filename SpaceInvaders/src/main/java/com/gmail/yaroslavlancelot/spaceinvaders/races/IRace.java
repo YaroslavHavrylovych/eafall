@@ -2,8 +2,8 @@ package com.gmail.yaroslavlancelot.spaceinvaders.races;
 
 import android.content.Context;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.CreepBuildingDummy;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.CreepBuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.UnitDummy;
 
@@ -16,17 +16,13 @@ public interface IRace {
 
     int getBuildingsAmount();
 
-    String[] getBuildingsNames();
+    int getBuildingCost(BuildingId buildingId);
 
-    StaticObject getBuildingById(int buildingId, Color teamColor);
-
-    int getBuildingCostById(int buildingId);
-
-    Unit getUnitForBuilding(int buildingId, Color teamColor);
+    Unit getUnit(int unitId, Color teamColor);
 
     void loadResources(TextureManager textureManager, Context context);
 
     UnitDummy getUnitDummy(int unitId);
 
-    CreepBuildingDummy getBuildingDummy(int buildingId);
+    CreepBuildingDummy getBuildingDummy(BuildingId buildingId);
 }

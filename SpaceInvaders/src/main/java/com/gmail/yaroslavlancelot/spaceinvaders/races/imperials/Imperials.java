@@ -5,15 +5,13 @@ import android.content.Context;
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.SpaceInvadersApplication;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.CreepBuilding;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.CreepBuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.CreepBuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.BuildingListLoader;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.UnitListLoader;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.UnitDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.LocaleImpl;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations;
 
@@ -25,7 +23,9 @@ import org.andengine.util.color.Color;
 import org.simpleframework.xml.core.Persister;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /** imperials */
 public class Imperials implements IRace {
@@ -35,7 +35,7 @@ public class Imperials implements IRace {
     private VertexBufferObjectManager mObjectManager;
     private SoundOperations mSoundOperations;
     private List<UnitDummy> mUnitDummies;
-    private List<CreepBuildingDummy> mCreepBuildingDummies;
+    private Map<Integer, CreepBuildingDummy> mCreepBuildingDummies;
 
     public Imperials(final VertexBufferObjectManager objectManager, final SoundOperations soundOperations) {
         mObjectManager = objectManager;
@@ -53,31 +53,20 @@ public class Imperials implements IRace {
     }
 
     @Override
-    public String[] getBuildingsNames() {
-        String[] result = new String[getBuildingsAmount()];
-        for (int i = 0; i < getBuildingsAmount(); i++) {
-            result[i] = LocaleImpl.getInstance().getStringById(mCreepBuildingDummies.get(i).getNameId());
-        }
-        return result;
+    public CreepBuildingDummy getBuildingDummy(BuildingId buildingId) {
+        CreepBuildingDummy dummy = mCreepBuildingDummies.get(buildingId.getId());
+        return dummy;
+    }
+
+    //TODO change it for bot
+    @Override
+    public int getBuildingCost(BuildingId buildingId) {
+        return getBuildingDummy(buildingId).getCost(buildingId.getUpgrade());
     }
 
     @Override
-    public StaticObject getBuildingById(final int buildingId, Color teamColor) {
-        CreepBuildingDummy dummy = mCreepBuildingDummies.get(buildingId);
-        CreepBuilding unit = dummy.constructBuilding(mObjectManager);
-        unit.setBackgroundArea(dummy.getTeamColorArea());
-        unit.setBackgroundColor(teamColor);
-        return unit;
-    }
-
-    @Override
-    public int getBuildingCostById(final int buildingId) {
-        return mCreepBuildingDummies.get(buildingId).getCost();
-    }
-
-    @Override
-    public Unit getUnitForBuilding(final int buildingId, Color teamColor) {
-        UnitDummy dummy = mUnitDummies.get(buildingId);
+    public Unit getUnit(int unitId, Color teamColor) {
+        UnitDummy dummy = mUnitDummies.get(unitId);
         Unit unit = dummy.constructUnit(mObjectManager, mSoundOperations);
         unit.setBackgroundArea(dummy.getTeamColorArea());
         unit.setBackgroundColor(teamColor);
@@ -97,23 +86,31 @@ public class Imperials implements IRace {
         if (buildingListLoader == null) return;
         Context context = SpaceInvadersApplication.getContext();
 
-        int unitsAmount = buildingListLoader.getList().size();
-        mCreepBuildingDummies = new ArrayList<CreepBuildingDummy>(unitsAmount);
+        int buildingsAmount = buildingListLoader.getList().size();
+        mCreepBuildingDummies = new HashMap<Integer, CreepBuildingDummy>(buildingsAmount);
 
-        int textureManagerElementsInLine = (int) Math.round(Math.sqrt(unitsAmount) + 1);
-        int size = textureManagerElementsInLine * SizeConstants.UNIT_SIZE;
+        //init list
+        CreepBuildingDummy creepBuildingDummy;
+        int buildingsWithUpgradesAmount = 0;
+        for (int i = 0; i < buildingsAmount; i++) {
+            creepBuildingDummy = new CreepBuildingDummy(buildingListLoader.getList().get(i));
+            buildingsWithUpgradesAmount += (creepBuildingDummy.getUpgrades() * SizeConstants.BUILDING_SIZE);
+            mCreepBuildingDummies.put(creepBuildingDummy.getBuildingId(), creepBuildingDummy);
+        }
+
+        int textureManagerElementsInLine = (int) Math.round(Math.sqrt(buildingsWithUpgradesAmount) + 1);
+        int size = textureManagerElementsInLine * SizeConstants.BUILDING_SIZE;
 
         BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(
                 textureManager, size, size, TextureOptions.BILINEAR);
 
-        CreepBuildingDummy creepBuildingDummy;
-        int n, m;
-        for (int i = 0; i < unitsAmount; i++) {
-            creepBuildingDummy = new CreepBuildingDummy(buildingListLoader.getList().get(i));
-            n = (i % textureManagerElementsInLine) * creepBuildingDummy.getWidth();
-            m = (i / textureManagerElementsInLine) * creepBuildingDummy.getHeight();
-            creepBuildingDummy.loadResources(context, smallObjectTexture, n, m);
-            mCreepBuildingDummies.add(creepBuildingDummy);
+        //load
+        int n, m, i = 0;
+        for (CreepBuildingDummy dummy : mCreepBuildingDummies.values()) {
+            n = (i % textureManagerElementsInLine) * dummy.getWidth();
+            m = (i / textureManagerElementsInLine) * dummy.getHeight();
+            dummy.loadResources(context, smallObjectTexture, n, m, getRaceName());
+            i++;
         }
         smallObjectTexture.load();
     }
@@ -159,10 +156,5 @@ public class Imperials implements IRace {
     @Override
     public UnitDummy getUnitDummy(int unitId) {
         return mUnitDummies.get(unitId);
-    }
-
-    @Override
-    public CreepBuildingDummy getBuildingDummy(int buildingId) {
-        return mCreepBuildingDummies.get(buildingId);
     }
 }

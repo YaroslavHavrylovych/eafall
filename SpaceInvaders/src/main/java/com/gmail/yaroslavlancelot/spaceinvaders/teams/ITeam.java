@@ -3,6 +3,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.teams;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 
@@ -54,6 +55,9 @@ public interface ITeam {
     /** get team money */
     int getMoney();
 
+    /** set money value */
+    void setMoney(int money);
+
     /**
      * change current team money
      *
@@ -85,6 +89,6 @@ public interface ITeam {
     /** set category and maskBit for current team units */
     void changeFixtureDefFilter(short category, short maskBits);
 
-    /** set money value */
-    void setMoney(int money);
+    /** return ids of the buildings that you can build here */
+    BuildingId[] getBuildingsIds();
 }
