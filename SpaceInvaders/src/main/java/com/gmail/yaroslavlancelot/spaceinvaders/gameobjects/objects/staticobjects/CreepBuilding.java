@@ -65,6 +65,11 @@ public class CreepBuilding implements Building {
     }
 
     @Override
+    public int getUpgrade() {
+        return mUpgrade;
+    }
+
+    @Override
     public int getIncome() {
         return mBuildingsAmount * mBuilding.getIncome();
     }
@@ -72,7 +77,6 @@ public class CreepBuilding implements Building {
     @Override
     public synchronized boolean buyBuilding() {
         ITeam team = TeamsHolder.getTeam(mTeamName);
-        //TODO it will be a bit wrong work on the server side
         boolean isFakePlanet = TeamControlBehaviourType.isClientSide(team.getTeamControlType());
         if (isFakePlanet) {
             mBuildingsAmount++;
@@ -106,11 +110,10 @@ public class CreepBuilding implements Building {
             throw new UnsupportedOperationException("Building upgrade exceed possible building upgrades");
         }
         if (mBuildingsAmount <= 0) {
-            throw new UnsupportedOperationException("No building to upgrade");
+            return false;
         }
 
         ITeam team = TeamsHolder.getTeam(mTeamName);
-        //TODO it will be a bit wrong work on the server side
         boolean isFakePlanet = TeamControlBehaviourType.isClientSide(team.getTeamControlType());
         if (!isFakePlanet) {
             int cost = mCreepBuildingDummy.getCost(nextUpgrade);

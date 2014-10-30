@@ -11,6 +11,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /** represent team planet */
 public class PlanetStaticObject extends StaticObject {
@@ -87,7 +88,15 @@ public class PlanetStaticObject extends StaticObject {
         return buildings.getAmount();
     }
 
-    public Map<Integer, Building> getBuildings() {
-        return mBuildings;
+    public int getExistingBuildingsTypesAmount() {
+        return mBuildings.size();
+    }
+
+    public Set<Integer> getExistingBuildingsTypes() {
+        return mBuildings.keySet();
+    }
+
+    public Building getBuilding(int id) {
+        return mBuildings.get(id);
     }
 }

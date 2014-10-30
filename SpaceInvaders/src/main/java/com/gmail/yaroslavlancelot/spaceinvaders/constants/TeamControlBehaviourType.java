@@ -27,6 +27,7 @@ public enum TeamControlBehaviourType {
         return type == TeamControlBehaviourType.USER_CONTROL_ON_SERVER_SIDE || type == TeamControlBehaviourType.USER_CONTROL_ON_CLIENT_SIDE;
     }
 
+    //TODO check this when you will check the multiplayer
     /** return true if type parameter corresponding to client side */
     public static boolean isClientSide(TeamControlBehaviourType type) {
         return type == TeamControlBehaviourType.REMOTE_CONTROL_ON_CLIENT_SIDE || type == TeamControlBehaviourType.USER_CONTROL_ON_CLIENT_SIDE;

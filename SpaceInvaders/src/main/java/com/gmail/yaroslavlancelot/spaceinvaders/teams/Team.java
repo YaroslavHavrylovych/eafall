@@ -14,7 +14,10 @@ import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.util.color.Color;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import de.greenrobot.event.EventBus;
@@ -41,14 +44,28 @@ public class Team implements ITeam {
     private Color mTeamColor = new Color(100, 100, 100);
     /** team control type */
     private TeamControlBehaviourType mTeamControlBehaviourType;
+    /** array of buildings which team can build */
+    private BuildingId[] mBuildingsTypesIds;
 
     public Team(final String teamName, IRace teamRace, TeamControlBehaviourType teamType) {
         mTeamObjects = new ArrayList<GameObject>(20);
         mTeamName = teamName;
         mTeamRace = teamRace;
+        initBuildingsTypes(teamRace);
         mTeamControlBehaviourType = teamType;
         mTeamFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f, false);
         EventBus.getDefault().register(this);
+    }
+
+    private void initBuildingsTypes(IRace teamRace) {
+        Set<Integer> idSet = teamRace.getBuildingsIds();
+        mBuildingsTypesIds = new BuildingId[idSet.size()];
+        Iterator<Integer> it = idSet.iterator();
+        int id, i = 0;
+        while (it.hasNext()) {
+            id = it.next();
+            mBuildingsTypesIds[i++] = BuildingId.makeId(id, 0);
+        }
     }
 
     @Override
@@ -155,16 +172,33 @@ public class Team implements ITeam {
 
     @Override
     public BuildingId[] getBuildingsIds() {
-        //TODO implement it's rights
-        return new BuildingId[]{
-                BuildingId.makeId(10, 0),
-                BuildingId.makeId(20, 0),
-                BuildingId.makeId(30, 0),
-                BuildingId.makeId(40, 0),
-                BuildingId.makeId(50, 0),
-                BuildingId.makeId(60, 0),
-                BuildingId.makeId(70, 0),
-                BuildingId.makeId(80, 0)};
+        syncBuildingsWithPlanet();
+        return mBuildingsTypesIds;
+    }
+
+    private void syncBuildingsWithPlanet() {
+        if (mTeamPlanet.getExistingBuildingsTypesAmount() == 0) {
+            return;
+        }
+        Set<Integer> planetBuildings = mTeamPlanet.getExistingBuildingsTypes();
+        SortedSet<Integer> allBuildings = mTeamRace.getBuildingsIds();
+
+        Iterator<Integer> it = allBuildings.iterator();
+        int id;
+        while (it.hasNext()) {
+            id = it.next();
+            //if no building on the planet, then use default one
+            if (!planetBuildings.contains(id)) {
+                continue;
+            }
+            int position = allBuildings.headSet(id).size();
+            BuildingId buildingId = mBuildingsTypesIds[position];
+            Building building = mTeamPlanet.getBuilding(id);
+            if (buildingId.getUpgrade() == building.getUpgrade()) {
+                continue;
+            }
+            mBuildingsTypesIds[position] = BuildingId.makeId(id, building.getUpgrade());
+        }
     }
 
     @SuppressWarnings("unused")
@@ -176,9 +210,9 @@ public class Team implements ITeam {
             return;
         }
         BuildingId buildingId = upgradeBuildingEvent.getBuildingId();
-        Building building = getTeamPlanet().getBuildings().get(buildingId.getId());
+        Building building = getTeamPlanet().getBuilding(buildingId.getId());
         if (building == null) {
-            throw new UnsupportedOperationException("No building to upgrade");
+            return;
         }
         building.upgradeBuilding();
     }

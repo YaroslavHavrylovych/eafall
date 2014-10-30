@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /** imperials */
 public class Imperials implements IRace {
@@ -36,10 +38,16 @@ public class Imperials implements IRace {
     private SoundOperations mSoundOperations;
     private List<UnitDummy> mUnitDummies;
     private Map<Integer, CreepBuildingDummy> mCreepBuildingDummies;
+    private SortedSet<Integer> mSortedBuildingsSet;
 
     public Imperials(final VertexBufferObjectManager objectManager, final SoundOperations soundOperations) {
         mObjectManager = objectManager;
         mSoundOperations = soundOperations;
+    }
+
+    @Override
+    public SortedSet<Integer> getBuildingsIds() {
+        return mSortedBuildingsSet;
     }
 
     @Override
@@ -58,7 +66,6 @@ public class Imperials implements IRace {
         return dummy;
     }
 
-    //TODO change it for bot
     @Override
     public int getBuildingCost(BuildingId buildingId) {
         return getBuildingDummy(buildingId).getCost(buildingId.getUpgrade());
@@ -113,6 +120,8 @@ public class Imperials implements IRace {
             i++;
         }
         smallObjectTexture.load();
+
+        mSortedBuildingsSet = new TreeSet<Integer>(mCreepBuildingDummies.keySet());
     }
 
     private void loadUnits(TextureManager textureManager) {
@@ -156,5 +165,22 @@ public class Imperials implements IRace {
     @Override
     public UnitDummy getUnitDummy(int unitId) {
         return mUnitDummies.get(unitId);
+    }
+
+    @Override
+    public int getUpgradeCost(BuildingId buildingId) {
+        CreepBuildingDummy dummy = mCreepBuildingDummies.get(buildingId.getId());
+        if(buildingId.getUpgrade() + 1 >= dummy.getUpgrades()) {
+            return -1;
+        }
+        int cost = dummy.getCost(buildingId.getUpgrade() + 1);
+        int result = (int) Math.round(cost * 0.5 + 1);
+        return result;
+    }
+
+    @Override
+    public boolean isUpgradeAvailable(BuildingId buildingId) {
+        CreepBuildingDummy dummy = mCreepBuildingDummies.get(buildingId.getId());
+        return buildingId.getUpgrade() + 1 < dummy.getUpgrades();
     }
 }

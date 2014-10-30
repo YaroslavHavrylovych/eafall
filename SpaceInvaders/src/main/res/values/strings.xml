@@ -47,6 +47,7 @@
 
     <!-- buildings -->
     <string name="description_build_button">Build</string>
+    <string name="description_back_button">Back</string>
     <string name="description_upgrade_button">Upgrade</string>
     <string name="description_cost">Cost :</string>
     <string name="description_produce">Produce :</string>

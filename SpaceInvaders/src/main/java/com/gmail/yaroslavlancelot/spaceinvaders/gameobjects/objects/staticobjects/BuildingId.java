@@ -6,13 +6,17 @@ package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjec
  */
 public class BuildingId {
     /** building line id */
-    private int mId;
+    private final int mId;
     /** current building line upgrade */
-    private int mUpgrade;
+    private final int mUpgrade;
 
     private BuildingId(int id, int upgrade) {
         mId = id;
         mUpgrade = upgrade;
+    }
+
+    public BuildingId getNextUpgrade() {
+        return BuildingId.makeId(mId, mUpgrade + 1);
     }
 
     public static BuildingId makeId(int id, int upgrade) {

@@ -3,6 +3,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.update
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Damage;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.UnitDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.BaseDescriptionAreaUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
@@ -37,9 +38,13 @@ public class UnitAdditionalAreaUpdater extends BaseDescriptionAreaUpdater {
 
     @Override
     public void updateDescription(RectangularShape drawArea, Object objectId, String raceName, String teamName) {
-        attach(drawArea);
+        final BuildingId buildingId = (BuildingId) objectId;
         IRace race = RacesHolder.getInstance().getElement(raceName);
-        UnitDummy dummy = race.getUnitDummy((Integer) objectId);
+        int unitId = race.getBuildingDummy(buildingId).getUnitId(buildingId.getUpgrade());
+
+        attach(drawArea);
+
+        UnitDummy dummy = race.getUnitDummy(unitId);
         Damage damage = dummy.getDamage();
         mAttack.setText(damage.getDamageValue() + " " + damage.getDamageType());
         Armor defence = dummy.getUnitArmor();

@@ -55,11 +55,14 @@ public class UnitDescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
 
     @Override
     public void updateDescription(RectangularShape drawArea, Object objectId, String raceName, final String teamName) {
-        attach(drawArea);
+        final BuildingId buildingId = (BuildingId) objectId;
         IRace race = RacesHolder.getInstance().getElement(raceName);
-        UnitDummy dummy = race.getUnitDummy((Integer) objectId);
+        int unitId = race.getBuildingDummy(buildingId).getUnitId(buildingId.getUpgrade());
+
+        attach(drawArea);
+        UnitDummy dummy = race.getUnitDummy(unitId);
+
         // building name
-        final BuildingId buildingId = BuildingId.makeId(10, 0);
         CreepBuildingDummy buildingDummy = race.getBuildingDummy(buildingId);
         mUnitBuildingNameLink.setText(LocaleImpl.getInstance().getStringById(buildingDummy.getStringId()));
         mUnitBuildingNameLink.setOnClickListener(new TouchUtils.OnClickListener() {

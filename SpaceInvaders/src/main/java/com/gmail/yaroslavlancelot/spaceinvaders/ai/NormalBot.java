@@ -66,7 +66,7 @@ public class NormalBot implements Runnable {
                 }
 
                 // start of the game
-                if (mBotTeam.getTeamPlanet().getBuildings().isEmpty()) {
+                if (mBotTeam.getTeamPlanet().getExistingBuildingsTypesAmount() == 0) {
                     buildFirstBuilding();
                     continue;
                 }
@@ -175,7 +175,7 @@ public class NormalBot implements Runnable {
     private int[] getBuildings(ITeam team) {
         int[] buildings = new int[team.getTeamRace().getBuildingsAmount()];
         for (int i = 0; i < buildings.length; i++) {
-            Building building = team.getTeamPlanet().getBuildings().get(new Integer(i + 1) * 10);
+            Building building = team.getTeamPlanet().getBuilding(new Integer(i + 1) * 10);
             buildings[i] = building == null ? 0 : building.getAmount();
         }
         return buildings;
