@@ -6,16 +6,20 @@ import org.andengine.engine.camera.hud.HUD;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.ITouchArea;
+import org.andengine.entity.scene.Scene;
 
 /** Base popups class. Touch on HUD except any hud element will cause popup closing */
-public abstract class PopupHud extends HUD {
+public class PopupHud extends HUD {
     /** represent boolean value which true if popup is showing now and false in other way */
     protected boolean mIsPopupShowing;
     /** area for popup (all other area is transparent) */
     protected Rectangle mPopupRectangle;
+    /** popup attached scene */
+    private Scene mScene;
 
 
-    public PopupHud() {
+    public PopupHud(Scene scene) {
+        mScene = scene;
         setBackgroundEnabled(false);
         setTouchAreaBindingOnActionDownEnabled(true);
         setOnAreaTouchTraversalBackToFront();
@@ -51,7 +55,9 @@ public abstract class PopupHud extends HUD {
     }
 
     /** detach from the screen */
-    public abstract void detachPopup();
+    public void detachPopup() {
+        mScene.clearChildScene();
+    }
 
     /**
      * check if popup is showing and if it's then unregister all touch areas and detach
@@ -75,5 +81,7 @@ public abstract class PopupHud extends HUD {
     }
 
     /** attach to the screen */
-    public abstract void attachPopup();
+    public void attachPopup() {
+        mScene.setChildScene(this);
+    }
 }

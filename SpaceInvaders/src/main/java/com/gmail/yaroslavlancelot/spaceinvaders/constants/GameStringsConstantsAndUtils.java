@@ -18,6 +18,8 @@ public final class GameStringsConstantsAndUtils {
     public static final String FILE_BUILDINGS_POPUP_UP_BUTTON = "images/up_button.png";
     /** game button */
     public static final String FILE_GAME_BUTTON = "images/game_button.png";
+    /** circle point */
+    public static final String FILE_CIRCLE_POINT = "images/circle_point.png";
     /** file name for red planet */
     public static final String FILE_RED_PLANET = "images/planet_1.png";
     /** file name for blue planet */

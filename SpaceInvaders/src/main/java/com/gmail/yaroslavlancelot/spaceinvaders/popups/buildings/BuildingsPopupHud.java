@@ -16,6 +16,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
 
 import org.andengine.entity.IEntity;
 import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.scene.Scene;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
@@ -26,7 +27,7 @@ import java.util.Map;
 
 import de.greenrobot.event.EventBus;
 
-public abstract class BuildingsPopupHud extends PopupHud {
+public class BuildingsPopupHud extends PopupHud {
     public static final String TAG = BuildingsPopupHud.class.getCanonicalName();
     /** building of this team popup is showing */
     private final String mTeamName;
@@ -34,7 +35,8 @@ public abstract class BuildingsPopupHud extends PopupHud {
     /** The key is the serial number of the building in the list of the buildings */
     private Map<Integer, PopupItemFactory.BuildingPopupItem> mItems;
 
-    public BuildingsPopupHud(String teamName, VertexBufferObjectManager vertexBufferObjectManager) {
+    public BuildingsPopupHud(String teamName, Scene scene, VertexBufferObjectManager vertexBufferObjectManager) {
+        super(scene);
         ITeam team = TeamsHolder.getInstance().getElement(teamName);
         int buildingsAmount = team.getTeamRace().getBuildingsAmount();
 

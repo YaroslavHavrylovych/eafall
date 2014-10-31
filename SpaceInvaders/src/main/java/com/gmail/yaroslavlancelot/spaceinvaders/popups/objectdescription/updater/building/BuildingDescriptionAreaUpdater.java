@@ -92,6 +92,7 @@ public class BuildingDescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
     public void updateUpgradeCost(BuildingId buildingId, String teamName) {
         IRace race = TeamsHolder.getTeam(teamName).getTeamRace();
         int amount = TeamsHolder.getTeam(teamName).getTeamPlanet().getBuildingsAmount(buildingId.getId());
+        amount = amount == 0 ? 1 : amount;
         int upgradeCost = amount * race.getUpgradeCost(buildingId);
         mUpgradeLink.setText(Integer.valueOf(upgradeCost).toString());
     }

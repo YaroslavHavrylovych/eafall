@@ -71,8 +71,8 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
     }
 
     @Override
-    protected Unit createUnit(int unitKey, ITeam unitTeam) {
-        Unit unit = super.createUnit(unitKey, unitTeam);
+    protected Unit createUnit(int unitKey, ITeam unitTeam, boolean isTopPath) {
+        Unit unit = super.createUnit(unitKey, unitTeam, isTopPath);
 
         try {
             mGameSocketServer.sendBroadcastServerMessage(new UnitCreatedServerMessage(unitTeam.getTeamName(), unitKey, unit));

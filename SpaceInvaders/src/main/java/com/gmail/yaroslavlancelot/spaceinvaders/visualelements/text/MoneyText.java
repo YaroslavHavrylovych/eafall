@@ -3,6 +3,8 @@ package com.gmail.yaroslavlancelot.spaceinvaders.visualelements.text;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.MoneyUpdatedEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.unitpath.HideUnitPathChooser;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.unitpath.ShowUnitPathChooser;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
 
 import org.andengine.entity.text.Text;
@@ -28,6 +30,10 @@ public class MoneyText extends Text {
         EventBus.getDefault().register(this);
     }
 
+    private static String generateTextString(String prefix, int money) {
+        return prefix + money;
+    }
+
     @SuppressWarnings("unused")
     /** really used by {@link de.greenrobot.event.EventBus} */
     public void onEvent(MoneyUpdatedEvent moneyUpdatedEvent) {
@@ -41,7 +47,15 @@ public class MoneyText extends Text {
         setX(SizeConstants.GAME_FIELD_WIDTH / 2 - getWidth() / 2);
     }
 
-    private static String generateTextString(String prefix, int money) {
-        return prefix + money;
+    @SuppressWarnings("unused")
+    /** really used by {@link de.greenrobot.event.EventBus} */
+    public void onEvent(final ShowUnitPathChooser showUnitPathChooser) {
+        setVisible(false);
+    }
+
+    @SuppressWarnings("unused")
+    /** really used by {@link de.greenrobot.event.EventBus} */
+    public void onEvent(final HideUnitPathChooser hideUnitPathChooser) {
+        setVisible(true);
     }
 }

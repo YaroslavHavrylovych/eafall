@@ -5,6 +5,8 @@ import android.content.Context;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.UnitByBuildingDescriptionShowEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.unitpath.HideUnitPathChooser;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.unitpath.ShowUnitPathChooser;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.PopupHud;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building.BuildingDescriptionPopupUpdater;
@@ -15,6 +17,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.visualelements.text.Link;
 
 import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.scene.Scene;
 import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -26,7 +29,7 @@ import de.greenrobot.event.EventBus;
  * Appears in the bottom of the screen when you want to create a building
  * or see unit (other object) characteristics.
  */
-public abstract class DescriptionPopupHud extends PopupHud {
+public class DescriptionPopupHud extends PopupHud {
     public static final String TAG = DescriptionPopupHud.class.getCanonicalName();
     /** general elements of the popup (background sprite, close button, description image) */
     private DescriptionPopupBackgroundSprite mDescriptionPopupBackgroundSprite;
@@ -38,9 +41,11 @@ public abstract class DescriptionPopupHud extends PopupHud {
     /**
      * single instance that's why it's private constructor
      *
+     * @param scene                     popup attaches to this scene
      * @param vertexBufferObjectManager object manager to create inner elements
      */
-    public DescriptionPopupHud(VertexBufferObjectManager vertexBufferObjectManager) {
+    public DescriptionPopupHud(Scene scene, VertexBufferObjectManager vertexBufferObjectManager) {
+        super(scene);
         mPopupRectangle = new Rectangle(0, SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.DESCRIPTION_POPUP_HEIGHT,
                 SizeConstants.GAME_FIELD_WIDTH, SizeConstants.DESCRIPTION_POPUP_HEIGHT, vertexBufferObjectManager);
 
@@ -98,6 +103,19 @@ public abstract class DescriptionPopupHud extends PopupHud {
         ITeam team = TeamsHolder.getInstance().getElement(unitByBuildingDescriptionShowEvent.getTeamName());
         mDescriptionPopupBackgroundSprite.updateDescription(mUnitsDescriptionUpdater, objectId,
                 team.getTeamRace().getRaceName(), team.getTeamName());
+        showPopup();
+    }
+
+
+    @SuppressWarnings("unused")
+    /** really used by {@link de.greenrobot.event.EventBus} */
+    public void onEvent(final ShowUnitPathChooser showUnitPathChooser) {
+        hidePopup();
+    }
+
+    @SuppressWarnings("unused")
+    /** really used by {@link de.greenrobot.event.EventBus} */
+    public void onEvent(final HideUnitPathChooser hideUnitPathChooser) {
         showPopup();
     }
 }
