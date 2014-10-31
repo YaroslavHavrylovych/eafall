@@ -1,20 +1,17 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
-import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.BuildingsAmountChangedEvent;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameloop.UnitCreatorCycle;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Higgs;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.CreepBuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 
-import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import de.greenrobot.event.EventBus;
+import java.util.Set;
 
 /** represent team planet */
 public class PlanetStaticObject extends StaticObject {
@@ -23,22 +20,11 @@ public class PlanetStaticObject extends StaticObject {
     // unit spawn point
     private float mSpawnPointX, mSpawnPointY;
     // buildings in current planet
-    private Map<Integer, BuildingsHolder> buildings = new HashMap<Integer, BuildingsHolder>(15);
+    private Map<Integer, Building> mBuildings = new HashMap<Integer, Building>(9);
     /** the team, current planet belongs to */
     private ITeam mPlanetTeam;
 
-    /**
-     * used on client side. Means that planet will only display without handling units creation logic and
-     * money calculation but can  calculate buildings
-     */
-    private boolean mIsFakePlanet = false;
-
-    public PlanetStaticObject(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager objectManager, ITeam planetTeam, boolean isFakePlanet) {
-        this(x, y, textureRegion, objectManager, planetTeam);
-        mIsFakePlanet = isFakePlanet;
-    }
-
-    private PlanetStaticObject(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager objectManager, ITeam planetTeam) {
+    public PlanetStaticObject(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager objectManager, ITeam planetTeam) {
         super(x, y, textureRegion, objectManager);
         mIncomeIncreasingValue = 10;
         mPlanetTeam = planetTeam;
@@ -46,6 +32,15 @@ public class PlanetStaticObject extends StaticObject {
         setWidth(SizeConstants.PLANET_DIAMETER);
         setHeight(SizeConstants.PLANET_DIAMETER);
         initHealth(3000);
+    }
+
+    @Override
+    public int getIncome() {
+        int value = super.getIncome();
+        for (Building building : mBuildings.values()) {
+            value += building.getIncome();
+        }
+        return value;
     }
 
     /** set unit spawn point */
@@ -62,116 +57,46 @@ public class PlanetStaticObject extends StaticObject {
         return mSpawnPointY;
     }
 
-    /** handle logic of creating a building on a non-fake planet */
-    public boolean purchaseBuilding(int buildingId) {
-        return createBuildingById(buildingId, false);
-    }
-
-    /** create new building object and add it to holder so then call {@code addBuilding()} */
-    private boolean createBuildingById(int buildingId, boolean isFakePlanet) {
-        LoggerHelper.methodInvocation(TAG, "buildBuilding. IsFakePlanet=" + isFakePlanet);
-        if (buildings.get(buildingId) == null) {
-            final StaticObject staticObject =
-                    mPlanetTeam.getTeamRace().getBuildingById(buildingId, mPlanetTeam.getTeamColor());
-            buildings.put(buildingId, new BuildingsHolder(staticObject, buildingId));
-        }
-        return addBuilding(buildingId, isFakePlanet);
-    }
-
     /**
-     * construction new building on the planet. If planet is fake then it will just creating building
-     * if it's first instance of particular building type in other way (if it's not first) will just
-     * increase building amount
+     * Invoke if you want to create new building. If building is doing some real action
+     * (it's on the server side or it's single player and not an client which just is showing)
+     * then team money will be reduced.
+     *
+     * @param buildingId id of the building you want to create
+     * @return true if building amount was increased and false in other case
      */
-    private boolean addBuilding(int key, boolean isFakePlanet) {
-        BuildingsHolder holder = buildings.get(key);
-        StaticObject building = buildings.get(key).mBuilding;
-        if (isFakePlanet) {
-            if (holder.mBuildingsAmount == 0)
-                attachChild(building);
-        } else {
-            LoggerHelper.printDebugMessage(TAG, "building creation : " + "existing money=" + getMoneyAmount()
-                    + ", cost=" + building.mCost);
-            if (getMoneyAmount() < building.mCost)
-                return false;
-            if (holder.mBuildingsAmount == 0) {
-                LoggerHelper.printInformationMessage(TAG, "creating building on planet");
-                attachChild(building);
+    public boolean createBuilding(BuildingId buildingId) {
+        LoggerHelper.methodInvocation(TAG, "createBuilding");
+        Building creepBuilding = mBuildings.get(buildingId.getId());
+        if (creepBuilding == null) {
+            final CreepBuildingDummy creepBuildingDummy =
+                    mPlanetTeam.getTeamRace().getBuildingDummy(buildingId);
+            if(creepBuildingDummy == null) {
+                throw new IllegalArgumentException("no building with id " + buildingId);
             }
-            buyBuilding(building.mCost);
+            creepBuilding = new CreepBuilding(creepBuildingDummy, getVertexBufferObjectManager(), mPlanetTeam.getTeamName());
+            attachChild(creepBuilding.getEntity());
+            mBuildings.put(buildingId.getId(), creepBuilding);
         }
-        holder.increaseBuildingsAmount();
-        return true;
-    }
-
-    /** returns money amount (from team to which current planet belongs) */
-    private int getMoneyAmount() {
-        return mPlanetTeam == null ? 0 : mPlanetTeam.getMoney();
-    }
-
-    /** pay money for creating building on the planet */
-    private void buyBuilding(int cost) {
-        if (mPlanetTeam != null)
-            mPlanetTeam.changeMoney(-cost);
-    }
-
-    /** perform {@code createBuildingById} invocation with parameter of is this planet is fake */
-    public boolean createBuildingById(int buildingId) {
-        LoggerHelper.methodInvocation(TAG, "buildBuilding");
-        return createBuildingById(buildingId, mIsFakePlanet);
+        return creepBuilding.buyBuilding();
     }
 
     /** get buildings amount for passed building type */
-    public int getBuildingAmount(int buildingId) {
-        BuildingsHolder holder = buildings.get(buildingId);
-        if (holder == null) return 0;
-        return holder.getBuildingsAmount();
+    public int getBuildingsAmount(int buildingId) {
+        Building buildings = mBuildings.get(buildingId);
+        if (buildings == null) return 0;
+        return buildings.getAmount();
     }
 
-    public Map<Integer, BuildingsHolder> getBuildings() {
-        return buildings;
+    public int getExistingBuildingsTypesAmount() {
+        return mBuildings.size();
     }
 
-    /**
-     * holds building image (for current planet) and building id and amount of current building in the planet
-     * (for use it when income and new building creation etc)
-     */
-    public class BuildingsHolder {
-        /** hold building object */
-        private final StaticObject mBuilding;
-        /** hold building id */
-        private final int mBuildingId;
-        /** predefine time to create a unit (now it's common for all buildings) */
-        private final int mUnitCreationCycleTime = 20;
-        /** amount of current building instances on the planet */
-        private int mBuildingsAmount;
-        /** contains logic of unit creation in the cycle */
-        private UnitCreatorCycle mUnitCreatorCycle;
+    public Set<Integer> getExistingBuildingsTypes() {
+        return mBuildings.keySet();
+    }
 
-
-        private BuildingsHolder(StaticObject building, int buildingId) {
-            mBuilding = building;
-            mBuildingId = buildingId;
-        }
-
-        /** contains logic of the new building creation */
-        private void increaseBuildingsAmount() {
-            LoggerHelper.methodInvocation(TAG, "increaseBuildingsAmount");
-            if (!mIsFakePlanet) {
-                mIncomeIncreasingValue += mBuilding.getObjectIncomeIncreasingValue();
-                if (mUnitCreatorCycle == null) {
-                    mUnitCreatorCycle = new UnitCreatorCycle(mPlanetTeam.getTeamName(), mBuildingId);
-                    registerUpdateHandler(new TimerHandler(mUnitCreationCycleTime, true, mUnitCreatorCycle));
-                }
-                mUnitCreatorCycle.increaseUnitAmount();
-            }
-            mBuildingsAmount += 1;
-            EventBus.getDefault().post(new BuildingsAmountChangedEvent(mPlanetTeam.getTeamName(), mBuildingId, mBuildingsAmount));
-        }
-
-        /** returns current building amount/instances on the planet */
-        public int getBuildingsAmount() {
-            return mBuildingsAmount;
-        }
+    public Building getBuilding(int id) {
+        return mBuildings.get(id);
     }
 }

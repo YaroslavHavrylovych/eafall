@@ -5,57 +5,41 @@ import android.content.Context;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.BuildingDescriptionShowEvent;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.CreepBuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.PopupHud;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.item.PopupItemFactory;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.LocaleImpl;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
 
+import org.andengine.entity.IEntity;
 import org.andengine.entity.primitive.Rectangle;
-import org.andengine.entity.sprite.ButtonSprite;
-import org.andengine.entity.sprite.Sprite;
-import org.andengine.entity.text.Text;
-import org.andengine.opengl.font.FontUtils;
-import org.andengine.opengl.font.IFont;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
-import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.greenrobot.event.EventBus;
 
 public abstract class BuildingsPopupHud extends PopupHud {
     public static final String TAG = BuildingsPopupHud.class.getCanonicalName();
-    /** buildings popup element height */
-    private static final int POPUP_ELEMENT_HEIGHT = SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT;
-    /** popup image height */
-    private static final int ITEM_IMAGE_HEIGHT = SizeConstants.BUILDING_POPUP_ELEMENT_HEIGHT;
-    /** popup image height */
-    private static final int ITEM_IMAGE_WIDTH = ITEM_IMAGE_HEIGHT;
-    private static final String sNumberFormatTemplate = "####' : '";
-    private static final NumberFormat sNumberFormat = new DecimalFormat(sNumberFormatTemplate);
-    /** popup text font */
-    private static String FONT = GameStringsConstantsAndUtils.KEY_FONT_MONEY;
     /** building of this team popup is showing */
     private final String mTeamName;
-    /** popup items (buildings) */
-    private List<BuildingsPopupItem> mItems;
+
+    /** The key is the serial number of the building in the list of the buildings */
+    private Map<Integer, PopupItemFactory.BuildingPopupItem> mItems;
 
     public BuildingsPopupHud(String teamName, VertexBufferObjectManager vertexBufferObjectManager) {
         ITeam team = TeamsHolder.getInstance().getElement(teamName);
         int buildingsAmount = team.getTeamRace().getBuildingsAmount();
 
-        mPopupRectangle = new Rectangle(0, 0, calculatePopupWidth(team),
+        mPopupRectangle = new Rectangle(0, 0,
+                SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_WIDTH,
                 SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT * buildingsAmount,
                 vertexBufferObjectManager);
 
@@ -65,32 +49,51 @@ public abstract class BuildingsPopupHud extends PopupHud {
         mPopupRectangle.setY(SizeConstants.GAME_FIELD_HEIGHT - mPopupRectangle.getHeight());
     }
 
-    public static float calculatePopupWidth(ITeam team) {
-        float lengthWithoutText = SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT
-                + SizeConstants.BUILDING_POPUP_AFTER_TEXT_PADDING;
-
-        IFont font = FontHolderUtils.getInstance().getElement(FONT);
-
-        float maxTextLength = 0f;
-        for (String buildingName : team.getTeamRace().getBuildingsNames())
-            maxTextLength = Math.max(FontUtils.measureText(font, buildingName), maxTextLength);
-
-        float additionLength = FontUtils.measureText(font, sNumberFormatTemplate.replaceAll("'", ""));
-        return lengthWithoutText + maxTextLength + additionLength;
-    }
-
     private void initBuildingPopupForTeam(String teamName) {
         ITeam team = TeamsHolder.getInstance().getElement(teamName);
-        IRace race = team.getTeamRace();
-        mItems = new ArrayList<BuildingsPopupItem>(team.getTeamRace().getBuildingsAmount());
-        // init elements
-        float width = mPopupRectangle.getWidth();
-        for (int buildingId = 0; buildingId < race.getBuildingsAmount(); buildingId++) {
-            BuildingsPopupItem item = new BuildingsPopupItem(buildingId,
-                    0, buildingId * POPUP_ELEMENT_HEIGHT, width, POPUP_ELEMENT_HEIGHT);
-            mItems.add(item.init());
-            mPopupRectangle.attachChild(item);
+        mItems = new HashMap<Integer, PopupItemFactory.BuildingPopupItem>(team.getTeamRace().getBuildingsAmount());
+
+        syncBuildingsWithTeam(teamName);
+    }
+
+    private void syncBuildingsWithTeam(String teamName) {
+        final ITeam team = TeamsHolder.getTeam(teamName);
+        BuildingId[] buildings = team.getBuildingsIds();
+        String raceName = team.getTeamRace().getRaceName();
+        for (int i = 0; i < buildings.length; i++) {
+            // if building which should be on this position is not created at all
+            if (!mItems.containsKey(i)) {
+                IEntity item = constructPopupItem(i, buildings[i], raceName);
+                mPopupRectangle.attachChild(item);
+                continue;
+            }
+
+            // if building on position exist, we check it's upgrade to be sure that it's needed building
+            if (mItems.get(i).getBuildingId().getUpgrade() != buildings[i].getUpgrade()) {
+                mPopupRectangle.detachChild(mItems.get(i).getItemEntity());
+                IEntity item = constructPopupItem(i, buildings[i], raceName);
+                mPopupRectangle.attachChild(item);
+            }
         }
+    }
+
+    private IEntity constructPopupItem(final int serialNumber, final BuildingId buildingId, String raceName) {
+        PopupItemFactory.BuildingPopupItem item = PopupItemFactory.createBuildingPopupItem(
+                0, serialNumber * SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT,
+                mPopupRectangle.getVertexBufferObjectManager());
+        item.setBuildingId(buildingId, raceName);
+        item.setOnClickListener(new TouchUtils.OnClickListener() {
+            @Override
+            public void onClick() {
+                LoggerHelper.printDebugMessage(TAG, "showPopup building description");
+                if (mIsPopupShowing) {
+                    hidePopup();
+                }
+                EventBus.getDefault().post(new BuildingDescriptionShowEvent(buildingId, mTeamName));
+            }
+        });
+        mItems.put(serialNumber, item);
+        return item.getItemEntity();
     }
 
     public static void loadResource(Context context, TextureManager textureManager) {
@@ -110,51 +113,9 @@ public abstract class BuildingsPopupHud extends PopupHud {
         }
     }
 
-    /** represent popup item */
-    private class BuildingsPopupItem extends ButtonSprite {
-        private Sprite mStaticObject;
-        private Text mText;
-        private int mObjectId;
-
-        private BuildingsPopupItem(int objectId, float x, float y, float width, float height) {
-            super(x, y,
-                    (ITiledTextureRegion) TextureRegionHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.FILE_POPUP_BACKGROUND_ITEM),
-                    mPopupRectangle.getVertexBufferObjectManager());
-            setWidth(width);
-            setHeight(height);
-
-            CreepBuildingDummy dummy = (TeamsHolder.getInstance().getElement(mTeamName))
-                    .getTeamRace().getBuildingDummy((mObjectId = objectId));
-            mStaticObject = new Sprite(SizeConstants.BUILDING_POPUP_IMAGE_PADDING, SizeConstants.BUILDING_POPUP_IMAGE_PADDING,
-                    ITEM_IMAGE_WIDTH, ITEM_IMAGE_HEIGHT, dummy.getTextureRegion(), getVertexBufferObjectManager());
-
-            initText(dummy.getNameId(), dummy.getCost());
-        }
-
-        private void initText(int objectNameId, int cost) {
-            String textString = sNumberFormat.format(cost) + LocaleImpl.getInstance().getStringById(objectNameId);
-            IFont font = FontHolderUtils.getInstance().getElement(FONT);
-            mText = new Text(SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT,
-                    SizeConstants.BUILDING_POPUP_ELEMENT_HEIGHT + SizeConstants.BUILDING_POPUP_IMAGE_PADDING - font.getLineHeight(),
-                    font, textString, getVertexBufferObjectManager());
-        }
-
-        public BuildingsPopupItem init() {
-            attachChild(mStaticObject);
-            attachChild(mText);
-
-            setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                    LoggerHelper.printDebugMessage(TAG, "showPopup building description");
-                    if (mIsPopupShowing) {
-                        hidePopup();
-                    }
-                    EventBus.getDefault().post(new BuildingDescriptionShowEvent(mObjectId, mTeamName));
-                }
-            });
-
-            return this;
-        }
+    @Override
+    protected synchronized void showPopup() {
+        syncBuildingsWithTeam(mTeamName);
+        super.showPopup();
     }
 }

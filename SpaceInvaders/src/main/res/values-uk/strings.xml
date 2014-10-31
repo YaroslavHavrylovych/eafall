@@ -46,7 +46,9 @@
     <!-- description popup -->
 
     <!-- buildings -->
-    <string name="description_build">Побудувати</string>
+    <string name="description_build_button">Побудувати</string>
+    <string name="description_back_button">Повернутись</string>
+    <string name="description_upgrade_button">Прокачати</string>
     <string name="description_cost">Ціна :</string>
     <string name="description_produce">Створює :</string>
     <string name="description_unit_producing_time">Час створення юніта :</string>

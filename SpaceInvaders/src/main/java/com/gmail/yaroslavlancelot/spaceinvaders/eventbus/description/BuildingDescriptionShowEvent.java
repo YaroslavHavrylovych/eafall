@@ -1,16 +1,18 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description;
 
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
+
 public class BuildingDescriptionShowEvent {
-    private int mObjectId;
+    private BuildingId mBuildingId;
     private String mTeamName;
 
-    public BuildingDescriptionShowEvent(int objectId, String teamName) {
-        mObjectId = objectId;
+    public BuildingDescriptionShowEvent(BuildingId buildingId, String teamName) {
+        mBuildingId = buildingId;
         mTeamName = teamName;
     }
 
-    public int getObjectId() {
-        return mObjectId;
+    public BuildingId getObjectId() {
+        return mBuildingId;
     }
 
     public String getTeamName() {

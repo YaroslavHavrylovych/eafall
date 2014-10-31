@@ -1,13 +1,16 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
-import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.UnitDescriptionShowEvent;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.CreepBuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.BuildingDescriptionShowEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.UnitByBuildingDescriptionShowEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.CreepBuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.UnitDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.DescriptionText;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.BaseDescriptionAreaUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.RacesHolder;
+import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.visualelements.text.Link;
 
@@ -28,7 +31,9 @@ public class BuildingDescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
     /* values changed with each #updateDescription call */
     private DescriptionText mCostValue;
     private DescriptionText mUnitCreationTimeValue;
+    private DescriptionText mUpgradeText;
     private Link mProducedUnitLink;
+    private Link mUpgradeLink;
 
     public BuildingDescriptionAreaUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         // cost
@@ -41,30 +46,54 @@ public class BuildingDescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
         text = createDescriptionText(2, R.string.description_unit_producing_time, vertexBufferObjectManager);
         mUnitCreationTimeValue = createDescriptionText(text.getWidth() + mSpace, text.getY(), "8", vertexBufferObjectManager);
         // upgrade
-        text = createDescriptionText(3, R.string.description_upgrade, vertexBufferObjectManager);
+        text = mUpgradeText = createDescriptionText(3, R.string.description_upgrade, vertexBufferObjectManager);
+        mUpgradeLink = createLink(text.getWidth(), text.getY(), vertexBufferObjectManager);
 
         // touch
         scene.registerTouchArea(mProducedUnitLink);
+        scene.registerTouchArea(mUpgradeLink);
     }
 
     /** update description values (e.g. new building appear) */
     @Override
-    public void updateDescription(RectangularShape drawArea, final int objectId,
+    public void updateDescription(RectangularShape drawArea, Object objectId,
                                   final String raceName, final String teamName) {
+        final BuildingId buildingId = (BuildingId) objectId;
         attach(drawArea);
         IRace race = RacesHolder.getInstance().getElement(raceName);
-        CreepBuildingDummy dummy = race.getBuildingDummy(objectId);
+        CreepBuildingDummy dummy = race.getBuildingDummy(buildingId);
         // cost
-        mCostValue.setText(Integer.toString(dummy.getCost()));
+        mCostValue.setText(Integer.toString(dummy.getCost(buildingId.getUpgrade())));
         // produced unit
-        UnitDummy unitDummy = race.getUnitDummy(objectId);
+        final int unitId = dummy.getUnitId(buildingId.getUpgrade());
+        UnitDummy unitDummy = race.getUnitDummy(unitId);
         mProducedUnitLink.setText(unitDummy.getName());
         mProducedUnitLink.setOnClickListener(new TouchUtils.OnClickListener() {
             @Override
             public void onClick() {
-                EventBus.getDefault().post(new UnitDescriptionShowEvent(objectId, teamName));
+                EventBus.getDefault().post(new UnitByBuildingDescriptionShowEvent(buildingId, teamName));
             }
         });
+        //upgrade
+        if (race.isUpgradeAvailable(buildingId)) {
+            updateUpgradeCost(buildingId, teamName);
+            mUpgradeLink.setOnClickListener(new TouchUtils.OnClickListener() {
+                @Override
+                public void onClick() {
+                    EventBus.getDefault().post(new BuildingDescriptionShowEvent(buildingId.getNextUpgrade(), teamName));
+                }
+            });
+        } else {
+            drawArea.detachChild(mUpgradeText);
+            drawArea.detachChild(mUpgradeLink);
+        }
+    }
+
+    public void updateUpgradeCost(BuildingId buildingId, String teamName) {
+        IRace race = TeamsHolder.getTeam(teamName).getTeamRace();
+        int amount = TeamsHolder.getTeam(teamName).getTeamPlanet().getBuildingsAmount(buildingId.getId());
+        int upgradeCost = amount * race.getUpgradeCost(buildingId);
+        mUpgradeLink.setText(Integer.valueOf(upgradeCost).toString());
     }
 
     @Override

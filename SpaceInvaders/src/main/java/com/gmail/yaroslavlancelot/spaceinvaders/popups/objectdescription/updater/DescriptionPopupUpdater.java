@@ -6,16 +6,16 @@ import org.andengine.entity.text.Text;
 /** used for update object description popup */
 public interface DescriptionPopupUpdater {
     /** update object image */
-    void updateImage(RectangularShape drawArea, int objectId, String raceName, String teamName);
+    void updateImage(RectangularShape drawArea, Object objectId, String raceName, String teamName);
 
     /** update object description */
-    void updateDescription(RectangularShape drawArea, int objectId, String raceName, String teamName);
+    void updateDescription(RectangularShape drawArea, Object objectId, String raceName, String teamName);
 
     /** update addition information area */
-    void updateAdditionInfo(RectangularShape drawArea, int objectId, String raceName, String teamName);
+    void updateAdditionInfo(RectangularShape drawArea, Object objectId, String raceName, String teamName);
 
     /** update described object name */
-    void updateObjectNameText(Text text, int objectId, String raceName);
+    void updateObjectNameText(Text text, Object objectId, String raceName);
 
     /** clear description popup */
     void clear();
@@ -23,7 +23,7 @@ public interface DescriptionPopupUpdater {
     /** updates only description area of the description popup */
     public static interface DescriptionAreaUpdater {
         /** update description area (and attach all items) */
-        void updateDescription(RectangularShape drawArea, final int objectId,
+        void updateDescription(RectangularShape drawArea, final Object objectId,
                                final String raceName, final String teamName);
 
         /** detach all objects (e.g. popup hidden) */

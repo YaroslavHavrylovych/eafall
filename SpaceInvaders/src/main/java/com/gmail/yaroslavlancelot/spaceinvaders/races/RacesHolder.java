@@ -10,6 +10,10 @@ public class RacesHolder extends HolderUtils<IRace> {
     private RacesHolder() {
     }
 
+    public static IRace getRace(String raceName) {
+        return getInstance().getElement(raceName);
+    }
+
     public static RacesHolder getInstance() {
         return sInstance;
     }

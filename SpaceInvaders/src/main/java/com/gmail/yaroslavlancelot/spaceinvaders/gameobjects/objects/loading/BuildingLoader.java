@@ -2,16 +2,20 @@ package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /** read building data from unit-store xml file */
 @Root(name = "building")
 public class BuildingLoader {
-    @Attribute(name = "name")
+    @Attribute(name = "name", required = true)
     public String name;
 
-    @Element(name = "cost")
-    public Integer cost;
+    @Element(name = "id")
+    public Integer id;
 
     @Element(name = "position_x")
     public Integer position_x;
@@ -19,6 +23,10 @@ public class BuildingLoader {
     @Element(name = "position_y")
     public Integer position_y;
 
-    @Element(name = "team_color_area")
-    public TeamColorArea team_color_area;
+    @ElementList(name = "upgrades")
+    List<BuildingUpgradeLoader> mBuildingLoaderList = new ArrayList<BuildingUpgradeLoader>(3);
+
+    public List<BuildingUpgradeLoader> getUpdates() {
+        return mBuildingLoaderList;
+    }
 }

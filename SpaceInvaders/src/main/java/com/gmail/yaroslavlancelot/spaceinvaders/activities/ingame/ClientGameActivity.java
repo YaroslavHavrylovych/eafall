@@ -1,6 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.client.BuildingCreationClientMessage;
@@ -28,10 +29,11 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
     }
 
     @Override
-    protected void userWantCreateBuilding(final ITeam userTeam, final int buildingId) {
+    protected void userWantCreateBuilding(final ITeam userTeam, BuildingId buildingId) {
         LoggerHelper.methodInvocation(TAG, "userWantCreateBuilding");
         try {
-            mGameServerConnector.sendClientMessage(new BuildingCreationClientMessage(userTeam.getTeamName(), buildingId));
+            mGameServerConnector.sendClientMessage(new BuildingCreationClientMessage(
+                    userTeam.getTeamName(), buildingId.getId(), buildingId.getUpgrade()));
             LoggerHelper.printInformationMessage(TAG, "send building request team= " + userTeam.getTeamName() + ", building=" + buildingId + "");
         } catch (IOException e) {
             LoggerHelper.printErrorMessage(TAG, e.getMessage());
@@ -44,11 +46,11 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
     }
 
     @Override
-    public void buildingCreated(final int buildingId, final String teamName) {
+    public void buildingCreated(BuildingId buildingId, final String teamName) {
         LoggerHelper.methodInvocation(TAG, "buildingCreated");
         LoggerHelper.printDebugMessage(TAG, "buildingId=" + buildingId + ", teamName=" + teamName);
         PlanetStaticObject planetStaticObject = TeamsHolder.getInstance().getElement(teamName).getTeamPlanet();
-        planetStaticObject.createBuildingById(buildingId);
+        planetStaticObject.createBuilding(buildingId);
     }
 
     @Override

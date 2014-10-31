@@ -13,25 +13,30 @@ import de.greenrobot.event.EventBus;
 public class UnitCreatorCycle implements ITimerCallback {
     private final int mUnitKey;
     private final String mTeamName;
-    private volatile int mUnitAmount;
+    private volatile int mUnitsAmount;
 
     public UnitCreatorCycle(String teamName, int unitKey) {
-        mTeamName = teamName;
-        mUnitKey = unitKey;
+        this(teamName, unitKey, 0);
     }
 
-    public void increaseUnitAmount() {
-        mUnitAmount++;
+    public UnitCreatorCycle(String teamName, int unitKey, int unitsAmount) {
+        mTeamName = teamName;
+        mUnitKey = unitKey;
+        mUnitsAmount = unitsAmount;
+    }
+
+    public void increaseUnitsAmount() {
+        mUnitsAmount++;
     }
 
     @SuppressWarnings("unused")
-    public int getUnitAmount() {
-        return mUnitAmount;
+    public int getUnitsAmount() {
+        return mUnitsAmount;
     }
 
     @Override
     public void onTimePassed(final TimerHandler pTimerHandler) {
-        for (int i = 0; i < mUnitAmount; i++) {
+        for (int i = 0; i < mUnitsAmount; i++) {
             EventBus.getDefault().post(new CreateUnitEvent(mUnitKey, mTeamName));
         }
     }

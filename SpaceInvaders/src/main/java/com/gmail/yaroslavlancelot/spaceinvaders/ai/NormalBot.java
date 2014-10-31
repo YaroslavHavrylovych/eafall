@@ -1,6 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.ai;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.Building;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.UnitDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
@@ -22,6 +23,8 @@ public class NormalBot implements Runnable {
         mBotTeam = botTeam;
         mUnitsEfficiencyArray = calculateEfficiencyMap(botTeam.getTeamRace(), botTeam.getEnemyTeam().getTeamRace());
     }
+
+    //TODO bot is not working well after my buildingId's manipulations
 
     public static float[][] calculateEfficiencyMap(IRace race1, IRace race2) {
         int race1BuildingsAmount = race1.getBuildingsAmount(),
@@ -63,13 +66,13 @@ public class NormalBot implements Runnable {
                 }
 
                 // start of the game
-                if (mBotTeam.getTeamPlanet().getBuildings().isEmpty()) {
+                if (mBotTeam.getTeamPlanet().getExistingBuildingsTypesAmount() == 0) {
                     buildFirstBuilding();
                     continue;
                 }
 
                 // money amount is very low
-                if (mBotTeam.getMoney() < mBotTeam.getTeamRace().getBuildingCostById(0))
+                if (mBotTeam.getMoney() < mBotTeam.getTeamRace().getBuildingCost(BuildingId.makeId(10, 0)))
                     continue;
 
                 /*
@@ -79,14 +82,17 @@ public class NormalBot implements Runnable {
                  */
                 // get uncovered buildings
                 int[] uncoveredBuildings = getUncoveredBuildings(mBotTeam, mUnitsEfficiencyArray);
-                if (isAllCovered(uncoveredBuildings)) {
-                    // build some building
-                    buildFirstBuilding();
-                } else {
-                    // cover
-                    int buildingId = getBuildingIdToCreate(mBotTeam, mUnitsEfficiencyArray, uncoveredBuildings);
-                    mBotTeam.getTeamPlanet().createBuildingById(buildingId);
+//                if (isAllCovered(uncoveredBuildings)) {
+//                    // build some building
+//                    buildFirstBuilding();
+//                } else {
+                // cover
+                int buildingId = getBuildingIdToCreate(mBotTeam, mUnitsEfficiencyArray, uncoveredBuildings);
+                BuildingId id = BuildingId.makeId((buildingId + 1) * 10, 0);
+                if (mBotTeam.getMoney() >= mBotTeam.getTeamRace().getBuildingCost(id)) {
+                    mBotTeam.getTeamPlanet().createBuilding(id);
                 }
+//                }
             }
         }
     }
@@ -102,17 +108,17 @@ public class NormalBot implements Runnable {
     private void buildFirstBuilding() {
         int money = mBotTeam.getMoney();
         if (money <= 0) return;
-        int income = mBotTeam.getTeamPlanet().getObjectIncomeIncreasingValue();
-        int coolestBuildingBotCanBuildId = 0;
-        for (int i = 0; i < mBotTeam.getTeamRace().getBuildingsAmount(); i++) {
-            if (money + income >= mBotTeam.getTeamRace().getBuildingCostById(coolestBuildingBotCanBuildId)) {
+        int income = mBotTeam.getTeamPlanet().getIncome();
+        int coolestBuildingBotCanBuildId = 1;
+        for (int i = 1; i < mBotTeam.getTeamRace().getBuildingsAmount(); i++) {
+            if (money + income >= mBotTeam.getTeamRace().getBuildingCost(BuildingId.makeId(coolestBuildingBotCanBuildId * 10, 0))) {
                 coolestBuildingBotCanBuildId++;
             }
         }
         if (coolestBuildingBotCanBuildId <= 0) {
             return;
         }
-        mBotTeam.getTeamPlanet().createBuildingById(coolestBuildingBotCanBuildId - 1);
+        mBotTeam.getTeamPlanet().createBuilding(BuildingId.makeId(coolestBuildingBotCanBuildId * 10, 0));
     }
 
     private int[] getUncoveredBuildings(ITeam team, float[][] efficiencyArray) {
@@ -140,12 +146,6 @@ public class NormalBot implements Runnable {
         return buildingsOfRace2;
     }
 
-    private boolean isAllCovered(int[] array) {
-        for (int i = 0; i < array.length; i++)
-            if (array[i] > 0) return false;
-        return true;
-    }
-
     private int getBuildingIdToCreate(ITeam team, float[][] efficiencyArray, int[] uncoveredBuildings) {
         int firstUncoveredBuildingId = 0;
         for (int i = 0; i < uncoveredBuildings.length; i++) {
@@ -163,7 +163,7 @@ public class NormalBot implements Runnable {
             for (int j = 1; efficiencyComparingWithMoneyCost[i] < uncoveredBuildings[firstUncoveredBuildingId]; j++) {
                 result = efficiencyArray[i][firstUncoveredBuildingId] * j;
             }
-            efficiencyComparingWithMoneyCost[i] = result * team.getTeamRace().getBuildingCostById(i);
+            efficiencyComparingWithMoneyCost[i] = result * team.getTeamRace().getBuildingCost(BuildingId.makeId((i + 1) * 10, 0));
             if (efficiencyComparingWithMoneyCost[i] < minValue) {
                 minValue = efficiencyComparingWithMoneyCost[i];
                 minValueId = i;
@@ -175,9 +175,15 @@ public class NormalBot implements Runnable {
     private int[] getBuildings(ITeam team) {
         int[] buildings = new int[team.getTeamRace().getBuildingsAmount()];
         for (int i = 0; i < buildings.length; i++) {
-            PlanetStaticObject.BuildingsHolder buildingsHolder = team.getTeamPlanet().getBuildings().get(new Integer(i));
-            buildings[i] = buildingsHolder == null ? 0 : buildingsHolder.getBuildingsAmount();
+            Building building = team.getTeamPlanet().getBuilding(new Integer(i + 1) * 10);
+            buildings[i] = building == null ? 0 : building.getAmount();
         }
         return buildings;
+    }
+
+    private boolean isAllCovered(int[] array) {
+        for (int i = 0; i < array.length; i++)
+            if (array[i] > 0) return false;
+        return true;
     }
 }

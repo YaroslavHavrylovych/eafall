@@ -25,6 +25,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.ObjectDest
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.PlanetDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.RectangleWithBody;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.SunStaticObject;
@@ -375,7 +376,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
                 (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2,
                 mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_RED_PLANET),
                 GameStringsConstantsAndUtils.KEY_RED_PLANET,
-                mSecondTeam, isFakePlanet
+                mSecondTeam
         ));
         mSecondTeam.getTeamPlanet().setSpawnPoint(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER / 2 -
                         SizeConstants.UNIT_SIZE - 2 - SizeConstants.ADDITION_MARGIN_FOR_PLANET,
@@ -384,9 +385,9 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     }
 
     /** create planet game object */
-    protected PlanetStaticObject createPlanet(float x, float y, ITextureRegion textureRegion, String key, ITeam team, boolean isFakePlanet, long... unitUniqueId) {
+    protected PlanetStaticObject createPlanet(float x, float y, ITextureRegion textureRegion, String key, ITeam team, long... unitUniqueId) {
         LoggerHelper.methodInvocation(TAG, "createPlanet");
-        PlanetStaticObject planetStaticObject = new PlanetStaticObject(x, y, textureRegion, getVertexBufferObjectManager(), team, isFakePlanet);
+        PlanetStaticObject planetStaticObject = new PlanetStaticObject(x, y, textureRegion, getVertexBufferObjectManager(), team);
         planetStaticObject.setObjectDestroyedListener(new PlanetDestroyedListener(team));
         mStaticObjects.put(key, planetStaticObject);
         attachEntity(planetStaticObject);
@@ -403,7 +404,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
                         + SizeConstants.ADDITION_MARGIN_FOR_PLANET,
                 mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_BLUE_PLANET),
                 GameStringsConstantsAndUtils.KEY_BLUE_PLANET,
-                mFirstTeam, isFakePlanet
+                mFirstTeam
         ));
         mFirstTeam.getTeamPlanet().setSpawnPoint(SizeConstants.PLANET_DIAMETER / 2 + SizeConstants.UNIT_SIZE + 2,
                 SizeConstants.GAME_FIELD_HEIGHT / 2 + SizeConstants.ADDITION_MARGIN_FOR_PLANET);
@@ -542,10 +543,10 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     @SuppressWarnings("unused")
     /** really used by {@link de.greenrobot.event.EventBus} */
     public void onEvent(final CreateBuildingEvent createBuildingEvent) {
-        userWantCreateBuilding(TeamsHolder.getInstance().getElement(createBuildingEvent.getTeamName()), createBuildingEvent.getKey());
+        userWantCreateBuilding(TeamsHolder.getInstance().getElement(createBuildingEvent.getTeamName()), createBuildingEvent.getBuildingId());
     }
 
-    protected abstract void userWantCreateBuilding(ITeam userTeam, int buildingId);
+    protected abstract void userWantCreateBuilding(ITeam userTeam, BuildingId buildingId);
 
     @SuppressWarnings("unused")
     /** really used by {@link de.greenrobot.event.EventBus} */
@@ -570,7 +571,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
      */
     protected Unit createThinUnit(int unitKey, ITeam unitTeam, float x, float y, long...
             unitUniqueId) {
-        Unit unit = unitTeam.getTeamRace().getUnitForBuilding(unitKey, unitTeam.getTeamColor());
+        Unit unit = unitTeam.getTeamRace().getUnit(unitKey, unitTeam.getTeamColor());
         unit.setObjectDestroyedListener(new ObjectDestroyedListener(unitTeam));
         unit.setPosition(x, y);
         unitTeam.addObjectToTeam(unit);

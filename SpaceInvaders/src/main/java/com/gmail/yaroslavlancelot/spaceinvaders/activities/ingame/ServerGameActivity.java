@@ -2,7 +2,6 @@ package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
-import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateBuildingEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.GameLoadedEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.MoneyUpdatedEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.GameObjectsContactListener;
@@ -10,6 +9,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IGameObjec
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IUnitFireCallback;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IVelocityChangedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.GameSocketServer;
@@ -46,27 +46,28 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
     }
 
     @Override
-    protected void userWantCreateBuilding(final ITeam userTeam, final int buildingId) {
+    protected PlanetStaticObject createPlanet(float x, float y, ITextureRegion textureRegion, String key, ITeam team, long... uniquesId) {
+        PlanetStaticObject planetStaticObject = super.createPlanet(x, y, textureRegion, key, team, uniquesId);
+        planetStaticObject.setGameObjectHealthChangedListener(this);
+        return planetStaticObject;
+    }
+
+    @Override
+    protected void userWantCreateBuilding(final ITeam userTeam, BuildingId buildingId) {
         LoggerHelper.printInformationMessage(TAG, "user want to create building with id=" + buildingId);
         PlanetStaticObject planetStaticObject = userTeam.getTeamPlanet();
         if (planetStaticObject != null) {
-            boolean isBuildingCreated = userTeam.getTeamPlanet().purchaseBuilding(buildingId);
+            boolean isBuildingCreated = userTeam.getTeamPlanet().createBuilding(buildingId);
             LoggerHelper.printDebugMessage(TAG, "isBuildingCreated=" + isBuildingCreated);
             if (isBuildingCreated) {
                 try {
-                    mGameSocketServer.sendBroadcastServerMessage(new BuildingCreatedServerMessage(buildingId, userTeam.getTeamName()));
+                    mGameSocketServer.sendBroadcastServerMessage(new BuildingCreatedServerMessage(
+                            buildingId.getId(), buildingId.getUpgrade(), userTeam.getTeamName()));
                 } catch (IOException e) {
                     LoggerHelper.printErrorMessage(TAG, "send message (create building on server) IOException");
                 }
             }
         }
-    }
-
-    @Override
-    protected PlanetStaticObject createPlanet(float x, float y, ITextureRegion textureRegion, String key, ITeam team, boolean isFakePlanet, long... uniquesId) {
-        PlanetStaticObject planetStaticObject = super.createPlanet(x, y, textureRegion, key, team, isFakePlanet, uniquesId);
-        planetStaticObject.setGameObjectHealthChangedListener(this);
-        return planetStaticObject;
     }
 
     @Override
