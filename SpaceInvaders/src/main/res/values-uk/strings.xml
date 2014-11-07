@@ -49,10 +49,11 @@
     <string name="description_build_button">Побудувати</string>
     <string name="description_back_button">Повернутись</string>
     <string name="description_upgrade_button">Прокачати</string>
+    <string name="description_path_button">Обрати шлях</string>
     <string name="description_cost">Ціна :</string>
     <string name="description_produce">Створює :</string>
     <string name="description_unit_producing_time">Час створення юніта :</string>
-    <string name="description_upgrade">Апгрейд :</string>
+    <string name="description_upgrade">Ціна прокачки :</string>
 
     <!-- units -->
     <string name="description_building">Будинок :</string>

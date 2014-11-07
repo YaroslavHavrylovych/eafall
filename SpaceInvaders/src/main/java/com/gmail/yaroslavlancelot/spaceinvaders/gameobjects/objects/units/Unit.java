@@ -80,8 +80,8 @@ public class Unit extends GameObject {
         registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new SimpleUnitTimerCallback()));
     }
 
-    public void initMovingPath() {
-        mUnitPath = UnitPathUtil.getUnitPathAccordingToStartAbscissa(getX());
+    public void initMovingPath(boolean ltr, boolean top) {
+        mUnitPath = UnitPathUtil.createUnitPath(ltr, top);
     }
 
     public void setUnitFireCallback(IUnitFireCallback unitFireCallback) {

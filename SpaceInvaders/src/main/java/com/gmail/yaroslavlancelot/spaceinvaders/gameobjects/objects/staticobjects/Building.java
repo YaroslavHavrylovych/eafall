@@ -21,4 +21,10 @@ public interface Building {
 
     /** return building entity */
     IEntity getEntity();
+
+    /** return true if buildings creates units which use top path to go and false in other case */
+    boolean isTopPath();
+
+    /** set true if this building need to produce units which will go by the top path and false in the other case */
+    void setPath(boolean isTop);
 }

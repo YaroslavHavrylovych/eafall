@@ -32,6 +32,8 @@ public class CreepBuilding implements Building {
     private int mUpgrade;
     /** create units */
     private UnitCreatorCycle mUnitCreatorCycle;
+    /** building produce units which will go by the top path */
+    private boolean mIsTopPath = true;
 
     public CreepBuilding(final CreepBuildingDummy dummy, VertexBufferObjectManager objectManager, String teamName) {
         mTeamName = teamName;
@@ -90,7 +92,8 @@ public class CreepBuilding implements Building {
             if (mBuildingsAmount <= 0) {
                 mBuildingsAmount = 0;
                 mBasement.attachChild(mBuilding);
-                mUnitCreatorCycle = new UnitCreatorCycle(mTeamName, mCreepBuildingDummy.getUnitId(mUpgrade));
+                mUnitCreatorCycle = new UnitCreatorCycle(mTeamName,
+                        mCreepBuildingDummy.getUnitId(mUpgrade), isTopPath());
                 mBuilding.registerUpdateHandler(new TimerHandler(20, true, mUnitCreatorCycle));
             }
             mBuildingsAmount++;
@@ -124,7 +127,8 @@ public class CreepBuilding implements Building {
             //upgrade
             team.changeMoney(-cost);
             mBuilding.clearUpdateHandlers();
-            mUnitCreatorCycle = new UnitCreatorCycle(mTeamName, mCreepBuildingDummy.getUnitId(nextUpgrade), mBuildingsAmount);
+            mUnitCreatorCycle = new UnitCreatorCycle(mTeamName, mCreepBuildingDummy.getUnitId(nextUpgrade),
+                    mBuildingsAmount, isTopPath());
         }
         Color teamColor = TeamsHolder.getTeam(mTeamName).getTeamColor();
         VertexBufferObjectManager objectManager = mBuilding.getVertexBufferObjectManager();
@@ -151,5 +155,18 @@ public class CreepBuilding implements Building {
     @Override
     public synchronized IEntity getEntity() {
         return mBasement;
+    }
+
+    @Override
+    public boolean isTopPath() {
+        return mIsTopPath;
+    }
+
+    @Override
+    public void setPath(boolean isTop) {
+        mIsTopPath = isTop;
+        if (mUnitCreatorCycle != null) {
+            mUnitCreatorCycle.setUnitMovementPath(mIsTopPath);
+        }
     }
 }

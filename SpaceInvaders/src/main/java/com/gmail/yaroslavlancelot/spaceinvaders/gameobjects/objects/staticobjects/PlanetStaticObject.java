@@ -71,7 +71,7 @@ public class PlanetStaticObject extends StaticObject {
         if (creepBuilding == null) {
             final CreepBuildingDummy creepBuildingDummy =
                     mPlanetTeam.getTeamRace().getBuildingDummy(buildingId);
-            if(creepBuildingDummy == null) {
+            if (creepBuildingDummy == null) {
                 throw new IllegalArgumentException("no building with id " + buildingId);
             }
             creepBuilding = new CreepBuilding(creepBuildingDummy, getVertexBufferObjectManager(), mPlanetTeam.getTeamName());

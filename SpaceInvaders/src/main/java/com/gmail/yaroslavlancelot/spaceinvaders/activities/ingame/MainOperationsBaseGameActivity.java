@@ -31,6 +31,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobject
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.SunStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.MainSceneTouchListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.PopupManager;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.BuildingsPopupHud;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.ShowBuildingsPopupButtonSprite;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.DescriptionPopupHud;
@@ -46,6 +47,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.MusicAndSoundsHandler;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitCallbacksUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitPathUtil;
 import com.gmail.yaroslavlancelot.spaceinvaders.visualelements.text.MoneyText;
 
 import org.andengine.engine.camera.SmoothCamera;
@@ -226,9 +228,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         }
 
         // other loader
-        BuildingsPopupHud.loadResource(this, getTextureManager());
-        ShowBuildingsPopupButtonSprite.loadResources(this, getTextureManager());
-        DescriptionPopupHud.loadResources(this, getTextureManager());
+        PopupManager.loadResource(this, getTextureManager());
 
         TextureRegionHolderUtils.loadGeneralGameTextures(this, getTextureManager());
 
@@ -264,46 +264,20 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         initSecondPlanet(TeamControlBehaviourType.isClientSide(teamBehaviorType));
 
         initMoneyText();
-        initBuildingsPopupInvocation();
-        initDescriptionPopup();
+        initPopups();
     }
 
-    private void initDescriptionPopup() {
-        DescriptionPopupHud descriptionPopupHud = new DescriptionPopupHud(getVertexBufferObjectManager()) {
-            @Override
-            public void detachPopup() {
-                mHud.clearChildScene();
-            }
-
-            @Override
-            public void attachPopup() {
-                mHud.setChildScene(this);
-            }
-        };
-        descriptionPopupHud.setCamera(mCamera);
-    }
-
-    private void initBuildingsPopupInvocation() {
+    private void initPopups() {
         for (ITeam team : TeamsHolder.getInstance().getElements()) {
             if (team.getTeamControlType() == TeamControlBehaviourType.USER_CONTROL_ON_SERVER_SIDE ||
                     team.getTeamControlType() == TeamControlBehaviourType.USER_CONTROL_ON_CLIENT_SIDE) {
-                final BuildingsPopupHud buildingsPopupHud = new BuildingsPopupHud(team.getTeamName(), getVertexBufferObjectManager()) {
-                    @Override
-                    public void detachPopup() {
-                        mHud.clearChildScene();
-                    }
-
-                    @Override
-                    public void attachPopup() {
-                        mHud.setChildScene(this);
-                    }
-                };
-                buildingsPopupHud.setCamera(mCamera);
+                PopupManager.init(team.getTeamName(), mHud, mCamera, getVertexBufferObjectManager());
+                //buildings
                 ShowBuildingsPopupButtonSprite button = new ShowBuildingsPopupButtonSprite(getVertexBufferObjectManager());
                 button.setOnClickListener(new ButtonSprite.OnClickListener() {
                     @Override
                     public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                        buildingsPopupHud.triggerPopup();
+                        PopupManager.getPopup(BuildingsPopupHud.KEY).triggerPopup();
                     }
                 });
                 mHud.attachChild(button);
@@ -553,16 +527,17 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     public void onEvent(final CreateUnitEvent abstractEntityEvent) {
         int unitKey = abstractEntityEvent.getKey();
         final ITeam team = TeamsHolder.getInstance().getElement(abstractEntityEvent.getTeamName());
-        createUnit(unitKey, team);
+        createUnit(unitKey, team, abstractEntityEvent.isTopPath());
     }
 
     /** create unit with body and update it's enemies and moving path */
-    protected Unit createUnit(int unitKey, final ITeam unitTeam) {
-        Unit warrior = createThinUnit(unitKey, unitTeam,
-                unitTeam.getTeamPlanet().getSpawnPointX(), unitTeam.getTeamPlanet().getSpawnPointY());
+    protected Unit createUnit(int unitKey, final ITeam unitTeam, boolean isTopPath) {
+        float x = unitTeam.getTeamPlanet().getSpawnPointX(),
+                y = unitTeam.getTeamPlanet().getSpawnPointY();
+        Unit warrior = createThinUnit(unitKey, unitTeam, x, y);
         warrior.registerUpdateHandler();
         warrior.setEnemiesUpdater(UnitCallbacksUtils.getSimpleUnitEnemiesUpdater(unitTeam.getEnemyTeam()));
-        warrior.initMovingPath();
+        warrior.initMovingPath(UnitPathUtil.isLtrPath(x), isTopPath);
         return warrior;
     }
 

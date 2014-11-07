@@ -16,6 +16,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
 
 import org.andengine.entity.IEntity;
 import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.scene.Scene;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
@@ -26,15 +27,19 @@ import java.util.Map;
 
 import de.greenrobot.event.EventBus;
 
-public abstract class BuildingsPopupHud extends PopupHud {
+public class BuildingsPopupHud extends PopupHud {
+    /** for logs */
     public static final String TAG = BuildingsPopupHud.class.getCanonicalName();
+    /** for popup manager */
+    public static final String KEY = TAG;
     /** building of this team popup is showing */
     private final String mTeamName;
 
     /** The key is the serial number of the building in the list of the buildings */
     private Map<Integer, PopupItemFactory.BuildingPopupItem> mItems;
 
-    public BuildingsPopupHud(String teamName, VertexBufferObjectManager vertexBufferObjectManager) {
+    public BuildingsPopupHud(String teamName, Scene scene, VertexBufferObjectManager vertexBufferObjectManager) {
+        super(scene);
         ITeam team = TeamsHolder.getInstance().getElement(teamName);
         int buildingsAmount = team.getTeamRace().getBuildingsAmount();
 
@@ -86,9 +91,6 @@ public abstract class BuildingsPopupHud extends PopupHud {
             @Override
             public void onClick() {
                 LoggerHelper.printDebugMessage(TAG, "showPopup building description");
-                if (mIsPopupShowing) {
-                    hidePopup();
-                }
                 EventBus.getDefault().post(new BuildingDescriptionShowEvent(buildingId, mTeamName));
             }
         });
@@ -103,18 +105,8 @@ public abstract class BuildingsPopupHud extends PopupHud {
         smallObjectTexture.load();
     }
 
-    /** will showPopup or hidePopup popup depending on current state */
-    public synchronized void triggerPopup() {
-        LoggerHelper.printDebugMessage(TAG, "showPopup popup = " + !mIsPopupShowing);
-        if (mIsPopupShowing) {
-            hidePopup();
-        } else {
-            showPopup();
-        }
-    }
-
     @Override
-    protected synchronized void showPopup() {
+    public synchronized void showPopup() {
         syncBuildingsWithTeam(mTeamName);
         super.showPopup();
     }

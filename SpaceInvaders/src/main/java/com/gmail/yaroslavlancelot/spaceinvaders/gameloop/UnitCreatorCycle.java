@@ -14,15 +14,21 @@ public class UnitCreatorCycle implements ITimerCallback {
     private final int mUnitKey;
     private final String mTeamName;
     private volatile int mUnitsAmount;
+    private volatile boolean mIsTopPath;
 
-    public UnitCreatorCycle(String teamName, int unitKey) {
-        this(teamName, unitKey, 0);
+    public UnitCreatorCycle(String teamName, int unitKey, boolean isTopPath) {
+        this(teamName, unitKey, 0, isTopPath);
     }
 
-    public UnitCreatorCycle(String teamName, int unitKey, int unitsAmount) {
+    public UnitCreatorCycle(String teamName, int unitKey, int unitsAmount, boolean isTopPath) {
         mTeamName = teamName;
         mUnitKey = unitKey;
         mUnitsAmount = unitsAmount;
+        mIsTopPath = isTopPath;
+    }
+
+    public void setUnitMovementPath(boolean isTopPath) {
+        mIsTopPath = isTopPath;
     }
 
     public void increaseUnitsAmount() {
@@ -37,7 +43,7 @@ public class UnitCreatorCycle implements ITimerCallback {
     @Override
     public void onTimePassed(final TimerHandler pTimerHandler) {
         for (int i = 0; i < mUnitsAmount; i++) {
-            EventBus.getDefault().post(new CreateUnitEvent(mUnitKey, mTeamName));
+            EventBus.getDefault().post(new CreateUnitEvent(mUnitKey, mTeamName, mIsTopPath));
         }
     }
 }

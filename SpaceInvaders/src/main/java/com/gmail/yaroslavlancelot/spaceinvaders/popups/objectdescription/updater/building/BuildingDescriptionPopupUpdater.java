@@ -8,6 +8,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateBuildingEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.UpgradeBuildingEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.UnitByBuildingDescriptionShowEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.unitpath.ShowUnitPathChooser;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.CreepBuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.Building;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
@@ -37,6 +38,7 @@ import de.greenrobot.event.EventBus;
 public class BuildingDescriptionPopupUpdater extends BaseDescriptionPopupUpdater {
     private static final BuildingId sNoValue = null;
     private volatile BuildingId mBuildingId = sNoValue;
+    private static final int BUTTON_MARGIN = 20;
     private volatile String mTeamName = "";
     /** basically used for display buildings amount on building image */
     private AmountDrawer mAmountDrawer;
@@ -44,6 +46,8 @@ public class BuildingDescriptionPopupUpdater extends BaseDescriptionPopupUpdater
     private TextButton mBuildOrBackButton;
     /** press to upgrade building (if such exist) */
     private TextButton mUpgradeButton;
+    /** press to set units path for the current building */
+    private TextButton mPathButton;
     /** image for addition information */
     private Sprite mAdditionDescriptionImage;
     /** building description object (update description area which u pass to it) */
@@ -68,6 +72,10 @@ public class BuildingDescriptionPopupUpdater extends BaseDescriptionPopupUpdater
         mUpgradeButton = new TextButton(vertexBufferObjectManager, 300, 70);
         mUpgradeButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_upgrade_button));
         mScene.registerTouchArea(mUpgradeButton);
+        //upgrade
+        mPathButton = new TextButton(vertexBufferObjectManager, 300, 70);
+        mPathButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_path_button));
+        mScene.registerTouchArea(mPathButton);
     }
 
     private void initAdditionInformationArea() {
@@ -98,6 +106,7 @@ public class BuildingDescriptionPopupUpdater extends BaseDescriptionPopupUpdater
             ((BuildingDescriptionAreaUpdater) mDescriptionAreaUpdater).updateUpgradeCost(
                     buildingsAmountChangedEvent.getBuildingId(), buildingsAmountChangedEvent.getTeamName());
         }
+        mPathButton.setVisible(true);
     }
 
     @Override
@@ -121,6 +130,7 @@ public class BuildingDescriptionPopupUpdater extends BaseDescriptionPopupUpdater
         mAmountDrawer.detach();
         mBuildOrBackButton.detachSelf();
         mUpgradeButton.detachSelf();
+        mPathButton.detachSelf();
         if (mAdditionDescriptionImage != null) {
             mAdditionDescriptionImage.detachSelf(mScene);
             mAdditionDescriptionImage = null;
@@ -144,7 +154,7 @@ public class BuildingDescriptionPopupUpdater extends BaseDescriptionPopupUpdater
     }
 
     @Override
-    public void updateDescription(RectangularShape drawArea, Object objectId, String raceName, String teamName) {
+    public void updateDescription(RectangularShape drawArea, Object objectId, String raceName, final String teamName) {
         IRace race = RacesHolder.getRace(raceName);
         final BuildingId buildingId = (BuildingId) objectId;
         //description
@@ -174,10 +184,10 @@ public class BuildingDescriptionPopupUpdater extends BaseDescriptionPopupUpdater
         mBuildOrBackButton.setPosition(0, drawArea.getHeight() - mBuildOrBackButton.getHeight());
         drawArea.attachChild(mBuildOrBackButton);
         //button upgrade
-        mUpgradeButton.setPosition(mBuildOrBackButton.getX() + mBuildOrBackButton.getWidth() + 20, mBuildOrBackButton.getY());
-        CreepBuildingDummy dummy = race.getBuildingDummy(buildingId);
+        mUpgradeButton.setPosition(mBuildOrBackButton.getX() + mBuildOrBackButton.getWidth() + BUTTON_MARGIN, mBuildOrBackButton.getY());
+        boolean isUpgradeAvailable = race.isUpgradeAvailable(buildingId);
         //check if upgrades available
-        if (race.isUpgradeAvailable(buildingId)) {
+        if (isUpgradeAvailable) {
             drawArea.attachChild(mUpgradeButton);
             mUpgradeButton.setOnClickListener(new ButtonSprite.OnClickListener() {
                 @Override
@@ -185,6 +195,21 @@ public class BuildingDescriptionPopupUpdater extends BaseDescriptionPopupUpdater
                     EventBus.getDefault().post(new UpgradeBuildingEvent(mTeamName, buildingId));
                 }
             });
+        }
+        //button path
+        ButtonSprite button = isUpgradeAvailable ? mUpgradeButton : mBuildOrBackButton;
+        mPathButton.setPosition(button.getX() + button.getWidth() + BUTTON_MARGIN, button.getY());
+        drawArea.attachChild(mPathButton);
+        mPathButton.setOnClickListener(new ButtonSprite.OnClickListener() {
+            @Override
+            public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                EventBus.getDefault().post(new ShowUnitPathChooser(teamName, buildingId.getId()));
+            }
+        });
+        if (building != null && buildingId.getUpgrade() == building.getUpgrade()) {
+            mPathButton.setVisible(true);
+        } else {
+            mPathButton.setVisible(false);
         }
     }
 
