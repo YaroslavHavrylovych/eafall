@@ -5,8 +5,6 @@ import android.content.Context;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.UnitByBuildingDescriptionShowEvent;
-import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.unitpath.HideUnitPathChooser;
-import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.unitpath.ShowUnitPathChooser;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.PopupHud;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building.BuildingDescriptionPopupUpdater;
@@ -31,6 +29,7 @@ import de.greenrobot.event.EventBus;
  */
 public class DescriptionPopupHud extends PopupHud {
     public static final String TAG = DescriptionPopupHud.class.getCanonicalName();
+    public static final String KEY = TAG;
     /** general elements of the popup (background sprite, close button, description image) */
     private DescriptionPopupBackgroundSprite mDescriptionPopupBackgroundSprite;
     /** building updater */
@@ -103,19 +102,6 @@ public class DescriptionPopupHud extends PopupHud {
         ITeam team = TeamsHolder.getInstance().getElement(unitByBuildingDescriptionShowEvent.getTeamName());
         mDescriptionPopupBackgroundSprite.updateDescription(mUnitsDescriptionUpdater, objectId,
                 team.getTeamRace().getRaceName(), team.getTeamName());
-        showPopup();
-    }
-
-
-    @SuppressWarnings("unused")
-    /** really used by {@link de.greenrobot.event.EventBus} */
-    public void onEvent(final ShowUnitPathChooser showUnitPathChooser) {
-        hidePopup();
-    }
-
-    @SuppressWarnings("unused")
-    /** really used by {@link de.greenrobot.event.EventBus} */
-    public void onEvent(final HideUnitPathChooser hideUnitPathChooser) {
         showPopup();
     }
 }

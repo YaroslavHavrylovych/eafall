@@ -31,7 +31,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobject
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.SunStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.MainSceneTouchListener;
-import com.gmail.yaroslavlancelot.spaceinvaders.popups.PathChoosePopup;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.PopupManager;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.BuildingsPopupHud;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.ShowBuildingsPopupButtonSprite;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.DescriptionPopupHud;
@@ -228,10 +228,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         }
 
         // other loader
-        BuildingsPopupHud.loadResource(this, getTextureManager());
-        ShowBuildingsPopupButtonSprite.loadResources(this, getTextureManager());
-        DescriptionPopupHud.loadResources(this, getTextureManager());
-        PathChoosePopup.loadResources(this, getTextureManager());
+        PopupManager.loadResource(this, getTextureManager());
 
         TextureRegionHolderUtils.loadGeneralGameTextures(this, getTextureManager());
 
@@ -267,34 +264,24 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         initSecondPlanet(TeamControlBehaviourType.isClientSide(teamBehaviorType));
 
         initMoneyText();
-        initDescriptionPopup();
-        initServerUserPopups();
+        initPopups();
     }
 
-    private void initDescriptionPopup() {
-        DescriptionPopupHud descriptionPopupHud = new DescriptionPopupHud(mHud, getVertexBufferObjectManager());
-        descriptionPopupHud.setCamera(mCamera);
-    }
-
-    private void initServerUserPopups() {
+    private void initPopups() {
         for (ITeam team : TeamsHolder.getInstance().getElements()) {
             if (team.getTeamControlType() == TeamControlBehaviourType.USER_CONTROL_ON_SERVER_SIDE ||
                     team.getTeamControlType() == TeamControlBehaviourType.USER_CONTROL_ON_CLIENT_SIDE) {
+                PopupManager.init(team.getTeamName(), mHud, mCamera, getVertexBufferObjectManager());
                 //buildings
-                final BuildingsPopupHud buildingsPopupHud = new BuildingsPopupHud(team.getTeamName(), mHud, getVertexBufferObjectManager());
-                buildingsPopupHud.setCamera(mCamera);
                 ShowBuildingsPopupButtonSprite button = new ShowBuildingsPopupButtonSprite(getVertexBufferObjectManager());
                 button.setOnClickListener(new ButtonSprite.OnClickListener() {
                     @Override
                     public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                        buildingsPopupHud.triggerPopup();
+                        PopupManager.getPopup(BuildingsPopupHud.KEY).triggerPopup();
                     }
                 });
                 mHud.attachChild(button);
                 mHud.registerTouchArea(button);
-                //path chooser
-                PathChoosePopup popup = new PathChoosePopup(mHud, getVertexBufferObjectManager());
-                popup.setCamera(mCamera);
             }
         }
     }

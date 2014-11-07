@@ -1,5 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.popups;
 
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
 
 import org.andengine.engine.camera.hud.HUD;
@@ -9,14 +10,17 @@ import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.scene.Scene;
 
 /** Base popups class. Touch on HUD except any hud element will cause popup closing */
-public class PopupHud extends HUD {
+public abstract class PopupHud extends HUD implements IPopup {
+    /** for logs */
+    private static final String TAG = PopupHud.class.getCanonicalName();
     /** represent boolean value which true if popup is showing now and false in other way */
     protected boolean mIsPopupShowing;
     /** area for popup (all other area is transparent) */
     protected Rectangle mPopupRectangle;
     /** popup attached scene */
     private Scene mScene;
-
+    /** state changing intent */
+    private StateChangingListener mStateChangingListener;
 
     public PopupHud(Scene scene) {
         mScene = scene;
@@ -37,7 +41,8 @@ public class PopupHud extends HUD {
      * check is popup is showing and if it's not detach all elements and unregister
      * all touch areas for mPopupRectangle
      */
-    protected synchronized void hidePopup() {
+    @Override
+    public synchronized void hidePopup() {
         if (!mIsPopupShowing) {
             return;
         }
@@ -52,10 +57,13 @@ public class PopupHud extends HUD {
         detachChild(mPopupRectangle);
         unregisterTouchArea(mPopupRectangle);
         mIsPopupShowing = false;
+        if (mStateChangingListener != null) {
+            mStateChangingListener.afterHiding();
+        }
     }
 
     /** detach from the screen */
-    public void detachPopup() {
+    protected void detachPopup() {
         mScene.clearChildScene();
     }
 
@@ -63,9 +71,13 @@ public class PopupHud extends HUD {
      * check if popup is showing and if it's then unregister all touch areas and detach
      * all elements for mPopupRectangle
      */
-    protected synchronized void showPopup() {
+    @Override
+    public synchronized void showPopup() {
         if (mIsPopupShowing) {
             return;
+        }
+        if (mStateChangingListener != null) {
+            mStateChangingListener.beforeShowing();
         }
         attachPopup();
         IEntity child;
@@ -80,8 +92,34 @@ public class PopupHud extends HUD {
         mIsPopupShowing = true;
     }
 
+    /** will showPopup or hidePopup popup depending on current state */
+    @Override
+    public synchronized void triggerPopup() {
+        LoggerHelper.printDebugMessage(TAG, "showPopup popup = " + !mIsPopupShowing);
+        if (mIsPopupShowing) {
+            hidePopup();
+        } else {
+            showPopup();
+        }
+    }
+
+    @Override
+    public boolean isShowing() {
+        return mIsPopupShowing;
+    }
+
     /** attach to the screen */
-    public void attachPopup() {
+    protected void attachPopup() {
         mScene.setChildScene(this);
+    }
+
+    public void setStateChangingListener(StateChangingListener stateChangingListener) {
+        mStateChangingListener = stateChangingListener;
+    }
+
+    public static interface StateChangingListener {
+        void beforeShowing();
+
+        void afterHiding();
     }
 }

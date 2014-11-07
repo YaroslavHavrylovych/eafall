@@ -28,7 +28,10 @@ import java.util.Map;
 import de.greenrobot.event.EventBus;
 
 public class BuildingsPopupHud extends PopupHud {
+    /** for logs */
     public static final String TAG = BuildingsPopupHud.class.getCanonicalName();
+    /** for popup manager */
+    public static final String KEY = TAG;
     /** building of this team popup is showing */
     private final String mTeamName;
 
@@ -88,9 +91,6 @@ public class BuildingsPopupHud extends PopupHud {
             @Override
             public void onClick() {
                 LoggerHelper.printDebugMessage(TAG, "showPopup building description");
-                if (mIsPopupShowing) {
-                    hidePopup();
-                }
                 EventBus.getDefault().post(new BuildingDescriptionShowEvent(buildingId, mTeamName));
             }
         });
@@ -105,18 +105,8 @@ public class BuildingsPopupHud extends PopupHud {
         smallObjectTexture.load();
     }
 
-    /** will showPopup or hidePopup popup depending on current state */
-    public synchronized void triggerPopup() {
-        LoggerHelper.printDebugMessage(TAG, "showPopup popup = " + !mIsPopupShowing);
-        if (mIsPopupShowing) {
-            hidePopup();
-        } else {
-            showPopup();
-        }
-    }
-
     @Override
-    protected synchronized void showPopup() {
+    public synchronized void showPopup() {
         syncBuildingsWithTeam(mTeamName);
         super.showPopup();
     }

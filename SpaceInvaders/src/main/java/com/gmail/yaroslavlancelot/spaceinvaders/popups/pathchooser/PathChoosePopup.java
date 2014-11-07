@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.popups;
+package com.gmail.yaroslavlancelot.spaceinvaders.popups.pathchooser;
 
 import android.content.Context;
 
@@ -6,6 +6,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAn
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.unitpath.HideUnitPathChooser;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.unitpath.ShowUnitPathChooser;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.PopupHud;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
@@ -22,6 +23,7 @@ import de.greenrobot.event.EventBus;
 
 /** */
 public class PathChoosePopup extends PopupHud {
+    public static final String KEY = PathChoosePopup.class.getCanonicalName();
     private CirclePointButton mTopCircle;
     private CirclePointButton mBottomCircle;
     private String mTeamName;
@@ -81,7 +83,7 @@ public class PathChoosePopup extends PopupHud {
     }
 
     @Override
-    protected synchronized void hidePopup() {
+    public synchronized void hidePopup() {
         TeamsHolder.getTeam(mTeamName).getTeamPlanet().getBuilding(mBuildingId)
                 .setPath(mTopCircle.isActive());
         super.hidePopup();
