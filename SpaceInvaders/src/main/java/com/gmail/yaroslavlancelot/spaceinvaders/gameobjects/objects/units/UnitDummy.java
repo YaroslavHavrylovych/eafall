@@ -2,6 +2,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units;
 
 import android.content.Context;
 
+import com.gmail.yaroslavlancelot.spaceinvaders.alliances.imperials.Imperials;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Armor;
@@ -14,7 +15,6 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Da
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.TeamColorArea;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.UnitLoader;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.Imperials;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations;
 
@@ -47,7 +47,7 @@ public class UnitDummy {
 
     public UnitDummy(UnitLoader unitLoader) {
         mUnitLoader = unitLoader;
-        mPathToImage = GameStringsConstantsAndUtils.getPathToUnits(Imperials.RACE_NAME) + mUnitLoader.name + ".png";
+        mPathToImage = GameStringsConstantsAndUtils.getPathToUnits(Imperials.ALLIANCE_NAME) + mUnitLoader.name + ".png";
         mHeight = SizeConstants.UNIT_SIZE;
         mWidth = SizeConstants.UNIT_SIZE;
 
@@ -85,14 +85,14 @@ public class UnitDummy {
         mTextureRegion = TextureRegionHolderUtils.getInstance().getElement(mPathToImage);
     }
 
-    public Unit constructUnit(final VertexBufferObjectManager objectManager, final SoundOperations soundOperations) {
+    public Unit constructUnit(VertexBufferObjectManager objectManager, SoundOperations soundOperations, String allianceName) {
         UnitBuilder unitBuilder = new UnitBuilder(mTextureRegion, soundOperations, objectManager);
 
         unitBuilder.setHealth(getHealth())
                 .setViewRadius(mUnitLoader.view_radius)
                 .setAttackRadius(mUnitLoader.attack_radius)
                 .setReloadTime(mUnitLoader.reload_time)
-                .setSoundPath(GameStringsConstantsAndUtils.getPathToSounds(Imperials.RACE_NAME) + mUnitLoader.sound)
+                .setSoundPath(GameStringsConstantsAndUtils.getPathToSounds(allianceName) + mUnitLoader.sound)
                 .setDamage(mUnitDamage)
                 .setWidth(getWidth())
                 .setHeight(getHeight())

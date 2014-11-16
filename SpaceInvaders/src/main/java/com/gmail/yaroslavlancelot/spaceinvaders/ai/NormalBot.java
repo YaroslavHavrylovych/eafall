@@ -3,7 +3,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.ai;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.Building;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.UnitDummy;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
+import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 
@@ -26,7 +26,7 @@ public class NormalBot implements Runnable {
 
     //TODO bot is not working well after my buildingId's manipulations
 
-    public static float[][] calculateEfficiencyMap(IRace race1, IRace race2) {
+    public static float[][] calculateEfficiencyMap(IAlliance race1, IAlliance race2) {
         int race1BuildingsAmount = race1.getBuildingsAmount(),
                 race2BuildingsAmount = race2.getBuildingsAmount();
         float[][] unitsEfficiencyMap = new float[race1BuildingsAmount][];

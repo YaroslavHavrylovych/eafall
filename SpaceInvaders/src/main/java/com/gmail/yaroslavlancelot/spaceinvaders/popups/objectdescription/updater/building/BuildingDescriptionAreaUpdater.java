@@ -8,8 +8,8 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobject
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.UnitDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.DescriptionText;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.BaseDescriptionAreaUpdater;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.RacesHolder;
+import com.gmail.yaroslavlancelot.spaceinvaders.alliances.AllianceHolder;
+import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.visualelements.text.Link;
@@ -60,7 +60,7 @@ public class BuildingDescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
                                   final String raceName, final String teamName) {
         final BuildingId buildingId = (BuildingId) objectId;
         attach(drawArea);
-        IRace race = RacesHolder.getInstance().getElement(raceName);
+        IAlliance race = AllianceHolder.getInstance().getElement(raceName);
         CreepBuildingDummy dummy = race.getBuildingDummy(buildingId);
         // cost
         mCostValue.setText(Integer.toString(dummy.getCost(buildingId.getUpgrade())));
@@ -90,7 +90,7 @@ public class BuildingDescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
     }
 
     public void updateUpgradeCost(BuildingId buildingId, String teamName) {
-        IRace race = TeamsHolder.getTeam(teamName).getTeamRace();
+        IAlliance race = TeamsHolder.getTeam(teamName).getTeamRace();
         int amount = TeamsHolder.getTeam(teamName).getTeamPlanet().getBuildingsAmount(buildingId.getId());
         amount = amount == 0 ? 1 : amount;
         int upgradeCost = amount * race.getUpgradeCost(buildingId);

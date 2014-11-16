@@ -4,9 +4,9 @@
     <string name="single_game">Одиночна гра</string>
     <string name="multiplayer_game">Мультиплеєрна гра</string>
 
-    <!-- races names -->
-    <string name="app_name">Космічні Загарбники</string>
-    <string name="money_value_prefix">Гроші : </string>
+    <!-- unions -->
+
+    <!-- imperials -->
     <string name="camp">Табір</string>
     <string name="tent">Намет</string>
     <string name="barracks">Бараки</string>
@@ -16,10 +16,23 @@
     <string name="laboratory">Лабораторія</string>
     <string name="bunker">Бункер</string>
 
+    <!-- rebels -->
+    <string name="underground">Сховище</string>
+    <string name="factory">Фабрика</string>
+    <string name="shelter">Криївка</string>
+    <string name="hospital">Лікарня</string>
+    <string name="mine">Шахта</string>
+    <string name="artillery">Артилерія</string>
+    <string name="sabotage_center">Диверсійний центр</string>
+
+    <!-- /unions -->
+
     <!-- settings -->
     <string name="settings">Налаштування</string>
 
     <!-- general -->
+    <string name="app_name">Космічні Загарбники</string>
+    <string name="money_value_prefix">Гроші : </string>
     <string name="exit">Вихід</string>
     <string name="back">Назад</string>
     <string name="connect">З’єднати</string>
@@ -63,4 +76,6 @@
     <string name="description_unique">Особливе :</string>
     <string name="description_attack">А</string>
     <string name="description_defence">З</string>
+
+    <!-- /description popup -->
 </resources>

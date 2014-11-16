@@ -5,7 +5,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourTy
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
+import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
 
 import org.andengine.util.color.Color;
 
@@ -69,7 +69,7 @@ public interface ITeam {
     void incomeTime();
 
     /** get current team race */
-    IRace getTeamRace();
+    IAlliance getTeamRace();
 
     /** return current team color */
     Color getTeamColor();

@@ -7,8 +7,8 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobject
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.UnitDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.DescriptionText;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.BaseDescriptionAreaUpdater;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.RacesHolder;
+import com.gmail.yaroslavlancelot.spaceinvaders.alliances.AllianceHolder;
+import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LocaleImpl;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.visualelements.text.Link;
@@ -56,7 +56,7 @@ public class UnitDescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
     @Override
     public void updateDescription(RectangularShape drawArea, Object objectId, String raceName, final String teamName) {
         final BuildingId buildingId = (BuildingId) objectId;
-        IRace race = RacesHolder.getInstance().getElement(raceName);
+        IAlliance race = AllianceHolder.getInstance().getElement(raceName);
         int unitId = race.getBuildingDummy(buildingId).getUnitId(buildingId.getUpgrade());
 
         attach(drawArea);

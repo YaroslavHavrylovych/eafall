@@ -10,6 +10,10 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.ai.NormalBot;
+import com.gmail.yaroslavlancelot.spaceinvaders.alliances.AllianceHolder;
+import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
+import com.gmail.yaroslavlancelot.spaceinvaders.alliances.imperials.Imperials;
+import com.gmail.yaroslavlancelot.spaceinvaders.alliances.rebels.Rebels;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
@@ -35,9 +39,6 @@ import com.gmail.yaroslavlancelot.spaceinvaders.popups.PopupManager;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.BuildingsPopupHud;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.ShowBuildingsPopupButtonSprite;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.DescriptionPopupHud;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.RacesHolder;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.imperials.Imperials;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.Team;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
@@ -222,9 +223,10 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         mBackgroundMusic = mMusicAndSoundsHandler.new BackgroundMusic(getMusicManager());
 
         //races loadGeneralGameTextures
-        RacesHolder.getInstance().addElement(Imperials.RACE_NAME, new Imperials(getVertexBufferObjectManager(), mMusicAndSoundsHandler));
-        for (IRace race : RacesHolder.getInstance().getElements()) {
-            race.loadResources(getTextureManager(), this);
+        AllianceHolder.getInstance().addElement(Imperials.ALLIANCE_NAME, new Imperials(getVertexBufferObjectManager(), mMusicAndSoundsHandler));
+        AllianceHolder.getInstance().addElement(Rebels.ALLIANCE_NAME, new Rebels(getVertexBufferObjectManager(), mMusicAndSoundsHandler));
+        for (IAlliance race : AllianceHolder.getInstance().getElements()) {
+            race.loadResources(getTextureManager());
         }
 
         // other loader
@@ -252,16 +254,10 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
 
     protected void onInitPlanetsAndTeams() {
         initTeams();
-
-        Intent intent = getIntent();
-
         // first team init
-        TeamControlBehaviourType teamBehaviorType = TeamControlBehaviourType.valueOf(intent.getStringExtra(GameStringsConstantsAndUtils.FIRST_TEAM_NAME));
-        initFirstPlanet(TeamControlBehaviourType.isClientSide(teamBehaviorType));
-
+        initFirstPlanet();
         // second team init
-        teamBehaviorType = TeamControlBehaviourType.valueOf(intent.getStringExtra(GameStringsConstantsAndUtils.SECOND_TEAM_NAME));
-        initSecondPlanet(TeamControlBehaviourType.isClientSide(teamBehaviorType));
+        initSecondPlanet();
 
         initMoneyText();
         initPopups();
@@ -289,9 +285,10 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
 
     protected void initTeams() {
         // red team
-        IRace race = RacesHolder.getInstance().getElement(Imperials.RACE_NAME);
-        mSecondTeam = createTeam(GameStringsConstantsAndUtils.SECOND_TEAM_NAME, race);
-        mFirstTeam = createTeam(GameStringsConstantsAndUtils.FIRST_TEAM_NAME, race);
+        IAlliance race = AllianceHolder.getInstance().getElement(Imperials.ALLIANCE_NAME);
+        mSecondTeam = createTeam(GameStringsConstantsAndUtils.FIRST_TEAM_NAME, race);
+        race = AllianceHolder.getInstance().getElement(Rebels.ALLIANCE_NAME);
+        mFirstTeam = createTeam(GameStringsConstantsAndUtils.SECOND_TEAM_NAME, race);
 
         mSecondTeam.setTeamColor(Color.RED);
         mSecondTeam.setTeamColor(Color.BLUE);
@@ -337,14 +334,14 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     }
 
     /** create new team depending on team control type which stored in extra */
-    protected ITeam createTeam(String teamNameInExtra, IRace race) {
+    protected ITeam createTeam(String teamNameInExtra, IAlliance race) {
         Intent intent = getIntent();
         TeamControlBehaviourType teamType = TeamControlBehaviourType.valueOf(intent.getStringExtra(teamNameInExtra));
         return new Team(teamNameInExtra, race, teamType);
     }
 
     /** init first team and planet */
-    protected void initSecondPlanet(boolean isFakePlanet) {
+    protected void initSecondPlanet() {
         mSecondTeam.setTeamPlanet(createPlanet(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER
                         - SizeConstants.ADDITION_MARGIN_FOR_PLANET,
                 (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2,
@@ -373,7 +370,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     }
 
     /** init second team and planet */
-    protected void initFirstPlanet(boolean isFakePlanet) {
+    protected void initFirstPlanet() {
         mFirstTeam.setTeamPlanet(createPlanet(0, (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2
                         + SizeConstants.ADDITION_MARGIN_FOR_PLANET,
                 mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_BLUE_PLANET),
