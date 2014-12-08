@@ -1,6 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.races;
-
-import android.content.Context;
+package com.gmail.yaroslavlancelot.spaceinvaders.alliances;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.CreepBuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
@@ -13,8 +11,8 @@ import org.andengine.util.color.Color;
 import java.util.SortedSet;
 
 /** abstract race interface */
-public interface IRace {
-    String getRaceName();
+public interface IAlliance {
+    String getAllianceName();
 
     int getBuildingsAmount();
 
@@ -22,7 +20,7 @@ public interface IRace {
 
     Unit getUnit(int unitId, Color teamColor);
 
-    void loadResources(TextureManager textureManager, Context context);
+    void loadResources(TextureManager textureManager);
 
     UnitDummy getUnitDummy(int unitId);
 

@@ -64,7 +64,7 @@ public class BuildingsPopupHud extends PopupHud {
     private void syncBuildingsWithTeam(String teamName) {
         final ITeam team = TeamsHolder.getTeam(teamName);
         BuildingId[] buildings = team.getBuildingsIds();
-        String raceName = team.getTeamRace().getRaceName();
+        String raceName = team.getTeamRace().getAllianceName();
         for (int i = 0; i < buildings.length; i++) {
             // if building which should be on this position is not created at all
             if (!mItems.containsKey(i)) {

@@ -81,7 +81,7 @@ public class DescriptionPopupHud extends PopupHud {
         BuildingId buildingId = buildingDescriptionShowEvent.getObjectId();
         ITeam team = TeamsHolder.getInstance().getElement(buildingDescriptionShowEvent.getTeamName());
         mDescriptionPopupBackgroundSprite.updateDescription(mBuildingDescriptionUpdater, buildingId,
-                team.getTeamRace().getRaceName(), team.getTeamName());
+                team.getTeamRace().getAllianceName(), team.getTeamName());
         showPopup();
     }
 
@@ -101,7 +101,7 @@ public class DescriptionPopupHud extends PopupHud {
         Object objectId = unitByBuildingDescriptionShowEvent.getBuildingId();
         ITeam team = TeamsHolder.getInstance().getElement(unitByBuildingDescriptionShowEvent.getTeamName());
         mDescriptionPopupBackgroundSprite.updateDescription(mUnitsDescriptionUpdater, objectId,
-                team.getTeamRace().getRaceName(), team.getTeamName());
+                team.getTeamRace().getAllianceName(), team.getTeamName());
         showPopup();
     }
 }

@@ -13,8 +13,8 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.Cree
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.Building;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.BaseDescriptionPopupUpdater;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.RacesHolder;
+import com.gmail.yaroslavlancelot.spaceinvaders.alliances.AllianceHolder;
+import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LocaleImpl;
@@ -121,7 +121,7 @@ public class BuildingDescriptionPopupUpdater extends BaseDescriptionPopupUpdater
     @Override
     protected String getDescribedObjectName(Object objectId, String raceName) {
         return LocaleImpl.getInstance().getStringById
-                (RacesHolder.getInstance().getElement(raceName).getBuildingDummy((BuildingId) objectId).getStringId());
+                (AllianceHolder.getInstance().getElement(raceName).getBuildingDummy((BuildingId) objectId).getStringId());
     }
 
     @Override
@@ -143,7 +143,7 @@ public class BuildingDescriptionPopupUpdater extends BaseDescriptionPopupUpdater
 
     @Override
     protected ITextureRegion getDescriptionImage(Object objectId, String raceName) {
-        IRace race = RacesHolder.getInstance().getElement(raceName);
+        IAlliance race = AllianceHolder.getInstance().getElement(raceName);
         BuildingId buildingId = (BuildingId) objectId;
         return race.getBuildingDummy(buildingId).getTextureRegionArray(buildingId.getUpgrade());
     }
@@ -155,7 +155,7 @@ public class BuildingDescriptionPopupUpdater extends BaseDescriptionPopupUpdater
 
     @Override
     public void updateDescription(RectangularShape drawArea, Object objectId, String raceName, final String teamName) {
-        IRace race = RacesHolder.getRace(raceName);
+        IAlliance race = AllianceHolder.getRace(raceName);
         final BuildingId buildingId = (BuildingId) objectId;
         //description
         mDescriptionAreaUpdater.updateDescription(drawArea, objectId, raceName, teamName);
@@ -241,7 +241,7 @@ public class BuildingDescriptionPopupUpdater extends BaseDescriptionPopupUpdater
     }
 
     protected ITextureRegion getAdditionalInformationImage(Object objectId, String raceName) {
-        IRace race = RacesHolder.getRace(raceName);
+        IAlliance race = AllianceHolder.getRace(raceName);
         BuildingId buildingId = (BuildingId) objectId;
         CreepBuildingDummy dummy = race.getBuildingDummy(buildingId);
         final int unitId = dummy.getUnitId(buildingId.getUpgrade());

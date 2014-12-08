@@ -4,9 +4,9 @@
     <string name="single_game">Single game</string>
     <string name="multiplayer_game">Multiplayer game</string>
 
-    <!-- races names -->
-    <string name="app_name">SpaceInvaders</string>
-    <string name="money_value_prefix">Money : </string>
+    <!-- unions -->
+
+    <!-- imperials -->
     <string name="camp">Camp</string>
     <string name="tent">Tent</string>
     <string name="barracks">Barracks</string>
@@ -16,10 +16,24 @@
     <string name="laboratory">Laboratory</string>
     <string name="bunker">Bunker</string>
 
+    <!-- rebels -->
+    <string name="underground">Underground</string>
+    <string name="factory">Factory</string>
+    <string name="shelter">Shelter</string>
+    <string name="hospital">Hospital</string>
+    <string name="mine">Mine</string>
+    <string name="artillery">Artillery</string>
+    <string name="sabotage_center">Sabotage Center</string>
+
+    <!-- /unions -->
+
+
     <!-- settings -->
     <string name="settings">Settings</string>
 
     <!-- general -->
+    <string name="app_name">SpaceInvaders</string>
+    <string name="money_value_prefix">Money : </string>
     <string name="exit">Exit</string>
     <string name="back">Back</string>
     <string name="connect">Connect</string>
@@ -63,4 +77,6 @@
     <string name="description_unique">Unique :</string>
     <string name="description_attack">A</string>
     <string name="description_defence">D</string>
+
+    <!-- /description popup -->
 </resources>

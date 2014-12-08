@@ -2,8 +2,8 @@ package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.update
 
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.BaseDescriptionPopupUpdater;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.RacesHolder;
+import com.gmail.yaroslavlancelot.spaceinvaders.alliances.AllianceHolder;
+import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
 
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.RectangularShape;
@@ -26,7 +26,7 @@ public class UnitsDescriptionPopupUpdater extends BaseDescriptionPopupUpdater {
     @Override
     protected String getDescribedObjectName(Object objectId, String raceName) {
         BuildingId buildingId = (BuildingId) objectId;
-        IRace race = RacesHolder.getInstance().getElement(raceName);
+        IAlliance race = AllianceHolder.getInstance().getElement(raceName);
         int unitId = race.getBuildingDummy(buildingId).getUnitId(buildingId.getUpgrade());
         return race.getUnitDummy(unitId).getName();
     }
@@ -41,7 +41,7 @@ public class UnitsDescriptionPopupUpdater extends BaseDescriptionPopupUpdater {
     @Override
     protected ITextureRegion getDescriptionImage(Object objectId, String raceName) {
         BuildingId buildingId = (BuildingId) objectId;
-        IRace race = RacesHolder.getInstance().getElement(raceName);
+        IAlliance race = AllianceHolder.getInstance().getElement(raceName);
         int unitId = race.getBuildingDummy(buildingId).getUnitId(buildingId.getUpgrade());
         return race.getUnitDummy(unitId).getTextureRegion();
     }

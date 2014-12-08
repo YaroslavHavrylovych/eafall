@@ -4,7 +4,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAn
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.CreepBuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.RacesHolder;
+import com.gmail.yaroslavlancelot.spaceinvaders.alliances.AllianceHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LocaleImpl;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
@@ -67,7 +67,7 @@ public class BuildingsPopupItem extends ButtonSprite implements PopupItemFactory
         mBuildingId = buildingId;
 
         // image
-        CreepBuildingDummy dummy = RacesHolder.getRace(raceName).getBuildingDummy(mBuildingId);
+        CreepBuildingDummy dummy = AllianceHolder.getRace(raceName).getBuildingDummy(mBuildingId);
         mStaticObject = new Sprite(SizeConstants.BUILDING_POPUP_IMAGE_PADDING, SizeConstants.BUILDING_POPUP_IMAGE_PADDING,
                 ITEM_IMAGE_WIDTH, ITEM_IMAGE_HEIGHT,
                 dummy.getTextureRegionArray(mBuildingId.getUpgrade()),

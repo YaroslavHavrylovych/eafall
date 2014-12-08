@@ -1,0 +1,141 @@
+<buildings
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="buildings_schema_definition.xsd">
+    <building name="underground">
+        <id>10</id>
+        <position_x>48</position_x>
+        <position_y>32</position_y>
+        <upgrades>
+            <upgrade id="0">
+                <image_name>camp.png</image_name>
+                <cost>150</cost>
+                <unit_id>0</unit_id>
+                <team_color_area>
+                    <x>4</x>
+                    <y>4</y>
+                    <width>8</width>
+                    <height>8</height>
+                </team_color_area>
+            </upgrade>
+            <upgrade id="1">
+                <image_name>barracks.png</image_name>
+                <cost>200</cost>
+                <unit_id>2</unit_id>
+                <team_color_area>
+                    <x>0</x>
+                    <y>0</y>
+                    <width>16</width>
+                    <height>16</height>
+                </team_color_area>
+            </upgrade>
+        </upgrades>
+    </building>
+    <building name="factory">
+        <id>20</id>
+        <position_x>64</position_x>
+        <position_y>32</position_y>
+        <upgrades>
+            <upgrade id="0">
+                <image_name>tent.png</image_name>
+                <cost>180</cost>
+                <unit_id>1</unit_id>
+                <team_color_area>
+                    <x>7</x>
+                    <y>7</y>
+                    <width>2</width>
+                    <height>2</height>
+                </team_color_area>
+            </upgrade>
+        </upgrades>
+    </building>
+    <building name="shelter">
+        <id>30</id>
+        <position_x>80</position_x>
+        <position_y>48</position_y>
+        <upgrades>
+            <upgrade id="0">
+                <image_name>barracks.png</image_name>
+                <cost>220</cost>
+                <unit_id>2</unit_id>
+                <team_color_area>
+                    <x>0</x>
+                    <y>0</y>
+                    <width>16</width>
+                    <height>16</height>
+                </team_color_area>
+            </upgrade>
+        </upgrades>
+    </building>
+    <building name="hospital">
+        <id>40</id>
+        <position_x>80</position_x>
+        <position_y>64</position_y>
+        <upgrades>
+            <upgrade id="0">
+                <image_name>shooters_hall.png</image_name>
+                <cost>300</cost>
+                <unit_id>3</unit_id>
+                <team_color_area>
+                    <x>6</x>
+                    <y>6</y>
+                    <width>4</width>
+                    <height>4</height>
+                </team_color_area>
+            </upgrade>
+        </upgrades>
+    </building>
+    <building name="mine">
+        <id>50</id>
+        <position_x>64</position_x>
+        <position_y>48</position_y>
+        <upgrades>
+            <upgrade id="0">
+                <image_name>training_center.png</image_name>
+                <cost>340</cost>
+                <unit_id>4</unit_id>
+                <team_color_area>
+                    <x>13</x>
+                    <y>4</y>
+                    <width>2</width>
+                    <height>8</height>
+                </team_color_area>
+            </upgrade>
+        </upgrades>
+    </building>
+    <building name="artillery">
+        <id>60</id>
+        <position_x>48</position_x>
+        <position_y>80</position_y>
+        <upgrades>
+            <upgrade id="0">
+                <image_name>workshop.png</image_name>
+                <cost>360</cost>
+                <unit_id>5</unit_id>
+                <team_color_area>
+                    <x>3</x>
+                    <y>6</y>
+                    <width>10</width>
+                    <height>3</height>
+                </team_color_area>
+            </upgrade>
+        </upgrades>
+    </building>
+    <building name="sabotage_center">
+        <id>70</id>
+        <position_x>32</position_x>
+        <position_y>48</position_y>
+        <upgrades>
+            <upgrade id="0">
+                <image_name>laboratory.png</image_name>
+                <cost>450</cost>
+                <unit_id>6</unit_id>
+                <team_color_area>
+                    <x>0</x>
+                    <y>5</y>
+                    <width>16</width>
+                    <height>11</height>
+                </team_color_area>
+            </upgrade>
+        </upgrades>
+    </building>
+</buildings>

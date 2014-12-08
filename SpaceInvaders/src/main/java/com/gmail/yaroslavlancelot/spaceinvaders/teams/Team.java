@@ -8,7 +8,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.Building;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.races.IRace;
+import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
 
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.util.color.Color;
@@ -30,7 +30,7 @@ public class Team implements ITeam {
     /** current team name */
     private final String mTeamName;
     /** race of current team */
-    private final IRace mTeamRace;
+    private final IAlliance mTeamRace;
     private final AtomicBoolean mIsFirstIncome = new AtomicBoolean(true);
     /** object related to current team */
     private volatile List<GameObject> mTeamObjects;
@@ -47,7 +47,7 @@ public class Team implements ITeam {
     /** array of buildings which team can build */
     private BuildingId[] mBuildingsTypesIds;
 
-    public Team(final String teamName, IRace teamRace, TeamControlBehaviourType teamType) {
+    public Team(final String teamName, IAlliance teamRace, TeamControlBehaviourType teamType) {
         mTeamObjects = new ArrayList<GameObject>(20);
         mTeamName = teamName;
         mTeamRace = teamRace;
@@ -57,7 +57,7 @@ public class Team implements ITeam {
         EventBus.getDefault().register(this);
     }
 
-    private void initBuildingsTypes(IRace teamRace) {
+    private void initBuildingsTypes(IAlliance teamRace) {
         Set<Integer> idSet = teamRace.getBuildingsIds();
         mBuildingsTypesIds = new BuildingId[idSet.size()];
         Iterator<Integer> it = idSet.iterator();
@@ -140,7 +140,7 @@ public class Team implements ITeam {
     }
 
     @Override
-    public IRace getTeamRace() {
+    public IAlliance getTeamRace() {
         return mTeamRace;
     }
 
