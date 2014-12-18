@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.activities;
+package com.gmail.yaroslavlancelot.spaceinvaders.activities.multiplayer;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,7 +6,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
+import com.gmail.yaroslavlancelot.spaceinvaders.activities.BaseNonGameActivity;
 import com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame.ClientGameActivity;
+import com.gmail.yaroslavlancelot.spaceinvaders.alliances.imperials.Imperials;
+import com.gmail.yaroslavlancelot.spaceinvaders.alliances.rebels.Rebels;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.PreGameStartClient;
@@ -44,8 +47,10 @@ public class ClientWaitForGameActivity extends BaseNonGameActivity implements Pr
         GameServerConnector.getGameServerConnector().removePreGameStartCallback(this);
         Intent clientGameIntent = new Intent(ClientWaitForGameActivity.this, ClientGameActivity.class);
         clientGameIntent.
-                putExtra(GameStringsConstantsAndUtils.SECOND_TEAM_NAME, TeamControlBehaviourType.USER_CONTROL_ON_CLIENT_SIDE.toString()).
-                putExtra(GameStringsConstantsAndUtils.FIRST_TEAM_NAME, TeamControlBehaviourType.REMOTE_CONTROL_ON_CLIENT_SIDE.toString());
+                putExtra(GameStringsConstantsAndUtils.SECOND_TEAM_CONTROL_BEHAVIOUR_TYPE, TeamControlBehaviourType.USER_CONTROL_ON_CLIENT_SIDE.toString()).
+                putExtra(GameStringsConstantsAndUtils.SECOND_TEAM_ALLIANCE, Rebels.ALLIANCE_NAME).
+                putExtra(GameStringsConstantsAndUtils.FIRST_TEAM_ALLIANCE, Imperials.ALLIANCE_NAME).
+                putExtra(GameStringsConstantsAndUtils.FIRST_TEAM_CONTROL_BEHAVIOUR_TYPE, TeamControlBehaviourType.REMOTE_CONTROL_ON_CLIENT_SIDE.toString());
         startActivity(clientGameIntent);
     }
 

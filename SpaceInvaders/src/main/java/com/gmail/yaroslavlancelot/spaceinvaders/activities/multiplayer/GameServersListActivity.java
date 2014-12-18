@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.activities;
+package com.gmail.yaroslavlancelot.spaceinvaders.activities.multiplayer;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
+import com.gmail.yaroslavlancelot.spaceinvaders.activities.BaseNonGameActivity;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.client.ConnectionEstablishClientMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.PreGameStartClient;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.connector.GameServerConnector;

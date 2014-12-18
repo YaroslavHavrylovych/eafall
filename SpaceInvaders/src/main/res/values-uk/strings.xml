@@ -4,8 +4,20 @@
     <string name="single_game">Одиночна гра</string>
     <string name="multiplayer_game">Мультиплеєрна гра</string>
 
-    <!-- unions -->
+    <!-- pre game customizations -->
+    <string name="choose_alliance">Союзи</string>
 
+    <string-array name="alliances">
+        <item>Імперці</item>
+        <item>Повстанці</item>
+        <item>Мутанти</item>
+    </string-array>
+
+    <string name="planet1">Планета 1</string>
+    <string name="planet2">Планета 2</string>
+    <!-- /pre game customizations -->
+
+    <!-- unions -->
     <!-- imperials -->
     <string name="camp">Табір</string>
     <string name="tent">Намет</string>

@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- pre game customization -->
+    <dimen name="pre_game_margin_top">100dp</dimen>
+    <dimen name="pre_game_margin_left">50dp</dimen>
+    <dimen name="pre_game_padding">20dp</dimen>
+
     <!-- startup screen -->
     <dimen name="startup_screen_button_width">200dp</dimen>
     <dimen name="startup_screen_space_between_buttons">12dp</dimen>

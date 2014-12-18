@@ -7,7 +7,7 @@
         <position_y>32</position_y>
         <upgrades>
             <upgrade id="0">
-                <image_name>camp.png</image_name>
+                <image_name>workshop.png</image_name>
                 <cost>150</cost>
                 <unit_id>0</unit_id>
                 <team_color_area>
@@ -18,7 +18,7 @@
                 </team_color_area>
             </upgrade>
             <upgrade id="1">
-                <image_name>barracks.png</image_name>
+                <image_name>workshop.png</image_name>
                 <cost>200</cost>
                 <unit_id>2</unit_id>
                 <team_color_area>
@@ -36,7 +36,7 @@
         <position_y>32</position_y>
         <upgrades>
             <upgrade id="0">
-                <image_name>tent.png</image_name>
+                <image_name>workshop.png</image_name>
                 <cost>180</cost>
                 <unit_id>1</unit_id>
                 <team_color_area>
@@ -54,7 +54,7 @@
         <position_y>48</position_y>
         <upgrades>
             <upgrade id="0">
-                <image_name>barracks.png</image_name>
+                <image_name>workshop.png</image_name>
                 <cost>220</cost>
                 <unit_id>2</unit_id>
                 <team_color_area>
@@ -72,7 +72,7 @@
         <position_y>64</position_y>
         <upgrades>
             <upgrade id="0">
-                <image_name>shooters_hall.png</image_name>
+                <image_name>workshop.png</image_name>
                 <cost>300</cost>
                 <unit_id>3</unit_id>
                 <team_color_area>
@@ -90,7 +90,7 @@
         <position_y>48</position_y>
         <upgrades>
             <upgrade id="0">
-                <image_name>training_center.png</image_name>
+                <image_name>workshop.png</image_name>
                 <cost>340</cost>
                 <unit_id>4</unit_id>
                 <team_color_area>
@@ -126,7 +126,7 @@
         <position_y>48</position_y>
         <upgrades>
             <upgrade id="0">
-                <image_name>laboratory.png</image_name>
+                <image_name>workshop.png</image_name>
                 <cost>450</cost>
                 <unit_id>6</unit_id>
                 <team_color_area>
