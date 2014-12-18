@@ -5,9 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
-import com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame.SinglePlayerGameActivity;
-import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
-import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
+import com.gmail.yaroslavlancelot.spaceinvaders.activities.multiplayer.GameServersListActivity;
+import com.gmail.yaroslavlancelot.spaceinvaders.activities.singleplayer.PreGameCustomizationActivity;
 
 /**
  * first game activity with menu etc.
@@ -32,10 +31,7 @@ public class StartupActivity extends BaseNonGameActivity {
         singleGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                Intent singleGameIntent = new Intent(StartupActivity.this, SinglePlayerGameActivity.class);
-                singleGameIntent.
-                        putExtra(GameStringsConstantsAndUtils.FIRST_TEAM_NAME, TeamControlBehaviourType.USER_CONTROL_ON_SERVER_SIDE.toString()).
-                        putExtra(GameStringsConstantsAndUtils.SECOND_TEAM_NAME, TeamControlBehaviourType.BOT_CONTROL_ON_SERVER_SIDE.toString());
+                Intent singleGameIntent = new Intent(StartupActivity.this, PreGameCustomizationActivity.class);
                 startActivity(singleGameIntent);
             }
         });

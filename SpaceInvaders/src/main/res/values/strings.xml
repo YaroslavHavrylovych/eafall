@@ -4,8 +4,20 @@
     <string name="single_game">Single game</string>
     <string name="multiplayer_game">Multiplayer game</string>
 
-    <!-- unions -->
+    <!-- pre game customizations -->
+    <string name="choose_alliance">Alliance</string>
 
+    <string-array name="alliances">
+        <item>Imperials</item>
+        <item>Rebels</item>
+        <item>Mutants</item>
+    </string-array>
+
+    <string name="planet1">Planet 1</string>
+    <string name="planet2">Planet 2</string>
+    <!-- /pre game customizations -->
+
+    <!-- unions -->
     <!-- imperials -->
     <string name="camp">Camp</string>
     <string name="tent">Tent</string>

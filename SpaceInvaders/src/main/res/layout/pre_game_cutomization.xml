@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/pre_game_parent">
+
+    <TextView
+        android:id="@+id/choose_planet_1"
+        android:clickable="false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/planet1"
+        android:layout_marginTop="@dimen/pre_game_margin_top"
+        android:layout_marginStart="@dimen/pre_game_margin_left"
+        android:layout_marginLeft="@dimen/pre_game_margin_left"/>
+
+    <Spinner
+        android:id="@+id/choose_alliance_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/pre_game_margin_top"
+        android:layout_marginStart="@dimen/pre_game_padding"
+        android:layout_marginLeft="@dimen/pre_game_padding"
+        android:layout_toEndOf="@+id/choose_planet_1"
+        android:layout_toRightOf="@+id/choose_planet_1"
+        android:entries="@array/alliances"
+        android:prompt="@string/choose_alliance"/>
+
+    <TextView
+        android:id="@+id/choose_planet_2"
+        android:clickable="false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/planet2"
+        android:layout_marginTop="@dimen/pre_game_padding"
+        android:layout_marginStart="@dimen/pre_game_margin_left"
+        android:layout_marginLeft="@dimen/pre_game_margin_left"
+        android:layout_below="@id/choose_alliance_1"/>
+
+    <Spinner
+        android:id="@+id/choose_alliance_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/pre_game_padding"
+        android:layout_marginStart="@dimen/pre_game_padding"
+        android:layout_marginLeft="@dimen/pre_game_padding"
+        android:layout_below="@id/choose_alliance_1"
+        android:layout_toEndOf="@+id/choose_planet_2"
+        android:layout_toRightOf="@+id/choose_planet_2"
+        android:entries="@array/alliances"
+        android:prompt="@string/choose_alliance"/>
+
+    <Button
+        android:id="@id/start_game"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="48dp"/>
+</RelativeLayout>

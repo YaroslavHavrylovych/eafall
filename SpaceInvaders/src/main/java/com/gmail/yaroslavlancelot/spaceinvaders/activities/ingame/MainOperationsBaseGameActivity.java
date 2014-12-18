@@ -223,8 +223,11 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         mBackgroundMusic = mMusicAndSoundsHandler.new BackgroundMusic(getMusicManager());
 
         //races loadGeneralGameTextures
-        AllianceHolder.getInstance().addElement(Imperials.ALLIANCE_NAME, new Imperials(getVertexBufferObjectManager(), mMusicAndSoundsHandler));
-        AllianceHolder.getInstance().addElement(Rebels.ALLIANCE_NAME, new Rebels(getVertexBufferObjectManager(), mMusicAndSoundsHandler));
+        Intent intent = getIntent();
+        AllianceHolder.addAllianceByName(intent.getStringExtra(GameStringsConstantsAndUtils.FIRST_TEAM_ALLIANCE),
+                getVertexBufferObjectManager(), mMusicAndSoundsHandler);
+        AllianceHolder.addAllianceByName(intent.getStringExtra(GameStringsConstantsAndUtils.SECOND_TEAM_ALLIANCE),
+                getVertexBufferObjectManager(), mMusicAndSoundsHandler);
         for (IAlliance race : AllianceHolder.getInstance().getElements()) {
             race.loadResources(getTextureManager());
         }
@@ -285,10 +288,14 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
 
     protected void initTeams() {
         // red team
-        IAlliance race = AllianceHolder.getInstance().getElement(Imperials.ALLIANCE_NAME);
-        mSecondTeam = createTeam(GameStringsConstantsAndUtils.FIRST_TEAM_NAME, race);
-        race = AllianceHolder.getInstance().getElement(Rebels.ALLIANCE_NAME);
-        mFirstTeam = createTeam(GameStringsConstantsAndUtils.SECOND_TEAM_NAME, race);
+
+        Intent intent = getIntent();
+        IAlliance race = AllianceHolder.getInstance().getElement(
+                        intent.getStringExtra(GameStringsConstantsAndUtils.FIRST_TEAM_ALLIANCE));
+        mSecondTeam = createTeam(GameStringsConstantsAndUtils.FIRST_TEAM_CONTROL_BEHAVIOUR_TYPE, race);
+        race = AllianceHolder.getInstance().getElement(
+                intent.getStringExtra(GameStringsConstantsAndUtils.SECOND_TEAM_ALLIANCE));
+        mFirstTeam = createTeam(GameStringsConstantsAndUtils.SECOND_TEAM_CONTROL_BEHAVIOUR_TYPE, race);
 
         mSecondTeam.setTeamColor(Color.RED);
         mSecondTeam.setTeamColor(Color.BLUE);
@@ -320,7 +327,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     protected void initTeamFixtureDef(ITeam team) {
         TeamControlBehaviourType type = team.getTeamControlType();
         boolean isRemote = TeamControlBehaviourType.isClientSide(type);
-        if (team.getTeamName().equals(GameStringsConstantsAndUtils.FIRST_TEAM_NAME)) {
+        if (team.getTeamName().equals(GameStringsConstantsAndUtils.FIRST_TEAM_CONTROL_BEHAVIOUR_TYPE)) {
             if (isRemote)
                 team.changeFixtureDefFilter(CollisionCategoriesConstants.CATEGORY_TEAM1, CollisionCategoriesConstants.MASKBITS_TEAM1_THIN);
             else

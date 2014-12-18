@@ -4,8 +4,8 @@ import android.app.Activity;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.HolderUtils;
 
-/** general actions for all non in-game activities */
-public class BaseNonGameActivity extends Activity {
+/** base/parent (general actions) for all non in-game activities */
+public abstract class BaseNonGameActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();

@@ -1,7 +1,7 @@
 <units
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="units_schema_definition.xsd">
-    <unit name="scout">
+    <unit name="robot">
         <health>300</health>
         <armor>magnetic</armor>
         <armor_value>2</armor_value>
@@ -35,7 +35,7 @@
             <height>8</height>
         </team_color_area>
     </unit>
-    <unit name="infantrymen">
+    <unit name="robot">
         <health>700</health>
         <armor>physical</armor>
         <armor_value>10</armor_value>
@@ -52,7 +52,7 @@
             <height>3</height>
         </team_color_area>
     </unit>
-    <unit name="agent">
+    <unit name="robot">
         <health>400</health>
         <armor>electrical</armor>
         <armor_value>5</armor_value>
@@ -69,7 +69,7 @@
             <height>6</height>
         </team_color_area>
     </unit>
-    <unit name="conscript">
+    <unit name="robot">
         <health>450</health>
         <armor>physical</armor>
         <armor_value>5</armor_value>
@@ -86,7 +86,7 @@
             <height>3</height>
         </team_color_area>
     </unit>
-    <unit name="demolisher">
+    <unit name="robot">
         <health>200</health>
         <armor>magnetic</armor>
         <armor_value>1</armor_value>
@@ -103,7 +103,7 @@
             <height>4</height>
         </team_color_area>
     </unit>
-    <unit name="superman">
+    <unit name="robot">
         <health>1000</health>
         <armor>higgs_shield</armor>
         <armor_value>10</armor_value>
