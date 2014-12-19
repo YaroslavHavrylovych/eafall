@@ -6,11 +6,6 @@ import com.gmail.yaroslavlancelot.spaceinvaders.alliances.imperials.Imperials;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Armor;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Electrical;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.HeavyWater;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Higgs;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Magnetic;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Physical;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Damage;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.TeamColorArea;
@@ -52,32 +47,11 @@ public class UnitDummy {
         mWidth = SizeConstants.UNIT_SIZE;
 
         mUnitDamage = new Damage(mUnitLoader.damage, mUnitLoader.damage_value);
-        mUnitArmor = getUnitArmor(mUnitLoader.armor_value, mUnitLoader.armor);
+        mUnitArmor = new Armor(mUnitLoader.armor, mUnitLoader.armor_value);
 
         TeamColorArea area = mUnitLoader.team_color_area;
         mTeamColorArea = new Area(area.x, area.y, area.width, area.height);
         mUnitLoader.team_color_area = null;
-    }
-
-    private static Armor getUnitArmor(int value, String name) {
-        switch (Armor.ArmorType.valueOf(name.toUpperCase())) {
-            case PHYSICAL: {
-                return new Physical(value);
-            }
-            case ELECTRICAL: {
-                return new Electrical(value);
-            }
-            case HEAVY_WATER_SHIELD: {
-                return new HeavyWater(value);
-            }
-            case HIGGS_SHIELD: {
-                return new Higgs(value);
-            }
-            case MAGNETIC: {
-                return new Magnetic(value);
-            }
-        }
-        throw new IllegalArgumentException("unknown armor type");
     }
 
     public void loadResources(Context context, BitmapTextureAtlas textureAtlas, int x, int y) {

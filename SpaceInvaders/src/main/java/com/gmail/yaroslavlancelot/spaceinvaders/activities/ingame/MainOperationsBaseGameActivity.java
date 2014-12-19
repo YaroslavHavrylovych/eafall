@@ -12,8 +12,6 @@ import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.ai.NormalBot;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.AllianceHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
-import com.gmail.yaroslavlancelot.spaceinvaders.alliances.imperials.Imperials;
-import com.gmail.yaroslavlancelot.spaceinvaders.alliances.rebels.Rebels;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
@@ -27,6 +25,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities.DetachEntityEv
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.GameObjectsContactListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.ObjectDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.PlanetDestroyedListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.RectangleWithBody;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
@@ -162,6 +161,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
                         splashTextureAtlas, this, GameStringsConstantsAndUtils.FILE_SPLASH_SCREEN, 0, 0)
         );
         splashTextureAtlas.load();
+        Armor.initSafetyTable();
 
         onCreateResourcesCallback.onCreateResourcesFinished();
     }
@@ -291,7 +291,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
 
         Intent intent = getIntent();
         IAlliance race = AllianceHolder.getInstance().getElement(
-                        intent.getStringExtra(GameStringsConstantsAndUtils.FIRST_TEAM_ALLIANCE));
+                intent.getStringExtra(GameStringsConstantsAndUtils.FIRST_TEAM_ALLIANCE));
         mSecondTeam = createTeam(GameStringsConstantsAndUtils.FIRST_TEAM_CONTROL_BEHAVIOUR_TYPE, race);
         race = AllianceHolder.getInstance().getElement(
                 intent.getStringExtra(GameStringsConstantsAndUtils.SECOND_TEAM_ALLIANCE));

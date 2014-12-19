@@ -1,7 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Higgs;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.CreepBuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
@@ -28,7 +28,7 @@ public class PlanetStaticObject extends StaticObject {
         super(x, y, textureRegion, objectManager);
         mIncomeIncreasingValue = 10;
         mPlanetTeam = planetTeam;
-        mObjectArmor = new Higgs(2);
+        mObjectArmor = new Armor(Armor.ArmorType.MIXED.name(), 10);
         setWidth(SizeConstants.PLANET_DIAMETER);
         setHeight(SizeConstants.PLANET_DIAMETER);
         initHealth(3000);
