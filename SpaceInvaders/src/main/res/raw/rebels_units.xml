@@ -2,6 +2,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="units_schema_definition.xsd">
     <unit name="robot">
+        <id>0</id>
         <health>300</health>
         <armor>magnetic</armor>
         <armor_value>2</armor_value>
@@ -9,6 +10,7 @@
         <damage_value>30</damage_value>
         <attack_radius>90</attack_radius>
         <view_radius>190</view_radius>
+        <speed>100</speed>
         <reload_time>1.4</reload_time>
         <sound>electrical_1s.ogg</sound>
         <team_color_area>
@@ -19,6 +21,7 @@
         </team_color_area>
     </unit>
     <unit name="robot">
+        <id>1</id>
         <health>500</health>
         <armor>electrical</armor>
         <armor_value>10</armor_value>
@@ -26,6 +29,7 @@
         <damage_value>40</damage_value>
         <attack_radius>110</attack_radius>
         <view_radius>240</view_radius>
+        <speed>100</speed>
         <reload_time>1.0</reload_time>
         <sound>annihilation_1s.ogg</sound>
         <team_color_area>
@@ -36,6 +40,7 @@
         </team_color_area>
     </unit>
     <unit name="robot">
+        <id>2</id>
         <health>700</health>
         <armor>physical</armor>
         <armor_value>10</armor_value>
@@ -43,6 +48,7 @@
         <damage_value>20</damage_value>
         <attack_radius>70</attack_radius>
         <view_radius>190</view_radius>
+        <speed>100</speed>
         <reload_time>1.0</reload_time>
         <sound>electrical_1s.ogg</sound>
         <team_color_area>
@@ -53,6 +59,7 @@
         </team_color_area>
     </unit>
     <unit name="robot">
+        <id>3</id>
         <health>400</health>
         <armor>electrical</armor>
         <armor_value>5</armor_value>
@@ -60,6 +67,7 @@
         <damage_value>60</damage_value>
         <attack_radius>100</attack_radius>
         <view_radius>240</view_radius>
+        <speed>100</speed>
         <reload_time>1.0</reload_time>
         <sound>magnetic_1s.ogg</sound>
         <team_color_area>
@@ -70,6 +78,7 @@
         </team_color_area>
     </unit>
     <unit name="robot">
+        <id>4</id>
         <health>450</health>
         <armor>physical</armor>
         <armor_value>5</armor_value>
@@ -77,6 +86,7 @@
         <damage_value>20</damage_value>
         <attack_radius>70</attack_radius>
         <view_radius>190</view_radius>
+        <speed>100</speed>
         <reload_time>1.7</reload_time>
         <sound>annihilation_1s.ogg</sound>
         <team_color_area>
@@ -87,6 +97,7 @@
         </team_color_area>
     </unit>
     <unit name="robot">
+        <id>5</id>
         <health>200</health>
         <armor>magnetic</armor>
         <armor_value>1</armor_value>
@@ -94,6 +105,7 @@
         <damage_value>50</damage_value>
         <attack_radius>190</attack_radius>
         <view_radius>240</view_radius>
+        <speed>100</speed>
         <reload_time>3.5</reload_time>
         <sound>higgs_3s.ogg</sound>
         <team_color_area>
@@ -104,6 +116,7 @@
         </team_color_area>
     </unit>
     <unit name="robot">
+        <id>6</id>
         <health>1000</health>
         <armor>higgs_shield</armor>
         <armor_value>10</armor_value>
@@ -111,6 +124,7 @@
         <damage_value>60</damage_value>
         <attack_radius>90</attack_radius>
         <view_radius>190</view_radius>
+        <speed>100</speed>
         <reload_time>3.0</reload_time>
         <sound>annihilation_1s.ogg</sound>
         <team_color_area>

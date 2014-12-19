@@ -26,6 +26,6 @@ public class Damage {
     }
 
     public static enum DamageType {
-        RAILGUN, LASER, NEUTRINO_BLASTER, HIGGSON, ANNIHILATOR, QUAKER
+        RAILGUN, LASER, NEUTRINO, HIGGSON, ANNIHILATOR, QUAKER
     }
 }

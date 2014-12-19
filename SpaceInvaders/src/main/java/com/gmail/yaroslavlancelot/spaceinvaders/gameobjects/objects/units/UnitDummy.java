@@ -39,12 +39,15 @@ public class UnitDummy {
     private final Armor mUnitArmor;
     /** unit texture region (do not create it each time when u want to create unit) */
     private ITextureRegion mTextureRegion;
+    /** speed of the unit */
+    private float mUnitSpeed;
 
     public UnitDummy(UnitLoader unitLoader) {
         mUnitLoader = unitLoader;
         mPathToImage = GameStringsConstantsAndUtils.getPathToUnits(Imperials.ALLIANCE_NAME) + mUnitLoader.name + ".png";
         mHeight = SizeConstants.UNIT_SIZE;
         mWidth = SizeConstants.UNIT_SIZE;
+        mUnitSpeed = mUnitLoader.speed / 100;
 
         mUnitDamage = new Damage(mUnitLoader.damage, mUnitLoader.damage_value);
         mUnitArmor = new Armor(mUnitLoader.armor, mUnitLoader.armor_value);
@@ -68,6 +71,7 @@ public class UnitDummy {
                 .setReloadTime(mUnitLoader.reload_time)
                 .setSoundPath(GameStringsConstantsAndUtils.getPathToSounds(allianceName) + mUnitLoader.sound)
                 .setDamage(mUnitDamage)
+                .setSpeed(mUnitSpeed)
                 .setWidth(getWidth())
                 .setHeight(getHeight())
                 .setArmor(mUnitArmor);
@@ -85,6 +89,10 @@ public class UnitDummy {
 
     public int getHeight() {
         return mHeight;
+    }
+
+    public int getId() {
+        return mUnitLoader.id;
     }
 
     public Area getTeamColorArea() {
@@ -105,5 +113,9 @@ public class UnitDummy {
 
     public String getName() {
         return mUnitLoader.name;
+    }
+
+    public float getUnitSpeed() {
+        return mUnitSpeed;
     }
 }

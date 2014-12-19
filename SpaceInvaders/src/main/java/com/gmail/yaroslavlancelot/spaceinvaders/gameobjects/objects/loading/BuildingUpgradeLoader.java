@@ -19,6 +19,9 @@ public class BuildingUpgradeLoader {
     @Element(name = "unit_id")
     public Integer unit_id;
 
+    @Element(name = "building_time")
+    public Integer building_time;
+
     @Element(name = "team_color_area")
     public TeamColorArea team_color_area;
 }

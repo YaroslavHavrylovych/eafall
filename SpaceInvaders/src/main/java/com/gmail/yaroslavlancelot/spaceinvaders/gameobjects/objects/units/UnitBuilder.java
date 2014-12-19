@@ -24,6 +24,7 @@ public class UnitBuilder {
     private String mSoundPath;
     private int mWidth;
     private int mHeight;
+    private float mSpeed;
 
     public UnitBuilder(ITextureRegion textureRegion, SoundOperations soundOperations, VertexBufferObjectManager objectManager) {
         mTextureRegion = textureRegion;
@@ -106,9 +107,17 @@ public class UnitBuilder {
         return this;
     }
 
+    public int getWidth() {
+        return mWidth;
+    }
+
     public UnitBuilder setWidth(int width) {
         mWidth = width;
         return this;
+    }
+
+    public int getHeight() {
+        return mHeight;
     }
 
     public UnitBuilder setHeight(int height) {
@@ -116,11 +125,12 @@ public class UnitBuilder {
         return this;
     }
 
-    public int getWidth() {
-        return mWidth;
+    public float getSpeed() {
+        return mSpeed;
     }
 
-    public int getHeight() {
-        return mHeight;
+    public UnitBuilder setSpeed(float speed) {
+        mSpeed = speed;
+        return this;
     }
 }

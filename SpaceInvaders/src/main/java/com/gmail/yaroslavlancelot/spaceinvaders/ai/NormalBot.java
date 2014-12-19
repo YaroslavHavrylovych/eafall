@@ -21,7 +21,7 @@ public class NormalBot implements Runnable {
     public NormalBot(ITeam botTeam) {
         LoggerHelper.methodInvocation(TAG, "NormalBot");
         mBotTeam = botTeam;
-        mUnitsEfficiencyArray = calculateEfficiencyMap(botTeam.getTeamRace(), botTeam.getEnemyTeam().getTeamRace());
+        mUnitsEfficiencyArray = null;//calculateEfficiencyMap(botTeam.getTeamRace(), botTeam.getEnemyTeam().getTeamRace());
     }
 
     //TODO bot is not working well after my buildingId's manipulations
@@ -57,44 +57,44 @@ public class NormalBot implements Runnable {
 
     @Override
     public void run() {
-        while (mBotTeam.getTeamPlanet() != null) {
-            delay();
-            synchronized (mBotTeam.getTeamPlanet()) {
-                // win
-                if (mBotTeam.getEnemyTeam().getTeamPlanet() == null) {
-                    return;
-                }
-
-                // start of the game
-                if (mBotTeam.getTeamPlanet().getExistingBuildingsTypesAmount() == 0) {
-                    buildFirstBuilding();
-                    continue;
-                }
-
-                // money amount is very low
-                if (mBotTeam.getMoney() < mBotTeam.getTeamRace().getBuildingCost(BuildingId.makeId(10, 0)))
-                    continue;
-
-                /*
-                 * Each building should cover some building from enemy planet.
-                 * So first we create array which contains not covered buildings from enemy planet.
-                 * Then we create buildings which can cover enemies buildings.
-                 */
-                // get uncovered buildings
-                int[] uncoveredBuildings = getUncoveredBuildings(mBotTeam, mUnitsEfficiencyArray);
-//                if (isAllCovered(uncoveredBuildings)) {
-//                    // build some building
-//                    buildFirstBuilding();
-//                } else {
-                // cover
-                int buildingId = getBuildingIdToCreate(mBotTeam, mUnitsEfficiencyArray, uncoveredBuildings);
-                BuildingId id = BuildingId.makeId((buildingId + 1) * 10, 0);
-                if (mBotTeam.getMoney() >= mBotTeam.getTeamRace().getBuildingCost(id)) {
-                    mBotTeam.getTeamPlanet().createBuilding(id);
-                }
+//        while (mBotTeam.getTeamPlanet() != null) {
+//            delay();
+//            synchronized (mBotTeam.getTeamPlanet()) {
+//                // win
+//                if (mBotTeam.getEnemyTeam().getTeamPlanet() == null) {
+//                    return;
 //                }
-            }
-        }
+//
+//                // start of the game
+//                if (mBotTeam.getTeamPlanet().getExistingBuildingsTypesAmount() == 0) {
+//                    buildFirstBuilding();
+//                    continue;
+//                }
+//
+//                // money amount is very low
+//                if (mBotTeam.getMoney() < mBotTeam.getTeamRace().getBuildingCost(BuildingId.makeId(10, 0)))
+//                    continue;
+//
+//                /*
+//                 * Each building should cover some building from enemy planet.
+//                 * So first we create array which contains not covered buildings from enemy planet.
+//                 * Then we create buildings which can cover enemies buildings.
+//                 */
+//                // get uncovered buildings
+//                int[] uncoveredBuildings = getUncoveredBuildings(mBotTeam, mUnitsEfficiencyArray);
+////                if (isAllCovered(uncoveredBuildings)) {
+////                    // build some building
+////                    buildFirstBuilding();
+////                } else {
+//                // cover
+//                int buildingId = getBuildingIdToCreate(mBotTeam, mUnitsEfficiencyArray, uncoveredBuildings);
+//                BuildingId id = BuildingId.makeId((buildingId + 1) * 10, 0);
+//                if (mBotTeam.getMoney() >= mBotTeam.getTeamRace().getBuildingCost(id)) {
+//                    mBotTeam.getTeamPlanet().createBuilding(id);
+//                }
+////                }
+//            }
+//        }
     }
 
     private void delay() {

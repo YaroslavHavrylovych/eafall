@@ -27,11 +27,11 @@ import de.greenrobot.event.EventBus;
 public class Unit extends GameObject {
     public static final String TAG = Unit.class.getCanonicalName();
     /** max velocity for this unit */
-    protected float mMaxVelocity = 1.5f;
+    protected float mMaxVelocity;
     /** update time for current object */
     protected float mUpdateCycleTime = .5f;
     /** delay time between attacks */
-    protected double mTimeForReload = 1.5 * 1000;
+    protected double mTimeForReload;
     /** attack radius of current unit */
     protected int mAttackRadius;
     /** area in which unit can search for enemies */
@@ -64,6 +64,7 @@ public class Unit extends GameObject {
         mObjectDamage = unitBuilder.getDamage();
         mAttackRadius = unitBuilder.getAttackRadius();
         mViewRadius = unitBuilder.getViewRadius();
+        mMaxVelocity = unitBuilder.getSpeed();
         setReloadTime(unitBuilder.getReloadTime());
         initSound(unitBuilder.getSoundPath());
     }

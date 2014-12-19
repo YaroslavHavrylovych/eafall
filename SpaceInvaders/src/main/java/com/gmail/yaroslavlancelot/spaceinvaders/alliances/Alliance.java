@@ -31,7 +31,7 @@ public abstract class Alliance implements IAlliance {
     private static final String TAG = Alliance.class.getCanonicalName();
     protected VertexBufferObjectManager mObjectManager;
     protected SoundOperations mSoundOperations;
-    protected List<UnitDummy> mUnitDummies;
+    protected Map<Integer, UnitDummy> mUnitDummies;
     protected Map<Integer, CreepBuildingDummy> mCreepBuildingDummies;
     protected SortedSet<Integer> mSortedBuildingsSet;
 
@@ -140,7 +140,7 @@ public abstract class Alliance implements IAlliance {
         Context context = SpaceInvadersApplication.getContext();
 
         int unitsAmount = unitListLoader.getList().size();
-        mUnitDummies = new ArrayList<UnitDummy>(unitsAmount);
+        mUnitDummies = new HashMap<Integer, UnitDummy>(unitsAmount);
 
         int textureManagerElementsInLine = (int) Math.round(Math.sqrt(unitsAmount) + 1);
         int size = textureManagerElementsInLine * SizeConstants.UNIT_SIZE;
@@ -155,7 +155,7 @@ public abstract class Alliance implements IAlliance {
             n = (i % textureManagerElementsInLine) * unitDummy.getWidth();
             m = (i / textureManagerElementsInLine) * unitDummy.getHeight();
             unitDummy.loadResources(context, smallObjectTexture, n, m);
-            mUnitDummies.add(unitDummy);
+            mUnitDummies.put(unitDummy.getId(), unitDummy);
         }
         smallObjectTexture.load();
     }

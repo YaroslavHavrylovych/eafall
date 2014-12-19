@@ -24,6 +24,8 @@
                                                                 type="xs:nonNegativeInteger"/>
                                                     <xs:element name="unit_id"
                                                                 type="xs:nonNegativeInteger"/>
+                                                    <xs:element name="building_time"
+                                                                type="xs:nonNegativeInteger"/>
                                                     <xs:element name="team_color_area">
                                                         <xs:complexType>
                                                             <xs:sequence maxOccurs="1"
