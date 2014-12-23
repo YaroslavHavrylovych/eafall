@@ -52,7 +52,7 @@ public class NormalBot implements Runnable {
     }
 
     private static int getArmorDamage(UnitDummy unit1, UnitDummy unit2) {
-        return unit1.getUnitArmor().getDamage(unit2.getDamage());
+        return unit1.getArmor().getDamage(unit2.getDamage());
     }
 
     @Override

@@ -47,7 +47,7 @@ public class UnitAdditionalAreaUpdater extends BaseDescriptionAreaUpdater {
         UnitDummy dummy = race.getUnitDummy(unitId);
         Damage damage = dummy.getDamage();
         mAttack.setText(damage.getDamageValue() + " " + damage.getDamageType());
-        Armor defence = dummy.getUnitArmor();
+        Armor defence = dummy.getArmor();
         mDefence.setText(defence.getArmorValue() + " " + damage.getDamageType());
     }
 }

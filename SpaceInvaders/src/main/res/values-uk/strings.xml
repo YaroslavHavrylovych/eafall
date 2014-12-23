@@ -19,6 +19,7 @@
 
     <!-- unions -->
     <!-- imperials -->
+    <!-- buildings -->
     <string name="camp">Табір</string>
     <string name="tent">Намет</string>
     <string name="barracks">Бараки</string>
@@ -27,6 +28,24 @@
     <string name="workshop">Майстерня</string>
     <string name="laboratory">Лабораторія</string>
     <string name="bunker">Бункер</string>
+    <!-- /buildings -->
+    <!-- units -->
+    <string name="conscript">Призовник</string>
+    <string name="grant">Боєць</string>
+    <string name="sergeant">Сержант</string>
+    <string name="boy_scout">Пластун</string>
+    <string name="scout">Опікун</string>
+    <string name="infantrymen">Піхотинець</string>
+    <string name="SF">СВ</string>
+    <string name="sniper">Снайпер</string>
+    <string name="killer">Вбивця</string>
+    <string name="agent">Агент</string>
+    <string name="spy">Шпигун</string>
+    <string name="robot">Робот</string>
+    <string name="metal_killer">Залізячник</string>
+    <string name="demolisher">Підривник</string>
+    <string name="superman">Супермен</string>
+    <!-- /units -->
 
     <!-- rebels -->
     <string name="underground">Сховище</string>

@@ -112,7 +112,7 @@ public class DescriptionPopupBackgroundSprite extends Sprite {
 
     public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
         //described object name font
-        IFont font = FontFactory.create(fontManager, textureManager, 256, 256,
+        IFont font = FontFactory.create(fontManager, textureManager, 512, 256,
                 Typeface.create(Typeface.DEFAULT, Typeface.BOLD),
                 70f, Color.BLUE);
         font.load();
