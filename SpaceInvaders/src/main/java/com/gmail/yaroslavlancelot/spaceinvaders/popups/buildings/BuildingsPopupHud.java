@@ -2,7 +2,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings;
 
 import android.content.Context;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.StringsAndPathUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
@@ -100,7 +100,7 @@ public class BuildingsPopupHud extends PopupHud {
 
     public static void loadResource(Context context, TextureManager textureManager) {
         BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 1200, 100, TextureOptions.BILINEAR);
-        TextureRegionHolderUtils.addTiledElementFromAssets(GameStringsConstantsAndUtils.FILE_POPUP_BACKGROUND_ITEM,
+        TextureRegionHolderUtils.addTiledElementFromAssets(StringsAndPathUtils.FILE_POPUP_BACKGROUND_ITEM,
                 TextureRegionHolderUtils.getInstance(), smallObjectTexture, context, 0, 0, 2, 1);
         smallObjectTexture.load();
     }

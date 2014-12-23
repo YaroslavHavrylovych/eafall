@@ -1,9 +1,9 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch;
 
-import android.content.Context;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 
+import com.gmail.yaroslavlancelot.spaceinvaders.SpaceInvadersApplication;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.ICameraCoordinates;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
 
@@ -44,9 +44,10 @@ public class MainSceneTouchListener implements IOnSceneTouchListener, ICameraCoo
     /** additional touch listeners that will be invoked after this touch listener finish it's work handling */
     private List<ITouchCallback> mSceneClickListeners = new ArrayList<ITouchCallback>(2);
 
-    public MainSceneTouchListener(SmoothCamera camera, Context context, float screenToSceneRatio) {
+    public MainSceneTouchListener(SmoothCamera camera, float screenToSceneRatio) {
         mCamera = camera;
-        mMapZoomScaleGestureDetector = new ScaleGestureDetector(context, new MapZoomScaleGestureDetector());
+        mMapZoomScaleGestureDetector = new ScaleGestureDetector(
+                SpaceInvadersApplication.getContext(), new MapZoomScaleGestureDetector());
         mCameraCurrentWidth = mCameraMaxWidth = mCamera.getWidth();
         mCameraCurrentHeight = mCameraMaxHeight = mCamera.getHeight();
         mCameraCurrentCenterX = mCamera.getCenterX();

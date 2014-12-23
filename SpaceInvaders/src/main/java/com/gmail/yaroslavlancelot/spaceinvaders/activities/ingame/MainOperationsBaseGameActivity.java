@@ -1,8 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
 import android.content.Intent;
-import android.util.DisplayMetrics;
-import android.view.Display;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -12,10 +10,8 @@ import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.ai.NormalBot;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.AllianceHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
-import com.gmail.yaroslavlancelot.spaceinvaders.alliances.imperials.Imperials;
-import com.gmail.yaroslavlancelot.spaceinvaders.alliances.rebels.Rebels;
-import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.StringsAndPathUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateBuildingEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateCircleBodyEvent;
@@ -31,14 +27,13 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.RectangleWithBody;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.SunStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.MainSceneTouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.PopupManager;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.BuildingsPopupHud;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.ShowBuildingsPopupButtonSprite;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.DescriptionPopupHud;
+import com.gmail.yaroslavlancelot.spaceinvaders.scenes.GameBackgroundScene;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.Team;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
@@ -61,7 +56,6 @@ import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.shape.IAreaShape;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
@@ -106,14 +100,10 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     protected GameObjectsContactListener mContactListener;
     /* splash screen */
     protected Scene mSplashScene;
-    /** contains game obstacles and other static objects */
-    private HashMap<String, StaticObject> mStaticObjects = new HashMap<String, StaticObject>();
     /** game camera */
     private SmoothCamera mCamera;
     /** hold all texture regions used in current game */
     private TextureRegionHolderUtils mTextureRegionHolderUtils;
-    /** main scene touch listener */
-    private MainSceneTouchListener mMainSceneTouchListener;
     /** background theme */
     private MusicAndSoundsHandler mMusicAndSoundsHandler;
     private MusicAndSoundsHandler.BackgroundMusic mBackgroundMusic;
@@ -157,9 +147,9 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         mTextureRegionHolderUtils = TextureRegionHolderUtils.getInstance();
 
         BitmapTextureAtlas splashTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 128, 32, TextureOptions.DEFAULT);
-        mTextureRegionHolderUtils.addElement(GameStringsConstantsAndUtils.KEY_SPLASH_SCREEN,
+        mTextureRegionHolderUtils.addElement(StringsAndPathUtils.KEY_SPLASH_SCREEN,
                 BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-                        splashTextureAtlas, this, GameStringsConstantsAndUtils.FILE_SPLASH_SCREEN, 0, 0)
+                        splashTextureAtlas, this, StringsAndPathUtils.FILE_SPLASH_SCREEN, 0, 0)
         );
         splashTextureAtlas.load();
 
@@ -176,7 +166,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
 
     protected void initSplashScene() {
         mSplashScene = new Scene();
-        Sprite splash = new Sprite(0, 0, mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_SPLASH_SCREEN),
+        Sprite splash = new Sprite(0, 0, mTextureRegionHolderUtils.getElement(StringsAndPathUtils.KEY_SPLASH_SCREEN),
                 mEngine.getVertexBufferObjectManager());
 
         splash.setScale(4f);
@@ -224,9 +214,9 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
 
         //races loadGeneralGameTextures
         Intent intent = getIntent();
-        AllianceHolder.addAllianceByName(intent.getStringExtra(GameStringsConstantsAndUtils.FIRST_TEAM_ALLIANCE),
+        AllianceHolder.addAllianceByName(intent.getStringExtra(StringsAndPathUtils.FIRST_TEAM_ALLIANCE),
                 getVertexBufferObjectManager(), mMusicAndSoundsHandler);
-        AllianceHolder.addAllianceByName(intent.getStringExtra(GameStringsConstantsAndUtils.SECOND_TEAM_ALLIANCE),
+        AllianceHolder.addAllianceByName(intent.getStringExtra(StringsAndPathUtils.SECOND_TEAM_ALLIANCE),
                 getVertexBufferObjectManager(), mMusicAndSoundsHandler);
         for (IAlliance race : AllianceHolder.getInstance().getElements()) {
             race.loadResources(getTextureManager());
@@ -234,8 +224,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
 
         // other loader
         PopupManager.loadResource(this, getTextureManager());
-
         TextureRegionHolderUtils.loadGeneralGameTextures(this, getTextureManager());
+        GameBackgroundScene.loadImages(getTextureManager());
 
         // font
         FontHolderUtils.loadGeneralGameFonts(getFontManager(), getTextureManager());
@@ -243,13 +233,14 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     }
 
     protected void onInitGameScene() {
-        mGameScene = new Scene();
-        mGameScene.setBackground(new Background(0, 0, 0));
+        //game scene
+        GameBackgroundScene gameBackgroundScene = new GameBackgroundScene(getVertexBufferObjectManager());
+        gameBackgroundScene.initGameSceneTouch(getWindowManager(), mCamera, mMusicAndSoundsHandler);
+        mGameScene = gameBackgroundScene;
 
         // sun and planets
         createSun();
 
-        initGameSceneTouch();
         initHud();
 
         mGameScene.registerUpdateHandler(mPhysicsWorld);
@@ -291,11 +282,11 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
 
         Intent intent = getIntent();
         IAlliance race = AllianceHolder.getInstance().getElement(
-                        intent.getStringExtra(GameStringsConstantsAndUtils.FIRST_TEAM_ALLIANCE));
-        mSecondTeam = createTeam(GameStringsConstantsAndUtils.FIRST_TEAM_CONTROL_BEHAVIOUR_TYPE, race);
+                intent.getStringExtra(StringsAndPathUtils.FIRST_TEAM_ALLIANCE));
+        mSecondTeam = createTeam(StringsAndPathUtils.FIRST_TEAM_CONTROL_BEHAVIOUR_TYPE, race);
         race = AllianceHolder.getInstance().getElement(
-                intent.getStringExtra(GameStringsConstantsAndUtils.SECOND_TEAM_ALLIANCE));
-        mFirstTeam = createTeam(GameStringsConstantsAndUtils.SECOND_TEAM_CONTROL_BEHAVIOUR_TYPE, race);
+                intent.getStringExtra(StringsAndPathUtils.SECOND_TEAM_ALLIANCE));
+        mFirstTeam = createTeam(StringsAndPathUtils.SECOND_TEAM_CONTROL_BEHAVIOUR_TYPE, race);
 
         mSecondTeam.setTeamColor(Color.RED);
         mSecondTeam.setTeamColor(Color.BLUE);
@@ -327,7 +318,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     protected void initTeamFixtureDef(ITeam team) {
         TeamControlBehaviourType type = team.getTeamControlType();
         boolean isRemote = TeamControlBehaviourType.isClientSide(type);
-        if (team.getTeamName().equals(GameStringsConstantsAndUtils.FIRST_TEAM_CONTROL_BEHAVIOUR_TYPE)) {
+        if (team.getTeamName().equals(StringsAndPathUtils.FIRST_TEAM_CONTROL_BEHAVIOUR_TYPE)) {
             if (isRemote)
                 team.changeFixtureDefFilter(CollisionCategoriesConstants.CATEGORY_TEAM1, CollisionCategoriesConstants.MASKBITS_TEAM1_THIN);
             else
@@ -352,8 +343,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         mSecondTeam.setTeamPlanet(createPlanet(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER
                         - SizeConstants.ADDITION_MARGIN_FOR_PLANET,
                 (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2,
-                mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_RED_PLANET),
-                GameStringsConstantsAndUtils.KEY_RED_PLANET,
+                mTextureRegionHolderUtils.getElement(StringsAndPathUtils.KEY_RED_PLANET),
+                StringsAndPathUtils.KEY_RED_PLANET,
                 mSecondTeam
         ));
         mSecondTeam.getTeamPlanet().setSpawnPoint(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER / 2 -
@@ -367,7 +358,6 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         LoggerHelper.methodInvocation(TAG, "createPlanet");
         PlanetStaticObject planetStaticObject = new PlanetStaticObject(x, y, textureRegion, getVertexBufferObjectManager(), team);
         planetStaticObject.setObjectDestroyedListener(new PlanetDestroyedListener(team));
-        mStaticObjects.put(key, planetStaticObject);
         attachEntity(planetStaticObject);
         if (unitUniqueId.length > 0)
             planetStaticObject.setObjectUniqueId(unitUniqueId[0]);
@@ -380,8 +370,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     protected void initFirstPlanet() {
         mFirstTeam.setTeamPlanet(createPlanet(0, (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2
                         + SizeConstants.ADDITION_MARGIN_FOR_PLANET,
-                mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_BLUE_PLANET),
-                GameStringsConstantsAndUtils.KEY_BLUE_PLANET,
+                mTextureRegionHolderUtils.getElement(StringsAndPathUtils.KEY_BLUE_PLANET),
+                StringsAndPathUtils.KEY_BLUE_PLANET,
                 mFirstTeam
         ));
         mFirstTeam.getTeamPlanet().setSpawnPoint(SizeConstants.PLANET_DIAMETER / 2 + SizeConstants.UNIT_SIZE + 2,
@@ -392,11 +382,9 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     protected SunStaticObject createSun() {
         float x = (SizeConstants.GAME_FIELD_WIDTH - SizeConstants.SUN_DIAMETER) / 2;
         float y = (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.SUN_DIAMETER) / 2;
-        ITextureRegion textureRegion = mTextureRegionHolderUtils.getElement(GameStringsConstantsAndUtils.KEY_SUN);
-        String key = GameStringsConstantsAndUtils.KEY_SUN;
+        ITextureRegion textureRegion = mTextureRegionHolderUtils.getElement(StringsAndPathUtils.KEY_SUN);
 
         SunStaticObject sunStaticObject = new SunStaticObject(x, y, textureRegion, mEngine.getVertexBufferObjectManager());
-        mStaticObjects.put(key, sunStaticObject);
         attachEntity(sunStaticObject);
         mGameObjectsMap.put(sunStaticObject.getObjectUniqueId(), sunStaticObject);
         onEvent(new CreateCircleBodyEvent(sunStaticObject));
@@ -429,18 +417,6 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         mHud = mCamera.getHUD();
         mHud.setTouchAreaBindingOnActionDownEnabled(true);
         mHud.setOnAreaTouchTraversalFrontToBack();
-    }
-
-    /** init scene touch events so user can collaborate with game by screen touches */
-    private void initGameSceneTouch() {
-        LoggerHelper.methodInvocation(TAG, "initGameSceneTouch");
-        Display display = getWindowManager().getDefaultDisplay();
-        DisplayMetrics metrics = new DisplayMetrics();
-        display.getMetrics(metrics);
-        float screenToSceneRatio = metrics.widthPixels / SizeConstants.GAME_FIELD_WIDTH;
-        mMainSceneTouchListener = new MainSceneTouchListener(mCamera, this, screenToSceneRatio);
-        mGameScene.setOnSceneTouchListener(mMainSceneTouchListener);
-        mMusicAndSoundsHandler.setCameraCoordinates(mMainSceneTouchListener);
     }
 
     @Override

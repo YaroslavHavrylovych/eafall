@@ -3,7 +3,10 @@ package com.gmail.yaroslavlancelot.spaceinvaders.constants;
 import java.io.File;
 
 /** game constants for game objects */
-public final class GameStringsConstantsAndUtils {
+public final class StringsAndPathUtils {
+    public static final String sSeparator = File.separator;
+    /** images storing path */
+    public static final String GENERAL_IMAGES_PATH = "images" + sSeparator;
     /** sun file name */
     public static final String FILE_SUN = "images/sun.png";
     /** splash screen file name */
@@ -42,12 +45,15 @@ public final class GameStringsConstantsAndUtils {
     public static final String KEY_FONT_MONEY = "key_money_font";
     /** splash screen key */
     public static final String KEY_SPLASH_SCREEN = "key_splash_screen";
-    public static final String sSeparator = File.separator;
 
     /**
      * private constructor
      */
-    private GameStringsConstantsAndUtils() {
+    private StringsAndPathUtils() {
+    }
+
+    public static String getPathToGeneralImages() {
+        return GENERAL_IMAGES_PATH;
     }
 
     public static String getPathToBuildings(String raceName) {

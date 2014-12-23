@@ -1,9 +1,8 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.utils;
 
 import android.content.Context;
-import android.media.MediaPlayer;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.StringsAndPathUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.ICameraCoordinates;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations;
 
@@ -16,6 +15,7 @@ import org.andengine.audio.sound.SoundManager;
 
 import java.io.IOException;
 
+//TODO I don't like this class :)
 public class MusicAndSoundsHandler implements SoundOperations {
     public static final String TAG = MusicAndSoundsHandler.class.getCanonicalName();
     private SoundManager mSoundManager;
@@ -36,15 +36,6 @@ public class MusicAndSoundsHandler implements SoundOperations {
         return null;
     }
 
-    public static Sound getSound(String path, Context context, SoundManager soundManager) {
-        try {
-            return SoundFactory.createSoundFromAsset(soundManager, context, path);
-        } catch (IOException e) {
-            LoggerHelper.printErrorMessage(TAG, "can't instantiate sounds");
-        }
-        return null;
-    }
-
     public void setCameraCoordinates(ICameraCoordinates cameraCoordinates) {
         mCameraCoordinates = cameraCoordinates;
     }
@@ -52,6 +43,15 @@ public class MusicAndSoundsHandler implements SoundOperations {
     @Override
     public Sound loadSound(final String path) {
         return getSound(path, mContext, mSoundManager);
+    }
+
+    public static Sound getSound(String path, Context context, SoundManager soundManager) {
+        try {
+            return SoundFactory.createSoundFromAsset(soundManager, context, path);
+        } catch (IOException e) {
+            LoggerHelper.printErrorMessage(TAG, "can't instantiate sounds");
+        }
+        return null;
     }
 
     @Override
@@ -87,7 +87,7 @@ public class MusicAndSoundsHandler implements SoundOperations {
 
         public BackgroundMusic(MusicManager musicManager) {
             mBackgroundMusic =
-                    getMusic(GameStringsConstantsAndUtils.getPathToBackgroundMusic() + "background_1.ogg",
+                    getMusic(StringsAndPathUtils.getPathToBackgroundMusic() + "background_1.ogg",
                             mContext, musicManager);
         }
 

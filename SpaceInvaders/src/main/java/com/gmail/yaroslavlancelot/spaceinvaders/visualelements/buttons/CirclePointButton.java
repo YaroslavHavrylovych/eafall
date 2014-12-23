@@ -2,7 +2,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.visualelements.buttons;
 
 import android.content.Context;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.StringsAndPathUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 
 import org.andengine.entity.sprite.TiledSprite;
@@ -21,7 +21,7 @@ public class CirclePointButton extends TiledSprite {
 
     public static void loadResources(Context context, TextureManager textureManager) {
         BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 128, 64, TextureOptions.BILINEAR);
-        TextureRegionHolderUtils.addTiledElementFromAssets(GameStringsConstantsAndUtils.FILE_CIRCLE_POINT,
+        TextureRegionHolderUtils.addTiledElementFromAssets(StringsAndPathUtils.FILE_CIRCLE_POINT,
                 TextureRegionHolderUtils.getInstance(), smallObjectTexture, context, 0, 0, 2, 1);
         smallObjectTexture.load();
     }

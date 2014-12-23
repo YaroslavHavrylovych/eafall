@@ -4,9 +4,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.StringsAndPathUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.DescriptionPopupUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
@@ -50,7 +49,7 @@ public class DescriptionPopupBackgroundSprite extends Sprite {
 
     DescriptionPopupBackgroundSprite(float width, float height, VertexBufferObjectManager vertexBufferObjectManager) {
         super(0, 0, width, height,
-                TextureRegionHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.FILE_DESCRIPTION_POPUP_BACKGROUND),
+                TextureRegionHolderUtils.getInstance().getElement(StringsAndPathUtils.FILE_DESCRIPTION_POPUP_BACKGROUND),
                 vertexBufferObjectManager);
 
         initAreas();
@@ -103,7 +102,7 @@ public class DescriptionPopupBackgroundSprite extends Sprite {
     public static void loadResources(Context context, TextureManager textureManager) {
         //background
         BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 1920, 540, TextureOptions.BILINEAR);
-        TextureRegionHolderUtils.addElementFromAssets(GameStringsConstantsAndUtils.FILE_DESCRIPTION_POPUP_BACKGROUND,
+        TextureRegionHolderUtils.addElementFromAssets(StringsAndPathUtils.FILE_DESCRIPTION_POPUP_BACKGROUND,
                 TextureRegionHolderUtils.getInstance(), smallObjectTexture, context, 0, 0);
         smallObjectTexture.load();
 

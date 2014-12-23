@@ -2,7 +2,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.popups.pathchooser;
 
 import android.content.Context;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.StringsAndPathUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.unitpath.HideUnitPathChooser;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.unitpath.ShowUnitPathChooser;
@@ -57,7 +57,7 @@ public class PathChoosePopup extends PopupHud {
 
     private CirclePointButton createCircle(float y, VertexBufferObjectManager vertexBufferObjectManager) {
         return new CirclePointButton(SizeConstants.GAME_FIELD_WIDTH / 2, y,
-                (ITiledTextureRegion) TextureRegionHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.FILE_CIRCLE_POINT),
+                (ITiledTextureRegion) TextureRegionHolderUtils.getInstance().getElement(StringsAndPathUtils.FILE_CIRCLE_POINT),
                 vertexBufferObjectManager);
     }
 

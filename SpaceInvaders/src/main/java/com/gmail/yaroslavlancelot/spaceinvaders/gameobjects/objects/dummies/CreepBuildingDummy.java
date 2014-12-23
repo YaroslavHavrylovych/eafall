@@ -3,7 +3,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies;
 import android.content.Context;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.SpaceInvadersApplication;
-import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.StringsAndPathUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.BuildingLoader;
@@ -58,7 +58,7 @@ public class CreepBuildingDummy {
     public void loadResources(Context context, BitmapTextureAtlas textureAtlas, int x, int y, String raceName) {
         for (int i = 0; i < mBuildingLoader.getUpdates().size(); i++) {
             BuildingUpgradeLoader upgradeLoader = mBuildingLoader.getUpdates().get(i);
-            String pathToImage = GameStringsConstantsAndUtils.getPathToBuildings(raceName) + upgradeLoader.image_name;
+            String pathToImage = StringsAndPathUtils.getPathToBuildings(raceName) + upgradeLoader.image_name;
             GameObject.loadResource(pathToImage, context, textureAtlas, x + getWidth() * i, y + getHeight() * i);
             mTextureRegionArray[i] = TextureRegionHolderUtils.getInstance().getElement(pathToImage);
         }

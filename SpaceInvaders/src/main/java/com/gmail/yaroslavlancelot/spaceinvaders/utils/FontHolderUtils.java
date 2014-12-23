@@ -2,7 +2,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.utils;
 
 import android.graphics.Typeface;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.StringsAndPathUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 
 import org.andengine.opengl.font.FontFactory;
@@ -23,7 +23,7 @@ public class FontHolderUtils extends HolderUtils<IFont> {
         IFont font = FontFactory.create(fontManager, textureManager, 256, 256,
                 Typeface.create(Typeface.DEFAULT, Typeface.BOLD), SizeConstants.MONEY_FONT_SIZE, Color.WHITE.hashCode());
         font.load();
-        FontHolderUtils.getInstance().addElement(GameStringsConstantsAndUtils.KEY_FONT_MONEY, font);
+        FontHolderUtils.getInstance().addElement(StringsAndPathUtils.KEY_FONT_MONEY, font);
         LoggerHelper.printDebugMessage(FontHolderUtils.class.getCanonicalName(), "fonts loaded");
     }
 

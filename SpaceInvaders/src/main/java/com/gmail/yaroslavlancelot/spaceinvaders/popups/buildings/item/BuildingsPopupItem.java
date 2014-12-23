@@ -1,6 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.item;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.StringsAndPathUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.CreepBuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
@@ -36,7 +36,7 @@ public class BuildingsPopupItem extends ButtonSprite implements PopupItemFactory
     private static final String sNumberFormatTemplate = "####' : '";
     private static final NumberFormat sNumberFormat = new DecimalFormat(sNumberFormatTemplate);
     /** popup text font */
-    private static String FONT = GameStringsConstantsAndUtils.KEY_FONT_MONEY;
+    private static String FONT = StringsAndPathUtils.KEY_FONT_MONEY;
 
     /** displayed object id */
     private BuildingId mBuildingId;
@@ -47,7 +47,7 @@ public class BuildingsPopupItem extends ButtonSprite implements PopupItemFactory
 
     BuildingsPopupItem(float x, float y, VertexBufferObjectManager objectManager) {
         super(x, y,
-                (ITiledTextureRegion) TextureRegionHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.FILE_POPUP_BACKGROUND_ITEM),
+                (ITiledTextureRegion) TextureRegionHolderUtils.getInstance().getElement(StringsAndPathUtils.FILE_POPUP_BACKGROUND_ITEM),
                 objectManager);
         setWidth(POPUP_ELEMENT_WIDTH);
         setHeight(POPUP_ELEMENT_HEIGHT);

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.StringsAndPathUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 
@@ -32,7 +32,7 @@ public class TextButton extends ButtonSprite {
 
     public TextButton(VertexBufferObjectManager vertexBufferObjectManager, float width, float height, float x, float y) {
         super(x, y,
-                (ITiledTextureRegion) TextureRegionHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.FILE_GAME_BUTTON),
+                (ITiledTextureRegion) TextureRegionHolderUtils.getInstance().getElement(StringsAndPathUtils.FILE_GAME_BUTTON),
                 vertexBufferObjectManager);
         setWidth(width);
         setHeight(height);
@@ -48,7 +48,7 @@ public class TextButton extends ButtonSprite {
 
     public static void loadResources(Context context, TextureManager textureManager) {
         BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 400, 100, TextureOptions.BILINEAR);
-        TextureRegionHolderUtils.addTiledElementFromAssets(GameStringsConstantsAndUtils.FILE_GAME_BUTTON,
+        TextureRegionHolderUtils.addTiledElementFromAssets(StringsAndPathUtils.FILE_GAME_BUTTON,
                 TextureRegionHolderUtils.getInstance(), smallObjectTexture, context, 0, 0, 2, 1);
         smallObjectTexture.load();
     }

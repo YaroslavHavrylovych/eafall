@@ -1,6 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.visualelements.text;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.StringsAndPathUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.MoneyUpdatedEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.unitpath.HideUnitPathChooser;
@@ -22,7 +22,7 @@ public class MoneyText extends Text {
 
     public MoneyText(String teamName, String prefix, VertexBufferObjectManager pVertexBufferObjectManager) {
         super(0, SizeConstants.MONEY_FONT_SIZE * 2,
-                FontHolderUtils.getInstance().getElement(GameStringsConstantsAndUtils.KEY_FONT_MONEY),
+                FontHolderUtils.getInstance().getElement(StringsAndPathUtils.KEY_FONT_MONEY),
                 generateTextString(prefix, 0), prefix.length() + 6, pVertexBufferObjectManager);
         mMoneyValuePrefix = prefix;
         mTeamName = teamName;

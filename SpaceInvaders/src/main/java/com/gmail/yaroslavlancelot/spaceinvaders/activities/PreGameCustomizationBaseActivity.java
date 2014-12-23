@@ -9,7 +9,7 @@ import android.widget.Spinner;
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.imperials.Imperials;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.rebels.Rebels;
-import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.StringsAndPathUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
 
 /**
@@ -53,10 +53,10 @@ public abstract class PreGameCustomizationBaseActivity extends BaseNonGameActivi
                 Intent singleGameIntent = new Intent(PreGameCustomizationBaseActivity.this, activityToStartClass);
 
                 singleGameIntent.
-                        putExtra(GameStringsConstantsAndUtils.FIRST_TEAM_CONTROL_BEHAVIOUR_TYPE, team1.toString()).
-                        putExtra(GameStringsConstantsAndUtils.FIRST_TEAM_ALLIANCE, getAllianceName(mAlliance1)).
-                        putExtra(GameStringsConstantsAndUtils.SECOND_TEAM_CONTROL_BEHAVIOUR_TYPE, team2.toString()).
-                        putExtra(GameStringsConstantsAndUtils.SECOND_TEAM_ALLIANCE, getAllianceName(mAlliance2));
+                        putExtra(StringsAndPathUtils.FIRST_TEAM_CONTROL_BEHAVIOUR_TYPE, team1.toString()).
+                        putExtra(StringsAndPathUtils.FIRST_TEAM_ALLIANCE, getAllianceName(mAlliance1)).
+                        putExtra(StringsAndPathUtils.SECOND_TEAM_CONTROL_BEHAVIOUR_TYPE, team2.toString()).
+                        putExtra(StringsAndPathUtils.SECOND_TEAM_ALLIANCE, getAllianceName(mAlliance2));
                 ;
                 startActivity(singleGameIntent);
             }

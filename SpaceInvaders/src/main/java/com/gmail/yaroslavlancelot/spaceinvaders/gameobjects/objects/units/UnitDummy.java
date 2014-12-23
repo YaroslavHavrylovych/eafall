@@ -3,7 +3,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units;
 import android.content.Context;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.imperials.Imperials;
-import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.StringsAndPathUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Electrical;
@@ -47,7 +47,7 @@ public class UnitDummy {
 
     public UnitDummy(UnitLoader unitLoader) {
         mUnitLoader = unitLoader;
-        mPathToImage = GameStringsConstantsAndUtils.getPathToUnits(Imperials.ALLIANCE_NAME) + mUnitLoader.name + ".png";
+        mPathToImage = StringsAndPathUtils.getPathToUnits(Imperials.ALLIANCE_NAME) + mUnitLoader.name + ".png";
         mHeight = SizeConstants.UNIT_SIZE;
         mWidth = SizeConstants.UNIT_SIZE;
 
@@ -92,7 +92,7 @@ public class UnitDummy {
                 .setViewRadius(mUnitLoader.view_radius)
                 .setAttackRadius(mUnitLoader.attack_radius)
                 .setReloadTime(mUnitLoader.reload_time)
-                .setSoundPath(GameStringsConstantsAndUtils.getPathToSounds(allianceName) + mUnitLoader.sound)
+                .setSoundPath(StringsAndPathUtils.getPathToSounds(allianceName) + mUnitLoader.sound)
                 .setDamage(mUnitDamage)
                 .setWidth(getWidth())
                 .setHeight(getHeight())

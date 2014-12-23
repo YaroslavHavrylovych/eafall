@@ -2,7 +2,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.utils;
 
 import android.content.Context;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.StringsAndPathUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 
 import org.andengine.opengl.texture.TextureManager;
@@ -57,14 +57,14 @@ public class TextureRegionHolderUtils extends HolderUtils<ITextureRegion> {
         BitmapTextureAtlas biggerObjectsTexture = new BitmapTextureAtlas(textureManager,
                 512, 512, TextureOptions.BILINEAR);
         TextureRegionHolderUtils utils = getInstance();
-        utils.addElement(GameStringsConstantsAndUtils.KEY_SUN,
-                BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, context, GameStringsConstantsAndUtils.FILE_SUN, 0, 0));
-        utils.addElement(GameStringsConstantsAndUtils.KEY_RED_PLANET,
-                BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, context, GameStringsConstantsAndUtils.FILE_RED_PLANET,
+        utils.addElement(StringsAndPathUtils.KEY_SUN,
+                BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, context, StringsAndPathUtils.FILE_SUN, 0, 0));
+        utils.addElement(StringsAndPathUtils.KEY_RED_PLANET,
+                BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, context, StringsAndPathUtils.FILE_RED_PLANET,
                         0, SizeConstants.FILE_SUN_DIAMETER)
         );
-        utils.addElement(GameStringsConstantsAndUtils.KEY_BLUE_PLANET,
-                BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, context, GameStringsConstantsAndUtils.FILE_BLUE_PLANET,
+        utils.addElement(StringsAndPathUtils.KEY_BLUE_PLANET,
+                BitmapTextureAtlasTextureRegionFactory.createFromAsset(biggerObjectsTexture, context, StringsAndPathUtils.FILE_BLUE_PLANET,
                         SizeConstants.PLANET_DIAMETER, SizeConstants.FILE_SUN_DIAMETER)
         );
         biggerObjectsTexture.load();

@@ -10,7 +10,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.activities.BaseNonGameActivity;
 import com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame.ServerGameActivity;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.imperials.Imperials;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.rebels.Rebels;
-import com.gmail.yaroslavlancelot.spaceinvaders.constants.GameStringsConstantsAndUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.StringsAndPathUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.GameSocketServer;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.StartingGameServerMessage;
@@ -87,10 +87,10 @@ public class ServerGameCreationActivity extends BaseNonGameActivity implements P
                 mGameSocketServer = null;
                 Intent startServerIntent = new Intent(ServerGameCreationActivity.this, ServerGameActivity.class);
                 startServerIntent.
-                        putExtra(GameStringsConstantsAndUtils.SECOND_TEAM_CONTROL_BEHAVIOUR_TYPE, TeamControlBehaviourType.REMOTE_CONTROL_ON_SERVER_SIDE.toString()).
-                        putExtra(GameStringsConstantsAndUtils.SECOND_TEAM_ALLIANCE, Rebels.ALLIANCE_NAME).
-                        putExtra(GameStringsConstantsAndUtils.FIRST_TEAM_ALLIANCE, Imperials.ALLIANCE_NAME).
-                        putExtra(GameStringsConstantsAndUtils.FIRST_TEAM_CONTROL_BEHAVIOUR_TYPE, TeamControlBehaviourType.USER_CONTROL_ON_SERVER_SIDE.toString());
+                        putExtra(StringsAndPathUtils.SECOND_TEAM_CONTROL_BEHAVIOUR_TYPE, TeamControlBehaviourType.REMOTE_CONTROL_ON_SERVER_SIDE.toString()).
+                        putExtra(StringsAndPathUtils.SECOND_TEAM_ALLIANCE, Rebels.ALLIANCE_NAME).
+                        putExtra(StringsAndPathUtils.FIRST_TEAM_ALLIANCE, Imperials.ALLIANCE_NAME).
+                        putExtra(StringsAndPathUtils.FIRST_TEAM_CONTROL_BEHAVIOUR_TYPE, TeamControlBehaviourType.USER_CONTROL_ON_SERVER_SIDE.toString());
                 startActivity(startServerIntent);
             }
         });
