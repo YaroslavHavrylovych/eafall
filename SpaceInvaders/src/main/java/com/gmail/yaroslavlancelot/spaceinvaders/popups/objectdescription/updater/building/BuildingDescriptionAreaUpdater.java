@@ -63,9 +63,9 @@ public class BuildingDescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
         attach(drawArea);
         IAlliance race = AllianceHolder.getInstance().getElement(raceName);
         CreepBuildingDummy dummy = race.getBuildingDummy(buildingId);
-        // cost
+        //cost
         mCostValue.setText(Integer.toString(dummy.getCost(buildingId.getUpgrade())));
-        // produced unit
+        //produced unit
         final int unitId = dummy.getUnitId(buildingId.getUpgrade());
         UnitDummy unitDummy = race.getUnitDummy(unitId);
         mProducedUnitLink.setText(SpaceInvadersApplication.getContext().getResources().getString(
@@ -76,6 +76,8 @@ public class BuildingDescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
                 EventBus.getDefault().post(new UnitByBuildingDescriptionShowEvent(buildingId, teamName));
             }
         });
+        //building time
+        mUnitCreationTimeValue.setText(Integer.toString(dummy.getUnitCreationTime(buildingId.getUpgrade())));
         //upgrade
         if (race.isUpgradeAvailable(buildingId)) {
             updateUpgradeCost(buildingId, teamName);
