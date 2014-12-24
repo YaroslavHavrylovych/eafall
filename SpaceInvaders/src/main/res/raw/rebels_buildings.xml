@@ -10,6 +10,7 @@
                 <image_name>workshop.png</image_name>
                 <cost>150</cost>
                 <unit_id>0</unit_id>
+                <building_time>16</building_time>
                 <team_color_area>
                     <x>4</x>
                     <y>4</y>
@@ -21,6 +22,7 @@
                 <image_name>workshop.png</image_name>
                 <cost>200</cost>
                 <unit_id>2</unit_id>
+                <building_time>16</building_time>
                 <team_color_area>
                     <x>0</x>
                     <y>0</y>
@@ -39,6 +41,7 @@
                 <image_name>workshop.png</image_name>
                 <cost>180</cost>
                 <unit_id>1</unit_id>
+                <building_time>16</building_time>
                 <team_color_area>
                     <x>7</x>
                     <y>7</y>
@@ -57,6 +60,7 @@
                 <image_name>workshop.png</image_name>
                 <cost>220</cost>
                 <unit_id>2</unit_id>
+                <building_time>16</building_time>
                 <team_color_area>
                     <x>0</x>
                     <y>0</y>
@@ -75,6 +79,7 @@
                 <image_name>workshop.png</image_name>
                 <cost>300</cost>
                 <unit_id>3</unit_id>
+                <building_time>16</building_time>
                 <team_color_area>
                     <x>6</x>
                     <y>6</y>
@@ -93,6 +98,7 @@
                 <image_name>workshop.png</image_name>
                 <cost>340</cost>
                 <unit_id>4</unit_id>
+                <building_time>16</building_time>
                 <team_color_area>
                     <x>13</x>
                     <y>4</y>
@@ -111,6 +117,7 @@
                 <image_name>workshop.png</image_name>
                 <cost>360</cost>
                 <unit_id>5</unit_id>
+                <building_time>16</building_time>
                 <team_color_area>
                     <x>3</x>
                     <y>6</y>
@@ -129,6 +136,7 @@
                 <image_name>workshop.png</image_name>
                 <cost>450</cost>
                 <unit_id>6</unit_id>
+                <building_time>16</building_time>
                 <team_color_area>
                     <x>0</x>
                     <y>5</y>

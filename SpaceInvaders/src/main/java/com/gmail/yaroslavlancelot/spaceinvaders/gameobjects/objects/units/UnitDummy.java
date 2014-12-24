@@ -2,15 +2,11 @@ package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units;
 
 import android.content.Context;
 
+import com.gmail.yaroslavlancelot.spaceinvaders.SpaceInvadersApplication;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.imperials.Imperials;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.StringsAndPathUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Armor;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Electrical;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.HeavyWater;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Higgs;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Magnetic;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Physical;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Damage;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.TeamColorArea;
@@ -44,40 +40,28 @@ public class UnitDummy {
     private final Armor mUnitArmor;
     /** unit texture region (do not create it each time when u want to create unit) */
     private ITextureRegion mTextureRegion;
+    /** speed of the unit */
+    private float mUnitSpeed;
+    /** you can get unit name from the string resources by this id */
+    private int mUnitStringId;
 
     public UnitDummy(UnitLoader unitLoader) {
         mUnitLoader = unitLoader;
         mPathToImage = StringsAndPathUtils.getPathToUnits(Imperials.ALLIANCE_NAME) + mUnitLoader.name + ".png";
         mHeight = SizeConstants.UNIT_SIZE;
         mWidth = SizeConstants.UNIT_SIZE;
+        mUnitSpeed = mUnitLoader.speed / 100;
 
         mUnitDamage = new Damage(mUnitLoader.damage, mUnitLoader.damage_value);
-        mUnitArmor = getUnitArmor(mUnitLoader.armor_value, mUnitLoader.armor);
+        mUnitArmor = new Armor(mUnitLoader.armor, mUnitLoader.armor_value);
 
         TeamColorArea area = mUnitLoader.team_color_area;
         mTeamColorArea = new Area(area.x, area.y, area.width, area.height);
         mUnitLoader.team_color_area = null;
-    }
 
-    private static Armor getUnitArmor(int value, String name) {
-        switch (Armor.ArmorType.valueOf(name.toUpperCase())) {
-            case PHYSICAL: {
-                return new Physical(value);
-            }
-            case ELECTRICAL: {
-                return new Electrical(value);
-            }
-            case HEAVY_WATER_SHIELD: {
-                return new HeavyWater(value);
-            }
-            case HIGGS_SHIELD: {
-                return new Higgs(value);
-            }
-            case MAGNETIC: {
-                return new Magnetic(value);
-            }
-        }
-        throw new IllegalArgumentException("unknown armor type");
+        Context context = SpaceInvadersApplication.getContext();
+        mUnitStringId = context.getResources().getIdentifier(
+                mUnitLoader.name, "string", context.getApplicationInfo().packageName);
     }
 
     public void loadResources(Context context, BitmapTextureAtlas textureAtlas, int x, int y) {
@@ -93,16 +77,25 @@ public class UnitDummy {
                 .setAttackRadius(mUnitLoader.attack_radius)
                 .setReloadTime(mUnitLoader.reload_time)
                 .setSoundPath(StringsAndPathUtils.getPathToSounds(allianceName) + mUnitLoader.sound)
-                .setDamage(mUnitDamage)
+                .setDamage(getDamage())
+                .setSpeed(getSpeed())
                 .setWidth(getWidth())
                 .setHeight(getHeight())
-                .setArmor(mUnitArmor);
+                .setArmor(getArmor());
 
         return new Unit(unitBuilder);
     }
 
     public int getHealth() {
         return mUnitLoader.health;
+    }
+
+    public Damage getDamage() {
+        return mUnitDamage;
+    }
+
+    public float getSpeed() {
+        return mUnitSpeed;
     }
 
     public int getWidth() {
@@ -113,23 +106,23 @@ public class UnitDummy {
         return mHeight;
     }
 
+    public Armor getArmor() {
+        return mUnitArmor;
+    }
+
+    public int getId() {
+        return mUnitLoader.id;
+    }
+
     public Area getTeamColorArea() {
         return mTeamColorArea;
-    }
-
-    public Damage getDamage() {
-        return mUnitDamage;
-    }
-
-    public Armor getUnitArmor() {
-        return mUnitArmor;
     }
 
     public ITextureRegion getTextureRegion() {
         return mTextureRegion;
     }
 
-    public String getName() {
-        return mUnitLoader.name;
+    public int getUnitStringId() {
+        return mUnitStringId;
     }
 }

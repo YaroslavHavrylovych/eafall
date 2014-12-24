@@ -1,9 +1,10 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.unit;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
-import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.BaseDescriptionPopupUpdater;
+import com.gmail.yaroslavlancelot.spaceinvaders.SpaceInvadersApplication;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.AllianceHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.BaseDescriptionPopupUpdater;
 
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.RectangularShape;
@@ -28,7 +29,8 @@ public class UnitsDescriptionPopupUpdater extends BaseDescriptionPopupUpdater {
         BuildingId buildingId = (BuildingId) objectId;
         IAlliance race = AllianceHolder.getInstance().getElement(raceName);
         int unitId = race.getBuildingDummy(buildingId).getUnitId(buildingId.getUpgrade());
-        return race.getUnitDummy(unitId).getName();
+        return SpaceInvadersApplication.getContext().getResources().getString(
+                race.getUnitDummy(unitId).getUnitStringId());
     }
 
     @Override

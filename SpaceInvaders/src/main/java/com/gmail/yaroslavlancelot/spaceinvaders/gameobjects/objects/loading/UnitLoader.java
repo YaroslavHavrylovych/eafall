@@ -10,6 +10,9 @@ public class UnitLoader {
     @Attribute(name = "name")
     public String name;
 
+    @Element(name = "id")
+    public Integer id;
+
     @Element(name = "health")
     public Integer health;
 
@@ -30,6 +33,9 @@ public class UnitLoader {
 
     @Element(name = "view_radius")
     public Integer view_radius;
+
+    @Element(name = "speed")
+    public Integer speed;
 
     @Element(name = "reload_time")
     public Double reload_time;

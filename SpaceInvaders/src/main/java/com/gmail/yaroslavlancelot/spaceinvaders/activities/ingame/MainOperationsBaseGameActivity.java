@@ -1,7 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
 import android.content.Intent;
-
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -23,6 +22,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities.DetachEntityEv
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.GameObjectsContactListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.ObjectDestroyedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.PlanetDestroyedListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.RectangleWithBody;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
@@ -152,6 +152,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
                         splashTextureAtlas, this, StringsAndPathUtils.FILE_SPLASH_SCREEN, 0, 0)
         );
         splashTextureAtlas.load();
+        Armor.initSafetyTable();
 
         onCreateResourcesCallback.onCreateResourcesFinished();
     }

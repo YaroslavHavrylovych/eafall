@@ -64,6 +64,14 @@ public class CreepBuildingDummy {
         }
     }
 
+    public int getWidth() {
+        return mWidth;
+    }
+
+    public int getHeight() {
+        return mHeight;
+    }
+
     public int getUpgrades() {
         return mBuildingLoader.getUpdates().size();
     }
@@ -72,16 +80,12 @@ public class CreepBuildingDummy {
         return mBuildingLoader.getUpdates().get(upgrade).cost;
     }
 
+    public int getUnitCreationTime(int upgrade) {
+        return mBuildingLoader.getUpdates().get(upgrade).building_time;
+    }
+
     public int getUnitId(int upgrade) {
         return mBuildingLoader.getUpdates().get(upgrade).unit_id;
-    }
-
-    public int getHeight() {
-        return mHeight;
-    }
-
-    public int getWidth() {
-        return mWidth;
     }
 
     public int getX() {

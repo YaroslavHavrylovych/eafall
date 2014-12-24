@@ -94,7 +94,8 @@ public class CreepBuilding implements Building {
                 mBasement.attachChild(mBuilding);
                 mUnitCreatorCycle = new UnitCreatorCycle(mTeamName,
                         mCreepBuildingDummy.getUnitId(mUpgrade), isTopPath());
-                mBuilding.registerUpdateHandler(new TimerHandler(20, true, mUnitCreatorCycle));
+                mBuilding.registerUpdateHandler(new TimerHandler(
+                        mCreepBuildingDummy.getUnitCreationTime(mUpgrade), true, mUnitCreatorCycle));
             }
             mBuildingsAmount++;
             mUnitCreatorCycle.increaseUnitsAmount();

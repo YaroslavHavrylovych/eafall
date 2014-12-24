@@ -19,6 +19,7 @@
 
     <!-- unions -->
     <!-- imperials -->
+    <!-- buildings -->
     <string name="camp">Camp</string>
     <string name="tent">Tent</string>
     <string name="barracks">Barracks</string>
@@ -27,6 +28,24 @@
     <string name="workshop">Workshop</string>
     <string name="laboratory">Laboratory</string>
     <string name="bunker">Bunker</string>
+    <!-- /buildings -->
+    <!-- units -->
+    <string name="conscript">Conscript</string>
+    <string name="grant">Grant</string>
+    <string name="sergeant">Sergeant</string>
+    <string name="boy_scout">Boy Scout</string>
+    <string name="scout">Scout</string>
+    <string name="infantrymen">Infantrymen</string>
+    <string name="SF">SF</string>
+    <string name="sniper">Sniper</string>
+    <string name="killer">Killer</string>
+    <string name="agent">Agent</string>
+    <string name="spy">Spy</string>
+    <string name="robot">Robot</string>
+    <string name="metal_killer">Metal Killer</string>
+    <string name="demolisher">Demolisher</string>
+    <string name="superman">Superman</string>
+    <!-- /units -->
 
     <!-- rebels -->
     <string name="underground">Underground</string>
@@ -38,7 +57,6 @@
     <string name="sabotage_center">Sabotage Center</string>
 
     <!-- /unions -->
-
 
     <!-- settings -->
     <string name="settings">Settings</string>

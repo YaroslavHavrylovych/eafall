@@ -1,6 +1,9 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
+import com.gmail.yaroslavlancelot.spaceinvaders.SpaceInvadersApplication;
+import com.gmail.yaroslavlancelot.spaceinvaders.alliances.AllianceHolder;
+import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.UnitByBuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.CreepBuildingDummy;
@@ -8,8 +11,6 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobject
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.UnitDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.DescriptionText;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.BaseDescriptionAreaUpdater;
-import com.gmail.yaroslavlancelot.spaceinvaders.alliances.AllianceHolder;
-import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.visualelements.text.Link;
@@ -62,18 +63,21 @@ public class BuildingDescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
         attach(drawArea);
         IAlliance race = AllianceHolder.getInstance().getElement(raceName);
         CreepBuildingDummy dummy = race.getBuildingDummy(buildingId);
-        // cost
+        //cost
         mCostValue.setText(Integer.toString(dummy.getCost(buildingId.getUpgrade())));
-        // produced unit
+        //produced unit
         final int unitId = dummy.getUnitId(buildingId.getUpgrade());
         UnitDummy unitDummy = race.getUnitDummy(unitId);
-        mProducedUnitLink.setText(unitDummy.getName());
+        mProducedUnitLink.setText(SpaceInvadersApplication.getContext().getResources().getString(
+                unitDummy.getUnitStringId()));
         mProducedUnitLink.setOnClickListener(new TouchUtils.OnClickListener() {
             @Override
             public void onClick() {
                 EventBus.getDefault().post(new UnitByBuildingDescriptionShowEvent(buildingId, teamName));
             }
         });
+        //building time
+        mUnitCreationTimeValue.setText(Integer.toString(dummy.getUnitCreationTime(buildingId.getUpgrade())));
         //upgrade
         if (race.isUpgradeAvailable(buildingId)) {
             updateUpgradeCost(buildingId, teamName);
