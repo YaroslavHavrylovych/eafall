@@ -48,14 +48,31 @@
     <!-- /units -->
 
     <!-- rebels -->
+    <!-- buildings -->
     <string name="underground">Сховище</string>
     <string name="factory">Фабрика</string>
-    <string name="shelter">Криївка</string>
-    <string name="hospital">Лікарня</string>
-    <string name="mine">Шахта</string>
+    <string name="bomos">Алтар</string>
+    <string name="hospital">Шпиталь</string>
+    <string name="minery">Шахта</string>
     <string name="artillery">Артилерія</string>
     <string name="sabotage_center">Диверсійний центр</string>
-
+    <!-- /buildings -->
+    <!-- units -->
+    <string name="machine_gunner">Механічний стрілок</string>
+    <string name="mechanical_soldier">Механічний солдат</string>
+    <string name="oplot_u">Оплот У</string>
+    <string name="oplot_m">Оплот М</string>
+    <string name="suicide">Смертник</string>
+    <string name="priest">Священник</string>
+    <string name="doctor">Лікар</string>
+    <string name="shaman">Шаман</string>
+    <string name="engineer">Інженер</string>
+    <string name="exploder">Підривник</string>
+    <string name="ballista">Баліста</string>
+    <string name="thor">Тор</string>
+    <string name="recruiter">Вербувальник</string>
+    <string name="saboteur">Диверсант</string>
+    <!-- /units -->
     <!-- /unions -->
 
     <!-- settings -->

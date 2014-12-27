@@ -48,14 +48,31 @@
     <!-- /units -->
 
     <!-- rebels -->
+    <!-- buildings -->
     <string name="underground">Underground</string>
     <string name="factory">Factory</string>
-    <string name="shelter">Shelter</string>
+    <string name="bomos">Bomos</string>
     <string name="hospital">Hospital</string>
-    <string name="mine">Mine</string>
+    <string name="minery">Minery</string>
     <string name="artillery">Artillery</string>
     <string name="sabotage_center">Sabotage Center</string>
-
+    <!-- /buildings -->
+    <!-- units -->
+    <string name="machine_gunner">Machine Gunner</string>
+    <string name="mechanical_soldier">Mechanical Soldier</string>
+    <string name="oplot_u">Oplot U</string>
+    <string name="oplot_m">Oplot M</string>
+    <string name="suicide">Suicide</string>
+    <string name="priest">Priest</string>
+    <string name="doctor">Doctor</string>
+    <string name="shaman">Shaman</string>
+    <string name="engineer">Engineer</string>
+    <string name="exploder">Exploder</string>
+    <string name="ballista">Ballista</string>
+    <string name="thor">Thor</string>
+    <string name="recruiter">Recruiter</string>
+    <string name="saboteur">Saboteur</string>
+    <!-- /units -->
     <!-- /unions -->
 
     <!-- settings -->

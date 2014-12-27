@@ -4,9 +4,9 @@ import java.io.File;
 
 /** game constants for game objects */
 public final class StringsAndPathUtils {
-    public static final String sSeparator = File.separator;
+    public static final String SEPARATOR = File.separator;
     /** images storing path */
-    public static final String GENERAL_IMAGES_PATH = "images" + sSeparator;
+    public static final String GENERAL_IMAGES_PATH = "images" + SEPARATOR;
     /** sun file name */
     public static final String FILE_SUN = "images/sun.png";
     /** splash screen file name */
@@ -57,22 +57,22 @@ public final class StringsAndPathUtils {
     }
 
     public static String getPathToBuildings(String raceName) {
-        String path = "images" + sSeparator + "races" + sSeparator + raceName.toLowerCase() + sSeparator + "buildings" + sSeparator;
+        String path = "images" + SEPARATOR + "races" + SEPARATOR + raceName.toLowerCase() + SEPARATOR + "buildings" + SEPARATOR;
         return path;
     }
 
     public static String getPathToUnits(String raceName) {
-        String path = "images" + sSeparator + "races" + sSeparator + raceName.toLowerCase() + sSeparator + "units" + sSeparator;
+        String path = "images" + SEPARATOR + "races" + SEPARATOR + raceName.toLowerCase() + SEPARATOR + "units" + SEPARATOR;
         return path;
     }
 
     public static String getPathToSounds(String raceName) {
-        String path = "sounds" + sSeparator + "races" + sSeparator + raceName.toLowerCase() + sSeparator;
+        String path = "sounds" + SEPARATOR + "races" + SEPARATOR + raceName.toLowerCase() + SEPARATOR;
         return path;
     }
 
     public static String getPathToBackgroundMusic() {
-        String path = "sounds" + sSeparator + "game" + sSeparator;
+        String path = "sounds" + SEPARATOR + "game" + SEPARATOR;
         return path;
     }
 }
