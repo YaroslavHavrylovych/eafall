@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
+import com.gmail.yaroslavlancelot.spaceinvaders.alliances.Mutants;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.imperials.Imperials;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.rebels.Rebels;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.StringsAndPathUtils;
@@ -78,6 +79,8 @@ public abstract class PreGameCustomizationBaseActivity extends BaseNonGameActivi
                 return Imperials.ALLIANCE_NAME;
             case 1:
                 return Rebels.ALLIANCE_NAME;
+            case 2:
+                return Mutants.ALLIANCE_NAME;
         }
     }
 }

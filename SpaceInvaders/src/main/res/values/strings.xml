@@ -73,6 +73,35 @@
     <string name="recruiter">Recruiter</string>
     <string name="saboteur">Saboteur</string>
     <!-- /units -->
+
+    <!-- mutants -->
+    <!-- buildings -->
+    <string name="water_cave">Water Cave</string>
+    <string name="invisible_plain">Invisible Pain</string>
+    <string name="hydra_pond">Hydra Pond</string>
+    <string name="poison_cave">Poison Cave</string>
+    <string name="web">Web</string>
+    <string name="mountain_cave">Mountain Cave</string>
+    <string name="hell">Hell</string>
+    <!-- /buildings -->
+    <!-- units -->
+    <string name="lizard">Lizard</string>
+    <string name="tortoise">Tortoise</string>
+    <string name="dragon">Dragon</string>
+    <string name="scorpion">Scorpion</string>
+    <string name="king_scorpion">Scorpion King</string>
+    <string name="young_hydra">Young Hydra</string>
+    <string name="hydra">Hydra</string>
+    <string name="eel">Eel</string>
+    <string name="cobra">Cobra</string>
+    <string name="spider1">Spider 1</string>
+    <string name="spider2">Spider 2</string>
+    <string name="bat">Bat</string>
+    <string name="vampire">Vampire</string>
+    <string name="agat">Agat</string>
+    <string name="kak">Kak</string>
+    <!-- units -->
+    <!-- /mutants -->
     <!-- /unions -->
 
     <!-- settings -->
