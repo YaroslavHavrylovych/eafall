@@ -151,7 +151,7 @@ public abstract class Alliance implements IAlliance {
         UnitDummy unitDummy;
         int n, m;
         for (int i = 0; i < unitsAmount; i++) {
-            unitDummy = new UnitDummy(unitListLoader.getList().get(i));
+            unitDummy = new UnitDummy(unitListLoader.getList().get(i), getAllianceName().toLowerCase());
             n = (i % textureManagerElementsInLine) * unitDummy.getWidth();
             m = (i / textureManagerElementsInLine) * unitDummy.getHeight();
             unitDummy.loadResources(context, smallObjectTexture, n, m);

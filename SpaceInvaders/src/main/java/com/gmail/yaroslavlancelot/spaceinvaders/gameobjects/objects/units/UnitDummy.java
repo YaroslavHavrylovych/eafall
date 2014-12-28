@@ -4,8 +4,8 @@ import android.content.Context;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.SpaceInvadersApplication;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.imperials.Imperials;
-import com.gmail.yaroslavlancelot.spaceinvaders.constants.StringsAndPathUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.StringsAndPathUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Damage;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
@@ -45,12 +45,12 @@ public class UnitDummy {
     /** you can get unit name from the string resources by this id */
     private int mUnitStringId;
 
-    public UnitDummy(UnitLoader unitLoader) {
+    public UnitDummy(UnitLoader unitLoader, String allianceName) {
         mUnitLoader = unitLoader;
-        mPathToImage = StringsAndPathUtils.getPathToUnits(Imperials.ALLIANCE_NAME) + mUnitLoader.name + ".png";
+        mPathToImage = StringsAndPathUtils.getPathToUnits(allianceName) + mUnitLoader.name + ".png";
         mHeight = SizeConstants.UNIT_SIZE;
         mWidth = SizeConstants.UNIT_SIZE;
-        mUnitSpeed = mUnitLoader.speed / 100;
+        mUnitSpeed = ((float) mUnitLoader.speed) / 100;
 
         mUnitDamage = new Damage(mUnitLoader.damage, mUnitLoader.damage_value);
         mUnitArmor = new Armor(mUnitLoader.armor, mUnitLoader.armor_value);

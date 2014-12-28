@@ -39,6 +39,8 @@ public class AllianceHolder extends HolderUtils<IAlliance> {
             alliance = new Imperials(objectManager, soundOperations);
         } else if (name.equals(Rebels.ALLIANCE_NAME)) {
             alliance = new Rebels(objectManager, soundOperations);
+        } else if (name.equals(Mutants.ALLIANCE_NAME)) {
+            alliance = new Mutants(objectManager, soundOperations);
         } else {
             alliance = new Imperials(objectManager, soundOperations);
         }

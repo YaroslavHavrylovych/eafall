@@ -48,14 +48,60 @@
     <!-- /units -->
 
     <!-- rebels -->
+    <!-- buildings -->
     <string name="underground">Сховище</string>
     <string name="factory">Фабрика</string>
-    <string name="shelter">Криївка</string>
-    <string name="hospital">Лікарня</string>
-    <string name="mine">Шахта</string>
+    <string name="bomos">Алтар</string>
+    <string name="hospital">Шпиталь</string>
+    <string name="minery">Шахта</string>
     <string name="artillery">Артилерія</string>
     <string name="sabotage_center">Диверсійний центр</string>
+    <!-- /buildings -->
+    <!-- units -->
+    <string name="machine_gunner">Механічний стрілок</string>
+    <string name="mechanical_soldier">Механічний солдат</string>
+    <string name="oplot_u">Оплот У</string>
+    <string name="oplot_m">Оплот М</string>
+    <string name="suicide">Смертник</string>
+    <string name="priest">Священник</string>
+    <string name="doctor">Лікар</string>
+    <string name="shaman">Шаман</string>
+    <string name="engineer">Інженер</string>
+    <string name="exploder">Підривник</string>
+    <string name="ballista">Баліста</string>
+    <string name="thor">Тор</string>
+    <string name="recruiter">Вербувальник</string>
+    <string name="saboteur">Диверсант</string>
+    <!-- /units -->
 
+    <!-- mutants -->
+    <!-- buildings -->
+    <string name="water_cave">Водна Печера</string>
+    <string name="invisible_plain">Схована місцина</string>
+    <string name="hydra_pond">Загата Гідр</string>
+    <string name="poison_cave">Отруйна Печера</string>
+    <string name="web">Павутина</string>
+    <string name="mountain_cave">Печера в Горах</string>
+    <string name="hell">Пекло</string>
+    <!-- /buildings -->
+    <!-- units -->
+    <string name="lizard">Ящірка</string>
+    <string name="tortoise">Черепаха</string>
+    <string name="dragon">Дракон</string>
+    <string name="scorpion">Скорпіон</string>
+    <string name="king_scorpion">Король Скорпіон</string>
+    <string name="young_hydra">Молода Гідра</string>
+    <string name="hydra">Гідра</string>
+    <string name="eel">Вуж</string>
+    <string name="cobra">Кобра</string>
+    <string name="spider1">Павук 1</string>
+    <string name="spider2">Павук 2</string>
+    <string name="bat">Кажан</string>
+    <string name="vampire">Вампір</string>
+    <string name="agat">Агат</string>
+    <string name="kak">Кек</string>
+    <!-- units -->
+    <!-- /mutants -->
     <!-- /unions -->
 
     <!-- settings -->

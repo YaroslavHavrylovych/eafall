@@ -24,7 +24,7 @@ import de.greenrobot.event.EventBus;
 
 /** Player team implementation */
 public class Team implements ITeam {
-    public final int INIT_MONEY_VALUE = 500;
+    public final int INIT_MONEY_VALUE = 5000;
     /** fixture def of the team (used for bullet creation) */
     protected final FixtureDef mTeamFixtureDef;
     /** current team name */
