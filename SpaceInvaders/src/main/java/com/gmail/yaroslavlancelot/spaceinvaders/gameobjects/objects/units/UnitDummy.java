@@ -50,7 +50,7 @@ public class UnitDummy {
         mPathToImage = StringsAndPathUtils.getPathToUnits(allianceName) + mUnitLoader.name + ".png";
         mHeight = SizeConstants.UNIT_SIZE;
         mWidth = SizeConstants.UNIT_SIZE;
-        mUnitSpeed = mUnitLoader.speed / 100;
+        mUnitSpeed = ((float) mUnitLoader.speed) / 100;
 
         mUnitDamage = new Damage(mUnitLoader.damage, mUnitLoader.damage_value);
         mUnitArmor = new Armor(mUnitLoader.armor, mUnitLoader.armor_value);
