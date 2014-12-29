@@ -8,7 +8,6 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IUnitFireC
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Bullet;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.ISimpleUnitEnemiesUpdater;
-import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.UnitPathUtil;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations;
 
@@ -98,17 +97,20 @@ public class Unit extends GameObject {
     }
 
     protected void attackGoal(GameObject attackedObject) {
-        if (attackedObject == null) return;
+        if (attackedObject == null) {
+            return;
+        }
 
-        rotate(MathUtils.radToDeg(getDirection(attackedObject.getX(), attackedObject.getY())));
+        rotate(MathUtils.radToDeg(getDirection(attackedObject.getCenterX(), attackedObject.getCenterY())));
 
-        if (!isReloadFinished()) return;
+        if (!isReloadFinished()) {
+            return;
+        }
 
-        if (mUnitFireCallback != null)
+        if (mUnitFireCallback != null) {
             mUnitFireCallback.fire(getObjectUniqueId(), attackedObject.getObjectUniqueId());
+        }
 
-        LoggerHelper.printVerboseMessage(TAG, "unit=" + getObjectUniqueId() + "(" + getX() + "," + getY() + ")" +
-                ", attack object=" + attackedObject.getObjectUniqueId() + "(" + attackedObject.getX() + "," + attackedObject.getY() + ")");
         playSound(mFireSound, mSoundOperations);
         Bullet bullet = new Bullet(getVertexBufferObjectManager(), getBackgroundColor(), mObjectDamage, mBulletFixtureDef);
         Vector2 objectPosition = getBody().getPosition();
@@ -154,7 +156,7 @@ public class Unit extends GameObject {
             // check for units to attack
             if (mObjectToAttack != null && mObjectToAttack != mEnemiesUpdater.getMainTarget() &&
                     mObjectToAttack.isObjectAlive() && UnitPathUtil.getDistanceBetweenPoints(getX(), getY(),
-                    mObjectToAttack.getX(), mObjectToAttack.getY()) < mViewRadius) {
+                    mObjectToAttack.getCenterX(), mObjectToAttack.getCenterY()) < mViewRadius) {
                 attackOrMove();
                 return;
             } else {
@@ -192,14 +194,20 @@ public class Unit extends GameObject {
          */
         private void attackOrMove() {
             // check if we already can attack
-            float distanceToTarget = UnitPathUtil.getDistanceBetweenPoints(getX(), getY(), mObjectToAttack.getX(), mObjectToAttack.getY());
+            float distanceToTarget = UnitPathUtil.getDistanceBetweenPoints(getCenterX(), getCenterY(),
+                    mObjectToAttack.getCenterX(), mObjectToAttack.getCenterY())
+                    //minus both objects radius to have distance between objects corners
+                    //instead of distance between centers
+                    - mObjectToAttack.getWidth() / 2
+                    - getWidth() / 2;
             if (distanceToTarget < mAttackRadius) {
                 attackGoal(mObjectToAttack);
                 // stay on position
                 setUnitLinearVelocity(0, 0);
-            } else
+            } else {
                 // pursuit attacked unit
-                moveToPoint(mObjectToAttack.getX(), mObjectToAttack.getY());
+                moveToPoint(mObjectToAttack.getCenterX(), mObjectToAttack.getCenterY());
+            }
         }
 
         private void moveToPoint(float x, float y) {

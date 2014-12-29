@@ -152,7 +152,6 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
                         splashTextureAtlas, this, StringsAndPathUtils.FILE_SPLASH_SCREEN, 0, 0)
         );
         splashTextureAtlas.load();
-        Armor.initSafetyTable();
 
         onCreateResourcesCallback.onCreateResourcesFinished();
     }

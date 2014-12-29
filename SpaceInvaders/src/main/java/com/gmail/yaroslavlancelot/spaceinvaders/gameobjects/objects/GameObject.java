@@ -2,6 +2,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects;
 
 import android.content.Context;
 
+import com.badlogic.gdx.math.Vector2;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IGameObjectHealthChanged;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IObjectDestroyedListener;
@@ -58,11 +59,6 @@ public abstract class GameObject extends RectangleWithBody {
     private long mUniqueId;
     /** physic body will be assigned to this "body rectangle" (area) */
     private Rectangle mBodyRectangle;
-    /*
-     * used for storing previous unit velocity. So we can compare and use in update loop. If velocity
-     * not changed we will not set new velocity and will not trigger velocity changed listener
-     * */
-    private float prevVelocityX, prevVelocityY;
 
     protected GameObject(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
         super(x, y, textureRegion.getWidth(), textureRegion.getWidth(), vertexBufferObjectManager);
@@ -278,15 +274,14 @@ public abstract class GameObject extends RectangleWithBody {
 
     /** set physic body velocity */
     public void setUnitLinearVelocity(float x, float y) {
-        if (Math.abs(prevVelocityX - x) < VELOCITY_EPSILON && Math.abs(prevVelocityY - y) < VELOCITY_EPSILON)
+        Vector2 velocity = getBody().getLinearVelocity();
+        if (Math.abs(velocity.x - x) < VELOCITY_EPSILON && Math.abs(velocity.y - y) < VELOCITY_EPSILON) {
             return;
-        else {
-            prevVelocityX = x;
-            prevVelocityY = y;
         }
 
         mPhysicBody.setLinearVelocity(x, y);
-        if (mVelocityChangedListener != null)
+        if (mVelocityChangedListener != null) {
             mVelocityChangedListener.velocityChanged(GameObject.this);
+        }
     }
 }

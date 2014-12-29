@@ -51,10 +51,11 @@ public class GameObjectsContactListener implements ContactListener {
 
     private void bulletColliedWithObject(Bullet bullet, Object object) {
         if (!bullet.getAndSetFalseIsObjectAlive()) return;
-        if (object instanceof GameObject)
+        if (object instanceof GameObject) {
             ((GameObject) object).damageObject(bullet.getDamage());
-        else
+        } else {
             return;
+        }
         EventBus.getDefault().post(new DetachEntityEvent(bullet));
     }
 
