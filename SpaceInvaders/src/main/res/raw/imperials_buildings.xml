@@ -248,6 +248,15 @@
     <wealth_building name="municipality">
         <first_build_income>20</first_build_income>
         <next_buildings_income>2</next_buildings_income>
+        <cost>350</cost>
+        <position_x>32</position_x>
+        <position_y>64</position_y>
         <image_name>bunker.png</image_name>
+        <team_color_area>
+            <x>2</x>
+            <y>10</y>
+            <width>11</width>
+            <height>5</height>
+        </team_color_area>
     </wealth_building>
 </buildings>

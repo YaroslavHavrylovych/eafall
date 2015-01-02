@@ -228,6 +228,15 @@
     <wealth_building name="caches">
         <first_build_income>20</first_build_income>
         <next_buildings_income>2</next_buildings_income>
+        <cost>350</cost>
+        <position_x>32</position_x>
+        <position_y>48</position_y>
         <image_name>sabotage_center.png</image_name>
+        <team_color_area>
+            <x>0</x>
+            <y>5</y>
+            <width>16</width>
+            <height>11</height>
+        </team_color_area>
     </wealth_building>
 </buildings>

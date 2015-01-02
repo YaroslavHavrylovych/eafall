@@ -11,12 +11,12 @@ import java.util.List;
 @Root(strict = false)
 public class BuildingListLoader {
     @ElementList(inline = true)
-    List<CreepBuildingLoader> mCreepBuildingLoaderList = new ArrayList<CreepBuildingLoader>(8);
+    List<CreepBuildingLoader> creepBuildingLoaderList = new ArrayList<CreepBuildingLoader>(8);
 
     @Element(name = "wealth_building")
-    public WealthBuildingLoader mWealthBuildingLoader;
+    public WealthBuildingLoader wealthBuildingLoader;
 
     public List<CreepBuildingLoader> getList() {
-        return mCreepBuildingLoaderList;
+        return creepBuildingLoaderList;
     }
 }

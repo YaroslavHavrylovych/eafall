@@ -51,6 +51,5 @@ public abstract class BuildingDummy {
 
     public abstract int getStringId();
 
-    public abstract void
-    loadResources(Context context, BitmapTextureAtlas textureAtlas, int x, int y, String raceName);
+    public abstract void loadResources(Context context, BitmapTextureAtlas textureAtlas, int x, int y, String raceName);
 }

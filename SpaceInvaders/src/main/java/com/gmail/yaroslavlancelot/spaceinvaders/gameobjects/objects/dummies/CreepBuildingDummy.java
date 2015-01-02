@@ -23,17 +23,17 @@ public class CreepBuildingDummy extends BuildingDummy {
     /** data loaded from xml which store buildings data (in string format) */
     private CreepBuildingLoader mCreepBuildingLoader;
 
-    public CreepBuildingDummy(CreepBuildingLoader creepBuildingLoader) {
+    public CreepBuildingDummy(CreepBuildingLoader buildingLoader) {
         super(SizeConstants.BUILDING_SIZE, SizeConstants.BUILDING_SIZE);
-        mCreepBuildingLoader = creepBuildingLoader;
+        mCreepBuildingLoader = buildingLoader;
 
         /* how many upgrades does the building have */
         int upgrades = mCreepBuildingLoader.getUpdates().size();
         mTeamColorAreaArray = new Area[upgrades];
         mTextureRegionArray = new ITextureRegion[upgrades];
 
-        for (int i = 0; i < creepBuildingLoader.getUpdates().size(); i++) {
-            CreepBuildingUpgradeLoader upgradeLoader = creepBuildingLoader.getUpdates().get(i);
+        for (int i = 0; i < buildingLoader.getUpdates().size(); i++) {
+            CreepBuildingUpgradeLoader upgradeLoader = buildingLoader.getUpdates().get(i);
             TeamColorArea area = upgradeLoader.team_color_area;
             mTeamColorAreaArray[i] = new Area(area.x, area.y, area.width, area.height);
             upgradeLoader.team_color_area = null;

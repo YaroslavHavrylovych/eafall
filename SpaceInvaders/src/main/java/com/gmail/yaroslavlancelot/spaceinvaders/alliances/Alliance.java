@@ -7,6 +7,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.BuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.CreepBuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.WealthBuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.buildings.BuildingListLoader;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.units.UnitListLoader;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
@@ -104,19 +105,23 @@ public abstract class Alliance implements IAlliance {
 
     protected void loadBuildings(TextureManager textureManager, BuildingListLoader buildingListLoader) {
         Context context = SpaceInvadersApplication.getContext();
+        mBuildingDummies = new HashMap<Integer, BuildingDummy>(buildingListLoader.getList().size() //units
+                + 1); //wealth buildings
 
-        int buildingsAmount = buildingListLoader.getList().size();
-        mBuildingDummies = new HashMap<Integer, BuildingDummy>(buildingsAmount);
-
-        //init list
-        CreepBuildingDummy creepBuildingDummy;
+        //units
+        BuildingDummy buildingDummy;
         int buildingsWithUpgradesAmount = 0;
-        for (int i = 0; i < buildingsAmount; i++) {
-            creepBuildingDummy = new CreepBuildingDummy(buildingListLoader.getList().get(i));
-            buildingsWithUpgradesAmount += (creepBuildingDummy.getUpgrades() * SizeConstants.BUILDING_SIZE);
-            mBuildingDummies.put(creepBuildingDummy.getBuildingId(), creepBuildingDummy);
+        for (int i = 0; i < buildingListLoader.getList().size(); i++) {
+            buildingDummy = new CreepBuildingDummy(buildingListLoader.getList().get(i));
+            buildingsWithUpgradesAmount += (buildingDummy.getUpgrades() * SizeConstants.BUILDING_SIZE);
+            mBuildingDummies.put(buildingDummy.getBuildingId(), buildingDummy);
         }
+        //wealth
+        buildingDummy = new WealthBuildingDummy(buildingListLoader.wealthBuildingLoader);
+        buildingsWithUpgradesAmount++;
+        mBuildingDummies.put(buildingDummy.getBuildingId(), buildingDummy);
 
+        //creating texture atlas for loading buildings
         int textureManagerElementsInLine = (int) Math.round(Math.sqrt(buildingsWithUpgradesAmount) + 1);
         int size = textureManagerElementsInLine * SizeConstants.BUILDING_SIZE;
 
