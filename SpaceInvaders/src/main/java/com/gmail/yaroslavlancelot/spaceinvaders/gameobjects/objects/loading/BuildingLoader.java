@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** read building data from unit-store xml file */
-@Root(name = "building")
+@Root(name = "units_building")
 public class BuildingLoader {
     @Attribute(name = "name", required = true)
     public String name;

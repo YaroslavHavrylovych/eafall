@@ -2,7 +2,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="buildings_schema_definition.xsd">
     <!-- 10 -->
-    <building name="water_cave">
+    <units_building name="water_cave">
         <id>10</id>
         <position_x>48</position_x>
         <position_y>32</position_y>
@@ -44,9 +44,9 @@
                 </team_color_area>
             </upgrade>
         </upgrades>
-    </building>
+    </units_building>
     <!-- 20 -->
-    <building name="invisible_plain">
+    <units_building name="invisible_plain">
         <id>20</id>
         <position_x>64</position_x>
         <position_y>32</position_y>
@@ -76,9 +76,9 @@
                 </team_color_area>
             </upgrade>
         </upgrades>
-    </building>
+    </units_building>
     <!-- 30 -->
-    <building name="hydra_pond">
+    <units_building name="hydra_pond">
         <id>30</id>
         <position_x>80</position_x>
         <position_y>48</position_y>
@@ -108,9 +108,9 @@
                 </team_color_area>
             </upgrade>
         </upgrades>
-    </building>
+    </units_building>
     <!-- 40 -->
-    <building name="poison_cave">
+    <units_building name="poison_cave">
         <id>40</id>
         <position_x>80</position_x>
         <position_y>64</position_y>
@@ -140,9 +140,9 @@
                 </team_color_area>
             </upgrade>
         </upgrades>
-    </building>
+    </units_building>
     <!-- 50 -->
-    <building name="web">
+    <units_building name="web">
         <id>50</id>
         <position_x>64</position_x>
         <position_y>48</position_y>
@@ -172,9 +172,9 @@
                 </team_color_area>
             </upgrade>
         </upgrades>
-    </building>
+    </units_building>
     <!-- 60 -->
-    <building name="mountain_cave">
+    <units_building name="mountain_cave">
         <id>60</id>
         <position_x>48</position_x>
         <position_y>80</position_y>
@@ -204,9 +204,9 @@
                 </team_color_area>
             </upgrade>
         </upgrades>
-    </building>
+    </units_building>
     <!-- 70 -->
-    <building name="hell">
+    <units_building name="hell">
         <id>70</id>
         <position_x>32</position_x>
         <position_y>48</position_y>
@@ -236,5 +236,5 @@
                 </team_color_area>
             </upgrade>
         </upgrades>
-    </building>
+    </units_building>
 </buildings>

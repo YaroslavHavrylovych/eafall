@@ -4,7 +4,7 @@
         <xs:complexType>
             <xs:sequence>
 
-                <xs:element name="building" maxOccurs="unbounded">
+                <xs:element name="units_building" maxOccurs="unbounded">
                     <xs:complexType>
                         <xs:sequence>
                             <xs:element name="id" type="xs:nonNegativeInteger"/>
