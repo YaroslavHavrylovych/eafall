@@ -1,6 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.eventbus;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
 
 /** after building was created */
 public class BuildingsAmountChangedEvent {

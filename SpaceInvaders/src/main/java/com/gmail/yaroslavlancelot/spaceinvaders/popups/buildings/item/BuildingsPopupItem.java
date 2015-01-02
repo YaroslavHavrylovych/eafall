@@ -1,10 +1,10 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.item;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.constants.StringsAndPathUtils;
-import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.CreepBuildingDummy;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.AllianceHolder;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.StringsAndPathUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.CreepBuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LocaleImpl;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
@@ -54,11 +54,6 @@ public class BuildingsPopupItem extends ButtonSprite implements PopupItemFactory
     }
 
     @Override
-    public IEntity getItemEntity() {
-        return this;
-    }
-
-    @Override
     public void setBuildingId(BuildingId buildingId, String raceName) {
         // object id
         if (mBuildingId != null && mBuildingId.equals(buildingId)) {
@@ -67,7 +62,7 @@ public class BuildingsPopupItem extends ButtonSprite implements PopupItemFactory
         mBuildingId = buildingId;
 
         // image
-        CreepBuildingDummy dummy = AllianceHolder.getRace(raceName).getBuildingDummy(mBuildingId);
+        CreepBuildingDummy dummy = (CreepBuildingDummy) AllianceHolder.getRace(raceName).getBuildingDummy(mBuildingId);
         mStaticObject = new Sprite(SizeConstants.BUILDING_POPUP_IMAGE_PADDING, SizeConstants.BUILDING_POPUP_IMAGE_PADDING,
                 ITEM_IMAGE_WIDTH, ITEM_IMAGE_HEIGHT,
                 dummy.getTextureRegionArray(mBuildingId.getUpgrade()),
@@ -77,16 +72,6 @@ public class BuildingsPopupItem extends ButtonSprite implements PopupItemFactory
         // text
         initText(dummy.getStringId(), dummy.getCost(mBuildingId.getUpgrade()));
         attachChild(mText);
-    }
-
-    @Override
-    public void setOnClickListener(final TouchUtils.OnClickListener clickListener) {
-        setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                clickListener.onClick();
-            }
-        });
     }
 
     private void initText(int objectNameId, int cost) {
@@ -100,5 +85,20 @@ public class BuildingsPopupItem extends ButtonSprite implements PopupItemFactory
     @Override
     public BuildingId getBuildingId() {
         return mBuildingId;
+    }
+
+    @Override
+    public void setOnClickListener(final TouchUtils.OnClickListener clickListener) {
+        setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                clickListener.onClick();
+            }
+        });
+    }
+
+    @Override
+    public IEntity getItemEntity() {
+        return this;
     }
 }

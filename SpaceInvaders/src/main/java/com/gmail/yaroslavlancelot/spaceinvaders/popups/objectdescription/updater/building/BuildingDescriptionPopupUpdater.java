@@ -3,18 +3,18 @@ package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.update
 import android.content.Context;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
+import com.gmail.yaroslavlancelot.spaceinvaders.alliances.AllianceHolder;
+import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.BuildingsAmountChangedEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateBuildingEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.UpgradeBuildingEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.UnitByBuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.unitpath.ShowUnitPathChooser;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.ICreepBuilding;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.CreepBuildingDummy;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.Building;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.BaseDescriptionPopupUpdater;
-import com.gmail.yaroslavlancelot.spaceinvaders.alliances.AllianceHolder;
-import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LocaleImpl;
@@ -160,7 +160,7 @@ public class BuildingDescriptionPopupUpdater extends BaseDescriptionPopupUpdater
         //description
         mDescriptionAreaUpdater.updateDescription(drawArea, objectId, raceName, teamName);
         //button or back build
-        Building building = TeamsHolder.getTeam(teamName).getTeamPlanet().getBuilding(buildingId.getId());
+        ICreepBuilding building = TeamsHolder.getTeam(teamName).getTeamPlanet().getBuilding(buildingId.getId());
         String text;
         final Object event;
         if (//user looking on upgraded version of the not created building
@@ -226,7 +226,7 @@ public class BuildingDescriptionPopupUpdater extends BaseDescriptionPopupUpdater
         mAdditionInfoRectangle.setHeight(drawArea.getHeight());
 
         final BuildingId buildingId = (BuildingId) objectId;
-        CreepBuildingDummy dummy = TeamsHolder.getTeam(teamName).getTeamRace().getBuildingDummy(buildingId);
+        CreepBuildingDummy dummy = (CreepBuildingDummy) TeamsHolder.getTeam(teamName).getTeamRace().getBuildingDummy(buildingId);
         final int unitId = dummy.getUnitId(buildingId.getUpgrade());
         mAdditionInfoRectangle.setTouchCallback(
                 new TouchUtils.CustomTouchListener(mAdditionDescriptionImage) {
@@ -243,7 +243,7 @@ public class BuildingDescriptionPopupUpdater extends BaseDescriptionPopupUpdater
     protected ITextureRegion getAdditionalInformationImage(Object objectId, String raceName) {
         IAlliance race = AllianceHolder.getRace(raceName);
         BuildingId buildingId = (BuildingId) objectId;
-        CreepBuildingDummy dummy = race.getBuildingDummy(buildingId);
+        CreepBuildingDummy dummy = (CreepBuildingDummy) race.getBuildingDummy(buildingId);
         final int unitId = dummy.getUnitId(buildingId.getUpgrade());
         return race.getUnitDummy(unitId).getTextureRegion();
     }

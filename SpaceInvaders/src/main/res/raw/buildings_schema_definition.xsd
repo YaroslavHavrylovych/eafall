@@ -3,18 +3,15 @@
     <xs:element name="buildings">
         <xs:complexType>
             <xs:sequence>
-
                 <xs:element name="units_building" maxOccurs="unbounded">
                     <xs:complexType>
                         <xs:sequence>
                             <xs:element name="id" type="xs:nonNegativeInteger"/>
                             <xs:element name="position_x" type="xs:nonNegativeInteger"/>
                             <xs:element name="position_y" type="xs:nonNegativeInteger"/>
-
                             <xs:element name="upgrades" minOccurs="1" maxOccurs="1">
                                 <xs:complexType>
                                     <xs:sequence>
-
                                         <xs:element name="upgrade" minOccurs="1"
                                                     maxOccurs="unbounded">
                                             <xs:complexType>
@@ -42,16 +39,24 @@
                                                         </xs:complexType>
                                                     </xs:element>
                                                 </xs:sequence>
-
                                                 <xs:attribute name="id" use="required"
                                                               type="xs:nonNegativeInteger"/>
                                             </xs:complexType>
                                         </xs:element>
-
                                     </xs:sequence>
                                 </xs:complexType>
                             </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="name" use="required" type="xs:string"/>
+                    </xs:complexType>
+                </xs:element>
 
+                <xs:element name="wealth_building" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="first_build_income" type="xs:nonNegativeInteger"/>
+                            <xs:element name="next_buildings_income" type="xs:nonNegativeInteger"/>
+                            <xs:element name="image_name" type="xs:string"/>
                         </xs:sequence>
                         <xs:attribute name="name" use="required" type="xs:string"/>
                     </xs:complexType>

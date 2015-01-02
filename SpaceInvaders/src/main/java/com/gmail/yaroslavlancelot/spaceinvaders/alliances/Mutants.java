@@ -1,8 +1,8 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.alliances;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.BuildingListLoader;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.UnitListLoader;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.buildings.BuildingListLoader;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.units.UnitListLoader;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations;
 

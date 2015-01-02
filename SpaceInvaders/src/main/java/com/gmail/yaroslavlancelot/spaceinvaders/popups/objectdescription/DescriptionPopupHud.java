@@ -5,7 +5,7 @@ import android.content.Context;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.UnitByBuildingDescriptionShowEvent;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.PopupHud;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building.BuildingDescriptionPopupUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.unit.UnitsDescriptionPopupUpdater;

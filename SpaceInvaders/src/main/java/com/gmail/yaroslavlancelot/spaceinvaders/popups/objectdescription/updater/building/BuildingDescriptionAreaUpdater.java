@@ -6,8 +6,8 @@ import com.gmail.yaroslavlancelot.spaceinvaders.alliances.AllianceHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.UnitByBuildingDescriptionShowEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.CreepBuildingDummy;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.UnitDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.DescriptionText;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.BaseDescriptionAreaUpdater;
@@ -62,7 +62,7 @@ public class BuildingDescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
         final BuildingId buildingId = (BuildingId) objectId;
         attach(drawArea);
         IAlliance race = AllianceHolder.getInstance().getElement(raceName);
-        CreepBuildingDummy dummy = race.getBuildingDummy(buildingId);
+        CreepBuildingDummy dummy = (CreepBuildingDummy) race.getBuildingDummy(buildingId);
         //cost
         mCostValue.setText(Integer.toString(dummy.getCost(buildingId.getUpgrade())));
         //produced unit

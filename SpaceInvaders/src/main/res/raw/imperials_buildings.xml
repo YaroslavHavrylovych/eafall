@@ -245,4 +245,9 @@
             </upgrade>
         </upgrades>
     </units_building>
+    <wealth_building name="municipality">
+        <first_build_income>20</first_build_income>
+        <next_buildings_income>2</next_buildings_income>
+        <image_name>bunker.png</image_name>
+    </wealth_building>
 </buildings>

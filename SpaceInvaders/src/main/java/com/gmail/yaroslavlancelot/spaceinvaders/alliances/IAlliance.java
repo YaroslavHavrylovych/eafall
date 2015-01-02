@@ -1,7 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.alliances;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.CreepBuildingDummy;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.BuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.UnitDummy;
 
@@ -24,7 +24,7 @@ public interface IAlliance {
 
     UnitDummy getUnitDummy(int unitId);
 
-    CreepBuildingDummy getBuildingDummy(BuildingId buildingId);
+    BuildingDummy getBuildingDummy(BuildingId buildingId);
 
     /** returns all buildings ids without upgrades */
     SortedSet<Integer> getBuildingsIds();

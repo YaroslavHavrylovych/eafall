@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading;
+package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.buildings;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
@@ -10,7 +10,7 @@ import java.util.List;
 
 /** read building data from unit-store xml file */
 @Root(name = "units_building")
-public class BuildingLoader {
+public class CreepBuildingLoader {
     @Attribute(name = "name", required = true)
     public String name;
 
@@ -24,9 +24,9 @@ public class BuildingLoader {
     public Integer position_y;
 
     @ElementList(name = "upgrades")
-    List<BuildingUpgradeLoader> mBuildingLoaderList = new ArrayList<BuildingUpgradeLoader>(3);
+    List<CreepBuildingUpgradeLoader> mBuildingLoaderList = new ArrayList<CreepBuildingUpgradeLoader>(3);
 
-    public List<BuildingUpgradeLoader> getUpdates() {
+    public List<CreepBuildingUpgradeLoader> getUpdates() {
         return mBuildingLoaderList;
     }
 }

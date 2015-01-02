@@ -1,7 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.ai;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.Building;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.ICreepBuilding;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.UnitDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
@@ -175,7 +175,7 @@ public class NormalBot implements Runnable {
     private int[] getBuildings(ITeam team) {
         int[] buildings = new int[team.getTeamRace().getBuildingsAmount()];
         for (int i = 0; i < buildings.length; i++) {
-            Building building = team.getTeamPlanet().getBuilding(new Integer(i + 1) * 10);
+            ICreepBuilding building = team.getTeamPlanet().getBuilding(new Integer(i + 1) * 10);
             buildings[i] = building == null ? 0 : building.getAmount();
         }
         return buildings;

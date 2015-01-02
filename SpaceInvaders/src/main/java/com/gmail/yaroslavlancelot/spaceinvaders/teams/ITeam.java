@@ -3,7 +3,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.teams;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
 

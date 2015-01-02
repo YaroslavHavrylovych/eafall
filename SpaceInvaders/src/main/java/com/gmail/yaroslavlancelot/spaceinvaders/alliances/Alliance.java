@@ -4,10 +4,11 @@ import android.content.Context;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.SpaceInvadersApplication;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.BuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.CreepBuildingDummy;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.BuildingListLoader;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.UnitListLoader;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.buildings.BuildingListLoader;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.units.UnitListLoader;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.UnitDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
@@ -20,19 +21,18 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 import org.simpleframework.xml.core.Persister;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+/** Each alliance common functionality */
 public abstract class Alliance implements IAlliance {
     private static final String TAG = Alliance.class.getCanonicalName();
     protected VertexBufferObjectManager mObjectManager;
     protected SoundOperations mSoundOperations;
     protected Map<Integer, UnitDummy> mUnitDummies;
-    protected Map<Integer, CreepBuildingDummy> mCreepBuildingDummies;
+    protected Map<Integer, BuildingDummy> mBuildingDummies;
     protected SortedSet<Integer> mSortedBuildingsSet;
 
     protected Alliance(final VertexBufferObjectManager objectManager, final SoundOperations soundOperations) {
@@ -42,7 +42,7 @@ public abstract class Alliance implements IAlliance {
 
     @Override
     public int getBuildingsAmount() {
-        return mCreepBuildingDummies.size();
+        return mBuildingDummies.size();
     }
 
     @Override
@@ -65,8 +65,8 @@ public abstract class Alliance implements IAlliance {
     }
 
     @Override
-    public CreepBuildingDummy getBuildingDummy(BuildingId buildingId) {
-        CreepBuildingDummy dummy = mCreepBuildingDummies.get(buildingId.getId());
+    public BuildingDummy getBuildingDummy(BuildingId buildingId) {
+        BuildingDummy dummy = mBuildingDummies.get(buildingId.getId());
         return dummy;
     }
 
@@ -77,7 +77,7 @@ public abstract class Alliance implements IAlliance {
 
     @Override
     public int getUpgradeCost(BuildingId buildingId) {
-        CreepBuildingDummy dummy = mCreepBuildingDummies.get(buildingId.getId());
+        BuildingDummy dummy = mBuildingDummies.get(buildingId.getId());
         if (buildingId.getUpgrade() + 1 >= dummy.getUpgrades()) {
             return -1;
         }
@@ -87,7 +87,7 @@ public abstract class Alliance implements IAlliance {
 
     @Override
     public boolean isUpgradeAvailable(BuildingId buildingId) {
-        CreepBuildingDummy dummy = mCreepBuildingDummies.get(buildingId.getId());
+        BuildingDummy dummy = mBuildingDummies.get(buildingId.getId());
         return buildingId.getUpgrade() + 1 < dummy.getUpgrades();
     }
 
@@ -106,7 +106,7 @@ public abstract class Alliance implements IAlliance {
         Context context = SpaceInvadersApplication.getContext();
 
         int buildingsAmount = buildingListLoader.getList().size();
-        mCreepBuildingDummies = new HashMap<Integer, CreepBuildingDummy>(buildingsAmount);
+        mBuildingDummies = new HashMap<Integer, BuildingDummy>(buildingsAmount);
 
         //init list
         CreepBuildingDummy creepBuildingDummy;
@@ -114,7 +114,7 @@ public abstract class Alliance implements IAlliance {
         for (int i = 0; i < buildingsAmount; i++) {
             creepBuildingDummy = new CreepBuildingDummy(buildingListLoader.getList().get(i));
             buildingsWithUpgradesAmount += (creepBuildingDummy.getUpgrades() * SizeConstants.BUILDING_SIZE);
-            mCreepBuildingDummies.put(creepBuildingDummy.getBuildingId(), creepBuildingDummy);
+            mBuildingDummies.put(creepBuildingDummy.getBuildingId(), creepBuildingDummy);
         }
 
         int textureManagerElementsInLine = (int) Math.round(Math.sqrt(buildingsWithUpgradesAmount) + 1);
@@ -125,7 +125,7 @@ public abstract class Alliance implements IAlliance {
 
         //load
         int n, m, i = 0;
-        for (CreepBuildingDummy dummy : mCreepBuildingDummies.values()) {
+        for (BuildingDummy dummy : mBuildingDummies.values()) {
             n = (i % textureManagerElementsInLine) * dummy.getWidth();
             m = (i / textureManagerElementsInLine) * dummy.getHeight();
             dummy.loadResources(context, smallObjectTexture, n, m, getAllianceName());
@@ -133,7 +133,7 @@ public abstract class Alliance implements IAlliance {
         }
         smallObjectTexture.load();
 
-        mSortedBuildingsSet = new TreeSet<Integer>(mCreepBuildingDummies.keySet());
+        mSortedBuildingsSet = new TreeSet<Integer>(mBuildingDummies.keySet());
     }
 
     protected void loadUnits(TextureManager textureManager, UnitListLoader unitListLoader) {

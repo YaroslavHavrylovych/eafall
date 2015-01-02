@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects;
+package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings;
 
 /**
  * buildings have custom id's. Each building have not just int as id but

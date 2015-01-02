@@ -1,4 +1,6 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading;
+package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.buildings;
+
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.TeamColorArea;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
@@ -6,7 +8,7 @@ import org.simpleframework.xml.Root;
 
 /** update of particular building */
 @Root(name = "upgrade")
-public class BuildingUpgradeLoader {
+public class CreepBuildingUpgradeLoader {
     @Attribute(name = "id", required = true)
     public Integer id;
 

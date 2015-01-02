@@ -1,42 +1,34 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects;
+package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.BuildingsAmountChangedEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameloop.UnitCreatorCycle;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.CreepBuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.StaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
 
 import org.andengine.engine.handler.timer.TimerHandler;
-import org.andengine.entity.IEntity;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
 import de.greenrobot.event.EventBus;
 
-public class CreepBuilding implements Building {
+public class CreepBuilding extends Building implements ICreepBuilding {
     private static final String TAG = CreepBuilding.class.getCanonicalName();
-    /** current building team name */
-    private final String mTeamName;
     /** displayed on the planet building */
     private StaticObject mBuilding;
-    /** building basement, holder for all building elements */
-    private Rectangle mBasement;
     /** building dummy link */
     private CreepBuildingDummy mCreepBuildingDummy;
-    /** amount of buildings of the current building type */
-    private int mBuildingsAmount;
-    /** current building upgrade */
-    private int mUpgrade;
     /** create units */
     private UnitCreatorCycle mUnitCreatorCycle;
     /** building produce units which will go by the top path */
     private boolean mIsTopPath = true;
 
     public CreepBuilding(final CreepBuildingDummy dummy, VertexBufferObjectManager objectManager, String teamName) {
-        mTeamName = teamName;
+        super(BuildingType.CREEP_BUILDING, teamName);
         mCreepBuildingDummy = dummy;
         float width = dummy.getWidth();
         float height = dummy.getHeight();
@@ -46,8 +38,9 @@ public class CreepBuilding implements Building {
         mBuilding = getBuildingByUpgrade(mUpgrade, dummy, teamColor, objectManager);
 
         // attach the building to the basement
-        mBasement = new Rectangle(dummy.getX(), dummy.getY(), width, height, objectManager);
-        mBasement.setColor(Color.TRANSPARENT);
+        Rectangle basement = new Rectangle(dummy.getX(), dummy.getY(), width, height, objectManager);
+        basement.setColor(Color.TRANSPARENT);
+        setEntity(basement);
     }
 
     private static StaticObject getBuildingByUpgrade(final int upgrade, final CreepBuildingDummy creepBuildingDummy,
@@ -67,16 +60,6 @@ public class CreepBuilding implements Building {
     }
 
     @Override
-    public int getUpgrade() {
-        return mUpgrade;
-    }
-
-    @Override
-    public int getIncome() {
-        return mBuildingsAmount * mBuilding.getIncome();
-    }
-
-    @Override
     public synchronized boolean buyBuilding() {
         ITeam team = TeamsHolder.getTeam(mTeamName);
         boolean isFakePlanet = TeamControlBehaviourType.isClientSide(team.getTeamControlType());
@@ -91,7 +74,7 @@ public class CreepBuilding implements Building {
 
             if (mBuildingsAmount <= 0) {
                 mBuildingsAmount = 0;
-                mBasement.attachChild(mBuilding);
+                getEntity().attachChild(mBuilding);
                 mUnitCreatorCycle = new UnitCreatorCycle(mTeamName,
                         mCreepBuildingDummy.getUnitId(mUpgrade), isTopPath());
                 mBuilding.registerUpdateHandler(new TimerHandler(
@@ -100,6 +83,7 @@ public class CreepBuilding implements Building {
             mBuildingsAmount++;
             mUnitCreatorCycle.increaseUnitsAmount();
         }
+        setIncome(mBuildingsAmount * mBuilding.getIncome());
         EventBus.getDefault().post(new BuildingsAmountChangedEvent(mTeamName,
                 BuildingId.makeId(mCreepBuildingDummy.getBuildingId(), mUpgrade),
                 mBuildingsAmount));
@@ -138,24 +122,14 @@ public class CreepBuilding implements Building {
             mBuilding.registerUpdateHandler(new TimerHandler(20, true, mUnitCreatorCycle));
         }
 
-        mBasement.detachChildren();
-        mBasement.attachChild(mBuilding);
+        getEntity().detachChildren();
+        getEntity().attachChild(mBuilding);
 
         mUpgrade = nextUpgrade;
         //change description popup
         EventBus.getDefault().post(new BuildingDescriptionShowEvent(
                 BuildingId.makeId(mCreepBuildingDummy.getBuildingId(), nextUpgrade), mTeamName));
         return true;
-    }
-
-    @Override
-    public synchronized int getAmount() {
-        return mBuildingsAmount;
-    }
-
-    @Override
-    public synchronized IEntity getEntity() {
-        return mBasement;
     }
 
     @Override
