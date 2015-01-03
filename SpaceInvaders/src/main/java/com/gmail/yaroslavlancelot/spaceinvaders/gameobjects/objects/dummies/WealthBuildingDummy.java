@@ -20,6 +20,7 @@ public class WealthBuildingDummy extends BuildingDummy {
     /** building id */
     private static final int BUILDING_ID = 12345;
     private WealthBuildingLoader mBuildingLoader;
+    private int mDescriptionStringId;
 
     public WealthBuildingDummy(WealthBuildingLoader buildingLoader) {
         super(SizeConstants.BUILDING_SIZE, SizeConstants.BUILDING_SIZE);
@@ -36,6 +37,9 @@ public class WealthBuildingDummy extends BuildingDummy {
         Context context = SpaceInvadersApplication.getContext();
         mBuildingStringId = context.getResources().getIdentifier(
                 mBuildingLoader.name, "string", context.getApplicationInfo().packageName);
+
+        mDescriptionStringId = context.getResources().getIdentifier(
+                mBuildingLoader.name + "_description", "string", context.getApplicationInfo().packageName);
     }
 
     @Override
@@ -83,5 +87,9 @@ public class WealthBuildingDummy extends BuildingDummy {
     @Override
     public BuildingType getBuildingType() {
         return BuildingType.WEALTH_BUILDING;
+    }
+
+    public int getDescriptionStringId() {
+        return mDescriptionStringId;
     }
 }

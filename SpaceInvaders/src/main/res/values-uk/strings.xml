@@ -29,6 +29,7 @@
     <string name="laboratory">Лабораторія</string>
     <string name="bunker">Бункер</string>
     <string name="municipality">Муніципалітет</string>
+    <string name="municipality_description">Перший створений будинок додає 20\u0025\nдо прибутку золота.\nКожен наступний будинок додає\n1% до існуючої кількості.</string>
     <!-- /buildings -->
     <!-- units -->
     <string name="conscript">Призовник</string>
@@ -58,6 +59,7 @@
     <string name="artillery">Артилерія</string>
     <string name="sabotage_center">Диверсійний центр</string>
     <string name="caches">Криївка</string>
+    <string name="caches_description">Перший створений будинок додає 20\u0025\nдо прибутку золота.\nКожен наступний будинок додає\n1% до існуючої кількості.</string>
     <!-- /buildings -->
     <!-- units -->
     <string name="machine_gunner">Механічний стрілок</string>
@@ -86,6 +88,7 @@
     <string name="mountain_cave">Печера в Горах</string>
     <string name="hell">Пекло</string>
     <string name="reptile_city">Місто Рептилій</string>
+    <string name="reptile_city_description">Перший створений будинок додає 20\u0025\nдо прибутку золота.\nКожен наступний будинок додає\n1% до існуючої кількості.</string>
     <!-- /buildings -->
     <!-- units -->
     <string name="lizard">Ящірка</string>
@@ -126,7 +129,7 @@
     <!-- creating server -->
     <string name="your_ip_address">Адреса Вашого сервера : </string>
     <string name="template_ip">125.125.125.125</string>
-    <string name="no_opponents">Жоднен клієнт ще не під’єднався до Вашого сервера...</string>
+    <string name="no_opponents">Жоднен клієнт ще не під’єднався до Вашого сервера…</string>
     <string name="your_opponent_name">Ім’я Вашого опонента : </string>
     <string name="your_opponent_ip">Адреса Вашого опонента : </string>
     <string name="start_game">Почати гру</string>
@@ -145,6 +148,7 @@
     <string name="description_path_button">Обрати шлях</string>
     <string name="description_cost">Ціна :</string>
     <string name="description_produce">Створює :</string>
+    <string name="description_description">Опис :</string>
     <string name="description_unit_producing_time">Час створення юніта :</string>
     <string name="description_upgrade">Ціна прокачки :</string>
 
