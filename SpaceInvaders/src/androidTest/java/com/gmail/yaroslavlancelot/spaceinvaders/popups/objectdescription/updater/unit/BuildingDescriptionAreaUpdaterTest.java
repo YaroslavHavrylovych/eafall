@@ -3,7 +3,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.update
 import android.test.AndroidTestCase;
 
 /** unit description object test */
-public class UnitDescriptionAreaUpdaterTest extends AndroidTestCase {
+public class BuildingDescriptionAreaUpdaterTest extends AndroidTestCase {
     public void testEmpty() {
 
     }

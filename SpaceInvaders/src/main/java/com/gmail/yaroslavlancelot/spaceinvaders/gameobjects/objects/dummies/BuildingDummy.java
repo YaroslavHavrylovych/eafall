@@ -2,6 +2,8 @@ package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies;
 
 import android.content.Context;
 
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.BuildingType;
+
 import org.andengine.entity.shape.Area;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -52,4 +54,6 @@ public abstract class BuildingDummy {
     public abstract int getStringId();
 
     public abstract void loadResources(Context context, BitmapTextureAtlas textureAtlas, int x, int y, String raceName);
+
+    public abstract BuildingType getBuildingType();
 }

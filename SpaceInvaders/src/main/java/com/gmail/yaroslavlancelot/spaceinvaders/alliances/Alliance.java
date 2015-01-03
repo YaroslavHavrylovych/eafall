@@ -1,6 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.alliances;
 
 import android.content.Context;
+import android.util.SparseArray;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.SpaceInvadersApplication;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
@@ -22,8 +23,6 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 import org.simpleframework.xml.core.Persister;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -32,8 +31,8 @@ public abstract class Alliance implements IAlliance {
     private static final String TAG = Alliance.class.getCanonicalName();
     protected VertexBufferObjectManager mObjectManager;
     protected SoundOperations mSoundOperations;
-    protected Map<Integer, UnitDummy> mUnitDummies;
-    protected Map<Integer, BuildingDummy> mBuildingDummies;
+    protected SparseArray<UnitDummy> mUnitDummies;
+    protected SparseArray<BuildingDummy> mBuildingDummies;
     protected SortedSet<Integer> mSortedBuildingsSet;
 
     protected Alliance(final VertexBufferObjectManager objectManager, final SoundOperations soundOperations) {
@@ -67,8 +66,7 @@ public abstract class Alliance implements IAlliance {
 
     @Override
     public BuildingDummy getBuildingDummy(BuildingId buildingId) {
-        BuildingDummy dummy = mBuildingDummies.get(buildingId.getId());
-        return dummy;
+        return mBuildingDummies.get(buildingId.getId());
     }
 
     @Override
@@ -105,7 +103,7 @@ public abstract class Alliance implements IAlliance {
 
     protected void loadBuildings(TextureManager textureManager, BuildingListLoader buildingListLoader) {
         Context context = SpaceInvadersApplication.getContext();
-        mBuildingDummies = new HashMap<Integer, BuildingDummy>(buildingListLoader.getList().size() //units
+        mBuildingDummies = new SparseArray<BuildingDummy>(buildingListLoader.getList().size() //units
                 + 1); //wealth buildings
 
         //units
@@ -129,23 +127,26 @@ public abstract class Alliance implements IAlliance {
                 textureManager, size, size, TextureOptions.BILINEAR);
 
         //load
-        int n, m, i = 0;
-        for (BuildingDummy dummy : mBuildingDummies.values()) {
-            n = (i % textureManagerElementsInLine) * dummy.getWidth();
-            m = (i / textureManagerElementsInLine) * dummy.getHeight();
-            dummy.loadResources(context, smallObjectTexture, n, m, getAllianceName());
-            i++;
+        int n, m;
+        for (int i = 0; i < mBuildingDummies.size(); i++) {
+            buildingDummy = mBuildingDummies.valueAt(i);
+            n = (i % textureManagerElementsInLine) * buildingDummy.getWidth();
+            m = (i / textureManagerElementsInLine) * buildingDummy.getHeight();
+            buildingDummy.loadResources(context, smallObjectTexture, n, m, getAllianceName());
         }
         smallObjectTexture.load();
 
-        mSortedBuildingsSet = new TreeSet<Integer>(mBuildingDummies.keySet());
+        mSortedBuildingsSet = new TreeSet<Integer>();
+        for (int i = 0; i < mBuildingDummies.size(); i++) {
+            mSortedBuildingsSet.add(mBuildingDummies.keyAt(i));
+        }
     }
 
     protected void loadUnits(TextureManager textureManager, UnitListLoader unitListLoader) {
         Context context = SpaceInvadersApplication.getContext();
 
         int unitsAmount = unitListLoader.getList().size();
-        mUnitDummies = new HashMap<Integer, UnitDummy>(unitsAmount);
+        mUnitDummies = new SparseArray<UnitDummy>(unitsAmount);
 
         int textureManagerElementsInLine = (int) Math.round(Math.sqrt(unitsAmount) + 1);
         int size = textureManagerElementsInLine * SizeConstants.UNIT_SIZE;

@@ -11,7 +11,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import java.util.List;
 
 /** base operations for description area updaters */
-public abstract class BaseDescriptionAreaUpdater implements DescriptionPopupUpdater.DescriptionAreaUpdater {
+public abstract class BaseDescriptionAreaUpdater implements IPopupUpdater.IDescriptionAreaUpdater {
     /* default values */
     /** space between different description lines */
     protected int mBetweenDescriptionLinesSpace = 5;
@@ -44,6 +44,13 @@ public abstract class BaseDescriptionAreaUpdater implements DescriptionPopupUpda
         for (Text text : mDescriptionTextList) {
             text.detachSelf();
         }
+    }
+
+    /** update description values (e.g. new building appear) */
+    @Override
+    public void updateDescription(RectangularShape drawArea, Object objectId,
+                                  final String raceName, final String teamName) {
+        attach(drawArea);
     }
 
     /**

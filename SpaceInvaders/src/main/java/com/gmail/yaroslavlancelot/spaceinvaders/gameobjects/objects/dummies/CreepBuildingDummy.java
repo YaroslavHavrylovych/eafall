@@ -5,10 +5,11 @@ import android.content.Context;
 import com.gmail.yaroslavlancelot.spaceinvaders.SpaceInvadersApplication;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.StringsAndPathUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.BuildingType;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.TeamColorArea;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.buildings.CreepBuildingLoader;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.buildings.CreepBuildingUpgradeLoader;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.TeamColorArea;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 
 import org.andengine.entity.shape.Area;
@@ -45,16 +46,6 @@ public class CreepBuildingDummy extends BuildingDummy {
     }
 
     @Override
-    public void loadResources(Context context, BitmapTextureAtlas textureAtlas, int x, int y, String raceName) {
-        for (int i = 0; i < mCreepBuildingLoader.getUpdates().size(); i++) {
-            CreepBuildingUpgradeLoader upgradeLoader = mCreepBuildingLoader.getUpdates().get(i);
-            String pathToImage = StringsAndPathUtils.getPathToBuildings(raceName) + upgradeLoader.image_name;
-            GameObject.loadResource(pathToImage, context, textureAtlas, x + getWidth() * i, y + getHeight() * i);
-            mTextureRegionArray[i] = TextureRegionHolderUtils.getInstance().getElement(pathToImage);
-        }
-    }
-
-    @Override
     public int getUpgrades() {
         return mCreepBuildingLoader.getUpdates().size();
     }
@@ -87,6 +78,21 @@ public class CreepBuildingDummy extends BuildingDummy {
     @Override
     public int getStringId() {
         return mBuildingStringId;
+    }
+
+    @Override
+    public void loadResources(Context context, BitmapTextureAtlas textureAtlas, int x, int y, String raceName) {
+        for (int i = 0; i < mCreepBuildingLoader.getUpdates().size(); i++) {
+            CreepBuildingUpgradeLoader upgradeLoader = mCreepBuildingLoader.getUpdates().get(i);
+            String pathToImage = StringsAndPathUtils.getPathToBuildings(raceName) + upgradeLoader.image_name;
+            GameObject.loadResource(pathToImage, context, textureAtlas, x + getWidth() * i, y + getHeight() * i);
+            mTextureRegionArray[i] = TextureRegionHolderUtils.getInstance().getElement(pathToImage);
+        }
+    }
+
+    @Override
+    public BuildingType getBuildingType() {
+        return BuildingType.CREEP_BUILDING;
     }
 
     public int getUnitCreationTime(int upgrade) {

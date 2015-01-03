@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import de.greenrobot.event.EventBus;
 
 /** Update unit description (and only description area) on given area. */
-public class UnitDescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
+public class DescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
     /* values changed with each #updateDescription call */
     private Link mUnitBuildingNameLink;
     private DescriptionText mUnitSpeed;
@@ -32,7 +32,7 @@ public class UnitDescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
     private DescriptionText mUnique;
 
 
-    public UnitDescriptionAreaUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
+    public DescriptionAreaUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         // unit building
         Text text = createDescriptionText(0, R.string.description_building, vertexBufferObjectManager);
         mUnitBuildingNameLink = createLink(text.getWidth(), text.getY(), vertexBufferObjectManager);

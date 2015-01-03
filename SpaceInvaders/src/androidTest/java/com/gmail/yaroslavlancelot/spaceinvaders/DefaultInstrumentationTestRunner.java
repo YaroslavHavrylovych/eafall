@@ -3,7 +3,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders;
 import android.test.InstrumentationTestRunner;
 import android.test.InstrumentationTestSuite;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.unit.UnitDescriptionAreaUpdaterTest;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.unit.BuildingDescriptionAreaUpdaterTest;
 
 import junit.framework.TestSuite;
 
@@ -13,7 +13,7 @@ public class DefaultInstrumentationTestRunner extends InstrumentationTestRunner 
     public TestSuite getAllTests() {
         InstrumentationTestSuite suite = new InstrumentationTestSuite(this);
 
-        suite.addTestSuite(UnitDescriptionAreaUpdaterTest.class);
+        suite.addTestSuite(BuildingDescriptionAreaUpdaterTest.class);
 
         return suite;
     }

@@ -4,7 +4,7 @@ import org.andengine.entity.shape.RectangularShape;
 import org.andengine.entity.text.Text;
 
 /** used for update object description popup */
-public interface DescriptionPopupUpdater {
+public interface IPopupUpdater {
     /** update object image */
     void updateImage(RectangularShape drawArea, Object objectId, String raceName, String teamName);
 
@@ -21,7 +21,7 @@ public interface DescriptionPopupUpdater {
     void clear();
 
     /** updates only description area of the description popup */
-    public static interface DescriptionAreaUpdater {
+    public static interface IDescriptionAreaUpdater {
         /** update description area (and attach all items) */
         void updateDescription(RectangularShape drawArea, final Object objectId,
                                final String raceName, final String teamName);

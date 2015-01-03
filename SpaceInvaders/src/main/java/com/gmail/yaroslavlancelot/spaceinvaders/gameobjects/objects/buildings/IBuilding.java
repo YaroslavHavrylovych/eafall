@@ -1,5 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings;
 
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.BuildingType;
+
 import org.andengine.entity.IEntity;
 
 /** General interface for existing buildings. Used by planet to simplify buildings usage. */
@@ -22,9 +24,4 @@ public interface IBuilding {
     /** return building upgrade */
     int getUpgrade();
 
-    public enum BuildingType {
-        CREEP_BUILDING,
-        WEALTH_BUILDING,
-        ARTIFACT_BUILDING;
-    }
 }

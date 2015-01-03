@@ -1,5 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings;
 
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.BuildingType;
+
 import org.andengine.entity.IEntity;
 import org.andengine.entity.primitive.Rectangle;
 

@@ -19,11 +19,11 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import java.util.ArrayList;
 
 /**  */
-public class UnitAdditionalAreaUpdater extends BaseDescriptionAreaUpdater {
+public class AdditionalInfoAreaUpdater extends BaseDescriptionAreaUpdater {
     private Link mAttack;
     private Link mDefence;
 
-    public UnitAdditionalAreaUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
+    public AdditionalInfoAreaUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         //attack
         Text text = createDescriptionText(0, R.string.description_attack, vertexBufferObjectManager);
         mAttack = createLink(text.getWidth(), text.getY(), vertexBufferObjectManager);

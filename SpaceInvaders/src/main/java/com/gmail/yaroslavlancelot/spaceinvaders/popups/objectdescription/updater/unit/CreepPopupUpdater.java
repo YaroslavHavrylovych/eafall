@@ -5,7 +5,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.alliances.AllianceHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.CreepBuildingDummy;
-import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.BaseDescriptionPopupUpdater;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.BasePopupUpdater;
 
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.RectangularShape;
@@ -13,16 +13,16 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /** present particular unit in description popup */
-public class UnitsDescriptionPopupUpdater extends BaseDescriptionPopupUpdater {
+public class CreepPopupUpdater extends BasePopupUpdater {
     /** unit description object (update description area which u pass to it) */
-    private DescriptionAreaUpdater mDescriptionAreaUpdater;
+    private IDescriptionAreaUpdater mDescriptionAreaUpdater;
     /** updates unit addition information area */
-    private DescriptionAreaUpdater mAdditionInformationAreaUpdater;
+    private IDescriptionAreaUpdater mAdditionInformationAreaUpdater;
 
-    public UnitsDescriptionPopupUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
+    public CreepPopupUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         super(vertexBufferObjectManager, scene);
-        mDescriptionAreaUpdater = new UnitDescriptionAreaUpdater(vertexBufferObjectManager, scene);
-        mAdditionInformationAreaUpdater = new UnitAdditionalAreaUpdater(vertexBufferObjectManager, scene);
+        mDescriptionAreaUpdater = new com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.unit.DescriptionAreaUpdater(vertexBufferObjectManager, scene);
+        mAdditionInformationAreaUpdater = new AdditionalInfoAreaUpdater(vertexBufferObjectManager, scene);
     }
 
     @Override
