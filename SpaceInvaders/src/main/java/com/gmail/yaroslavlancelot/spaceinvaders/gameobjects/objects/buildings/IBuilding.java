@@ -24,4 +24,9 @@ public interface IBuilding {
     /** return building upgrade */
     int getUpgrade();
 
+    /** byu new building */
+    boolean buyBuilding();
+
+    /** upgrade all buildings of the current type */
+    boolean upgradeBuilding();
 }

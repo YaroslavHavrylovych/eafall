@@ -92,4 +92,12 @@ public class WealthBuildingDummy extends BuildingDummy {
     public int getDescriptionStringId() {
         return mDescriptionStringId;
     }
+
+    public int getFirstBuildingIncome() {
+        return mBuildingLoader.first_build_income;
+    }
+
+    public int getNextBuildingsIncome() {
+        return mBuildingLoader.next_buildings_income;
+    }
 }

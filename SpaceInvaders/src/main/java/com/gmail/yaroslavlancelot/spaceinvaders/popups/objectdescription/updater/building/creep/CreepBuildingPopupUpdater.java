@@ -10,7 +10,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.BuildingDes
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.UnitByBuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.unitpath.ShowUnitPathChooser;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.ICreepBuilding;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.IBuilding;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.CreepBuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building.BaseBuildingPopupUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
@@ -62,22 +62,12 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
     }
 
     @Override
-    public void onEvent(final BuildingsAmountChangedEvent buildingsAmountChangedEvent) {
-        super.onEvent(buildingsAmountChangedEvent);
-        if (mDescriptionAreaUpdater instanceof com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building.creep.DescriptionAreaUpdater) {
-            ((com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building.creep.DescriptionAreaUpdater)
-                    mDescriptionAreaUpdater).updateUpgradeCost(buildingsAmountChangedEvent.getBuildingId(), buildingsAmountChangedEvent.getTeamName());
-        }
-        mPathButton.setVisible(true);
-    }
-
-    @Override
     public void updateDescription(RectangularShape drawArea, Object objectId, String raceName, final String teamName) {
         super.updateDescription(drawArea, objectId, raceName, teamName);
         IAlliance race = AllianceHolder.getRace(raceName);
         final BuildingId buildingId = (BuildingId) objectId;
         //button or back build
-        ICreepBuilding building = TeamsHolder.getTeam(teamName).getTeamPlanet().getBuilding(buildingId.getId());
+        IBuilding building = TeamsHolder.getTeam(teamName).getTeamPlanet().getBuilding(buildingId.getId());
         final Object event;
         if (//user looking on upgraded version of the not created building
                 (building == null && buildingId.getUpgrade() > 0)
@@ -123,6 +113,16 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
         } else {
             mPathButton.setVisible(false);
         }
+    }
+
+    @Override
+    public void onEvent(final BuildingsAmountChangedEvent buildingsAmountChangedEvent) {
+        super.onEvent(buildingsAmountChangedEvent);
+        if (mDescriptionAreaUpdater instanceof com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building.creep.DescriptionAreaUpdater) {
+            ((com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building.creep.DescriptionAreaUpdater)
+                    mDescriptionAreaUpdater).updateUpgradeCost(buildingsAmountChangedEvent.getBuildingId(), buildingsAmountChangedEvent.getTeamName());
+        }
+        mPathButton.setVisible(true);
     }
 
     @Override

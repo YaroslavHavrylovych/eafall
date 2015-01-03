@@ -2,11 +2,14 @@ package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjec
 
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Armor;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.ICreepBuilding;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.BuildingDummy;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.CreepBuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.BuildingType;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.CreepBuilding;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.IBuilding;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.WealthBuilding;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.BuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.CreepBuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.WealthBuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 
@@ -24,7 +27,7 @@ public class PlanetStaticObject extends StaticObject {
     // unit spawn point
     private float mSpawnPointX, mSpawnPointY;
     // buildings in current planet
-    private Map<Integer, ICreepBuilding> mBuildings = new HashMap<Integer, ICreepBuilding>(9);
+    private Map<Integer, IBuilding> mBuildings = new HashMap<Integer, IBuilding>(10);
     /** the team, current planet belongs to */
     private ITeam mPlanetTeam;
 
@@ -41,10 +44,18 @@ public class PlanetStaticObject extends StaticObject {
     @Override
     public int getIncome() {
         int value = super.getIncome();
-        for (ICreepBuilding building : mBuildings.values()) {
+        int percentIncrease = 0;
+        for (IBuilding building : mBuildings.values()) {
+            if (building.getBuildingType() == BuildingType.ARTIFACT_BUILDING) {
+                continue;
+            }
+            if (building.getBuildingType() == BuildingType.WEALTH_BUILDING) {
+                percentIncrease += building.getIncome();
+                continue;
+            }
             value += building.getIncome();
         }
-        return value;
+        return value + value * (percentIncrease / 100);
     }
 
     /** set unit spawn point */
@@ -71,23 +82,37 @@ public class PlanetStaticObject extends StaticObject {
      */
     public boolean createBuilding(BuildingId buildingId) {
         LoggerHelper.methodInvocation(TAG, "createBuilding");
-        ICreepBuilding creepBuilding = mBuildings.get(buildingId.getId());
-        if (creepBuilding == null) {
-            final BuildingDummy buildingDummy =
-                    mPlanetTeam.getTeamRace().getBuildingDummy(buildingId);
+        IBuilding building = mBuildings.get(buildingId.getId());
+        if (building == null) {
+            final BuildingDummy buildingDummy = mPlanetTeam.getTeamRace().getBuildingDummy(buildingId);
             if (buildingDummy == null) {
                 throw new IllegalArgumentException("no building with id " + buildingId);
             }
-            creepBuilding = new CreepBuilding((CreepBuildingDummy) buildingDummy, getVertexBufferObjectManager(), mPlanetTeam.getTeamName());
-            attachChild(creepBuilding.getEntity());
-            mBuildings.put(buildingId.getId(), creepBuilding);
+
+            switch (buildingDummy.getBuildingType()) {
+                case CREEP_BUILDING: {
+                    building = new CreepBuilding((CreepBuildingDummy) buildingDummy, getVertexBufferObjectManager(),
+                            mPlanetTeam.getTeamName());
+                    break;
+                }
+                case WEALTH_BUILDING: {
+                    building = new WealthBuilding((WealthBuildingDummy) buildingDummy, getVertexBufferObjectManager(),
+                            mPlanetTeam.getTeamName());
+                    break;
+                }
+                default: {
+                    throw new IllegalStateException("unknown building type in create building");
+                }
+            }
+            attachChild(building.getEntity());
+            mBuildings.put(buildingId.getId(), building);
         }
-        return creepBuilding.buyBuilding();
+        return building.buyBuilding();
     }
 
     /** get buildings amount for passed building type */
     public int getBuildingsAmount(int buildingId) {
-        ICreepBuilding buildings = mBuildings.get(buildingId);
+        IBuilding buildings = mBuildings.get(buildingId);
         if (buildings == null) return 0;
         return buildings.getAmount();
     }
@@ -100,7 +125,7 @@ public class PlanetStaticObject extends StaticObject {
         return mBuildings.keySet();
     }
 
-    public ICreepBuilding getBuilding(int id) {
+    public IBuilding getBuilding(int id) {
         return mBuildings.get(id);
     }
 }
