@@ -55,7 +55,7 @@ public class PlanetStaticObject extends StaticObject {
             }
             value += building.getIncome();
         }
-        return value + value * (percentIncrease / 100);
+        return value + (int) (value * (((float)percentIncrease) / 100));
     }
 
     /** set unit spawn point */
