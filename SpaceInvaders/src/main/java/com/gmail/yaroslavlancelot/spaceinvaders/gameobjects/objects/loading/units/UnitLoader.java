@@ -1,4 +1,6 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading;
+package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.units;
+
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.TeamColorArea;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;

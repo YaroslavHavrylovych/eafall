@@ -1,6 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.eventbus;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
 
 /** holds data needed to upgrade the building */
 public class UpgradeBuildingEvent {

@@ -1,13 +1,14 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.unit;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Armor;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Damage;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.UnitDummy;
-import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.BaseDescriptionAreaUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.AllianceHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Armor;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Damage;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.CreepBuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.UnitDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.BaseDescriptionAreaUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.visualelements.text.Link;
 
 import org.andengine.entity.scene.Scene;
@@ -18,11 +19,11 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import java.util.ArrayList;
 
 /**  */
-public class UnitAdditionalAreaUpdater extends BaseDescriptionAreaUpdater {
+public class AdditionalInfoAreaUpdater extends BaseDescriptionAreaUpdater {
     private Link mAttack;
     private Link mDefence;
 
-    public UnitAdditionalAreaUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
+    public AdditionalInfoAreaUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         //attack
         Text text = createDescriptionText(0, R.string.description_attack, vertexBufferObjectManager);
         mAttack = createLink(text.getWidth(), text.getY(), vertexBufferObjectManager);
@@ -40,7 +41,7 @@ public class UnitAdditionalAreaUpdater extends BaseDescriptionAreaUpdater {
     public void updateDescription(RectangularShape drawArea, Object objectId, String raceName, String teamName) {
         final BuildingId buildingId = (BuildingId) objectId;
         IAlliance race = AllianceHolder.getInstance().getElement(raceName);
-        int unitId = race.getBuildingDummy(buildingId).getUnitId(buildingId.getUpgrade());
+        int unitId = ((CreepBuildingDummy) race.getBuildingDummy(buildingId)).getUnitId(buildingId.getUpgrade());
 
         attach(drawArea);
 

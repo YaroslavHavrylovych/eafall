@@ -11,14 +11,14 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
  * Description popup can present different objects. General actions for all of them you
  * can use with extending current class
  */
-public abstract class BaseDescriptionPopupUpdater implements DescriptionPopupUpdater {
+public abstract class BasePopupUpdater implements IPopupUpdater {
     protected final VertexBufferObjectManager mVertexBufferObjectManager;
     /** left side sprite (showPopup descript object image) in it's area */
     protected Sprite mObjectImage;
     /** used by children classes */
     protected Scene mScene;
 
-    public BaseDescriptionPopupUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
+    public BasePopupUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         mVertexBufferObjectManager = vertexBufferObjectManager;
         mScene = scene;
     }

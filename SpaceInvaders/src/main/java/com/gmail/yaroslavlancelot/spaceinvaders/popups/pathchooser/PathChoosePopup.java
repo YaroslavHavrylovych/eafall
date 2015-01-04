@@ -2,10 +2,11 @@ package com.gmail.yaroslavlancelot.spaceinvaders.popups.pathchooser;
 
 import android.content.Context;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.constants.StringsAndPathUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.StringsAndPathUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.unitpath.HideUnitPathChooser;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.unitpath.ShowUnitPathChooser;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.ICreepBuilding;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.PopupHud;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
@@ -70,8 +71,9 @@ public class PathChoosePopup extends PopupHud {
     public void onEvent(final ShowUnitPathChooser showUnitPathChooser) {
         mTeamName = showUnitPathChooser.getTeamName();
         mBuildingId = showUnitPathChooser.getBuildingId();
-        boolean isTop = TeamsHolder.getTeam(mTeamName).getTeamPlanet().getBuilding(mBuildingId)
-                .isTopPath();
+        boolean isTop =
+                ((ICreepBuilding) TeamsHolder.getTeam(mTeamName).getTeamPlanet().getBuilding(mBuildingId))
+                        .isTopPath();
         if (isTop) {
             mTopCircle.setActive();
             mBottomCircle.setDeactivated();
@@ -84,7 +86,7 @@ public class PathChoosePopup extends PopupHud {
 
     @Override
     public synchronized void hidePopup() {
-        TeamsHolder.getTeam(mTeamName).getTeamPlanet().getBuilding(mBuildingId)
+        ((ICreepBuilding) TeamsHolder.getTeam(mTeamName).getTeamPlanet().getBuilding(mBuildingId))
                 .setPath(mTopCircle.isActive());
         super.hidePopup();
         EventBus.getDefault().post(new HideUnitPathChooser());

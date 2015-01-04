@@ -5,10 +5,14 @@ import android.content.Context;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.UnitByBuildingDescriptionShowEvent;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.BuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.PopupHud;
-import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building.BuildingDescriptionPopupUpdater;
-import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.unit.UnitsDescriptionPopupUpdater;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.IPopupUpdater;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building.BaseBuildingPopupUpdater;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building.creep.CreepBuildingPopupUpdater;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building.wealth.WealthBuildingPopupUpdater;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.unit.CreepPopupUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
@@ -32,10 +36,12 @@ public class DescriptionPopupHud extends PopupHud {
     public static final String KEY = TAG;
     /** general elements of the popup (background sprite, close button, description image) */
     private DescriptionPopupBackgroundSprite mDescriptionPopupBackgroundSprite;
-    /** building updater */
-    private BuildingDescriptionPopupUpdater mBuildingDescriptionUpdater;
+    /** creep building updater */
+    private CreepBuildingPopupUpdater mCreepBuildingPopupUpdater;
+    /** wealth building updater */
+    private WealthBuildingPopupUpdater mWealthBuildingPopupUpdater;
     /** unit updater */
-    private UnitsDescriptionPopupUpdater mUnitsDescriptionUpdater;
+    private CreepPopupUpdater mUnitsDescriptionUpdater;
 
     /**
      * single instance that's why it's private constructor
@@ -48,8 +54,9 @@ public class DescriptionPopupHud extends PopupHud {
         mPopupRectangle = new Rectangle(0, SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.DESCRIPTION_POPUP_HEIGHT,
                 SizeConstants.GAME_FIELD_WIDTH, SizeConstants.DESCRIPTION_POPUP_HEIGHT, vertexBufferObjectManager);
 
-        mBuildingDescriptionUpdater = new BuildingDescriptionPopupUpdater(vertexBufferObjectManager, this);
-        mUnitsDescriptionUpdater = new UnitsDescriptionPopupUpdater(vertexBufferObjectManager, this);
+        mCreepBuildingPopupUpdater = new CreepBuildingPopupUpdater(vertexBufferObjectManager, this);
+        mWealthBuildingPopupUpdater = new WealthBuildingPopupUpdater(vertexBufferObjectManager, this);
+        mUnitsDescriptionUpdater = new CreepPopupUpdater(vertexBufferObjectManager, this);
 
         mPopupRectangle.setTouchCallback(TouchUtils.EmptyTouch.getInstance());
         initBackgroundSprite(vertexBufferObjectManager);
@@ -64,12 +71,12 @@ public class DescriptionPopupHud extends PopupHud {
 
     public static void loadResources(Context context, TextureManager textureManager) {
         DescriptionPopupBackgroundSprite.loadResources(context, textureManager);
-        BuildingDescriptionPopupUpdater.loadResources(context, textureManager);
+        BaseBuildingPopupUpdater.loadResources(context, textureManager);
     }
 
     public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
         DescriptionPopupBackgroundSprite.loadFonts(fontManager, textureManager);
-        BuildingDescriptionPopupUpdater.loadFonts(fontManager, textureManager);
+        BaseBuildingPopupUpdater.loadFonts(fontManager, textureManager);
         DescriptionText.loadFonts(fontManager, textureManager);
         Link.loadFonts(fontManager, textureManager);
     }
@@ -80,7 +87,22 @@ public class DescriptionPopupHud extends PopupHud {
         onEvent();
         BuildingId buildingId = buildingDescriptionShowEvent.getObjectId();
         ITeam team = TeamsHolder.getInstance().getElement(buildingDescriptionShowEvent.getTeamName());
-        mDescriptionPopupBackgroundSprite.updateDescription(mBuildingDescriptionUpdater, buildingId,
+        BuildingDummy buildingDummy = team.getTeamRace().getBuildingDummy(buildingId);
+        IPopupUpdater popupUpdater;
+        switch (buildingDummy.getBuildingType()) {
+            case CREEP_BUILDING: {
+                popupUpdater = mCreepBuildingPopupUpdater;
+                break;
+            }
+            case WEALTH_BUILDING: {
+                popupUpdater = mWealthBuildingPopupUpdater;
+                break;
+            }
+            default: {
+                throw new IllegalArgumentException("unknown building type for popup updater");
+            }
+        }
+        mDescriptionPopupBackgroundSprite.updateDescription(popupUpdater, buildingId,
                 team.getTeamRace().getAllianceName(), team.getTeamName());
         showPopup();
     }
@@ -90,8 +112,9 @@ public class DescriptionPopupHud extends PopupHud {
     }
 
     private void clear() {
-        mBuildingDescriptionUpdater.clear();
+        mCreepBuildingPopupUpdater.clear();
         mUnitsDescriptionUpdater.clear();
+        mWealthBuildingPopupUpdater.clear();
     }
 
     @SuppressWarnings("unused")

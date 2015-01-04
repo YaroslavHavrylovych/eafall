@@ -2,7 +2,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="buildings_schema_definition.xsd">
     <!-- 10 -->
-    <building name="camp">
+    <units_building name="camp">
         <id>10</id>
         <position_x>48</position_x>
         <position_y>32</position_y>
@@ -44,9 +44,9 @@
                 </team_color_area>
             </upgrade>
         </upgrades>
-    </building>
+    </units_building>
     <!-- 20 -->
-    <building name="tent">
+    <units_building name="tent">
         <id>20</id>
         <position_x>64</position_x>
         <position_y>32</position_y>
@@ -76,9 +76,9 @@
                 </team_color_area>
             </upgrade>
         </upgrades>
-    </building>
+    </units_building>
     <!-- 30 -->
-    <building name="barracks">
+    <units_building name="barracks">
         <id>30</id>
         <position_x>80</position_x>
         <position_y>48</position_y>
@@ -108,9 +108,9 @@
                 </team_color_area>
             </upgrade>
         </upgrades>
-    </building>
+    </units_building>
     <!-- 40 -->
-    <building name="shooters_hall">
+    <units_building name="shooters_hall">
         <id>40</id>
         <position_x>80</position_x>
         <position_y>64</position_y>
@@ -140,9 +140,9 @@
                 </team_color_area>
             </upgrade>
         </upgrades>
-    </building>
+    </units_building>
     <!-- 50 -->
-    <building name="training_center">
+    <units_building name="training_center">
         <id>50</id>
         <position_x>64</position_x>
         <position_y>48</position_y>
@@ -172,9 +172,9 @@
                 </team_color_area>
             </upgrade>
         </upgrades>
-    </building>
+    </units_building>
     <!-- 60 -->
-    <building name="workshop">
+    <units_building name="workshop">
         <id>60</id>
         <position_x>48</position_x>
         <position_y>80</position_y>
@@ -204,9 +204,9 @@
                 </team_color_area>
             </upgrade>
         </upgrades>
-    </building>
+    </units_building>
     <!-- 70 -->
-    <building name="laboratory">
+    <units_building name="laboratory">
         <id>70</id>
         <position_x>32</position_x>
         <position_y>48</position_y>
@@ -224,9 +224,9 @@
                 </team_color_area>
             </upgrade>
         </upgrades>
-    </building>
+    </units_building>
     <!-- 80 -->
-    <building name="bunker">
+    <units_building name="bunker">
         <id>80</id>
         <position_x>32</position_x>
         <position_y>64</position_y>
@@ -244,5 +244,19 @@
                 </team_color_area>
             </upgrade>
         </upgrades>
-    </building>
+    </units_building>
+    <wealth_building name="municipality">
+        <first_build_income>20</first_build_income>
+        <next_buildings_income>2</next_buildings_income>
+        <cost>350</cost>
+        <position_x>56</position_x>
+        <position_y>56</position_y>
+        <image_name>bunker.png</image_name>
+        <team_color_area>
+            <x>2</x>
+            <y>10</y>
+            <width>11</width>
+            <height>5</height>
+        </team_color_area>
+    </wealth_building>
 </buildings>

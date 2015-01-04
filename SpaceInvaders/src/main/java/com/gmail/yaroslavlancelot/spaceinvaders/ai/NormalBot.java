@@ -1,9 +1,9 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.ai;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.Building;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.UnitDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.IBuilding;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.UnitDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 
@@ -146,6 +146,21 @@ public class NormalBot implements Runnable {
         return buildingsOfRace2;
     }
 
+    private int[] getBuildings(ITeam team) {
+        int[] buildings = new int[team.getTeamRace().getBuildingsAmount()];
+        for (int i = 0; i < buildings.length; i++) {
+            IBuilding building = team.getTeamPlanet().getBuilding(new Integer(i + 1) * 10);
+            buildings[i] = building == null ? 0 : building.getAmount();
+        }
+        return buildings;
+    }
+
+    private boolean isAllCovered(int[] array) {
+        for (int i = 0; i < array.length; i++)
+            if (array[i] > 0) return false;
+        return true;
+    }
+
     private int getBuildingIdToCreate(ITeam team, float[][] efficiencyArray, int[] uncoveredBuildings) {
         int firstUncoveredBuildingId = 0;
         for (int i = 0; i < uncoveredBuildings.length; i++) {
@@ -170,20 +185,5 @@ public class NormalBot implements Runnable {
             }
         }
         return minValueId;
-    }
-
-    private int[] getBuildings(ITeam team) {
-        int[] buildings = new int[team.getTeamRace().getBuildingsAmount()];
-        for (int i = 0; i < buildings.length; i++) {
-            Building building = team.getTeamPlanet().getBuilding(new Integer(i + 1) * 10);
-            buildings[i] = building == null ? 0 : building.getAmount();
-        }
-        return buildings;
-    }
-
-    private boolean isAllCovered(int[] array) {
-        for (int i = 0; i < array.length; i++)
-            if (array[i] > 0) return false;
-        return true;
     }
 }

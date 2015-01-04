@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building;
+package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building.creep;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.SpaceInvadersApplication;
@@ -6,8 +6,8 @@ import com.gmail.yaroslavlancelot.spaceinvaders.alliances.AllianceHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.UnitByBuildingDescriptionShowEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.CreepBuildingDummy;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.UnitDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.DescriptionText;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.BaseDescriptionAreaUpdater;
@@ -25,10 +25,11 @@ import java.util.ArrayList;
 import de.greenrobot.event.EventBus;
 
 /**
+ * For CREEP building : <br/>
  * writes building description on given area (p.s. only description popup). Knows about other
  * buttons (e.g. build button) on the description popup so place text with knowing of this.
  */
-public class BuildingDescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
+public class DescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
     /* values changed with each #updateDescription call */
     private DescriptionText mCostValue;
     private DescriptionText mUnitCreationTimeValue;
@@ -36,7 +37,7 @@ public class BuildingDescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
     private Link mProducedUnitLink;
     private Link mUpgradeLink;
 
-    public BuildingDescriptionAreaUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
+    public DescriptionAreaUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         // cost
         Text text = createDescriptionText(0, R.string.description_cost, vertexBufferObjectManager);
         mCostValue = createDescriptionText(text.getWidth() + mSpace, 0, vertexBufferObjectManager);
@@ -45,7 +46,7 @@ public class BuildingDescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
         mProducedUnitLink = createLink(text.getWidth(), text.getY(), vertexBufferObjectManager);
         // unit creation time
         text = createDescriptionText(2, R.string.description_unit_producing_time, vertexBufferObjectManager);
-        mUnitCreationTimeValue = createDescriptionText(text.getWidth() + mSpace, text.getY(), "8", vertexBufferObjectManager);
+        mUnitCreationTimeValue = createDescriptionText(text.getWidth() + mSpace, text.getY(), "50", vertexBufferObjectManager);
         // upgrade
         text = mUpgradeText = createDescriptionText(3, R.string.description_upgrade, vertexBufferObjectManager);
         mUpgradeLink = createLink(text.getWidth(), text.getY(), vertexBufferObjectManager);
@@ -55,14 +56,13 @@ public class BuildingDescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
         scene.registerTouchArea(mUpgradeLink);
     }
 
-    /** update description values (e.g. new building appear) */
     @Override
     public void updateDescription(RectangularShape drawArea, Object objectId,
                                   final String raceName, final String teamName) {
+        super.updateDescription(drawArea, objectId, raceName, teamName);
         final BuildingId buildingId = (BuildingId) objectId;
-        attach(drawArea);
         IAlliance race = AllianceHolder.getInstance().getElement(raceName);
-        CreepBuildingDummy dummy = race.getBuildingDummy(buildingId);
+        CreepBuildingDummy dummy = (CreepBuildingDummy) race.getBuildingDummy(buildingId);
         //cost
         mCostValue.setText(Integer.toString(dummy.getCost(buildingId.getUpgrade())));
         //produced unit

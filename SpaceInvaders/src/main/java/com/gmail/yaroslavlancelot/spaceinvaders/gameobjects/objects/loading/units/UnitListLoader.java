@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading;
+package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.units;
 
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;

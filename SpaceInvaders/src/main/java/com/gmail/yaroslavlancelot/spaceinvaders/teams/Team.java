@@ -1,14 +1,14 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.teams;
 
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.MoneyUpdatedEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.UpgradeBuildingEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.Building;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.IBuilding;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
 
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.util.color.Color;
@@ -193,7 +193,7 @@ public class Team implements ITeam {
             }
             int position = allBuildings.headSet(id).size();
             BuildingId buildingId = mBuildingsTypesIds[position];
-            Building building = mTeamPlanet.getBuilding(id);
+            IBuilding building = mTeamPlanet.getBuilding(id);
             if (buildingId.getUpgrade() == building.getUpgrade()) {
                 continue;
             }
@@ -210,7 +210,7 @@ public class Team implements ITeam {
             return;
         }
         BuildingId buildingId = upgradeBuildingEvent.getBuildingId();
-        Building building = getTeamPlanet().getBuilding(buildingId.getId());
+        IBuilding building = getTeamPlanet().getBuilding(buildingId.getId());
         if (building == null) {
             return;
         }

@@ -28,6 +28,8 @@
     <string name="workshop">Workshop</string>
     <string name="laboratory">Laboratory</string>
     <string name="bunker">Bunker</string>
+    <string name="municipality">Municipality</string>
+    <string name="municipality_description">First created building increase by 20\u0025\n to the income.\nEach next adds\n1\u0025 t existing value.</string>
     <!-- /buildings -->
     <!-- units -->
     <string name="conscript">Conscript</string>
@@ -56,6 +58,8 @@
     <string name="minery">Minery</string>
     <string name="artillery">Artillery</string>
     <string name="sabotage_center">Sabotage Center</string>
+    <string name="caches">Caches</string>
+    <string name="caches_description">First created building increase by 20\u0025\n to the income.\nEach next adds\n1\u0025 t existing value.</string>
     <!-- /buildings -->
     <!-- units -->
     <string name="machine_gunner">Machine Gunner</string>
@@ -83,6 +87,8 @@
     <string name="web">Web</string>
     <string name="mountain_cave">Mountain Cave</string>
     <string name="hell">Hell</string>
+    <string name="reptile_city">Reptile City</string>
+    <string name="reptile_city_description">First created building increase by 20\u0025\n to the income.\nEach next adds\n1\u0025 t existing value.</string>
     <!-- /buildings -->
     <!-- units -->
     <string name="lizard">Lizard</string>
@@ -123,7 +129,7 @@
     <!-- creating server -->
     <string name="your_ip_address">Your ip address : </string>
     <string name="template_ip">125.125.125.125</string>
-    <string name="no_opponents">No clients connected to your server...</string>
+    <string name="no_opponents">No clients connected to your server…</string>
     <string name="your_opponent_name">Your opponent name : </string>
     <string name="your_opponent_ip">Your opponent ip : </string>
     <string name="start_game">Start game</string>
@@ -142,6 +148,7 @@
     <string name="description_path_button">Set path</string>
     <string name="description_cost">Cost :</string>
     <string name="description_produce">Produce :</string>
+    <string name="description_description">Description :</string>
     <string name="description_unit_producing_time">Unit producing time :</string>
     <string name="description_upgrade">Upgrade cost :</string>
 

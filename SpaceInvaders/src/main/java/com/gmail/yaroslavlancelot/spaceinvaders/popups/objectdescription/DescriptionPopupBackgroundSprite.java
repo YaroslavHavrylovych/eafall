@@ -6,7 +6,7 @@ import android.graphics.Typeface;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.StringsAndPathUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
-import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.DescriptionPopupUpdater;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.IPopupUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 
@@ -123,14 +123,14 @@ public class DescriptionPopupBackgroundSprite extends Sprite {
         return isVisible() && super.onAreaTouched(pSceneTouchEvent, touchAreaLocalX, touchAreaLocalY);
     }
 
-    public void updateDescription(DescriptionPopupUpdater updater, Object objectId, String raceName, String teamName) {
+    public void updateDescription(IPopupUpdater updater, Object objectId, String raceName, String teamName) {
         updater.updateImage(mImageShape, objectId, raceName, teamName);
         updater.updateDescription(mDescriptionShape, objectId, raceName, teamName);
         updater.updateAdditionInfo(mAdditionalInformationShape, objectId, raceName, teamName);
         updateObjectNameText(updater, objectId, raceName);
     }
 
-    private void updateObjectNameText(DescriptionPopupUpdater updater, Object objectId, String raceName) {
+    private void updateObjectNameText(IPopupUpdater updater, Object objectId, String raceName) {
         updater.updateObjectNameText(mObjectNameText, objectId, raceName);
         mObjectNameText.setX(mDescriptionShape.getX() + mDescriptionShape.getWidth() / 2
                 - mObjectNameText.getWidth() / 2);
