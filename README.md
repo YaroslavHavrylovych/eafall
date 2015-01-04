@@ -1,8 +1,8 @@
-# This is my README
+# The project is private so you can't get it without requesting the permission. #
 
-Home made project. Game which get it's root from WarCraft map.
+First that you should know is that the project was started as just for fun. I don't know the destiny of this project: will it be open-source or I will create private project or will open it partly it is not decided yet.
 
-Brief about game :
-you have a planet as and your opponent. You can create some buildings on your planet. They are different in cost and produced units. Each unit have different armor and attack (not only value but type). YOU CAN'T CONTROL UNITS MOVEMENT ONLY BUILDINGS WHICH CREATES THEM.
+Additional description you can find [here](https://bitbucket.org/yaroslav_havrylovych/spaceinvaders/wiki/Home).
 
-It's still not finished so I can't describe it more cause I don't know what really will be in result. Rules and game objects sometimes changes with development so will see :)
+*Note* :
+The project uses [AndEngine](https://github.com/nicolasgramlich/AndEngine) graphics, physics and network engines.
