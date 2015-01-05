@@ -6,9 +6,11 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.BuildingType
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.CreepBuilding;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.IBuilding;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.SpecialBuilding;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.WealthBuilding;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.BuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.CreepBuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.SpecialBuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.WealthBuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
@@ -46,7 +48,7 @@ public class PlanetStaticObject extends StaticObject {
         int value = super.getIncome();
         int percentIncrease = 0;
         for (IBuilding building : mBuildings.values()) {
-            if (building.getBuildingType() == BuildingType.ARTIFACT_BUILDING) {
+            if (building.getBuildingType() == BuildingType.SPECIAL_BUILDING) {
                 continue;
             }
             if (building.getBuildingType() == BuildingType.WEALTH_BUILDING) {
@@ -55,7 +57,7 @@ public class PlanetStaticObject extends StaticObject {
             }
             value += building.getIncome();
         }
-        return value + (int) (value * (((float)percentIncrease) / 100));
+        return value + (int) (value * (((float) percentIncrease) / 100));
     }
 
     /** set unit spawn point */
@@ -97,6 +99,11 @@ public class PlanetStaticObject extends StaticObject {
                 }
                 case WEALTH_BUILDING: {
                     building = new WealthBuilding((WealthBuildingDummy) buildingDummy, getVertexBufferObjectManager(),
+                            mPlanetTeam.getTeamName());
+                    break;
+                }
+                case SPECIAL_BUILDING: {
+                    building = new SpecialBuilding((SpecialBuildingDummy) buildingDummy, getVertexBufferObjectManager(),
                             mPlanetTeam.getTeamName());
                     break;
                 }

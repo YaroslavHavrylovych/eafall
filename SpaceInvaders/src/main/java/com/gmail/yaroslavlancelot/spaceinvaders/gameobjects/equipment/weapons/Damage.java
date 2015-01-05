@@ -7,10 +7,19 @@ package com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons;
 public class Damage {
     private int mDamageValue;
     private DamageType mDamageType;
+    private volatile int mAdditionalDamage;
 
     public Damage(String damageType, int damageValue) {
         mDamageValue = damageValue;
         mDamageType = DamageType.valueOf(damageType.toUpperCase());
+    }
+
+    public int getAdditionalDamage() {
+        return mAdditionalDamage;
+    }
+
+    public void setAdditionalDamage(int additionalDamage) {
+        mAdditionalDamage = additionalDamage;
     }
 
     public int getDamageValue() {

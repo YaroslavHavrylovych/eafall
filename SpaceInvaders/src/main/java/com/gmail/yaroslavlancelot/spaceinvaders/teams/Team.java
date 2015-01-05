@@ -5,10 +5,12 @@ import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.MoneyUpdatedEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.UpgradeBuildingEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.bonuses.Bonus;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.IBuilding;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
 
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.util.color.Color;
@@ -33,7 +35,7 @@ public class Team implements ITeam {
     private final IAlliance mTeamRace;
     private final AtomicBoolean mIsFirstIncome = new AtomicBoolean(true);
     /** object related to current team */
-    private volatile List<GameObject> mTeamObjects;
+    private final List<GameObject> mTeamObjects;
     /** current team main planet */
     private volatile PlanetStaticObject mTeamPlanet;
     /** team to fight with */
@@ -46,6 +48,8 @@ public class Team implements ITeam {
     private TeamControlBehaviourType mTeamControlBehaviourType;
     /** array of buildings which team can build */
     private BuildingId[] mBuildingsTypesIds;
+    /** bonus which will be applied to each team unit */
+    private ArrayList<Bonus> mUnitBonuses = new ArrayList<Bonus>(2);
 
     public Team(final String teamName, IAlliance teamRace, TeamControlBehaviourType teamType) {
         mTeamObjects = new ArrayList<GameObject>(20);
@@ -69,13 +73,36 @@ public class Team implements ITeam {
     }
 
     @Override
+    public void addTeamBonus(Bonus teamBonus) {
+        synchronized (mTeamObjects) {
+            mUnitBonuses.add(teamBonus);
+            for (GameObject gameObject : mTeamObjects) {
+                if (!(gameObject instanceof Unit)) {
+                    continue;
+                }
+                Unit unit = (Unit) gameObject;
+                unit.addBonus(teamBonus, Integer.MAX_VALUE);
+            }
+        }
+    }
+
+    @Override
     public void addObjectToTeam(final GameObject object) {
-        mTeamObjects.add(object);
+        synchronized (mTeamObjects) {
+            mTeamObjects.add(object);
+            if (object instanceof Unit) {
+                for (Bonus bonus : mUnitBonuses) {
+                    ((Unit) object).addBonus(bonus, Integer.MAX_VALUE);
+                }
+            }
+        }
     }
 
     @Override
     public void removeObjectFromTeam(final GameObject object) {
-        mTeamObjects.remove(object);
+        synchronized (mTeamObjects) {
+            mTeamObjects.remove(object);
+        }
     }
 
     @Override

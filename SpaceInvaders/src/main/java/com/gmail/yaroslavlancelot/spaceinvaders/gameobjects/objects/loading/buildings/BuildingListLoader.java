@@ -16,6 +16,9 @@ public class BuildingListLoader {
     @Element(name = "wealth_building")
     public WealthBuildingLoader wealthBuildingLoader;
 
+    @Element(name = "special_building")
+    public SpecialBuildingLoader specialBuildingLoader;
+
     public List<CreepBuildingLoader> getList() {
         return creepBuildingLoaderList;
     }

@@ -29,7 +29,7 @@
     <string name="laboratory">Laboratory</string>
     <string name="bunker">Bunker</string>
     <string name="municipality">Municipality</string>
-    <string name="municipality_description">First created building increase by 20\u0025\n to the income.\nEach next adds\n1\u0025 t existing value.</string>
+    <string name="earth_artifact">Earth Artifact</string>
     <!-- /buildings -->
     <!-- units -->
     <string name="conscript">Conscript</string>
@@ -59,7 +59,7 @@
     <string name="artillery">Artillery</string>
     <string name="sabotage_center">Sabotage Center</string>
     <string name="caches">Caches</string>
-    <string name="caches_description">First created building increase by 20\u0025\n to the income.\nEach next adds\n1\u0025 t existing value.</string>
+    <string name="space_material">Space Material</string>
     <!-- /buildings -->
     <!-- units -->
     <string name="machine_gunner">Machine Gunner</string>
@@ -88,7 +88,7 @@
     <string name="mountain_cave">Mountain Cave</string>
     <string name="hell">Hell</string>
     <string name="reptile_city">Reptile City</string>
-    <string name="reptile_city_description">First created building increase by 20\u0025\n to the income.\nEach next adds\n1\u0025 t existing value.</string>
+    <string name="king_of_snakes">King of Snakes</string>
     <!-- /buildings -->
     <!-- units -->
     <string name="lizard">Lizard</string>
@@ -162,4 +162,12 @@
     <string name="description_defence">D</string>
 
     <!-- /description popup -->
+
+    <!-- descriptions -->
+    <string name="earth_artifact_description">By 10\u0025 increase each unit health</string>
+    <string name="space_material_description">Give 10\u0025 chance for team each unit \nto avoid an attack</string>
+    <string name="king_of_snakes_description">By 10\u0025 increase an attack for the \n team each unit</string>
+    <string name="municipality_description">First created building increase by 20\u0025\n to the income.\nEach next adds \n1\u0025 t existing value.</string>
+    <string name="caches_description">First created building increase by 20\u0025\n to the income.\nEach next adds \n1\u0025 t existing value.</string>
+    <string name="reptile_city_description">First created building increase by 20\u0025\n to the income.\nEach next adds \n1\u0025 t existing value.</string>
 </resources>

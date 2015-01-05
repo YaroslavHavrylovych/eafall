@@ -8,6 +8,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.BuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.CreepBuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.SpecialBuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.WealthBuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.buildings.BuildingListLoader;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.units.UnitListLoader;
@@ -116,6 +117,10 @@ public abstract class Alliance implements IAlliance {
         }
         //wealth
         buildingDummy = new WealthBuildingDummy(buildingListLoader.wealthBuildingLoader);
+        buildingsWithUpgradesAmount++;
+        mBuildingDummies.put(buildingDummy.getBuildingId(), buildingDummy);
+        //special
+        buildingDummy = new SpecialBuildingDummy(buildingListLoader.specialBuildingLoader);
         buildingsWithUpgradesAmount++;
         mBuildingDummies.put(buildingDummy.getBuildingId(), buildingDummy);
 
