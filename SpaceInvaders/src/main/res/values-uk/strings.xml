@@ -29,7 +29,7 @@
     <string name="laboratory">Лабораторія</string>
     <string name="bunker">Бункер</string>
     <string name="municipality">Муніципалітет</string>
-    <string name="municipality_description">Перший створений будинок додає 20\u0025\nдо прибутку золота.\nКожен наступний будинок додає\n1% до існуючої кількості.</string>
+    <string name="earth_artifact">Артифакт з Землі</string>
     <!-- /buildings -->
     <!-- units -->
     <string name="conscript">Призовник</string>
@@ -59,7 +59,7 @@
     <string name="artillery">Артилерія</string>
     <string name="sabotage_center">Диверсійний центр</string>
     <string name="caches">Криївка</string>
-    <string name="caches_description">Перший створений будинок додає 20\u0025\nдо прибутку золота.\nКожен наступний будинок додає\n1% до існуючої кількості.</string>
+    <string name="space_material">Космічна матерія</string>
     <!-- /buildings -->
     <!-- units -->
     <string name="machine_gunner">Механічний стрілок</string>
@@ -88,7 +88,7 @@
     <string name="mountain_cave">Печера в Горах</string>
     <string name="hell">Пекло</string>
     <string name="reptile_city">Місто Рептилій</string>
-    <string name="reptile_city_description">Перший створений будинок додає 20\u0025\nдо прибутку золота.\nКожен наступний будинок додає\n1% до існуючої кількості.</string>
+    <string name="king_of_snakes">Король Змій</string>
     <!-- /buildings -->
     <!-- units -->
     <string name="lizard">Ящірка</string>
@@ -162,4 +162,12 @@
     <string name="description_defence">З</string>
 
     <!-- /description popup -->
+
+    <!-- descriptions -->
+    <string name="earth_artifact_description">На 10% підвищує здоров’я кожному юніту</string>
+    <string name="space_material_description">Надає 10% шанс кожному юніту команди \nзапобігти отриманню пошкоджень</string>
+    <string name="king_of_snakes_description">На 10% збільшує атаку кожного \nюніту команди</string>
+    <string name="municipality_description">Перший створений будинок додає 20\u0025\nдо прибутку золота.\nКожен наступний будинок додає\n1% до існуючої кількості.</string>
+    <string name="caches_description">Перший створений будинок додає 20\u0025\nдо прибутку золота.\nКожен наступний будинок додає\n1% до існуючої кількості.</string>
+    <string name="reptile_city_description">Перший створений будинок додає 20\u0025\nдо прибутку золота.\nКожен наступний будинок додає\n1% до існуючої кількості.</string>
 </resources>

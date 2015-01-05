@@ -1,11 +1,12 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.teams;
 
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.bonuses.Bonus;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
 
 import org.andengine.util.color.Color;
 
@@ -14,8 +15,15 @@ import java.util.List;
 /** Player team interface. Each team can have only one team in opponents */
 public interface ITeam {
     /**
+     * add bonus which will be applied to each unit which is added to the team
+     *
+     * @param teamBonus bonus to add
+     */
+    void addTeamBonus(Bonus teamBonus);
+
+    /**
      * Add new {@link com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject}
-     * to a team.
+     * to a team. If this is the unit, then bonuses will be added during this method.
      */
     void addObjectToTeam(GameObject object);
 

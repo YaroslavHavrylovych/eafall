@@ -8,6 +8,6 @@ public enum BuildingType {
     CREEP_BUILDING,
     /** buildings which produce money amount */
     WEALTH_BUILDING,
-    /** special for each race buildings */
-    ARTIFACT_BUILDING
+    /** unique for each race buildings */
+    SPECIAL_BUILDING
 }

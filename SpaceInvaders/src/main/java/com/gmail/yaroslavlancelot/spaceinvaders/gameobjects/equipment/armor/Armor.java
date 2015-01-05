@@ -16,6 +16,7 @@ public class Armor {
             new float[]{.3f, .5f, .45f, .6f, .5f, 1.75f}
     };
     private int mArmorValue;
+    private volatile int mAdditionalArmor;
     private ArmorType mArmorType;
 
     public Armor(String armorType, final int armorValue) {
@@ -23,13 +24,17 @@ public class Armor {
         mArmorType = ArmorType.valueOf(armorType.toUpperCase());
     }
 
+    public void setAdditionalArmor(int additionalArmor) {
+        mAdditionalArmor = additionalArmor;
+    }
+
     public int getDamage(Damage damage) {
         int realDamage = getDamageAfterConsumption(damage);
-        return realDamage * realDamage / (realDamage + mArmorValue) + 1;
+        return realDamage * realDamage / (realDamage + mArmorValue + mAdditionalArmor) + 1;
     }
 
     protected int getDamageAfterConsumption(Damage damage) {
-        return (int) (damage.getDamageValue() *
+        return (int) ((damage.getDamageValue() + damage.getAdditionalDamage()) *
                 sArmorSafetyTable[damage.getDamageType().ordinal()][mArmorType.ordinal()]);
     }
 

@@ -75,6 +75,35 @@
                         <xs:attribute name="name" use="required" type="xs:string"/>
                     </xs:complexType>
                 </xs:element>
+                <!-- special -->
+                <xs:element name="special_building" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="characteristic" type="xs:string"/>
+                            <xs:element name="value" type="xs:integer"/>
+                            <!--
+                                    * percentage true if value in percent
+                                    * (e.g. 10 in value for health means adds 10 percent to unit maximum health)
+                             -->
+                            <xs:element name="percentage" type="xs:boolean"/>
+                            <xs:element name="cost" type="xs:nonNegativeInteger"/>
+                            <xs:element name="position_x" type="xs:nonNegativeInteger"/>
+                            <xs:element name="position_y" type="xs:nonNegativeInteger"/>
+                            <xs:element name="image_name" type="xs:string"/>
+                            <xs:element name="team_color_area">
+                                <xs:complexType>
+                                    <xs:sequence maxOccurs="1" minOccurs="1">
+                                        <xs:element name="x" type="xs:float"/>
+                                        <xs:element name="y" type="xs:float"/>
+                                        <xs:element name="width" type="xs:float"/>
+                                        <xs:element name="height" type="xs:float"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="name" use="required" type="xs:string"/>
+                    </xs:complexType>
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

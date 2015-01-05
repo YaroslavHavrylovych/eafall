@@ -1,33 +1,14 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.utils;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /** {@link java.util.Map} wrapper. Simplified it's usage */
-public abstract class HolderUtils<T> {
-    /** hold current class instance to simplify it's clearing */
-    private static final List<HolderUtils> sInstanceHolder = new ArrayList<HolderUtils>(7);
+public abstract class HolderUtils<T> extends SelfCleanable {
     private Map<String, T> holderMap = new HashMap<String, T>(15);
 
-    protected HolderUtils() {
-        synchronized (sInstanceHolder) {
-            sInstanceHolder.add(this);
-        }
-    }
-
-    /** clear all static holders */
-    public static void clearMemory() {
-        synchronized (sInstanceHolder) {
-            for (HolderUtils holder : sInstanceHolder) {
-                holder.clear();
-            }
-            sInstanceHolder.clear();
-        }
-    }
-
+    @Override
     public void clear() {
         if (holderMap != null)
             holderMap.clear();
