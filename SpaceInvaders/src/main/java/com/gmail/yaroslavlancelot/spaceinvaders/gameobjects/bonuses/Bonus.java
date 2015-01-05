@@ -17,7 +17,11 @@ public class Bonus extends SelfCleanable {
     private int mValue;
     /** current bonus type */
     private BonusType mBonusType;
-    /** decides can current bonus be imposed with other bonuses of the current type or not */
+    /**
+     * Decides can current bonus be imposed with other bonuses <br/>
+     * General example for this is team bonuses. They are for all units and
+     * unit can have other bonuses at the same time which are not coupled together.
+     */
     private boolean mImposed;
 
     private Bonus(int value, BonusType bonusType, boolean imposed) {
@@ -54,7 +58,7 @@ public class Bonus extends SelfCleanable {
     }
 
     /**
-     * Filtering bonuses by bonus type and return bonus value based on existingValue and getting biggest
+     * Filtering bonuses by bonus type and return bonus value based on existingValue and calculate sum
      * value from imposed and not imposed bonuses.
      *
      * @param bonuses       given set of bonuses
@@ -67,7 +71,7 @@ public class Bonus extends SelfCleanable {
         int imposed = 0, notImposed = 0;
         int increasingValue;
         for (Bonus bonus : bonuses) {
-            if (bonus.mBonusType.isSameType(bonusType)) {
+            if (!bonus.mBonusType.isSameType(bonusType)) {
                 continue;
             }
             if (bonus.mBonusType.percent()) {
@@ -81,7 +85,7 @@ public class Bonus extends SelfCleanable {
                 notImposed = increasingValue;
             }
         }
-        return imposed > notImposed ? imposed : notImposed;
+        return imposed + notImposed;
     }
 
     @Override
@@ -89,13 +93,10 @@ public class Bonus extends SelfCleanable {
         mBonuses.clear();
     }
 
-    //TODO create team bonus and other bonuses. And then can be togather, other - not.
     /** existing bonuses */
     public static enum BonusType {
         ATTACK, DEFENCE, HEALTH,
-        ATTACK_PERCENTS,
-        DEFENCE_PERCENTS,
-        HEALTH_PERCENTS,
+        ATTACK_PERCENTS, DEFENCE_PERCENTS, HEALTH_PERCENTS,
         AVOID_ATTACK_CHANCE;
 
         public boolean percent() {
@@ -110,10 +111,11 @@ public class Bonus extends SelfCleanable {
             if (this == bonusType) {
                 return true;
             }
-            if (toString().contains("DEFENCE") && bonusType.toString().contains("DEFENCE")) {
+            if (toString().startsWith("DEFENCE") && bonusType.toString().startsWith("DEFENCE")) {
                 return true;
-            }
-            if (toString().contains("ATTACK") && bonusType.toString().contains("ATTACK")) {
+            } else if (toString().startsWith("ATTACK") && bonusType.toString().startsWith("ATTACK")) {
+                return true;
+            } else if (bonusType.toString().contains("AVOID_ATTACK")) {
                 return true;
             }
             return false;

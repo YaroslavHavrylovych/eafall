@@ -97,18 +97,18 @@ public class SpecialBuildingDummy extends BuildingDummy {
     /** return building bonus */
     public Bonus getBonus() {
         String characteristic = mBuildingLoader.characteristic;
-        if (characteristic.contains("attack")) {
+        if (characteristic.startsWith("attack")) {
             Bonus.BonusType type = mBuildingLoader.percentage ? Bonus.BonusType.ATTACK_PERCENTS : Bonus.BonusType.ATTACK;
             return Bonus.getBonus(mBuildingLoader.value, type, true);
         }
-        if (characteristic.contains("defence")) {
+        if (characteristic.startsWith("defence")) {
             Bonus.BonusType type = mBuildingLoader.percentage ? Bonus.BonusType.DEFENCE_PERCENTS : Bonus.BonusType.DEFENCE;
             return Bonus.getBonus(mBuildingLoader.value, type, true);
         }
         if (characteristic.contains("avoid_attack")) {
             return Bonus.getBonus(mBuildingLoader.value, Bonus.BonusType.AVOID_ATTACK_CHANCE, true);
         }
-        if (characteristic.contains("health")) {
+        if (characteristic.startsWith("health")) {
             Bonus.BonusType type = mBuildingLoader.percentage ? Bonus.BonusType.HEALTH_PERCENTS : Bonus.BonusType.HEALTH;
             return Bonus.getBonus(mBuildingLoader.value, type, true);
         }

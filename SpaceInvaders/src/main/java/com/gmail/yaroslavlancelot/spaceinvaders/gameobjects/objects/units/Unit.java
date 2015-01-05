@@ -206,7 +206,6 @@ public class Unit extends GameObject {
             }
             Set<Bonus> bonusSet = mBonuses.keySet();
             //attack
-            //TODO wrong, because one bonus added things for everything (attack, defence, avoid etc)
             mObjectDamage.setAdditionalDamage(Bonus.getBonusByType(bonusSet,
                     Bonus.BonusType.ATTACK, mObjectDamage.getDamageValue()));
             //defence
