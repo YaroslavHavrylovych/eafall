@@ -10,8 +10,12 @@ public class Damage {
     private volatile int mAdditionalDamage;
 
     public Damage(String damageType, int damageValue) {
+        this(DamageType.valueOf(damageType.toUpperCase()), damageValue);
+    }
+
+    public Damage(DamageType damageType, int damageValue) {
         mDamageValue = damageValue;
-        mDamageType = DamageType.valueOf(damageType.toUpperCase());
+        mDamageType = damageType;
     }
 
     public int getAdditionalDamage() {

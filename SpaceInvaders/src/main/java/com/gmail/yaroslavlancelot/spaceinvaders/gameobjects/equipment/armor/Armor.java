@@ -20,8 +20,12 @@ public class Armor {
     private ArmorType mArmorType;
 
     public Armor(String armorType, final int armorValue) {
+        this(ArmorType.valueOf(armorType.toUpperCase()), armorValue);
+    }
+
+    public Armor(ArmorType armorType, final int armorValue) {
         mArmorValue = armorValue;
-        mArmorType = ArmorType.valueOf(armorType.toUpperCase());
+        mArmorType = armorType;
     }
 
     public void setAdditionalArmor(int additionalArmor) {

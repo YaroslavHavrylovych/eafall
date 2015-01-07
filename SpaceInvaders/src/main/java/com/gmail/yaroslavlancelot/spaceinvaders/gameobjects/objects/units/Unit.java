@@ -6,6 +6,8 @@ import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities.AttachEntityEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.bonuses.Bonus;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IUnitFireCallback;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Armor;
+import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Damage;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.Bullet;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.ISimpleUnitEnemiesUpdater;
@@ -73,8 +75,10 @@ public class Unit extends GameObject {
         setWidth(unitBuilder.getWidth());
         setHeight(unitBuilder.getHeight());
         initHealth(unitBuilder.getHealth());
-        mObjectArmor = unitBuilder.getArmor();
-        mObjectDamage = unitBuilder.getDamage();
+        mObjectArmor = new Armor(unitBuilder.getArmor().getArmorType(),
+                unitBuilder.getArmor().getArmorValue());
+        mObjectDamage = new Damage(unitBuilder.getDamage().getDamageType(),
+                unitBuilder.getDamage().getDamageValue());
         mAttackRadius = unitBuilder.getAttackRadius();
         mViewRadius = unitBuilder.getViewRadius();
         mMaxVelocity = unitBuilder.getSpeed();
