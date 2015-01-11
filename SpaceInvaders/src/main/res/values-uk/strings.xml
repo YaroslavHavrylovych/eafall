@@ -28,6 +28,7 @@
     <string name="workshop">Майстерня</string>
     <string name="laboratory">Лабораторія</string>
     <string name="bunker">Бункер</string>
+    <string name="defender">Захисник</string>
     <string name="municipality">Муніципалітет</string>
     <string name="earth_artifact">Артифакт з Землі</string>
     <!-- /buildings -->
@@ -58,6 +59,7 @@
     <string name="minery">Шахта</string>
     <string name="artillery">Артилерія</string>
     <string name="sabotage_center">Диверсійний центр</string>
+    <string name="fort">Форт</string>
     <string name="caches">Криївка</string>
     <string name="space_material">Космічна матерія</string>
     <!-- /buildings -->
@@ -87,6 +89,7 @@
     <string name="web">Павутина</string>
     <string name="mountain_cave">Печера в Горах</string>
     <string name="hell">Пекло</string>
+    <string name="bastion">Бастіон</string>
     <string name="reptile_city">Місто Рептилій</string>
     <string name="king_of_snakes">Король Змій</string>
     <!-- /buildings -->
@@ -119,6 +122,7 @@
     <string name="exit">Вихід</string>
     <string name="back">Назад</string>
     <string name="connect">З’єднати</string>
+    <string name="orbital_station">Орбітальна станція</string>
 
     <!-- network game -->
     <string name="create_game">Створити гру</string>

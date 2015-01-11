@@ -5,12 +5,13 @@ import android.content.Context;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.UnitByBuildingDescriptionShowEvent;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.BuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.dummies.BuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.PopupHud;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.IPopupUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building.BaseBuildingPopupUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building.creep.CreepBuildingPopupUpdater;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building.defence.DefenceBuildingPopupUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building.special.SpecialBuildingPopupUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building.wealth.WealthBuildingPopupUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.unit.CreepPopupUpdater;
@@ -45,6 +46,8 @@ public class DescriptionPopupHud extends PopupHud {
     private WealthBuildingPopupUpdater mWealthBuildingPopupUpdater;
     /** unit updater */
     private CreepPopupUpdater mUnitsDescriptionUpdater;
+    /** defence building updater */
+    private DefenceBuildingPopupUpdater mDefenceBuildingPopupUpdater;
 
     /**
      * single instance that's why it's private constructor
@@ -61,6 +64,7 @@ public class DescriptionPopupHud extends PopupHud {
         mWealthBuildingPopupUpdater = new WealthBuildingPopupUpdater(vertexBufferObjectManager, this);
         mSpecialBuildingPopupUpdater = new SpecialBuildingPopupUpdater(vertexBufferObjectManager, this);
         mUnitsDescriptionUpdater = new CreepPopupUpdater(vertexBufferObjectManager, this);
+        mDefenceBuildingPopupUpdater = new DefenceBuildingPopupUpdater(vertexBufferObjectManager, this);
 
         mPopupRectangle.setTouchCallback(TouchUtils.EmptyTouch.getInstance());
         initBackgroundSprite(vertexBufferObjectManager);
@@ -106,6 +110,10 @@ public class DescriptionPopupHud extends PopupHud {
                 popupUpdater = mSpecialBuildingPopupUpdater;
                 break;
             }
+            case DEFENCE_BUILDING: {
+                popupUpdater = mDefenceBuildingPopupUpdater;
+                break;
+            }
             default: {
                 throw new IllegalArgumentException("unknown building type for popup updater");
             }
@@ -124,6 +132,7 @@ public class DescriptionPopupHud extends PopupHud {
         mUnitsDescriptionUpdater.clear();
         mWealthBuildingPopupUpdater.clear();
         mSpecialBuildingPopupUpdater.clear();
+        mDefenceBuildingPopupUpdater.clear();
     }
 
     @SuppressWarnings("unused")

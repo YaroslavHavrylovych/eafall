@@ -1,9 +1,10 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.ai;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.IBuilding;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.UnitDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.IBuilding;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.UnitDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.dynamic.MovableUnitDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 

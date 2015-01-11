@@ -1,6 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.item;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
 
 import org.andengine.entity.IEntity;

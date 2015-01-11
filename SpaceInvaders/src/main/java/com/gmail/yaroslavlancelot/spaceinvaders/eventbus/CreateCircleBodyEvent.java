@@ -2,7 +2,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.eventbus;
 
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.RectangleWithBody;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.RectangleWithBody;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.CollisionCategoriesConstants;
 
 /** holds data needed for registering body in PhysicWorld */

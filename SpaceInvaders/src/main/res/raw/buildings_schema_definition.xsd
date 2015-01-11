@@ -51,6 +51,30 @@
                         <xs:attribute name="name" use="required" type="xs:string"/>
                     </xs:complexType>
                 </xs:element>
+                <!-- defence -->
+                <xs:element name="defence_building" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="position_x" type="xs:nonNegativeInteger"/>
+                            <xs:element name="position_y" type="xs:nonNegativeInteger"/>
+                            <xs:element name="image_name" type="xs:string"/>
+                            <xs:element name="cost" type="xs:nonNegativeInteger"/>
+                            <xs:element name="unit_id" type="xs:nonNegativeInteger"/>
+                            <xs:element name="building_time" type="xs:nonNegativeInteger"/>
+                            <xs:element name="team_color_area">
+                                <xs:complexType>
+                                    <xs:sequence maxOccurs="1" minOccurs="1">
+                                        <xs:element name="x" type="xs:float"/>
+                                        <xs:element name="y" type="xs:float"/>
+                                        <xs:element name="width" type="xs:float"/>
+                                        <xs:element name="height" type="xs:float"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="name" use="required" type="xs:string"/>
+                    </xs:complexType>
+                </xs:element>
                 <!-- wealth -->
                 <xs:element name="wealth_building" maxOccurs="1">
                     <xs:complexType>

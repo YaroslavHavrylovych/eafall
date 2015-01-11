@@ -1,7 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server;
 
 import com.badlogic.gdx.math.Vector2;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.dynamic.MovableUnit;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.MessagesConstants;
 
 import org.andengine.extension.multiplayer.protocol.adt.message.server.ServerMessage;
@@ -20,7 +20,7 @@ public class UnitChangePositionServerMessage extends ServerMessage implements Me
     public UnitChangePositionServerMessage() {
     }
 
-    public UnitChangePositionServerMessage(Unit unit) {
+    public UnitChangePositionServerMessage(MovableUnit unit) {
         Vector2 positionVector = unit.getBody().getPosition();
         mX = positionVector.x;
         mY = positionVector.y;

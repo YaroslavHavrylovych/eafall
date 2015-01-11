@@ -4,14 +4,14 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.GameLoadedEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.MoneyUpdatedEvent;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.GameObjectsContactListener;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IGameObjectHealthChanged;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IUnitFireCallback;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IVelocityChangedListener;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.callbacks.GameObjectsContactListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.callbacks.IGameObjectHealthChanged;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.callbacks.IUnitFireCallback;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.callbacks.IVelocityChangedListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.GameObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.staticobjects.PlanetStaticObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.dynamic.MovableUnit;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.GameSocketServer;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.BuildingCreatedServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.GameObjectHealthChangedServerMessage;
@@ -71,8 +71,8 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
     }
 
     @Override
-    protected Unit createUnit(int unitKey, ITeam unitTeam, boolean isTopPath) {
-        Unit unit = super.createUnit(unitKey, unitTeam, isTopPath);
+    protected MovableUnit createMovableUnit(int unitKey, ITeam unitTeam, boolean isTopPath) {
+        MovableUnit unit = super.createMovableUnit(unitKey, unitTeam, isTopPath);
 
         try {
             mGameSocketServer.sendBroadcastServerMessage(new UnitCreatedServerMessage(unitTeam.getTeamName(), unitKey, unit));
@@ -118,21 +118,21 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
     private void resolveContactData(final Contact contact) {
         Object userData = contact.getFixtureA().getBody().getUserData();
         if (userData != null) {
-            if (userData instanceof Unit)
-                velocityChanged((Unit) userData);
+            if (userData instanceof MovableUnit)
+                velocityChanged((MovableUnit) userData);
         }
         userData = contact.getFixtureB().getBody().getUserData();
         if (userData != null) {
-            if (userData instanceof Unit)
-                velocityChanged((Unit) userData);
+            if (userData instanceof MovableUnit)
+                velocityChanged((MovableUnit) userData);
         }
     }
 
     @Override
     public void velocityChanged(final GameObject unit) {
         try {
-            if (unit instanceof Unit)
-                mGameSocketServer.sendBroadcastServerMessage(new UnitChangePositionServerMessage((Unit) unit));
+            if (unit instanceof MovableUnit)
+                mGameSocketServer.sendBroadcastServerMessage(new UnitChangePositionServerMessage((MovableUnit) unit));
         } catch (IOException e) {
             LoggerHelper.printErrorMessage(TAG, "send message (unit moved on server) IOException");
         }

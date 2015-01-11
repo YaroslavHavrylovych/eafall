@@ -5,15 +5,18 @@ import android.util.SparseArray;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.SpaceInvadersApplication;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.BuildingDummy;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.CreepBuildingDummy;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.SpecialBuildingDummy;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.WealthBuildingDummy;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.buildings.BuildingListLoader;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.loading.units.UnitListLoader;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.UnitDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.dummies.BuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.dummies.CreepBuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.dummies.DefenceBuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.dummies.SpecialBuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.dummies.WealthBuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.loading.buildings.BuildingListLoader;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.loading.units.UnitListLoader;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.Unit;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.UnitDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.dynamic.MovableUnit;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.dynamic.MovableUnitDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations;
 
@@ -115,6 +118,10 @@ public abstract class Alliance implements IAlliance {
             buildingsWithUpgradesAmount += (buildingDummy.getUpgrades() * SizeConstants.BUILDING_SIZE);
             mBuildingDummies.put(buildingDummy.getBuildingId(), buildingDummy);
         }
+        //defence
+        buildingDummy = new DefenceBuildingDummy(buildingListLoader.defenceBuildingLoader);
+        buildingsWithUpgradesAmount++;
+        mBuildingDummies.put(buildingDummy.getBuildingId(), buildingDummy);
         //wealth
         buildingDummy = new WealthBuildingDummy(buildingListLoader.wealthBuildingLoader);
         buildingsWithUpgradesAmount++;
@@ -159,10 +166,10 @@ public abstract class Alliance implements IAlliance {
         BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(
                 textureManager, size, size, TextureOptions.BILINEAR);
 
-        UnitDummy unitDummy;
+        MovableUnitDummy unitDummy;
         int n, m;
         for (int i = 0; i < unitsAmount; i++) {
-            unitDummy = new UnitDummy(unitListLoader.getList().get(i), getAllianceName().toLowerCase());
+            unitDummy = new MovableUnitDummy(unitListLoader.getList().get(i), getAllianceName().toLowerCase());
             n = (i % textureManagerElementsInLine) * unitDummy.getWidth();
             m = (i / textureManagerElementsInLine) * unitDummy.getHeight();
             unitDummy.loadResources(context, smallObjectTexture, n, m);

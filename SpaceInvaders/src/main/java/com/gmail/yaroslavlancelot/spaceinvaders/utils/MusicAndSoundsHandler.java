@@ -3,7 +3,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.utils;
 import android.content.Context;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.StringsAndPathUtils;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.ICameraCoordinates;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.ICameraCoordinates;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations;
 
 import org.andengine.audio.music.Music;

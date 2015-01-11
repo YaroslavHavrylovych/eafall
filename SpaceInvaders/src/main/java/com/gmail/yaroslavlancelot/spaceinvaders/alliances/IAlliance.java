@@ -1,9 +1,11 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.alliances;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.BuildingDummy;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.UnitDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.dummies.BuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.Unit;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.UnitDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.dynamic.MovableUnit;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.dynamic.MovableUnitDummy;
 
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.util.color.Color;

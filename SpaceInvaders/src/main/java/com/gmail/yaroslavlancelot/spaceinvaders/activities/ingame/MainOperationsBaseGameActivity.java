@@ -1,6 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
 import android.content.Intent;
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -14,20 +15,21 @@ import com.gmail.yaroslavlancelot.spaceinvaders.constants.StringsAndPathUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateBuildingEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateCircleBodyEvent;
-import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateUnitEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateMovableUnitEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.GameLoadedEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities.AbstractEntityEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities.AttachEntityEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities.DetachEntityEvent;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.GameObjectsContactListener;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.ObjectDestroyedListener;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.PlanetDestroyedListener;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.RectangleWithBody;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.SunStaticObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.callbacks.GameObjectsContactListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.callbacks.ObjectDestroyedListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.callbacks.PlanetDestroyedListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.GameObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.RectangleWithBody;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.staticobjects.PlanetStaticObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.staticobjects.SunStaticObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.Unit;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.dynamic.MovableUnit;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.PopupManager;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.BuildingsPopupHud;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.ShowBuildingsPopupButtonSprite;
@@ -467,8 +469,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
                 }
                 scene.unregisterTouchArea(entity);
                 scene.detachChild(entity);
-                if (entity instanceof Unit)
-                    mGameObjectsMap.remove(((Unit) entity).getObjectUniqueId());
+                if (entity instanceof MovableUnit)
+                    mGameObjectsMap.remove(((MovableUnit) entity).getObjectUniqueId());
             }
         });
     }
@@ -503,48 +505,57 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
 
     @SuppressWarnings("unused")
     /** really used by {@link de.greenrobot.event.EventBus} */
-    public void onEvent(final CreateUnitEvent abstractEntityEvent) {
+    public void onEvent(final CreateMovableUnitEvent abstractEntityEvent) {
         int unitKey = abstractEntityEvent.getKey();
         final ITeam team = TeamsHolder.getInstance().getElement(abstractEntityEvent.getTeamName());
-        createUnit(unitKey, team, abstractEntityEvent.isTopPath());
+        createMovableUnit(unitKey, team, abstractEntityEvent.isTopPath());
+    }
+
+    /** create unit */
+    private Unit createUnit(int unitKey, final ITeam unitTeam, float x, float y) {
+        Unit unit = createThinUnit(unitKey, unitTeam, x, y);
+        unit.registerUpdateHandler();
+        unit.setEnemiesUpdater(UnitCallbacksUtils.getSimpleUnitEnemiesUpdater(unitTeam.getEnemyTeam()));
+        return unit;
     }
 
     /** create unit with body and update it's enemies and moving path */
-    protected Unit createUnit(int unitKey, final ITeam unitTeam, boolean isTopPath) {
+    protected MovableUnit createMovableUnit(int unitKey, final ITeam unitTeam, boolean isTopPath) {
         float x = unitTeam.getTeamPlanet().getSpawnPointX(),
                 y = unitTeam.getTeamPlanet().getSpawnPointY();
-        Unit warrior = createThinUnit(unitKey, unitTeam, x, y);
-        warrior.registerUpdateHandler();
-        warrior.setEnemiesUpdater(UnitCallbacksUtils.getSimpleUnitEnemiesUpdater(unitTeam.getEnemyTeam()));
-        warrior.initMovingPath(UnitPathUtil.isLtrPath(x), isTopPath);
-        return warrior;
+        MovableUnit movableUnit = (MovableUnit) createUnit(unitKey, unitTeam, x, y);
+        movableUnit.initMovingPath(UnitPathUtil.isLtrPath(x), isTopPath);
+        return movableUnit;
     }
 
     /**
-     * create unit (with physic body) in particular position and add it to team
+     * create unit (with physic body) in particular position and add it to team.
+     * Thin unit - unit without enemies update handler and behaviour update handler.
      */
     protected Unit createThinUnit(int unitKey, ITeam unitTeam, float x, float y, long...
             unitUniqueId) {
-        Unit unit = unitTeam.getTeamRace().getUnit(unitKey, unitTeam.getTeamColor());
-        unit.setObjectDestroyedListener(new ObjectDestroyedListener(unitTeam));
-        unit.setPosition(x, y);
-        unitTeam.addObjectToTeam(unit);
+        Unit thinUnit = unitTeam.getTeamRace().getUnit(unitKey, unitTeam.getTeamColor());
+        thinUnit.setObjectDestroyedListener(new ObjectDestroyedListener(unitTeam));
+        thinUnit.setPosition(x, y);
+        unitTeam.addObjectToTeam(thinUnit);
 
-        if (unitUniqueId.length > 0)
-            unit.setObjectUniqueId(unitUniqueId[0]);
-        mGameObjectsMap.put(unit.getObjectUniqueId(), unit);
+        if (unitUniqueId.length > 0) {
+            thinUnit.setObjectUniqueId(unitUniqueId[0]);
+        }
+        mGameObjectsMap.put(thinUnit.getObjectUniqueId(), thinUnit);
 
         // init physic body
         BodyDef.BodyType bodyType = BodyDef.BodyType.DynamicBody;
-        onEvent(new CreateCircleBodyEvent(unit, bodyType, unitTeam.getFixtureDefUnit()));
-        if (unitTeam.getTeamControlType() == TeamControlBehaviourType.REMOTE_CONTROL_ON_CLIENT_SIDE)
-            unit.removeDamage();
-        unit.setBulletFixtureDef(CollisionCategoriesConstants.getBulletFixtureDefByUnitCategory(
+        onEvent(new CreateCircleBodyEvent(thinUnit, bodyType, unitTeam.getFixtureDefUnit()));
+        if (unitTeam.getTeamControlType() == TeamControlBehaviourType.REMOTE_CONTROL_ON_CLIENT_SIDE) {
+            thinUnit.removeDamage();
+        }
+        thinUnit.setBulletFixtureDef(CollisionCategoriesConstants.getBulletFixtureDefByUnitCategory(
                 unitTeam.getFixtureDefUnit().filter.categoryBits));
 
-        attachEntity(unit);
+        attachEntity(thinUnit);
 
-        return unit;
+        return thinUnit;
     }
 
     @SuppressWarnings("unused")

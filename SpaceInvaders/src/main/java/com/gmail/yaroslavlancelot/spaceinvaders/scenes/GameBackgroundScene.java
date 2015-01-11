@@ -7,7 +7,7 @@ import android.view.WindowManager;
 import com.gmail.yaroslavlancelot.spaceinvaders.SpaceInvadersApplication;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.StringsAndPathUtils;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.MainSceneTouchListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.touch.MainSceneTouchListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.MusicAndSoundsHandler;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
@@ -28,7 +28,8 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
  * <br/>
  * 2. Loading needed images.
  */
-public class GameBackgroundScene extends Scene {
+public class
+        GameBackgroundScene extends Scene {
     private static final String TAG = GameBackgroundScene.class.getCanonicalName();
     private static String mBackgroundImagePath = StringsAndPathUtils.getPathToGeneralImages() + "background.png";
 
@@ -52,11 +53,11 @@ public class GameBackgroundScene extends Scene {
     /** init scene touch events so user can collaborate with game by screen touches */
 
     /**
-     * Creates and init {@link com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.touch.MainSceneTouchListener}
+     * Creates and init {@link com.gmail.yaroslavlancelot.spaceinvaders.objects.touch.MainSceneTouchListener}
      * and assign it to the {@link GameBackgroundScene} instance.
      * <br/>
      * Set camera coordinates to music and sound handler with using
-     * {@link com.gmail.yaroslavlancelot.spaceinvaders.utils.MusicAndSoundsHandler#setCameraCoordinates(com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.ICameraCoordinates)}
+     * {@link com.gmail.yaroslavlancelot.spaceinvaders.utils.MusicAndSoundsHandler#setCameraCoordinates(com.gmail.yaroslavlancelot.spaceinvaders.objects.ICameraCoordinates)}
      *
      * @param windowManager         used to find screen ratio needed for touch lister instance creation
      * @param smoothCamera          camera to pass to the scene touch listener

@@ -5,12 +5,12 @@ import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.MoneyUpdatedEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.UpgradeBuildingEvent;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.bonuses.Bonus;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.IBuilding;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.bonuses.Bonus;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.GameObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.IBuilding;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.staticobjects.PlanetStaticObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.dynamic.MovableUnit;
 
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.util.color.Color;
@@ -77,10 +77,10 @@ public class Team implements ITeam {
         synchronized (mTeamObjects) {
             mUnitBonuses.add(teamBonus);
             for (GameObject gameObject : mTeamObjects) {
-                if (!(gameObject instanceof Unit)) {
+                if (!(gameObject instanceof MovableUnit)) {
                     continue;
                 }
-                Unit unit = (Unit) gameObject;
+                MovableUnit unit = (MovableUnit) gameObject;
                 unit.addBonus(teamBonus, Integer.MAX_VALUE);
             }
         }
@@ -90,9 +90,9 @@ public class Team implements ITeam {
     public void addObjectToTeam(final GameObject object) {
         synchronized (mTeamObjects) {
             mTeamObjects.add(object);
-            if (object instanceof Unit) {
+            if (object instanceof MovableUnit) {
                 for (Bonus bonus : mUnitBonuses) {
-                    ((Unit) object).addBonus(bonus, Integer.MAX_VALUE);
+                    ((MovableUnit) object).addBonus(bonus, Integer.MAX_VALUE);
                 }
             }
         }
