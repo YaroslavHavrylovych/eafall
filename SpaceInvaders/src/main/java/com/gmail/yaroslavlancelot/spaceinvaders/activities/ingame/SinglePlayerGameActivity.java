@@ -8,6 +8,12 @@ import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
  * Single player game
  */
 public class SinglePlayerGameActivity extends ThickClientGameActivity {
+
+    @Override
+    public void afterGameLoaded() {
+        changeSplashSceneWithGameScene();
+    }
+
     @Override
     protected void userWantCreateBuilding(final ITeam userTeam, BuildingId buildingId) {
         PlanetStaticObject planetStaticObject = userTeam.getTeamPlanet();

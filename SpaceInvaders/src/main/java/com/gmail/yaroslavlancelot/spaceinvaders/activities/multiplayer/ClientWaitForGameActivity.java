@@ -12,8 +12,8 @@ import com.gmail.yaroslavlancelot.spaceinvaders.alliances.imperials.Imperials;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.rebels.Rebels;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.StringsAndPathUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.PreGameStartClient;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.connector.GameServerConnector;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.client.callbacks.PreGameStartClient;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.client.connector.GameServerConnector;
 
 /**
  * Client connected to server and waiting for game

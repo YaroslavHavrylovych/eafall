@@ -4,10 +4,11 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.client.BuildingCreationClientMessage;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.UnitChangePositionServerMessage;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.InGameClient;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.connector.GameServerConnector;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.client.messages.BuildingCreatedClientMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.client.messages.GameLoadedClientMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages.UnitChangePositionServerMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.client.callbacks.InGameClient;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.client.connector.GameServerConnector;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
@@ -29,10 +30,21 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
     }
 
     @Override
+    public void afterGameLoaded() {
+        LoggerHelper.methodInvocation(TAG, "afterGameLoaded");
+        try {
+            mGameServerConnector.sendClientMessage(new GameLoadedClientMessage());
+            LoggerHelper.printInformationMessage(TAG, "send gameLoaded");
+        } catch (IOException e) {
+            LoggerHelper.printErrorMessage(TAG, e.getMessage());
+        }
+    }
+
+    @Override
     protected void userWantCreateBuilding(final ITeam userTeam, BuildingId buildingId) {
         LoggerHelper.methodInvocation(TAG, "userWantCreateBuilding");
         try {
-            mGameServerConnector.sendClientMessage(new BuildingCreationClientMessage(
+            mGameServerConnector.sendClientMessage(new BuildingCreatedClientMessage(
                     userTeam.getTeamName(), buildingId.getId(), buildingId.getUpgrade()));
             LoggerHelper.printInformationMessage(TAG, "send building request team= " + userTeam.getTeamName() + ", building=" + buildingId + "");
         } catch (IOException e) {
@@ -134,5 +146,10 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
         ITeam team = TeamsHolder.getInstance().getElement(teamName);
         if (team == null) return;
         team.setMoney(money);
+    }
+
+    @Override
+    public void gameStarted() {
+        changeSplashSceneWithGameScene();
     }
 }

@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client;
+package com.gmail.yaroslavlancelot.spaceinvaders.network.client.callbacks;
 
 /**
  * callback from server about game state until client didn't connect to game
