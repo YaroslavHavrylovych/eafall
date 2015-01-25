@@ -14,7 +14,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building.defence.DefenceBuildingPopupUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building.special.SpecialBuildingPopupUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building.wealth.WealthBuildingPopupUpdater;
-import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.unit.CreepPopupUpdater;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.unit.UnitPopupUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TouchUtils;
@@ -45,7 +45,7 @@ public class DescriptionPopupHud extends PopupHud {
     /** wealth building updater */
     private WealthBuildingPopupUpdater mWealthBuildingPopupUpdater;
     /** unit updater */
-    private CreepPopupUpdater mUnitsDescriptionUpdater;
+    private UnitPopupUpdater mUnitsDescriptionUpdater;
     /** defence building updater */
     private DefenceBuildingPopupUpdater mDefenceBuildingPopupUpdater;
 
@@ -63,7 +63,7 @@ public class DescriptionPopupHud extends PopupHud {
         mCreepBuildingPopupUpdater = new CreepBuildingPopupUpdater(vertexBufferObjectManager, this);
         mWealthBuildingPopupUpdater = new WealthBuildingPopupUpdater(vertexBufferObjectManager, this);
         mSpecialBuildingPopupUpdater = new SpecialBuildingPopupUpdater(vertexBufferObjectManager, this);
-        mUnitsDescriptionUpdater = new CreepPopupUpdater(vertexBufferObjectManager, this);
+        mUnitsDescriptionUpdater = new UnitPopupUpdater(vertexBufferObjectManager, this);
         mDefenceBuildingPopupUpdater = new DefenceBuildingPopupUpdater(vertexBufferObjectManager, this);
 
         mPopupRectangle.setTouchCallback(TouchUtils.EmptyTouch.getInstance());

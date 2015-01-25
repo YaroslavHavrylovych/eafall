@@ -48,7 +48,7 @@ public class CreepBuilding extends Building implements ICreepBuilding {
         //first building created
         if (mUnitCreatorCycle == null) {
             mUnitCreatorCycle = new UnitCreatorCycle(mTeamName,
-                    mCreepBuildingDummy.getUnitId(mUpgrade), isTopPath());
+                    mCreepBuildingDummy.getMovableUnitId(mUpgrade), isTopPath());
             mBuildingStaticObject.registerUpdateHandler(new TimerHandler(
                     mCreepBuildingDummy.getUnitCreationTime(mUpgrade), true, mUnitCreatorCycle));
         }
@@ -94,7 +94,7 @@ public class CreepBuilding extends Building implements ICreepBuilding {
             //upgrade
             team.changeMoney(-cost);
             mBuildingStaticObject.clearUpdateHandlers();
-            mUnitCreatorCycle = new UnitCreatorCycle(mTeamName, mCreepBuildingDummy.getUnitId(nextUpgrade),
+            mUnitCreatorCycle = new UnitCreatorCycle(mTeamName, mCreepBuildingDummy.getMovableUnitId(nextUpgrade),
                     mBuildingsAmount, isTopPath());
         }
         Color teamColor = TeamsHolder.getTeam(mTeamName).getTeamColor();

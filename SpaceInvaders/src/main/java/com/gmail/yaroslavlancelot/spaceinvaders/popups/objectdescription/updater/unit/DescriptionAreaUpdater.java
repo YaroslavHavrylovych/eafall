@@ -1,11 +1,14 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.unit;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
+import com.gmail.yaroslavlancelot.spaceinvaders.SpaceInvadersApplication;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.AllianceHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.dummies.BuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.dummies.CreepBuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.dummies.DefenceBuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.UnitDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.dynamic.MovableUnitDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.DescriptionText;
@@ -55,16 +58,28 @@ public class DescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
     }
 
     @Override
+    protected void iniDescriptionTextList() {
+        mDescriptionTextList = new ArrayList<Text>(10);
+    }
+
+    @Override
     public void updateDescription(RectangularShape drawArea, Object objectId, String raceName, final String teamName) {
         final BuildingId buildingId = (BuildingId) objectId;
         IAlliance race = AllianceHolder.getInstance().getElement(raceName);
-        int unitId = ((CreepBuildingDummy) race.getBuildingDummy(buildingId)).getUnitId(buildingId.getUpgrade());
+        BuildingDummy buildingDummy = race.getBuildingDummy(buildingId);
+        int unitId;
+        if (buildingDummy instanceof CreepBuildingDummy) {
+            unitId = ((CreepBuildingDummy) buildingDummy).getMovableUnitId(buildingId.getUpgrade());
+        } else if (buildingDummy instanceof DefenceBuildingDummy) {
+            unitId = ((DefenceBuildingDummy) buildingDummy).getOrbitalStationUnitId();
+        } else {
+            return;
+        }
 
         attach(drawArea);
-        UnitDummy dummy = race.getUnitDummy(unitId);
+        UnitDummy unitDummy = race.getUnitDummy(unitId);
 
         // building name
-        CreepBuildingDummy buildingDummy = (CreepBuildingDummy) race.getBuildingDummy(buildingId);
         mUnitBuildingNameLink.setText(LocaleImpl.getInstance().getStringById(buildingDummy.getStringId()));
         mUnitBuildingNameLink.setOnClickListener(new TouchUtils.OnClickListener() {
             @Override
@@ -73,14 +88,15 @@ public class DescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
             }
         });
         // static text
-        mUnitHealth.setText("" + dummy.getHealth());
-        mUnitSpeed.setText("200");
-        mUnitReloadTime.setText("1.5");
+        mUnitHealth.setText("" + unitDummy.getHealth());
+        String unitSpeed;
+        if (unitDummy instanceof MovableUnitDummy) {
+            unitSpeed = "" + ((MovableUnitDummy) unitDummy).getSpeed();
+        } else {
+            unitSpeed = SpaceInvadersApplication.getContext().getString(R.string.unmovable);
+        }
+        mUnitSpeed.setText(unitSpeed);
+        mUnitReloadTime.setText("" + unitDummy.getReloadTime());
         mUnique.setText("cool unit");
-    }
-
-    @Override
-    protected void iniDescriptionTextList() {
-        mDescriptionTextList = new ArrayList<Text>(10);
     }
 }

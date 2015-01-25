@@ -154,7 +154,7 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
         IAlliance race = AllianceHolder.getRace(raceName);
         BuildingId buildingId = (BuildingId) objectId;
         CreepBuildingDummy dummy = (CreepBuildingDummy) race.getBuildingDummy(buildingId);
-        final int unitId = dummy.getUnitId(buildingId.getUpgrade());
+        final int unitId = dummy.getMovableUnitId(buildingId.getUpgrade());
         return race.getUnitDummy(unitId).getTextureRegion();
     }
 }

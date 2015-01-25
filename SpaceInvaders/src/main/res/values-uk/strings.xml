@@ -123,6 +123,7 @@
     <string name="back">Назад</string>
     <string name="connect">З’єднати</string>
     <string name="orbital_station">Орбітальна станція</string>
+    <string name="unmovable">Нерухомий</string>
 
     <!-- network game -->
     <string name="create_game">Створити гру</string>

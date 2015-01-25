@@ -13,10 +13,11 @@ import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.dummies.SpecialB
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.dummies.WealthBuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.loading.buildings.BuildingListLoader;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.loading.units.UnitListLoader;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.loading.units.UnitLoader;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.UnitDummy;
-import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.dynamic.MovableUnit;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.dynamic.MovableUnitDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.stationary.StationaryUnitDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.interfaces.SoundOperations;
 
@@ -166,10 +167,16 @@ public abstract class Alliance implements IAlliance {
         BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(
                 textureManager, size, size, TextureOptions.BILINEAR);
 
-        MovableUnitDummy unitDummy;
+        UnitDummy unitDummy;
+        UnitLoader unitLoader;
         int n, m;
         for (int i = 0; i < unitsAmount; i++) {
-            unitDummy = new MovableUnitDummy(unitListLoader.getList().get(i), getAllianceName().toLowerCase());
+            unitLoader = unitListLoader.getList().get(i);
+            if (unitLoader.speed > 1f) {
+                unitDummy = new MovableUnitDummy(unitLoader, getAllianceName().toLowerCase());
+            } else {
+                unitDummy = new StationaryUnitDummy(unitLoader, getAllianceName().toLowerCase());
+            }
             n = (i % textureManagerElementsInLine) * unitDummy.getWidth();
             m = (i / textureManagerElementsInLine) * unitDummy.getHeight();
             unitDummy.loadResources(context, smallObjectTexture, n, m);

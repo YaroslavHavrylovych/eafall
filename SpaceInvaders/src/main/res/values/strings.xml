@@ -123,6 +123,7 @@
     <string name="back">Back</string>
     <string name="connect">Connect</string>
     <string name="orbital_station">Orbital station</string>
+    <string name="unmovable">Unmovable</string>
 
     <!-- network game -->
     <string name="create_game">Create game</string>

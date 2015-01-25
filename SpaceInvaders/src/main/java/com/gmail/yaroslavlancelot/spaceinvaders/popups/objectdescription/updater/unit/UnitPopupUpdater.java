@@ -4,7 +4,9 @@ import com.gmail.yaroslavlancelot.spaceinvaders.SpaceInvadersApplication;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.AllianceHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.dummies.BuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.dummies.CreepBuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.dummies.DefenceBuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.BasePopupUpdater;
 
 import org.andengine.entity.scene.Scene;
@@ -13,13 +15,13 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /** present particular unit in description popup */
-public class CreepPopupUpdater extends BasePopupUpdater {
+public class UnitPopupUpdater extends BasePopupUpdater {
     /** unit description object (update description area which u pass to it) */
     private IDescriptionAreaUpdater mDescriptionAreaUpdater;
     /** updates unit addition information area */
     private IDescriptionAreaUpdater mAdditionInformationAreaUpdater;
 
-    public CreepPopupUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
+    public UnitPopupUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         super(vertexBufferObjectManager, scene);
         mDescriptionAreaUpdater = new com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.unit.DescriptionAreaUpdater(vertexBufferObjectManager, scene);
         mAdditionInformationAreaUpdater = new AdditionalInfoAreaUpdater(vertexBufferObjectManager, scene);
@@ -29,9 +31,17 @@ public class CreepPopupUpdater extends BasePopupUpdater {
     protected String getDescribedObjectName(Object objectId, String raceName) {
         BuildingId buildingId = (BuildingId) objectId;
         IAlliance race = AllianceHolder.getInstance().getElement(raceName);
-        int unitId = ((CreepBuildingDummy) race.getBuildingDummy(buildingId)).getUnitId(buildingId.getUpgrade());
-        return SpaceInvadersApplication.getContext().getResources().getString(
-                race.getUnitDummy(unitId).getUnitStringId());
+        BuildingDummy buildingDummy = race.getBuildingDummy(buildingId);
+        int unitId;
+        if (buildingDummy instanceof CreepBuildingDummy) {
+            unitId = ((CreepBuildingDummy) buildingDummy).getMovableUnitId(buildingId.getUpgrade());
+        } else if (buildingDummy instanceof DefenceBuildingDummy) {
+            unitId = ((DefenceBuildingDummy) buildingDummy).getOrbitalStationUnitId();
+        } else {
+            return null;
+        }
+        return SpaceInvadersApplication.getContext().getResources()
+                .getString(race.getUnitDummy(unitId).getUnitStringId());
     }
 
     @Override
@@ -45,7 +55,15 @@ public class CreepPopupUpdater extends BasePopupUpdater {
     protected ITextureRegion getDescriptionImage(Object objectId, String raceName) {
         BuildingId buildingId = (BuildingId) objectId;
         IAlliance race = AllianceHolder.getInstance().getElement(raceName);
-        int unitId = ((CreepBuildingDummy) race.getBuildingDummy(buildingId)).getUnitId(buildingId.getUpgrade());
+        BuildingDummy buildingDummy = race.getBuildingDummy(buildingId);
+        int unitId;
+        if (buildingDummy instanceof CreepBuildingDummy) {
+            unitId = ((CreepBuildingDummy) buildingDummy).getMovableUnitId(buildingId.getUpgrade());
+        } else if (buildingDummy instanceof DefenceBuildingDummy) {
+            unitId = ((DefenceBuildingDummy) buildingDummy).getOrbitalStationUnitId();
+        } else {
+            return null;
+        }
         return race.getUnitDummy(unitId).getTextureRegion();
     }
 

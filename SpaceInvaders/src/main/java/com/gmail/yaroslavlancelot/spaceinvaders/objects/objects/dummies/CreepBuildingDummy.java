@@ -99,7 +99,7 @@ public class CreepBuildingDummy extends BuildingDummy {
         return mCreepBuildingLoader.getUpdates().get(upgrade).building_time;
     }
 
-    public int getUnitId(int upgrade) {
+    public int getMovableUnitId(int upgrade) {
         return mCreepBuildingLoader.getUpdates().get(upgrade).unit_id;
     }
 }

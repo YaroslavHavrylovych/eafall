@@ -102,4 +102,8 @@ public abstract class UnitDummy {
     public int getUnitStringId() {
         return mUnitStringId;
     }
+
+    public float getReloadTime() {
+        return mUnitLoader.reload_time;
+    }
 }

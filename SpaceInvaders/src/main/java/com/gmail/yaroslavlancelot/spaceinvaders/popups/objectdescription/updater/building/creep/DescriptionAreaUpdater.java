@@ -9,7 +9,6 @@ import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.UnitByBuild
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.dummies.CreepBuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.UnitDummy;
-import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.dynamic.MovableUnitDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.DescriptionText;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.BaseDescriptionAreaUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
@@ -67,7 +66,7 @@ public class DescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
         //cost
         mCostValue.setText(Integer.toString(dummy.getCost(buildingId.getUpgrade())));
         //produced unit
-        final int unitId = dummy.getUnitId(buildingId.getUpgrade());
+        final int unitId = dummy.getMovableUnitId(buildingId.getUpgrade());
         UnitDummy unitDummy = race.getUnitDummy(unitId);
         mProducedUnitLink.setText(SpaceInvadersApplication.getContext().getResources().getString(
                 unitDummy.getUnitStringId()));

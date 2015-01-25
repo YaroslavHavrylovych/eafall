@@ -40,7 +40,7 @@ public class UnitLoader {
     public Integer speed;
 
     @Element(name = "reload_time")
-    public Double reload_time;
+    public Float reload_time;
 
     @Element(name = "sound")
     public String sound;
