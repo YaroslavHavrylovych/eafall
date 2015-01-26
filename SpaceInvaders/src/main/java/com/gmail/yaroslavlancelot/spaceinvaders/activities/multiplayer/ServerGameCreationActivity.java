@@ -12,11 +12,11 @@ import com.gmail.yaroslavlancelot.spaceinvaders.alliances.imperials.Imperials;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.rebels.Rebels;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.StringsAndPathUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.GameSocketServer;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.StartingGameServerMessage;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.server.PreGameStartServer;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.connector.ClientConnectorListener;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.discovery.SocketDiscoveryServer;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.server.GameSocketServer;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages.StartingGameServerMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.server.callbacks.PreGameStartServer;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.server.connector.ClientConnectorListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.server.discovery.SocketDiscoveryServer;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 
 import org.andengine.extension.multiplayer.protocol.util.WifiUtils;
@@ -83,7 +83,7 @@ public class ServerGameCreationActivity extends BaseNonGameActivity implements P
                     LoggerHelper.printErrorMessage(TAG, ioException.getMessage());
                     return;
                 }
-                mGameSocketServer.removePreGameStartCallback(ServerGameCreationActivity.this);
+                mGameSocketServer.removePreGameStartCallback();
                 mGameSocketServer = null;
                 Intent startServerIntent = new Intent(ServerGameCreationActivity.this, ServerGameActivity.class);
                 startServerIntent.
@@ -123,7 +123,7 @@ public class ServerGameCreationActivity extends BaseNonGameActivity implements P
 
     private void stopServer() {
         if (mGameSocketServer != null) {
-            mGameSocketServer.removePreGameStartCallback(ServerGameCreationActivity.this);
+            mGameSocketServer.removePreGameStartCallback();
             mGameSocketServer.terminate();
             mGameSocketServer = null;
         }

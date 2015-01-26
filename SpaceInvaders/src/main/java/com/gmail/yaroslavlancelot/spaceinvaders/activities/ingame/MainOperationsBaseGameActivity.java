@@ -1,6 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
 import android.content.Intent;
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -15,7 +16,6 @@ import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourTy
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateBuildingEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateCircleBodyEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateUnitEvent;
-import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.GameLoadedEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities.AbstractEntityEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities.AttachEntityEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities.DetachEntityEvent;
@@ -178,33 +178,38 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     public void onPopulateScene(Scene scene, OnPopulateSceneCallback onPopulateSceneCallback) {
         onPopulateSceneCallback.onPopulateSceneFinished();
 
-        changeSplashSceneWithGameScene();
+        asyncGameLoading();
     }
 
-    protected void changeSplashSceneWithGameScene() {
+    protected void asyncGameLoading() {
         mEngine.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback() {
             public void onTimePassed(final TimerHandler pTimerHandler) {
                 mEngine.unregisterUpdateHandler(pTimerHandler);
 
-                onLoadGameResources();
-                onInitGameScene();
-                initThickClient();
-                onInitPlanetsAndTeams();
+                loadGameResources();
+                initGameScene();
+                initPlanetsAndTeams();
 
                 mPhysicsWorld.setContactListener(mContactListener = new GameObjectsContactListener());
                 mBackgroundMusic.initBackgroundMusic();
                 mBackgroundMusic.playBackgroundMusic();
 
-                mSplashScene.detachSelf();
-                mEngine.setScene(mGameScene);
-
-                EventBus.getDefault().register(MainOperationsBaseGameActivity.this);
-                EventBus.getDefault().post(new GameLoadedEvent());
+                afterGameLoaded();
             }
         }));
     }
 
-    protected void onLoadGameResources() {
+    public abstract void afterGameLoaded();
+
+    public void replaceSplashSceneWithGameScene() {
+        EventBus.getDefault().register(MainOperationsBaseGameActivity.this);
+        initThickClient();
+
+        mSplashScene.detachSelf();
+        mEngine.setScene(mGameScene);
+    }
+
+    protected void loadGameResources() {
         LoggerHelper.methodInvocation(TAG, "onCreateGameResources");
 
         // music
@@ -231,7 +236,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         DescriptionPopupHud.loadFonts(getFontManager(), getTextureManager());
     }
 
-    protected void onInitGameScene() {
+    protected void initGameScene() {
         //game scene
         GameBackgroundScene gameBackgroundScene = new GameBackgroundScene(getVertexBufferObjectManager());
         gameBackgroundScene.initGameSceneTouch(getWindowManager(), mCamera, mMusicAndSoundsHandler);
@@ -245,7 +250,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         mGameScene.registerUpdateHandler(mPhysicsWorld);
     }
 
-    protected void onInitPlanetsAndTeams() {
+    protected void initPlanetsAndTeams() {
         initTeams();
         // first team init
         initFirstPlanet();
@@ -473,7 +478,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         });
     }
 
-    /** attach entity to scene (hud or game scene) */
+    /** attach entity to scene (hud or game scene)*/
     private void attachEntity(final IAreaShape entity, final Scene scene, final boolean registerChildrenTouch) {
         MainOperationsBaseGameActivity.this.runOnUpdateThread(new Runnable() {
             @Override
@@ -520,9 +525,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         return warrior;
     }
 
-    /**
-     * create unit (with physic body) in particular position and add it to team
-     */
+    /** create unit (with physic body) in particular position and add it to team */
     protected Unit createThinUnit(int unitKey, ITeam unitTeam, float x, float y, long...
             unitUniqueId) {
         Unit unit = unitTeam.getTeamRace().getUnit(unitKey, unitTeam.getTeamColor());

@@ -1,19 +1,19 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server;
+package com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.network.MessagesConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages.constants.ServerMessagesConstants;
 import org.andengine.extension.multiplayer.protocol.adt.message.server.ServerMessage;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class StartingGameServerMessage extends ServerMessage implements MessagesConstants {
+public class StartingGameServerMessage extends ServerMessage implements ServerMessagesConstants {
     public StartingGameServerMessage() {
     }
 
     @Override
     public short getFlag() {
-        return FLAG_MESSAGE_SERVER_STARTING_GAME;
+        return STARTING_GAME;
     }
 
     @Override

@@ -1,16 +1,17 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.network.connector;
+package com.gmail.yaroslavlancelot.spaceinvaders.network.client.connector;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.network.MessagesConstants;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.BuildingCreatedServerMessage;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.GameObjectHealthChangedServerMessage;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.MoneyChangedServerMessage;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.StartingGameServerMessage;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.UnitChangePositionServerMessage;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.UnitCreatedServerMessage;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.UnitFireServerMessage;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.WaitingForPlayersServerMessage;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.InGameClient;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.PreGameStartClient;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages.constants.ServerMessagesConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages.BuildingCreatedServerMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages.GameStartedServerMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages.GameObjectHealthChangedServerMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages.MoneyChangedServerMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages.StartingGameServerMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages.UnitChangePositionServerMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages.UnitCreatedServerMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages.UnitFireServerMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages.WaitingForPlayersServerMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.client.callbacks.InGameClient;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.client.callbacks.PreGameStartClient;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 
 import org.andengine.extension.multiplayer.protocol.adt.message.server.IServerMessage;
@@ -27,7 +28,7 @@ import java.util.List;
 /**
  * Used by client to operate with server. Sending and retrieving messages.
  */
-public class GameServerConnector extends ServerConnector<SocketConnection> implements MessagesConstants {
+public class GameServerConnector extends ServerConnector<SocketConnection> implements ServerMessagesConstants {
     public static final String TAG = GameServerConnector.class.getCanonicalName();
     private static volatile GameServerConnector sGameServerConnector;
     private final String mServerIp;
@@ -38,7 +39,7 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
         super(new SocketConnection(new Socket(serverIP, serverPort)), pSocketConnectionServerConnectorListener);
         mServerIp = serverIP;
 
-        registerServerMessage(FLAG_MESSAGE_SERVER_WAITING_FOR_PLAYERS, WaitingForPlayersServerMessage.class, new IServerMessageHandler<SocketConnection>() {
+        registerServerMessage(WAITING_FOR_PLAYERS, WaitingForPlayersServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
                 LoggerHelper.printInformationMessageInClient(TAG, "server waiting for players");
@@ -50,7 +51,7 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
             }
         });
 
-        registerServerMessage(FLAG_MESSAGE_SERVER_STARTING_GAME, StartingGameServerMessage.class, new IServerMessageHandler<SocketConnection>() {
+        registerServerMessage(STARTING_GAME, StartingGameServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
                 LoggerHelper.printInformationMessageInClient(TAG, "starting game");
@@ -62,7 +63,7 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
             }
         });
 
-        registerServerMessage(FLAG_MESSAGE_SERVER_BUILDING_CREATED, BuildingCreatedServerMessage.class, new IServerMessageHandler<SocketConnection>() {
+        registerServerMessage(BUILDING_CREATED, BuildingCreatedServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
                 LoggerHelper.printInformationMessageInClient(TAG, "building created");
@@ -75,7 +76,7 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
             }
         });
 
-        registerServerMessage(FLAG_MESSAGE_SERVER_UNIT_CREATED, UnitCreatedServerMessage.class, new IServerMessageHandler<SocketConnection>() {
+        registerServerMessage(UNIT_CREATED, UnitCreatedServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
                 LoggerHelper.printInformationMessageInClient(TAG, "unit created");
@@ -89,7 +90,7 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
             }
         });
 
-        registerServerMessage(FLAG_MESSAGE_SERVER_UNIT_MOVED, UnitChangePositionServerMessage.class, new IServerMessageHandler<SocketConnection>() {
+        registerServerMessage(UNIT_MOVED, UnitChangePositionServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
                 LoggerHelper.printInformationMessageInClient(TAG, "unit moved");
@@ -102,7 +103,7 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
             }
         });
 
-        registerServerMessage(FLAG_MESSAGE_SERVER_GAME_OBJECT_HEALTH_CHANGED, GameObjectHealthChangedServerMessage.class, new IServerMessageHandler<SocketConnection>() {
+        registerServerMessage(GAME_OBJECT_HEALTH_CHANGED, GameObjectHealthChangedServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
                 LoggerHelper.printInformationMessageInClient(TAG, "game object health changed");
@@ -116,7 +117,7 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
             }
         });
 
-        registerServerMessage(FLAG_MESSAGE_SERVER_UNIT_FIRE, UnitFireServerMessage.class, new IServerMessageHandler<SocketConnection>() {
+        registerServerMessage(UNIT_FIRE, UnitFireServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
                 LoggerHelper.printInformationMessageInClient(TAG, "fireFromPosition on server");
@@ -130,7 +131,7 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
             }
         });
 
-        registerServerMessage(FLAG_MESSAGE_SERVER_MONEY_CHANGED, MoneyChangedServerMessage.class, new IServerMessageHandler<SocketConnection>() {
+        registerServerMessage(MONEY_CHANGED, MoneyChangedServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
                 LoggerHelper.printInformationMessageInClient(TAG, "money changed on server");
@@ -138,6 +139,18 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
                 synchronized (mInGameClientList) {
                     for (InGameClient inGameClient : mInGameClientList) {
                         inGameClient.moneyChanged(unitFireServerMessage.getTeamName(), unitFireServerMessage.getMoney());
+                    }
+                }
+            }
+        });
+
+        registerServerMessage(GAME_STARTED, GameStartedServerMessage.class, new IServerMessageHandler<SocketConnection>() {
+            @Override
+            public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
+                LoggerHelper.printInformationMessageInClient(TAG, "game started");
+                synchronized (mInGameClientList) {
+                    for (InGameClient inGameClient : mInGameClientList) {
+                        inGameClient.gameStarted();
                     }
                 }
             }

@@ -1,22 +1,23 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.client;
+package com.gmail.yaroslavlancelot.spaceinvaders.network.client.messages;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.network.MessagesConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.client.messages.constants.ClientMessagesConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages.constants.ServerMessagesConstants;
 import org.andengine.extension.multiplayer.protocol.adt.message.client.ClientMessage;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class ConnectionEstablishClientMessage extends ClientMessage implements MessagesConstants {
+public class ConnectionEstablishedClientMessage extends ClientMessage implements ClientMessagesConstants {
     public static final short PROTOCOL_VERSION = 1;
 
     private short mProtocolVersion;
 
     @Deprecated
-    public ConnectionEstablishClientMessage() {
+    public ConnectionEstablishedClientMessage() {
     }
 
-    public ConnectionEstablishClientMessage(final short pProtocolVersion) {
+    public ConnectionEstablishedClientMessage(final short pProtocolVersion) {
         this.mProtocolVersion = pProtocolVersion;
     }
 
@@ -26,7 +27,7 @@ public class ConnectionEstablishClientMessage extends ClientMessage implements M
 
     @Override
     public short getFlag() {
-        return FLAG_MESSAGE_CLIENT_CONNECTION_ESTABLISHED;
+        return CONNECTION_ESTABLISHED;
     }
 
     @Override

@@ -1,45 +1,25 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server;
+package com.gmail.yaroslavlancelot.spaceinvaders.network.client.messages;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.MessagesConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.client.messages.constants.ClientMessagesConstants;
 
-import org.andengine.extension.multiplayer.protocol.adt.message.server.ServerMessage;
+import org.andengine.extension.multiplayer.protocol.adt.message.client.ClientMessage;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class BuildingCreatedServerMessage extends ServerMessage implements MessagesConstants {
+public class BuildingCreationClientMessage extends ClientMessage implements ClientMessagesConstants {
     private BuildingId mBuildingId;
     private String mTeamName;
 
     @Deprecated
-    public BuildingCreatedServerMessage() {
+    public BuildingCreationClientMessage() {
     }
 
-    public BuildingCreatedServerMessage(int buildingId, int upgrade, String teamName) {
+    public BuildingCreationClientMessage(String teamName, int buildingId, int upgrade) {
         mBuildingId = BuildingId.makeId(buildingId, upgrade);
         mTeamName = teamName;
-    }
-
-    @Override
-    public short getFlag() {
-        return FLAG_MESSAGE_SERVER_BUILDING_CREATED;
-    }
-
-    @Override
-    protected void onReadTransmissionData(final DataInputStream pDataInputStream) throws IOException {
-        int id = pDataInputStream.readInt();
-        int upgrade = pDataInputStream.readInt();
-        mBuildingId = BuildingId.makeId(id, upgrade);
-        mTeamName = pDataInputStream.readUTF();
-    }
-
-    @Override
-    protected void onWriteTransmissionData(final DataOutputStream pDataOutputStream) throws IOException {
-        pDataOutputStream.writeInt(mBuildingId.getId());
-        pDataOutputStream.writeInt(mBuildingId.getUpgrade());
-        pDataOutputStream.writeUTF(mTeamName);
     }
 
     public BuildingId getBuildingId() {
@@ -48,5 +28,25 @@ public class BuildingCreatedServerMessage extends ServerMessage implements Messa
 
     public String getTeamName() {
         return mTeamName;
+    }
+
+    @Override
+    protected void onReadTransmissionData(final DataInputStream pDataInputStream) throws IOException {
+        mTeamName = pDataInputStream.readUTF();
+        int id = pDataInputStream.readInt();
+        int upgrade = pDataInputStream.readInt();
+        mBuildingId = BuildingId.makeId(id, upgrade);
+    }
+
+    @Override
+    protected void onWriteTransmissionData(final DataOutputStream pDataOutputStream) throws IOException {
+        pDataOutputStream.writeUTF(mTeamName);
+        pDataOutputStream.writeInt(mBuildingId.getId());
+        pDataOutputStream.writeInt(mBuildingId.getUpgrade());
+    }
+
+    @Override
+    public short getFlag() {
+        return BUILDING_CREATION;
     }
 }

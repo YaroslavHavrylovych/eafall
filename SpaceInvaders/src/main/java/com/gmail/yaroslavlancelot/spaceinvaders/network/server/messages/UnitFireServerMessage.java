@@ -1,6 +1,6 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server;
+package com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.network.MessagesConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages.constants.ServerMessagesConstants;
 
 import org.andengine.extension.multiplayer.protocol.adt.message.server.ServerMessage;
 
@@ -8,7 +8,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class UnitFireServerMessage extends ServerMessage implements MessagesConstants {
+public class UnitFireServerMessage extends ServerMessage implements ServerMessagesConstants {
     private long mUnitUniqueId;
 
     private long mAttackedGameObjectUniqueId;
@@ -36,7 +36,7 @@ public class UnitFireServerMessage extends ServerMessage implements MessagesCons
 
     @Override
     public short getFlag() {
-        return FLAG_MESSAGE_SERVER_UNIT_FIRE;
+        return UNIT_FIRE;
     }
 
     public long getAttackedGameObjectUniqueId() {

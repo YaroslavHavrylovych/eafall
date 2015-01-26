@@ -1,11 +1,13 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.network;
+package com.gmail.yaroslavlancelot.spaceinvaders.network.server;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateBuildingEvent;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.client.BuildingCreationClientMessage;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.client.ConnectionEstablishClientMessage;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.server.InGameServer;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.server.PreGameStartServer;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.connector.GameServerConnector;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.client.messages.BuildingCreationClientMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.client.messages.ConnectionEstablishedClientMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.client.messages.GameLoadedClientMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.client.messages.constants.ClientMessagesConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.server.callbacks.InGameServer;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.server.callbacks.PreGameStartServer;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.client.connector.GameServerConnector;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 
 import org.andengine.extension.multiplayer.protocol.adt.message.client.IClientMessage;
@@ -16,22 +18,18 @@ import org.andengine.extension.multiplayer.protocol.server.connector.SocketConne
 import org.andengine.extension.multiplayer.protocol.shared.SocketConnection;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import de.greenrobot.event.EventBus;
 
 /**
  * Used by server to communicate with client. Sending and retrieving messages.
  */
-public class GameSocketServer extends SocketServer<SocketConnectionClientConnector> implements MessagesConstants {
+public class GameSocketServer extends SocketServer<SocketConnectionClientConnector> implements ClientMessagesConstants {
     public static final String TAG = GameServerConnector.class.getCanonicalName();
     private static GameSocketServer sGameSocketServer;
-    //TODO it should be just PreGameStartServer not a list
-    private List<PreGameStartServer> mPreGameStartServerList = new ArrayList<PreGameStartServer>(2);
+    private PreGameStartServer mPreGameStartServer;
     private String mClientIp;
-    //TODO it should be just InGameServer not a list
-    private List<InGameServer> mInGameServerList = new ArrayList<InGameServer>(2);
+    private InGameServer mInGameServer;
 
     public GameSocketServer(final int pPort, final ClientConnector.IClientConnectorListener<SocketConnection> pClientConnectorListener) {
         super(pPort, pClientConnectorListener);
@@ -53,26 +51,36 @@ public class GameSocketServer extends SocketServer<SocketConnectionClientConnect
         LoggerHelper.printInformationMessage(TAG, "New client connector created with client " + mClientIp);
         final SocketConnectionClientConnector clientConnector = new SocketConnectionClientConnector(pSocketConnection);
 
-        clientConnector.registerClientMessage(FLAG_MESSAGE_CLIENT_CONNECTION_ESTABLISHED, ConnectionEstablishClientMessage.class, new IClientMessageHandler<SocketConnection>() {
+        clientConnector.registerClientMessage(CONNECTION_ESTABLISHED, ConnectionEstablishedClientMessage.class, new IClientMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ClientConnector<SocketConnection> pClientConnector, final IClientMessage pClientMessage) throws IOException {
                 LoggerHelper.printInformationMessageInClient(TAG, "connection with client established");
-                int protocolVersion = ((ConnectionEstablishClientMessage) pClientMessage).getProtocolVersion();
+                int protocolVersion = ((ConnectionEstablishedClientMessage) pClientMessage).getProtocolVersion();
                 LoggerHelper.printDebugMessage(TAG, "protocolVersion=" + protocolVersion);
-                synchronized (mPreGameStartServerList) {
-                    for (PreGameStartServer preGameStartServer : mPreGameStartServerList) {
-                        preGameStartServer.clientConnectionEstablished(mClientIp);
-                    }
+                synchronized (mPreGameStartServer) {
+                    mPreGameStartServer.clientConnectionEstablished(mClientIp);
                 }
             }
         });
 
-        clientConnector.registerClientMessage(FLAG_MESSAGE_CLIENT_WANT_CREATE_BUILDING, BuildingCreationClientMessage.class, new IClientMessageHandler<SocketConnection>() {
+        clientConnector.registerClientMessage(BUILDING_CREATION, BuildingCreationClientMessage.class, new IClientMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ClientConnector<SocketConnection> pClientConnector, final IClientMessage pClientMessage) throws IOException {
                 LoggerHelper.printInformationMessageInClient(TAG, "client want to create a building");
                 BuildingCreationClientMessage message = (BuildingCreationClientMessage) pClientMessage;
+                //ToDo Remove EventBus
                 EventBus.getDefault().post(new CreateBuildingEvent(message.getTeamName(), message.getBuildingId()));
+            }
+        });
+
+
+        clientConnector.registerClientMessage(GAME_LOADED, GameLoadedClientMessage.class, new IClientMessageHandler<SocketConnection>() {
+            @Override
+            public void onHandleMessage(final ClientConnector<SocketConnection> pClientConnector, final IClientMessage pClientMessage) throws IOException {
+                LoggerHelper.printInformationMessageInClient(TAG, "client loaded game");
+                synchronized (mInGameServer) {
+                    mInGameServer.gameLoaded();
+                }
             }
         });
 
@@ -84,26 +92,18 @@ public class GameSocketServer extends SocketServer<SocketConnectionClientConnect
     }
 
     public void addPreGameStartCallback(PreGameStartServer preGameStartServer) {
-        synchronized (mPreGameStartServerList) {
-            mPreGameStartServerList.add(preGameStartServer);
-        }
+        this.mPreGameStartServer = preGameStartServer;
     }
 
-    public void removePreGameStartCallback(PreGameStartServer preGameStartServer) {
-        synchronized (mPreGameStartServerList) {
-            mPreGameStartServerList.add(preGameStartServer);
-        }
+    public void removePreGameStartCallback() {
+        this.mPreGameStartServer = null;
     }
 
-    public void addInGameCallbacks(InGameServer inGameServer) {
-        synchronized (mPreGameStartServerList) {
-            mInGameServerList.add(inGameServer);
-        }
+    public void addInGameCallback(InGameServer inGameServer) {
+        mInGameServer = inGameServer;
     }
 
-    public void removeInGameCallbacks(InGameServer inGameServer) {
-        synchronized (mPreGameStartServerList) {
-            mInGameServerList.remove(inGameServer);
-        }
+    public void removeInGameCallback() {
+        mInGameServer = null;
     }
 }

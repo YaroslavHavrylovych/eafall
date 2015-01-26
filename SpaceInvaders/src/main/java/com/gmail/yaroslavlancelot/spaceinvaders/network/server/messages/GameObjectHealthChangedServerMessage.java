@@ -1,6 +1,6 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server;
+package com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.network.MessagesConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages.constants.ServerMessagesConstants;
 
 import org.andengine.extension.multiplayer.protocol.adt.message.server.ServerMessage;
 
@@ -8,7 +8,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class GameObjectHealthChangedServerMessage extends ServerMessage implements MessagesConstants {
+public class GameObjectHealthChangedServerMessage extends ServerMessage implements ServerMessagesConstants {
     private int mObjectHealth;
     private long mGameObjectUniqueId;
 
@@ -43,6 +43,6 @@ public class GameObjectHealthChangedServerMessage extends ServerMessage implemen
 
     @Override
     public short getFlag() {
-        return FLAG_MESSAGE_SERVER_GAME_OBJECT_HEALTH_CHANGED;
+        return GAME_OBJECT_HEALTH_CHANGED;
     }
 }

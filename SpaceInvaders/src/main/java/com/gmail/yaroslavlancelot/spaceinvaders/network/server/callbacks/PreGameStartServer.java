@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.server;
+package com.gmail.yaroslavlancelot.spaceinvaders.network.server.callbacks;
 
 /**
  * callback from client about game state after client connect to game but before it begins
