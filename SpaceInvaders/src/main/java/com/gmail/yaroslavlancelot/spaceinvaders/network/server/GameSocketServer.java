@@ -1,7 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.network.server;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateBuildingEvent;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.client.messages.BuildingCreatedClientMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.client.messages.BuildingCreationClientMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.client.messages.ConnectionEstablishedClientMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.client.messages.GameLoadedClientMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.client.messages.constants.ClientMessagesConstants;
@@ -63,11 +63,11 @@ public class GameSocketServer extends SocketServer<SocketConnectionClientConnect
             }
         });
 
-        clientConnector.registerClientMessage(BUILDING_CREATED, BuildingCreatedClientMessage.class, new IClientMessageHandler<SocketConnection>() {
+        clientConnector.registerClientMessage(BUILDING_CREATION, BuildingCreationClientMessage.class, new IClientMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ClientConnector<SocketConnection> pClientConnector, final IClientMessage pClientMessage) throws IOException {
                 LoggerHelper.printInformationMessageInClient(TAG, "client want to create a building");
-                BuildingCreatedClientMessage message = (BuildingCreatedClientMessage) pClientMessage;
+                BuildingCreationClientMessage message = (BuildingCreationClientMessage) pClientMessage;
                 //ToDo Remove EventBus
                 EventBus.getDefault().post(new CreateBuildingEvent(message.getTeamName(), message.getBuildingId()));
             }

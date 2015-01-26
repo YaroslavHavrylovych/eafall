@@ -14,12 +14,10 @@ import java.io.IOException;
 public class GameLoadedClientMessage extends ClientMessage implements ClientMessagesConstants {
     @Override
     protected void onReadTransmissionData(DataInputStream pDataInputStream) throws IOException {
-
     }
 
     @Override
     protected void onWriteTransmissionData(DataOutputStream pDataOutputStream) throws IOException {
-
     }
 
     @Override

@@ -9,15 +9,15 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class BuildingCreatedClientMessage extends ClientMessage implements ClientMessagesConstants {
+public class BuildingCreationClientMessage extends ClientMessage implements ClientMessagesConstants {
     private BuildingId mBuildingId;
     private String mTeamName;
 
     @Deprecated
-    public BuildingCreatedClientMessage() {
+    public BuildingCreationClientMessage() {
     }
 
-    public BuildingCreatedClientMessage(String teamName, int buildingId, int upgrade) {
+    public BuildingCreationClientMessage(String teamName, int buildingId, int upgrade) {
         mBuildingId = BuildingId.makeId(buildingId, upgrade);
         mTeamName = teamName;
     }
@@ -47,6 +47,6 @@ public class BuildingCreatedClientMessage extends ClientMessage implements Clien
 
     @Override
     public short getFlag() {
-        return BUILDING_CREATED;
+        return BUILDING_CREATION;
     }
 }

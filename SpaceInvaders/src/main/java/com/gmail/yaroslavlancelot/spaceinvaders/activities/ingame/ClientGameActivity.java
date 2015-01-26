@@ -4,7 +4,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.client.messages.BuildingCreatedClientMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.client.messages.BuildingCreationClientMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.client.messages.GameLoadedClientMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages.UnitChangePositionServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.client.callbacks.InGameClient;
@@ -44,7 +44,7 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
     protected void userWantCreateBuilding(final ITeam userTeam, BuildingId buildingId) {
         LoggerHelper.methodInvocation(TAG, "userWantCreateBuilding");
         try {
-            mGameServerConnector.sendClientMessage(new BuildingCreatedClientMessage(
+            mGameServerConnector.sendClientMessage(new BuildingCreationClientMessage(
                     userTeam.getTeamName(), buildingId.getId(), buildingId.getUpgrade()));
             LoggerHelper.printInformationMessage(TAG, "send building request team= " + userTeam.getTeamName() + ", building=" + buildingId + "");
         } catch (IOException e) {
@@ -150,6 +150,6 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
 
     @Override
     public void gameStarted() {
-        changeSplashSceneWithGameScene();
+        replaceSplashSceneWithGameScene();
     }
 }

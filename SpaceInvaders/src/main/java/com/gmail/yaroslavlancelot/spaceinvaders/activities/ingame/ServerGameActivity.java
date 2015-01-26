@@ -2,7 +2,6 @@ package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
-import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.GameLoadedEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.MoneyUpdatedEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.GameObjectsContactListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.callbacks.IGameObjectHealthChanged;
@@ -39,13 +38,13 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
         IGameObjectHealthChanged, IUnitFireCallback {
     private GameSocketServer mGameSocketServer;
 
-    private boolean serverGameLoaded;
-    private boolean clientGameLoaded;
+    private boolean mServerGameLoaded;
+    private boolean mClientGameLoaded;
 
     @Override
     public EngineOptions onCreateEngineOptions() {
-        serverGameLoaded = false;
-        clientGameLoaded = false;
+        mServerGameLoaded = false;
+        mClientGameLoaded = false;
         mGameSocketServer = GameSocketServer.getGameSocketServer();
         mGameSocketServer.addInGameCallback(ServerGameActivity.this);
         return super.onCreateEngineOptions();
@@ -53,14 +52,14 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
 
     @Override
     public void afterGameLoaded() {
-        serverGameLoaded = true;
-        if (clientGameLoaded){
+        mServerGameLoaded = true;
+        if (mClientGameLoaded){
             try {
                 mGameSocketServer.sendBroadcastServerMessage(new GameStartedServerMessage());
             } catch (IOException e) {
                 LoggerHelper.printErrorMessage(TAG, "send message (create building on server) IOException");
             }
-            changeSplashSceneWithGameScene();
+            replaceSplashSceneWithGameScene();
             registerContactCallback();
         }
     }
@@ -173,14 +172,14 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
 
     @Override
     public void gameLoaded() {
-        clientGameLoaded = true;
-        if (serverGameLoaded){
+        mClientGameLoaded = true;
+        if (mServerGameLoaded){
             try {
                 mGameSocketServer.sendBroadcastServerMessage(new GameStartedServerMessage());
             } catch (IOException e) {
                 LoggerHelper.printErrorMessage(TAG, "send message (create building on server) IOException");
             }
-            changeSplashSceneWithGameScene();
+            replaceSplashSceneWithGameScene();
             registerContactCallback();
         }
     }

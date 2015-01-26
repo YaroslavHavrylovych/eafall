@@ -182,7 +182,6 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     }
 
     protected void asyncGameLoading() {
-        //ToDo Check if this is running not in the main thread
         mEngine.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback() {
             public void onTimePassed(final TimerHandler pTimerHandler) {
                 mEngine.unregisterUpdateHandler(pTimerHandler);
@@ -202,14 +201,12 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
 
     public abstract void afterGameLoaded();
 
-    public void changeSplashSceneWithGameScene() {
+    public void replaceSplashSceneWithGameScene() {
+        EventBus.getDefault().register(MainOperationsBaseGameActivity.this);
         initThickClient();
 
         mSplashScene.detachSelf();
         mEngine.setScene(mGameScene);
-
-        //TODO find money initialization and set next line before it
-        EventBus.getDefault().register(MainOperationsBaseGameActivity.this);
     }
 
     protected void loadGameResources() {
@@ -338,18 +335,14 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
             team.changeFixtureDefFilter(CollisionCategoriesConstants.CATEGORY_TEAM2, CollisionCategoriesConstants.MASKBITS_TEAM2_THICK);
     }
 
-    /**
-     * create new team depending on team control type which stored in extra
-     */
+    /** create new team depending on team control type which stored in extra */
     protected ITeam createTeam(String teamNameInExtra, IAlliance race) {
         Intent intent = getIntent();
         TeamControlBehaviourType teamType = TeamControlBehaviourType.valueOf(intent.getStringExtra(teamNameInExtra));
         return new Team(teamNameInExtra, race, teamType);
     }
 
-    /**
-     * init first team and planet
-     */
+    /** init first team and planet */
     protected void initSecondPlanet() {
         mSecondTeam.setTeamPlanet(createPlanet(SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER
                         - SizeConstants.ADDITION_MARGIN_FOR_PLANET,
@@ -364,9 +357,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         );
     }
 
-    /**
-     * create planet game object
-     */
+    /** create planet game object */
     protected PlanetStaticObject createPlanet(float x, float y, ITextureRegion textureRegion, String key, ITeam team, long... unitUniqueId) {
         LoggerHelper.methodInvocation(TAG, "createPlanet");
         PlanetStaticObject planetStaticObject = new PlanetStaticObject(x, y, textureRegion, getVertexBufferObjectManager(), team);
@@ -379,9 +370,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         return planetStaticObject;
     }
 
-    /**
-     * init second team and planet
-     */
+    /** init second team and planet */
     protected void initFirstPlanet() {
         mFirstTeam.setTeamPlanet(createPlanet(0, (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.PLANET_DIAMETER) / 2
                         + SizeConstants.ADDITION_MARGIN_FOR_PLANET,
@@ -393,9 +382,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
                 SizeConstants.GAME_FIELD_HEIGHT / 2 + SizeConstants.ADDITION_MARGIN_FOR_PLANET);
     }
 
-    /**
-     * create sun
-     */
+    /** create sun */
     protected SunStaticObject createSun() {
         float x = (SizeConstants.GAME_FIELD_WIDTH - SizeConstants.SUN_DIAMETER) / 2;
         float y = (SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.SUN_DIAMETER) / 2;
@@ -408,9 +395,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         return sunStaticObject;
     }
 
-    /**
-     * move money text position on screen depending on planets position
-     */
+    /** move money text position on screen depending on planets position */
     private void initMoneyText() {
         LoggerHelper.methodInvocation(TAG, "initMoneyText");
         for (ITeam team : TeamsHolder.getInstance().getElements()) {
@@ -431,9 +416,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         new Thread(new NormalBot(initializingTeam)).start();
     }
 
-    /**
-     * init hud
-     */
+    /** init hud */
     private void initHud() {
         mHud = mCamera.getHUD();
         mHud.setTouchAreaBindingOnActionDownEnabled(true);
@@ -469,9 +452,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         }
     }
 
-    /**
-     * detach entity from scene (hud or game scene)
-     */
+    /** detach entity from scene (hud or game scene) */
     private void detachEntity(final IAreaShape entity, final Scene scene,
                               final boolean withBody, final boolean unregisterChildrenTouch) {
         MainOperationsBaseGameActivity.this.runOnUpdateThread(new Runnable() {
@@ -497,9 +478,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         });
     }
 
-    /**
-     * attach entity to scene (hud or game scene)
-     */
+    /** attach entity to scene (hud or game scene)*/
     private void attachEntity(final IAreaShape entity, final Scene scene, final boolean registerChildrenTouch) {
         MainOperationsBaseGameActivity.this.runOnUpdateThread(new Runnable() {
             @Override
@@ -535,9 +514,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         createUnit(unitKey, team, abstractEntityEvent.isTopPath());
     }
 
-    /**
-     * create unit with body and update it's enemies and moving path
-     */
+    /** create unit with body and update it's enemies and moving path */
     protected Unit createUnit(int unitKey, final ITeam unitTeam, boolean isTopPath) {
         float x = unitTeam.getTeamPlanet().getSpawnPointX(),
                 y = unitTeam.getTeamPlanet().getSpawnPointY();
@@ -548,9 +525,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         return warrior;
     }
 
-    /**
-     * create unit (with physic body) in particular position and add it to team
-     */
+    /** create unit (with physic body) in particular position and add it to team */
     protected Unit createThinUnit(int unitKey, ITeam unitTeam, float x, float y, long...
             unitUniqueId) {
         Unit unit = unitTeam.getTeamRace().getUnit(unitKey, unitTeam.getTeamColor());
@@ -589,18 +564,14 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         gameObject.setBody(body);
     }
 
-    /**
-     * attach entity to game scene
-     */
+    /** attach entity to game scene */
     private void attachEntity(final IAreaShape entity) {
         attachEntity(entity, mGameScene, false);
     }
 
     protected abstract void initThickClient();
 
-    /**
-     * return unit if it exist (live) by using unit unique id
-     */
+    /** return unit if it exist (live) by using unit unique id */
     protected GameObject getGameObjectById(long id) {
         return mGameObjectsMap.get(id);
     }
