@@ -1,7 +1,8 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server;
+package com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.network.MessagesConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.Unit;
+
+import com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages.constants.ServerMessagesConstants;
 
 import org.andengine.extension.multiplayer.protocol.adt.message.server.ServerMessage;
 
@@ -9,7 +10,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class UnitCreatedServerMessage extends ServerMessage implements MessagesConstants {
+public class UnitCreatedServerMessage extends ServerMessage implements ServerMessagesConstants {
     private int mUnitId;
     private String mTeamName;
     private float mX, mY;
@@ -47,7 +48,7 @@ public class UnitCreatedServerMessage extends ServerMessage implements MessagesC
 
     @Override
     public short getFlag() {
-        return FLAG_MESSAGE_SERVER_UNIT_CREATED;
+        return UNIT_CREATED;
     }
 
     public float getY() {

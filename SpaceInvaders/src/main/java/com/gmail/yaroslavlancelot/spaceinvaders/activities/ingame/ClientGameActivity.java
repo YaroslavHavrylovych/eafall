@@ -1,14 +1,15 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
+import com.gmail.yaroslavlancelot.spaceinvaders.network.client.messages.BuildingCreationClientMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.client.messages.GameLoadedClientMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages.UnitChangePositionServerMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.client.callbacks.InGameClient;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.client.connector.GameServerConnector;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.dynamic.MovableUnit;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.client.BuildingCreationClientMessage;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.UnitChangePositionServerMessage;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.InGameClient;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.connector.GameServerConnector;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
@@ -27,6 +28,17 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
         mGameServerConnector = GameServerConnector.getGameServerConnector();
         mGameServerConnector.addInGameCallback(this);
         return super.onCreateEngineOptions();
+    }
+
+    @Override
+    public void afterGameLoaded() {
+        LoggerHelper.methodInvocation(TAG, "afterGameLoaded");
+        try {
+            mGameServerConnector.sendClientMessage(new GameLoadedClientMessage());
+            LoggerHelper.printInformationMessage(TAG, "send gameLoaded");
+        } catch (IOException e) {
+            LoggerHelper.printErrorMessage(TAG, e.getMessage());
+        }
     }
 
     @Override
@@ -136,5 +148,10 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
         ITeam team = TeamsHolder.getInstance().getElement(teamName);
         if (team == null) return;
         team.setMoney(money);
+    }
+
+    @Override
+    public void gameStarted() {
+        replaceSplashSceneWithGameScene();
     }
 }

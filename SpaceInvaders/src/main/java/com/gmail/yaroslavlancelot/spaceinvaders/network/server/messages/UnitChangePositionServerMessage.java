@@ -1,8 +1,9 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server;
+package com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages;
 
 import com.badlogic.gdx.math.Vector2;
+
+import com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages.constants.ServerMessagesConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.dynamic.MovableUnit;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.MessagesConstants;
 
 import org.andengine.extension.multiplayer.protocol.adt.message.server.ServerMessage;
 
@@ -10,7 +11,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class UnitChangePositionServerMessage extends ServerMessage implements MessagesConstants {
+public class UnitChangePositionServerMessage extends ServerMessage implements ServerMessagesConstants {
     private float mX, mY;
     private long mUnitUniqueId;
     private float mVelocityX, mVelocityY;
@@ -53,7 +54,7 @@ public class UnitChangePositionServerMessage extends ServerMessage implements Me
 
     @Override
     public short getFlag() {
-        return FLAG_MESSAGE_SERVER_UNIT_MOVED;
+        return UNIT_MOVED;
     }
 
     public float getY() {

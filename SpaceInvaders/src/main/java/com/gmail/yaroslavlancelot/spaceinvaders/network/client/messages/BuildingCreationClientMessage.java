@@ -1,7 +1,7 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.client;
+package com.gmail.yaroslavlancelot.spaceinvaders.network.client.messages;
 
+import com.gmail.yaroslavlancelot.spaceinvaders.network.client.messages.constants.ClientMessagesConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.BuildingId;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.MessagesConstants;
 
 import org.andengine.extension.multiplayer.protocol.adt.message.client.ClientMessage;
 
@@ -9,7 +9,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class BuildingCreationClientMessage extends ClientMessage implements MessagesConstants {
+public class BuildingCreationClientMessage extends ClientMessage implements ClientMessagesConstants {
     private BuildingId mBuildingId;
     private String mTeamName;
 
@@ -47,6 +47,6 @@ public class BuildingCreationClientMessage extends ClientMessage implements Mess
 
     @Override
     public short getFlag() {
-        return FLAG_MESSAGE_CLIENT_WANT_CREATE_BUILDING;
+        return BUILDING_CREATION;
     }
 }

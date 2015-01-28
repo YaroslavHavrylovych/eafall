@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.network.discovery;
+package com.gmail.yaroslavlancelot.spaceinvaders.network.server.discovery;
 
 import org.andengine.extension.multiplayer.protocol.server.SocketServerDiscoveryServer;
 import org.andengine.extension.multiplayer.protocol.shared.IDiscoveryData;

@@ -12,10 +12,10 @@ import android.widget.TextView;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.activities.BaseNonGameActivity;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.client.ConnectionEstablishClientMessage;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.client.PreGameStartClient;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.connector.GameServerConnector;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.discovery.SocketDiscoveryServer;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.client.messages.ConnectionEstablishedClientMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.client.callbacks.PreGameStartClient;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.client.connector.GameServerConnector;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.server.discovery.SocketDiscoveryServer;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 
 import org.andengine.extension.multiplayer.protocol.client.SocketServerDiscoveryClient;
@@ -201,7 +201,7 @@ public class GameServersListActivity extends BaseNonGameActivity implements
                 }
                 if (gameServerConnector == null) return;
                 try {
-                    gameServerConnector.sendClientMessage(new ConnectionEstablishClientMessage(ConnectionEstablishClientMessage.PROTOCOL_VERSION));
+                    gameServerConnector.sendClientMessage(new ConnectionEstablishedClientMessage(ConnectionEstablishedClientMessage.PROTOCOL_VERSION));
                 } catch (IOException e) {
                     LoggerHelper.printErrorMessage(TAG, e.toString());
                     return;

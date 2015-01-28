@@ -96,22 +96,18 @@ public abstract class Building implements IBuilding {
     @Override
     public boolean buyBuilding() {
         ITeam team = TeamsHolder.getTeam(mTeamName);
-        boolean isFakePlanet = TeamControlBehaviourType.isClientSide(team.getTeamControlType());
-        if (isFakePlanet) {
-            mBuildingsAmount++;
-        } else {
+        if (!TeamControlBehaviourType.isClientSide(team.getTeamControlType())) {
             int cost = mDummy.getCost(mUpgrade);
             if (team.getMoney() < cost) {
                 return false;
             }
             team.changeMoney(-cost);
-
-            if (mBuildingsAmount <= 0) {
-                mBuildingsAmount = 0;
-                getEntity().attachChild(mBuildingStaticObject);
-            }
-            mBuildingsAmount++;
         }
+        if (mBuildingsAmount <= 0) {
+            mBuildingsAmount = 0;
+            getEntity().attachChild(mBuildingStaticObject);
+        }
+        mBuildingsAmount++;
         EventBus.getDefault().post(new BuildingsAmountChangedEvent(mTeamName,
                 BuildingId.makeId(mDummy.getBuildingId(), mUpgrade),
                 mBuildingsAmount));

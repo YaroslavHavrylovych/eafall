@@ -1,6 +1,6 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server;
+package com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.network.MessagesConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages.constants.ServerMessagesConstants;
 
 import org.andengine.extension.multiplayer.protocol.adt.message.server.ServerMessage;
 
@@ -8,7 +8,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class MoneyChangedServerMessage extends ServerMessage implements MessagesConstants {
+public class MoneyChangedServerMessage extends ServerMessage implements ServerMessagesConstants {
     private String mTeamName;
     private int mMoney;
 
@@ -35,7 +35,7 @@ public class MoneyChangedServerMessage extends ServerMessage implements Messages
 
     @Override
     public short getFlag() {
-        return FLAG_MESSAGE_SERVER_MONEY_CHANGED;
+        return MONEY_CHANGED;
     }
 
     public String getTeamName() {

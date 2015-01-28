@@ -1,7 +1,7 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.network.connector;
+package com.gmail.yaroslavlancelot.spaceinvaders.network.server.connector;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.activities.multiplayer.ServerGameCreationActivity;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server.WaitingForPlayersServerMessage;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages.WaitingForPlayersServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import org.andengine.extension.multiplayer.protocol.server.connector.ClientConnector;
 import org.andengine.extension.multiplayer.protocol.server.connector.SocketConnectionClientConnector;
