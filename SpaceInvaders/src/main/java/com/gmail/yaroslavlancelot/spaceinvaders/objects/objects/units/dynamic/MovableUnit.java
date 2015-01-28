@@ -1,8 +1,10 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.dynamic;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.bonuses.Bonus;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.callbacks.IVelocityChangedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.dynamicobjects.Bullet;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.Unit;
@@ -24,6 +26,8 @@ public class MovableUnit extends Unit {
     public static final String TAG = MovableUnit.class.getCanonicalName();
     /** how often (in millis) unit bonuses should be updated */
     private static final int sBonusUpdateTime = 1000;
+    /** body type */
+    private static final BodyDef.BodyType sBodyType = BodyDef.BodyType.DynamicBody;
     /** current unit bonuses */
     protected final Map<Bonus, Integer> mBonuses = new HashMap<Bonus, Integer>();
     /** max velocity for this unit */
@@ -34,6 +38,8 @@ public class MovableUnit extends Unit {
     private int mObjectHealthBonus;
     /** chance to avoid an attack */
     private int mChanceToAvoidAnAttack;
+    /** will trigger if object velocity changed */
+    private IVelocityChangedListener mVelocityChangedListener;
 
     /** create unit from appropriate builder */
     public MovableUnit(MovableUnitBuilder unitBuilder) {
@@ -56,6 +62,11 @@ public class MovableUnit extends Unit {
         bullet.fireFromPosition(objectPosition.x + SizeConstants.UNIT_SIZE / 2 / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
                 objectPosition.y - Bullet.BULLET_SIZE / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
                 attackedObject);
+    }
+
+    @Override
+    public BodyDef.BodyType getBodyType() {
+        return sBodyType;
     }
 
     public int getChanceToAvoidAnAttack() {
@@ -113,6 +124,19 @@ public class MovableUnit extends Unit {
             //avoid an attack
             mChanceToAvoidAnAttack = Bonus.getBonusByType(bonusSet,
                     Bonus.BonusType.AVOID_ATTACK_CHANCE, 0);
+        }
+    }
+
+    public void setVelocityChangedListener(IVelocityChangedListener velocityChangedListener) {
+        mVelocityChangedListener = velocityChangedListener;
+    }
+
+    @Override
+    public void setUnitLinearVelocity(float x, float y) {
+        super.setUnitLinearVelocity(x, y);
+
+        if (mVelocityChangedListener != null) {
+            mVelocityChangedListener.velocityChanged(MovableUnit.this);
         }
     }
 

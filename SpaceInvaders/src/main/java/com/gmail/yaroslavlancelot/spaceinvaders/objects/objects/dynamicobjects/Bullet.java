@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
-import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateCircleBodyEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities.CreateCircleBodyEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities.DetachEntityEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.equipment.weapons.Damage;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.RectangleWithBody;

@@ -2,7 +2,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.update
 
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.AllianceHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
-import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateBuildingEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.buildings.CreateBuildingEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.UnitByBuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.dummies.DefenceBuildingDummy;

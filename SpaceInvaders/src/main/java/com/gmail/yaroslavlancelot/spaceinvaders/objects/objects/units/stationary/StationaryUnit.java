@@ -1,6 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.stationary;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.dynamicobjects.Bullet;
@@ -16,6 +17,8 @@ import java.util.List;
 /** Basic class for all stationary/unmovable game units ( */
 public class StationaryUnit extends Unit {
     public static final String TAG = StationaryUnit.class.getCanonicalName();
+    /** body type */
+    private static final BodyDef.BodyType sBodyType = BodyDef.BodyType.StaticBody;
 
     /** create unit from appropriate builder */
     public StationaryUnit(StationaryUnitBuilder unitBuilder) {
@@ -37,6 +40,11 @@ public class StationaryUnit extends Unit {
         bullet.fireFromPosition(objectPosition.x + SizeConstants.UNIT_SIZE / 2 / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
                 objectPosition.y - Bullet.BULLET_SIZE / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
                 attackedObject);
+    }
+
+    @Override
+    public BodyDef.BodyType getBodyType() {
+        return sBodyType;
     }
 
     /** stationary unit behaviour */

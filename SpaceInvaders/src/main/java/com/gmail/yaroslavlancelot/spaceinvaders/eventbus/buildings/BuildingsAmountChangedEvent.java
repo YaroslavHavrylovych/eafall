@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.eventbus;
+package com.gmail.yaroslavlancelot.spaceinvaders.eventbus.buildings;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.BuildingId;
 

@@ -1,6 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.network;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateBuildingEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.buildings.CreateBuildingEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.client.BuildingCreationClientMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.client.ConnectionEstablishClientMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.callbacks.server.InGameServer;

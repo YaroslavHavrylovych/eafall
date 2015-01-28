@@ -1,7 +1,8 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.network.adt.messages.server;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.dynamic.MovableUnit;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.MessagesConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.Unit;
+
 import org.andengine.extension.multiplayer.protocol.adt.message.server.ServerMessage;
 
 import java.io.DataInputStream;
@@ -18,7 +19,7 @@ public class UnitCreatedServerMessage extends ServerMessage implements MessagesC
     public UnitCreatedServerMessage() {
     }
 
-    public UnitCreatedServerMessage(String teamName, int unitId, MovableUnit unit) {
+    public UnitCreatedServerMessage(String teamName, int unitId, Unit unit) {
         mUnitId = unitId;
         mTeamName = teamName;
         mX = unit.getX();
@@ -64,6 +65,7 @@ public class UnitCreatedServerMessage extends ServerMessage implements MessagesC
     public int getUnitId() {
         return mUnitId;
     }
+
     public long getUnitUniqueId() {
         return mUnitUniqueId;
     }

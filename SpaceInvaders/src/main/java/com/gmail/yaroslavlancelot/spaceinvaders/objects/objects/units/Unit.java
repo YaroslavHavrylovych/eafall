@@ -1,5 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units;
 
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities.AttachEntityEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.callbacks.IUnitFireCallback;
@@ -140,4 +141,6 @@ public abstract class Unit extends GameObject {
     public void setBulletFixtureDef(FixtureDef bulletFixtureDef) {
         mBulletFixtureDef = bulletFixtureDef;
     }
+
+    public abstract BodyDef.BodyType getBodyType();
 }

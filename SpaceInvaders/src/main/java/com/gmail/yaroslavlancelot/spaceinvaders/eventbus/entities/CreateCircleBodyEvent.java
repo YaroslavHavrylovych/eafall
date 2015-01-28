@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.eventbus;
+package com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities;
 
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;

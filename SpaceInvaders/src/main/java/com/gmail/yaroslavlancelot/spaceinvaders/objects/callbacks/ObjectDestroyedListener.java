@@ -2,7 +2,7 @@ package com.gmail.yaroslavlancelot.spaceinvaders.objects.callbacks;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.entities.DetachEntityEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.RectangleWithBody;
-import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.dynamic.MovableUnit;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 
 import de.greenrobot.event.EventBus;
@@ -23,8 +23,8 @@ public class ObjectDestroyedListener implements IObjectDestroyedListener {
 
     @Override
     public void objectDestroyed(final RectangleWithBody gameObject) {
-        if (gameObject instanceof MovableUnit) {
-            mTeam.removeObjectFromTeam((MovableUnit) gameObject);
+        if (gameObject instanceof Unit) {
+            mTeam.removeObjectFromTeam((Unit) gameObject);
         }
         EventBus.getDefault().post(new DetachEntityEvent(gameObject));
     }

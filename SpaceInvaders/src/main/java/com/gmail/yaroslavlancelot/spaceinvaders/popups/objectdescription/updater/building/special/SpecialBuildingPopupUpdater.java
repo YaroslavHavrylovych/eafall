@@ -1,6 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building.special;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateBuildingEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.buildings.CreateBuildingEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building.BaseBuildingPopupUpdater;
 

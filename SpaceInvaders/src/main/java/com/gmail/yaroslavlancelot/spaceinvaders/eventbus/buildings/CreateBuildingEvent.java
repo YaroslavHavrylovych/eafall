@@ -1,19 +1,19 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.eventbus;
+package com.gmail.yaroslavlancelot.spaceinvaders.eventbus.buildings;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.BuildingId;
 
-/** holds data needed to upgrade the building */
-public class UpgradeBuildingEvent {
+/** holds data need for building creation */
+public class CreateBuildingEvent {
     private final BuildingId mBuildingId;
     private final String mTeamName;
 
     /**
-     * building upgrade event
+     * building creation event
      *
      * @param teamName   team name to create a building
      * @param buildingId building buildingId in team
      */
-    public UpgradeBuildingEvent(final String teamName, BuildingId buildingId) {
+    public CreateBuildingEvent(final String teamName, BuildingId buildingId) {
         mBuildingId = buildingId;
         mTeamName = teamName;
     }

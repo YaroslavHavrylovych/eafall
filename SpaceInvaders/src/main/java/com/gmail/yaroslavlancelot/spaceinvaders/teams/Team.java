@@ -4,7 +4,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.MoneyUpdatedEvent;
-import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.UpgradeBuildingEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.buildings.UpgradeBuildingEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.bonuses.Bonus;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.GameObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.BuildingId;

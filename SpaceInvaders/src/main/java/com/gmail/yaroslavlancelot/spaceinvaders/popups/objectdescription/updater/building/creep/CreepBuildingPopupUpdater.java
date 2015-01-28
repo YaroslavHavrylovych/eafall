@@ -3,9 +3,9 @@ package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.update
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.AllianceHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
-import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.BuildingsAmountChangedEvent;
-import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateBuildingEvent;
-import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.UpgradeBuildingEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.buildings.BuildingsAmountChangedEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.buildings.CreateBuildingEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.buildings.UpgradeBuildingEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.UnitByBuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.unitpath.ShowUnitPathChooser;

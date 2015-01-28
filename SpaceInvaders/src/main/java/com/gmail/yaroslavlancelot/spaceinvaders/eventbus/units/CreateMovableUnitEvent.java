@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.eventbus;
+package com.gmail.yaroslavlancelot.spaceinvaders.eventbus.units;
 
 /** holds data need for unit creation */
 public class CreateMovableUnitEvent {

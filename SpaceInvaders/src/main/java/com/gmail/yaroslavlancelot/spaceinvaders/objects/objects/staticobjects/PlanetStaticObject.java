@@ -5,11 +5,13 @@ import com.gmail.yaroslavlancelot.spaceinvaders.objects.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.BuildingType;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.CreepBuilding;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.DefenceBuilding;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.IBuilding;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.SpecialBuilding;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.WealthBuilding;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.dummies.BuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.dummies.CreepBuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.dummies.DefenceBuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.dummies.SpecialBuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.dummies.WealthBuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
@@ -104,6 +106,11 @@ public class PlanetStaticObject extends StaticObject {
                 }
                 case SPECIAL_BUILDING: {
                     building = new SpecialBuilding((SpecialBuildingDummy) buildingDummy, getVertexBufferObjectManager(),
+                            mPlanetTeam.getTeamName());
+                    break;
+                }
+                case DEFENCE_BUILDING: {
+                    building = new DefenceBuilding((DefenceBuildingDummy) buildingDummy, getVertexBufferObjectManager(),
                             mPlanetTeam.getTeamName());
                     break;
                 }

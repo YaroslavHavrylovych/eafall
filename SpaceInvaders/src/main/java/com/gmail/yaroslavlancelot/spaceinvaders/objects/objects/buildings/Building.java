@@ -1,7 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
-import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.BuildingsAmountChangedEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.buildings.BuildingsAmountChangedEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.BuildingType;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.dummies.BuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.staticobjects.StaticObject;

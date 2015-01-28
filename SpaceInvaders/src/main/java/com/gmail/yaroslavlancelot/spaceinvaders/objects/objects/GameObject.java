@@ -6,7 +6,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.callbacks.IGameObjectHealthChanged;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.callbacks.IObjectDestroyedListener;
-import com.gmail.yaroslavlancelot.spaceinvaders.objects.callbacks.IVelocityChangedListener;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.equipment.weapons.Damage;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
@@ -51,8 +50,6 @@ public abstract class GameObject extends RectangleWithBody {
     protected IObjectDestroyedListener mObjectDestroyedListener;
     /** id of the string in the string files to represent object */
     private int mObjectStringId;
-    /** will trigger if object velocity changed */
-    private IVelocityChangedListener mVelocityChangedListener;
     /** will trigger if object health changed */
     private IGameObjectHealthChanged mGameObjectHealthChangedListener;
     /** unique unit id */
@@ -92,10 +89,6 @@ public abstract class GameObject extends RectangleWithBody {
 
     public void setGameObjectHealthChangedListener(IGameObjectHealthChanged gameObjectHealthChangedListener) {
         mGameObjectHealthChangedListener = gameObjectHealthChangedListener;
-    }
-
-    public void setVelocityChangedListener(IVelocityChangedListener velocityChangedListener) {
-        mVelocityChangedListener = velocityChangedListener;
     }
 
     public int getObjectStringId() {
@@ -280,8 +273,5 @@ public abstract class GameObject extends RectangleWithBody {
         }
 
         mPhysicBody.setLinearVelocity(x, y);
-        if (mVelocityChangedListener != null) {
-            mVelocityChangedListener.velocityChanged(GameObject.this);
-        }
     }
 }
