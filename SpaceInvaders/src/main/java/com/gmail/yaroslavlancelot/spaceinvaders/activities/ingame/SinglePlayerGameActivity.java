@@ -1,7 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.staticobjects.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 
 /**

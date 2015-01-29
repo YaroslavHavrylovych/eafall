@@ -3,11 +3,13 @@ package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.update
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.AllianceHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.armor.Armor;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.equipment.weapons.Damage;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.CreepBuildingDummy;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.UnitDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.equipment.armor.Armor;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.equipment.weapons.Damage;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.dummies.BuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.dummies.CreepBuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.dummies.DefenceBuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.UnitDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.BaseDescriptionAreaUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.visualelements.text.Link;
 
@@ -18,7 +20,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import java.util.ArrayList;
 
-/**  */
+/** unit additional area (in general we have attack and defence value here) */
 public class AdditionalInfoAreaUpdater extends BaseDescriptionAreaUpdater {
     private Link mAttack;
     private Link mDefence;
@@ -41,7 +43,15 @@ public class AdditionalInfoAreaUpdater extends BaseDescriptionAreaUpdater {
     public void updateDescription(RectangularShape drawArea, Object objectId, String raceName, String teamName) {
         final BuildingId buildingId = (BuildingId) objectId;
         IAlliance race = AllianceHolder.getInstance().getElement(raceName);
-        int unitId = ((CreepBuildingDummy) race.getBuildingDummy(buildingId)).getUnitId(buildingId.getUpgrade());
+        BuildingDummy buildingDummy = race.getBuildingDummy(buildingId);
+        int unitId;
+        if (buildingDummy instanceof CreepBuildingDummy) {
+            unitId = ((CreepBuildingDummy) buildingDummy).getMovableUnitId(buildingId.getUpgrade());
+        } else if (buildingDummy instanceof DefenceBuildingDummy) {
+            unitId = ((DefenceBuildingDummy) buildingDummy).getOrbitalStationUnitId();
+        } else {
+            return;
+        }
 
         attach(drawArea);
 

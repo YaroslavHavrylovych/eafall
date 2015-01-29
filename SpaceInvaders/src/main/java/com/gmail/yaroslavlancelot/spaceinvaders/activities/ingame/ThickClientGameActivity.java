@@ -1,7 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameloop.MoneyUpdateCycle;
+import com.gmail.yaroslavlancelot.spaceinvaders.loops.MoneyUpdateCycle;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.CollisionCategoriesConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 

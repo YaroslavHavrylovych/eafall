@@ -3,15 +3,15 @@ package com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.update
 import com.gmail.yaroslavlancelot.spaceinvaders.R;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.AllianceHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
-import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.BuildingsAmountChangedEvent;
-import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateBuildingEvent;
-import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.UpgradeBuildingEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.buildings.BuildingsAmountChangedEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.buildings.CreateBuildingEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.buildings.UpgradeBuildingEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.UnitByBuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.unitpath.ShowUnitPathChooser;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.IBuilding;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.CreepBuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.IBuilding;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.dummies.CreepBuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.building.BaseBuildingPopupUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LocaleImpl;
@@ -154,7 +154,7 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
         IAlliance race = AllianceHolder.getRace(raceName);
         BuildingId buildingId = (BuildingId) objectId;
         CreepBuildingDummy dummy = (CreepBuildingDummy) race.getBuildingDummy(buildingId);
-        final int unitId = dummy.getUnitId(buildingId.getUpgrade());
+        final int unitId = dummy.getMovableUnitId(buildingId.getUpgrade());
         return race.getUnitDummy(unitId).getTextureRegion();
     }
 }

@@ -6,9 +6,9 @@ import com.gmail.yaroslavlancelot.spaceinvaders.alliances.AllianceHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description.UnitByBuildingDescriptionShowEvent;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dummies.CreepBuildingDummy;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.UnitDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.dummies.CreepBuildingDummy;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.UnitDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.DescriptionText;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.updater.BaseDescriptionAreaUpdater;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
@@ -66,7 +66,7 @@ public class DescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
         //cost
         mCostValue.setText(Integer.toString(dummy.getCost(buildingId.getUpgrade())));
         //produced unit
-        final int unitId = dummy.getUnitId(buildingId.getUpgrade());
+        final int unitId = dummy.getMovableUnitId(buildingId.getUpgrade());
         UnitDummy unitDummy = race.getUnitDummy(unitId);
         mProducedUnitLink.setText(SpaceInvadersApplication.getContext().getResources().getString(
                 unitDummy.getUnitStringId()));
@@ -103,6 +103,6 @@ public class DescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
 
     @Override
     protected void iniDescriptionTextList() {
-        mDescriptionTextList = new ArrayList<Text>(7);
+        mDescriptionTextList = new ArrayList<Text>(8);
     }
 }

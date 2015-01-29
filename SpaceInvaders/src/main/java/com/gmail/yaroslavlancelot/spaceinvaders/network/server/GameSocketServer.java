@@ -1,13 +1,13 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.network.server;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.CreateBuildingEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.eventbus.buildings.CreateBuildingEvent;
+import com.gmail.yaroslavlancelot.spaceinvaders.network.client.connector.GameServerConnector;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.client.messages.BuildingCreationClientMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.client.messages.ConnectionEstablishedClientMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.client.messages.GameLoadedClientMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.client.messages.constants.ClientMessagesConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.server.callbacks.InGameServer;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.server.callbacks.PreGameStartServer;
-import com.gmail.yaroslavlancelot.spaceinvaders.network.client.connector.GameServerConnector;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 
 import org.andengine.extension.multiplayer.protocol.adt.message.client.IClientMessage;

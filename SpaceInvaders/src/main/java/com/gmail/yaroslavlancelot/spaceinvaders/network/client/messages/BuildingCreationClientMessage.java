@@ -1,7 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.network.client.messages;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.client.messages.constants.ClientMessagesConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.BuildingId;
 
 import org.andengine.extension.multiplayer.protocol.adt.message.client.ClientMessage;
 
