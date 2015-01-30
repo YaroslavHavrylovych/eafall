@@ -1,6 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.eventbus.description;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.BuildingId;
 
 /** showPopup unit in description popup */
 public class UnitByBuildingDescriptionShowEvent {

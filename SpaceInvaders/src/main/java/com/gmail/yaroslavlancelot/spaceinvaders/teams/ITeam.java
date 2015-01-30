@@ -3,10 +3,10 @@ package com.gmail.yaroslavlancelot.spaceinvaders.teams;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.TeamControlBehaviourType;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.bonuses.Bonus;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.bonuses.Bonus;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.GameObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.staticobjects.PlanetStaticObject;
 
 import org.andengine.util.color.Color;
 
@@ -22,25 +22,25 @@ public interface ITeam {
     void addTeamBonus(Bonus teamBonus);
 
     /**
-     * Add new {@link com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject}
+     * Add new {@link com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.GameObject}
      * to a team. If this is the unit, then bonuses will be added during this method.
      */
     void addObjectToTeam(GameObject object);
 
     /**
-     * Remove {@link com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject}
+     * Remove {@link com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.GameObject}
      * from the team team.
      */
     void removeObjectFromTeam(GameObject object);
 
     /**
-     * get team {@link com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject}
+     * get team {@link com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.staticobjects.PlanetStaticObject}
      * which can be oly one
      */
     PlanetStaticObject getTeamPlanet();
 
     /**
-     * set team {@link com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject}
+     * set team {@link com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.staticobjects.PlanetStaticObject}
      * which can be only one and if it will be destroyed then team loose
      */
     void setTeamPlanet(PlanetStaticObject planet);
@@ -54,7 +54,7 @@ public interface ITeam {
     /** set enemy team */
     void setEnemyTeam(ITeam enemyTeam);
 
-    /** get list of all {@link com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject} for the current team */
+    /** get list of all {@link com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.GameObject} for the current team */
     List<GameObject> getTeamObjects();
 
     /** get current team name */

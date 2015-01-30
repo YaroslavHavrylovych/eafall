@@ -1,6 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.network.client.callbacks;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages.UnitChangePositionServerMessage;
 
 public interface InGameClient {

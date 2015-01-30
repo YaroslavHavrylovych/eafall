@@ -28,8 +28,12 @@ public abstract class BasePopupUpdater implements IPopupUpdater {
         if (mObjectImage != null) {
             drawArea.detachChild(mObjectImage);
         }
+        ITextureRegion textureRegion = getDescriptionImage(objectId, raceName);
+        if (textureRegion == null) {
+            return;
+        }
         mObjectImage = new Sprite(0, 0, drawArea.getWidth(), drawArea.getHeight(),
-                getDescriptionImage(objectId, raceName), mVertexBufferObjectManager);
+                textureRegion, mVertexBufferObjectManager);
         drawArea.attachChild(mObjectImage);
     }
 

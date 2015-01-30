@@ -1,6 +1,7 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.Unit;
+
 import com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages.constants.ServerMessagesConstants;
 
 import org.andengine.extension.multiplayer.protocol.adt.message.server.ServerMessage;
@@ -65,6 +66,7 @@ public class UnitCreatedServerMessage extends ServerMessage implements ServerMes
     public int getUnitId() {
         return mUnitId;
     }
+
     public long getUnitUniqueId() {
         return mUnitUniqueId;
     }

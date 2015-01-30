@@ -16,7 +16,7 @@
                             <xs:element name="attack_radius" type="xs:positiveInteger"/>
                             <xs:element name="view_radius" type="xs:positiveInteger"/>
                             <xs:element name="speed" type="xs:positiveInteger"/>
-                            <xs:element name="reload_time" type="xs:double"/>
+                            <xs:element name="reload_time" type="xs:float"/>
                             <xs:element name="sound" type="xs:string"/>
                             <xs:element name="team_color_area">
                                 <xs:complexType>

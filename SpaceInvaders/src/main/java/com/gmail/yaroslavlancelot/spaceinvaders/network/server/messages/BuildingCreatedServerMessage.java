@@ -1,6 +1,6 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.BuildingId;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages.constants.ServerMessagesConstants;
 
 import org.andengine.extension.multiplayer.protocol.adt.message.server.ServerMessage;

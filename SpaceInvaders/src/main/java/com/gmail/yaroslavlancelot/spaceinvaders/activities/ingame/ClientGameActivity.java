@@ -1,14 +1,15 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.activities.ingame;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.buildings.BuildingId;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.staticobjects.PlanetStaticObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.client.messages.BuildingCreationClientMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.client.messages.GameLoadedClientMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.server.messages.UnitChangePositionServerMessage;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.client.callbacks.InGameClient;
 import com.gmail.yaroslavlancelot.spaceinvaders.network.client.connector.GameServerConnector;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.GameObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.BuildingId;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.staticobjects.PlanetStaticObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.Unit;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.dynamic.MovableUnit;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
@@ -91,11 +92,11 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
         runOnUpdateThread(new Runnable() {
             @Override
             public void run() {
-                if (gameObject == null || !(gameObject instanceof Unit)) {
+                if (gameObject == null || !(gameObject instanceof MovableUnit)) {
                     LoggerHelper.printInformationMessage(TAG, "try yo move uncreated unit or it's not a unit");
                     return;
                 }
-                Unit unit = (Unit) gameObject;
+                MovableUnit unit = (MovableUnit) gameObject;
                 if (!gameObject.isObjectAlive()) return;
                 unit.setUnitPosition(x, y);
                 unit.rotate(rotation);
@@ -135,8 +136,9 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
             @Override
             public void run() {
                 Unit unit = (Unit) gameObject;
-                if (unit.isObjectAlive())
+                if (unit.isObjectAlive()) {
                     unit.fire(objectToAttack);
+                }
             }
         });
     }

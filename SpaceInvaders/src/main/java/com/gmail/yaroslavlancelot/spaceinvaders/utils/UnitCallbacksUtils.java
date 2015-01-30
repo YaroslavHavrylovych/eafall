@@ -1,8 +1,8 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.utils;
 
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.GameObject;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.dynamicobjects.ISimpleUnitEnemiesUpdater;
-import com.gmail.yaroslavlancelot.spaceinvaders.gameobjects.objects.units.Unit;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.GameObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.dynamicobjects.ISimpleUnitEnemiesUpdater;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.Unit;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 
 import java.util.ArrayList;
@@ -39,6 +39,11 @@ public class UnitCallbacksUtils {
         @Override
         public GameObject getMainTarget() {
             return mEnemyTeam.getTeamPlanet();
+        }
+
+        @Override
+        public List<GameObject> getEnemiesInRangeForUnit(Unit unit, int range) {
+            return TeamUtils.getEnemiesInRangeForUnit(unit, range, mEnemyTeam);
         }
     }
 }

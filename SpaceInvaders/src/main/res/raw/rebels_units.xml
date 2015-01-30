@@ -274,4 +274,24 @@
             <height>4</height>
         </team_color_area>
     </unit>
+    <!-- orbital station -->
+    <unit name="orbital_station">
+        <id>250</id>
+        <health>1000</health>
+        <armor>mixed</armor>
+        <armor_value>10</armor_value>
+        <damage>higgson</damage>
+        <damage_value>50</damage_value>
+        <attack_radius>180</attack_radius>
+        <view_radius>300</view_radius>
+        <speed>1</speed>
+        <reload_time>2</reload_time>
+        <sound>annihilation_1s.ogg</sound>
+        <team_color_area>
+            <x>6</x>
+            <y>1</y>
+            <width>4</width>
+            <height>4</height>
+        </team_color_area>
+    </unit>
 </units>
