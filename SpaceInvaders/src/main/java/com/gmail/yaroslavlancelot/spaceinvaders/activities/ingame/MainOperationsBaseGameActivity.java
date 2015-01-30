@@ -169,10 +169,14 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
             public void onTimePassed(final TimerHandler pTimerHandler) {
                 mEngine.unregisterUpdateHandler(pTimerHandler);
 
+                // music
+                mMusicAndSoundsHandler = new MusicAndSoundsHandler(getSoundManager(), MainOperationsBaseGameActivity.this);
+                mBackgroundMusic = mMusicAndSoundsHandler.new BackgroundMusic(getMusicManager());
+
                 mSceneManager.loadInGameResources();
+                mGameScene = mSceneManager.createInGameScene();
                 mGameScene.registerUpdateHandler(mPhysicsWorld);
                 initHud();
-                mGameScene = mSceneManager.createInGameScene();
                 initPlanetsAndTeams();
 
                 mPhysicsWorld.setContactListener(mContactListener = new GameObjectsContactListener());
@@ -541,5 +545,9 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     /** return unit if it exist (live) by using unit unique id */
     protected GameObject getGameObjectById(long id) {
         return mGameObjectsMap.get(id);
+    }
+
+    public MusicAndSoundsHandler getmMusicAndSoundsHandler() {
+        return mMusicAndSoundsHandler;
     }
 }

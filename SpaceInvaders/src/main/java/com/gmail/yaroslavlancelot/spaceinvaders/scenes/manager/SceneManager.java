@@ -41,10 +41,6 @@ public class SceneManager {
     /** user static area */
     protected HUD mHud;
 
-    /** background theme */
-    private MusicAndSoundsHandler mMusicAndSoundsHandler;
-    private MusicAndSoundsHandler.BackgroundMusic mBackgroundMusic;
-
     public SceneManager(MainOperationsBaseGameActivity activity, Engine engine, SmoothCamera camera){
         mActivity = activity;
         mEngine = engine;
@@ -75,16 +71,13 @@ public class SceneManager {
 
     public void loadInGameResources() {
         LoggerHelper.methodInvocation(TAG, "onCreateGameResources");
-        // music
-        mMusicAndSoundsHandler = new MusicAndSoundsHandler(mActivity.getSoundManager(), mActivity);
-        mBackgroundMusic = mMusicAndSoundsHandler.new BackgroundMusic(mActivity.getMusicManager());
 
         //races loadGeneralGameTextures
         Intent intent = mActivity.getIntent();
         AllianceHolder.addAllianceByName(intent.getStringExtra(StringsAndPathUtils.FIRST_TEAM_ALLIANCE),
-                mActivity.getVertexBufferObjectManager(), mMusicAndSoundsHandler);
+                mActivity.getVertexBufferObjectManager(), mActivity.getmMusicAndSoundsHandler());
         AllianceHolder.addAllianceByName(intent.getStringExtra(StringsAndPathUtils.SECOND_TEAM_ALLIANCE),
-                mActivity.getVertexBufferObjectManager(), mMusicAndSoundsHandler);
+                mActivity.getVertexBufferObjectManager(), mActivity.getmMusicAndSoundsHandler());
         for (IAlliance race : AllianceHolder.getInstance().getElements()) {
             race.loadResources(mActivity.getTextureManager());
         }
@@ -102,7 +95,7 @@ public class SceneManager {
     public Scene createInGameScene() {
         //game scene
         GameBackgroundScene gameBackgroundScene = new GameBackgroundScene(mActivity.getVertexBufferObjectManager());
-        gameBackgroundScene.initGameSceneTouch(mActivity.getWindowManager(), mCamera, mMusicAndSoundsHandler);
+        gameBackgroundScene.initGameSceneTouch(mActivity.getWindowManager(), mCamera, mActivity.getmMusicAndSoundsHandler());
         mGameScene = gameBackgroundScene;
         return mGameScene;
     }
