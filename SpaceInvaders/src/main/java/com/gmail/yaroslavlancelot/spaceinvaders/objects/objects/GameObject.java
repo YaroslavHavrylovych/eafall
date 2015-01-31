@@ -75,8 +75,7 @@ public abstract class GameObject extends RectangleWithBody {
     }
 
     public static void loadResource(String pathToImage, Context context, BitmapTextureAtlas textureAtlas, int x, int y) {
-        TextureRegionHolderUtils.addElementFromAssets(pathToImage, TextureRegionHolderUtils.getInstance(),
-                textureAtlas, context, x, y);
+        TextureRegionHolderUtils.addElementFromAssets(pathToImage, textureAtlas, context, x, y);
     }
 
     public long getObjectUniqueId() {

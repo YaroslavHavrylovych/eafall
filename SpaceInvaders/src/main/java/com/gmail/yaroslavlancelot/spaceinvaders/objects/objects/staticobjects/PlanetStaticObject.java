@@ -1,6 +1,9 @@
 package com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.staticobjects;
 
+import android.content.Context;
+
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.constants.StringsAndPathUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.BuildingType;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.buildings.BuildingId;
@@ -16,7 +19,12 @@ import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.dummies.SpecialB
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.dummies.WealthBuildingDummy;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
 
+import org.andengine.opengl.texture.TextureManager;
+import org.andengine.opengl.texture.TextureOptions;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
@@ -141,5 +149,17 @@ public class PlanetStaticObject extends StaticObject {
 
     public IBuilding getBuilding(int id) {
         return mBuildings.get(id);
+    }
+
+    public static void loadImages(Context context, TextureManager textureManager){
+        BitmapTextureAtlas bitmapTextureAtlas = new BitmapTextureAtlas(textureManager,
+                256, 128, TextureOptions.BILINEAR);
+        TextureRegionHolderUtils.getInstance().addElement(StringsAndPathUtils.KEY_RED_PLANET,
+                BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+                        bitmapTextureAtlas, context, StringsAndPathUtils.FILE_RED_PLANET, 0, 0));
+        TextureRegionHolderUtils.getInstance().addElement(StringsAndPathUtils.KEY_BLUE_PLANET,
+                BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+                        bitmapTextureAtlas, context, StringsAndPathUtils.FILE_BLUE_PLANET, 128, 0));
+        bitmapTextureAtlas.load();
     }
 }

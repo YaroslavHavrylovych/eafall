@@ -48,8 +48,8 @@ public class TextButton extends ButtonSprite {
 
     public static void loadResources(Context context, TextureManager textureManager) {
         BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 400, 100, TextureOptions.BILINEAR);
-        TextureRegionHolderUtils.addTiledElementFromAssets(StringsAndPathUtils.FILE_GAME_BUTTON,
-                TextureRegionHolderUtils.getInstance(), smallObjectTexture, context, 0, 0, 2, 1);
+        TextureRegionHolderUtils.addTiledElementFromAssets(
+                StringsAndPathUtils.FILE_GAME_BUTTON, smallObjectTexture, context, 0, 0, 2, 1);
         smallObjectTexture.load();
     }
 

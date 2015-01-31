@@ -34,8 +34,8 @@ public class ShowBuildingsPopupButtonSprite extends ButtonSprite {
     public static void loadResources(Context context, TextureManager textureManager) {
         int size = SizeConstants.BUILDING_POPUP_INVOCATION_BUTTON_SIZE;
         BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 2 * size, size, TextureOptions.BILINEAR);
-        TextureRegionHolderUtils.addTiledElementFromAssets(StringsAndPathUtils.FILE_BUILDINGS_POPUP_UP_BUTTON,
-                TextureRegionHolderUtils.getInstance(), smallObjectTexture, context, 0, 0, 2, 1);
+        TextureRegionHolderUtils.addTiledElementFromAssets(
+                StringsAndPathUtils.FILE_BUILDINGS_POPUP_UP_BUTTON, smallObjectTexture, context, 0, 0, 2, 1);
         smallObjectTexture.load();
     }
 

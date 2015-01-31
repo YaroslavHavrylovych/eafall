@@ -33,7 +33,7 @@ import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.stationary
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.PopupManager;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.BuildingsPopupHud;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.ShowBuildingsPopupButtonSprite;
-import com.gmail.yaroslavlancelot.spaceinvaders.scenes.manager.SceneManager;
+import com.gmail.yaroslavlancelot.spaceinvaders.scene.SceneManager;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.Team;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
@@ -93,8 +93,6 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     protected PhysicsWorld mPhysicsWorld;
     /** game objects contact listener */
     protected GameObjectsContactListener mContactListener;
-    /* splash screen */
-    protected Scene mSplashScene;
     /** game camera */
     private SmoothCamera mCamera;
     /** scene manager */
@@ -143,7 +141,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
 
         mTextureRegionHolderUtils = TextureRegionHolderUtils.getInstance();
 
-        mSceneManager = new SceneManager(this, mEngine, mCamera);
+        mSceneManager = new SceneManager(this, mEngine);
         mSceneManager.loadSplashResources();
 
         onCreateResourcesCallback.onCreateResourcesFinished();
@@ -153,8 +151,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     public void onCreateScene(final OnCreateSceneCallback onCreateSceneCallback) {
         LoggerHelper.methodInvocation(TAG, "onCreateScene");
 
-        mSplashScene = mSceneManager.createSplashScene();
-        onCreateSceneCallback.onCreateSceneFinished(mSplashScene);
+        mSceneManager.createSplashScene();
+        onCreateSceneCallback.onCreateSceneFinished(mSceneManager.getSplashScene());
     }
 
     @Override
@@ -173,8 +171,14 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
                 mMusicAndSoundsHandler = new MusicAndSoundsHandler(getSoundManager(), MainOperationsBaseGameActivity.this);
                 mBackgroundMusic = mMusicAndSoundsHandler.new BackgroundMusic(getMusicManager());
 
-                mSceneManager.loadInGameResources();
-                mGameScene = mSceneManager.createInGameScene();
+                Intent intent = getIntent();
+                AllianceHolder.addAllianceByName(intent.getStringExtra(StringsAndPathUtils.FIRST_TEAM_ALLIANCE),
+                        getVertexBufferObjectManager(), getmMusicAndSoundsHandler());
+                AllianceHolder.addAllianceByName(intent.getStringExtra(StringsAndPathUtils.SECOND_TEAM_ALLIANCE),
+                        getVertexBufferObjectManager(), getmMusicAndSoundsHandler());
+
+                mSceneManager.loadGameResources();
+                mGameScene = mSceneManager.createGameScene(mCamera);
                 mGameScene.registerUpdateHandler(mPhysicsWorld);
                 initHud();
                 initPlanetsAndTeams();
@@ -193,7 +197,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     public void replaceSplashSceneWithGameScene() {
         EventBus.getDefault().register(this);
         initThickClient();
-        mSceneManager.replaceSplashSceneWithGameScene();
+        mSceneManager.replaceSplashSceneWithGame();
     }
 
     protected void initPlanetsAndTeams() {

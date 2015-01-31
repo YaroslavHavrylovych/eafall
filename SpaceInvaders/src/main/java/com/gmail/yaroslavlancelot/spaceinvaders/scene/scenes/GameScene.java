@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.scenes;
+package com.gmail.yaroslavlancelot.spaceinvaders.scene.scenes;
 
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -28,13 +28,12 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
  * <br/>
  * 2. Loading needed images.
  */
-public class
-        GameBackgroundScene extends Scene {
-    private static final String TAG = GameBackgroundScene.class.getCanonicalName();
+public class GameScene extends Scene {
+    private static final String TAG = GameScene.class.getCanonicalName();
     private static String mBackgroundImagePath = StringsAndPathUtils.getPathToGeneralImages() + "background.png";
 
     /** set background image to the scene */
-    public GameBackgroundScene(VertexBufferObjectManager vertexBufferObjectManager) {
+    public GameScene(VertexBufferObjectManager vertexBufferObjectManager) {
         setBackground(new SpriteBackground(new Sprite(0, 0,
                 TextureRegionHolderUtils.getInstance().getElement(mBackgroundImagePath),
                 vertexBufferObjectManager)));
@@ -45,8 +44,7 @@ public class
         BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager,
                 SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT, TextureOptions.BILINEAR);
         TextureRegionHolderUtils.addElementFromAssets(mBackgroundImagePath,
-                TextureRegionHolderUtils.getInstance(), smallObjectTexture,
-                SpaceInvadersApplication.getContext(), 0, 0);
+                smallObjectTexture, SpaceInvadersApplication.getContext(), 0, 0);
         smallObjectTexture.load();
     }
 
@@ -54,7 +52,7 @@ public class
 
     /**
      * Creates and init {@link com.gmail.yaroslavlancelot.spaceinvaders.objects.touch.MainSceneTouchListener}
-     * and assign it to the {@link GameBackgroundScene} instance.
+     * and assign it to the {@link GameScene} instance.
      * <br/>
      * Set camera coordinates to music and sound handler with using
      * {@link com.gmail.yaroslavlancelot.spaceinvaders.utils.MusicAndSoundsHandler#setCameraCoordinates(com.gmail.yaroslavlancelot.spaceinvaders.objects.ICameraCoordinates)}
