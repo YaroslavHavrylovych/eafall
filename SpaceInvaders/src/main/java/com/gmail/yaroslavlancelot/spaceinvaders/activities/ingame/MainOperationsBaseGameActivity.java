@@ -33,11 +33,15 @@ import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.units.stationary
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.PopupManager;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.BuildingsPopupHud;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.ShowBuildingsPopupButtonSprite;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.DescriptionPopupHud;
 import com.gmail.yaroslavlancelot.spaceinvaders.scene.SceneManager;
+import com.gmail.yaroslavlancelot.spaceinvaders.scene.scenes.GameScene;
+import com.gmail.yaroslavlancelot.spaceinvaders.scene.scenes.SplashScene;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.Team;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.CollisionCategoriesConstants;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.MusicAndSoundsHandler;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
@@ -141,8 +145,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
 
         mTextureRegionHolderUtils = TextureRegionHolderUtils.getInstance();
 
-        mSceneManager = new SceneManager(this, mEngine);
-        mSceneManager.loadSplashResources();
+        mSceneManager = new SceneManager(this);
+        SplashScene.loadResources(this, getTextureManager());
 
         onCreateResourcesCallback.onCreateResourcesFinished();
     }
@@ -176,8 +180,16 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
                         getVertexBufferObjectManager(), getmMusicAndSoundsHandler());
                 AllianceHolder.addAllianceByName(intent.getStringExtra(StringsAndPathUtils.SECOND_TEAM_ALLIANCE),
                         getVertexBufferObjectManager(), getmMusicAndSoundsHandler());
+                for (IAlliance race : AllianceHolder.getInstance().getElements()) {
+                    race.loadResources(getTextureManager());
+                }
 
-                mSceneManager.loadGameResources();
+                PopupManager.loadResource(MainOperationsBaseGameActivity.this, getTextureManager());
+                GameScene.loadResources(MainOperationsBaseGameActivity.this, getTextureManager());
+
+                // font
+                FontHolderUtils.loadGeneralGameFonts(getFontManager(), getTextureManager());
+                DescriptionPopupHud.loadFonts(getFontManager(), getTextureManager());
                 mGameScene = mSceneManager.createGameScene(mCamera);
                 mGameScene.registerUpdateHandler(mPhysicsWorld);
                 initHud();

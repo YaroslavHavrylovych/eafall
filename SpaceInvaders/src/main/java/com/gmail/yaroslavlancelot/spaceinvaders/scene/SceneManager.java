@@ -27,83 +27,80 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 
 /**
- * Created by Merle on 26-01-2015.
+ * Manager class for scenes
+ * Creates and stores and changes scenes
  */
 public class SceneManager {
 
     /** tag, which is used for debugging purpose */
     public static final String TAG = SceneManager.class.getCanonicalName();
 
+    /** splash scene */
     private SplashScene mSplashScene;
+    /** game scene */
     private GameScene mGameScene;
-
+    /** main game activity */
     private MainOperationsBaseGameActivity mGameActivity;
-    private Engine mEngine;
 
-    public SceneManager(MainOperationsBaseGameActivity gameActivity, Engine engine){
+    /**
+     * Constructs SceneManager using engine and game activity
+     *
+     * @param gameActivity      any instance of game activity
+     */
+    public SceneManager(MainOperationsBaseGameActivity gameActivity){
         mGameActivity = gameActivity;
-        mEngine = engine;
     }
 
-    public void loadSplashResources() {
-        BitmapTextureAtlas splashTextureAtlas =
-                new BitmapTextureAtlas(mGameActivity.getTextureManager(), 128, 32, TextureOptions.DEFAULT);
-        TextureRegionHolderUtils.getInstance().addElement(
-                StringsAndPathUtils.KEY_SPLASH_SCREEN, BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-                        splashTextureAtlas, mGameActivity, StringsAndPathUtils.FILE_SPLASH_SCREEN, 0, 0)
-        );
-        splashTextureAtlas.load();
-    }
-
+    /**
+     * Creates and stores splash scene
+     *
+     * @return instance of SplashScene
+     */
     public SplashScene createSplashScene() {
-        mSplashScene = new SplashScene();
-        Sprite splash = new Sprite(0, 0, TextureRegionHolderUtils.getInstance()
-                .getElement(StringsAndPathUtils.KEY_SPLASH_SCREEN), mEngine.getVertexBufferObjectManager());
-        splash.setScale(4f);
-        splash.setPosition((SizeConstants.GAME_FIELD_WIDTH - splash.getWidth()) * 0.5f,
-                (SizeConstants.GAME_FIELD_HEIGHT - splash.getHeight()) * 0.5f);
-        mSplashScene.attachChild(splash);
-        return mSplashScene;
+        return mSplashScene = new SplashScene(mGameActivity.getEngine());
     }
 
+    /**
+     * Returns stored SplashScene instance
+     *
+     * @return instance of SplashScene, if not created yet - got null;
+     */
     public SplashScene getSplashScene() {
         return mSplashScene;
     }
 
-    public void loadGameResources() {
-        LoggerHelper.methodInvocation(TAG, "onCreateGameResources");
-
-        //races loadGeneralGameTextures
-        for (IAlliance race : AllianceHolder.getInstance().getElements()) {
-            race.loadResources(mGameActivity.getTextureManager());
-        }
-
-        // other loader
-        PopupManager.loadResource(mGameActivity, mGameActivity.getTextureManager());
-        SunStaticObject.loadImages(mGameActivity, mGameActivity.getTextureManager());
-        PlanetStaticObject.loadImages(mGameActivity, mGameActivity.getTextureManager());
-        GameScene.loadImages(mGameActivity.getTextureManager());
-
-        // font
-        FontHolderUtils.loadGeneralGameFonts(mGameActivity.getFontManager(), mGameActivity.getTextureManager());
-        DescriptionPopupHud.loadFonts(mGameActivity.getFontManager(), mGameActivity.getTextureManager());
-    }
-
+    /**
+     * Creates and stores game scene
+     *
+     * @return instance of SplashScene
+     */
     public GameScene createGameScene(SmoothCamera smoothCamera) {
         //game scene
-        GameScene gameScene = new GameScene(mGameActivity.getVertexBufferObjectManager());
-        gameScene.initGameSceneTouch(
+        mGameScene = new GameScene(mGameActivity.getVertexBufferObjectManager());
+        mGameScene.initGameSceneTouch(
                 mGameActivity.getWindowManager(), smoothCamera, mGameActivity.getmMusicAndSoundsHandler());
-        mGameScene = gameScene;
         return mGameScene;
     }
 
-    public void replaceSplashSceneWithGame() {
-        mSplashScene.detachSelf();
-        mEngine.setScene(mGameScene);
-    }
-
+    /**
+     * Returns stored GameScene instance
+     *
+     * @return instance of GameScene, if not created yet - got null;
+     */
     public GameScene getGameScene() {
         return mGameScene;
+    }
+
+    /**
+     * Replaces splash scene with game scene
+     *
+     * @throws IllegalStateException if splash scene or game scene have not been created yet
+     */
+    public void replaceSplashSceneWithGame() {
+        if (mSplashScene == null || mGameScene == null){
+            throw new IllegalStateException("mSplashScene or mGameScene have not been initialized");
+        }
+        mSplashScene.detachSelf();
+        mGameActivity.getEngine().setScene(mGameScene);
     }
 }
