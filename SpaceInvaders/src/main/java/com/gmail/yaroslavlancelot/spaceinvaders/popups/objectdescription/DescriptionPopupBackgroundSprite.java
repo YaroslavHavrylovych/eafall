@@ -102,8 +102,7 @@ public class DescriptionPopupBackgroundSprite extends Sprite {
     public static void loadResources(Context context, TextureManager textureManager) {
         //background
         BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 1920, 540, TextureOptions.BILINEAR);
-        TextureRegionHolderUtils.addElementFromAssets(StringsAndPathUtils.FILE_DESCRIPTION_POPUP_BACKGROUND,
-                TextureRegionHolderUtils.getInstance(), smallObjectTexture, context, 0, 0);
+        TextureRegionHolderUtils.addElementFromAssets(StringsAndPathUtils.FILE_DESCRIPTION_POPUP_BACKGROUND, smallObjectTexture, context, 0, 0);
         smallObjectTexture.load();
 
         CloseButtonSprite.loadResources(context, textureManager);

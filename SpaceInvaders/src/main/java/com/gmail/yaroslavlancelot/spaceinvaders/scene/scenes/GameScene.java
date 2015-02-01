@@ -1,13 +1,21 @@
-package com.gmail.yaroslavlancelot.spaceinvaders.scenes;
+package com.gmail.yaroslavlancelot.spaceinvaders.scene.scenes;
 
+import android.content.Context;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
 
 import com.gmail.yaroslavlancelot.spaceinvaders.SpaceInvadersApplication;
+import com.gmail.yaroslavlancelot.spaceinvaders.alliances.AllianceHolder;
+import com.gmail.yaroslavlancelot.spaceinvaders.alliances.IAlliance;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.SizeConstants;
 import com.gmail.yaroslavlancelot.spaceinvaders.constants.StringsAndPathUtils;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.staticobjects.PlanetStaticObject;
+import com.gmail.yaroslavlancelot.spaceinvaders.objects.objects.staticobjects.SunStaticObject;
 import com.gmail.yaroslavlancelot.spaceinvaders.objects.touch.MainSceneTouchListener;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.PopupManager;
+import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.DescriptionPopupHud;
+import com.gmail.yaroslavlancelot.spaceinvaders.utils.FontHolderUtils;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.LoggerHelper;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.MusicAndSoundsHandler;
 import com.gmail.yaroslavlancelot.spaceinvaders.utils.TextureRegionHolderUtils;
@@ -20,6 +28,7 @@ import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.ui.activity.BaseGameActivity;
 
 /**
  * Game scene
@@ -28,13 +37,12 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
  * <br/>
  * 2. Loading needed images.
  */
-public class
-        GameBackgroundScene extends Scene {
-    private static final String TAG = GameBackgroundScene.class.getCanonicalName();
+public class GameScene extends Scene {
+    private static final String TAG = GameScene.class.getCanonicalName();
     private static String mBackgroundImagePath = StringsAndPathUtils.getPathToGeneralImages() + "background.png";
 
     /** set background image to the scene */
-    public GameBackgroundScene(VertexBufferObjectManager vertexBufferObjectManager) {
+    public GameScene(VertexBufferObjectManager vertexBufferObjectManager) {
         setBackground(new SpriteBackground(new Sprite(0, 0,
                 TextureRegionHolderUtils.getInstance().getElement(mBackgroundImagePath),
                 vertexBufferObjectManager)));
@@ -45,16 +53,22 @@ public class
         BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager,
                 SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT, TextureOptions.BILINEAR);
         TextureRegionHolderUtils.addElementFromAssets(mBackgroundImagePath,
-                TextureRegionHolderUtils.getInstance(), smallObjectTexture,
-                SpaceInvadersApplication.getContext(), 0, 0);
+                smallObjectTexture, SpaceInvadersApplication.getContext(), 0, 0);
         smallObjectTexture.load();
+    }
+
+    public static void loadResources(Context context, TextureManager textureManager) {
+        LoggerHelper.methodInvocation(TAG, "loadResources");
+        SunStaticObject.loadImages(context, textureManager);
+        PlanetStaticObject.loadImages(context, textureManager);
+        GameScene.loadImages(textureManager);
     }
 
     /** init scene touch events so user can collaborate with game by screen touches */
 
     /**
      * Creates and init {@link com.gmail.yaroslavlancelot.spaceinvaders.objects.touch.MainSceneTouchListener}
-     * and assign it to the {@link GameBackgroundScene} instance.
+     * and assign it to the {@link GameScene} instance.
      * <br/>
      * Set camera coordinates to music and sound handler with using
      * {@link com.gmail.yaroslavlancelot.spaceinvaders.utils.MusicAndSoundsHandler#setCameraCoordinates(com.gmail.yaroslavlancelot.spaceinvaders.objects.ICameraCoordinates)}

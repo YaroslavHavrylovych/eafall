@@ -34,7 +34,9 @@ import com.gmail.yaroslavlancelot.spaceinvaders.popups.PopupManager;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.BuildingsPopupHud;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.buildings.ShowBuildingsPopupButtonSprite;
 import com.gmail.yaroslavlancelot.spaceinvaders.popups.objectdescription.DescriptionPopupHud;
-import com.gmail.yaroslavlancelot.spaceinvaders.scenes.GameBackgroundScene;
+import com.gmail.yaroslavlancelot.spaceinvaders.scene.SceneManager;
+import com.gmail.yaroslavlancelot.spaceinvaders.scene.scenes.GameScene;
+import com.gmail.yaroslavlancelot.spaceinvaders.scene.scenes.SplashScene;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.ITeam;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.Team;
 import com.gmail.yaroslavlancelot.spaceinvaders.teams.TeamsHolder;
@@ -59,14 +61,10 @@ import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.IAreaShape;
 import org.andengine.entity.sprite.ButtonSprite;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.input.touch.controller.MultiTouch;
-import org.andengine.opengl.texture.TextureOptions;
-import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
-import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.color.Color;
@@ -99,10 +97,10 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     protected PhysicsWorld mPhysicsWorld;
     /** game objects contact listener */
     protected GameObjectsContactListener mContactListener;
-    /* splash screen */
-    protected Scene mSplashScene;
     /** game camera */
     private SmoothCamera mCamera;
+    /** scene manager */
+    private SceneManager mSceneManager;
     /** hold all texture regions used in current game */
     private TextureRegionHolderUtils mTextureRegionHolderUtils;
     /** background theme */
@@ -147,12 +145,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
 
         mTextureRegionHolderUtils = TextureRegionHolderUtils.getInstance();
 
-        BitmapTextureAtlas splashTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 128, 32, TextureOptions.DEFAULT);
-        mTextureRegionHolderUtils.addElement(StringsAndPathUtils.KEY_SPLASH_SCREEN,
-                BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-                        splashTextureAtlas, this, StringsAndPathUtils.FILE_SPLASH_SCREEN, 0, 0)
-        );
-        splashTextureAtlas.load();
+        mSceneManager = new SceneManager(this);
+        SplashScene.loadResources(this, getTextureManager());
 
         onCreateResourcesCallback.onCreateResourcesFinished();
     }
@@ -161,19 +155,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     public void onCreateScene(final OnCreateSceneCallback onCreateSceneCallback) {
         LoggerHelper.methodInvocation(TAG, "onCreateScene");
 
-        initSplashScene();
-        onCreateSceneCallback.onCreateSceneFinished(mSplashScene);
-    }
-
-    protected void initSplashScene() {
-        mSplashScene = new Scene();
-        Sprite splash = new Sprite(0, 0, mTextureRegionHolderUtils.getElement(StringsAndPathUtils.KEY_SPLASH_SCREEN),
-                mEngine.getVertexBufferObjectManager());
-
-        splash.setScale(4f);
-        splash.setPosition((SizeConstants.GAME_FIELD_WIDTH - splash.getWidth()) * 0.5f,
-                (SizeConstants.GAME_FIELD_HEIGHT - splash.getHeight()) * 0.5f);
-        mSplashScene.attachChild(splash);
+        mSceneManager.createSplashScene();
+        onCreateSceneCallback.onCreateSceneFinished(mSceneManager.getSplashScene());
     }
 
     @Override
@@ -188,8 +171,28 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
             public void onTimePassed(final TimerHandler pTimerHandler) {
                 mEngine.unregisterUpdateHandler(pTimerHandler);
 
-                loadGameResources();
-                initGameScene();
+                // music
+                mMusicAndSoundsHandler = new MusicAndSoundsHandler(getSoundManager(), MainOperationsBaseGameActivity.this);
+                mBackgroundMusic = mMusicAndSoundsHandler.new BackgroundMusic(getMusicManager());
+
+                Intent intent = getIntent();
+                AllianceHolder.addAllianceByName(intent.getStringExtra(StringsAndPathUtils.FIRST_TEAM_ALLIANCE),
+                        getVertexBufferObjectManager(), getmMusicAndSoundsHandler());
+                AllianceHolder.addAllianceByName(intent.getStringExtra(StringsAndPathUtils.SECOND_TEAM_ALLIANCE),
+                        getVertexBufferObjectManager(), getmMusicAndSoundsHandler());
+                for (IAlliance race : AllianceHolder.getInstance().getElements()) {
+                    race.loadResources(getTextureManager());
+                }
+
+                PopupManager.loadResource(MainOperationsBaseGameActivity.this, getTextureManager());
+                GameScene.loadResources(MainOperationsBaseGameActivity.this, getTextureManager());
+
+                // font
+                FontHolderUtils.loadGeneralGameFonts(getFontManager(), getTextureManager());
+                DescriptionPopupHud.loadFonts(getFontManager(), getTextureManager());
+                mGameScene = mSceneManager.createGameScene(mCamera);
+                mGameScene.registerUpdateHandler(mPhysicsWorld);
+                initHud();
                 initPlanetsAndTeams();
 
                 mPhysicsWorld.setContactListener(mContactListener = new GameObjectsContactListener());
@@ -204,55 +207,15 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     public abstract void afterGameLoaded();
 
     public void replaceSplashSceneWithGameScene() {
-        EventBus.getDefault().register(MainOperationsBaseGameActivity.this);
+        EventBus.getDefault().register(this);
         initThickClient();
-
-        mSplashScene.detachSelf();
-        mEngine.setScene(mGameScene);
-    }
-
-    protected void loadGameResources() {
-        LoggerHelper.methodInvocation(TAG, "onCreateGameResources");
-
-        // music
-        mMusicAndSoundsHandler = new MusicAndSoundsHandler(getSoundManager(), MainOperationsBaseGameActivity.this);
-        mBackgroundMusic = mMusicAndSoundsHandler.new BackgroundMusic(getMusicManager());
-
-        //races loadGeneralGameTextures
-        Intent intent = getIntent();
-        AllianceHolder.addAllianceByName(intent.getStringExtra(StringsAndPathUtils.FIRST_TEAM_ALLIANCE),
-                getVertexBufferObjectManager(), mMusicAndSoundsHandler);
-        AllianceHolder.addAllianceByName(intent.getStringExtra(StringsAndPathUtils.SECOND_TEAM_ALLIANCE),
-                getVertexBufferObjectManager(), mMusicAndSoundsHandler);
-        for (IAlliance race : AllianceHolder.getInstance().getElements()) {
-            race.loadResources(getTextureManager());
-        }
-
-        // other loader
-        PopupManager.loadResource(this, getTextureManager());
-        TextureRegionHolderUtils.loadGeneralGameTextures(this, getTextureManager());
-        GameBackgroundScene.loadImages(getTextureManager());
-
-        // font
-        FontHolderUtils.loadGeneralGameFonts(getFontManager(), getTextureManager());
-        DescriptionPopupHud.loadFonts(getFontManager(), getTextureManager());
-    }
-
-    protected void initGameScene() {
-        //game scene
-        GameBackgroundScene gameBackgroundScene = new GameBackgroundScene(getVertexBufferObjectManager());
-        gameBackgroundScene.initGameSceneTouch(getWindowManager(), mCamera, mMusicAndSoundsHandler);
-        mGameScene = gameBackgroundScene;
-
-        // sun and planets
-        createSun();
-
-        initHud();
-
-        mGameScene.registerUpdateHandler(mPhysicsWorld);
+        mSceneManager.replaceSplashSceneWithGame();
     }
 
     protected void initPlanetsAndTeams() {
+        //initSun
+        createSun();
+
         initTeams();
         // first team init
         initFirstPlanet();
@@ -457,7 +420,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     /** detach entity from scene (hud or game scene) */
     private void detachEntity(final IAreaShape entity, final Scene scene,
                               final boolean withBody, final boolean unregisterChildrenTouch) {
-        MainOperationsBaseGameActivity.this.runOnUpdateThread(new Runnable() {
+        this.runOnUpdateThread(new Runnable() {
             @Override
             public void run() {
                 if (withBody) {
@@ -483,7 +446,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
 
     /** attach entity to scene (hud or game scene)*/
     private void attachEntity(final IAreaShape entity, final Scene scene, final boolean registerChildrenTouch) {
-        MainOperationsBaseGameActivity.this.runOnUpdateThread(new Runnable() {
+        this.runOnUpdateThread(new Runnable() {
             @Override
             public void run() {
                 if (registerChildrenTouch) {
@@ -598,5 +561,9 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     /** return unit if it exist (live) by using unit unique id */
     protected GameObject getGameObjectById(long id) {
         return mGameObjectsMap.get(id);
+    }
+
+    public MusicAndSoundsHandler getmMusicAndSoundsHandler() {
+        return mMusicAndSoundsHandler;
     }
 }

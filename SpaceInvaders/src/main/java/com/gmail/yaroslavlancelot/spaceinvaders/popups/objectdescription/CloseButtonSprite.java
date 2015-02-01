@@ -24,8 +24,8 @@ public class CloseButtonSprite extends ButtonSprite {
 
     public static void loadResources(Context context, TextureManager textureManager) {
         BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 50, 25, TextureOptions.BILINEAR);
-        TextureRegionHolderUtils.addTiledElementFromAssets(StringsAndPathUtils.FILE_DESCRIPTION_POPUP_CROSS,
-                TextureRegionHolderUtils.getInstance(), smallObjectTexture, context, 0, 0, 2, 1);
+        TextureRegionHolderUtils.addTiledElementFromAssets(
+                StringsAndPathUtils.FILE_DESCRIPTION_POPUP_CROSS, smallObjectTexture, context, 0, 0, 2, 1);
         smallObjectTexture.load();
     }
 }

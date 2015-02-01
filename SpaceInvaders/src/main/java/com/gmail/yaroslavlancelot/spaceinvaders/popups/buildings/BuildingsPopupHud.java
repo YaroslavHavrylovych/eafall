@@ -100,8 +100,8 @@ public class BuildingsPopupHud extends PopupHud {
 
     public static void loadResource(Context context, TextureManager textureManager) {
         BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 1200, 100, TextureOptions.BILINEAR);
-        TextureRegionHolderUtils.addTiledElementFromAssets(StringsAndPathUtils.FILE_POPUP_BACKGROUND_ITEM,
-                TextureRegionHolderUtils.getInstance(), smallObjectTexture, context, 0, 0, 2, 1);
+        TextureRegionHolderUtils.addTiledElementFromAssets(
+                StringsAndPathUtils.FILE_POPUP_BACKGROUND_ITEM, smallObjectTexture, context, 0, 0, 2, 1);
         smallObjectTexture.load();
     }
 
