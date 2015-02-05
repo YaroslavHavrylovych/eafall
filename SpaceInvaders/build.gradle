@@ -1,4 +1,4 @@
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 
 repositories {
     mavenCentral()
@@ -15,7 +15,7 @@ android {
     buildToolsVersion "19.1.0"
 
     defaultConfig {
-        testInstrumentationRunner "com.gmail.yaroslavlancelot.spaceinvaders.DefaultInstrumentationTestRunner"
-        testApplicationId "com.gmail.yaroslavlancelot.spaceinvaders"
+        testInstrumentationRunner "com.gmail.yaroslavlancelot.eafall.DefaultInstrumentationTestRunner"
+        testApplicationId "com.gmail.yaroslavlancelot.eafall"
     }
 }
