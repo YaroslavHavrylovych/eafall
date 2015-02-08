@@ -150,7 +150,7 @@ public abstract class RectangularShape extends Shape implements IAreaShape {
             y += entity.getY();
             entity = entity.getParent();
         }
-        return new Area(x, y, getWidth(), getHeight());
+        return Area.getArea(x, y, getWidth(), getHeight());
     }
 
 	public void resetRotationCenter() {

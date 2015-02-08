@@ -3,8 +3,8 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.stationary
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.gmail.yaroslavlancelot.eafall.game.constant.Sizes;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.Bullet;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path.StaticHelper;
 
@@ -26,6 +26,11 @@ public class StationaryUnit extends Unit {
         mUpdateCycleTime = .7f;
     }
 
+    @Override
+    public BodyDef.BodyType getBodyType() {
+        return sBodyType;
+    }
+
     public void registerUpdateHandler() {
         registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new StationaryUnitTimerCallback()));
     }
@@ -40,11 +45,6 @@ public class StationaryUnit extends Unit {
         bullet.fireFromPosition(objectPosition.x + Sizes.UNIT_SIZE / 2 / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
                 objectPosition.y - Bullet.BULLET_SIZE / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
                 attackedObject);
-    }
-
-    @Override
-    public BodyDef.BodyType getBodyType() {
-        return sBodyType;
     }
 
     /** stationary unit behaviour */

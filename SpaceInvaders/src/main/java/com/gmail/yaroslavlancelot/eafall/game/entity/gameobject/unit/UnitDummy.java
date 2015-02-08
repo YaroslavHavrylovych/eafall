@@ -5,12 +5,12 @@ import android.content.Context;
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.game.constant.Sizes;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringsAndPath;
+import com.gmail.yaroslavlancelot.eafall.game.entity.TeamColorArea;
+import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
-import com.gmail.yaroslavlancelot.eafall.game.entity.TeamColorArea;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.loader.UnitLoader;
-import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.sound.SoundOperations;
 
 import org.andengine.entity.shape.Area;
@@ -44,7 +44,8 @@ public abstract class UnitDummy {
 
     public UnitDummy(UnitLoader unitLoader, String allianceName) {
         mUnitLoader = unitLoader;
-        mPathToImage = StringsAndPath.getPathToUnits(allianceName) + mUnitLoader.name + ".png";
+        mPathToImage = StringsAndPath.getPathToUnits(allianceName.toLowerCase())
+                + mUnitLoader.name + ".png";
         mHeight = Sizes.UNIT_SIZE;
         mWidth = Sizes.UNIT_SIZE;
 
@@ -52,7 +53,7 @@ public abstract class UnitDummy {
         mUnitArmor = new Armor(mUnitLoader.armor, mUnitLoader.armor_value);
 
         TeamColorArea area = mUnitLoader.team_color_area;
-        mTeamColorArea = new Area(area.x, area.y, area.width, area.height);
+        mTeamColorArea = Area.getArea(area.x, area.y, area.width, area.height);
         mUnitLoader.team_color_area = null;
 
         Context context = EaFallApplication.getContext();
@@ -65,7 +66,10 @@ public abstract class UnitDummy {
         mTextureRegion = TextureRegionHolder.getInstance().getElement(mPathToImage);
     }
 
-    public abstract Unit constructUnit(VertexBufferObjectManager objectManager, SoundOperations soundOperations, String allianceName);
+    public abstract void initDummy(VertexBufferObjectManager objectManager,
+                                   SoundOperations soundOperations, String allianceName);
+
+    public abstract Unit constructUnit();
 
     public int getHealth() {
         return mUnitLoader.health;

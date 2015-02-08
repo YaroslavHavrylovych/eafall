@@ -1,11 +1,14 @@
 package com.gmail.yaroslavlancelot.eafall.game.client;
 
 import android.content.Intent;
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.gmail.yaroslavlancelot.eafall.BuildConfig;
 import com.gmail.yaroslavlancelot.eafall.R;
+import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.ai.NormalBot;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
@@ -13,40 +16,40 @@ import com.gmail.yaroslavlancelot.eafall.game.constant.CollisionCategories;
 import com.gmail.yaroslavlancelot.eafall.game.constant.Sizes;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringsAndPath;
 import com.gmail.yaroslavlancelot.eafall.game.entity.ContactListener;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.DestroyListener;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetDestroyListener;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.EnemiesFilter;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path.StaticHelper;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.bullet.AttachBulletEvent;
-import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.ConstructionPopupButton;
-import com.gmail.yaroslavlancelot.eafall.game.team.TeamControlBehaviourType;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.building.CreateBuildingEvent;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.AbstractEntityEvent;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.CreatePhysicBodyEvent;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.DetachEntityEvent;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.unit.CreateMovableUnitEvent;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.unit.CreateStationaryUnitEvent;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.RectangleWithBody;
+import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
+import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.BulletPool;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetDestroyListener;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.SunStaticObject;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.EnemiesFilter;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.MovableUnit;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path.StaticHelper;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.stationary.StationaryUnit;
+import com.gmail.yaroslavlancelot.eafall.game.eventbus.AbstractEntityEvent;
+import com.gmail.yaroslavlancelot.eafall.game.eventbus.AttachEntityEvent;
+import com.gmail.yaroslavlancelot.eafall.game.eventbus.CreatePhysicBodyEvent;
+import com.gmail.yaroslavlancelot.eafall.game.eventbus.DetachEntityEvent;
+import com.gmail.yaroslavlancelot.eafall.game.eventbus.RunOnUpdateThreadEvent;
+import com.gmail.yaroslavlancelot.eafall.game.eventbus.building.CreateBuildingEvent;
+import com.gmail.yaroslavlancelot.eafall.game.eventbus.unit.CreateMovableUnitEvent;
+import com.gmail.yaroslavlancelot.eafall.game.eventbus.unit.CreateStationaryUnitEvent;
 import com.gmail.yaroslavlancelot.eafall.game.popup.PopupManager;
 import com.gmail.yaroslavlancelot.eafall.game.popup.construction.BuildingsPopupHud;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.DescriptionPopupHud;
 import com.gmail.yaroslavlancelot.eafall.game.scene.SceneManager;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.GameScene;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.SplashScene;
+import com.gmail.yaroslavlancelot.eafall.game.sound.MusicAndSoundsHandler;
 import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
 import com.gmail.yaroslavlancelot.eafall.game.team.Team;
+import com.gmail.yaroslavlancelot.eafall.game.team.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
+import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.ConstructionPopupButton;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
-import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
-import com.gmail.yaroslavlancelot.eafall.game.sound.MusicAndSoundsHandler;
-import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.MoneyText;
 
 import org.andengine.engine.camera.SmoothCamera;
@@ -61,6 +64,7 @@ import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.IAreaShape;
 import org.andengine.entity.sprite.ButtonSprite;
+import org.andengine.entity.util.FPSLogger;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
@@ -68,6 +72,7 @@ import org.andengine.input.touch.controller.MultiTouch;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.color.Color;
+import org.andengine.util.time.TimeConstants;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -143,6 +148,18 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     public void onCreateResources(OnCreateResourcesCallback onCreateResourcesCallback) {
         LoggerHelper.methodInvocation(TAG, "onCreateResources");
 
+        if (BuildConfig.DEBUG) {
+            mEngine.registerUpdateHandler(new FPSLogger(1) {
+                @Override
+                protected void onLogFPS() {
+                    LoggerHelper.printVerboseMessage(TAG, String.format("FPS: %.2f (MIN: %.0f ms | MAX: %.0f ms)",
+                            this.mFrames / this.mSecondsElapsed,
+                            this.mShortestFrame * TimeConstants.MILLISECONDS_PER_SECOND,
+                            this.mLongestFrame * TimeConstants.MILLISECONDS_PER_SECOND));
+                }
+            });
+        }
+
         mTextureRegionHolderUtils = TextureRegionHolder.getInstance();
 
         mSceneManager = new SceneManager(this);
@@ -154,7 +171,6 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     @Override
     public void onCreateScene(final OnCreateSceneCallback onCreateSceneCallback) {
         LoggerHelper.methodInvocation(TAG, "onCreateScene");
-
         mSceneManager.createSplashScene();
         onCreateSceneCallback.onCreateSceneFinished(mSceneManager.getSplashScene());
     }
@@ -174,6 +190,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
                 // music
                 mMusicAndSoundsHandler = new MusicAndSoundsHandler(getSoundManager(), MainOperationsBaseGameActivity.this);
                 mBackgroundMusic = mMusicAndSoundsHandler.new BackgroundMusic(getMusicManager());
+
+                BulletPool.init(getVertexBufferObjectManager());
 
                 Intent intent = getIntent();
                 AllianceHolder.addAllianceByName(intent.getStringExtra(StringsAndPath.FIRST_TEAM_ALLIANCE),
@@ -212,6 +230,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         mSceneManager.replaceSplashSceneWithGame();
     }
 
+    protected abstract void initThickClient();
+
     protected void initPlanetsAndTeams() {
         //initSun
         createSun();
@@ -244,7 +264,6 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
             }
         }
     }
-
 
     protected void initTeams() {
         // red team
@@ -326,7 +345,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     protected PlanetStaticObject createPlanet(float x, float y, ITextureRegion textureRegion, String key, ITeam team, long... unitUniqueId) {
         LoggerHelper.methodInvocation(TAG, "createPlanet");
         PlanetStaticObject planetStaticObject = new PlanetStaticObject(x, y, textureRegion, getVertexBufferObjectManager(), team);
-        planetStaticObject.setObjectDestroyedListener(new PlanetDestroyListener(team));
+        planetStaticObject.addObjectDestroyedListener(new PlanetDestroyListener(team));
         attachEntity(planetStaticObject);
         if (unitUniqueId.length > 0)
             planetStaticObject.setObjectUniqueId(unitUniqueId[0]);
@@ -412,15 +431,15 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
             detachEntity(entity, scene,
                     entity instanceof RectangleWithBody && detachEntityEvent.withBody(),
                     detachEntityEvent.isUnregisterChildrenTouch());
-        } else if (abstractEntityEvent instanceof AttachBulletEvent) {
-            attachEntity(entity, scene, ((AttachBulletEvent) abstractEntityEvent).isRegisterChildrenTouch());
+        } else if (abstractEntityEvent instanceof AttachEntityEvent) {
+            attachEntity(entity, scene, ((AttachEntityEvent) abstractEntityEvent).isRegisterChildrenTouch());
         }
     }
 
     /** detach entity from scene (hud or game scene) */
     private void detachEntity(final IAreaShape entity, final Scene scene,
                               final boolean withBody, final boolean unregisterChildrenTouch) {
-        this.runOnUpdateThread(new Runnable() {
+        runOnUpdateThread(new Runnable() {
             @Override
             public void run() {
                 if (withBody) {
@@ -444,9 +463,9 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         });
     }
 
-    /** attach entity to scene (hud or game scene)*/
+    /** attach entity to scene (hud or game scene) */
     private void attachEntity(final IAreaShape entity, final Scene scene, final boolean registerChildrenTouch) {
-        this.runOnUpdateThread(new Runnable() {
+        runOnUpdateThread(new Runnable() {
             @Override
             public void run() {
                 if (registerChildrenTouch) {
@@ -458,8 +477,20 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
                         }
                     }
                 }
-                scene.attachChild(entity);
                 scene.registerTouchArea(entity);
+                scene.attachChild(entity);
+            }
+        });
+    }
+
+    /** used by EventBus */
+    @SuppressWarnings("unused")
+    public void onEvent(final RunOnUpdateThreadEvent.UpdateThreadRunnable callback) {
+        //TODO move this to thread pool
+        runOnUpdateThread(new Runnable() {
+            @Override
+            public void run() {
+                callback.updateThreadCallback();
             }
         });
     }
@@ -503,28 +534,15 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
      * create unit (with physic body) in particular position and add it to team.
      * Thin unit - unit without enemies update handler and behaviour update handler.
      */
-    protected Unit createThinUnit(int unitKey, ITeam unitTeam, float x, float y, long...
+    protected Unit createThinUnit(int unitKey, final ITeam unitTeam, float x, float y, long...
             unitUniqueId) {
-        Unit unit = unitTeam.getTeamRace().getUnit(unitKey, unitTeam.getTeamColor());
-        unit.setObjectDestroyedListener(new DestroyListener(unitTeam));
-        unit.setPosition(x, y);
-        unitTeam.addObjectToTeam(unit);
-
+        final Unit unit = unitTeam.getTeamRace().getUnit(unitKey, unitTeam.getTeamColor());
         if (unitUniqueId.length > 0) {
             unit.setObjectUniqueId(unitUniqueId[0]);
         }
+
+        unit.init(unitTeam.getTeamName(), x, y);
         mGameObjectsMap.put(unit.getObjectUniqueId(), unit);
-
-        // init physic body
-        onEvent(new CreatePhysicBodyEvent(unit, unit.getBodyType(), unitTeam.getFixtureDefUnit()));
-        if (unitTeam.getTeamControlType() == TeamControlBehaviourType.REMOTE_CONTROL_ON_CLIENT_SIDE) {
-            unit.removeDamage();
-        }
-        unit.setBulletFixtureDef(CollisionCategories.getBulletFixtureDefByUnitCategory(
-                unitTeam.getFixtureDefUnit().filter.categoryBits));
-
-        attachEntity(unit);
-
         return unit;
     }
 
@@ -555,8 +573,6 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         StationaryUnit unit = (StationaryUnit) createUnit(unitKey, team,
                 unitEvent.getX(), unitEvent.getY());
     }
-
-    protected abstract void initThickClient();
 
     /** return unit if it exist (live) by using unit unique id */
     protected GameObject getGameObjectById(long id) {

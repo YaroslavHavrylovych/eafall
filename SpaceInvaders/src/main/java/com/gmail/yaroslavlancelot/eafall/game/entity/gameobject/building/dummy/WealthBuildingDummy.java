@@ -31,7 +31,7 @@ public class WealthBuildingDummy extends BuildingDummy {
         mTextureRegionArray = new ITextureRegion[1];
 
         TeamColorArea area = mBuildingLoader.team_color_area;
-        mTeamColorAreaArray[0] = new Area(area.x, area.y, area.width, area.height);
+        mTeamColorAreaArray[0] = Area.getArea(area.x, area.y, area.width, area.height);
         mBuildingLoader.team_color_area = null;
 
         Context context = EaFallApplication.getContext();

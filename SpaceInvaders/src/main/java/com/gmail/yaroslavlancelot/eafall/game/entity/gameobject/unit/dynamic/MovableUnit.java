@@ -48,6 +48,18 @@ public class MovableUnit extends Unit {
         mMaxVelocity = unitBuilder.getSpeed();
     }
 
+    @Override
+    protected void onNegativeHealth() {
+        removeBonuses();
+        super.onNegativeHealth();
+    }
+
+    @Override
+    public BodyDef.BodyType getBodyType() {
+        return sBodyType;
+    }
+
+    @Override
     public void registerUpdateHandler() {
         registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new SimpleUnitTimerCallback()));
     }
@@ -65,9 +77,20 @@ public class MovableUnit extends Unit {
                 attackedObject);
     }
 
+    /** remove all bonus from the unit */
+    public void removeBonuses() {
+        synchronized (mBonuses) {
+            mBonuses.clear();
+        }
+    }
+
     @Override
-    public BodyDef.BodyType getBodyType() {
-        return sBodyType;
+    public void setUnitLinearVelocity(float x, float y) {
+        super.setUnitLinearVelocity(x, y);
+
+        if (mVelocityChangedListener != null) {
+            mVelocityChangedListener.velocityChanged(MovableUnit.this);
+        }
     }
 
     public int getChanceToAvoidAnAttack() {
@@ -130,15 +153,6 @@ public class MovableUnit extends Unit {
 
     public void setVelocityChangedListener(IVelocityListener velocityChangedListener) {
         mVelocityChangedListener = velocityChangedListener;
-    }
-
-    @Override
-    public void setUnitLinearVelocity(float x, float y) {
-        super.setUnitLinearVelocity(x, y);
-
-        if (mVelocityChangedListener != null) {
-            mVelocityChangedListener.velocityChanged(MovableUnit.this);
-        }
     }
 
     /** used for update current object in game loop */

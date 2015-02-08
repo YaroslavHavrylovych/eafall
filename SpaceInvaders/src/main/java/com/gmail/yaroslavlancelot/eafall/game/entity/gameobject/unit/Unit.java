@@ -2,13 +2,20 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit;
 
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IFireListener;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.bullet.AttachBulletEvent;
+import com.gmail.yaroslavlancelot.eafall.game.constant.CollisionCategories;
+import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.Bullet;
+import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.BulletPool;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
-import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.Bullet;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IFireListener;
+import com.gmail.yaroslavlancelot.eafall.game.eventbus.AttachEntityEvent;
+import com.gmail.yaroslavlancelot.eafall.game.eventbus.CreatePhysicBodyEvent;
+import com.gmail.yaroslavlancelot.eafall.game.eventbus.RunOnUpdateThreadEvent;
 import com.gmail.yaroslavlancelot.eafall.game.sound.SoundOperations;
+import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
+import com.gmail.yaroslavlancelot.eafall.game.team.TeamControlBehaviourType;
+import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
 
 import org.andengine.audio.sound.Sound;
 import org.andengine.input.touch.TouchEvent;
@@ -16,7 +23,7 @@ import org.andengine.input.touch.TouchEvent;
 import de.greenrobot.event.EventBus;
 
 /** base class for dynamic and static/unmovable objects which can attack other objects */
-public abstract class Unit extends GameObject {
+public abstract class Unit extends GameObject implements RunOnUpdateThreadEvent.UpdateThreadRunnable {
     public static final String TAG = Unit.class.getCanonicalName();
     /** update time for current object */
     protected float mUpdateCycleTime = .5f;
@@ -40,6 +47,8 @@ public abstract class Unit extends GameObject {
     protected IFireListener mUnitFireCallback;
     /** fixture def for bullets created by this unit */
     private FixtureDef mBulletFixtureDef;
+    /** unit team name */
+    private volatile String mTeamName;
 
     /** create unit from appropriate builder */
     public Unit(UnitBuilder unitBuilder) {
@@ -64,6 +73,67 @@ public abstract class Unit extends GameObject {
 
     protected void initSound(String path) {
         mFireSound = mSoundOperations.loadSound(path);
+    }
+
+    @Override
+    public void updateThreadCallback() {
+        getBody().setTransform(-100, -100, 0);
+        getBody().setActive(false);
+        onUnitDestroyed();
+    }
+
+    protected void onUnitDestroyed() {
+    }
+
+    @Override
+    protected void onNegativeHealth() {
+        super.onNegativeHealth();
+        clearUpdateHandlers();
+        if (mTeamName != null) {
+            TeamsHolder.getTeam(mTeamName).removeObjectFromTeam(this);
+        }
+        EventBus.getDefault().post(this);
+    }
+
+    /**
+     * Init unit after creation. You need manually trigger this method after constructor at the time
+     * when you want to init and attach this (totally working)  unit
+     */
+    public void init(String teamName, float x, float y) {
+        mTeamName = teamName;
+        ITeam team = TeamsHolder.getTeam(teamName);
+        boolean existingUnit;
+
+        if (getBody() == null) {
+            existingUnit = true;
+            EventBus.getDefault().post(new CreatePhysicBodyEvent(this, getBodyType(), team.getFixtureDefUnit()));
+        } else {
+            getBody().setActive(true);
+            existingUnit = false;
+        }
+
+        setBulletFixtureDef(CollisionCategories.getBulletFixtureDefByUnitCategory(
+                team.getFixtureDefUnit().filter.categoryBits));
+
+        if (team.getTeamControlType() == TeamControlBehaviourType.REMOTE_CONTROL_ON_CLIENT_SIDE) {
+            removeDamage();
+        }
+
+        setPosition(x, y);
+        if (existingUnit) {
+            EventBus.getDefault().post(new AttachEntityEvent(this, false, false));
+        }
+        team.addObjectToTeam(this);
+    }
+
+    public abstract BodyDef.BodyType getBodyType();
+
+    public void setBulletFixtureDef(FixtureDef bulletFixtureDef) {
+        mBulletFixtureDef = bulletFixtureDef;
+    }
+
+    public void removeDamage() {
+        mObjectDamage.removeDamage();
     }
 
     /** define unit behaviour/lifecycle */
@@ -97,11 +167,10 @@ public abstract class Unit extends GameObject {
         }
 
         playSound(mFireSound, mSoundOperations);
-        Bullet bullet = new Bullet(getVertexBufferObjectManager(), getBackgroundColor(), mObjectDamage, mBulletFixtureDef);
+        Bullet bullet = BulletPool.getInstance().obtainPoolItem();
+        bullet.init(getBackgroundColor(), mObjectDamage, mBulletFixtureDef);
 
         setBulletFirePosition(attackedObject, bullet);
-
-        EventBus.getDefault().post(new AttachBulletEvent(bullet));
     }
 
     /**
@@ -132,14 +201,4 @@ public abstract class Unit extends GameObject {
     public int getViewRadius() {
         return mViewRadius;
     }
-
-    public void removeDamage() {
-        mObjectDamage.removeDamage();
-    }
-
-    public void setBulletFixtureDef(FixtureDef bulletFixtureDef) {
-        mBulletFixtureDef = bulletFixtureDef;
-    }
-
-    public abstract BodyDef.BodyType getBodyType();
 }

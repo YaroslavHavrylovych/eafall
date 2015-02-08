@@ -4,12 +4,12 @@ import android.content.Context;
 
 import com.badlogic.gdx.math.Vector2;
 import com.gmail.yaroslavlancelot.eafall.game.constant.Sizes;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IDestroyListener;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IHealthListener;
 import com.gmail.yaroslavlancelot.eafall.game.entity.RectangleWithBody;
+import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage;
-import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IDestroyListener;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IHealthListener;
 import com.gmail.yaroslavlancelot.eafall.game.sound.SoundOperations;
 
 import org.andengine.audio.sound.Sound;
@@ -22,6 +22,8 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 import org.andengine.util.math.MathConstants;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -48,7 +50,7 @@ public abstract class GameObject extends RectangleWithBody {
     /** object armor */
     protected Armor mObjectArmor;
     /** callback to send message about death */
-    protected IDestroyListener mObjectDestroyedListener;
+    protected volatile List<IDestroyListener> mObjectDestroyedListener = new ArrayList<IDestroyListener>(2);
     /** id of the string in the string files to represent object */
     private int mObjectStringId;
     /** will trigger if object health changed */
@@ -125,8 +127,8 @@ public abstract class GameObject extends RectangleWithBody {
         return (mObjectCurrentHealth > 0 || mObjectCurrentHealth == sUndestroyableObjectKey) && mPhysicBody != null;
     }
 
-    public void setObjectDestroyedListener(final IDestroyListener objectDestroyedListener) {
-        mObjectDestroyedListener = objectDestroyedListener;
+    public void addObjectDestroyedListener(final IDestroyListener objectDestroyedListener) {
+        mObjectDestroyedListener.add(objectDestroyedListener);
     }
 
     @Override
@@ -162,15 +164,24 @@ public abstract class GameObject extends RectangleWithBody {
      */
     public void setHealth(int objectHealth) {
         mObjectCurrentHealth = objectHealth;
-        if (mGameObjectHealthChangedListener != null)
+        if (mGameObjectHealthChangedListener != null) {
             mGameObjectHealthChangedListener.gameObjectHealthChanged(mUniqueId, mObjectCurrentHealth);
-        if (mObjectCurrentHealth < 0) {
-            if (mObjectDestroyedListener != null)
-                mObjectDestroyedListener.objectDestroyed(this);
-        } else {
-            if (mHealthBar != null)
-                mHealthBar.redrawHealthBar(mObjectMaximumHealth, mObjectCurrentHealth);
         }
+        if (mObjectCurrentHealth < 0) {
+            if (mObjectDestroyedListener != null) {
+                onNegativeHealth();
+                for (IDestroyListener listener : mObjectDestroyedListener) {
+                    listener.objectDestroyed(this);
+                }
+            }
+        } else {
+            if (mHealthBar != null) {
+                mHealthBar.redrawHealthBar(mObjectMaximumHealth, mObjectCurrentHealth);
+            }
+        }
+    }
+
+    protected void onNegativeHealth() {
     }
 
     public Color getBackgroundColor() {
@@ -182,7 +193,7 @@ public abstract class GameObject extends RectangleWithBody {
     }
 
     public void setBackgroundArea() {
-        setBackgroundArea(new Area(2.5f, 2.5f, Sizes.UNIT_TEAM_COLOR_INNER_SPRITE_SIZE,
+        setBackgroundArea(Area.getArea(2.5f, 2.5f, Sizes.UNIT_TEAM_COLOR_INNER_SPRITE_SIZE,
                 Sizes.UNIT_TEAM_COLOR_INNER_SPRITE_SIZE));
     }
 

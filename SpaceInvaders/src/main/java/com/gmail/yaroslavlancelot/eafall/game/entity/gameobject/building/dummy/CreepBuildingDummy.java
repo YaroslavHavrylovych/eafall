@@ -36,7 +36,7 @@ public class CreepBuildingDummy extends BuildingDummy {
         for (int i = 0; i < buildingLoader.getUpdates().size(); i++) {
             CreepBuildingUpgradeLoader upgradeLoader = buildingLoader.getUpdates().get(i);
             TeamColorArea area = upgradeLoader.team_color_area;
-            mTeamColorAreaArray[i] = new Area(area.x, area.y, area.width, area.height);
+            mTeamColorAreaArray[i] = Area.getArea(area.x, area.y, area.width, area.height);
             upgradeLoader.team_color_area = null;
         }
 

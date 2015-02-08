@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.SparseArray;
 
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
+import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.constant.Sizes;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
@@ -12,13 +13,12 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.D
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.SpecialBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.WealthBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.loader.BuildingListLoader;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.loader.UnitListLoader;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.loader.UnitLoader;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.MovableUnitDummy;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.loader.UnitListLoader;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.loader.UnitLoader;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.stationary.StationaryUnitDummy;
-import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.sound.SoundOperations;
 
 import org.andengine.opengl.texture.TextureManager;
@@ -57,8 +57,8 @@ public abstract class Alliance implements IAlliance {
 
     @Override
     public Unit getUnit(int unitId, Color teamColor) {
-        UnitDummy dummy = mUnitDummies.get(unitId);
-        Unit unit = dummy.constructUnit(mObjectManager, mSoundOperations, getAllianceName());
+        UnitDummy dummy = getUnitDummy(unitId);
+        Unit unit = dummy.constructUnit();
         unit.setBackgroundArea(dummy.getTeamColorArea());
         unit.setBackgroundColor(teamColor);
         return unit;
@@ -173,9 +173,9 @@ public abstract class Alliance implements IAlliance {
         for (int i = 0; i < unitsAmount; i++) {
             unitLoader = unitListLoader.getList().get(i);
             if (unitLoader.speed > 1f) {
-                unitDummy = new MovableUnitDummy(unitLoader, getAllianceName().toLowerCase());
+                unitDummy = new MovableUnitDummy(unitLoader, getAllianceName());
             } else {
-                unitDummy = new StationaryUnitDummy(unitLoader, getAllianceName().toLowerCase());
+                unitDummy = new StationaryUnitDummy(unitLoader, getAllianceName());
             }
             n = (i % textureManagerElementsInLine) * unitDummy.getWidth();
             m = (i / textureManagerElementsInLine) * unitDummy.getHeight();
@@ -183,5 +183,10 @@ public abstract class Alliance implements IAlliance {
             mUnitDummies.put(unitDummy.getId(), unitDummy);
         }
         smallObjectTexture.load();
+        //Init after loading. Init will create a pool, pool need for textures.
+        for (int i = 0; i < mUnitDummies.size(); i++) {
+            mUnitDummies.get(mUnitDummies.keyAt(i))
+                    .initDummy(mObjectManager, mSoundOperations, getAllianceName());
+        }
     }
 }
