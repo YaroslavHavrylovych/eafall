@@ -54,7 +54,7 @@ public class GameSocketServer extends SocketServer<SocketConnectionClientConnect
         clientConnector.registerClientMessage(CONNECTION_ESTABLISHED, ConnectionEstablishedClientMessage.class, new IClientMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ClientConnector<SocketConnection> pClientConnector, final IClientMessage pClientMessage) throws IOException {
-                LoggerHelper.printInformationMessageInClient(TAG, "connection with client established");
+                LoggerHelper.printInformationMessage(TAG, "RECEIVED MESSAGE: sender = CLIENT, type = " + CONNECTION_ESTABLISHED);
                 int protocolVersion = ((ConnectionEstablishedClientMessage) pClientMessage).getProtocolVersion();
                 LoggerHelper.printDebugMessage(TAG, "protocolVersion=" + protocolVersion);
                 synchronized (mPreGameStartServer) {
@@ -66,7 +66,7 @@ public class GameSocketServer extends SocketServer<SocketConnectionClientConnect
         clientConnector.registerClientMessage(BUILDING_CREATION, BuildingCreationClientMessage.class, new IClientMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ClientConnector<SocketConnection> pClientConnector, final IClientMessage pClientMessage) throws IOException {
-                LoggerHelper.printInformationMessageInClient(TAG, "client want to create a building");
+                LoggerHelper.printInformationMessage(TAG, "RECEIVED MESSAGE: sender = CLIENT, type = " + BUILDING_CREATION);
                 BuildingCreationClientMessage message = (BuildingCreationClientMessage) pClientMessage;
                 //ToDo Remove EventBus
                 EventBus.getDefault().post(new CreateBuildingEvent(message.getTeamName(), message.getBuildingId()));
@@ -77,7 +77,7 @@ public class GameSocketServer extends SocketServer<SocketConnectionClientConnect
         clientConnector.registerClientMessage(GAME_LOADED, GameLoadedClientMessage.class, new IClientMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ClientConnector<SocketConnection> pClientConnector, final IClientMessage pClientMessage) throws IOException {
-                LoggerHelper.printInformationMessageInClient(TAG, "client loaded game");
+                LoggerHelper.printInformationMessage(TAG, "RECEIVED MESSAGE: sender = CLIENT, type = " + GAME_LOADED);
                 synchronized (mInGameServer) {
                     mInGameServer.gameLoaded();
                 }
