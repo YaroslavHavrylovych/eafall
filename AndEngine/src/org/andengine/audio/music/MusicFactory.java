@@ -1,21 +1,24 @@
 package org.andengine.audio.music;
 
 import java.io.File;
+import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.IOException;
+
+import org.andengine.util.StreamUtils;
 
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 
 /**
- * (c) 2010 Nicolas Gramlich 
+ * (c) 2010 Nicolas Gramlich
  * (c) 2011 Zynga Inc.
- * 
+ *
  * @author Nicolas Gramlich
  * @since 15:05:49 - 13.06.2010
  */
-public class MusicFactory {
+public final class MusicFactory {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -30,6 +33,10 @@ public class MusicFactory {
 	// Constructors
 	// ===========================================================
 
+	private MusicFactory() {
+
+	}
+
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
@@ -38,10 +45,10 @@ public class MusicFactory {
 	 * @param pAssetBasePath must end with '<code>/</code>' or have <code>.length() == 0</code>.
 	 */
 	public static void setAssetBasePath(final String pAssetBasePath) {
-		if(pAssetBasePath.endsWith("/") || pAssetBasePath.length() == 0) {
+		if (pAssetBasePath.endsWith("/") || pAssetBasePath.length() == 0) {
 			MusicFactory.sAssetBasePath = pAssetBasePath;
 		} else {
-			throw new IllegalStateException("pAssetBasePath must end with '/' or be lenght zero.");
+			throw new IllegalStateException("pAssetBasePath must end with '/' or be length zero.");
 		}
 	}
 
@@ -64,7 +71,10 @@ public class MusicFactory {
 	public static Music createMusicFromFile(final MusicManager pMusicManager, final File pFile) throws IOException {
 		final MediaPlayer mediaPlayer = new MediaPlayer();
 
-		mediaPlayer.setDataSource(new FileInputStream(pFile).getFD());
+		final FileInputStream fileInputStream = new FileInputStream(pFile);
+		final FileDescriptor fileDescriptor = fileInputStream.getFD();
+		StreamUtils.close(fileInputStream);
+		mediaPlayer.setDataSource(fileDescriptor);
 		mediaPlayer.prepare();
 
 		final Music music = new Music(pMusicManager, mediaPlayer);

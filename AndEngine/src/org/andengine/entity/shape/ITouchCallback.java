@@ -5,7 +5,7 @@ import org.andengine.input.touch.TouchEvent;
 /** touch event callback */
 public interface ITouchCallback {
     /**
-     * (documentation copied from {@link org.andengine.entity.shape.IShape}. Method moved to interface so we can use it separately)
+     * (documentation copied from {@link IShape}. Method moved to interface so we can use it separately)
      * This method only fires if this {@link org.andengine.entity.scene.ITouchArea} is registered to the {@link org.andengine.entity.scene.Scene} via {@link org.andengine.entity.scene.Scene#registerTouchArea(org.andengine.entity.scene.ITouchArea)}.
      *
      * @param pSceneTouchEvent

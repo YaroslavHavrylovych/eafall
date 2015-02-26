@@ -1,23 +1,23 @@
 package com.gmail.yaroslavlancelot.eafall.game.eventbus;
 
 
-import org.andengine.entity.shape.IAreaShape;
+import org.andengine.entity.shape.Shape;
 
 /** hold entity for attach */
 public class AttachEntityEvent extends AbstractEntityEvent {
     /** unregister touch in all child elements */
     private boolean mRegisterChildrenTouch;
 
-    public AttachEntityEvent(IAreaShape entity, boolean hud, boolean registerChildrenTouch) {
+    public AttachEntityEvent(Shape entity, boolean hud, boolean registerChildrenTouch) {
         super(entity, hud);
         mRegisterChildrenTouch = registerChildrenTouch;
     }
 
-    public AttachEntityEvent(IAreaShape entity, boolean hud) {
+    public AttachEntityEvent(Shape entity, boolean hud) {
         super(entity, hud);
     }
 
-    public AttachEntityEvent(IAreaShape entity) {
+    public AttachEntityEvent(Shape entity) {
         super(entity);
     }
 

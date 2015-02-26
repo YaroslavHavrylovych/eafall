@@ -6,7 +6,9 @@ package com.gmail.yaroslavlancelot.eafall.game.constant;
 public final class Sizes {
     /* general */
     public static final int GAME_FIELD_WIDTH = 1920;
+    public static final int HALF_FIELD_WIDTH = GAME_FIELD_WIDTH / 2;
     public static final int GAME_FIELD_HEIGHT = 1080;
+    public static final int HALF_FIELD_HEIGHT = GAME_FIELD_HEIGHT / 2;
     public static final int PLANET_DIAMETER = 128;
     public static final int ADDITION_MARGIN_FOR_PLANET = 20;
     public static final int SUN_DIAMETER = 450;
@@ -34,10 +36,14 @@ public final class Sizes {
 
     /** description popup */
     // general
-    public static final int DESCRIPTION_POPUP_HEIGHT = Sizes.GAME_FIELD_HEIGHT / 2;
+    public static final int DESCRIPTION_POPUP_HEIGHT = HALF_FIELD_HEIGHT;
     public static final int DESCRIPTION_POPUP_WIDTH = Sizes.GAME_FIELD_WIDTH;
     public static final int DESCRIPTION_POPUP_PADDING = 70;
     public static final int DESCRIPTION_POPUP_TEXT_SIZE = 40;
+    public static final int DESCRIPTION_POPUP_TITLE_SIZE = 70;
+    // description area
+    public static final int DESCRIPTION_POPUP_DESCRIPTION_AREA_HEIGHT =
+            Sizes.DESCRIPTION_POPUP_HEIGHT - 2 * DESCRIPTION_POPUP_PADDING - DESCRIPTION_POPUP_TITLE_SIZE;
     // amount text
     public static final int DESCRIPTION_POPUP_AMOUNT_FONT_SIZE = 90;
     public static final int DESCRIPTION_POPUP_AMOUNT_TEXT_PADDING_VERTICAL = 5;

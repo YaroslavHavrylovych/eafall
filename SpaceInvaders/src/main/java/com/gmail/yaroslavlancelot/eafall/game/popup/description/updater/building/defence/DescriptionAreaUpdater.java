@@ -14,7 +14,7 @@ import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.BaseDesc
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.Link;
 
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.shape.RectangularShape;
+import org.andengine.entity.shape.Shape;
 import org.andengine.entity.text.Text;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
@@ -36,7 +36,7 @@ public class DescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
     public DescriptionAreaUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         // cost
         Text text = createDescriptionText(0, R.string.description_cost, vertexBufferObjectManager);
-        mCostValue = createDescriptionText(text.getWidth() + mSpace, 0, vertexBufferObjectManager);
+        mCostValue = createDescriptionText(text.getWidth() + mSpace, text.getY(), vertexBufferObjectManager);
         // produce
         text = createDescriptionText(1, R.string.description_produce, vertexBufferObjectManager);
         mProducedUnitLink = createLink(text.getWidth(), text.getY(), vertexBufferObjectManager);
@@ -54,7 +54,7 @@ public class DescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
     }
 
     @Override
-    public void updateDescription(RectangularShape drawArea, Object objectId,
+    public void updateDescription(Shape drawArea, Object objectId,
                                   final String raceName, final String teamName) {
         super.updateDescription(drawArea, objectId, raceName, teamName);
         final BuildingId buildingId = (BuildingId) objectId;

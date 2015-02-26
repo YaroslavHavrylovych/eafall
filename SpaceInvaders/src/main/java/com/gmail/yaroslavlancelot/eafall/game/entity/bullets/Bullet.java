@@ -15,7 +15,7 @@ import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.color.Color;
+import org.andengine.util.adt.color.Color;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 

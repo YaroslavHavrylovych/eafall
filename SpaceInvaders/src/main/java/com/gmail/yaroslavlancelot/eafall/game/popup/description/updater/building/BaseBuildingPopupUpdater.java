@@ -5,23 +5,23 @@ import android.content.Context;
 import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.building.BuildingsAmountChangedEvent;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
+import com.gmail.yaroslavlancelot.eafall.game.eventbus.building.BuildingsAmountChangedEvent;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.BasePopupUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
-import com.gmail.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.TextButton;
+import com.gmail.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.shape.RectangularShape;
+import org.andengine.entity.shape.Shape;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.color.Color;
+import org.andengine.util.adt.color.Color;
 
 import de.greenrobot.event.EventBus;
 
@@ -42,6 +42,7 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
     protected TextButton mBuildOrBackButton;
     /** image for addition information */
     protected Sprite mAdditionDescriptionImage;
+    //TODO I dont like this thing
     /** used only for intercept touch event on addition information area */
     protected Rectangle mAdditionInfoRectangle;
     /** building description object (update description area which u pass to it) */
@@ -77,7 +78,7 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
     }
 
     @Override
-    public void updateImage(RectangularShape drawArea, Object objectId, String raceName, String teamName) {
+    public void updateImage(Shape drawArea, Object objectId, String raceName, String teamName) {
         super.updateImage(drawArea, objectId, raceName, teamName);
         ITeam team = TeamsHolder.getInstance().getElement(teamName);
         mBuildingId = (BuildingId) objectId;
@@ -102,7 +103,7 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
         mAmountDrawer.detach();
         mBuildOrBackButton.detachSelf();
         if (mAdditionDescriptionImage != null) {
-            mAdditionDescriptionImage.detachSelf(mScene);
+            mAdditionDescriptionImage.detachSelf();
             mAdditionDescriptionImage = null;
             mAdditionInfoRectangle.detachSelf();
         }
@@ -119,12 +120,12 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
     }
 
     @Override
-    public void updateDescription(RectangularShape drawArea, Object objectId, String raceName, String teamName) {
+    public void updateDescription(Shape drawArea, Object objectId, String raceName, String teamName) {
         //description
         mDescriptionAreaUpdater.updateDescription(drawArea, objectId, raceName, teamName);
         //build button
         mBuildOrBackButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_build_button));
-        mBuildOrBackButton.setPosition(0, drawArea.getHeight() - mBuildOrBackButton.getHeight());
+        mBuildOrBackButton.setPosition(mBuildOrBackButton.getWidth() / 2, mBuildOrBackButton.getHeight() / 2);
         drawArea.attachChild(mBuildOrBackButton);
     }
 

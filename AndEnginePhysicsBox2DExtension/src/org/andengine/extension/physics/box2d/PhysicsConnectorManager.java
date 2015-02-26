@@ -3,14 +3,14 @@ package org.andengine.extension.physics.box2d;
 import java.util.ArrayList;
 
 import org.andengine.engine.handler.IUpdateHandler;
-import org.andengine.entity.shape.IShape;
+import org.andengine.entity.IEntity;
 
 import com.badlogic.gdx.physics.box2d.Body;
 
 /**
- * (c) 2010 Nicolas Gramlich 
+ * (c) 2010 Nicolas Gramlich
  * (c) 2011 Zynga Inc.
- * 
+ *
  * @author Nicolas Gramlich
  * @since 15:52:27 - 15.07.2010
  */
@@ -18,7 +18,7 @@ public class PhysicsConnectorManager extends ArrayList<PhysicsConnector> impleme
 	// ===========================================================
 	// Constants
 	// ===========================================================
-	
+
 	private static final long serialVersionUID = 412969510084261799L;
 
 	// ===========================================================
@@ -28,9 +28,9 @@ public class PhysicsConnectorManager extends ArrayList<PhysicsConnector> impleme
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	
+
 	PhysicsConnectorManager() {
-		
+
 	}
 
 	// ===========================================================
@@ -44,15 +44,15 @@ public class PhysicsConnectorManager extends ArrayList<PhysicsConnector> impleme
 	@Override
 	public void onUpdate(final float pSecondsElapsed) {
 		final ArrayList<PhysicsConnector> physicsConnectors = this;
-		for(int i = physicsConnectors.size() - 1; i >= 0; i--) {
+		for (int i = physicsConnectors.size() - 1; i >= 0; i--) {
 			physicsConnectors.get(i).onUpdate(pSecondsElapsed);
 		}
 	}
-	
+
 	@Override
 	public void reset() {
 		final ArrayList<PhysicsConnector> physicsConnectors = this;
-		for(int i = physicsConnectors.size() - 1; i >= 0; i--) {
+		for (int i = physicsConnectors.size() - 1; i >= 0; i--) {
 			physicsConnectors.get(i).reset();
 		}
 	}
@@ -60,23 +60,23 @@ public class PhysicsConnectorManager extends ArrayList<PhysicsConnector> impleme
 	// ===========================================================
 	// Methods
 	// ===========================================================
-	
-	public Body findBodyByShape(final IShape pShape) {
+
+	public Body findBodyByShape(final IEntity pShape) {
 		final ArrayList<PhysicsConnector> physicsConnectors = this;
-		for(int i = physicsConnectors.size() - 1; i >= 0; i--) {
+		for (int i = physicsConnectors.size() - 1; i >= 0; i--) {
 			final PhysicsConnector physicsConnector = physicsConnectors.get(i);
-			if(physicsConnector.mShape == pShape){
+			if (physicsConnector.mEntity == pShape) {
 				return physicsConnector.mBody;
 			}
 		}
 		return null;
 	}
-	
-	public PhysicsConnector findPhysicsConnectorByShape(final IShape pShape) {
+
+	public PhysicsConnector findPhysicsConnectorByShape(final IEntity pShape) {
 		final ArrayList<PhysicsConnector> physicsConnectors = this;
-		for(int i = physicsConnectors.size() - 1; i >= 0; i--) {
+		for (int i = physicsConnectors.size() - 1; i >= 0; i--) {
 			final PhysicsConnector physicsConnector = physicsConnectors.get(i);
-			if(physicsConnector.mShape == pShape){
+			if (physicsConnector.mEntity == pShape) {
 				return physicsConnector;
 			}
 		}

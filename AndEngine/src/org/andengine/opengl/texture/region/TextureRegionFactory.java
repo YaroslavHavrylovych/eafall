@@ -9,11 +9,11 @@ import org.andengine.opengl.texture.atlas.source.ITextureAtlasSource;
 /**
  * (c) 2010 Nicolas Gramlich
  * (c) 2011 Zynga Inc.
- * 
+ *
  * @author Nicolas Gramlich
  * @since 18:15:14 - 09.03.2010
  */
-public class TextureRegionFactory {
+public final class TextureRegionFactory {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -26,6 +26,10 @@ public class TextureRegionFactory {
 	// Constructors
 	// ===========================================================
 
+	private TextureRegionFactory() {
+
+	}
+
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
@@ -37,7 +41,7 @@ public class TextureRegionFactory {
 	// ===========================================================
 	// Methods
 	// ===========================================================
-	
+
 	public static TextureRegion extractFromTexture(final ITexture pTexture) {
 		return TextureRegionFactory.extractFromTexture(pTexture, false);
 	}

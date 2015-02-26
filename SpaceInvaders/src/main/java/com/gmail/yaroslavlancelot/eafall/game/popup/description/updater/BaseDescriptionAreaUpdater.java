@@ -1,10 +1,11 @@
 package com.gmail.yaroslavlancelot.eafall.game.popup.description.updater;
 
+import com.gmail.yaroslavlancelot.eafall.game.constant.Sizes;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.DescriptionText;
-import com.gmail.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.Link;
+import com.gmail.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 
-import org.andengine.entity.shape.RectangularShape;
+import org.andengine.entity.shape.Shape;
 import org.andengine.entity.text.Text;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
@@ -18,9 +19,11 @@ public abstract class BaseDescriptionAreaUpdater implements IPopupUpdater.IDescr
     /** space between description test and the link (e.g. unit health :(mSpace)health_value */
     protected int mSpace = 6;
 
-    /* holders */
-    /** */
+    /* description text */
+    /** text (links) to draw in the description area */
     protected List<Text> mDescriptionTextList;
+    /** how much text lines in the description area */
+    protected int mDescriptionTextLinesAmount;
 
     public BaseDescriptionAreaUpdater() {
         iniDescriptionTextList();
@@ -29,8 +32,15 @@ public abstract class BaseDescriptionAreaUpdater implements IPopupUpdater.IDescr
     /** updates mDescriptionTextList */
     protected abstract void iniDescriptionTextList();
 
+    /** update description values (e.g. new building appear) */
+    @Override
+    public void updateDescription(Shape drawArea, Object objectId,
+                                  final String raceName, final String teamName) {
+        attach(drawArea);
+    }
+
     /** attaches all of the mDescriptionTextList to given area */
-    protected void attach(RectangularShape drawArea) {
+    protected void attach(Shape drawArea) {
         if (mDescriptionTextList == null) return;
         for (Text text : mDescriptionTextList) {
             drawArea.attachChild(text);
@@ -46,24 +56,17 @@ public abstract class BaseDescriptionAreaUpdater implements IPopupUpdater.IDescr
         }
     }
 
-    /** update description values (e.g. new building appear) */
-    @Override
-    public void updateDescription(RectangularShape drawArea, Object objectId,
-                                  final String raceName, final String teamName) {
-        attach(drawArea);
-    }
-
     /**
      * create description text with coordinates based on position. Abscissa always will be 0 and ordinate
      * is sum of the description font size and between lines break multiplied with position
      */
     protected DescriptionText createDescriptionText(int position, int stringId, VertexBufferObjectManager objectManager) {
-        return createDescriptionText(0, position * (DescriptionText.sFontSize + mBetweenDescriptionLinesSpace),
+        int fontHeight = DescriptionText.sFontSize + mBetweenDescriptionLinesSpace,
+                halfFontHeight = fontHeight / 2;
+        return createDescriptionText(0,
+                Sizes.DESCRIPTION_POPUP_DESCRIPTION_AREA_HEIGHT -
+                        halfFontHeight - position * fontHeight,
                 LocaleImpl.getInstance().getStringById(stringId), objectManager);
-    }
-
-    protected DescriptionText createDescriptionText(float x, float y, VertexBufferObjectManager objectManager) {
-        return createDescriptionText(x, y, "", objectManager);
     }
 
     protected DescriptionText createDescriptionText(float x, float y, String value, VertexBufferObjectManager objectManager) {
@@ -75,6 +78,10 @@ public abstract class BaseDescriptionAreaUpdater implements IPopupUpdater.IDescr
         }
         mDescriptionTextList.add(text);
         return text;
+    }
+
+    protected DescriptionText createDescriptionText(float x, float y, VertexBufferObjectManager objectManager) {
+        return createDescriptionText(x, y, "", objectManager);
     }
 
     protected Link createLink(float x, float y, VertexBufferObjectManager objectManager) {

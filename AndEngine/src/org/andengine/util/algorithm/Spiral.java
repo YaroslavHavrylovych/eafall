@@ -1,9 +1,9 @@
 package org.andengine.util.algorithm;
 
-import org.andengine.util.algorithm.path.Direction;
+import org.andengine.util.adt.spatial.Direction;
 
 /**
- * (c) Zynga 2011
+ * (c) 2011 Zynga Inc.
  *
  * @author Nicolas Gramlich <ngramlich@zynga.com>
  * @since 22:40:53 - 10.11.2011

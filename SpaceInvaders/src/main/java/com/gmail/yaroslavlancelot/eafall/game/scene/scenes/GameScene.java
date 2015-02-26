@@ -37,7 +37,7 @@ public class GameScene extends Scene {
 
     /** set background image to the scene */
     public GameScene(VertexBufferObjectManager vertexBufferObjectManager) {
-        setBackground(new SpriteBackground(new Sprite(0, 0,
+        setBackground(new SpriteBackground(new Sprite(Sizes.HALF_FIELD_WIDTH, Sizes.HALF_FIELD_HEIGHT,
                 TextureRegionHolder.getInstance().getElement(mBackgroundImagePath),
                 vertexBufferObjectManager)));
     }

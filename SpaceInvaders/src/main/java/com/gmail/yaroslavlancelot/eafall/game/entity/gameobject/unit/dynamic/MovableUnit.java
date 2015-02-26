@@ -66,7 +66,7 @@ public class MovableUnit extends Unit {
 
     @Override
     protected void rotationBeforeFire(GameObject attackedObject) {
-        rotate(MathUtils.radToDeg(getDirection(attackedObject.getCenterX(), attackedObject.getCenterY())));
+        rotate(MathUtils.radToDeg(getDirection(attackedObject.getX(), attackedObject.getY())));
     }
 
     @Override
@@ -169,7 +169,7 @@ public class MovableUnit extends Unit {
             // check for units to attack
             if (mObjectToAttack != null && mObjectToAttack != mEnemiesUpdater.getMainTarget() &&
                     mObjectToAttack.isObjectAlive() && StaticHelper.getDistanceBetweenPoints(getX(), getY(),
-                    mObjectToAttack.getCenterX(), mObjectToAttack.getCenterY()) < mViewRadius) {
+                    mObjectToAttack.getX(), mObjectToAttack.getY()) < mViewRadius) {
                 attackOrMove();
                 return;
             } else {
@@ -207,8 +207,8 @@ public class MovableUnit extends Unit {
          */
         private void attackOrMove() {
             // check if we already can attack
-            float distanceToTarget = StaticHelper.getDistanceBetweenPoints(getCenterX(), getCenterY(),
-                    mObjectToAttack.getCenterX(), mObjectToAttack.getCenterY())
+            float distanceToTarget = StaticHelper.getDistanceBetweenPoints(getX(), getY(),
+                    mObjectToAttack.getX(), mObjectToAttack.getY())
                     //minus both objects radius to have distance between objects corners
                     //instead of distance between centers
                     - mObjectToAttack.getWidth() / 2
@@ -219,7 +219,7 @@ public class MovableUnit extends Unit {
                 setUnitLinearVelocity(0, 0);
             } else {
                 // pursuit attacked unit
-                moveToPoint(mObjectToAttack.getCenterX(), mObjectToAttack.getCenterY());
+                moveToPoint(mObjectToAttack.getX(), mObjectToAttack.getY());
             }
         }
 

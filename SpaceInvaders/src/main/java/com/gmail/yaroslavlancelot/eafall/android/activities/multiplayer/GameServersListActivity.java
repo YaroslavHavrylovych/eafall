@@ -11,23 +11,21 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.gmail.yaroslavlancelot.eafall.R;
+import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.android.activities.BaseNonGameActivity;
-import com.gmail.yaroslavlancelot.eafall.network.client.messages.ConnectionEstablishedClientMessage;
 import com.gmail.yaroslavlancelot.eafall.network.client.callbacks.PreGameStartClient;
 import com.gmail.yaroslavlancelot.eafall.network.client.connector.GameServerConnector;
+import com.gmail.yaroslavlancelot.eafall.network.client.messages.ConnectionEstablishedClientMessage;
 import com.gmail.yaroslavlancelot.eafall.network.server.discovery.SocketDiscoveryServer;
-import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 
-import org.andengine.extension.multiplayer.protocol.client.SocketServerDiscoveryClient;
-import org.andengine.extension.multiplayer.protocol.client.connector.ServerConnector;
-import org.andengine.extension.multiplayer.protocol.client.connector.SocketConnectionServerConnector;
-import org.andengine.extension.multiplayer.protocol.exception.WifiException;
-import org.andengine.extension.multiplayer.protocol.shared.IDiscoveryData;
-import org.andengine.extension.multiplayer.protocol.shared.SocketConnection;
-import org.andengine.extension.multiplayer.protocol.util.IPUtils;
-import org.andengine.extension.multiplayer.protocol.util.WifiUtils;
+import org.andengine.extension.multiplayer.client.SocketServerDiscoveryClient;
+import org.andengine.extension.multiplayer.client.connector.ServerConnector;
+import org.andengine.extension.multiplayer.client.connector.SocketConnectionServerConnector;
+import org.andengine.extension.multiplayer.shared.IDiscoveryData;
+import org.andengine.extension.multiplayer.shared.SocketConnection;
+import org.andengine.util.IPUtils;
+import org.andengine.util.WifiUtils;
 
-import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
@@ -179,7 +177,7 @@ public class GameServersListActivity extends BaseNonGameActivity implements
         super.onResume();
         try {
             initSocketDiscoveryClient();
-        } catch (WifiException e) {
+        } catch (WifiUtils.WifiUtilsException e) {
             e.printStackTrace();
         } catch (UnknownHostException e) {
             e.printStackTrace();
@@ -188,7 +186,7 @@ public class GameServersListActivity extends BaseNonGameActivity implements
         mSocketServerDiscoveryClient.discoverAsync();
     }
 
-    private void initSocketDiscoveryClient() throws WifiException, UnknownHostException {
+    private void initSocketDiscoveryClient() throws UnknownHostException, WifiUtils.WifiUtilsException {
         mServerConnectorMap = new HashMap<String, GameServerConnector>(5);
         //ListView
         mServersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -200,12 +198,8 @@ public class GameServersListActivity extends BaseNonGameActivity implements
                     gameServerConnector = mServerConnectorMap.remove(serverIpTextView.getText());
                 }
                 if (gameServerConnector == null) return;
-                try {
-                    gameServerConnector.sendClientMessage(new ConnectionEstablishedClientMessage(ConnectionEstablishedClientMessage.PROTOCOL_VERSION));
-                } catch (IOException e) {
-                    LoggerHelper.printErrorMessage(TAG, e.toString());
-                    return;
-                }
+                gameServerConnector.sendClientMessage(0,
+                        new ConnectionEstablishedClientMessage(ConnectionEstablishedClientMessage.PROTOCOL_VERSION));
                 gameServerConnector.removePreGameStartCallback(GameServersListActivity.this);
                 GameServerConnector.setGameServerConnector(gameServerConnector);
                 // start new activity

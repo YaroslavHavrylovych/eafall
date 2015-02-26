@@ -11,25 +11,44 @@ import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.handler.runnable.RunnableHandler;
 import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.modifier.IEntityModifier.IEntityModifierMatcher;
+import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.scene.Scene;
 import org.andengine.util.IDisposable;
+import org.andengine.util.adt.color.Color;
 import org.andengine.util.adt.transformation.Transformation;
-import org.andengine.util.color.Color;
 
 
 /**
  * (c) 2010 Nicolas Gramlich
  * (c) 2011 Zynga Inc.
- * 
+ *
  * @author Nicolas Gramlich
  * @since 11:20:25 - 08.03.2010
  */
-public interface IEntity extends IDrawHandler, IUpdateHandler, IDisposable {
+public interface IEntity extends IDrawHandler, IUpdateHandler, IDisposable, ITouchArea {
 	// ===========================================================
 	// Constants
 	// ===========================================================
 
-	public static final int TAG_INVALID = Integer.MIN_VALUE;
+	public static final int TAG_DEFAULT = 0;
+	public static final int ZINDEX_DEFAULT = 0;
+
+	public static final float OFFSET_CENTER_X_DEFAULT = 0.5f;
+	public static final float OFFSET_CENTER_Y_DEFAULT = 0.5f;
+
+	public static final float ROTATION_DEFAULT = 0;
+	public static final float ROTATION_CENTER_X_DEFAULT = 0.5f;
+	public static final float ROTATION_CENTER_Y_DEFAULT = 0.5f;
+
+	public static final float SCALE_X_DEFAULT = 1;
+	public static final float SCALE_Y_DEFAULT = 1;
+	public static final float SCALE_CENTER_X_DEFAULT = 0.5f;
+	public static final float SCALE_CENTER_Y_DEFAULT = 0.5f;
+
+	public static final float SKEW_X_DEFAULT = 0;
+	public static final float SKEW_Y_DEFAULT = 0;
+	public static final float SKEW_CENTER_X_DEFAULT = 0.5f;
+	public static final float SKEW_CENTER_Y_DEFAULT = 0.5f;
 
 	// ===========================================================
 	// Methods
@@ -57,6 +76,8 @@ public interface IEntity extends IDrawHandler, IUpdateHandler, IDisposable {
 	public IEntity getParent();
 	public void setParent(final IEntity pEntity);
 
+	public IEntity getRootEntity();
+
 	public float getX();
 	public float getY();
 	public void setX(final float pX);
@@ -64,6 +85,32 @@ public interface IEntity extends IDrawHandler, IUpdateHandler, IDisposable {
 
 	public void setPosition(final IEntity pOtherEntity);
 	public void setPosition(final float pX, final float pY);
+
+	public float getWidth();
+	public float getHeight();
+
+	/**
+	 * It is very likely you do NOT want to use this method!
+	 * @return
+	 */
+	@Deprecated
+	public float getWidthScaled();
+	/**
+	 * It is very likely you do NOT want to use this method!
+	 * @return
+	 */
+	@Deprecated
+	public float getHeightScaled();
+
+	public void setHeight(final float pHeight);
+	public void setWidth(final float pWidth);
+	public void setSize(final float pWidth, final float pHeight);
+
+	public float getOffsetCenterX();
+	public float getOffsetCenterY();
+	public void setOffsetCenterX(final float pOffsetCenterX);
+	public void setOffsetCenterY(final float pOffsetCenterY);
+	public void setOffsetCenter(final float pOffsetCenterX, final float pOffsetCenterY);
 
 	public boolean isRotated();
 	public float getRotation();
@@ -103,7 +150,11 @@ public interface IEntity extends IDrawHandler, IUpdateHandler, IDisposable {
 	public void setSkewCenterY(final float pSkewCenterY);
 	public void setSkewCenter(final float pSkewCenterX, final float pSkewCenterY);
 
-	public boolean isRotatedOrScaledOrSkewed();
+	public boolean isRotatedOrScaledOrSkewed(); // TODO What about the new offset?
+
+	public void setAnchorCenterX(final float pAnchorCenterX);
+	public void setAnchorCenterY(final float pAnchorCenterY);
+	public void setAnchorCenter(final float pAnchorCenterX, final float pAnchorCenterY);
 
 	public float getRed();
 	public float getGreen();
@@ -116,6 +167,7 @@ public interface IEntity extends IDrawHandler, IUpdateHandler, IDisposable {
 	public void setBlue(final float pBlue);
 	public void setAlpha(final float pAlpha);
 	public void setColor(final Color pColor);
+	public void setColor(final int pARGBPackedInt);
 	public void setColor(final float pRed, final float pGreen, final float pBlue);
 	public void setColor(final float pRed, final float pGreen, final float pBlue, final float pAlpha);
 
@@ -135,50 +187,100 @@ public interface IEntity extends IDrawHandler, IUpdateHandler, IDisposable {
 	 * @param pY
 	 * @return a shared(!) float[] of length 2.
 	 */
-	public float[] convertLocalToSceneCoordinates(final float pX, final float pY);
+	public float[] convertLocalCoordinatesToParentCoordinates(final float pX, final float pY);
 	/**
 	 * @param pX
 	 * @param pY
 	 * @param pReuse must be of length 2.
 	 * @return <code>pReuse</code> as a convenience.
 	 */
-	public float[] convertLocalToSceneCoordinates(final float pX, final float pY, final float[] pReuse);
+	public float[] convertLocalCoordinatesToParentCoordinates(final float pX, final float pY, final float[] pReuse);
 	/**
 	 * @param pCoordinates must be of length 2.
 	 * @return a shared(!) float[] of length 2.
 	 */
-	public float[] convertLocalToSceneCoordinates(final float[] pCoordinates);
+	public float[] convertLocalCoordinatesToParentCoordinates(final float[] pCoordinates);
 	/**
 	 * @param pCoordinates must be of length 2.
 	 * @param pReuse must be of length 2.
 	 * @return <code>pReuse</code> as a convenience.
 	 */
-	public float[] convertLocalToSceneCoordinates(final float[] pCoordinates, final float[] pReuse);
+	public float[] convertLocalCoordinatesToParentCoordinates(final float[] pCoordinates, final float[] pReuse);
 
 	/**
 	 * @param pX
 	 * @param pY
 	 * @return a shared(!) float[] of length 2.
 	 */
-	public float[] convertSceneToLocalCoordinates(final float pX, final float pY);
+	public float[] convertParentCoordinatesToLocalCoordinates(final float pX, final float pY);
 	/**
 	 * @param pX
 	 * @param pY
 	 * @param pReuse must be of length 2.
 	 * @return <code>pReuse</code> as a convenience.
 	 */
-	public float[] convertSceneToLocalCoordinates(final float pX, final float pY, final float[] pReuse);
+	public float[] convertParentCoordinatesToLocalCoordinates(final float pX, final float pY, final float[] pReuse);
 	/**
 	 * @param pCoordinates must be of length 2.
 	 * @return a shared(!) float[] of length 2.
 	 */
-	public float[] convertSceneToLocalCoordinates(final float[] pCoordinates);
+	public float[] convertParentCoordinatesToLocalCoordinates(final float[] pCoordinates);
 	/**
 	 * @param pCoordinates must be of length 2.
 	 * @param pReuse must be of length 2.
 	 * @return <code>pReuse</code> as a convenience.
 	 */
-	public float[] convertSceneToLocalCoordinates(final float[] pCoordinates, final float[] pReuse);
+	public float[] convertParentCoordinatesToLocalCoordinates(final float[] pCoordinates, final float[] pReuse);
+
+	/**
+	 * @param pX
+	 * @param pY
+	 * @return a shared(!) float[] of length 2.
+	 */
+	public float[] convertLocalCoordinatesToSceneCoordinates(final float pX, final float pY);
+	/**
+	 * @param pX
+	 * @param pY
+	 * @param pReuse must be of length 2.
+	 * @return <code>pReuse</code> as a convenience.
+	 */
+	public float[] convertLocalCoordinatesToSceneCoordinates(final float pX, final float pY, final float[] pReuse);
+	/**
+	 * @param pCoordinates must be of length 2.
+	 * @return a shared(!) float[] of length 2.
+	 */
+	public float[] convertLocalCoordinatesToSceneCoordinates(final float[] pCoordinates);
+	/**
+	 * @param pCoordinates must be of length 2.
+	 * @param pReuse must be of length 2.
+	 * @return <code>pReuse</code> as a convenience.
+	 */
+	public float[] convertLocalCoordinatesToSceneCoordinates(final float[] pCoordinates, final float[] pReuse);
+
+	/**
+	 * @param pX
+	 * @param pY
+	 * @return a shared(!) float[] of length 2.
+	 */
+	public float[] convertSceneCoordinatesToLocalCoordinates(final float pX, final float pY);
+	/**
+	 * @param pX
+	 * @param pY
+	 * @param pReuse must be of length 2.
+	 * @return <code>pReuse</code> as a convenience.
+	 */
+	public float[] convertSceneCoordinatesToLocalCoordinates(final float pX, final float pY, final float[] pReuse);
+	/**
+	 * @param pCoordinates must be of length 2.
+	 * @return a shared(!) float[] of length 2.
+	 */
+	public float[] convertSceneCoordinatesToLocalCoordinates(final float[] pCoordinates);
+	/**
+	 * @param pCoordinates must be of length 2.
+	 * @param pReuse must be of length 2.
+	 * @return <code>pReuse</code> as a convenience.
+	 */
+	public float[] convertSceneCoordinatesToLocalCoordinates(final float[] pCoordinates, final float[] pReuse);
 
 	public Transformation getLocalToSceneTransformation();
 	public Transformation getSceneToLocalTransformation();
@@ -241,9 +343,9 @@ public interface IEntity extends IDrawHandler, IUpdateHandler, IDisposable {
 	public void sortChildren();
 	/**
 	 * Sorts the {@link IEntity}s based on their ZIndex. Sort is stable.
-	 * In contrast to {@link IEntity#sortChildren()} this method is particularly useful to avoid multiple sorts per frame. 
+	 * In contrast to {@link #sortChildren()} this method is particularly useful to avoid multiple sorts per frame.
 	 * @param pImmediate if <code>true</code>, the sorting is executed immediately.
-	 * If <code>false</code> the sorting is executed before the next (visible) drawing of the children of this {@link IEntity}. 
+	 * If <code>false</code> the sorting is executed before the next (visible) drawing of the children of this {@link IEntity}.
 	 */
 	public void sortChildren(final boolean pImmediate);
 	/**
@@ -302,17 +404,20 @@ public interface IEntity extends IDrawHandler, IUpdateHandler, IDisposable {
 	public boolean unregisterEntityModifier(final IEntityModifier pEntityModifier);
 	public boolean unregisterEntityModifiers(final IEntityModifierMatcher pEntityModifierMatcher);
 	public int getEntityModifierCount();
+	public void resetEntityModifiers();
 	public void clearEntityModifiers();
 
 	public boolean isCullingEnabled();
 	public void setCullingEnabled(final boolean pCullingEnabled);
 	/**
-	 * Will only be performed if {@link IEntity#isCullingEnabled()} is true.
+	 * Will only be performed if {@link #isCullingEnabled()} is true.
 	 *
 	 * @param pCamera the currently active camera to perform culling checks against.
 	 * @return <code>true</code> when this object is visible by the {@link Camera}, <code>false</code> otherwise.
 	 */
 	public boolean isCulled(final Camera pCamera);
+
+	public boolean collidesWith(final IEntity pOtherEntity);
 
 	public void setUserData(final Object pUserData);
 	public Object getUserData();

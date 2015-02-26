@@ -14,9 +14,9 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 
 /**
- * (c) 2010 Nicolas Gramlich 
+ * (c) 2010 Nicolas Gramlich
  * (c) 2011 Zynga Inc.
- * 
+ *
  * @author Nicolas Gramlich
  * @since 15:11:50 - 15.03.2010
  */
@@ -24,6 +24,8 @@ public class ScreenCapture extends Entity implements IScreenGrabberCallback {
 	// ===========================================================
 	// Constants
 	// ===========================================================
+
+	private static final int PNG_QUALITY_MAXIMUM = 100;
 
 	// ===========================================================
 	// Fields
@@ -95,9 +97,9 @@ public class ScreenCapture extends Entity implements IScreenGrabberCallback {
 		FileOutputStream out = null;
 		try {
 			out = new FileOutputStream(pFilePath);
-			pBitmap.compress(CompressFormat.PNG, 100, out);
+			pBitmap.compress(CompressFormat.PNG, PNG_QUALITY_MAXIMUM, out);
 		} catch (final FileNotFoundException e) {
-			StreamUtils.flushCloseStream(out);
+			StreamUtils.flushAndCloseStream(out);
 			Debug.e("Error saving file to: " + pFilePath, e);
 			throw e;
 		}

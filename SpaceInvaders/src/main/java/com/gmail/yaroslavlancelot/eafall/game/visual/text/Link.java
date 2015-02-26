@@ -7,7 +7,6 @@ import com.gmail.yaroslavlancelot.eafall.game.constant.Sizes;
 import com.gmail.yaroslavlancelot.eafall.game.touch.StaticHelper;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 
-import org.andengine.entity.text.Text;
 import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.font.IFont;
@@ -15,7 +14,7 @@ import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /** used in description popup */
-public class Link extends Text {
+public class Link extends RecenterText {
     private final static String sFontSizeKey = "link_phont_size_key";
     private final static int sFontSize = Sizes.DESCRIPTION_POPUP_TEXT_SIZE;
     private volatile StaticHelper.OnClickListener mOnClickListener;
@@ -53,13 +52,13 @@ public class Link extends Text {
         @Override
         public void press() {
             super.press();
-            setColor(org.andengine.util.color.Color.BLUE);
+            setColor(org.andengine.util.adt.color.Color.BLUE);
         }
 
         @Override
         public void unPress() {
             super.unPress();
-            setColor(org.andengine.util.color.Color.CYAN);
+            setColor(org.andengine.util.adt.color.Color.CYAN);
         }
 
         @Override

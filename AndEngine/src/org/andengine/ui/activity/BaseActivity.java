@@ -1,6 +1,7 @@
 package org.andengine.ui.activity;
 
 import org.andengine.util.ActivityUtils;
+import org.andengine.util.DialogUtils;
 import org.andengine.util.call.AsyncCallable;
 import org.andengine.util.call.Callable;
 import org.andengine.util.call.Callback;
@@ -8,13 +9,13 @@ import org.andengine.util.progress.ProgressCallable;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.os.Looper;
+import android.os.Bundle;
 import android.widget.Toast;
 
 /**
- * (c) 2010 Nicolas Gramlich 
+ * (c) 2010 Nicolas Gramlich
  * (c) 2011 Zynga Inc.
- * 
+ *
  * @author Nicolas Gramlich
  * @since 18:35:28 - 29.08.2009
  */
@@ -43,12 +44,12 @@ public abstract class BaseActivity extends Activity {
 	// Methods
 	// ===========================================================
 
-	public void toastOnUIThread(final CharSequence pText) {
-		this.toastOnUIThread(pText, Toast.LENGTH_LONG);
+	public void toastOnUiThread(final CharSequence pText) {
+		this.toastOnUiThread(pText, Toast.LENGTH_SHORT);
 	}
 
-	public void toastOnUIThread(final CharSequence pText, final int pDuration) {
-		if(Looper.getMainLooper().getThread() == Thread.currentThread()) {
+	public void toastOnUiThread(final CharSequence pText, final int pDuration) {
+		if (ActivityUtils.isOnUiThread()) {
 			Toast.makeText(BaseActivity.this, pText, pDuration).show();
 		} else {
 			this.runOnUiThread(new Runnable() {
@@ -60,10 +61,20 @@ public abstract class BaseActivity extends Activity {
 		}
 	}
 
+	@Deprecated
+	public void showDialogOnUiThread(final int pDialogID) {
+		DialogUtils.showDialogOnUiThread(this, pDialogID);
+	}
+
+	@Deprecated
+	public void showDialogOnUiThread(final int pDialogID, final Bundle pBundle) {
+		DialogUtils.showDialogOnUiThread(this, pDialogID, pBundle);
+	}
+
 	/**
 	 * Performs a task in the background, showing a {@link ProgressDialog},
 	 * while the {@link Callable} is being processed.
-	 * 
+	 *
 	 * @param <T>
 	 * @param pTitleResourceID
 	 * @param pMessageResourceID
@@ -78,7 +89,7 @@ public abstract class BaseActivity extends Activity {
 	/**
 	 * Performs a task in the background, showing a indeterminate {@link ProgressDialog},
 	 * while the {@link Callable} is being processed.
-	 * 
+	 *
 	 * @param <T>
 	 * @param pTitleResourceID
 	 * @param pMessageResourceID
@@ -94,7 +105,7 @@ public abstract class BaseActivity extends Activity {
 	/**
 	 * Performs a task in the background, showing a {@link ProgressDialog} with an ProgressBar,
 	 * while the {@link AsyncCallable} is being processed.
-	 * 
+	 *
 	 * @param <T>
 	 * @param pTitleResourceID
 	 * @param pMessageResourceID
@@ -109,7 +120,7 @@ public abstract class BaseActivity extends Activity {
 	/**
 	 * Performs a task in the background, showing a {@link ProgressDialog} with a ProgressBar,
 	 * while the {@link AsyncCallable} is being processed.
-	 * 
+	 *
 	 * @param <T>
 	 * @param pTitleResourceID
 	 * @param pMessageResourceID
@@ -125,7 +136,7 @@ public abstract class BaseActivity extends Activity {
 	/**
 	 * Performs a task in the background, showing an indeterminate {@link ProgressDialog},
 	 * while the {@link AsyncCallable} is being processed.
-	 * 
+	 *
 	 * @param <T>
 	 * @param pTitleResourceID
 	 * @param pMessageResourceID

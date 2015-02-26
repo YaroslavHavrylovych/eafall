@@ -25,7 +25,7 @@ import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.color.Color;
+import org.andengine.util.adt.color.Color;
 import org.simpleframework.xml.core.Persister;
 
 import java.util.SortedSet;

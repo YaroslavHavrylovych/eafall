@@ -6,13 +6,13 @@ import static org.andengine.util.Constants.VERTEX_INDEX_Y;
 import org.andengine.entity.primitive.Line;
 
 /**
- * (c) 2010 Nicolas Gramlich 
+ * (c) 2010 Nicolas Gramlich
  * (c) 2011 Zynga Inc.
- * 
+ *
  * @author Nicolas Gramlich
  * @since 19:27:22 - 17.07.2010
  */
-public class LineCollisionChecker extends ShapeCollisionChecker {
+public final class LineCollisionChecker {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -26,6 +26,10 @@ public class LineCollisionChecker extends ShapeCollisionChecker {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
+
+	private LineCollisionChecker() {
+
+	}
 
 	// ===========================================================
 	// Getter & Setter

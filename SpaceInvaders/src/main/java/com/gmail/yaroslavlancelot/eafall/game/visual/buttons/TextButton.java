@@ -5,14 +5,13 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringsAndPath;
-import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
+import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.text.Text;
 import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.font.FontManager;
-import org.andengine.opengl.font.FontUtils;
 import org.andengine.opengl.font.IFont;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
@@ -37,13 +36,9 @@ public class TextButton extends ButtonSprite {
         setWidth(width);
         setHeight(height);
 
-        mText = new Text(0, measureTextOrdinate(),
+        mText = new Text(getWidth() / 2, getHeight() / 2,
                 FontHolder.getInstance().getElement(sFontSizeKey), "", 20, vertexBufferObjectManager);
         attachChild(mText);
-    }
-
-    private float measureTextOrdinate() {
-        return getHeight() / 2 - sFontSize / 2;
     }
 
     public static void loadResources(Context context, TextureManager textureManager) {
@@ -65,8 +60,6 @@ public class TextButton extends ButtonSprite {
         if (text.equalsIgnoreCase(mText.getText().toString())) {
             return;
         }
-        float textWidth = FontUtils.measureText(FontHolder.getInstance().getElement(sFontSizeKey), text);
-        mText.setX(getWidth() / 2 - textWidth / 2);
         mText.setText(text);
     }
 }

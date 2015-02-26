@@ -18,7 +18,7 @@ import com.gmail.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.Link;
 
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.shape.RectangularShape;
+import org.andengine.entity.shape.Shape;
 import org.andengine.entity.text.Text;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
@@ -63,7 +63,7 @@ public class DescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
     }
 
     @Override
-    public void updateDescription(RectangularShape drawArea, Object objectId, String raceName, final String teamName) {
+    public void updateDescription(Shape drawArea, Object objectId, String raceName, final String teamName) {
         final BuildingId buildingId = (BuildingId) objectId;
         IAlliance race = AllianceHolder.getInstance().getElement(raceName);
         BuildingDummy buildingDummy = race.getBuildingDummy(buildingId);

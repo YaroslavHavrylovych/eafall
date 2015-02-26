@@ -15,7 +15,7 @@ import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /** text used in description popup */
-public class DescriptionText extends Text {
+public class DescriptionText extends RecenterText {
     public final static int sFontSize = Sizes.DESCRIPTION_POPUP_TEXT_SIZE;
     private final static String sFontSizeKey = "description_text_font_size_key";
 

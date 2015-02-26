@@ -20,8 +20,7 @@ import de.greenrobot.event.EventBus;
 /** trigger buildings popup (already initialized) */
 public class ConstructionPopupButton extends ButtonSprite {
     public ConstructionPopupButton(VertexBufferObjectManager vertexBufferObjectManager) {
-        super(Sizes.GAME_FIELD_WIDTH / 2 - Sizes.BUILDING_POPUP_INVOCATION_BUTTON_SIZE / 2,
-                Sizes.GAME_FIELD_HEIGHT - Sizes.BUILDING_POPUP_INVOCATION_BUTTON_SIZE,
+        super(Sizes.GAME_FIELD_WIDTH / 2, Sizes.BUILDING_POPUP_INVOCATION_BUTTON_SIZE / 2,
                 (ITiledTextureRegion) TextureRegionHolder.getInstance().getElement(StringsAndPath.FILE_BUILDINGS_POPUP_UP_BUTTON),
                 vertexBufferObjectManager);
         int size = Sizes.BUILDING_POPUP_INVOCATION_BUTTON_SIZE;

@@ -4,20 +4,24 @@ import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 
+import org.andengine.engine.options.ConfigChooserOptions;
 import org.andengine.opengl.view.ConfigChooser;
 import org.andengine.util.exception.DeviceNotSupportedException;
 import org.andengine.util.exception.DeviceNotSupportedException.DeviceNotSupportedCause;
 import org.andengine.util.system.SystemUtils;
 
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.pm.ConfigurationInfo;
 import android.os.Build;
 
 /**
- * (c) Zynga 2012
+ * (c) 2012 Zynga Inc.
  *
  * @author Nicolas Gramlich <ngramlich@zynga.com>
  * @since 14:03:59 - 19.03.2012
  */
-public class AndEngine {
+public final class AndEngine {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -29,6 +33,10 @@ public class AndEngine {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
+
+	private AndEngine() {
+
+	}
 
 	// ===========================================================
 	// Getter & Setter
@@ -42,23 +50,23 @@ public class AndEngine {
 	// Methods
 	// ===========================================================
 
-	public static boolean isDeviceSupported() {
+	public static boolean isDeviceSupported(final Context pContext) {
 		try {
-			AndEngine.checkDeviceSupported();
+			AndEngine.checkDeviceSupported(pContext);
 			return true;
 		} catch (final DeviceNotSupportedException e) {
 			return false;
 		}
 	}
 
-	public static void checkDeviceSupported() throws DeviceNotSupportedException {
+	public static void checkDeviceSupported(final Context pContext) throws DeviceNotSupportedException {
 		AndEngine.checkCodePathSupport();
 
-		AndEngine.checkOpenGLSupport();
+		AndEngine.checkOpenGLSupport(pContext);
 	}
 
 	private static void checkCodePathSupport() throws DeviceNotSupportedException {
-		if(SystemUtils.isAndroidVersionOrLower(Build.VERSION_CODES.FROYO)) {
+		if (SystemUtils.isAndroidVersionOrLower(Build.VERSION_CODES.FROYO)) {
 			try {
 				System.loadLibrary("andengine");
 			} catch (final UnsatisfiedLinkError e) {
@@ -67,8 +75,19 @@ public class AndEngine {
 		}
 	}
 
-	private static void checkOpenGLSupport() throws DeviceNotSupportedException {
+	private static void checkOpenGLSupport(final Context pContext) throws DeviceNotSupportedException {
+		AndEngine.checkGLES20Support(pContext);
 		AndEngine.checkEGLConfigChooserSupport();
+	}
+
+	private static void checkGLES20Support(final Context pContext) throws DeviceNotSupportedException {
+		final ActivityManager activityManager = (ActivityManager) pContext.getSystemService(Context.ACTIVITY_SERVICE);
+
+		final ConfigurationInfo configurationInfo = activityManager.getDeviceConfigurationInfo();
+
+		if (configurationInfo.reqGlEsVersion < 0x20000) {
+			throw new DeviceNotSupportedException(DeviceNotSupportedCause.GLES2_UNSUPPORTED);
+		}
 	}
 
 	private static void checkEGLConfigChooserSupport() throws DeviceNotSupportedException {
@@ -82,7 +101,7 @@ public class AndEngine {
 		final int[] version = new int[2];
 		egl.eglInitialize(eglDisplay, version);
 
-		final ConfigChooser configChooser = new ConfigChooser(false); // TODO Doesn't correlate to possible multisampling request in EngineOptions...
+		final ConfigChooser configChooser = new ConfigChooser(new ConfigChooserOptions());
 
 		try {
 			configChooser.chooseConfig(egl, eglDisplay);

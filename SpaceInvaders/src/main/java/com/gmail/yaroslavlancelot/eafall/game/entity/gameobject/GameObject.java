@@ -19,8 +19,9 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.color.Color;
+import org.andengine.util.adt.color.Color;
 import org.andengine.util.math.MathConstants;
+import org.andengine.util.math.MathUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,19 +58,20 @@ public abstract class GameObject extends RectangleWithBody {
     private IHealthListener mGameObjectHealthChangedListener;
     /** unique unit id */
     private long mUniqueId;
-    /** physic body will be assigned to this "body rectangle" (area) */
-    private Rectangle mBodyRectangle;
 
     protected GameObject(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
-        super(x, y, textureRegion.getWidth(), textureRegion.getWidth(), vertexBufferObjectManager);
-        mBodyRectangle = new Rectangle(0, 0, textureRegion.getWidth(), textureRegion.getWidth(), vertexBufferObjectManager);
-        mBodyRectangle.setColor(Color.TRANSPARENT);
+        this(x, y, textureRegion.getWidth(), textureRegion.getWidth(), textureRegion, vertexBufferObjectManager);
+    }
+
+    protected GameObject(float x, float y, float width, float height, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
+        super(x, y, width, height, vertexBufferObjectManager);
+        float halfX = getWidth() / 2,
+                halfY = getHeight() / 2;
         setColor(Color.TRANSPARENT);
-        attachChild(mBodyRectangle);
-        mObjectSprite = new Sprite(0, 0, textureRegion, vertexBufferObjectManager);
-        mBackground = new Rectangle(0, 0, 0, 0, vertexBufferObjectManager);
-        mBodyRectangle.attachChild(mBackground);
-        mBodyRectangle.attachChild(mObjectSprite);
+        mObjectSprite = new Sprite(halfX, halfY, textureRegion, vertexBufferObjectManager);
+        mBackground = new Rectangle(halfX, halfY, 0, 0, vertexBufferObjectManager);
+        attachChild(mBackground);
+        attachChild(mObjectSprite);
         mUniqueId = sGameObjectsTracker.getAndIncrement();
     }
 
@@ -113,6 +115,7 @@ public abstract class GameObject extends RectangleWithBody {
 
     protected void initHealthBar() {
         mHealthBar = new HealthBar(getVertexBufferObjectManager(), getWidth());
+        mHealthBar.setPosition(getWidth() / 2, getHeight() + HealthBar.HEALTH_BAR_HEIGHT);
         attachChild(mHealthBar.getHealthBar());
     }
 
@@ -204,14 +207,6 @@ public abstract class GameObject extends RectangleWithBody {
         mBackground.setHeight(area.height);
     }
 
-    public float getCenterX() {
-        return getX() + getWidth() / 2;
-    }
-
-    public float getCenterY() {
-        return getY() + getHeight() / 2;
-    }
-
     public Armor getObjectArmor() {
         return mObjectArmor;
     }
@@ -235,11 +230,11 @@ public abstract class GameObject extends RectangleWithBody {
 
     /** rotate all objects which hold current game object (and children) exclude health bar */
     public void rotate(float angleInDeg) {
-        mBodyRectangle.setRotation(angleInDeg);
+        mObjectSprite.setRotation(angleInDeg);
     }
 
     public float getRotationAngle() {
-        return mBodyRectangle.getRotation();
+        return mObjectSprite.getRotation();
     }
 
     /**
@@ -267,7 +262,7 @@ public abstract class GameObject extends RectangleWithBody {
 
         float newAngle = (float) Math.atan(b / a);
 
-        if (startY < y) {
+        if (startY > y) {
             if (startX > x) return 3 * MathConstants.PI / 2 - newAngle;
             else return newAngle + MathConstants.PI / 2;
         }

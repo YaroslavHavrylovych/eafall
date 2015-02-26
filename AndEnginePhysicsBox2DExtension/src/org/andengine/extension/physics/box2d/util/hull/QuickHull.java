@@ -3,9 +3,9 @@ package org.andengine.extension.physics.box2d.util.hull;
 import com.badlogic.gdx.math.Vector2;
 
 /**
- * (c) 2010 Nicolas Gramlich 
+ * (c) 2010 Nicolas Gramlich
  * (c) 2011 Zynga Inc.
- * 
+ *
  * @author Nicolas Gramlich
  * @since 14:01:34 - 14.09.2010
  * @see http://www.iti.fh-flensburg.de/lang/algorithmen/geo/
@@ -58,7 +58,7 @@ public class QuickHull extends BaseHullAlgorithm {
 	}
 
 	private void computeHullVertices(final Vector2Line pLine, final int pIndexFrom, final int pIndexTo) {
-		if(pIndexFrom > pIndexTo) {
+		if (pIndexFrom > pIndexTo) {
 			return;
 		}
 		final int k = this.indexOfFurthestVertex(pLine, pIndexFrom, pIndexTo);
@@ -88,9 +88,9 @@ public class QuickHull extends BaseHullAlgorithm {
 
 		int f = pFromIndex;
 		float mx = 0;
-		for(int i = pFromIndex; i <= pToIndex; i++) {
+		for (int i = pFromIndex; i <= pToIndex; i++) {
 			final float d = -Vector2Util.area2(vertices[i], pLine);
-			if(d > mx || d == mx && vertices[i].x > vertices[f].y) {
+			if (d > mx || d == mx && vertices[i].x > vertices[f].y) {
 				mx = d;
 				f = i;
 			}
@@ -103,14 +103,14 @@ public class QuickHull extends BaseHullAlgorithm {
 
 		int i = pFromIndex;
 		int j = pToIndex;
-		while(i <= j) {
-			while(i <= j && Vector2Util.isRightOf(vertices[i], pLine)) {
+		while (i <= j) {
+			while (i <= j && Vector2Util.isRightOf(vertices[i], pLine)) {
 				i++;
 			}
-			while(i <= j && !Vector2Util.isRightOf(vertices[j], pLine)) {
+			while (i <= j && !Vector2Util.isRightOf(vertices[j], pLine)) {
 				j--;
 			}
-			if(i <= j) {
+			if (i <= j) {
 				this.swap(i++, j--);
 			}
 		}

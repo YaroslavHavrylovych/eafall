@@ -54,7 +54,7 @@ public class StationaryUnit extends Unit {
             // check for anything to attack
             if (mObjectToAttack != null && mObjectToAttack != mEnemiesUpdater.getMainTarget() &&
                     mObjectToAttack.isObjectAlive() && StaticHelper.getDistanceBetweenPoints(getX(), getY(),
-                    mObjectToAttack.getCenterX(), mObjectToAttack.getCenterY()) < mAttackRadius) {
+                    mObjectToAttack.getX(), mObjectToAttack.getY()) < mAttackRadius) {
                 attackGoal(mObjectToAttack);
                 return;
             } else {

@@ -12,7 +12,7 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.Pla
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.MovableUnit;
 
 import org.andengine.extension.physics.box2d.PhysicsFactory;
-import org.andengine.util.color.Color;
+import org.andengine.util.adt.color.Color;
 
 import java.util.ArrayList;
 import java.util.Iterator;

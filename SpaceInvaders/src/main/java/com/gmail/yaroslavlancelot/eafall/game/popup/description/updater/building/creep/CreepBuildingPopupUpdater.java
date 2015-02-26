@@ -3,23 +3,23 @@ package com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.buildin
 import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.IBuilding;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.CreepBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.building.BuildingsAmountChangedEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.building.CreateBuildingEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.building.UpgradeBuildingEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.description.UnitByBuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.path.ShowUnitPathChooser;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.IBuilding;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.CreepBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.building.BaseBuildingPopupUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
 import com.gmail.yaroslavlancelot.eafall.game.touch.StaticHelper;
-import com.gmail.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.TextButton;
+import com.gmail.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.shape.RectangularShape;
+import org.andengine.entity.shape.Shape;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -48,7 +48,7 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
         mUpgradeButton = new TextButton(vertexBufferObjectManager, 300, 70);
         mUpgradeButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_upgrade_button));
         mScene.registerTouchArea(mUpgradeButton);
-        //upgrade
+        //path button
         mPathButton = new TextButton(vertexBufferObjectManager, 300, 70);
         mPathButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_path_button));
         mScene.registerTouchArea(mPathButton);
@@ -62,7 +62,7 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
     }
 
     @Override
-    public void updateDescription(RectangularShape drawArea, Object objectId, String raceName, final String teamName) {
+    public void updateDescription(Shape drawArea, Object objectId, String raceName, final String teamName) {
         super.updateDescription(drawArea, objectId, raceName, teamName);
         IAlliance race = AllianceHolder.getRace(raceName);
         final BuildingId buildingId = (BuildingId) objectId;
@@ -86,7 +86,8 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
             }
         });
         //button upgrade
-        mUpgradeButton.setPosition(mBuildOrBackButton.getX() + mBuildOrBackButton.getWidth() + BUTTON_MARGIN, mBuildOrBackButton.getY());
+        mUpgradeButton.setPosition(mBuildOrBackButton.getX() + mBuildOrBackButton.getWidth() / 2
+                + BUTTON_MARGIN + mUpgradeButton.getWidth() / 2, mBuildOrBackButton.getY());
         boolean isUpgradeAvailable = race.isUpgradeAvailable(buildingId);
         //check if upgrades available
         if (isUpgradeAvailable) {
@@ -100,7 +101,8 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
         }
         //button path
         ButtonSprite button = isUpgradeAvailable ? mUpgradeButton : mBuildOrBackButton;
-        mPathButton.setPosition(button.getX() + button.getWidth() + BUTTON_MARGIN, button.getY());
+        mPathButton.setPosition(button.getX() + button.getWidth() / 2 + BUTTON_MARGIN
+                + mPathButton.getWidth() / 2, button.getY());
         drawArea.attachChild(mPathButton);
         mPathButton.setOnClickListener(new ButtonSprite.OnClickListener() {
             @Override
@@ -126,16 +128,15 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
     }
 
     @Override
-    public void updateAdditionInfo(RectangularShape drawArea, Object objectId, String raceName, final String teamName) {
+    public void updateAdditionInfo(Shape drawArea, Object objectId, String raceName, final String teamName) {
         if (mAdditionDescriptionImage != null) {
             mAdditionDescriptionImage.detachSelf();
             mAdditionInfoRectangle.detachSelf();
         }
-        mAdditionDescriptionImage = new Sprite(0, 0, drawArea.getWidth(), drawArea.getHeight(),
+        mAdditionDescriptionImage = new Sprite(
+                drawArea.getWidth() / 2, drawArea.getHeight() / 2,
+                drawArea.getWidth(), drawArea.getHeight(),
                 getAdditionalInformationImage(objectId, raceName), mVertexBufferObjectManager);
-
-        mAdditionInfoRectangle.setWidth(drawArea.getWidth());
-        mAdditionInfoRectangle.setHeight(drawArea.getHeight());
 
         final BuildingId buildingId = (BuildingId) objectId;
         mAdditionInfoRectangle.setTouchCallback(

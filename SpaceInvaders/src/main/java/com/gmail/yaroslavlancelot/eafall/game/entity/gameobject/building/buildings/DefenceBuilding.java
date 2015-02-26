@@ -65,7 +65,7 @@ public class DefenceBuilding extends Building {
         }
         //create orbital stations
         PlanetStaticObject planet = team.getTeamPlanet();
-        float planetX = planet.getCenterX(), planetY = planet.getCenterY();
+        float planetX = planet.getX(), planetY = planet.getY();
         float x, y;
         for (int i = 0; i < ORBITAL_STATIONS_AMOUNT; i++) {
             x = sOrbitalStationsPositions[i][0];

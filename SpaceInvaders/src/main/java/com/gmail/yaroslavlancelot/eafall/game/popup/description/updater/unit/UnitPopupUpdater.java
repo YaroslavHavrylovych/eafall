@@ -10,7 +10,7 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.D
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.BasePopupUpdater;
 
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.shape.RectangularShape;
+import org.andengine.entity.shape.Shape;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
@@ -68,13 +68,13 @@ public class UnitPopupUpdater extends BasePopupUpdater {
     }
 
     @Override
-    public void updateDescription(RectangularShape drawArea, Object objectId, String raceName, String teamName) {
+    public void updateDescription(Shape drawArea, Object objectId, String raceName, String teamName) {
         //description
         mDescriptionAreaUpdater.updateDescription(drawArea, objectId, raceName, teamName);
     }
 
     @Override
-    public void updateAdditionInfo(RectangularShape drawArea, Object objectId, String raceName, String teamName) {
+    public void updateAdditionInfo(Shape drawArea, Object objectId, String raceName, String teamName) {
         mAdditionInformationAreaUpdater.updateDescription(drawArea, objectId, raceName, teamName);
     }
 }

@@ -13,13 +13,13 @@ import android.content.Context;
 import android.os.Environment;
 
 /**
- * (c) 2010 Nicolas Gramlich 
+ * (c) 2010 Nicolas Gramlich
  * (c) 2011 Zynga Inc.
- * 
+ *
  * @author Nicolas Gramlich
  * @since 13:53:33 - 20.06.2010
  */
-public class FileUtils {
+public final class FileUtils {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -32,6 +32,10 @@ public class FileUtils {
 	// Constructors
 	// ===========================================================
 
+	private FileUtils() {
+
+	}
+
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
@@ -43,6 +47,10 @@ public class FileUtils {
 	// ===========================================================
 	// Methods
 	// ===========================================================
+
+	public static String[] readLines(final File pFile) throws IOException {
+		return StreamUtils.readLines(new FileInputStream(pFile));
+	}
 
 	public static void copyToExternalStorage(final Context pContext, final int pSourceResourceID, final String pFilename) throws FileNotFoundException {
 		FileUtils.copyToExternalStorage(pContext, pContext.getResources().openRawResource(pSourceResourceID), pFilename);
@@ -135,12 +143,12 @@ public class FileUtils {
 		return new FileInputStream(absoluteFilePath);
 	}
 
-	public static String[] getDirectoryListOnExternalStorage(final Context pContext, final String pFilePath) {
+	public static String[] getDirectoryListOnExternalStorage(final Context pContext, final String pFilePath) throws FileNotFoundException {
 		final String absoluteFilePath = FileUtils.getAbsolutePathOnExternalStorage(pContext, pFilePath);
 		return new File(absoluteFilePath).list();
 	}
 
-	public static String[] getDirectoryListOnExternalStorage(final Context pContext, final String pFilePath, final FilenameFilter pFilenameFilter) {
+	public static String[] getDirectoryListOnExternalStorage(final Context pContext, final String pFilePath, final FilenameFilter pFilenameFilter) throws FileNotFoundException {
 		final String absoluteFilePath = FileUtils.getAbsolutePathOnExternalStorage(pContext, pFilePath);
 		return new File(absoluteFilePath).list(pFilenameFilter);
 	}
@@ -180,26 +188,24 @@ public class FileUtils {
 	}
 
 	/**
-	 * Deletes all files and sub-directories under <code>dir</code>. Returns
-	 * true if all deletions were successful. If a deletion fails, the method
-	 * stops attempting to delete and returns false.
-	 * 
+	 * Recursively deletes all files and sub-directories under <code>pFileOrDirectory</code>.
+	 *
 	 * @param pFileOrDirectory
-	 * @return
+	 * @return <code>true</code>, if all deletions were successful. <code>false</code>, if a deletion fails (the recursion is stopped then).
 	 */
-	public static boolean deleteDirectory(final File pFileOrDirectory) {
-		if(pFileOrDirectory.isDirectory()) {
+	public static boolean delete(final File pFileOrDirectory) {
+		if (pFileOrDirectory.isDirectory()) {
 			final String[] children = pFileOrDirectory.list();
-			final int childrenCount = children.length;
-			for(int i = 0; i < childrenCount; i++) {
-				final boolean success = FileUtils.deleteDirectory(new File(pFileOrDirectory, children[i]));
-				if(!success) {
+			final int childCount = children.length;
+			for (int i = 0; i < childCount; i++) {
+				final boolean success = FileUtils.delete(new File(pFileOrDirectory, children[i]));
+				if (!success) {
 					return false;
 				}
 			}
 		}
 
-		// The directory is now empty so delete it
+		/* The directory is now empty so delete it. */
 		return pFileOrDirectory.delete();
 	}
 

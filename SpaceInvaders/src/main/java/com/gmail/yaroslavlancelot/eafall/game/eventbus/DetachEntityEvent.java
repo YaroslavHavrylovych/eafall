@@ -1,6 +1,6 @@
 package com.gmail.yaroslavlancelot.eafall.game.eventbus;
 
-import org.andengine.entity.shape.IAreaShape;
+import org.andengine.entity.shape.Shape;
 
 /** hold entity for detach */
 public class DetachEntityEvent extends AbstractEntityEvent {
@@ -9,16 +9,16 @@ public class DetachEntityEvent extends AbstractEntityEvent {
     /** unregister touch in all child elements */
     private boolean mUnregisterChildrenTouch;
 
-    public DetachEntityEvent(IAreaShape entity, boolean hud, boolean unregisterChildrenTouch) {
+    public DetachEntityEvent(Shape entity, boolean hud, boolean unregisterChildrenTouch) {
         super(entity, hud);
         mUnregisterChildrenTouch = unregisterChildrenTouch;
     }
 
-    public DetachEntityEvent(IAreaShape entity, boolean hud) {
+    public DetachEntityEvent(Shape entity, boolean hud) {
         super(entity, hud);
     }
 
-    public DetachEntityEvent(IAreaShape entity) {
+    public DetachEntityEvent(Shape entity) {
         super(entity);
     }
 

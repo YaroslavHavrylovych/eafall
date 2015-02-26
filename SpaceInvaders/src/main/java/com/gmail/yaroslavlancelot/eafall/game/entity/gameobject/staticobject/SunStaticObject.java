@@ -15,7 +15,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class SunStaticObject extends StaticObject {
     public SunStaticObject(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
-        super(x, y, textureRegion, vertexBufferObjectManager);
+        super(x, y, Sizes.SUN_DIAMETER, Sizes.SUN_DIAMETER, textureRegion, vertexBufferObjectManager);
         setWidth(Sizes.SUN_DIAMETER);
         setHeight(Sizes.SUN_DIAMETER);
         mIncomeIncreasingValue = 0;

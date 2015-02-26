@@ -9,13 +9,13 @@ import org.andengine.util.call.Callback;
 
 
 /**
- * (c) 2010 Nicolas Gramlich 
+ * (c) 2010 Nicolas Gramlich
  * (c) 2011 Zynga Inc.
- * 
+ *
  * @author Nicolas Gramlich
  * @since 16:42:08 - 12.07.2011
  */
-public class BuildableTextureAtlasTextureRegionFactory {
+public final class BuildableTextureAtlasTextureRegionFactory {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -27,6 +27,10 @@ public class BuildableTextureAtlasTextureRegionFactory {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
+
+	private BuildableTextureAtlasTextureRegionFactory() {
+
+	}
 
 	// ===========================================================
 	// Getter & Setter
@@ -66,14 +70,14 @@ public class BuildableTextureAtlasTextureRegionFactory {
 			public void onCallback(final T pCallbackValue) {
 				final int tileWidth = pTextureAtlasSource.getTextureWidth() / pTileColumns;
 				final int tileHeight = pTextureAtlasSource.getTextureHeight() / pTileRows;
-				
-				for(int tileColumn = 0; tileColumn < pTileColumns; tileColumn++) {
-					for(int tileRow = 0; tileRow < pTileRows; tileRow++) {
+
+				for (int tileColumn = 0; tileColumn < pTileColumns; tileColumn++) {
+					for (int tileRow = 0; tileRow < pTileRows; tileRow++) {
 						final int tileIndex = tileRow * pTileColumns + tileColumn;
 
 						final int x = pCallbackValue.getTextureX() + tileColumn * tileWidth;
 						final int y = pCallbackValue.getTextureY() + tileRow * tileHeight;
-						
+
 						tiledTextureRegion.setTexturePosition(tileIndex, x, y);
 					}
 				}

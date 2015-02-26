@@ -6,7 +6,7 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitDummy;
 
 import org.andengine.opengl.texture.TextureManager;
-import org.andengine.util.color.Color;
+import org.andengine.util.adt.color.Color;
 
 import java.util.SortedSet;
 

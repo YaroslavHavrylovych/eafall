@@ -10,12 +10,12 @@ import com.gmail.yaroslavlancelot.eafall.network.server.callbacks.InGameServer;
 import com.gmail.yaroslavlancelot.eafall.network.server.callbacks.PreGameStartServer;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 
-import org.andengine.extension.multiplayer.protocol.adt.message.client.IClientMessage;
-import org.andengine.extension.multiplayer.protocol.server.IClientMessageHandler;
-import org.andengine.extension.multiplayer.protocol.server.SocketServer;
-import org.andengine.extension.multiplayer.protocol.server.connector.ClientConnector;
-import org.andengine.extension.multiplayer.protocol.server.connector.SocketConnectionClientConnector;
-import org.andengine.extension.multiplayer.protocol.shared.SocketConnection;
+import org.andengine.extension.multiplayer.adt.message.client.IClientMessage;
+import org.andengine.extension.multiplayer.server.IClientMessageHandler;
+import org.andengine.extension.multiplayer.server.SocketServer;
+import org.andengine.extension.multiplayer.server.connector.ClientConnector;
+import org.andengine.extension.multiplayer.server.connector.SocketConnectionClientConnector;
+import org.andengine.extension.multiplayer.shared.SocketConnection;
 
 import java.io.IOException;
 

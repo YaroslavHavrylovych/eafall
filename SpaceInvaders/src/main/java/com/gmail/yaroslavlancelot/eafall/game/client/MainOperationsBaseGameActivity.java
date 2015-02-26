@@ -62,7 +62,7 @@ import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.shape.IAreaShape;
+import org.andengine.entity.shape.Shape;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.util.FPSLogger;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
@@ -71,7 +71,7 @@ import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.input.touch.controller.MultiTouch;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.ui.activity.BaseGameActivity;
-import org.andengine.util.color.Color;
+import org.andengine.util.adt.color.Color;
 import org.andengine.util.time.TimeConstants;
 
 import java.util.HashMap;
@@ -328,17 +328,16 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
 
     /** init first team and planet */
     protected void initSecondPlanet() {
-        mSecondTeam.setTeamPlanet(createPlanet(Sizes.GAME_FIELD_WIDTH - Sizes.PLANET_DIAMETER
-                        - Sizes.ADDITION_MARGIN_FOR_PLANET,
-                (Sizes.GAME_FIELD_HEIGHT - Sizes.PLANET_DIAMETER) / 2,
+        PlanetStaticObject planet = createPlanet(
+                Sizes.GAME_FIELD_WIDTH - Sizes.PLANET_DIAMETER / 2 - Sizes.ADDITION_MARGIN_FOR_PLANET,
+                Sizes.HALF_FIELD_HEIGHT,
                 mTextureRegionHolderUtils.getElement(StringsAndPath.KEY_RED_PLANET),
                 StringsAndPath.KEY_RED_PLANET,
-                mSecondTeam
-        ));
-        mSecondTeam.getTeamPlanet().setSpawnPoint(Sizes.GAME_FIELD_WIDTH - Sizes.PLANET_DIAMETER / 2 -
-                        Sizes.UNIT_SIZE - 2 - Sizes.ADDITION_MARGIN_FOR_PLANET,
-                Sizes.GAME_FIELD_HEIGHT / 2
-        );
+                mSecondTeam);
+        mSecondTeam.setTeamPlanet(planet);
+        mSecondTeam.getTeamPlanet().setSpawnPoint(
+                planet.getX() - Sizes.PLANET_DIAMETER / 2 - Sizes.UNIT_SIZE - Sizes.ADDITION_MARGIN_FOR_PLANET,
+                planet.getY());
     }
 
     /** create planet game object */
@@ -347,8 +346,9 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         PlanetStaticObject planetStaticObject = new PlanetStaticObject(x, y, textureRegion, getVertexBufferObjectManager(), team);
         planetStaticObject.addObjectDestroyedListener(new PlanetDestroyListener(team));
         attachEntity(planetStaticObject);
-        if (unitUniqueId.length > 0)
+        if (unitUniqueId.length > 0) {
             planetStaticObject.setObjectUniqueId(unitUniqueId[0]);
+        }
         mGameObjectsMap.put(planetStaticObject.getObjectUniqueId(), planetStaticObject);
         onEvent(new CreatePhysicBodyEvent(planetStaticObject));
         return planetStaticObject;
@@ -356,20 +356,20 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
 
     /** init second team and planet */
     protected void initFirstPlanet() {
-        mFirstTeam.setTeamPlanet(createPlanet(0, (Sizes.GAME_FIELD_HEIGHT - Sizes.PLANET_DIAMETER) / 2
-                        + Sizes.ADDITION_MARGIN_FOR_PLANET,
+        PlanetStaticObject planet = createPlanet(Sizes.PLANET_DIAMETER / 2 + Sizes.ADDITION_MARGIN_FOR_PLANET,
+                Sizes.HALF_FIELD_HEIGHT,
                 mTextureRegionHolderUtils.getElement(StringsAndPath.KEY_BLUE_PLANET),
-                StringsAndPath.KEY_BLUE_PLANET,
-                mFirstTeam
-        ));
-        mFirstTeam.getTeamPlanet().setSpawnPoint(Sizes.PLANET_DIAMETER / 2 + Sizes.UNIT_SIZE + 2,
-                Sizes.GAME_FIELD_HEIGHT / 2 + Sizes.ADDITION_MARGIN_FOR_PLANET);
+                StringsAndPath.KEY_BLUE_PLANET, mFirstTeam);
+        mFirstTeam.setTeamPlanet(planet);
+        mFirstTeam.getTeamPlanet().setSpawnPoint(
+                Sizes.PLANET_DIAMETER + Sizes.ADDITION_MARGIN_FOR_PLANET + Sizes.UNIT_SIZE,
+                planet.getY());
     }
 
     /** create sun */
     protected SunStaticObject createSun() {
-        float x = (Sizes.GAME_FIELD_WIDTH - Sizes.SUN_DIAMETER) / 2;
-        float y = (Sizes.GAME_FIELD_HEIGHT - Sizes.SUN_DIAMETER) / 2;
+        float x = Sizes.HALF_FIELD_WIDTH;
+        float y = Sizes.HALF_FIELD_HEIGHT;
         ITextureRegion textureRegion = mTextureRegionHolderUtils.getElement(StringsAndPath.KEY_SUN);
 
         SunStaticObject sunStaticObject = new SunStaticObject(x, y, textureRegion, mEngine.getVertexBufferObjectManager());
@@ -424,7 +424,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     @SuppressWarnings("unused")
     /** really used by {@link de.greenrobot.event.EventBus} */
     public void onEvent(final AbstractEntityEvent abstractEntityEvent) {
-        final IAreaShape entity = abstractEntityEvent.getEntity();
+        final Shape entity = abstractEntityEvent.getEntity();
         final Scene scene = abstractEntityEvent.hud() ? mCamera.getHUD() : mGameScene;
         if (abstractEntityEvent instanceof DetachEntityEvent) {
             DetachEntityEvent detachEntityEvent = (DetachEntityEvent) abstractEntityEvent;
@@ -437,7 +437,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     }
 
     /** detach entity from scene (hud or game scene) */
-    private void detachEntity(final IAreaShape entity, final Scene scene,
+    private void detachEntity(final Shape entity, final Scene scene,
                               final boolean withBody, final boolean unregisterChildrenTouch) {
         runOnUpdateThread(new Runnable() {
             @Override
@@ -464,7 +464,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     }
 
     /** attach entity to scene (hud or game scene) */
-    private void attachEntity(final IAreaShape entity, final Scene scene, final boolean registerChildrenTouch) {
+    private void attachEntity(final Shape entity, final Scene scene, final boolean registerChildrenTouch) {
         runOnUpdateThread(new Runnable() {
             @Override
             public void run() {
@@ -561,7 +561,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     }
 
     /** attach entity to game scene */
-    private void attachEntity(final IAreaShape entity) {
+    private void attachEntity(final Shape entity) {
         attachEntity(entity, mGameScene, false);
     }
 

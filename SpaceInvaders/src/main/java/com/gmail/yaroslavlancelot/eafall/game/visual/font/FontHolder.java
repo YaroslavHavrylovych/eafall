@@ -11,7 +11,7 @@ import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.font.IFont;
 import org.andengine.opengl.texture.TextureManager;
-import org.andengine.util.color.Color;
+import org.andengine.util.adt.color.Color;
 
 /** Holds all {@link org.andengine.opengl.font.IFont} used in game */
 public class FontHolder extends Holder<IFont> {

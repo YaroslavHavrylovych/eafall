@@ -3,7 +3,7 @@ package com.gmail.yaroslavlancelot.eafall.game.touch;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.ITouchCallback;
-import org.andengine.entity.shape.RectangularShape;
+import org.andengine.entity.shape.Shape;
 import org.andengine.input.touch.TouchEvent;
 
 /** Helping functions to work with touch events */
@@ -46,11 +46,11 @@ public final class StaticHelper {
         /** true if current touch is simple click (just press down and up) */
         private boolean mIsItClickEvent;
         /** used to find out is you move in bounds or not */
-        private RectangularShape mObject;
+        private Shape mObject;
 
 
         /** parameters description you can see in javadoc to fields of this class */
-        public CustomTouchListener(RectangularShape object) {
+        public CustomTouchListener(Shape object) {
             mObject = object;
         }
 

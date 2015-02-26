@@ -10,7 +10,7 @@ import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.color.Color;
+import org.andengine.util.adt.color.Color;
 
 import de.greenrobot.event.EventBus;
 

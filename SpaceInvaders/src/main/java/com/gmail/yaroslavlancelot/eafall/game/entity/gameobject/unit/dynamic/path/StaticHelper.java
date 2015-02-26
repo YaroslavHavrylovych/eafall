@@ -24,15 +24,15 @@ public class StaticHelper {
             Sizes.GAME_FIELD_WIDTH / 2,
             Sizes.GAME_FIELD_WIDTH / 3,
             Sizes.PLANET_DIAMETER / 2};
-    /** unit movement on the top of the screen */
-    private static final float[] yArrayTop = new float[]{
+    /** unit movement on the bottom of the screen */
+    private static final float[] yArrayBottom = new float[]{
             Sizes.GAME_FIELD_HEIGHT / 2 - Sizes.PLANET_DIAMETER / 2,
             Sizes.GAME_FIELD_HEIGHT / 5,
             Sizes.GAME_FIELD_HEIGHT / 10,
             Sizes.GAME_FIELD_HEIGHT / 5,
             Sizes.GAME_FIELD_HEIGHT / 2 - Sizes.PLANET_DIAMETER / 2};
-    /** unit movement on the bottom of the screen */
-    private static final float[] yArrayBottom = new float[]{
+    /** unit movement on the top of the screen */
+    private static final float[] yArrayTop = new float[]{
             Sizes.GAME_FIELD_HEIGHT / 2 + Sizes.PLANET_DIAMETER / 2,
             Sizes.GAME_FIELD_HEIGHT * 4 / 5,
             Sizes.GAME_FIELD_HEIGHT * 9 / 10,

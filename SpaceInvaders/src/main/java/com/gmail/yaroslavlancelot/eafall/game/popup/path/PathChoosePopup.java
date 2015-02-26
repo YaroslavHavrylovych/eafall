@@ -4,13 +4,13 @@ import android.content.Context;
 
 import com.gmail.yaroslavlancelot.eafall.game.constant.Sizes;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringsAndPath;
+import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.ICreepBuilding;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.path.HideUnitPathChooser;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.path.ShowUnitPathChooser;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.ICreepBuilding;
 import com.gmail.yaroslavlancelot.eafall.game.popup.PopupHud;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
 import com.gmail.yaroslavlancelot.eafall.game.touch.StaticHelper;
-import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.CirclePointButton;
 
 import org.andengine.entity.primitive.Rectangle;
@@ -18,7 +18,7 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.color.Color;
+import org.andengine.util.adt.color.Color;
 
 import de.greenrobot.event.EventBus;
 
@@ -32,7 +32,7 @@ public class PathChoosePopup extends PopupHud {
 
     public PathChoosePopup(Scene scene, VertexBufferObjectManager vertexBufferObjectManager) {
         super(scene);
-        mPopupRectangle = new Rectangle(0, 0, Sizes.GAME_FIELD_WIDTH, Sizes.GAME_FIELD_HEIGHT,
+        mPopupRectangle = new Rectangle(Sizes.HALF_FIELD_WIDTH, Sizes.HALF_FIELD_HEIGHT, Sizes.GAME_FIELD_WIDTH, Sizes.GAME_FIELD_HEIGHT,
                 vertexBufferObjectManager);
         mPopupRectangle.setColor(Color.TRANSPARENT);
 
@@ -45,12 +45,8 @@ public class PathChoosePopup extends PopupHud {
 
     private void initCircles(VertexBufferObjectManager vertexBufferObjectManager) {
         //positions
-        mTopCircle = createCircle(Sizes.GAME_FIELD_HEIGHT / 10, vertexBufferObjectManager);
-        mBottomCircle = createCircle(Sizes.GAME_FIELD_HEIGHT * 9 / 10, vertexBufferObjectManager);
-        mTopCircle.setX(mTopCircle.getX() - mTopCircle.getWidth() / 2);
-        mTopCircle.setY(mTopCircle.getY() - mTopCircle.getHeight() / 2);
-        mBottomCircle.setX(mBottomCircle.getX() - mBottomCircle.getWidth() / 2);
-        mBottomCircle.setY(mBottomCircle.getY() - mBottomCircle.getHeight() / 2);
+        mBottomCircle = createCircle(Sizes.GAME_FIELD_HEIGHT / 10, vertexBufferObjectManager);
+        mTopCircle = createCircle(Sizes.GAME_FIELD_HEIGHT * 9 / 10, vertexBufferObjectManager);
         //touch;
         mTopCircle.setTouchCallback(new CircleCustomTouch(mTopCircle, mBottomCircle));
         mBottomCircle.setTouchCallback(new CircleCustomTouch(mBottomCircle, mTopCircle));

@@ -3,12 +3,12 @@ package com.gmail.yaroslavlancelot.eafall.game.popup.construction.item;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.constant.Sizes;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringsAndPath;
+import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.touch.StaticHelper;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 import com.gmail.yaroslavlancelot.eafall.general.locale.LocaleImpl;
-import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 
 import org.andengine.entity.IEntity;
 import org.andengine.entity.sprite.ButtonSprite;
@@ -42,7 +42,7 @@ public class BuildingsPopupItem extends ButtonSprite implements PopupItemFactory
     private BuildingId mBuildingId;
 
     /* popup elements */
-    private Sprite mStaticObject;
+    private Sprite mBuildingSprite;
     private Text mText;
 
     BuildingsPopupItem(float x, float y, VertexBufferObjectManager objectManager) {
@@ -63,23 +63,25 @@ public class BuildingsPopupItem extends ButtonSprite implements PopupItemFactory
 
         // image
         BuildingDummy dummy = AllianceHolder.getRace(raceName).getBuildingDummy(mBuildingId);
-        mStaticObject = new Sprite(Sizes.BUILDING_POPUP_IMAGE_PADDING, Sizes.BUILDING_POPUP_IMAGE_PADDING,
+        mBuildingSprite = new Sprite(Sizes.BUILDING_POPUP_IMAGE_PADDING + ITEM_IMAGE_WIDTH / 2,
+                Sizes.BUILDING_POPUP_ELEMENT_HEIGHT / 2 + Sizes.BUILDING_POPUP_IMAGE_PADDING,
                 ITEM_IMAGE_WIDTH, ITEM_IMAGE_HEIGHT,
                 dummy.getTextureRegionArray(mBuildingId.getUpgrade()),
                 getVertexBufferObjectManager());
-        attachChild(mStaticObject);
+        attachChild(mBuildingSprite);
 
         // text
-        initText(dummy.getStringId(), dummy.getCost(mBuildingId.getUpgrade()));
-        attachChild(mText);
+        attachChild(initText(dummy.getStringId(), dummy.getCost(mBuildingId.getUpgrade())));
     }
 
-    private void initText(int objectNameId, int cost) {
+    private Text initText(int objectNameId, int cost) {
         String textString = sNumberFormat.format(cost) + LocaleImpl.getInstance().getStringById(objectNameId);
         IFont font = FontHolder.getInstance().getElement(FONT);
-        mText = new Text(Sizes.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT,
-                Sizes.BUILDING_POPUP_ELEMENT_HEIGHT + Sizes.BUILDING_POPUP_IMAGE_PADDING - font.getLineHeight(),
+        mText = new Text(0,
+                (Sizes.BUILDING_POPUP_ELEMENT_HEIGHT - Sizes.BUILDING_POPUP_IMAGE_PADDING) - font.getLineHeight() / 2,
                 font, textString, getVertexBufferObjectManager());
+        mText.setX(ITEM_IMAGE_WIDTH + Sizes.BUILDING_POPUP_IMAGE_PADDING * 2 + mText.getWidth() / 2);
+        return mText;
     }
 
     @Override

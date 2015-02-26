@@ -21,12 +21,11 @@ public class MoneyText extends Text {
     private String mTeamName;
 
     public MoneyText(String teamName, String prefix, VertexBufferObjectManager pVertexBufferObjectManager) {
-        super(0, Sizes.MONEY_FONT_SIZE * 2,
+        super(Sizes.HALF_FIELD_WIDTH, Sizes.GAME_FIELD_HEIGHT - Sizes.MONEY_FONT_SIZE * 2 - Sizes.MONEY_FONT_SIZE / 2,
                 FontHolder.getInstance().getElement(StringsAndPath.KEY_FONT_MONEY),
                 generateTextString(prefix, 0), prefix.length() + 6, pVertexBufferObjectManager);
         mMoneyValuePrefix = prefix;
         mTeamName = teamName;
-        setX(Sizes.GAME_FIELD_WIDTH / 2 - getWidth() / 2);
         EventBus.getDefault().register(this);
     }
 
@@ -39,12 +38,6 @@ public class MoneyText extends Text {
     public void onEvent(MoneyUpdatedEvent moneyUpdatedEvent) {
         if (!mTeamName.equals(moneyUpdatedEvent.getTeamName())) return;
         setText(generateTextString(mMoneyValuePrefix, moneyUpdatedEvent.getMoney()));
-    }
-
-    @Override
-    public void setText(CharSequence pText) throws OutOfCharactersException {
-        super.setText(pText);
-        setX(Sizes.GAME_FIELD_WIDTH / 2 - getWidth() / 2);
     }
 
     @SuppressWarnings("unused")
