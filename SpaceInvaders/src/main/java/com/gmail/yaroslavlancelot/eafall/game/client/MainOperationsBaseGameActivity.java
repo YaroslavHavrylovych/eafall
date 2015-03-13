@@ -135,7 +135,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
                 Sizes.GAME_FIELD_WIDTH, Sizes.GAME_FIELD_HEIGHT), mCamera
         );
 
-        mPhysicsWorld = new PhysicsWorld(new Vector2(0, 0), false);
+        mPhysicsWorld = new PhysicsWorld(new Vector2(0, 0), false, 2, 2);
 
         // music
         engineOptions.getAudioOptions().setNeedsMusic(true);
