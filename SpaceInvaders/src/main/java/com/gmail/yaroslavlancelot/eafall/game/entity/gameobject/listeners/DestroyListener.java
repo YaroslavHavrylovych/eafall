@@ -1,7 +1,7 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners;
 
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.DetachEntityEvent;
-import com.gmail.yaroslavlancelot.eafall.game.entity.RectangleWithBody;
+import com.gmail.yaroslavlancelot.eafall.game.entity.BodiedSprite;
+import com.gmail.yaroslavlancelot.eafall.game.eventbus.DetachSpriteEvent;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
 
@@ -22,10 +22,10 @@ public class DestroyListener implements IDestroyListener {
     }
 
     @Override
-    public void objectDestroyed(final RectangleWithBody gameObject) {
+    public void objectDestroyed(final BodiedSprite gameObject) {
         if (gameObject instanceof Unit) {
             mTeam.removeObjectFromTeam((Unit) gameObject);
         }
-        EventBus.getDefault().post(new DetachEntityEvent(gameObject));
+        EventBus.getDefault().post(new DetachSpriteEvent(gameObject));
     }
 }

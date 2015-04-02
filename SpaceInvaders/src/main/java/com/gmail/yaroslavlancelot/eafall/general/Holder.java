@@ -3,6 +3,7 @@ package com.gmail.yaroslavlancelot.eafall.general;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /** {@link java.util.Map} wrapper. Simplified it's usage */
 public abstract class Holder<T> extends SelfCleanable {
@@ -25,9 +26,13 @@ public abstract class Holder<T> extends SelfCleanable {
         return holderMap.values();
     }
 
+    public Set<String> keySet() {
+        return holderMap.keySet();
+    }
+
     /** put object into internal map */
-    public void addElement(String id, T element) {
-        holderMap.put(id, element);
+    public T addElement(String id, T element) {
+        return holderMap.put(id, element);
     }
 
     /**

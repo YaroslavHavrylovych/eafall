@@ -3,7 +3,7 @@ package com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.buildin
 import android.graphics.Color;
 import android.graphics.Typeface;
 
-import com.gmail.yaroslavlancelot.eafall.game.constant.Sizes;
+import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 
 import org.andengine.entity.primitive.Rectangle;
@@ -35,8 +35,8 @@ public class AmountDrawer {
     /** change background size according to text value (new value - new size) */
     private void initBackground() {
         mText.setPosition(0, 0);
-        float width = mText.getWidth() + 2 * Sizes.DESCRIPTION_POPUP_AMOUNT_TEXT_PADDING_HORIZONTAL;
-        float height = mText.getHeight() + 2 * Sizes.DESCRIPTION_POPUP_AMOUNT_TEXT_PADDING_VERTICAL;
+        float width = mText.getWidth() + 2 * SizeConstants.DESCRIPTION_POPUP_AMOUNT_TEXT_PADDING_HORIZONTAL;
+        float height = mText.getHeight() + 2 * SizeConstants.DESCRIPTION_POPUP_AMOUNT_TEXT_PADDING_VERTICAL;
         width = width < height ? height : width;
         mBackground.setWidth(width);
         mBackground.setHeight(height);
@@ -47,7 +47,7 @@ public class AmountDrawer {
         //amount font
         IFont font = FontFactory.create(fontManager, textureManager, 256, 256,
                 Typeface.create(Typeface.DEFAULT, Typeface.BOLD),
-                Sizes.DESCRIPTION_POPUP_AMOUNT_FONT_SIZE, Color.WHITE);
+                SizeConstants.DESCRIPTION_POPUP_AMOUNT_FONT_SIZE, Color.WHITE);
         font.load();
         FontHolder.getInstance().addElement(sAmountFontKey, font);
     }

@@ -3,7 +3,7 @@ package com.gmail.yaroslavlancelot.eafall.game.client.thick;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.client.MainOperationsBaseGameActivity;
 import com.gmail.yaroslavlancelot.eafall.game.constant.CollisionCategories;
-import com.gmail.yaroslavlancelot.eafall.game.constant.Sizes;
+import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
 
@@ -32,16 +32,16 @@ public abstract class ThickClientGameActivity extends MainOperationsBaseGameActi
     private void createBounds() {
         LoggerHelper.methodInvocation(TAG, "createBounds");
         PhysicsFactory.createLineBody(
-                mPhysicsWorld, -1, -1, -1, Sizes.GAME_FIELD_HEIGHT + 1,
+                mPhysicsWorld, -1, -1, -1, SizeConstants.GAME_FIELD_HEIGHT + 1,
                 CollisionCategories.STATIC_BODY_FIXTURE_DEF);
         PhysicsFactory.createLineBody(
-                mPhysicsWorld, -1, -1, Sizes.GAME_FIELD_WIDTH + 1, -1,
+                mPhysicsWorld, -1, -1, SizeConstants.GAME_FIELD_WIDTH + 1, -1,
                 CollisionCategories.STATIC_BODY_FIXTURE_DEF);
         PhysicsFactory.createLineBody(
-                mPhysicsWorld, Sizes.GAME_FIELD_WIDTH + 1, -1, Sizes.GAME_FIELD_WIDTH + 1,
-                Sizes.GAME_FIELD_WIDTH + 1, CollisionCategories.STATIC_BODY_FIXTURE_DEF);
-        PhysicsFactory.createLineBody(mPhysicsWorld, Sizes.GAME_FIELD_WIDTH + 1,
-                Sizes.GAME_FIELD_HEIGHT + 1, -1, Sizes.GAME_FIELD_HEIGHT + 1,
+                mPhysicsWorld, SizeConstants.GAME_FIELD_WIDTH + 1, -1, SizeConstants.GAME_FIELD_WIDTH + 1,
+                SizeConstants.GAME_FIELD_WIDTH + 1, CollisionCategories.STATIC_BODY_FIXTURE_DEF);
+        PhysicsFactory.createLineBody(mPhysicsWorld, SizeConstants.GAME_FIELD_WIDTH + 1,
+                SizeConstants.GAME_FIELD_HEIGHT + 1, -1, SizeConstants.GAME_FIELD_HEIGHT + 1,
                 CollisionCategories.STATIC_BODY_FIXTURE_DEF);
     }
 

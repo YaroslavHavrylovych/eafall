@@ -2,7 +2,7 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.gmail.yaroslavlancelot.eafall.game.constant.Sizes;
+import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.Bullet;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IVelocityListener;
@@ -72,7 +72,7 @@ public class MovableUnit extends Unit {
     @Override
     protected void setBulletFirePosition(GameObject attackedObject, Bullet bullet) {
         Vector2 objectPosition = getBody().getPosition();
-        bullet.fireFromPosition(objectPosition.x + Sizes.UNIT_SIZE / 2 / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
+        bullet.fireFromPosition(objectPosition.x + SizeConstants.UNIT_SIZE / 2 / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
                 objectPosition.y - Bullet.BULLET_SIZE / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
                 attackedObject);
     }

@@ -1,19 +1,26 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject;
 
-import org.andengine.entity.IEntity;
-import org.andengine.entity.primitive.Rectangle;
+import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
+import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
+import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
+import com.gmail.yaroslavlancelot.eafall.game.entity.BatchedSprite;
+import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
+
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.adt.color.Color;
 
 public class HealthBar {
-    public static final int HEALTH_BAR_HEIGHT = 3;
-    private Rectangle mHealthBarRectangle;
-    private float mHealthBarWidth = 16;
+    private BatchedSprite mHealthBarRectangle;
+    private float mHealthBarWidth = SizeConstants.UNIT_SIZE;
 
     public HealthBar(VertexBufferObjectManager vertexBufferObjectManager, float healthBarWidth) {
         setHealthBarWidth(healthBarWidth);
-        mHealthBarRectangle = new Rectangle(0, 0, mHealthBarWidth, HEALTH_BAR_HEIGHT, vertexBufferObjectManager);
-        mHealthBarRectangle.setColor(Color.GREEN);
+        //create health bar sprite
+        mHealthBarRectangle = new BatchedSprite(0, 0,
+                mHealthBarWidth, SizeConstants.HEALTH_BAR_HEIGHT,
+                TextureRegionHolder.getInstance().getElement(StringConstants.FILE_HEALTH_BAR),
+                vertexBufferObjectManager);
+        mHealthBarRectangle.setSpriteGroupName(BatchingKeys.BULLET_HEALTH_TEAM_COLOR);
     }
 
     private void setHealthBarWidth(float healthBarWidth) {
@@ -21,10 +28,11 @@ public class HealthBar {
     }
 
     public void setPosition(float x, float y) {
-        mHealthBarRectangle.setPosition(x, y);
+        mHealthBarRectangle.setPosition(x + mHealthBarRectangle.getWidth() / 2,
+                y + mHealthBarRectangle.getHeight() / 2);
     }
 
-    public IEntity getHealthBar() {
+    public Sprite getHealthBarSprite() {
         return mHealthBarRectangle;
     }
 
@@ -34,6 +42,5 @@ public class HealthBar {
 
     private void redrawHealthBar(int healthMax, int actualHealth, float healthBarWidth) {
         mHealthBarRectangle.setWidth(healthBarWidth * actualHealth / healthMax);
-        mHealthBarRectangle.setX(mHealthBarRectangle.getWidth() / 2);
     }
 }

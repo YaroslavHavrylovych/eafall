@@ -1,11 +1,12 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic;
 
-import com.gmail.yaroslavlancelot.eafall.game.constant.StringsAndPath;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitBuilder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.loader.UnitLoader;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.pool.MovableUnitsPool;
 import com.gmail.yaroslavlancelot.eafall.game.sound.SoundOperations;
 
+import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /**
@@ -25,25 +26,21 @@ public class MovableUnitDummy extends UnitDummy {
     @Override
     public void initDummy(VertexBufferObjectManager objectManager, SoundOperations soundOperations, String allianceName) {
         /* for unit creation */
-        mPool = new MovableUnitsPool(initBuilder(objectManager, soundOperations, allianceName));
+        mPool = new MovableUnitsPool(
+                (MovableUnitBuilder) initBuilder(objectManager, soundOperations, allianceName));
     }
 
     /** create and return movable unit builder */
-    private MovableUnitBuilder initBuilder(VertexBufferObjectManager objectManager, SoundOperations soundOperations, String allianceName) {
-        MovableUnitBuilder unitBuilder = new MovableUnitBuilder(mTextureRegion, soundOperations, objectManager);
+    protected UnitBuilder initBuilder(VertexBufferObjectManager objectManager, SoundOperations soundOperations, String allianceName) {
+        return ((MovableUnitBuilder) super.initBuilder(objectManager, soundOperations, allianceName))
+                .setSpeed(getSpeed());
+    }
 
-        unitBuilder.setSpeed(getSpeed())
-                .setHealth(getHealth())
-                .setViewRadius(mUnitLoader.view_radius)
-                .setAttackRadius(mUnitLoader.attack_radius)
-                .setReloadTime(mUnitLoader.reload_time)
-                .setSoundPath(StringsAndPath.getPathToSounds(allianceName.toLowerCase()) + mUnitLoader.sound)
-                .setDamage(getDamage())
-                .setWidth(getWidth())
-                .setHeight(getHeight())
-                .setArmor(getArmor());
-
-        return unitBuilder;
+    @Override
+    protected UnitBuilder createUnitBuilder(ITextureRegion textureRegion,
+                                            SoundOperations soundOperations,
+                                            VertexBufferObjectManager objectManager) {
+        return new MovableUnitBuilder(textureRegion, soundOperations, objectManager);
     }
 
     public float getSpeed() {

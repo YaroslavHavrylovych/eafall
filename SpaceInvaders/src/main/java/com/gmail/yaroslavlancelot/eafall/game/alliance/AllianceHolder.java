@@ -34,7 +34,8 @@ public class AllianceHolder extends Holder<IAlliance> {
      * @param soundOperations SoundOperations
      */
     public static void addAllianceByName(String name,
-                                         final VertexBufferObjectManager objectManager, final SoundOperations soundOperations) {
+                                         final VertexBufferObjectManager objectManager, 
+                                         final SoundOperations soundOperations) {
         IAlliance alliance;
         if (name.equals(Imperials.ALLIANCE_NAME)) {
             alliance = new Imperials(objectManager, soundOperations);

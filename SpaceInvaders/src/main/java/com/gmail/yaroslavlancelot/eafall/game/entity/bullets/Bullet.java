@@ -3,25 +3,29 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.bullets;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.gmail.yaroslavlancelot.eafall.game.constant.Sizes;
-import com.gmail.yaroslavlancelot.eafall.game.entity.RectangleWithBody;
+import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
+import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
+import com.gmail.yaroslavlancelot.eafall.game.entity.BodiedSprite;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path.StaticHelper;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.AttachEntityEvent;
+import com.gmail.yaroslavlancelot.eafall.game.eventbus.AttachSpriteEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.CreatePhysicBodyEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.RunOnUpdateThreadEvent;
 
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
+import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.adt.color.Color;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import de.greenrobot.event.EventBus;
 
-public class Bullet extends RectangleWithBody implements RunOnUpdateThreadEvent.UpdateThreadRunnable {
+/**
+ * Bullet
+ */
+public class Bullet extends BodiedSprite implements RunOnUpdateThreadEvent.UpdateThreadRunnable {
     /** bullet size in points */
     public static final int BULLET_SIZE = 3;
     private static final BodyDef.BodyType sBulletBodyType = BodyDef.BodyType.DynamicBody;
@@ -54,13 +58,17 @@ public class Bullet extends RectangleWithBody implements RunOnUpdateThreadEvent.
     /** bullet damage value */
     private Damage mDamage;
 
-    Bullet(VertexBufferObjectManager vertexBufferObjectManager) {
-        super(-100, -100, BULLET_SIZE, BULLET_SIZE, vertexBufferObjectManager);
-        mIsObjectAlive = new AtomicBoolean(true);
+    public Bullet(ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
+        this(BULLET_SIZE, BULLET_SIZE, textureRegion, vertexBufferObjectManager);
     }
 
-    public void init(Color color, Damage damage, FixtureDef fixtureDef) {
-        setColor(color);
+    public Bullet(int width, int height, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
+        super(-100, -100, width, height, textureRegion, vertexBufferObjectManager);
+        mIsObjectAlive = new AtomicBoolean(true);
+        setSpriteGroupName(BatchingKeys.BULLET_HEALTH_TEAM_COLOR);
+    }
+
+    public void init(Damage damage, FixtureDef fixtureDef) {
         synchronized (mIsObjectAlive) {
             mDamage = damage;
             mBulletFixtureDef = fixtureDef;
@@ -71,11 +79,12 @@ public class Bullet extends RectangleWithBody implements RunOnUpdateThreadEvent.
         return mIsObjectAlive.getAndSet(false);
     }
 
-    public void fireFromPosition(float x, float y, RectangleWithBody gameObject) {
+    public void fireFromPosition(float x, float y, BodiedSprite gameObject) {
         Vector2 target = gameObject.getBody().getPosition();
         float goalX = target.x, goalY = target.y;
+        setPosition(x, y);
         if (mPhysicBody == null) {
-            EventBus.getDefault().post(new AttachEntityEvent(this));
+            EventBus.getDefault().post(new AttachSpriteEvent(this));
             EventBus.getDefault().post(new CreatePhysicBodyEvent(this, sBulletBodyType, mBulletFixtureDef, x, y, 0));
             mPhysicBody.setActive(false);
             mPhysicBody.setBullet(true);
@@ -102,7 +111,7 @@ public class Bullet extends RectangleWithBody implements RunOnUpdateThreadEvent.
     }
 
     protected boolean isBulletOutOfRange() {
-        return getX() < 0 || getY() < 0 || getX() > Sizes.GAME_FIELD_WIDTH || getY() > Sizes.GAME_FIELD_HEIGHT ||
+        return getX() < 0 || getY() < 0 || getX() > SizeConstants.GAME_FIELD_WIDTH || getY() > SizeConstants.GAME_FIELD_HEIGHT ||
                 StaticHelper.getDistanceBetweenPoints(getX(), getY(), mBulletStartX, mBulletStartY) > mMaxBulletFlyDistance;
     }
 

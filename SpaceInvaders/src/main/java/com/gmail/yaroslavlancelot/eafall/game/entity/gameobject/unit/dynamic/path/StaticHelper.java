@@ -1,6 +1,6 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path;
 
-import com.gmail.yaroslavlancelot.eafall.game.constant.Sizes;
+import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 
 /** Common operation with unit path */
 public class StaticHelper {
@@ -12,32 +12,32 @@ public class StaticHelper {
     public static final float MIN_DISTANCE_TO_SWITCH_TO_ANOTHER_POINT = 60;
     /** left to right unit movement */
     private static final float[] xArrayForward = new float[]{
-            Sizes.PLANET_DIAMETER,
-            Sizes.GAME_FIELD_WIDTH / 3,
-            Sizes.GAME_FIELD_WIDTH / 2,
-            Sizes.GAME_FIELD_WIDTH - Sizes.GAME_FIELD_WIDTH / 3,
-            Sizes.GAME_FIELD_WIDTH - Sizes.PLANET_DIAMETER / 2};
+            SizeConstants.PLANET_DIAMETER,
+            SizeConstants.GAME_FIELD_WIDTH / 3,
+            SizeConstants.GAME_FIELD_WIDTH / 2,
+            SizeConstants.GAME_FIELD_WIDTH - SizeConstants.GAME_FIELD_WIDTH / 3,
+            SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER / 2};
     /** right to left unit movement */
     private static final float[] xArrayBackward = new float[]{
-            Sizes.GAME_FIELD_WIDTH - Sizes.PLANET_DIAMETER / 2,
-            Sizes.GAME_FIELD_WIDTH - Sizes.GAME_FIELD_WIDTH / 3,
-            Sizes.GAME_FIELD_WIDTH / 2,
-            Sizes.GAME_FIELD_WIDTH / 3,
-            Sizes.PLANET_DIAMETER / 2};
+            SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER / 2,
+            SizeConstants.GAME_FIELD_WIDTH - SizeConstants.GAME_FIELD_WIDTH / 3,
+            SizeConstants.GAME_FIELD_WIDTH / 2,
+            SizeConstants.GAME_FIELD_WIDTH / 3,
+            SizeConstants.PLANET_DIAMETER / 2};
     /** unit movement on the bottom of the screen */
     private static final float[] yArrayBottom = new float[]{
-            Sizes.GAME_FIELD_HEIGHT / 2 - Sizes.PLANET_DIAMETER / 2,
-            Sizes.GAME_FIELD_HEIGHT / 5,
-            Sizes.GAME_FIELD_HEIGHT / 10,
-            Sizes.GAME_FIELD_HEIGHT / 5,
-            Sizes.GAME_FIELD_HEIGHT / 2 - Sizes.PLANET_DIAMETER / 2};
+            SizeConstants.GAME_FIELD_HEIGHT / 2 - SizeConstants.PLANET_DIAMETER / 2,
+            SizeConstants.GAME_FIELD_HEIGHT / 5,
+            SizeConstants.GAME_FIELD_HEIGHT / 10,
+            SizeConstants.GAME_FIELD_HEIGHT / 5,
+            SizeConstants.GAME_FIELD_HEIGHT / 2 - SizeConstants.PLANET_DIAMETER / 2};
     /** unit movement on the top of the screen */
     private static final float[] yArrayTop = new float[]{
-            Sizes.GAME_FIELD_HEIGHT / 2 + Sizes.PLANET_DIAMETER / 2,
-            Sizes.GAME_FIELD_HEIGHT * 4 / 5,
-            Sizes.GAME_FIELD_HEIGHT * 9 / 10,
-            Sizes.GAME_FIELD_HEIGHT * 4 / 5,
-            Sizes.GAME_FIELD_HEIGHT / 2 + Sizes.PLANET_DIAMETER / 2};
+            SizeConstants.GAME_FIELD_HEIGHT / 2 + SizeConstants.PLANET_DIAMETER / 2,
+            SizeConstants.GAME_FIELD_HEIGHT * 4 / 5,
+            SizeConstants.GAME_FIELD_HEIGHT * 9 / 10,
+            SizeConstants.GAME_FIELD_HEIGHT * 4 / 5,
+            SizeConstants.GAME_FIELD_HEIGHT / 2 + SizeConstants.PLANET_DIAMETER / 2};
 
     private StaticHelper() {
     }

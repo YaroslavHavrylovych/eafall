@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 
-import com.gmail.yaroslavlancelot.eafall.game.constant.StringsAndPath;
+import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 
@@ -31,7 +31,7 @@ public class TextButton extends ButtonSprite {
 
     public TextButton(VertexBufferObjectManager vertexBufferObjectManager, float width, float height, float x, float y) {
         super(x, y,
-                (ITiledTextureRegion) TextureRegionHolder.getInstance().getElement(StringsAndPath.FILE_GAME_BUTTON),
+                (ITiledTextureRegion) TextureRegionHolder.getInstance().getElement(StringConstants.FILE_GAME_BUTTON),
                 vertexBufferObjectManager);
         setWidth(width);
         setHeight(height);
@@ -44,7 +44,7 @@ public class TextButton extends ButtonSprite {
     public static void loadResources(Context context, TextureManager textureManager) {
         BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 400, 100, TextureOptions.BILINEAR);
         TextureRegionHolder.addTiledElementFromAssets(
-                StringsAndPath.FILE_GAME_BUTTON, smallObjectTexture, context, 0, 0, 2, 1);
+                StringConstants.FILE_GAME_BUTTON, smallObjectTexture, context, 0, 0, 2, 1);
         smallObjectTexture.load();
     }
 

@@ -11,7 +11,7 @@ import com.gmail.yaroslavlancelot.eafall.android.activities.BaseNonGameActivity;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.imperials.Imperials;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.rebels.Rebels;
 import com.gmail.yaroslavlancelot.eafall.game.client.thick.server.ServerGameActivity;
-import com.gmail.yaroslavlancelot.eafall.game.constant.StringsAndPath;
+import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.eafall.network.server.GameSocketServer;
 import com.gmail.yaroslavlancelot.eafall.network.server.callbacks.PreGameStartServer;
@@ -80,10 +80,10 @@ public class ServerGameCreationActivity extends BaseNonGameActivity implements P
                 mGameSocketServer = null;
                 Intent startServerIntent = new Intent(ServerGameCreationActivity.this, ServerGameActivity.class);
                 startServerIntent.
-                        putExtra(StringsAndPath.SECOND_TEAM_CONTROL_BEHAVIOUR_TYPE, TeamControlBehaviourType.REMOTE_CONTROL_ON_SERVER_SIDE.toString()).
-                        putExtra(StringsAndPath.SECOND_TEAM_ALLIANCE, Rebels.ALLIANCE_NAME).
-                        putExtra(StringsAndPath.FIRST_TEAM_ALLIANCE, Imperials.ALLIANCE_NAME).
-                        putExtra(StringsAndPath.FIRST_TEAM_CONTROL_BEHAVIOUR_TYPE, TeamControlBehaviourType.USER_CONTROL_ON_SERVER_SIDE.toString());
+                        putExtra(StringConstants.SECOND_TEAM_CONTROL_BEHAVIOUR_TYPE, TeamControlBehaviourType.REMOTE_CONTROL_ON_SERVER_SIDE.toString()).
+                        putExtra(StringConstants.SECOND_TEAM_ALLIANCE, Rebels.ALLIANCE_NAME).
+                        putExtra(StringConstants.FIRST_TEAM_ALLIANCE, Imperials.ALLIANCE_NAME).
+                        putExtra(StringConstants.FIRST_TEAM_CONTROL_BEHAVIOUR_TYPE, TeamControlBehaviourType.USER_CONTROL_ON_SERVER_SIDE.toString());
                 startActivity(startServerIntent);
             }
         });

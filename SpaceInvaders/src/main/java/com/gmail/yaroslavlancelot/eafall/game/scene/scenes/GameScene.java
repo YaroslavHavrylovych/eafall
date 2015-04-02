@@ -1,27 +1,20 @@
 package com.gmail.yaroslavlancelot.eafall.game.scene.scenes;
 
-import android.content.Context;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
 
-import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
-import com.gmail.yaroslavlancelot.eafall.game.constant.Sizes;
-import com.gmail.yaroslavlancelot.eafall.game.constant.StringsAndPath;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetStaticObject;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.SunStaticObject;
-import com.gmail.yaroslavlancelot.eafall.game.touch.GameSceneTouchListener;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
-import com.gmail.yaroslavlancelot.eafall.game.sound.MusicAndSoundsHandler;
+import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
+import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
+import com.gmail.yaroslavlancelot.eafall.game.sound.MusicAndSoundsHandler;
+import com.gmail.yaroslavlancelot.eafall.game.touch.GameSceneTouchListener;
 
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.opengl.texture.TextureManager;
-import org.andengine.opengl.texture.TextureOptions;
-import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /**
@@ -33,29 +26,12 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
  */
 public class GameScene extends Scene {
     private static final String TAG = GameScene.class.getCanonicalName();
-    private static String mBackgroundImagePath = StringsAndPath.getPathToGeneralImages() + "background.png";
 
     /** set background image to the scene */
     public GameScene(VertexBufferObjectManager vertexBufferObjectManager) {
-        setBackground(new SpriteBackground(new Sprite(Sizes.HALF_FIELD_WIDTH, Sizes.HALF_FIELD_HEIGHT,
-                TextureRegionHolder.getInstance().getElement(mBackgroundImagePath),
+        setBackground(new SpriteBackground(new Sprite(SizeConstants.HALF_FIELD_WIDTH, SizeConstants.HALF_FIELD_HEIGHT,
+                TextureRegionHolder.getInstance().getElement(StringConstants.FILE_BACKGROUND),
                 vertexBufferObjectManager)));
-    }
-
-    /** loads game scene background */
-    public static void loadImages(TextureManager textureManager) {
-        BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager,
-                Sizes.GAME_FIELD_WIDTH, Sizes.GAME_FIELD_HEIGHT, TextureOptions.BILINEAR);
-        TextureRegionHolder.addElementFromAssets(mBackgroundImagePath,
-                smallObjectTexture, EaFallApplication.getContext(), 0, 0);
-        smallObjectTexture.load();
-    }
-
-    public static void loadResources(Context context, TextureManager textureManager) {
-        LoggerHelper.methodInvocation(TAG, "loadResources");
-        SunStaticObject.loadImages(context, textureManager);
-        PlanetStaticObject.loadImages(context, textureManager);
-        GameScene.loadImages(textureManager);
     }
 
     /** init scene touch events so user can collaborate with game by screen touches */
@@ -77,7 +53,7 @@ public class GameScene extends Scene {
         Display display = windowManager.getDefaultDisplay();
         DisplayMetrics metrics = new DisplayMetrics();
         display.getMetrics(metrics);
-        float screenToSceneRatio = metrics.widthPixels / Sizes.GAME_FIELD_WIDTH;
+        float screenToSceneRatio = metrics.widthPixels / SizeConstants.GAME_FIELD_WIDTH;
         /* main scene touch listener */
         GameSceneTouchListener gameSceneTouchListener = new GameSceneTouchListener(smoothCamera, screenToSceneRatio);
         setOnSceneTouchListener(gameSceneTouchListener);

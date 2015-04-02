@@ -3,7 +3,7 @@ package com.gmail.yaroslavlancelot.eafall.game.visual.text;
 import android.graphics.Color;
 import android.graphics.Typeface;
 
-import com.gmail.yaroslavlancelot.eafall.game.constant.Sizes;
+import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.touch.StaticHelper;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 
@@ -16,7 +16,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 /** used in description popup */
 public class Link extends RecenterText {
     private final static String sFontSizeKey = "link_phont_size_key";
-    private final static int sFontSize = Sizes.DESCRIPTION_POPUP_TEXT_SIZE;
+    private final static int sFontSize = SizeConstants.DESCRIPTION_POPUP_TEXT_SIZE;
     private volatile StaticHelper.OnClickListener mOnClickListener;
 
     public Link(float x, float y, VertexBufferObjectManager vertexBufferObjectManager) {

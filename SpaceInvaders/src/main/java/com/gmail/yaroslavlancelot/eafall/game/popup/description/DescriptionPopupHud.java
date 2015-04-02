@@ -2,7 +2,7 @@ package com.gmail.yaroslavlancelot.eafall.game.popup.description;
 
 import android.content.Context;
 
-import com.gmail.yaroslavlancelot.eafall.game.constant.Sizes;
+import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.description.BuildingDescriptionShowEvent;
@@ -59,8 +59,8 @@ public class DescriptionPopupHud extends PopupHud {
      */
     public DescriptionPopupHud(Scene scene, VertexBufferObjectManager vertexBufferObjectManager) {
         super(scene);
-        mPopupRectangle = new Rectangle(Sizes.DESCRIPTION_POPUP_WIDTH / 2, Sizes.DESCRIPTION_POPUP_HEIGHT / 2,
-                Sizes.GAME_FIELD_WIDTH, Sizes.DESCRIPTION_POPUP_HEIGHT, vertexBufferObjectManager);
+        mPopupRectangle = new Rectangle(SizeConstants.DESCRIPTION_POPUP_WIDTH / 2, SizeConstants.DESCRIPTION_POPUP_HEIGHT / 2,
+                SizeConstants.GAME_FIELD_WIDTH, SizeConstants.DESCRIPTION_POPUP_HEIGHT, vertexBufferObjectManager);
         mPopupRectangle.setColor(Color.TRANSPARENT);
 
         mCreepBuildingPopupUpdater = new CreepBuildingPopupUpdater(vertexBufferObjectManager, this);
