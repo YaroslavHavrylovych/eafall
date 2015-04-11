@@ -4,8 +4,8 @@ import android.content.Context;
 import android.util.SparseArray;
 
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
-import com.gmail.yaroslavlancelot.eafall.game.constant.Sizes;
-import com.gmail.yaroslavlancelot.eafall.game.constant.StringsAndPath;
+import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
+import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.description.BuildingDescriptionShowEvent;
@@ -42,13 +42,13 @@ public class BuildingsPopupHud extends PopupHud {
         int buildingsAmount = team.getTeamRace().getBuildingsAmount();
 
         mPopupRectangle = new Rectangle(0, 0,
-                Sizes.BUILDING_POPUP_BACKGROUND_ITEM_WIDTH,
-                Sizes.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT * buildingsAmount,
+                SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_WIDTH,
+                SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT * buildingsAmount,
                 vertexBufferObjectManager);
 
         mTeamName = team.getTeamName();
         initBuildingPopupForTeam(mTeamName);
-        mPopupRectangle.setX(Sizes.HALF_FIELD_WIDTH);
+        mPopupRectangle.setX(SizeConstants.HALF_FIELD_WIDTH);
         mPopupRectangle.setY(mPopupRectangle.getHeight() / 2);
     }
 
@@ -86,8 +86,8 @@ public class BuildingsPopupHud extends PopupHud {
     private IEntity constructPopupItem(int id, int position, final BuildingId buildingId, String raceName) {
         PopupItemFactory.BuildingPopupItem item = PopupItemFactory.createBuildingPopupItem(
                 mPopupRectangle.getWidth() / 2,
-                position * Sizes.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT
-                        + Sizes.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT / 2,
+                position * SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT
+                        + SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT / 2,
                 mPopupRectangle.getVertexBufferObjectManager());
         item.setBuildingId(buildingId, raceName);
         item.setOnClickListener(new StaticHelper.OnClickListener() {
@@ -104,7 +104,7 @@ public class BuildingsPopupHud extends PopupHud {
     public static void loadResource(Context context, TextureManager textureManager) {
         BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 1200, 100, TextureOptions.BILINEAR);
         TextureRegionHolder.addTiledElementFromAssets(
-                StringsAndPath.FILE_POPUP_BACKGROUND_ITEM, smallObjectTexture, context, 0, 0, 2, 1);
+                StringConstants.FILE_POPUP_BACKGROUND_ITEM, smallObjectTexture, context, 0, 0, 2, 1);
         smallObjectTexture.load();
     }
 

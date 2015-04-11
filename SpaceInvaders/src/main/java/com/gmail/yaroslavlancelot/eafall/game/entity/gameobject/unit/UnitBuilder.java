@@ -1,5 +1,6 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit;
 
+import com.gmail.yaroslavlancelot.eafall.game.entity.Area;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage;
 import com.gmail.yaroslavlancelot.eafall.game.sound.SoundOperations;
@@ -25,6 +26,7 @@ public abstract class UnitBuilder {
     protected String mSoundPath;
     protected int mWidth;
     protected int mHeight;
+    private Area mTeamColorArea;
 
     public UnitBuilder(ITextureRegion textureRegion, SoundOperations soundOperations, VertexBufferObjectManager objectManager) {
         mTextureRegion = textureRegion;
@@ -122,6 +124,15 @@ public abstract class UnitBuilder {
 
     public UnitBuilder setHeight(int height) {
         mHeight = height;
+        return this;
+    }
+
+    public Area getTeamColorArea() {
+        return mTeamColorArea;
+    }
+
+    public UnitBuilder setTeamColorArea(Area teamColorArea) {
+        mTeamColorArea = teamColorArea;
         return this;
     }
 }

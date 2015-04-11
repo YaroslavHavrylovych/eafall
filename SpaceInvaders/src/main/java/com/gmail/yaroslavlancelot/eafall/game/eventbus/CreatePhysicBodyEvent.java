@@ -3,12 +3,12 @@ package com.gmail.yaroslavlancelot.eafall.game.eventbus;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.eafall.game.constant.CollisionCategories;
-import com.gmail.yaroslavlancelot.eafall.game.entity.RectangleWithBody;
+import com.gmail.yaroslavlancelot.eafall.game.entity.BodiedSprite;
 
 /** holds data needed for registering body in PhysicWorld */
 public class CreatePhysicBodyEvent {
     /** game object body for which needs to be created */
-    private RectangleWithBody mGameObject;
+    private BodiedSprite mGameObject;
     /** body type (is it static or dynamic or kinematic) */
     private BodyDef.BodyType mBodyType;
     /** body fixture definition (define collaborations with other bodies) */
@@ -19,17 +19,17 @@ public class CreatePhysicBodyEvent {
     private boolean mIsCustomBodyTransform;
 
     /** used for registering static circle body */
-    public CreatePhysicBodyEvent(RectangleWithBody gameObject) {
+    public CreatePhysicBodyEvent(BodiedSprite gameObject) {
         this(gameObject, BodyDef.BodyType.StaticBody, CollisionCategories.STATIC_BODY_FIXTURE_DEF);
     }
 
-    public CreatePhysicBodyEvent(RectangleWithBody gameObject, BodyDef.BodyType bodyType, FixtureDef fixtureDef) {
+    public CreatePhysicBodyEvent(BodiedSprite gameObject, BodyDef.BodyType bodyType, FixtureDef fixtureDef) {
         mGameObject = gameObject;
         mBodyType = bodyType;
         mFixtureDef = fixtureDef;
     }
 
-    public CreatePhysicBodyEvent(RectangleWithBody gameObject, BodyDef.BodyType bodyType, FixtureDef fixtureDef, float x, float y, float angle) {
+    public CreatePhysicBodyEvent(BodiedSprite gameObject, BodyDef.BodyType bodyType, FixtureDef fixtureDef, float x, float y, float angle) {
         this(gameObject, bodyType, fixtureDef);
         mX = x;
         mY = y;
@@ -37,7 +37,7 @@ public class CreatePhysicBodyEvent {
         mIsCustomBodyTransform = true;
     }
 
-    public RectangleWithBody getGameObject() {
+    public BodiedSprite getGameObject() {
         return mGameObject;
     }
 

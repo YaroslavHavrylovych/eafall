@@ -25,9 +25,9 @@ public class SceneManager {
     /**
      * Constructs SceneManager using engine and game activity
      *
-     * @param gameActivity      any instance of game activity
+     * @param gameActivity any instance of game activity
      */
-    public SceneManager(MainOperationsBaseGameActivity gameActivity){
+    public SceneManager(MainOperationsBaseGameActivity gameActivity) {
         mGameActivity = gameActivity;
     }
 
@@ -55,10 +55,9 @@ public class SceneManager {
      * @return instance of SplashScene
      */
     public GameScene createGameScene(SmoothCamera smoothCamera) {
-        //game scene
         mGameScene = new GameScene(mGameActivity.getVertexBufferObjectManager());
         mGameScene.initGameSceneTouch(
-                mGameActivity.getWindowManager(), smoothCamera, mGameActivity.getmMusicAndSoundsHandler());
+                mGameActivity.getWindowManager(), smoothCamera, mGameActivity.getMusicAndSoundsHandler());
         return mGameScene;
     }
 
@@ -77,7 +76,7 @@ public class SceneManager {
      * @throws IllegalStateException if splash scene or game scene have not been created yet
      */
     public void replaceSplashSceneWithGame() {
-        if (mSplashScene == null || mGameScene == null){
+        if (mSplashScene == null || mGameScene == null) {
             throw new IllegalStateException("mSplashScene or mGameScene have not been initialized");
         }
         mSplashScene.detachSelf();

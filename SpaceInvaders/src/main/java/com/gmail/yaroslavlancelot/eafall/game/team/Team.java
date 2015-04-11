@@ -51,7 +51,7 @@ public class Team implements ITeam {
     private ArrayList<Bonus> mUnitBonuses = new ArrayList<Bonus>(2);
 
     public Team(final String teamName, IAlliance teamRace, TeamControlBehaviourType teamType) {
-        mTeamObjects = new ArrayList<GameObject>(20);
+        mTeamObjects = new ArrayList<GameObject>(50);
         mTeamName = teamName;
         mTeamRace = teamRace;
         initBuildingsTypes(teamRace);

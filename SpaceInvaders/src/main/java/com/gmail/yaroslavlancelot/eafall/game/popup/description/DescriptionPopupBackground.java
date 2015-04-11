@@ -3,8 +3,8 @@ package com.gmail.yaroslavlancelot.eafall.game.popup.description;
 import android.content.Context;
 import android.graphics.Typeface;
 
-import com.gmail.yaroslavlancelot.eafall.game.constant.Sizes;
-import com.gmail.yaroslavlancelot.eafall.game.constant.StringsAndPath;
+import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
+import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.IPopupUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
@@ -48,7 +48,7 @@ public class DescriptionPopupBackground extends Sprite {
     //
     DescriptionPopupBackground(float width, float height, VertexBufferObjectManager vertexBufferObjectManager) {
         super(width / 2, height / 2, width, height,
-                TextureRegionHolder.getInstance().getElement(StringsAndPath.FILE_DESCRIPTION_POPUP_BACKGROUND),
+                TextureRegionHolder.getInstance().getElement(StringConstants.FILE_DESCRIPTION_POPUP_BACKGROUND),
                 vertexBufferObjectManager);
 
         initAreas();
@@ -61,26 +61,26 @@ public class DescriptionPopupBackground extends Sprite {
      */
     private void initAreas() {
         // descript image area
-        int padding = Sizes.DESCRIPTION_POPUP_PADDING;
-        int size = Sizes.DESCRIPTION_POPUP_HEIGHT - 2 * padding;
+        int padding = SizeConstants.DESCRIPTION_POPUP_PADDING;
+        int size = SizeConstants.DESCRIPTION_POPUP_HEIGHT - 2 * padding;
         mImageShape = new Rectangle(padding + size / 2, padding + size / 2, size, size, getVertexBufferObjectManager());
         mImageShape.setColor(Color.TRANSPARENT);
         attachChild(mImageShape);
         // addition information area
-        int paddingX = Sizes.DESCRIPTION_POPUP_WIDTH
-                - Sizes.DESCRIPTION_POPUP_ADDITIONAL_AREA_WIDTH / 2
-                - Sizes.DESCRIPTION_POPUP_PADDING;
-        int paddingY = Sizes.DESCRIPTION_POPUP_ADDITIONAL_AREA_HEIGHT / 2 + Sizes.DESCRIPTION_POPUP_PADDING;
+        int paddingX = SizeConstants.DESCRIPTION_POPUP_WIDTH
+                - SizeConstants.DESCRIPTION_POPUP_ADDITIONAL_AREA_WIDTH / 2
+                - SizeConstants.DESCRIPTION_POPUP_PADDING;
+        int paddingY = SizeConstants.DESCRIPTION_POPUP_ADDITIONAL_AREA_HEIGHT / 2 + SizeConstants.DESCRIPTION_POPUP_PADDING;
         mAdditionalInformationShape = new Rectangle(paddingX, paddingY,
-                Sizes.DESCRIPTION_POPUP_ADDITIONAL_AREA_WIDTH,
-                Sizes.DESCRIPTION_POPUP_ADDITIONAL_AREA_HEIGHT, getVertexBufferObjectManager());
+                SizeConstants.DESCRIPTION_POPUP_ADDITIONAL_AREA_WIDTH,
+                SizeConstants.DESCRIPTION_POPUP_ADDITIONAL_AREA_HEIGHT, getVertexBufferObjectManager());
         mAdditionalInformationShape.setColor(Color.TRANSPARENT);
         attachChild(mAdditionalInformationShape);
         // init described object name text
         initObjectNameText(padding);
         // object description area
-        int height = Sizes.DESCRIPTION_POPUP_DESCRIPTION_AREA_HEIGHT;
-        float width = Sizes.DESCRIPTION_POPUP_WIDTH - mAdditionalInformationShape.getWidth()
+        int height = SizeConstants.DESCRIPTION_POPUP_DESCRIPTION_AREA_HEIGHT;
+        float width = SizeConstants.DESCRIPTION_POPUP_WIDTH - mAdditionalInformationShape.getWidth()
                 - mImageShape.getWidth() - 4 * padding;
         mDescriptionShape = new Rectangle(mImageShape.getWidth() + 2 * padding + width / 2,
                 padding + height / 2,
@@ -91,7 +91,7 @@ public class DescriptionPopupBackground extends Sprite {
 
     private void initObjectNameText(int padding) {
         IFont font = FontHolder.getInstance().getElement(sDescriptionFontKey);
-        mObjectNameText = new Text(0, Sizes.DESCRIPTION_POPUP_HEIGHT - padding,
+        mObjectNameText = new Text(0, SizeConstants.DESCRIPTION_POPUP_HEIGHT - padding,
                 font, "", 20, getVertexBufferObjectManager());
         attachChild(mObjectNameText);
     }
@@ -99,7 +99,7 @@ public class DescriptionPopupBackground extends Sprite {
     public static void loadResources(Context context, TextureManager textureManager) {
         //background
         BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 1920, 540, TextureOptions.BILINEAR);
-        TextureRegionHolder.addElementFromAssets(StringsAndPath.FILE_DESCRIPTION_POPUP_BACKGROUND, smallObjectTexture, context, 0, 0);
+        TextureRegionHolder.addElementFromAssets(StringConstants.FILE_DESCRIPTION_POPUP_BACKGROUND, smallObjectTexture, context, 0, 0);
         smallObjectTexture.load();
     }
 
@@ -107,7 +107,7 @@ public class DescriptionPopupBackground extends Sprite {
         //described object name font
         IFont font = FontFactory.create(fontManager, textureManager, 512, 256,
                 Typeface.create(Typeface.DEFAULT, Typeface.BOLD),
-                Sizes.DESCRIPTION_POPUP_TITLE_SIZE, Color.BLUE.getABGRPackedInt());
+                SizeConstants.DESCRIPTION_POPUP_TITLE_SIZE, Color.BLUE.getABGRPackedInt());
         font.load();
         FontHolder.getInstance().addElement(sDescriptionFontKey, font);
     }

@@ -1,6 +1,6 @@
 package com.gmail.yaroslavlancelot.eafall.game.popup.description.updater;
 
-import com.gmail.yaroslavlancelot.eafall.game.constant.Sizes;
+import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.DescriptionText;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.Link;
 import com.gmail.yaroslavlancelot.eafall.general.locale.LocaleImpl;
@@ -64,7 +64,7 @@ public abstract class BaseDescriptionAreaUpdater implements IPopupUpdater.IDescr
         int fontHeight = DescriptionText.sFontSize + mBetweenDescriptionLinesSpace,
                 halfFontHeight = fontHeight / 2;
         return createDescriptionText(0,
-                Sizes.DESCRIPTION_POPUP_DESCRIPTION_AREA_HEIGHT -
+                SizeConstants.DESCRIPTION_POPUP_DESCRIPTION_AREA_HEIGHT -
                         halfFontHeight - position * fontHeight,
                 LocaleImpl.getInstance().getStringById(stringId), objectManager);
     }

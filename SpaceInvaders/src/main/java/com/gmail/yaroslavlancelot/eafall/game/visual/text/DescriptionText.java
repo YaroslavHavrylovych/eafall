@@ -3,10 +3,9 @@ package com.gmail.yaroslavlancelot.eafall.game.visual.text;
 import android.graphics.Color;
 import android.graphics.Typeface;
 
-import com.gmail.yaroslavlancelot.eafall.game.constant.Sizes;
+import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 
-import org.andengine.entity.text.Text;
 import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.font.FontUtils;
@@ -16,7 +15,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /** text used in description popup */
 public class DescriptionText extends RecenterText {
-    public final static int sFontSize = Sizes.DESCRIPTION_POPUP_TEXT_SIZE;
+    public final static int sFontSize = SizeConstants.DESCRIPTION_POPUP_TEXT_SIZE;
     private final static String sFontSizeKey = "description_text_font_size_key";
 
     public DescriptionText(float x, float y, VertexBufferObjectManager vertexBufferObjectManager) {

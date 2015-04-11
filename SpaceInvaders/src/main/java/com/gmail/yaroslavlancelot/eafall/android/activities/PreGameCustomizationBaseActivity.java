@@ -10,7 +10,7 @@ import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.mutants.Mutants;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.imperials.Imperials;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.rebels.Rebels;
-import com.gmail.yaroslavlancelot.eafall.game.constant.StringsAndPath;
+import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamControlBehaviourType;
 
 /**
@@ -54,10 +54,10 @@ public abstract class PreGameCustomizationBaseActivity extends BaseNonGameActivi
                 Intent singleGameIntent = new Intent(PreGameCustomizationBaseActivity.this, activityToStartClass);
 
                 singleGameIntent.
-                        putExtra(StringsAndPath.FIRST_TEAM_CONTROL_BEHAVIOUR_TYPE, team1.toString()).
-                        putExtra(StringsAndPath.FIRST_TEAM_ALLIANCE, getAllianceName(mAlliance1)).
-                        putExtra(StringsAndPath.SECOND_TEAM_CONTROL_BEHAVIOUR_TYPE, team2.toString()).
-                        putExtra(StringsAndPath.SECOND_TEAM_ALLIANCE, getAllianceName(mAlliance2));
+                        putExtra(StringConstants.FIRST_TEAM_CONTROL_BEHAVIOUR_TYPE, team1.toString()).
+                        putExtra(StringConstants.FIRST_TEAM_ALLIANCE, getAllianceName(mAlliance1)).
+                        putExtra(StringConstants.SECOND_TEAM_CONTROL_BEHAVIOUR_TYPE, team2.toString()).
+                        putExtra(StringConstants.SECOND_TEAM_ALLIANCE, getAllianceName(mAlliance2));
                 ;
                 startActivity(singleGameIntent);
             }

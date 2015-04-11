@@ -1,5 +1,6 @@
 package com.gmail.yaroslavlancelot.eafall.game.client.thin;
 
+import com.badlogic.gdx.physics.box2d.Body;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.client.MainOperationsBaseGameActivity;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
@@ -89,7 +90,8 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
                 }
                 MovableUnit unit = (MovableUnit) gameObject;
                 if (!gameObject.isObjectAlive()) return;
-                unit.setUnitPosition(x, y);
+                Body body = unit.getBody();
+                body.setTransform(x, y, 0);
                 unit.rotate(rotation);
                 unit.setUnitLinearVelocity(velocityX, velocityY);
             }

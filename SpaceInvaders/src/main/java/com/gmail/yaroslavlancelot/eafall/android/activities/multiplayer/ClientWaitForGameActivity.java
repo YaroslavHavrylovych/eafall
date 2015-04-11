@@ -10,7 +10,7 @@ import com.gmail.yaroslavlancelot.eafall.android.activities.BaseNonGameActivity;
 import com.gmail.yaroslavlancelot.eafall.game.client.thin.ClientGameActivity;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.imperials.Imperials;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.rebels.Rebels;
-import com.gmail.yaroslavlancelot.eafall.game.constant.StringsAndPath;
+import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.eafall.network.client.callbacks.PreGameStartClient;
 import com.gmail.yaroslavlancelot.eafall.network.client.connector.GameServerConnector;
@@ -47,10 +47,10 @@ public class ClientWaitForGameActivity extends BaseNonGameActivity implements Pr
         GameServerConnector.getGameServerConnector().removePreGameStartCallback(this);
         Intent clientGameIntent = new Intent(ClientWaitForGameActivity.this, ClientGameActivity.class);
         clientGameIntent.
-                putExtra(StringsAndPath.SECOND_TEAM_CONTROL_BEHAVIOUR_TYPE, TeamControlBehaviourType.USER_CONTROL_ON_CLIENT_SIDE.toString()).
-                putExtra(StringsAndPath.SECOND_TEAM_ALLIANCE, Rebels.ALLIANCE_NAME).
-                putExtra(StringsAndPath.FIRST_TEAM_ALLIANCE, Imperials.ALLIANCE_NAME).
-                putExtra(StringsAndPath.FIRST_TEAM_CONTROL_BEHAVIOUR_TYPE, TeamControlBehaviourType.REMOTE_CONTROL_ON_CLIENT_SIDE.toString());
+                putExtra(StringConstants.SECOND_TEAM_CONTROL_BEHAVIOUR_TYPE, TeamControlBehaviourType.USER_CONTROL_ON_CLIENT_SIDE.toString()).
+                putExtra(StringConstants.SECOND_TEAM_ALLIANCE, Rebels.ALLIANCE_NAME).
+                putExtra(StringConstants.FIRST_TEAM_ALLIANCE, Imperials.ALLIANCE_NAME).
+                putExtra(StringConstants.FIRST_TEAM_CONTROL_BEHAVIOUR_TYPE, TeamControlBehaviourType.REMOTE_CONTROL_ON_CLIENT_SIDE.toString());
         startActivity(clientGameIntent);
     }
 

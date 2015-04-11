@@ -1,14 +1,13 @@
 package com.gmail.yaroslavlancelot.eafall.game.visual.text;
 
-import com.gmail.yaroslavlancelot.eafall.game.constant.Sizes;
-import com.gmail.yaroslavlancelot.eafall.game.constant.StringsAndPath;
+import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
+import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.money.MoneyUpdatedEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.path.HideUnitPathChooser;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.path.ShowUnitPathChooser;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 
 import org.andengine.entity.text.Text;
-import org.andengine.entity.text.exception.OutOfCharactersException;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import de.greenrobot.event.EventBus;
@@ -21,8 +20,8 @@ public class MoneyText extends Text {
     private String mTeamName;
 
     public MoneyText(String teamName, String prefix, VertexBufferObjectManager pVertexBufferObjectManager) {
-        super(Sizes.HALF_FIELD_WIDTH, Sizes.GAME_FIELD_HEIGHT - Sizes.MONEY_FONT_SIZE * 2 - Sizes.MONEY_FONT_SIZE / 2,
-                FontHolder.getInstance().getElement(StringsAndPath.KEY_FONT_MONEY),
+        super(SizeConstants.HALF_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.MONEY_FONT_SIZE * 2 - SizeConstants.MONEY_FONT_SIZE / 2,
+                FontHolder.getInstance().getElement(StringConstants.KEY_FONT_MONEY),
                 generateTextString(prefix, 0), prefix.length() + 6, pVertexBufferObjectManager);
         mMoneyValuePrefix = prefix;
         mTeamName = teamName;

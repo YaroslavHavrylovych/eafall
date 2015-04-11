@@ -2,18 +2,20 @@ package com.gmail.yaroslavlancelot.eafall.game.entity;
 
 import com.badlogic.gdx.physics.box2d.Body;
 
-import org.andengine.entity.primitive.Rectangle;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
+import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /** extends rectangle to have physic body */
-public abstract class RectangleWithBody extends Rectangle {
+public abstract class BodiedSprite extends BatchedSprite {
     /** physics body associated with current object {@link org.andengine.entity.sprite.Sprite} */
     protected volatile Body mPhysicBody;
 
-    protected RectangleWithBody(float pX, float pY, float pWidth, float pHeight, VertexBufferObjectManager pVertexBufferObjectManager) {
-        super(pX, pY, pWidth, pHeight, pVertexBufferObjectManager);
+    protected BodiedSprite(float pX, float pY, float pWidth, float pHeight,
+                           ITextureRegion textureRegion,
+                           VertexBufferObjectManager pVertexBufferObjectManager) {
+        super(pX, pY, pWidth, pHeight, textureRegion, pVertexBufferObjectManager);
     }
 
     public Body getBody() {
@@ -30,14 +32,6 @@ public abstract class RectangleWithBody extends Rectangle {
         mPhysicBody.setUserData(this);
     }
 
-    private Body removeBody() {
-        if (mPhysicBody == null) return null;
-        Body body = mPhysicBody;
-        mPhysicBody = null;
-        body.setUserData(null);
-        return body;
-    }
-
     public synchronized void removeBody(PhysicsWorld physicsWorld) {
         Body body = removeBody();
         if (body == null) return;
@@ -48,5 +42,13 @@ public abstract class RectangleWithBody extends Rectangle {
         }
         body.setActive(false);
         physicsWorld.destroyBody(body);
+    }
+
+    private Body removeBody() {
+        if (mPhysicBody == null) return null;
+        Body body = mPhysicBody;
+        mPhysicBody = null;
+        body.setUserData(null);
+        return body;
     }
 }

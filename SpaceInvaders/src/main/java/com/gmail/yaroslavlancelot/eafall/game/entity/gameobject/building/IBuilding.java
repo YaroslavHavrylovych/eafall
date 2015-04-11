@@ -27,4 +27,10 @@ public interface IBuilding {
 
     /** upgrade all buildings of the current type */
     boolean upgradeBuilding();
+
+    /** get building abscissa on the planet (starting from the planet bottom left) */
+    float getX();
+
+    /** get building ordinate on the planet (starting from the planet bottom left) */
+    float getY();
 }

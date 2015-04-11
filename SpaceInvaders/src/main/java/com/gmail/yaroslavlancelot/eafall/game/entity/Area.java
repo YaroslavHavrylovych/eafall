@@ -1,4 +1,4 @@
-package org.andengine.entity.shape;
+package com.gmail.yaroslavlancelot.eafall.game.entity;
 
 import java.util.WeakHashMap;
 

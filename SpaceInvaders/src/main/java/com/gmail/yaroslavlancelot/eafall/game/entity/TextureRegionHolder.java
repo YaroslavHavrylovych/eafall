@@ -25,9 +25,14 @@ public class TextureRegionHolder extends Holder<ITextureRegion> {
      * @param x            x position to which texture should be loadGeneralGameTextures
      * @param y            y position to which texture should be loadGeneralGameTextures
      */
-    public static void addElementFromAssets(String key, BitmapTextureAtlas textureAtlas, Context context, int x, int y) {
-        if (!sTextureRegionHolderUtils.isElementExist(key))
-            sTextureRegionHolderUtils.addElement(key, BitmapTextureAtlasTextureRegionFactory.createFromAsset(textureAtlas, context, key, x, y));
+    public static ITextureRegion addElementFromAssets(String key, BitmapTextureAtlas textureAtlas, Context context, int x, int y) {
+        if (!sTextureRegionHolderUtils.isElementExist(key)) {
+            return 
+                    sTextureRegionHolderUtils.addElement(key, 
+                            BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+                                    textureAtlas, context, key, x, y));
+        }
+        return sTextureRegionHolderUtils.getElement(key);
     }
 
     /**
@@ -44,6 +49,10 @@ public class TextureRegionHolder extends Holder<ITextureRegion> {
     public static void addTiledElementFromAssets(String key, BitmapTextureAtlas textureAtlas, Context context, int x, int y, int columns, int rows) {
         if (!sTextureRegionHolderUtils.isElementExist(key))
             sTextureRegionHolderUtils.addElement(key, BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(textureAtlas, context, key, x, y, columns, rows));
+    }
+
+    public static ITextureRegion getRegion(String key) {
+        return getInstance().getElement(key);
     }
 
     /** return {@link TextureRegionHolder} object */

@@ -2,8 +2,8 @@ package com.gmail.yaroslavlancelot.eafall.game.popup.path;
 
 import android.content.Context;
 
-import com.gmail.yaroslavlancelot.eafall.game.constant.Sizes;
-import com.gmail.yaroslavlancelot.eafall.game.constant.StringsAndPath;
+import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
+import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.ICreepBuilding;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.path.HideUnitPathChooser;
@@ -32,7 +32,7 @@ public class PathChoosePopup extends PopupHud {
 
     public PathChoosePopup(Scene scene, VertexBufferObjectManager vertexBufferObjectManager) {
         super(scene);
-        mPopupRectangle = new Rectangle(Sizes.HALF_FIELD_WIDTH, Sizes.HALF_FIELD_HEIGHT, Sizes.GAME_FIELD_WIDTH, Sizes.GAME_FIELD_HEIGHT,
+        mPopupRectangle = new Rectangle(SizeConstants.HALF_FIELD_WIDTH, SizeConstants.HALF_FIELD_HEIGHT, SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT,
                 vertexBufferObjectManager);
         mPopupRectangle.setColor(Color.TRANSPARENT);
 
@@ -45,16 +45,16 @@ public class PathChoosePopup extends PopupHud {
 
     private void initCircles(VertexBufferObjectManager vertexBufferObjectManager) {
         //positions
-        mBottomCircle = createCircle(Sizes.GAME_FIELD_HEIGHT / 10, vertexBufferObjectManager);
-        mTopCircle = createCircle(Sizes.GAME_FIELD_HEIGHT * 9 / 10, vertexBufferObjectManager);
+        mBottomCircle = createCircle(SizeConstants.GAME_FIELD_HEIGHT / 10, vertexBufferObjectManager);
+        mTopCircle = createCircle(SizeConstants.GAME_FIELD_HEIGHT * 9 / 10, vertexBufferObjectManager);
         //touch;
         mTopCircle.setTouchCallback(new CircleCustomTouch(mTopCircle, mBottomCircle));
         mBottomCircle.setTouchCallback(new CircleCustomTouch(mBottomCircle, mTopCircle));
     }
 
     private CirclePointButton createCircle(float y, VertexBufferObjectManager vertexBufferObjectManager) {
-        return new CirclePointButton(Sizes.GAME_FIELD_WIDTH / 2, y,
-                (ITiledTextureRegion) TextureRegionHolder.getInstance().getElement(StringsAndPath.FILE_CIRCLE_POINT),
+        return new CirclePointButton(SizeConstants.GAME_FIELD_WIDTH / 2, y,
+                (ITiledTextureRegion) TextureRegionHolder.getInstance().getElement(StringConstants.FILE_CIRCLE_POINT),
                 vertexBufferObjectManager);
     }
 
