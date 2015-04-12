@@ -5,7 +5,7 @@ import org.andengine.opengl.texture.ITexture;
 /**
  * (c) 2010 Nicolas Gramlich
  * (c) 2011 Zynga Inc.
- * 
+ *
  * @author Nicolas Gramlich
  * @since 14:29:59 - 08.03.2010
  */
@@ -55,14 +55,11 @@ public class TextureRegion extends BaseTextureRegion {
 		this.mTextureX = pTextureX;
 		this.mTextureY = pTextureY;
 
-		if(pRotated) {
-			this.mRotated = true;
-
+		this.mRotated = pRotated;
+		if (this.mRotated) {
 			this.mTextureWidth = pTextureHeight;
 			this.mTextureHeight = pTextureWidth;
 		} else {
-			this.mRotated = false;
-
 			this.mTextureWidth = pTextureWidth;
 			this.mTextureHeight = pTextureHeight;
 		}
@@ -74,7 +71,7 @@ public class TextureRegion extends BaseTextureRegion {
 
 	@Override
 	public TextureRegion deepCopy() {
-		if(this.mRotated) {
+		if (this.mRotated) {
 			return new TextureRegion(this.mTexture, this.mTextureX, this.mTextureY, this.mTextureHeight, this.mTextureWidth, this.mScale, this.mRotated);
 		} else {
 			return new TextureRegion(this.mTexture, this.mTextureX, this.mTextureY, this.mTextureWidth, this.mTextureHeight, this.mScale, this.mRotated);
@@ -119,7 +116,7 @@ public class TextureRegion extends BaseTextureRegion {
 
 	@Override
 	public float getWidth() {
-		if(this.mRotated) {
+		if (this.mRotated) {
 			return this.mTextureHeight * this.mScale;
 		} else {
 			return this.mTextureWidth * this.mScale;
@@ -128,7 +125,7 @@ public class TextureRegion extends BaseTextureRegion {
 
 	@Override
 	public float getHeight() {
-		if(this.mRotated) {
+		if (this.mRotated) {
 			return this.mTextureWidth * this.mScale;
 		} else {
 			return this.mTextureHeight * this.mScale;

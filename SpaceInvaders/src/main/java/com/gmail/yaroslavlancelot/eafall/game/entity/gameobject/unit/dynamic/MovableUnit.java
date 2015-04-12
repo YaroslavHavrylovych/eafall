@@ -2,7 +2,7 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.gmail.yaroslavlancelot.eafall.game.constant.Sizes;
+import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.Bullet;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IVelocityListener;
@@ -48,26 +48,49 @@ public class MovableUnit extends Unit {
         mMaxVelocity = unitBuilder.getSpeed();
     }
 
+    @Override
+    protected void onNegativeHealth() {
+        removeBonuses();
+        super.onNegativeHealth();
+    }
+
+    @Override
+    public BodyDef.BodyType getBodyType() {
+        return sBodyType;
+    }
+
+    @Override
     public void registerUpdateHandler() {
         registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new SimpleUnitTimerCallback()));
     }
 
     @Override
     protected void rotationBeforeFire(GameObject attackedObject) {
-        rotate(MathUtils.radToDeg(getDirection(attackedObject.getCenterX(), attackedObject.getCenterY())));
+        rotate(MathUtils.radToDeg(getDirection(attackedObject.getX(), attackedObject.getY())));
     }
 
     @Override
     protected void setBulletFirePosition(GameObject attackedObject, Bullet bullet) {
         Vector2 objectPosition = getBody().getPosition();
-        bullet.fireFromPosition(objectPosition.x + Sizes.UNIT_SIZE / 2 / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
+        bullet.fireFromPosition(objectPosition.x + SizeConstants.UNIT_SIZE / 2 / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
                 objectPosition.y - Bullet.BULLET_SIZE / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
                 attackedObject);
     }
 
+    /** remove all bonus from the unit */
+    public void removeBonuses() {
+        synchronized (mBonuses) {
+            mBonuses.clear();
+        }
+    }
+
     @Override
-    public BodyDef.BodyType getBodyType() {
-        return sBodyType;
+    public void setUnitLinearVelocity(float x, float y) {
+        super.setUnitLinearVelocity(x, y);
+
+        if (mVelocityChangedListener != null) {
+            mVelocityChangedListener.velocityChanged(MovableUnit.this);
+        }
     }
 
     public int getChanceToAvoidAnAttack() {
@@ -132,15 +155,6 @@ public class MovableUnit extends Unit {
         mVelocityChangedListener = velocityChangedListener;
     }
 
-    @Override
-    public void setUnitLinearVelocity(float x, float y) {
-        super.setUnitLinearVelocity(x, y);
-
-        if (mVelocityChangedListener != null) {
-            mVelocityChangedListener.velocityChanged(MovableUnit.this);
-        }
-    }
-
     /** used for update current object in game loop */
     protected class SimpleUnitTimerCallback implements ITimerCallback {
         private float[] mTwoDimensionFloatArray = new float[2];
@@ -155,7 +169,7 @@ public class MovableUnit extends Unit {
             // check for units to attack
             if (mObjectToAttack != null && mObjectToAttack != mEnemiesUpdater.getMainTarget() &&
                     mObjectToAttack.isObjectAlive() && StaticHelper.getDistanceBetweenPoints(getX(), getY(),
-                    mObjectToAttack.getCenterX(), mObjectToAttack.getCenterY()) < mViewRadius) {
+                    mObjectToAttack.getX(), mObjectToAttack.getY()) < mViewRadius) {
                 attackOrMove();
                 return;
             } else {
@@ -193,8 +207,8 @@ public class MovableUnit extends Unit {
          */
         private void attackOrMove() {
             // check if we already can attack
-            float distanceToTarget = StaticHelper.getDistanceBetweenPoints(getCenterX(), getCenterY(),
-                    mObjectToAttack.getCenterX(), mObjectToAttack.getCenterY())
+            float distanceToTarget = StaticHelper.getDistanceBetweenPoints(getX(), getY(),
+                    mObjectToAttack.getX(), mObjectToAttack.getY())
                     //minus both objects radius to have distance between objects corners
                     //instead of distance between centers
                     - mObjectToAttack.getWidth() / 2
@@ -205,7 +219,7 @@ public class MovableUnit extends Unit {
                 setUnitLinearVelocity(0, 0);
             } else {
                 // pursuit attacked unit
-                moveToPoint(mObjectToAttack.getCenterX(), mObjectToAttack.getCenterY());
+                moveToPoint(mObjectToAttack.getX(), mObjectToAttack.getY());
             }
         }
 

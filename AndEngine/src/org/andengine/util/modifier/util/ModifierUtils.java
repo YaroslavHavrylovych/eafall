@@ -3,13 +3,13 @@ package org.andengine.util.modifier.util;
 import org.andengine.util.modifier.IModifier;
 
 /**
- * (c) 2010 Nicolas Gramlich 
+ * (c) 2010 Nicolas Gramlich
  * (c) 2011 Zynga Inc.
- * 
+ *
  * @author Nicolas Gramlich
  * @since 11:16:36 - 03.09.2010
  */
-public class ModifierUtils {
+public final class ModifierUtils {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -21,6 +21,10 @@ public class ModifierUtils {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
+
+	private ModifierUtils() {
+
+	}
 
 	// ===========================================================
 	// Getter & Setter
@@ -34,10 +38,10 @@ public class ModifierUtils {
 	// Methods
 	// ===========================================================
 
-	public static float getSequenceDurationOfModifier(final IModifier<?>[] pModifiers){
+	public static float getSequenceDurationOfModifier(final IModifier<?>[] pModifiers) {
 		float duration = Float.MIN_VALUE;
 
-		for(int i = pModifiers.length - 1; i >= 0; i--) {
+		for (int i = pModifiers.length - 1; i >= 0; i--) {
 			duration += pModifiers[i].getDuration();
 		}
 

@@ -3,7 +3,7 @@ package org.andengine.entity.modifier;
 import org.andengine.util.modifier.ease.IEaseFunction;
 
 /**
- * (c) Zynga 2012
+ * (c) 2012 Zynga Inc.
  *
  * @author Nicolas Gramlich <ngramlich@zynga.com>
  * @since 11:51:22 - 21.03.2012
@@ -53,7 +53,7 @@ public class CatmullRomSplineMoveModifier extends CardinalSplineMoveModifier {
 	// Inner and Anonymous Classes
 	// ===========================================================
 
-	public class CatmullRomMoveModifierConfig extends CardinalSplineMoveModifierConfig {
+	public static class CatmullRomMoveModifierConfig extends CardinalSplineMoveModifierConfig {
 		// ===========================================================
 		// Constants
 		// ===========================================================

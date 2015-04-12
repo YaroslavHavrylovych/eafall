@@ -15,6 +15,10 @@ public abstract class StaticObject extends GameObject {
     public StaticObject(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
         super(x, y, textureRegion, vertexBufferObjectManager);
     }
+    
+    public StaticObject(float x, float y, float width ,float height, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
+        super(x, y, width, height, textureRegion, vertexBufferObjectManager);
+    }
 
     public int getIncome() {
         return mIncomeIncreasingValue;

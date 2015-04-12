@@ -1,5 +1,7 @@
 package org.andengine.ui.activity;
 
+import java.io.IOException;
+
 import org.andengine.BuildConfig;
 import org.andengine.audio.music.MusicManager;
 import org.andengine.audio.sound.SoundManager;
@@ -39,7 +41,7 @@ import android.widget.FrameLayout.LayoutParams;
 /**
  * (c) 2010 Nicolas Gramlich
  * (c) 2011 Zynga Inc.
- * 
+ *
  * @author Nicolas Gramlich
  * @since 11:27:06 - 08.03.2010
  */
@@ -69,7 +71,7 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 
 	@Override
 	protected void onCreate(final Bundle pSavedInstanceState) {
-		if(BuildConfig.DEBUG) {
+		if (BuildConfig.DEBUG) {
 			Debug.d(this.getClass().getSimpleName() + ".onCreate" + " @(Thread: '" + Thread.currentThread().getName() + "')");
 		}
 
@@ -92,18 +94,18 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 
 	@Override
 	public synchronized void onSurfaceCreated(final GLState pGLState) {
-		if(BuildConfig.DEBUG) {
+		if (BuildConfig.DEBUG) {
 			Debug.d(this.getClass().getSimpleName() + ".onSurfaceCreated" + " @(Thread: '" + Thread.currentThread().getName() + "')");
 		}
 
-		if(this.mGameCreated) {
+		if (this.mGameCreated) {
 			this.onReloadResources();
 
-			if(this.mGamePaused && this.mGameCreated) {
+			if (this.mGamePaused && this.mGameCreated && !this.isFinishing()) {
 				this.onResumeGame();
 			}
 		} else {
-			if(this.mCreateGameCalled) {
+			if (this.mCreateGameCalled) {
 				this.mOnReloadResourcesScheduled = true;
 			} else {
 				this.mCreateGameCalled = true;
@@ -114,13 +116,13 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 
 	@Override
 	public synchronized void onSurfaceChanged(final GLState pGLState, final int pWidth, final int pHeight) {
-		if(BuildConfig.DEBUG) {
-			Debug.d(this.getClass().getSimpleName() + ".onSurfaceChanged(Width=" + pWidth + ",  Height=" + pHeight + ")" + " @(Thread: '" + Thread.currentThread().getName() + "')");
+		if (BuildConfig.DEBUG) {
+			Debug.d(this.getClass().getSimpleName() + ".onSurfaceChanged(Width=" + pWidth + ", Height=" + pHeight + ")" + " @(Thread: '" + Thread.currentThread().getName() + "')");
 		}
 	}
 
 	protected synchronized void onCreateGame() {
-		if(BuildConfig.DEBUG) {
+		if (BuildConfig.DEBUG) {
 			Debug.d(this.getClass().getSimpleName() + ".onCreateGame" + " @(Thread: '" + Thread.currentThread().getName() + "')");
 		}
 
@@ -128,7 +130,7 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 			@Override
 			public void onPopulateSceneFinished() {
 				try {
-					if(BuildConfig.DEBUG) {
+					if (BuildConfig.DEBUG) {
 						Debug.d(BaseGameActivity.this.getClass().getSimpleName() + ".onGameCreated" + " @(Thread: '" + Thread.currentThread().getName() + "')");
 					}
 
@@ -147,7 +149,7 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 				BaseGameActivity.this.mEngine.setScene(pScene);
 
 				try {
-					if(BuildConfig.DEBUG) {
+					if (BuildConfig.DEBUG) {
 						Debug.d(BaseGameActivity.this.getClass().getSimpleName() + ".onPopulateScene" + " @(Thread: '" + Thread.currentThread().getName() + "')");
 					}
 
@@ -162,7 +164,7 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 			@Override
 			public void onCreateResourcesFinished() {
 				try {
-					if(BuildConfig.DEBUG) {
+					if (BuildConfig.DEBUG) {
 						Debug.d(BaseGameActivity.this.getClass().getSimpleName() + ".onCreateScene" + " @(Thread: '" + Thread.currentThread().getName() + "')");
 					}
 
@@ -174,7 +176,7 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 		};
 
 		try {
-			if(BuildConfig.DEBUG) {
+			if (BuildConfig.DEBUG) {
 				Debug.d(this.getClass().getSimpleName() + ".onCreateResources" + " @(Thread: '" + Thread.currentThread().getName() + "')");
 			}
 
@@ -191,7 +193,7 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 		/* Since the potential asynchronous resource creation,
 		 * the surface might already be invalid
 		 * and a resource reloading might be necessary. */
-		if(this.mOnReloadResourcesScheduled) {
+		if (this.mOnReloadResourcesScheduled) {
 			this.mOnReloadResourcesScheduled = false;
 			try {
 				this.onReloadResources();
@@ -203,7 +205,7 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 
 	@Override
 	protected synchronized void onResume() {
-		if(BuildConfig.DEBUG) {
+		if (BuildConfig.DEBUG) {
 			Debug.d(this.getClass().getSimpleName() + ".onResume" + " @(Thread: '" + Thread.currentThread().getName() + "')");
 		}
 
@@ -215,7 +217,7 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 
 	@Override
 	public synchronized void onResumeGame() {
-		if(BuildConfig.DEBUG) {
+		if (BuildConfig.DEBUG) {
 			Debug.d(this.getClass().getSimpleName() + ".onResumeGame" + " @(Thread: '" + Thread.currentThread().getName() + "')");
 		}
 
@@ -228,14 +230,14 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 	public synchronized void onWindowFocusChanged(final boolean pHasWindowFocus) {
 		super.onWindowFocusChanged(pHasWindowFocus);
 
-		if(pHasWindowFocus && this.mGamePaused && this.mGameCreated) {
+		if (pHasWindowFocus && this.mGamePaused && this.mGameCreated && !this.isFinishing()) {
 			this.onResumeGame();
 		}
 	}
 
 	@Override
 	public void onReloadResources() {
-		if(BuildConfig.DEBUG) {
+		if (BuildConfig.DEBUG) {
 			Debug.d(this.getClass().getSimpleName() + ".onReloadResources" + " @(Thread: '" + Thread.currentThread().getName() + "')");
 		}
 
@@ -244,7 +246,7 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 
 	@Override
 	protected void onPause() {
-		if(BuildConfig.DEBUG) {
+		if (BuildConfig.DEBUG) {
 			Debug.d(this.getClass().getSimpleName() + ".onPause" + " @(Thread: '" + Thread.currentThread().getName() + "')");
 		}
 
@@ -253,14 +255,14 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 		this.mRenderSurfaceView.onPause();
 		this.releaseWakeLock();
 
-		if(!this.mGamePaused) {
+		if (!this.mGamePaused) {
 			this.onPauseGame();
 		}
 	}
 
 	@Override
 	public synchronized void onPauseGame() {
-		if(BuildConfig.DEBUG) {
+		if (BuildConfig.DEBUG) {
 			Debug.d(this.getClass().getSimpleName() + ".onPauseGame" + " @(Thread: '" + Thread.currentThread().getName() + "')");
 		}
 
@@ -271,7 +273,7 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 
 	@Override
 	protected void onDestroy() {
-		if(BuildConfig.DEBUG) {
+		if (BuildConfig.DEBUG) {
 			Debug.d(this.getClass().getSimpleName() + ".onDestroy" + " @(Thread: '" + Thread.currentThread().getName() + "')");
 		}
 
@@ -291,23 +293,23 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 	}
 
 	@Override
-	public void onDestroyResources() throws Exception {
-		if(BuildConfig.DEBUG) {
+	public void onDestroyResources() throws IOException {
+		if (BuildConfig.DEBUG) {
 			Debug.d(this.getClass().getSimpleName() + ".onDestroyResources" + " @(Thread: '" + Thread.currentThread().getName() + "')");
 		}
 
-		if(this.mEngine.getEngineOptions().getAudioOptions().needsMusic()) {
+		if (this.mEngine.getEngineOptions().getAudioOptions().needsMusic()) {
 			this.getMusicManager().releaseAll();
 		}
 
-		if(this.mEngine.getEngineOptions().getAudioOptions().needsSound()) {
+		if (this.mEngine.getEngineOptions().getAudioOptions().needsSound()) {
 			this.getSoundManager().releaseAll();
 		}
 	}
 
 	@Override
 	public synchronized void onGameDestroyed() {
-		if(BuildConfig.DEBUG) {
+		if (BuildConfig.DEBUG) {
 			Debug.d(this.getClass().getSimpleName() + ".onGameDestroyed" + " @(Thread: '" + Thread.currentThread().getName() + "')");
 		}
 
@@ -370,7 +372,9 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 		BaseGameActivity.this.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				BaseGameActivity.this.onResumeGame();
+				if (!BaseGameActivity.this.isFinishing()) {
+					BaseGameActivity.this.onResumeGame();
+				}
 			}
 		});
 	}
@@ -401,7 +405,7 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 	}
 
 	private void acquireWakeLock(final WakeLockOptions pWakeLockOptions) {
-		if(pWakeLockOptions == WakeLockOptions.SCREEN_ON) {
+		if (pWakeLockOptions == WakeLockOptions.SCREEN_ON) {
 			ActivityUtils.keepScreenOn(this);
 		} else {
 			final PowerManager pm = (PowerManager) this.getSystemService(Context.POWER_SERVICE);
@@ -415,7 +419,7 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 	}
 
 	private void releaseWakeLock() {
-		if(this.mWakeLock != null && this.mWakeLock.isHeld()) {
+		if (this.mWakeLock != null && this.mWakeLock.isHeld()) {
 			this.mWakeLock.release();
 		}
 	}
@@ -423,20 +427,20 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 	private void applyEngineOptions() {
 		final EngineOptions engineOptions = this.mEngine.getEngineOptions();
 
-		if(engineOptions.isFullscreen()) {
+		if (engineOptions.isFullscreen()) {
 			ActivityUtils.requestFullscreen(this);
 		}
 
-		if(engineOptions.getAudioOptions().needsMusic() || engineOptions.getAudioOptions().needsSound()) {
+		if (engineOptions.getAudioOptions().needsMusic() || engineOptions.getAudioOptions().needsSound()) {
 			this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		}
 
-		switch(engineOptions.getScreenOrientation()) {
+		switch (engineOptions.getScreenOrientation()) {
 			case LANDSCAPE_FIXED:
 				this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 				break;
 			case LANDSCAPE_SENSOR:
-				if(SystemUtils.SDK_VERSION_GINGERBREAD_OR_LATER) {
+				if (SystemUtils.SDK_VERSION_GINGERBREAD_OR_LATER) {
 					this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
 				} else {
 					Debug.w(ScreenOrientation.class.getSimpleName() + "." + ScreenOrientation.LANDSCAPE_SENSOR + " is not supported on this device. Falling back to " + ScreenOrientation.class.getSimpleName() + "." + ScreenOrientation.LANDSCAPE_FIXED);
@@ -447,7 +451,7 @@ public abstract class BaseGameActivity extends BaseActivity implements IGameInte
 				this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 				break;
 			case PORTRAIT_SENSOR:
-				if(SystemUtils.SDK_VERSION_GINGERBREAD_OR_LATER) {
+				if (SystemUtils.SDK_VERSION_GINGERBREAD_OR_LATER) {
 					this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
 				} else {
 					Debug.w(ScreenOrientation.class.getSimpleName() + "." + ScreenOrientation.PORTRAIT_SENSOR + " is not supported on this device. Falling back to " + ScreenOrientation.class.getSimpleName() + "." + ScreenOrientation.PORTRAIT_FIXED);

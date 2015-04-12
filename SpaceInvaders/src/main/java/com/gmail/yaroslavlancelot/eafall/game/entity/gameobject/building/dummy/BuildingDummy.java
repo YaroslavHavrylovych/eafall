@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingType;
 
-import org.andengine.entity.shape.Area;
+import com.gmail.yaroslavlancelot.eafall.game.entity.Area;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 

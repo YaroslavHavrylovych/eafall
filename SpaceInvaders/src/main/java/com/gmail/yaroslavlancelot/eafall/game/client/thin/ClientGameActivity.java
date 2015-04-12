@@ -1,11 +1,8 @@
 package com.gmail.yaroslavlancelot.eafall.game.client.thin;
 
+import com.badlogic.gdx.physics.box2d.Body;
+import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.client.MainOperationsBaseGameActivity;
-import com.gmail.yaroslavlancelot.eafall.network.client.messages.BuildingCreationClientMessage;
-import com.gmail.yaroslavlancelot.eafall.network.client.messages.GameLoadedClientMessage;
-import com.gmail.yaroslavlancelot.eafall.network.server.messages.UnitChangePositionServerMessage;
-import com.gmail.yaroslavlancelot.eafall.network.client.callbacks.InGameClient;
-import com.gmail.yaroslavlancelot.eafall.network.client.connector.GameServerConnector;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetStaticObject;
@@ -13,11 +10,13 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.MovableUnit;
 import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
-import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
+import com.gmail.yaroslavlancelot.eafall.network.client.callbacks.InGameClient;
+import com.gmail.yaroslavlancelot.eafall.network.client.connector.GameServerConnector;
+import com.gmail.yaroslavlancelot.eafall.network.client.messages.BuildingCreationClientMessage;
+import com.gmail.yaroslavlancelot.eafall.network.client.messages.GameLoadedClientMessage;
+import com.gmail.yaroslavlancelot.eafall.network.server.messages.UnitChangePositionServerMessage;
 
 import org.andengine.engine.options.EngineOptions;
-
-import java.io.IOException;
 
 /** Used in client. Handles messages from server and send it's own in react on client operations */
 public class ClientGameActivity extends MainOperationsBaseGameActivity implements InGameClient {
@@ -34,29 +33,21 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
     @Override
     public void afterGameLoaded() {
         LoggerHelper.methodInvocation(TAG, "afterGameLoaded");
-        try {
-            mGameServerConnector.sendClientMessage(new GameLoadedClientMessage());
-            LoggerHelper.printInformationMessage(TAG, "send gameLoaded");
-        } catch (IOException e) {
-            LoggerHelper.printErrorMessage(TAG, e.getMessage());
-        }
-    }
-
-    @Override
-    protected void userWantCreateBuilding(final ITeam userTeam, BuildingId buildingId) {
-        LoggerHelper.methodInvocation(TAG, "userWantCreateBuilding");
-        try {
-            mGameServerConnector.sendClientMessage(new BuildingCreationClientMessage(
-                    userTeam.getTeamName(), buildingId.getId(), buildingId.getUpgrade()));
-            LoggerHelper.printInformationMessage(TAG, "send building request team= " + userTeam.getTeamName() + ", building=" + buildingId + "");
-        } catch (IOException e) {
-            LoggerHelper.printErrorMessage(TAG, e.getMessage());
-        }
+        mGameServerConnector.sendClientMessage(0, new GameLoadedClientMessage());
+        LoggerHelper.printInformationMessage(TAG, "send gameLoaded");
     }
 
     @Override
     protected void initThickClient() {
         // it's thin client, so no actions
+    }
+
+    @Override
+    protected void userWantCreateBuilding(final ITeam userTeam, BuildingId buildingId) {
+        LoggerHelper.methodInvocation(TAG, "userWantCreateBuilding");
+        mGameServerConnector.sendClientMessage(0, new BuildingCreationClientMessage(
+                userTeam.getTeamName(), buildingId.getId(), buildingId.getUpgrade()));
+        LoggerHelper.printInformationMessage(TAG, "send building request team= " + userTeam.getTeamName() + ", building=" + buildingId + "");
     }
 
     @Override
@@ -99,7 +90,8 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
                 }
                 MovableUnit unit = (MovableUnit) gameObject;
                 if (!gameObject.isObjectAlive()) return;
-                unit.setUnitPosition(x, y);
+                Body body = unit.getBody();
+                body.setTransform(x, y, 0);
                 unit.rotate(rotation);
                 unit.setUnitLinearVelocity(velocityX, velocityY);
             }

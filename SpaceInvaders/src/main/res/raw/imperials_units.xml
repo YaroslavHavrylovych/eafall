@@ -15,10 +15,10 @@
         <reload_time>1.2</reload_time>
         <sound>annihilation_1s.ogg</sound>
         <team_color_area>
-            <x>1</x>
-            <y>11</y>
+            <x>0</x>
+            <y>0</y>
             <width>14</width>
-            <height>3</height>
+            <height>10</height>
         </team_color_area>
     </unit>
     <unit name="grant">
@@ -73,10 +73,10 @@
         <reload_time>1.0</reload_time>
         <sound>electrical_1s.ogg</sound>
         <team_color_area>
-            <x>2</x>
-            <y>8</y>
+            <x>0</x>
+            <y>0</y>
             <width>12</width>
-            <height>3</height>
+            <height>6</height>
         </team_color_area>
     </unit>
     <unit name="scout">

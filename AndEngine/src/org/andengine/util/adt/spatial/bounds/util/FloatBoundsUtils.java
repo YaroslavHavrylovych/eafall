@@ -4,7 +4,7 @@ import org.andengine.util.adt.bounds.IFloatBounds;
 
 
 /**
- * (c) Zynga 2011
+ * (c) 2011 Zynga Inc.
  *
  * @author Nicolas Gramlich <ngramlich@zynga.com>
  * @since 23:12:02 - 07.10.2011
@@ -22,6 +22,10 @@ public final class FloatBoundsUtils {
 	// Constructors
 	// ===========================================================
 
+	private FloatBoundsUtils() {
+
+	}
+
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
@@ -33,7 +37,7 @@ public final class FloatBoundsUtils {
 	// ===========================================================
 	// Methods
 	// ===========================================================
-	
+
 	public static final boolean intersects(final IFloatBounds pFloatBoundsA, final IFloatBounds pFloatBoundsB) {
 		return FloatBoundsUtils.intersects(pFloatBoundsA.getXMin(), pFloatBoundsA.getYMin(), pFloatBoundsA.getXMax(), pFloatBoundsA.getYMax(), pFloatBoundsB.getXMin(), pFloatBoundsB.getYMin(), pFloatBoundsB.getXMax(), pFloatBoundsB.getYMax());
 	}
@@ -47,7 +51,7 @@ public final class FloatBoundsUtils {
 	public static final boolean contains(final IFloatBounds pFloatBounds, final float pX, final float pY) {
 		return FloatBoundsUtils.contains(pFloatBounds.getXMin(), pFloatBounds.getYMin(), pFloatBounds.getXMax(), pFloatBounds.getYMax(), pX, pY);
 	}
-	
+
 	public static final boolean contains(final IFloatBounds pFloatBoundsA, final IFloatBounds pFloatBoundsB) {
 		return FloatBoundsUtils.contains(pFloatBoundsA.getXMin(), pFloatBoundsA.getYMin(), pFloatBoundsA.getXMax(), pFloatBoundsA.getYMax(), pFloatBoundsB.getXMin(), pFloatBoundsB.getYMin(), pFloatBoundsB.getXMax(), pFloatBoundsB.getYMax());
 	}

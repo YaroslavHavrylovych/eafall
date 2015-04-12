@@ -118,7 +118,7 @@ public class GameSceneTouchListener implements IOnSceneTouchListener, ICameraCoo
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_MOVE:
                 float newPositionX = mCamera.getCenterX() + (mTouchX - motionEventX) / mCamera.getZoomFactor() / mScreenToSceneRatio,
-                        newPositionY = mCamera.getCenterY() + (mTouchY - motionEventY) / mCamera.getZoomFactor() / mScreenToSceneRatio;
+                        newPositionY = mCamera.getCenterY() - (mTouchY - motionEventY) / mCamera.getZoomFactor() / mScreenToSceneRatio;
                 newPositionX = StaticHelper.stickToBorderOrLeftValue(newPositionX, 0, mCameraMaxWidth);
                 newPositionY = StaticHelper.stickToBorderOrLeftValue(newPositionY, 0, mCameraMaxHeight);
                 if (mCameraCurrentCenterX != newPositionX || mCameraCurrentCenterY != newPositionY) {

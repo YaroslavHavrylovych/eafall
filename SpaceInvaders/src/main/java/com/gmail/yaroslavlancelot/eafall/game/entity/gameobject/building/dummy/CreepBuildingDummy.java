@@ -3,16 +3,16 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy;
 import android.content.Context;
 
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
-import com.gmail.yaroslavlancelot.eafall.game.constant.Sizes;
-import com.gmail.yaroslavlancelot.eafall.game.constant.StringsAndPath;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingType;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
+import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
+import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
+import com.gmail.yaroslavlancelot.eafall.game.entity.BodiedSprite;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TeamColorArea;
+import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingType;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.loader.CreepBuildingLoader;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.loader.CreepBuildingUpgradeLoader;
-import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 
-import org.andengine.entity.shape.Area;
+import com.gmail.yaroslavlancelot.eafall.game.entity.Area;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 
@@ -25,7 +25,7 @@ public class CreepBuildingDummy extends BuildingDummy {
     private CreepBuildingLoader mCreepBuildingLoader;
 
     public CreepBuildingDummy(CreepBuildingLoader buildingLoader) {
-        super(Sizes.BUILDING_SIZE, Sizes.BUILDING_SIZE);
+        super(SizeConstants.BUILDING_SIZE, SizeConstants.BUILDING_SIZE);
         mCreepBuildingLoader = buildingLoader;
 
         /* how many upgrades does the building have */
@@ -36,7 +36,7 @@ public class CreepBuildingDummy extends BuildingDummy {
         for (int i = 0; i < buildingLoader.getUpdates().size(); i++) {
             CreepBuildingUpgradeLoader upgradeLoader = buildingLoader.getUpdates().get(i);
             TeamColorArea area = upgradeLoader.team_color_area;
-            mTeamColorAreaArray[i] = new Area(area.x, area.y, area.width, area.height);
+            mTeamColorAreaArray[i] = Area.getArea(area.x, area.y, area.width, area.height);
             upgradeLoader.team_color_area = null;
         }
 
@@ -84,8 +84,8 @@ public class CreepBuildingDummy extends BuildingDummy {
     public void loadResources(Context context, BitmapTextureAtlas textureAtlas, int x, int y, String raceName) {
         for (int i = 0; i < mCreepBuildingLoader.getUpdates().size(); i++) {
             CreepBuildingUpgradeLoader upgradeLoader = mCreepBuildingLoader.getUpdates().get(i);
-            String pathToImage = StringsAndPath.getPathToBuildings(raceName) + upgradeLoader.image_name;
-            GameObject.loadResource(pathToImage, context, textureAtlas, x + getWidth() * i, y + getHeight() * i);
+            String pathToImage = StringConstants.getPathToBuildings(raceName) + upgradeLoader.image_name;
+            BodiedSprite.loadResource(pathToImage, context, textureAtlas, x + getWidth() * i, y + getHeight() * i);
             mTextureRegionArray[i] = TextureRegionHolder.getInstance().getElement(pathToImage);
         }
     }

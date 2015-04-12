@@ -2,11 +2,10 @@ package com.gmail.yaroslavlancelot.eafall.game.alliance;
 
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitDummy;
 
 import org.andengine.opengl.texture.TextureManager;
-import org.andengine.util.color.Color;
+import org.andengine.opengl.texture.atlas.TextureAtlas;
 
 import java.util.SortedSet;
 
@@ -18,7 +17,11 @@ public interface IAlliance {
 
     int getBuildingCost(BuildingId buildingId);
 
-    Unit getUnit(int unitId, Color teamColor);
+    /** returns units texture atlas */
+    TextureAtlas getUnitTextureAtlas();
+
+    /** returns buildings texture atlas */
+    TextureAtlas getBuildingTextureAtlas();
 
     void loadResources(TextureManager textureManager);
 

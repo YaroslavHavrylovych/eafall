@@ -1,18 +1,19 @@
 package com.gmail.yaroslavlancelot.eafall.game.popup.construction;
 
 import android.content.Context;
+import android.util.SparseArray;
 
-import com.gmail.yaroslavlancelot.eafall.game.constant.Sizes;
-import com.gmail.yaroslavlancelot.eafall.game.constant.StringsAndPath;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.description.BuildingDescriptionShowEvent;
+import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
+import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
+import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
+import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
+import com.gmail.yaroslavlancelot.eafall.game.eventbus.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.popup.PopupHud;
 import com.gmail.yaroslavlancelot.eafall.game.popup.construction.item.PopupItemFactory;
 import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
 import com.gmail.yaroslavlancelot.eafall.game.touch.StaticHelper;
-import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
-import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 
 import org.andengine.entity.IEntity;
 import org.andengine.entity.primitive.Rectangle;
@@ -21,9 +22,6 @@ import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import de.greenrobot.event.EventBus;
 
@@ -36,7 +34,7 @@ public class BuildingsPopupHud extends PopupHud {
     private final String mTeamName;
 
     /** The key is the serial number of the building in the list of the buildings */
-    private Map<Integer, PopupItemFactory.BuildingPopupItem> mItems;
+    private SparseArray<PopupItemFactory.BuildingPopupItem> mItems;
 
     public BuildingsPopupHud(String teamName, Scene scene, VertexBufferObjectManager vertexBufferObjectManager) {
         super(scene);
@@ -44,19 +42,19 @@ public class BuildingsPopupHud extends PopupHud {
         int buildingsAmount = team.getTeamRace().getBuildingsAmount();
 
         mPopupRectangle = new Rectangle(0, 0,
-                Sizes.BUILDING_POPUP_BACKGROUND_ITEM_WIDTH,
-                Sizes.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT * buildingsAmount,
+                SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_WIDTH,
+                SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT * buildingsAmount,
                 vertexBufferObjectManager);
 
         mTeamName = team.getTeamName();
         initBuildingPopupForTeam(mTeamName);
-        mPopupRectangle.setX(Sizes.GAME_FIELD_WIDTH / 2 - mPopupRectangle.getWidth() / 2);
-        mPopupRectangle.setY(Sizes.GAME_FIELD_HEIGHT - mPopupRectangle.getHeight());
+        mPopupRectangle.setX(SizeConstants.HALF_FIELD_WIDTH);
+        mPopupRectangle.setY(mPopupRectangle.getHeight() / 2);
     }
 
     private void initBuildingPopupForTeam(String teamName) {
         ITeam team = TeamsHolder.getInstance().getElement(teamName);
-        mItems = new HashMap<Integer, PopupItemFactory.BuildingPopupItem>(team.getTeamRace().getBuildingsAmount());
+        mItems = new SparseArray<PopupItemFactory.BuildingPopupItem>(team.getTeamRace().getBuildingsAmount());
 
         syncBuildingsWithTeam(teamName);
     }
@@ -65,26 +63,31 @@ public class BuildingsPopupHud extends PopupHud {
         final ITeam team = TeamsHolder.getTeam(teamName);
         BuildingId[] buildings = team.getBuildingsIds();
         String raceName = team.getTeamRace().getAllianceName();
-        for (int i = 0; i < buildings.length; i++) {
+        int buildingsCount = buildings.length;
+        int position;
+        for (int id = 0; id < buildingsCount; id++) {
+            position = buildingsCount - id - 1;
             // if building which should be on this position is not created at all
-            if (!mItems.containsKey(i)) {
-                IEntity item = constructPopupItem(i, buildings[i], raceName);
+            if (mItems.indexOfKey(id) < 0) {
+                IEntity item = constructPopupItem(id, position, buildings[id], raceName);
                 mPopupRectangle.attachChild(item);
                 continue;
             }
 
             // if building on position exist, we check it's upgrade to be sure that it's needed building
-            if (mItems.get(i).getBuildingId().getUpgrade() != buildings[i].getUpgrade()) {
-                mPopupRectangle.detachChild(mItems.get(i).getItemEntity());
-                IEntity item = constructPopupItem(i, buildings[i], raceName);
+            if (mItems.get(id).getBuildingId().getUpgrade() != buildings[id].getUpgrade()) {
+                mPopupRectangle.detachChild(mItems.get(id).getItemEntity());
+                IEntity item = constructPopupItem(id, position, buildings[id], raceName);
                 mPopupRectangle.attachChild(item);
             }
         }
     }
 
-    private IEntity constructPopupItem(final int serialNumber, final BuildingId buildingId, String raceName) {
+    private IEntity constructPopupItem(int id, int position, final BuildingId buildingId, String raceName) {
         PopupItemFactory.BuildingPopupItem item = PopupItemFactory.createBuildingPopupItem(
-                0, serialNumber * Sizes.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT,
+                mPopupRectangle.getWidth() / 2,
+                position * SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT
+                        + SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT / 2,
                 mPopupRectangle.getVertexBufferObjectManager());
         item.setBuildingId(buildingId, raceName);
         item.setOnClickListener(new StaticHelper.OnClickListener() {
@@ -94,14 +97,14 @@ public class BuildingsPopupHud extends PopupHud {
                 EventBus.getDefault().post(new BuildingDescriptionShowEvent(buildingId, mTeamName));
             }
         });
-        mItems.put(serialNumber, item);
+        mItems.put(id, item);
         return item.getItemEntity();
     }
 
     public static void loadResource(Context context, TextureManager textureManager) {
         BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 1200, 100, TextureOptions.BILINEAR);
         TextureRegionHolder.addTiledElementFromAssets(
-                StringsAndPath.FILE_POPUP_BACKGROUND_ITEM, smallObjectTexture, context, 0, 0, 2, 1);
+                StringConstants.FILE_POPUP_BACKGROUND_ITEM, smallObjectTexture, context, 0, 0, 2, 1);
         smallObjectTexture.load();
     }
 

@@ -1,14 +1,13 @@
 package com.gmail.yaroslavlancelot.eafall.game.visual.text;
 
-import com.gmail.yaroslavlancelot.eafall.game.constant.Sizes;
-import com.gmail.yaroslavlancelot.eafall.game.constant.StringsAndPath;
+import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
+import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.money.MoneyUpdatedEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.path.HideUnitPathChooser;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.path.ShowUnitPathChooser;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 
 import org.andengine.entity.text.Text;
-import org.andengine.entity.text.exception.OutOfCharactersException;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import de.greenrobot.event.EventBus;
@@ -21,12 +20,11 @@ public class MoneyText extends Text {
     private String mTeamName;
 
     public MoneyText(String teamName, String prefix, VertexBufferObjectManager pVertexBufferObjectManager) {
-        super(0, Sizes.MONEY_FONT_SIZE * 2,
-                FontHolder.getInstance().getElement(StringsAndPath.KEY_FONT_MONEY),
+        super(SizeConstants.HALF_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.MONEY_FONT_SIZE * 2 - SizeConstants.MONEY_FONT_SIZE / 2,
+                FontHolder.getInstance().getElement(StringConstants.KEY_FONT_MONEY),
                 generateTextString(prefix, 0), prefix.length() + 6, pVertexBufferObjectManager);
         mMoneyValuePrefix = prefix;
         mTeamName = teamName;
-        setX(Sizes.GAME_FIELD_WIDTH / 2 - getWidth() / 2);
         EventBus.getDefault().register(this);
     }
 
@@ -39,12 +37,6 @@ public class MoneyText extends Text {
     public void onEvent(MoneyUpdatedEvent moneyUpdatedEvent) {
         if (!mTeamName.equals(moneyUpdatedEvent.getTeamName())) return;
         setText(generateTextString(mMoneyValuePrefix, moneyUpdatedEvent.getMoney()));
-    }
-
-    @Override
-    public void setText(CharSequence pText) throws OutOfCharactersException {
-        super.setText(pText);
-        setX(Sizes.GAME_FIELD_WIDTH / 2 - getWidth() / 2);
     }
 
     @SuppressWarnings("unused")

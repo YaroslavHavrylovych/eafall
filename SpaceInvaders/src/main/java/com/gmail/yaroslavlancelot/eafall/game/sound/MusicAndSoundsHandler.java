@@ -2,7 +2,7 @@ package com.gmail.yaroslavlancelot.eafall.game.sound;
 
 import android.content.Context;
 
-import com.gmail.yaroslavlancelot.eafall.game.constant.StringsAndPath;
+import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.touch.ICameraCoordinates;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 
@@ -87,7 +87,7 @@ public class MusicAndSoundsHandler implements SoundOperations {
 
         public BackgroundMusic(MusicManager musicManager) {
             mBackgroundMusic =
-                    getMusic(StringsAndPath.getPathToBackgroundMusic() + "background_1.ogg",
+                    getMusic(StringConstants.getPathToBackgroundMusic() + "background_1.ogg",
                             mContext, musicManager);
         }
 

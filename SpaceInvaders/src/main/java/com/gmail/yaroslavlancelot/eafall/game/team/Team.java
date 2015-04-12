@@ -12,7 +12,7 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.Pla
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.MovableUnit;
 
 import org.andengine.extension.physics.box2d.PhysicsFactory;
-import org.andengine.util.color.Color;
+import org.andengine.util.adt.color.Color;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -51,7 +51,7 @@ public class Team implements ITeam {
     private ArrayList<Bonus> mUnitBonuses = new ArrayList<Bonus>(2);
 
     public Team(final String teamName, IAlliance teamRace, TeamControlBehaviourType teamType) {
-        mTeamObjects = new ArrayList<GameObject>(20);
+        mTeamObjects = new ArrayList<GameObject>(50);
         mTeamName = teamName;
         mTeamRace = teamRace;
         initBuildingsTypes(teamRace);

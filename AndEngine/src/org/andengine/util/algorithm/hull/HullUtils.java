@@ -2,12 +2,12 @@ package org.andengine.util.algorithm.hull;
 
 
 /**
- * (c) Zynga 2012
+ * (c) 2012 Zynga Inc.
  *
  * @author Nicolas Gramlich <ngramlich@zynga.com>
  * @since 14:52:48 - 08.02.2012
  */
-public class HullUtils {
+public final class HullUtils {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -19,6 +19,10 @@ public class HullUtils {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
+
+	private HullUtils() {
+
+	}
 
 	// ===========================================================
 	// Getter & Setter
@@ -38,17 +42,17 @@ public class HullUtils {
 		float lowestVertexY = pVertices[pVertexOffsetY];
 
 		final int lastVertexOffset = pVertexCount * pVertexStride;
-		
+
 		/* Starting at one since, since we chose 0 as a the first candidate. */
-		int currentVertexIndex = 1; 
+		int currentVertexIndex = 1;
 		int currentVertexOffsetY = pVertexStride + pVertexOffsetY;
-		
+
 		/* Loop to the end. */
-		while(currentVertexOffsetY < lastVertexOffset) {
+		while (currentVertexOffsetY < lastVertexOffset) {
 			final float currentVertexY = pVertices[currentVertexOffsetY];
 
 			/* Check if the current candidate is lower and if so, assign it. */
-			if(currentVertexY < lowestVertexY) {
+			if (currentVertexY < lowestVertexY) {
 				lowestVertexIndex = currentVertexIndex;
 				lowestVertexY = currentVertexY;
 			}
@@ -62,7 +66,7 @@ public class HullUtils {
 		final int vertexOffsetA = pVertexIndexA * pVertexStride;
 		final int vertexOffsetB = pVertexIndexB * pVertexStride;
 
-		for(int i = pVertexStride - 1; i >= 0; i--) {
+		for (int i = pVertexStride - 1; i >= 0; i--) {
 			final float tmp = pVertices[vertexOffsetA + i];
 			pVertices[vertexOffsetA + i] = pVertices[vertexOffsetB + i];
 			pVertices[vertexOffsetB + i] = tmp;

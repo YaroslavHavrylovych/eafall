@@ -3,13 +3,14 @@ package org.andengine.entity.scene.background;
 import java.util.ArrayList;
 
 import org.andengine.engine.camera.Camera;
-import org.andengine.entity.shape.IAreaShape;
+import org.andengine.entity.IEntity;
 import org.andengine.opengl.util.GLState;
+import org.andengine.util.debug.Debug;
 
 /**
- * (c) 2010 Nicolas Gramlich 
+ * (c) 2010 Nicolas Gramlich
  * (c) 2011 Zynga Inc.
- * 
+ *
  * @author Nicolas Gramlich
  * @since 15:36:26 - 19.07.2010
  */
@@ -54,7 +55,7 @@ public class ParallaxBackground extends Background {
 		final float parallaxValue = this.mParallaxValue;
 		final ArrayList<ParallaxEntity> parallaxEntities = this.mParallaxEntities;
 
-		for(int i = 0; i < this.mParallaxEntityCount; i++) {
+		for (int i = 0; i < this.mParallaxEntityCount; i++) {
 			parallaxEntities.get(i).onDraw(pGLState, pCamera, parallaxValue);
 		}
 	}
@@ -71,7 +72,7 @@ public class ParallaxBackground extends Background {
 	public boolean detachParallaxEntity(final ParallaxEntity pParallaxEntity) {
 		this.mParallaxEntityCount--;
 		final boolean success = this.mParallaxEntities.remove(pParallaxEntity);
-		if(!success) {
+		if (!success) {
 			this.mParallaxEntityCount++;
 		}
 		return success;
@@ -91,15 +92,24 @@ public class ParallaxBackground extends Background {
 		// ===========================================================
 
 		final float mParallaxFactor;
-		final IAreaShape mAreaShape;
+		final IEntity mEntity;
 
 		// ===========================================================
 		// Constructors
 		// ===========================================================
 
-		public ParallaxEntity(final float pParallaxFactor, final IAreaShape pAreaShape) {
+		public ParallaxEntity(final float pParallaxFactor, final IEntity pEntity) {
 			this.mParallaxFactor = pParallaxFactor;
-			this.mAreaShape = pAreaShape;
+			this.mEntity = pEntity;
+
+			// TODO Adjust onDraw calculations, so that these assumptions aren't necessary.
+			if (this.mEntity.getX() != 0) {
+				Debug.w("The X position of a " + this.getClass().getSimpleName() + " is expected to be 0.");
+			}
+
+			if (this.mEntity.getOffsetCenterX() != 0) {
+				Debug.w("The OffsetCenterXposition of a " + this.getClass().getSimpleName() + " is expected to be 0.");
+			}
 		}
 
 		// ===========================================================
@@ -118,21 +128,21 @@ public class ParallaxBackground extends Background {
 			pGLState.pushModelViewGLMatrix();
 			{
 				final float cameraWidth = pCamera.getWidth();
-				final float shapeWidthScaled = this.mAreaShape.getWidthScaled();
-				float baseOffset = (pParallaxValue * this.mParallaxFactor) % shapeWidthScaled;
+				final float entityWidthScaled = this.mEntity.getWidth() * this.mEntity.getScaleX();
+				float baseOffset = (pParallaxValue * this.mParallaxFactor) % entityWidthScaled;
 
-				while(baseOffset > 0) {
-					baseOffset -= shapeWidthScaled;
+				while (baseOffset > 0) {
+					baseOffset -= entityWidthScaled;
 				}
 				pGLState.translateModelViewGLMatrixf(baseOffset, 0, 0);
 
 				float currentMaxX = baseOffset;
-				
+
 				do {
-					this.mAreaShape.onDraw(pGLState, pCamera);
-					pGLState.translateModelViewGLMatrixf(shapeWidthScaled, 0, 0);
-					currentMaxX += shapeWidthScaled;
-				} while(currentMaxX < cameraWidth);
+					this.mEntity.onDraw(pGLState, pCamera);
+					pGLState.translateModelViewGLMatrixf(entityWidthScaled, 0, 0);
+					currentMaxX += entityWidthScaled;
+				} while (currentMaxX < cameraWidth);
 			}
 			pGLState.popModelViewGLMatrix();
 		}

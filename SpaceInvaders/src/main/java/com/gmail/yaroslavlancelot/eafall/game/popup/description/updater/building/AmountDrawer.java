@@ -3,11 +3,11 @@ package com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.buildin
 import android.graphics.Color;
 import android.graphics.Typeface;
 
-import com.gmail.yaroslavlancelot.eafall.game.constant.Sizes;
+import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 
 import org.andengine.entity.primitive.Rectangle;
-import org.andengine.entity.shape.RectangularShape;
+import org.andengine.entity.shape.Shape;
 import org.andengine.entity.text.Text;
 import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.font.FontManager;
@@ -19,7 +19,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 public class AmountDrawer {
     private static final String sAmountFontKey = "key_objects_amount_font";
     private final Text mText;
-    private final RectangularShape mBackground;
+    private final Shape mBackground;
 
     public AmountDrawer(VertexBufferObjectManager objectManager) {
         mText = new Text(0, 0,
@@ -35,19 +35,19 @@ public class AmountDrawer {
     /** change background size according to text value (new value - new size) */
     private void initBackground() {
         mText.setPosition(0, 0);
-        float width = mText.getWidth() + 2 * Sizes.DESCRIPTION_POPUP_AMOUNT_TEXT_PADDING_HORIZONTAL;
-        float height = mText.getHeight() + 2 * Sizes.DESCRIPTION_POPUP_AMOUNT_TEXT_PADDING_VERTICAL;
+        float width = mText.getWidth() + 2 * SizeConstants.DESCRIPTION_POPUP_AMOUNT_TEXT_PADDING_HORIZONTAL;
+        float height = mText.getHeight() + 2 * SizeConstants.DESCRIPTION_POPUP_AMOUNT_TEXT_PADDING_VERTICAL;
         width = width < height ? height : width;
         mBackground.setWidth(width);
         mBackground.setHeight(height);
-        mText.setPosition(mBackground.getWidth() / 2 - mText.getWidth() / 2, Sizes.DESCRIPTION_POPUP_AMOUNT_TEXT_PADDING_VERTICAL);
+        mText.setPosition(mBackground.getWidth() / 2, mBackground.getHeight() / 2);
     }
 
     public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
         //amount font
         IFont font = FontFactory.create(fontManager, textureManager, 256, 256,
                 Typeface.create(Typeface.DEFAULT, Typeface.BOLD),
-                Sizes.DESCRIPTION_POPUP_AMOUNT_FONT_SIZE, Color.WHITE);
+                SizeConstants.DESCRIPTION_POPUP_AMOUNT_FONT_SIZE, Color.WHITE);
         font.load();
         FontHolder.getInstance().addElement(sAmountFontKey, font);
     }
@@ -67,12 +67,14 @@ public class AmountDrawer {
         initBackground();
     }
 
-    public void draw(RectangularShape area) {
-        mBackground.setX(area.getWidth() - mBackground.getWidth());
+    public void draw(Shape area) {
+        mBackground.setPosition(
+                area.getWidth() - mBackground.getWidth() / 2,
+                area.getHeight() - mBackground.getHeight() / 2);
         attachTo(area);
     }
 
-    private void attachTo(RectangularShape area) {
+    private void attachTo(Shape area) {
         area.attachChild(mBackground);
     }
 

@@ -10,7 +10,7 @@ import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.building
 import com.gmail.yaroslavlancelot.eafall.game.touch.StaticHelper;
 
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.shape.RectangularShape;
+import org.andengine.entity.shape.Shape;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -30,7 +30,7 @@ public class DefenceBuildingPopupUpdater extends BaseBuildingPopupUpdater {
     }
 
     @Override
-    public void updateDescription(RectangularShape drawArea, Object objectId, String raceName, final String teamName) {
+    public void updateDescription(Shape drawArea, Object objectId, String raceName, final String teamName) {
         super.updateDescription(drawArea, objectId, raceName, teamName);
         final BuildingId buildingId = (BuildingId) objectId;
         final Object event = new CreateBuildingEvent(mTeamName, buildingId);
@@ -43,7 +43,7 @@ public class DefenceBuildingPopupUpdater extends BaseBuildingPopupUpdater {
     }
 
     @Override
-    public void updateAdditionInfo(RectangularShape drawArea, Object objectId, String raceName, final String teamName) {
+    public void updateAdditionInfo(Shape drawArea, Object objectId, String raceName, final String teamName) {
         if (mAdditionDescriptionImage != null) {
             mAdditionDescriptionImage.detachSelf();
             mAdditionInfoRectangle.detachSelf();

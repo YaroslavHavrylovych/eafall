@@ -12,21 +12,20 @@ import org.andengine.entity.IEntityParameterCallable;
 import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.modifier.IEntityModifier.IEntityModifierMatcher;
 import org.andengine.entity.scene.menu.item.IMenuItem;
-import org.andengine.entity.shape.IShape;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.shader.ShaderProgram;
 import org.andengine.opengl.util.GLState;
 import org.andengine.opengl.vbo.IVertexBufferObject;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.adt.color.Color;
 import org.andengine.util.adt.transformation.Transformation;
-import org.andengine.util.color.Color;
 
 /**
  * I HATE THIS CLASS!
- * 
+ *
  * (c) 2010 Nicolas Gramlich
  * (c) 2011 Zynga Inc.
- * 
+ *
  * @author Nicolas Gramlich
  * @since 15:05:44 - 18.11.2010
  */
@@ -122,7 +121,8 @@ public abstract class BaseMenuItemDecorator implements IMenuItem {
 	public float getWidth() {
 		return this.mMenuItem.getWidth();
 	}
-	
+
+	@Deprecated
 	@Override
 	public float getWidthScaled() {
 		return this.mMenuItem.getWidthScaled();
@@ -132,7 +132,8 @@ public abstract class BaseMenuItemDecorator implements IMenuItem {
 	public float getHeight() {
 		return this.mMenuItem.getHeight();
 	}
-	
+
+	@Deprecated
 	@Override
 	public float getHeightScaled() {
 		return this.mMenuItem.getHeightScaled();
@@ -204,6 +205,11 @@ public abstract class BaseMenuItemDecorator implements IMenuItem {
 	}
 
 	@Override
+	public void setColor(final int pARGBPackedInt) {
+		this.mMenuItem.setColor(pARGBPackedInt);
+	}
+
+	@Override
 	public void setColor(final float pRed, final float pGreen, final float pBlue) {
 		this.mMenuItem.setColor(pRed, pGreen, pBlue);
 	}
@@ -211,6 +217,31 @@ public abstract class BaseMenuItemDecorator implements IMenuItem {
 	@Override
 	public void setColor(final float pRed, final float pGreen, final float pBlue, final float pAlpha) {
 		this.mMenuItem.setColor(pRed, pGreen, pBlue, pAlpha);
+	}
+
+	@Override
+	public float getOffsetCenterX() {
+		return this.mMenuItem.getOffsetCenterX();
+	}
+
+	@Override
+	public float getOffsetCenterY() {
+		return this.mMenuItem.getOffsetCenterY();
+	}
+
+	@Override
+	public void setOffsetCenterX(final float pOffsetCenterX) {
+		this.mMenuItem.setOffsetCenterX(pOffsetCenterX);
+	}
+
+	@Override
+	public void setOffsetCenterY(final float pOffsetCenterY) {
+		this.mMenuItem.setOffsetCenterY(pOffsetCenterY);
+	}
+
+	@Override
+	public void setOffsetCenter(final float pOffsetCenterX, final float pOffsetCenterY) {
+		this.mMenuItem.setOffsetCenter(pOffsetCenterX, pOffsetCenterY);
 	}
 
 	@Override
@@ -312,62 +343,62 @@ public abstract class BaseMenuItemDecorator implements IMenuItem {
 	public void setScaleCenter(final float pScaleCenterX, final float pScaleCenterY) {
 		this.mMenuItem.setScaleCenter(pScaleCenterX, pScaleCenterY);
 	}
-	
+
 	@Override
 	public boolean isSkewed() {
 		return this.mMenuItem.isSkewed();
 	}
-	
+
 	@Override
 	public float getSkewX() {
 		return this.mMenuItem.getSkewX();
 	}
-	
+
 	@Override
 	public float getSkewY() {
 		return this.mMenuItem.getSkewY();
 	}
-	
+
 	@Override
 	public void setSkew(final float pSkew) {
 		this.mMenuItem.setSkew(pSkew);
 	}
-	
+
 	@Override
 	public void setSkew(final float pSkewX, final float pSkewY) {
 		this.mMenuItem.setSkew(pSkewX, pSkewY);
 	}
-	
+
 	@Override
 	public void setSkewX(final float pSkewX) {
 		this.mMenuItem.setSkewX(pSkewX);
 	}
-	
+
 	@Override
 	public void setSkewY(final float pSkewY) {
 		this.mMenuItem.setSkewY(pSkewY);
 	}
-	
+
 	@Override
 	public float getSkewCenterX() {
 		return this.mMenuItem.getSkewCenterX();
 	}
-	
+
 	@Override
 	public float getSkewCenterY() {
 		return this.mMenuItem.getSkewCenterY();
 	}
-	
+
 	@Override
 	public void setSkewCenterX(final float pSkewCenterX) {
 		this.mMenuItem.setSkewCenterX(pSkewCenterX);
 	}
-	
+
 	@Override
 	public void setSkewCenterY(final float pSkewCenterY) {
 		this.mMenuItem.setSkewCenterY(pSkewCenterY);
 	}
-	
+
 	@Override
 	public void setSkewCenter(final float pSkewCenterX, final float pSkewCenterY) {
 		this.mMenuItem.setSkewCenter(pSkewCenterX, pSkewCenterY);
@@ -377,10 +408,25 @@ public abstract class BaseMenuItemDecorator implements IMenuItem {
 	public boolean isRotatedOrScaledOrSkewed() {
 		return this.mMenuItem.isRotatedOrScaledOrSkewed();
 	}
-	
+
 	@Override
-	public boolean collidesWith(final IShape pOtherShape) {
-		return this.mMenuItem.collidesWith(pOtherShape);
+	public void setAnchorCenterX(final float pAnchorCenterX) {
+		this.setAnchorCenterX(pAnchorCenterX);
+	}
+
+	@Override
+	public void setAnchorCenterY(final float pAnchorCenterY) {
+		this.setAnchorCenterY(pAnchorCenterY);
+	}
+
+	@Override
+	public void setAnchorCenter(final float pAnchorCenterX, final float pAnchorCenterY) {
+		this.mMenuItem.setAnchorCenter(pAnchorCenterX, pAnchorCenterY);
+	}
+
+	@Override
+	public boolean collidesWith(final IEntity pOtherEntity) {
+		return this.mMenuItem.collidesWith(pOtherEntity);
 	}
 
 	@Override
@@ -421,6 +467,11 @@ public abstract class BaseMenuItemDecorator implements IMenuItem {
 	@Override
 	public void clearEntityModifiers() {
 		this.mMenuItem.clearEntityModifiers();
+	}
+
+	@Override
+	public void resetEntityModifiers() {
+		this.mMenuItem.resetEntityModifiers();
 	}
 
 	@Override
@@ -525,43 +576,83 @@ public abstract class BaseMenuItemDecorator implements IMenuItem {
 	}
 
 	@Override
-	public float[] convertLocalToSceneCoordinates(final float pX, final float pY) {
-		return this.mMenuItem.convertLocalToSceneCoordinates(pX, pY);
+	public float[] convertLocalCoordinatesToParentCoordinates(final float pX, final float pY) {
+		return this.mMenuItem.convertLocalCoordinatesToParentCoordinates(pX, pY);
+	}
+	
+	@Override
+	public float[] convertLocalCoordinatesToParentCoordinates(final float pX, final float pY, final float[] pReuse) {
+		return this.mMenuItem.convertLocalCoordinatesToParentCoordinates(pX, pY, pReuse);
+	}
+	
+	@Override
+	public float[] convertLocalCoordinatesToParentCoordinates(final float[] pCoordinates) {
+		return this.mMenuItem.convertLocalCoordinatesToParentCoordinates(pCoordinates);
+	}
+	
+	@Override
+	public float[] convertLocalCoordinatesToParentCoordinates(final float[] pCoordinates, final float[] pReuse) {
+		return this.mMenuItem.convertLocalCoordinatesToParentCoordinates(pCoordinates, pReuse);
+	}
+	
+	@Override
+	public float[] convertParentCoordinatesToLocalCoordinates(final float pX, final float pY) {
+		return this.mMenuItem.convertParentCoordinatesToLocalCoordinates(pX, pY);
+	}
+	
+	@Override
+	public float[] convertParentCoordinatesToLocalCoordinates(final float pX, final float pY, final float[] pReuse) {
+		return this.mMenuItem.convertParentCoordinatesToLocalCoordinates(pX, pY, pReuse);
+	}
+	
+	@Override
+	public float[] convertParentCoordinatesToLocalCoordinates(final float[] pCoordinates) {
+		return this.mMenuItem.convertParentCoordinatesToLocalCoordinates(pCoordinates);
+	}
+	
+	@Override
+	public float[] convertParentCoordinatesToLocalCoordinates(final float[] pCoordinates, final float[] pReuse) {
+		return this.mMenuItem.convertParentCoordinatesToLocalCoordinates(pCoordinates, pReuse);
 	}
 
 	@Override
-	public float[] convertLocalToSceneCoordinates(final float pX, final float pY, final float[] pReuse) {
-		return this.mMenuItem.convertLocalToSceneCoordinates(pX, pY, pReuse);
+	public float[] convertLocalCoordinatesToSceneCoordinates(final float pX, final float pY) {
+		return this.mMenuItem.convertLocalCoordinatesToSceneCoordinates(pX, pY);
 	}
 
 	@Override
-	public float[] convertLocalToSceneCoordinates(final float[] pCoordinates) {
-		return this.mMenuItem.convertLocalToSceneCoordinates(pCoordinates);
+	public float[] convertLocalCoordinatesToSceneCoordinates(final float pX, final float pY, final float[] pReuse) {
+		return this.mMenuItem.convertLocalCoordinatesToSceneCoordinates(pX, pY, pReuse);
 	}
 
 	@Override
-	public float[] convertLocalToSceneCoordinates(final float[] pCoordinates, final float[] pReuse) {
-		return this.mMenuItem.convertLocalToSceneCoordinates(pCoordinates, pReuse);
+	public float[] convertLocalCoordinatesToSceneCoordinates(final float[] pCoordinates) {
+		return this.mMenuItem.convertLocalCoordinatesToSceneCoordinates(pCoordinates);
 	}
 
 	@Override
-	public float[] convertSceneToLocalCoordinates(final float pX, final float pY) {
-		return this.mMenuItem.convertSceneToLocalCoordinates(pX, pY);
+	public float[] convertLocalCoordinatesToSceneCoordinates(final float[] pCoordinates, final float[] pReuse) {
+		return this.mMenuItem.convertLocalCoordinatesToSceneCoordinates(pCoordinates, pReuse);
 	}
 
 	@Override
-	public float[] convertSceneToLocalCoordinates(final float pX, final float pY, final float[] pReuse) {
-		return this.mMenuItem.convertSceneToLocalCoordinates(pX, pY, pReuse);
+	public float[] convertSceneCoordinatesToLocalCoordinates(final float pX, final float pY) {
+		return this.mMenuItem.convertSceneCoordinatesToLocalCoordinates(pX, pY);
 	}
 
 	@Override
-	public float[] convertSceneToLocalCoordinates(final float[] pCoordinates) {
-		return this.mMenuItem.convertSceneToLocalCoordinates(pCoordinates);
+	public float[] convertSceneCoordinatesToLocalCoordinates(final float pX, final float pY, final float[] pReuse) {
+		return this.mMenuItem.convertSceneCoordinatesToLocalCoordinates(pX, pY, pReuse);
 	}
 
 	@Override
-	public float[] convertSceneToLocalCoordinates(final float[] pCoordinates, final float[] pReuse) {
-		return this.mMenuItem.convertSceneToLocalCoordinates(pCoordinates, pReuse);
+	public float[] convertSceneCoordinatesToLocalCoordinates(final float[] pCoordinates) {
+		return this.mMenuItem.convertSceneCoordinatesToLocalCoordinates(pCoordinates);
+	}
+
+	@Override
+	public float[] convertSceneCoordinatesToLocalCoordinates(final float[] pCoordinates, final float[] pReuse) {
+		return this.mMenuItem.convertSceneCoordinatesToLocalCoordinates(pCoordinates, pReuse);
 	}
 
 	@Override
@@ -594,13 +685,12 @@ public abstract class BaseMenuItemDecorator implements IMenuItem {
 		return this.mMenuItem.getChildByTag(pTag);
 	}
 
-	@Override
 	public IEntity getChildByIndex(final int pIndex) {
 		return this.mMenuItem.getChildByIndex(pIndex);
 	}
 
 	@Override
-	public IEntity getChildByMatcher(IEntityMatcher pEntityMatcher) {
+	public IEntity getChildByMatcher(final IEntityMatcher pEntityMatcher) {
 		return this.mMenuItem.getChildByMatcher(pEntityMatcher);
 	}
 
@@ -638,7 +728,7 @@ public abstract class BaseMenuItemDecorator implements IMenuItem {
 	public void sortChildren() {
 		this.mMenuItem.sortChildren();
 	}
-	
+
 	@Override
 	public void sortChildren(final boolean pImmediate) {
 		this.mMenuItem.sortChildren(pImmediate);
@@ -722,6 +812,11 @@ public abstract class BaseMenuItemDecorator implements IMenuItem {
 	@Override
 	public void setParent(final IEntity pEntity) {
 		this.mMenuItem.setParent(pEntity);
+	}
+
+	@Override
+	public IEntity getRootEntity() {
+		return this.mMenuItem.getRootEntity();
 	}
 
 	@Override

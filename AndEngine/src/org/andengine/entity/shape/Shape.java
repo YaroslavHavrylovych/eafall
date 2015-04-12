@@ -2,7 +2,6 @@ package org.andengine.entity.shape;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.Entity;
-import org.andengine.entity.scene.Scene;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.shader.ShaderProgram;
 import org.andengine.opengl.texture.ITexture;
@@ -20,97 +19,101 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
  * @since 11:51:27 - 13.03.2010
  */
 public abstract class Shape extends Entity implements IShape, ITouchListener {
-	// ===========================================================
-	// Constants
-	// ===========================================================
+    // ===========================================================
+    // Constants
+    // ===========================================================
 
-	// ===========================================================
-	// Fields
-	// ===========================================================
+    // ===========================================================
+    // Fields
+    // ===========================================================
 
-	protected int mBlendFunctionSource = IShape.BLENDFUNCTION_SOURCE_DEFAULT;
-	protected int mBlendFunctionDestination = IShape.BLENDFUNCTION_DESTINATION_DEFAULT;
+    protected int mBlendFunctionSource = IShape.BLENDFUNCTION_SOURCE_DEFAULT;
+    protected int mBlendFunctionDestination = IShape.BLENDFUNCTION_DESTINATION_DEFAULT;
 
-	protected boolean mBlendingEnabled = false;
+    protected boolean mBlendingEnabled;
 
-	protected ShaderProgram mShaderProgram;
+    protected ShaderProgram mShaderProgram;
     private ITouchCallback mTouchCallback;
 
     // ===========================================================
-	// Constructors
-	// ===========================================================
+    // Constructors
+    // ===========================================================
 
-	public Shape(final float pX, final float pY, final ShaderProgram pShaderProgram) {
-		super(pX, pY);
+    public Shape(final float pX, final float pY, final ShaderProgram pShaderProgram) {
+        super(pX, pY);
 
-		this.mShaderProgram = pShaderProgram;
-	}
+        this.mShaderProgram = pShaderProgram;
+    }
 
-	// ===========================================================
-	// Getter & Setter
-	// ===========================================================
+    public Shape(final float pX, final float pY, final float pWidth, final float pHeight, final ShaderProgram pShaderProgram) {
+        super(pX, pY, pWidth, pHeight);
 
-	@Override
-	public boolean isBlendingEnabled() {
-		return this.mBlendingEnabled;
-	}
+        this.mShaderProgram = pShaderProgram;
+    }
 
-	@Override
-	public void setBlendingEnabled(final boolean pBlendingEnabled) {
-		this.mBlendingEnabled = pBlendingEnabled;
-	}
+    // ===========================================================
+    // Getter & Setter
+    // ===========================================================
 
-	@Override
-	public int getBlendFunctionSource() {
-		return this.mBlendFunctionSource;
-	}
+    @Override
+    public boolean isBlendingEnabled() {
+        return this.mBlendingEnabled;
+    }
 
-	@Override
-	public void setBlendFunctionSource(final int pBlendFunctionSource) {
-		this.mBlendFunctionSource = pBlendFunctionSource;
-	}
+    @Override
+    public void setBlendingEnabled(final boolean pBlendingEnabled) {
+        this.mBlendingEnabled = pBlendingEnabled;
+    }
 
-	@Override
-	public int getBlendFunctionDestination() {
-		return this.mBlendFunctionDestination;
-	}
+    @Override
+    public int getBlendFunctionSource() {
+        return this.mBlendFunctionSource;
+    }
 
-	@Override
-	public void setBlendFunctionDestination(final int pBlendFunctionDestination) {
-		this.mBlendFunctionDestination = pBlendFunctionDestination;
-	}
+    @Override
+    public void setBlendFunctionSource(final int pBlendFunctionSource) {
+        this.mBlendFunctionSource = pBlendFunctionSource;
+    }
 
-	@Override
-	public void setBlendFunction(final int pBlendFunctionSource, final int pBlendFunctionDestination) {
-		this.mBlendFunctionSource = pBlendFunctionSource;
-		this.mBlendFunctionDestination = pBlendFunctionDestination;
-	}
+    @Override
+    public int getBlendFunctionDestination() {
+        return this.mBlendFunctionDestination;
+    }
 
-	@Override
-	public ShaderProgram getShaderProgram() {
-		return this.mShaderProgram;
-	}
+    @Override
+    public void setBlendFunctionDestination(final int pBlendFunctionDestination) {
+        this.mBlendFunctionDestination = pBlendFunctionDestination;
+    }
 
-	@Override
-	public void setShaderProgram(final ShaderProgram pShaderProgram) {
-		this.mShaderProgram = pShaderProgram;
-	}
+    @Override
+    public void setBlendFunction(final int pBlendFunctionSource, final int pBlendFunctionDestination) {
+        this.mBlendFunctionSource = pBlendFunctionSource;
+        this.mBlendFunctionDestination = pBlendFunctionDestination;
+    }
 
-	@Override
-	public VertexBufferObjectManager getVertexBufferObjectManager() {
-		return this.getVertexBufferObject().getVertexBufferObjectManager();
-	}
+    @Override
+    public VertexBufferObjectManager getVertexBufferObjectManager() {
+        return this.getVertexBufferObject().getVertexBufferObjectManager();
+    }
 
-	// ===========================================================
-	// Methods for/from SuperClass/Interfaces
-	// ===========================================================
+    @Override
+    public ShaderProgram getShaderProgram() {
+        return this.mShaderProgram;
+    }
 
-	protected abstract void onUpdateVertices();
+    @Override
+    public void setShaderProgram(final ShaderProgram pShaderProgram) {
+        this.mShaderProgram = pShaderProgram;
+    }
 
     @Override
     public void setTouchCallback(ITouchCallback touchCallback) {
         mTouchCallback = touchCallback;
     }
+
+    // ===========================================================
+    // Methods for/from SuperClass/Interfaces
+    // ===========================================================
 
     @Override
     public void removeTouchCallback() {
@@ -118,67 +121,85 @@ public abstract class Shape extends Entity implements IShape, ITouchListener {
     }
 
     @Override
-	protected void preDraw(final GLState pGLState, final Camera pCamera) {
-		if(this.mBlendingEnabled) {
-			pGLState.enableBlend();
-			pGLState.blendFunction(this.mBlendFunctionSource, this.mBlendFunctionDestination);
-		}
-	}
-
-	@Override
-	protected void postDraw(final GLState pGLState, final Camera pCamera) {
-		if(this.mBlendingEnabled) {
-			pGLState.disableBlend();
-		}
-	}
-
-	@Override
-	public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+    public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
         return (mTouchCallback != null && mTouchCallback.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY));
-	}
-
-	@Override
-	public void reset() {
-		super.reset();
-
-		this.mBlendFunctionSource = IShape.BLENDFUNCTION_SOURCE_DEFAULT;
-		this.mBlendFunctionDestination = IShape.BLENDFUNCTION_DESTINATION_DEFAULT;
-	}
-
-	@Override
-	public void dispose() {
-		super.dispose();
-
-		final IVertexBufferObject vertexBufferObject = this.getVertexBufferObject();
-		if((vertexBufferObject != null) && vertexBufferObject.isAutoDispose() && !vertexBufferObject.isDisposed()) {
-			vertexBufferObject.dispose();
-		}
-	}
-
-	// ===========================================================
-	// Methods
-	// ===========================================================
-    /** invoke {@code detachSelf} method with unregister touch even from scene */
-    public boolean detachSelf(Scene scene) {
-        scene.unregisterTouchArea(this);
-        return detachSelf();
     }
 
-	protected void initBlendFunction(final ITextureRegion pTextureRegion) {
-		this.initBlendFunction(pTextureRegion.getTexture());
-	}
+    @Override
+    public void setWidth(final float pWidth) {
+        super.setWidth(pWidth);
 
-	protected void initBlendFunction(final ITexture pTexture) {
-		this.initBlendFunction(pTexture.getTextureOptions());
-	}
+        this.onUpdateVertices();
+    }
 
-	protected void initBlendFunction(final TextureOptions pTextureOptions) {
-		if(pTextureOptions.mPreMultiplyAlpha) {
-			this.setBlendFunction(IShape.BLENDFUNCTION_SOURCE_PREMULTIPLYALPHA_DEFAULT, IShape.BLENDFUNCTION_DESTINATION_PREMULTIPLYALPHA_DEFAULT);
-		}
-	}
+    protected abstract void onUpdateVertices();
 
-	// ===========================================================
-	// Inner and Anonymous Classes
-	// ===========================================================
+    @Override
+    public void setHeight(final float pHeight) {
+        super.setHeight(pHeight);
+
+        this.onUpdateVertices();
+    }
+
+    @Override
+    public void setSize(final float pWidth, final float pHeight) {
+        super.setSize(pWidth, pHeight);
+
+        this.onUpdateVertices();
+    }
+
+    @Override
+    public void reset() {
+        super.reset();
+
+        this.mBlendFunctionSource = IShape.BLENDFUNCTION_SOURCE_DEFAULT;
+        this.mBlendFunctionDestination = IShape.BLENDFUNCTION_DESTINATION_DEFAULT;
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+
+        final IVertexBufferObject vertexBufferObject = this.getVertexBufferObject();
+        if ((vertexBufferObject != null) && vertexBufferObject.isAutoDispose() && !vertexBufferObject.isDisposed()) {
+            vertexBufferObject.dispose();
+        }
+    }
+
+    @Override
+    protected void preDraw(final GLState pGLState, final Camera pCamera) {
+        if (this.mBlendingEnabled) {
+            pGLState.enableBlend();
+            pGLState.blendFunction(this.mBlendFunctionSource, this.mBlendFunctionDestination);
+        }
+    }
+
+    @Override
+    protected void postDraw(final GLState pGLState, final Camera pCamera) {
+        if (this.mBlendingEnabled) {
+            pGLState.disableBlend();
+        }
+    }
+
+    // ===========================================================
+    // Methods
+    // ===========================================================
+
+    protected void initBlendFunction(final ITextureRegion pTextureRegion) {
+        this.initBlendFunction(pTextureRegion.getTexture());
+    }
+
+    protected void initBlendFunction(final ITexture pTexture) {
+        this.initBlendFunction(pTexture.getTextureOptions());
+    }
+
+    protected void initBlendFunction(final TextureOptions pTextureOptions) {
+        if (pTextureOptions.mPreMultiplyAlpha) {
+            this.setBlendFunction(IShape.BLENDFUNCTION_SOURCE_PREMULTIPLYALPHA_DEFAULT, IShape.BLENDFUNCTION_DESTINATION_PREMULTIPLYALPHA_DEFAULT);
+        }
+    }
+
+    // ===========================================================
+    // Inner and Anonymous Classes
+    // ===========================================================
 }

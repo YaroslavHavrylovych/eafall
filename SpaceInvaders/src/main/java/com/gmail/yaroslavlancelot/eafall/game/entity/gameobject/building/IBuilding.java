@@ -1,6 +1,6 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building;
 
-import org.andengine.entity.IEntity;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.StaticObject;
 
 /** General interface for existing buildings. Used by planet to simplify buildings usage. */
 public interface IBuilding {
@@ -14,10 +14,10 @@ public interface IBuilding {
     int getIncome();
 
     /** return buildings amount */
-    public int getAmount();
+    int getAmount();
 
     /** return building entity (for drawing) */
-    public IEntity getEntity();
+    StaticObject getEntity();
 
     /** return building upgrade */
     int getUpgrade();
@@ -27,4 +27,10 @@ public interface IBuilding {
 
     /** upgrade all buildings of the current type */
     boolean upgradeBuilding();
+
+    /** get building abscissa on the planet (starting from the planet bottom left) */
+    float getX();
+
+    /** get building ordinate on the planet (starting from the planet bottom left) */
+    float getY();
 }

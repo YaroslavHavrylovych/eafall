@@ -4,7 +4,6 @@ import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.Alliance;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.loader.BuildingListLoader;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.loader.UnitListLoader;
-import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.sound.SoundOperations;
 
 import org.andengine.opengl.texture.TextureManager;
@@ -31,17 +30,13 @@ public class Mutants extends Alliance {
         loadUnits(textureManager);
     }
 
-    private void loadBuildings(TextureManager textureManager) {
-        LoggerHelper.printDebugMessage(TAG, "loading buildings");
-        BuildingListLoader buildingListLoader = loadObjects(R.raw.mutants_buildings, BuildingListLoader.class);
-
-        loadBuildings(textureManager, buildingListLoader);
+    @Override
+    protected UnitListLoader getUnitListLoader() {
+        return loadObjects(R.raw.mutants_units, UnitListLoader.class);
     }
 
-    private void loadUnits(TextureManager textureManager) {
-        LoggerHelper.printDebugMessage(TAG, "loading units");
-        UnitListLoader unitListLoader = loadObjects(R.raw.mutants_units, UnitListLoader.class);
-
-        loadUnits(textureManager, unitListLoader);
+    @Override
+    protected BuildingListLoader getBuildingListLoader() {
+        return loadObjects(R.raw.mutants_buildings, BuildingListLoader.class);
     }
 }

@@ -3,7 +3,7 @@ package com.gmail.yaroslavlancelot.eafall.network.server.messages;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.network.server.messages.constants.ServerMessagesConstants;
 
-import org.andengine.extension.multiplayer.protocol.adt.message.server.ServerMessage;
+import org.andengine.extension.multiplayer.adt.message.server.ServerMessage;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

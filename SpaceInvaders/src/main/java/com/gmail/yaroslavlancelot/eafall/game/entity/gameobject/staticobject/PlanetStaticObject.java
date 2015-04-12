@@ -1,15 +1,15 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject;
 
-import android.content.Context;
-
-import com.gmail.yaroslavlancelot.eafall.game.constant.Sizes;
-import com.gmail.yaroslavlancelot.eafall.game.constant.StringsAndPath;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.Armor;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingType;
+import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
+import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
+import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
+import com.gmail.yaroslavlancelot.eafall.game.entity.BatchedSprite;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.ITeamObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingType;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.IBuilding;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.CreepBuilding;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.DefenceBuilding;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.IBuilding;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.SpecialBuilding;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.WealthBuilding;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
@@ -17,40 +17,55 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.C
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.DefenceBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.SpecialBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.WealthBuildingDummy;
-import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
-import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
-import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.Armor;
+import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
 
-import org.andengine.opengl.texture.TextureManager;
-import org.andengine.opengl.texture.TextureOptions;
-import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
-import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.adt.list.SmartList;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 /** represent team planet */
-public class PlanetStaticObject extends StaticObject {
+public class PlanetStaticObject extends StaticObject implements ITeamObject {
     /** tag, which is used for debugging purpose */
     public static final String TAG = PlanetStaticObject.class.getCanonicalName();
     // unit spawn point
     private float mSpawnPointX, mSpawnPointY;
     // buildings in current planet
     private Map<Integer, IBuilding> mBuildings = new HashMap<Integer, IBuilding>(10);
-    /** the team, current planet belongs to */
-    private ITeam mPlanetTeam;
+    /** current planet team name */
+    private String mTeamName;
 
-    public PlanetStaticObject(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager objectManager, ITeam planetTeam) {
-        super(x, y, textureRegion, objectManager);
+
+    public PlanetStaticObject(float x, float y, ITextureRegion textureRegion,
+                              VertexBufferObjectManager objectManager) {
+        super(x, y, SizeConstants.PLANET_DIAMETER, SizeConstants.PLANET_DIAMETER,
+                textureRegion, objectManager);
         mIncomeIncreasingValue = 10;
-        mPlanetTeam = planetTeam;
         mObjectArmor = new Armor(Armor.ArmorType.MIXED.name(), 10);
-        setWidth(Sizes.PLANET_DIAMETER);
-        setHeight(Sizes.PLANET_DIAMETER);
-        initHealth(3000);
+        initSpawnPoint();
+        mChildren = new SmartList<BatchedSprite>(12);
+        setSpriteGroupName(BatchingKeys.SUN_PLANET);
+    }
+
+    private void initSpawnPoint() {
+        float x;
+        if (getX() < SizeConstants.HALF_FIELD_WIDTH) {
+            x = SizeConstants.PLANET_DIAMETER + SizeConstants.ADDITION_MARGIN_FOR_PLANET + SizeConstants.UNIT_SIZE;
+        } else {
+            x = getX() - SizeConstants.PLANET_DIAMETER / 2
+                    - SizeConstants.UNIT_SIZE - SizeConstants.ADDITION_MARGIN_FOR_PLANET;
+        }
+        setSpawnPoint(x, getY());
+    }
+
+    /** set unit spawn point */
+    public void setSpawnPoint(float spawnPointX, float spawnPointY) {
+        mSpawnPointX = spawnPointX;
+        mSpawnPointY = spawnPointY;
     }
 
     @Override
@@ -68,12 +83,6 @@ public class PlanetStaticObject extends StaticObject {
             value += building.getIncome();
         }
         return value + (int) (value * (((float) percentIncrease) / 100));
-    }
-
-    /** set unit spawn point */
-    public void setSpawnPoint(float spawnPointX, float spawnPointY) {
-        mSpawnPointX = spawnPointX;
-        mSpawnPointY = spawnPointY;
     }
 
     public float getSpawnPointX() {
@@ -96,37 +105,42 @@ public class PlanetStaticObject extends StaticObject {
         LoggerHelper.methodInvocation(TAG, "createBuilding");
         IBuilding building = mBuildings.get(buildingId.getId());
         if (building == null) {
-            final BuildingDummy buildingDummy = mPlanetTeam.getTeamRace().getBuildingDummy(buildingId);
+            final BuildingDummy buildingDummy = TeamsHolder.getTeam(mTeamName).getTeamRace()
+                    .getBuildingDummy(buildingId);
             if (buildingDummy == null) {
                 throw new IllegalArgumentException("no building with id " + buildingId);
             }
 
             switch (buildingDummy.getBuildingType()) {
                 case CREEP_BUILDING: {
-                    building = new CreepBuilding((CreepBuildingDummy) buildingDummy, getVertexBufferObjectManager(),
-                            mPlanetTeam.getTeamName());
+                    building = new CreepBuilding((CreepBuildingDummy) buildingDummy,
+                            getVertexBufferObjectManager(), mTeamName);
                     break;
                 }
                 case WEALTH_BUILDING: {
-                    building = new WealthBuilding((WealthBuildingDummy) buildingDummy, getVertexBufferObjectManager(),
-                            mPlanetTeam.getTeamName());
+                    building = new WealthBuilding((WealthBuildingDummy) buildingDummy,
+                            getVertexBufferObjectManager(), mTeamName);
                     break;
                 }
                 case SPECIAL_BUILDING: {
-                    building = new SpecialBuilding((SpecialBuildingDummy) buildingDummy, getVertexBufferObjectManager(),
-                            mPlanetTeam.getTeamName());
+                    building = new SpecialBuilding((SpecialBuildingDummy) buildingDummy,
+                            getVertexBufferObjectManager(), mTeamName);
                     break;
                 }
                 case DEFENCE_BUILDING: {
-                    building = new DefenceBuilding((DefenceBuildingDummy) buildingDummy, getVertexBufferObjectManager(),
-                            mPlanetTeam.getTeamName());
+                    building = new DefenceBuilding((DefenceBuildingDummy) buildingDummy,
+                            getVertexBufferObjectManager(), mTeamName);
                     break;
                 }
                 default: {
                     throw new IllegalStateException("unknown building type in create building");
                 }
             }
-            attachChild(building.getEntity());
+            StaticObject buildingStatObj = building.getEntity();
+            buildingStatObj.setSpriteGroupName(BatchingKeys.getBuildingSpriteGroup(mTeamName));
+            buildingStatObj.setPosition(
+                    getX() + buildingStatObj.getX(), getY() + buildingStatObj.getY());
+            attachChild(buildingStatObj);
             mBuildings.put(buildingId.getId(), building);
         }
         return building.buyBuilding();
@@ -151,15 +165,14 @@ public class PlanetStaticObject extends StaticObject {
         return mBuildings.get(id);
     }
 
-    public static void loadImages(Context context, TextureManager textureManager){
-        BitmapTextureAtlas bitmapTextureAtlas = new BitmapTextureAtlas(textureManager,
-                256, 128, TextureOptions.BILINEAR);
-        TextureRegionHolder.getInstance().addElement(StringsAndPath.KEY_RED_PLANET,
-                BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-                        bitmapTextureAtlas, context, StringsAndPath.FILE_RED_PLANET, 0, 0));
-        TextureRegionHolder.getInstance().addElement(StringsAndPath.KEY_BLUE_PLANET,
-                BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-                        bitmapTextureAtlas, context, StringsAndPath.FILE_BLUE_PLANET, 128, 0));
-        bitmapTextureAtlas.load();
+    @Override
+    public String getTeam() {
+        return mTeamName;
+    }
+
+    @Override
+    public void setTeam(String teamName) {
+        mTeamName = teamName;
+        initHealthBar();
     }
 }

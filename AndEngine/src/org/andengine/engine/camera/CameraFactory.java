@@ -4,13 +4,13 @@ import android.content.Context;
 import android.util.DisplayMetrics;
 
 /**
- * (c) 2010 Nicolas Gramlich 
+ * (c) 2010 Nicolas Gramlich
  * (c) 2011 Zynga Inc.
- * 
+ *
  * @author Nicolas Gramlich
  * @since 13:50:42 - 03.07.2010
  */
-public class CameraFactory {
+public final class CameraFactory {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -22,6 +22,10 @@ public class CameraFactory {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
+
+	private CameraFactory() {
+
+	}
 
 	// ===========================================================
 	// Getter & Setter

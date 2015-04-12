@@ -4,19 +4,19 @@ import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.description.BuildingDescriptionShowEvent;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.description.UnitByBuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.CreepBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitDummy;
-import com.gmail.yaroslavlancelot.eafall.game.touch.StaticHelper;
-import com.gmail.yaroslavlancelot.eafall.game.visual.text.DescriptionText;
+import com.gmail.yaroslavlancelot.eafall.game.eventbus.description.BuildingDescriptionShowEvent;
+import com.gmail.yaroslavlancelot.eafall.game.eventbus.description.UnitByBuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.BaseDescriptionAreaUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
+import com.gmail.yaroslavlancelot.eafall.game.touch.StaticHelper;
+import com.gmail.yaroslavlancelot.eafall.game.visual.text.DescriptionText;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.Link;
 
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.shape.RectangularShape;
+import org.andengine.entity.shape.Shape;
 import org.andengine.entity.text.Text;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
@@ -40,7 +40,7 @@ public class DescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
     public DescriptionAreaUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         // cost
         Text text = createDescriptionText(0, R.string.description_cost, vertexBufferObjectManager);
-        mCostValue = createDescriptionText(text.getWidth() + mSpace, 0, vertexBufferObjectManager);
+        mCostValue = createDescriptionText(text.getWidth() + mSpace, text.getY(), vertexBufferObjectManager);
         // produce
         text = createDescriptionText(1, R.string.description_produce, vertexBufferObjectManager);
         mProducedUnitLink = createLink(text.getWidth(), text.getY(), vertexBufferObjectManager);
@@ -52,12 +52,18 @@ public class DescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
         mUpgradeLink = createLink(text.getWidth(), text.getY(), vertexBufferObjectManager);
 
         // touch
-        scene.registerTouchArea(mProducedUnitLink);
         scene.registerTouchArea(mUpgradeLink);
+        scene.registerTouchArea(mProducedUnitLink);
     }
 
     @Override
-    public void updateDescription(RectangularShape drawArea, Object objectId,
+    protected void iniDescriptionTextList() {
+        mDescriptionTextList = new ArrayList<Text>(8);
+        mDescriptionTextLinesAmount = 4;
+    }
+
+    @Override
+    public void updateDescription(Shape drawArea, Object objectId,
                                   final String raceName, final String teamName) {
         super.updateDescription(drawArea, objectId, raceName, teamName);
         final BuildingId buildingId = (BuildingId) objectId;
@@ -99,10 +105,5 @@ public class DescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
         amount = amount == 0 ? 1 : amount;
         int upgradeCost = amount * race.getUpgradeCost(buildingId);
         mUpgradeLink.setText(Integer.valueOf(upgradeCost).toString());
-    }
-
-    @Override
-    protected void iniDescriptionTextList() {
-        mDescriptionTextList = new ArrayList<Text>(8);
     }
 }

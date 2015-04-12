@@ -3,11 +3,8 @@ package com.gmail.yaroslavlancelot.eafall.game.entity;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.DetachEntityEvent;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.Bullet;
-
-import de.greenrobot.event.EventBus;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 
 public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactListener {
     private ContactCallback mContactCallback;
@@ -42,20 +39,23 @@ public class ContactListener implements com.badlogic.gdx.physics.box2d.ContactLi
     }
 
     protected void bulletColliedWithBullet(Bullet firstBody, Bullet secondBody) {
-        if (!firstBody.getAndSetFalseIsObjectAlive() || !secondBody.getAndSetFalseIsObjectAlive())
+        if (!firstBody.getAndSetFalseIsObjectAlive() || !secondBody.getAndSetFalseIsObjectAlive()) {
             return;
-        EventBus.getDefault().post(new DetachEntityEvent(firstBody));
-        EventBus.getDefault().post(new DetachEntityEvent(secondBody));
+        }
+        firstBody.destroyBullet();
+        secondBody.destroyBullet();
     }
 
     private void bulletColliedWithObject(Bullet bullet, Object object) {
-        if (!bullet.getAndSetFalseIsObjectAlive()) return;
+        if (!bullet.getAndSetFalseIsObjectAlive()) {
+            return;
+        }
         if (object instanceof GameObject) {
             ((GameObject) object).damageObject(bullet.getDamage());
         } else {
             return;
         }
-        EventBus.getDefault().post(new DetachEntityEvent(bullet));
+        bullet.destroyBullet();
     }
 
     @Override

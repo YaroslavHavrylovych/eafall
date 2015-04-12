@@ -2,16 +2,17 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildi
 
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.Building;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
-import com.gmail.yaroslavlancelot.eafall.game.team.TeamControlBehaviourType;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.description.BuildingDescriptionShowEvent;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitCreatorCycle;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.CreepBuildingDummy;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitCreatorCycle;
+import com.gmail.yaroslavlancelot.eafall.game.eventbus.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
+import com.gmail.yaroslavlancelot.eafall.game.team.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
 
 import org.andengine.engine.handler.timer.TimerHandler;
+import org.andengine.entity.IEntity;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.color.Color;
+import org.andengine.util.adt.color.Color;
 
 import de.greenrobot.event.EventBus;
 
@@ -95,19 +96,24 @@ public class CreepBuilding extends Building implements ICreepBuilding {
             }
             //upgrade
             team.changeMoney(-cost);
-            mBuildingStaticObject.clearUpdateHandlers();
-            mUnitCreatorCycle = new UnitCreatorCycle(mTeamName, mCreepBuildingDummy.getMovableUnitId(nextUpgrade),
-                    mBuildingsAmount, isTopPath());
         }
         Color teamColor = TeamsHolder.getTeam(mTeamName).getTeamColor();
-        VertexBufferObjectManager objectManager = mBuildingStaticObject.getVertexBufferObjectManager();
-        mBuildingStaticObject = getBuildingByUpgrade(nextUpgrade, mCreepBuildingDummy, teamColor, objectManager);
+        VertexBufferObjectManager objectManager =
+                mBuildingStaticObject.getVertexBufferObjectManager();
+        mBuildingStaticObject = getBuildingByUpgrade(nextUpgrade, mCreepBuildingDummy, teamColor,
+                objectManager);
         if (!isFakePlanet) {
+            mBuildingStaticObject.clearUpdateHandlers();
+            mUnitCreatorCycle = new UnitCreatorCycle(mTeamName,
+                    mCreepBuildingDummy.getMovableUnitId(nextUpgrade),
+                    mBuildingsAmount, isTopPath());
             mBuildingStaticObject.registerUpdateHandler(new TimerHandler(20, true, mUnitCreatorCycle));
         }
 
-        getEntity().detachChildren();
-        getEntity().attachChild(mBuildingStaticObject);
+        IEntity oldBuilding = getEntity();
+        IEntity parent = oldBuilding.getParent();
+        parent.detachChild(oldBuilding);
+        parent.attachChild(mBuildingStaticObject);
 
         mUpgrade = nextUpgrade;
         //change description popup

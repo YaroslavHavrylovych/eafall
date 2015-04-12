@@ -2,7 +2,7 @@ package com.gmail.yaroslavlancelot.eafall.game.visual.buttons;
 
 import android.content.Context;
 
-import com.gmail.yaroslavlancelot.eafall.game.constant.StringsAndPath;
+import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 
 import org.andengine.entity.sprite.TiledSprite;
@@ -22,7 +22,7 @@ public class CirclePointButton extends TiledSprite {
     public static void loadResources(Context context, TextureManager textureManager) {
         BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 128, 64, TextureOptions.BILINEAR);
         TextureRegionHolder.addTiledElementFromAssets(
-                StringsAndPath.FILE_CIRCLE_POINT, smallObjectTexture, context, 0, 0, 2, 1);
+                StringConstants.FILE_CIRCLE_POINT, smallObjectTexture, context, 0, 0, 2, 1);
         smallObjectTexture.load();
     }
 

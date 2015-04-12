@@ -5,7 +5,7 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.Buildin
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.building.BaseBuildingPopupUpdater;
 
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.shape.RectangularShape;
+import org.andengine.entity.shape.Shape;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
@@ -22,12 +22,12 @@ public class SpecialBuildingPopupUpdater extends BaseBuildingPopupUpdater {
     }
 
     @Override
-    public void updateAdditionInfo(RectangularShape drawArea, Object objectId, String raceName, String teamName) {
+    public void updateAdditionInfo(Shape drawArea, Object objectId, String raceName, String teamName) {
 
     }
 
     @Override
-    public void updateDescription(RectangularShape drawArea, Object objectId, String raceName, String teamName) {
+    public void updateDescription(Shape drawArea, Object objectId, String raceName, String teamName) {
         super.updateDescription(drawArea, objectId, raceName, teamName);
         final BuildingId buildingId = (BuildingId) objectId;
 

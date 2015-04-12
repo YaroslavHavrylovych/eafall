@@ -51,7 +51,7 @@ public abstract class PopupHud extends HUD implements IPopup {
         for (int i = 0; i < mPopupRectangle.getChildCount(); i++) {
             child = mPopupRectangle.getChildByIndex(i);
             if (child instanceof ITouchArea) {
-                unregisterTouchArea((ITouchArea) child);
+                unregisterTouchArea(child);
             }
         }
         detachChild(mPopupRectangle);
@@ -84,7 +84,7 @@ public abstract class PopupHud extends HUD implements IPopup {
         for (int i = 0; i < mPopupRectangle.getChildCount(); i++) {
             child = mPopupRectangle.getChildByIndex(i);
             if (child instanceof ITouchArea) {
-                registerTouchArea((ITouchArea) child);
+                registerTouchArea(child);
             }
         }
         attachChild(mPopupRectangle);

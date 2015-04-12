@@ -7,7 +7,7 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetStaticObject;
 
-import org.andengine.util.color.Color;
+import org.andengine.util.adt.color.Color;
 
 import java.util.List;
 

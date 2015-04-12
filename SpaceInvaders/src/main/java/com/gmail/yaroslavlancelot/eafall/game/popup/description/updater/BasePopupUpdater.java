@@ -1,7 +1,7 @@
 package com.gmail.yaroslavlancelot.eafall.game.popup.description.updater;
 
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.shape.RectangularShape;
+import org.andengine.entity.shape.Shape;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -24,7 +24,7 @@ public abstract class BasePopupUpdater implements IPopupUpdater {
     }
 
     @Override
-    public void updateImage(RectangularShape drawArea, Object objectId, String raceName, String teamName) {
+    public void updateImage(Shape drawArea, Object objectId, String raceName, String teamName) {
         if (mObjectImage != null) {
             drawArea.detachChild(mObjectImage);
         }
@@ -32,7 +32,8 @@ public abstract class BasePopupUpdater implements IPopupUpdater {
         if (textureRegion == null) {
             return;
         }
-        mObjectImage = new Sprite(0, 0, drawArea.getWidth(), drawArea.getHeight(),
+        mObjectImage = new Sprite(drawArea.getWidth() / 2, drawArea.getHeight() / 2,
+                drawArea.getWidth(), drawArea.getHeight(),
                 textureRegion, mVertexBufferObjectManager);
         drawArea.attachChild(mObjectImage);
     }

@@ -1,13 +1,46 @@
-#CUSTOM
-wiki
+# Custom folders
+wiki/**
 
-#ENVIRONMENT
-.idea
+# System:
+Thumbs.db
+.DS_Store
+*.swp
+*~
+Desktop.ini
+
+# Version Control Systems:
+.svn
+CVS
+.hg
+.bzr
+
+#gradle
 .gradle
+
+# Android:
+local.properties
+proguard/**
+target/**
+bin/**
+obj/**
+doc/**
+gen/**
+gdb.setup
+gdbserver
+
+# Eclipse:
+.settings
+.classpath
+.project
+
+# IntelliJ / Android Studio:
+.idea
 build
 project.properties
 *.iml
 local.properties
 spaceinvaders.iml
 eafall.iml
-.classpath
+
+# Crashlytics
+res/values/com_crashlytics_export_strings.xml

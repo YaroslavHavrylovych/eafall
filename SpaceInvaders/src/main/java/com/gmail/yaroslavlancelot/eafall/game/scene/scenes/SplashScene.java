@@ -2,8 +2,8 @@ package com.gmail.yaroslavlancelot.eafall.game.scene.scenes;
 
 import android.content.Context;
 
-import com.gmail.yaroslavlancelot.eafall.game.constant.Sizes;
-import com.gmail.yaroslavlancelot.eafall.game.constant.StringsAndPath;
+import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
+import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 
 import org.andengine.engine.Engine;
@@ -24,10 +24,10 @@ public class SplashScene extends Scene {
 
     public SplashScene(Engine engine) {
         Sprite splash = new Sprite(0, 0, TextureRegionHolder.getInstance()
-                .getElement(StringsAndPath.KEY_SPLASH_SCREEN), engine.getVertexBufferObjectManager());
+                .getElement(StringConstants.KEY_SPLASH_SCREEN), engine.getVertexBufferObjectManager());
         splash.setScale(4f);
-        splash.setPosition((Sizes.GAME_FIELD_WIDTH - splash.getWidth()) * 0.5f,
-                (Sizes.GAME_FIELD_HEIGHT - splash.getHeight()) * 0.5f);
+        splash.setPosition((SizeConstants.GAME_FIELD_WIDTH - splash.getWidth()) * 0.5f,
+                (SizeConstants.GAME_FIELD_HEIGHT - splash.getHeight()) * 0.5f);
         attachChild(splash);
     }
 
@@ -35,8 +35,8 @@ public class SplashScene extends Scene {
         BitmapTextureAtlas splashTextureAtlas =
                 new BitmapTextureAtlas(textureManager, 128, 32, TextureOptions.DEFAULT);
         TextureRegionHolder.getInstance().addElement(
-                StringsAndPath.KEY_SPLASH_SCREEN, BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-                        splashTextureAtlas, context, StringsAndPath.FILE_SPLASH_SCREEN, 0, 0)
+                StringConstants.KEY_SPLASH_SCREEN, BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+                        splashTextureAtlas, context, StringConstants.FILE_SPLASH_SCREEN, 0, 0)
         );
         splashTextureAtlas.load();
     }

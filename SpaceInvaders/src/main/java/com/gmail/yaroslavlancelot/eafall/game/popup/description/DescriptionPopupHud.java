@@ -2,11 +2,11 @@ package com.gmail.yaroslavlancelot.eafall.game.popup.description;
 
 import android.content.Context;
 
-import com.gmail.yaroslavlancelot.eafall.game.constant.Sizes;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.description.BuildingDescriptionShowEvent;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.description.UnitByBuildingDescriptionShowEvent;
+import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
+import com.gmail.yaroslavlancelot.eafall.game.eventbus.description.BuildingDescriptionShowEvent;
+import com.gmail.yaroslavlancelot.eafall.game.eventbus.description.UnitByBuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.popup.PopupHud;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.IPopupUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.building.BaseBuildingPopupUpdater;
@@ -26,6 +26,7 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.adt.color.Color;
 
 import de.greenrobot.event.EventBus;
 
@@ -58,8 +59,9 @@ public class DescriptionPopupHud extends PopupHud {
      */
     public DescriptionPopupHud(Scene scene, VertexBufferObjectManager vertexBufferObjectManager) {
         super(scene);
-        mPopupRectangle = new Rectangle(0, Sizes.GAME_FIELD_HEIGHT - Sizes.DESCRIPTION_POPUP_HEIGHT,
-                Sizes.GAME_FIELD_WIDTH, Sizes.DESCRIPTION_POPUP_HEIGHT, vertexBufferObjectManager);
+        mPopupRectangle = new Rectangle(SizeConstants.DESCRIPTION_POPUP_WIDTH / 2, SizeConstants.DESCRIPTION_POPUP_HEIGHT / 2,
+                SizeConstants.GAME_FIELD_WIDTH, SizeConstants.DESCRIPTION_POPUP_HEIGHT, vertexBufferObjectManager);
+        mPopupRectangle.setColor(Color.TRANSPARENT);
 
         mCreepBuildingPopupUpdater = new CreepBuildingPopupUpdater(vertexBufferObjectManager, this);
         mWealthBuildingPopupUpdater = new WealthBuildingPopupUpdater(vertexBufferObjectManager, this);

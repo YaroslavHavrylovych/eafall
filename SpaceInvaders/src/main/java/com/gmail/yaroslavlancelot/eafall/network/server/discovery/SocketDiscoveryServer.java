@@ -1,7 +1,7 @@
 package com.gmail.yaroslavlancelot.eafall.network.server.discovery;
 
-import org.andengine.extension.multiplayer.protocol.server.SocketServerDiscoveryServer;
-import org.andengine.extension.multiplayer.protocol.shared.IDiscoveryData;
+import org.andengine.extension.multiplayer.server.SocketServerDiscoveryServer;
+import org.andengine.extension.multiplayer.shared.IDiscoveryData;
 
 public class SocketDiscoveryServer extends SocketServerDiscoveryServer {
     public static final int SERVER_PORT = 8899;

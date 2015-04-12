@@ -2,7 +2,7 @@ package com.gmail.yaroslavlancelot.eafall.network.client.messages;
 
 import com.gmail.yaroslavlancelot.eafall.network.client.messages.constants.ClientMessagesConstants;
 
-import org.andengine.extension.multiplayer.protocol.adt.message.client.ClientMessage;
+import org.andengine.extension.multiplayer.adt.message.client.ClientMessage;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

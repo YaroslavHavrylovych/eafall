@@ -3,7 +3,7 @@ package org.andengine.entity.text;
 import java.util.ArrayList;
 
 import org.andengine.engine.camera.Camera;
-import org.andengine.entity.shape.RectangularShape;
+import org.andengine.entity.shape.Shape;
 import org.andengine.entity.text.exception.OutOfCharactersException;
 import org.andengine.entity.text.vbo.HighPerformanceTextVertexBufferObject;
 import org.andengine.entity.text.vbo.ITextVertexBufferObject;
@@ -17,8 +17,8 @@ import org.andengine.opengl.vbo.DrawType;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.opengl.vbo.attribute.VertexBufferObjectAttributes;
 import org.andengine.opengl.vbo.attribute.VertexBufferObjectAttributesBuilder;
-import org.andengine.util.HorizontalAlign;
-import org.andengine.util.adt.DataConstants;
+import org.andengine.util.adt.align.HorizontalAlign;
+import org.andengine.util.adt.data.constants.DataConstants;
 import org.andengine.util.adt.list.FloatArrayList;
 import org.andengine.util.adt.list.IFloatList;
 
@@ -29,11 +29,11 @@ import android.opengl.GLES20;
  *
  * (c) 2010 Nicolas Gramlich
  * (c) 2011 Zynga Inc.
- * 
+ *
  * @author Nicolas Gramlich
  * @since 10:54:59 - 03.04.2010
  */
-public class Text extends RectangularShape {
+public class Text extends Shape {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -134,6 +134,10 @@ public class Text extends RectangularShape {
 		this(pX, pY, pFont, pText, pCharactersMaximum, pTextOptions, pVertexBufferObjectManager, DrawType.STATIC);
 	}
 
+	public Text(final float pX, final float pY, final IFont pFont, final CharSequence pText, final int pCharactersMaximum, final TextOptions pTextOptions, final VertexBufferObjectManager pVertexBufferObjectManager, final ShaderProgram pShaderProgram) {
+		this(pX, pY, pFont, pText, pCharactersMaximum, pTextOptions, pVertexBufferObjectManager, DrawType.STATIC, pShaderProgram);
+	}
+
 	public Text(final float pX, final float pY, final IFont pFont, final CharSequence pText, final int pCharactersMaximum, final TextOptions pTextOptions, final VertexBufferObjectManager pVertexBufferObjectManager, final DrawType pDrawType) {
 		this(pX, pY, pFont, pText, pCharactersMaximum, pTextOptions, new HighPerformanceTextVertexBufferObject(pVertexBufferObjectManager, Text.LETTER_SIZE * pCharactersMaximum, pDrawType, true, Text.VERTEXBUFFEROBJECTATTRIBUTES_DEFAULT));
 	}
@@ -147,7 +151,7 @@ public class Text extends RectangularShape {
 	}
 
 	public Text(final float pX, final float pY, final IFont pFont, final CharSequence pText, final int pCharactersMaximum, final TextOptions pTextOptions, final ITextVertexBufferObject pTextVertexBufferObject, final ShaderProgram pShaderProgram) {
-		super(pX, pY, 0, 0, pShaderProgram);
+		super(pX, pY, pShaderProgram);
 
 		this.mFont = pFont;
 		this.mTextOptions = pTextOptions;
@@ -180,7 +184,7 @@ public class Text extends RectangularShape {
 
 	/**
 	 * @param pText
-	 * @throws OutOfCharactersException leaves this {@link Text} object in an undefined state, until {@link Text#setText(CharSequence)} is called again and no {@link OutOfCharactersException} is thrown.
+	 * @throws OutOfCharactersException leaves this {@link Text} object in an undefined state, until {@link #setText(CharSequence)} is called again and no {@link OutOfCharactersException} is thrown.
 	 */
 	public void setText(final CharSequence pText) throws OutOfCharactersException {
 		this.mText = pText;
@@ -189,7 +193,7 @@ public class Text extends RectangularShape {
 		this.mLines.clear();
 		this.mLineWidths.clear();
 
-		if(this.mTextOptions.mAutoWrap == AutoWrap.NONE) {
+		if (this.mTextOptions.mAutoWrap == AutoWrap.NONE) {
 			this.mLines = FontUtils.splitLines(this.mText, this.mLines); // TODO Add whitespace-trimming.
 		} else {
 			this.mLines = FontUtils.splitLines(this.mFont, this.mText, this.mLines, this.mTextOptions.mAutoWrap, this.mTextOptions.mAutoWrapWidth);
@@ -205,22 +209,16 @@ public class Text extends RectangularShape {
 		}
 		this.mLineWidthMaximum = maximumLineWidth;
 
-		if(this.mTextOptions.mAutoWrap == AutoWrap.NONE) {
+		if (this.mTextOptions.mAutoWrap == AutoWrap.NONE) {
 			this.mLineAlignmentWidth = this.mLineWidthMaximum;
 		} else {
 			this.mLineAlignmentWidth = this.mTextOptions.mAutoWrapWidth;
 		}
 
-		super.mWidth = this.mLineAlignmentWidth;
-		super.mHeight = lineCount * font.getLineHeight() + (lineCount - 1) * this.mTextOptions.mLeading;
+		final float width = this.mLineAlignmentWidth;
+		final float height = lineCount * font.getLineHeight() + (lineCount - 1) * this.mTextOptions.mLeading;
 
-		this.mRotationCenterX = super.mWidth * 0.5f;
-		this.mRotationCenterY = super.mHeight * 0.5f;
-
-		this.mScaleCenterX = this.mRotationCenterX;
-		this.mScaleCenterY = this.mRotationCenterY;
-
-		this.onUpdateVertices();
+		this.setSize(width, height);
 	}
 
 	public ArrayList<CharSequence> getLines() {
@@ -288,7 +286,7 @@ public class Text extends RectangularShape {
 	}
 
 	public void setCharactersToDraw(final int pCharactersToDraw) {
-		if(pCharactersToDraw > this.mCharactersMaximum) {
+		if (pCharactersToDraw > this.mCharactersMaximum) {
 			throw new OutOfCharactersException("Characters: maximum: '" + this.mCharactersMaximum + "' required: '" + pCharactersToDraw + "'.");
 		}
 		this.mCharactersToDraw = pCharactersToDraw;

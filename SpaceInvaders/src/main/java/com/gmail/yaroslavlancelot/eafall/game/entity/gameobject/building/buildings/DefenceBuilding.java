@@ -1,6 +1,6 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings;
 
-import com.gmail.yaroslavlancelot.eafall.game.constant.Sizes;
+import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.Building;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.unit.CreateStationaryUnitEvent;
@@ -18,9 +18,9 @@ public class DefenceBuilding extends Building {
     /** amount of orbital stations produced by this building */
     public static final int ORBITAL_STATIONS_AMOUNT = 3;
     /** abscissa of the game-field center point */
-    private static final float sGameFieldCenterX = Sizes.GAME_FIELD_WIDTH / 2;
+    private static final float sGameFieldCenterX = SizeConstants.GAME_FIELD_WIDTH / 2;
     private static final float sPlanetCenterOrbitalStationDistance =
-            (float) (Sizes.PLANET_DIAMETER * 1.5);
+            (float) (SizeConstants.PLANET_DIAMETER * 1.5);
     /** Triangle leg with hypotenuse equivalent to planet diameter */
     private static final float sLeg = (float) 0.7071 * sPlanetCenterOrbitalStationDistance;
     /**
@@ -65,7 +65,7 @@ public class DefenceBuilding extends Building {
         }
         //create orbital stations
         PlanetStaticObject planet = team.getTeamPlanet();
-        float planetX = planet.getCenterX(), planetY = planet.getCenterY();
+        float planetX = planet.getX(), planetY = planet.getY();
         float x, y;
         for (int i = 0; i < ORBITAL_STATIONS_AMOUNT; i++) {
             x = sOrbitalStationsPositions[i][0];

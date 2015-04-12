@@ -3,16 +3,16 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy;
 import android.content.Context;
 
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
-import com.gmail.yaroslavlancelot.eafall.game.constant.Sizes;
-import com.gmail.yaroslavlancelot.eafall.game.constant.StringsAndPath;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.bonus.Bonus;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingType;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
+import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
+import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
+import com.gmail.yaroslavlancelot.eafall.game.entity.BodiedSprite;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TeamColorArea;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.loader.SpecialBuildingLoader;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingType;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.loader.SpecialBuildingLoader;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.bonus.Bonus;
 
-import org.andengine.entity.shape.Area;
+import com.gmail.yaroslavlancelot.eafall.game.entity.Area;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 
@@ -24,7 +24,7 @@ public class SpecialBuildingDummy extends BuildingDummy {
     private int mDescriptionStringId;
 
     public SpecialBuildingDummy(SpecialBuildingLoader buildingLoader) {
-        super(Sizes.BUILDING_SIZE, Sizes.BUILDING_SIZE);
+        super(SizeConstants.BUILDING_SIZE, SizeConstants.BUILDING_SIZE);
         mBuildingLoader = buildingLoader;
 
         /* how many upgrades does the building have */
@@ -32,7 +32,7 @@ public class SpecialBuildingDummy extends BuildingDummy {
         mTextureRegionArray = new ITextureRegion[1];
 
         TeamColorArea area = mBuildingLoader.team_color_area;
-        mTeamColorAreaArray[0] = new Area(area.x, area.y, area.width, area.height);
+        mTeamColorAreaArray[0] = Area.getArea(area.x, area.y, area.width, area.height);
         mBuildingLoader.team_color_area = null;
 
         Context context = EaFallApplication.getContext();
@@ -80,8 +80,8 @@ public class SpecialBuildingDummy extends BuildingDummy {
 
     @Override
     public void loadResources(Context context, BitmapTextureAtlas textureAtlas, int x, int y, String raceName) {
-        String pathToImage = StringsAndPath.getPathToBuildings(raceName) + mBuildingLoader.image_name;
-        GameObject.loadResource(pathToImage, context, textureAtlas, x + getWidth(), y + getHeight());
+        String pathToImage = StringConstants.getPathToBuildings(raceName) + mBuildingLoader.image_name;
+        BodiedSprite.loadResource(pathToImage, context, textureAtlas, x + getWidth(), y + getHeight());
         mTextureRegionArray[0] = TextureRegionHolder.getInstance().getElement(pathToImage);
     }
 

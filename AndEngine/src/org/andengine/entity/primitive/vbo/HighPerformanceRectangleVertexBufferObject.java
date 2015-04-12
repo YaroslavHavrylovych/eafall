@@ -7,7 +7,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.opengl.vbo.attribute.VertexBufferObjectAttributes;
 
 /**
- * (c) Zynga 2012
+ * (c) 2012 Zynga Inc.
  *
  * @author Nicolas Gramlich <ngramlich@zynga.com>
  * @since 18:48:14 - 28.03.2012
@@ -43,10 +43,10 @@ public class HighPerformanceRectangleVertexBufferObject extends HighPerformanceV
 
 		final float packedColor = pRectangle.getColor().getABGRPackedFloat();
 
-		bufferData[0 * Rectangle.VERTEX_SIZE + Rectangle.COLOR_INDEX] = packedColor;
-		bufferData[1 * Rectangle.VERTEX_SIZE + Rectangle.COLOR_INDEX] = packedColor;
-		bufferData[2 * Rectangle.VERTEX_SIZE + Rectangle.COLOR_INDEX] = packedColor;
-		bufferData[3 * Rectangle.VERTEX_SIZE + Rectangle.COLOR_INDEX] = packedColor;
+		bufferData[(0 * Rectangle.VERTEX_SIZE) + Rectangle.COLOR_INDEX] = packedColor;
+		bufferData[(1 * Rectangle.VERTEX_SIZE) + Rectangle.COLOR_INDEX] = packedColor;
+		bufferData[(2 * Rectangle.VERTEX_SIZE) + Rectangle.COLOR_INDEX] = packedColor;
+		bufferData[(3 * Rectangle.VERTEX_SIZE) + Rectangle.COLOR_INDEX] = packedColor;
 
 		this.setDirtyOnHardware();
 	}
@@ -55,22 +55,20 @@ public class HighPerformanceRectangleVertexBufferObject extends HighPerformanceV
 	public void onUpdateVertices(final Rectangle pRectangle) {
 		final float[] bufferData = this.mBufferData;
 
-		final float x = 0;
-		final float y = 0;
-		final float x2 = pRectangle.getWidth(); // TODO Optimize with field access?
-		final float y2 = pRectangle.getHeight(); // TODO Optimize with field access?
+		final float width = pRectangle.getWidth(); // TODO Optimize with field access?
+		final float height = pRectangle.getHeight(); // TODO Optimize with field access?
 
-		bufferData[0 * Rectangle.VERTEX_SIZE + Rectangle.VERTEX_INDEX_X] = x;
-		bufferData[0 * Rectangle.VERTEX_SIZE + Rectangle.VERTEX_INDEX_Y] = y;
+		bufferData[(0 * Rectangle.VERTEX_SIZE) + Rectangle.VERTEX_INDEX_X] = 0;
+		bufferData[(0 * Rectangle.VERTEX_SIZE) + Rectangle.VERTEX_INDEX_Y] = 0;
 
-		bufferData[1 * Rectangle.VERTEX_SIZE + Rectangle.VERTEX_INDEX_X] = x;
-		bufferData[1 * Rectangle.VERTEX_SIZE + Rectangle.VERTEX_INDEX_Y] = y2;
+		bufferData[(1 * Rectangle.VERTEX_SIZE) + Rectangle.VERTEX_INDEX_X] = 0;
+		bufferData[(1 * Rectangle.VERTEX_SIZE) + Rectangle.VERTEX_INDEX_Y] = height;
 
-		bufferData[2 * Rectangle.VERTEX_SIZE + Rectangle.VERTEX_INDEX_X] = x2;
-		bufferData[2 * Rectangle.VERTEX_SIZE + Rectangle.VERTEX_INDEX_Y] = y;
+		bufferData[(2 * Rectangle.VERTEX_SIZE) + Rectangle.VERTEX_INDEX_X] = width;
+		bufferData[(2 * Rectangle.VERTEX_SIZE) + Rectangle.VERTEX_INDEX_Y] = 0;
 
-		bufferData[3 * Rectangle.VERTEX_SIZE + Rectangle.VERTEX_INDEX_X] = x2;
-		bufferData[3 * Rectangle.VERTEX_SIZE + Rectangle.VERTEX_INDEX_Y] = y2;
+		bufferData[(3 * Rectangle.VERTEX_SIZE) + Rectangle.VERTEX_INDEX_X] = width;
+		bufferData[(3 * Rectangle.VERTEX_SIZE) + Rectangle.VERTEX_INDEX_Y] = height;
 
 		this.setDirtyOnHardware();
 	}
