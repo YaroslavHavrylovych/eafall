@@ -1,9 +1,13 @@
+#CUSTOM
+wiki
+
+#ENVIRONMENT
 .idea
 .gradle
 build
 project.properties
-wiki
 *.iml
 local.properties
 spaceinvaders.iml
 eafall.iml
+.classpath
