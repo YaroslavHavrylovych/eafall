@@ -7,7 +7,6 @@ import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
 
-import org.andengine.entity.IEntity;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
 
@@ -70,7 +69,7 @@ public abstract class Building implements IBuilding {
     }
 
     @Override
-    public IEntity getEntity() {
+    public StaticObject getEntity() {
         return mBuildingStaticObject;
     }
 

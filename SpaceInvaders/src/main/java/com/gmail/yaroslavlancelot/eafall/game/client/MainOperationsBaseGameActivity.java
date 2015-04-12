@@ -185,10 +185,11 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
             mEngine.registerUpdateHandler(new FPSLogger(1) {
                 @Override
                 protected void onLogFPS() {
-                    LoggerHelper.printVerboseMessage(TAG, String.format("FPS: %.2f (MIN: %.0f ms | MAX: %.0f ms)",
-                            this.mFrames / this.mSecondsElapsed,
-                            this.mShortestFrame * TimeConstants.MILLISECONDS_PER_SECOND,
-                            this.mLongestFrame * TimeConstants.MILLISECONDS_PER_SECOND));
+                    LoggerHelper.printVerboseMessage(LoggerHelper.PERFORMANCE_TAG,
+                            String.format("FPS: %.2f (MIN: %.0f ms | MAX: %.0f ms)",
+                                    this.mFrames / this.mSecondsElapsed,
+                                    this.mShortestFrame * TimeConstants.MILLISECONDS_PER_SECOND,
+                                    this.mLongestFrame * TimeConstants.MILLISECONDS_PER_SECOND));
                 }
             });
         }

@@ -20,7 +20,6 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.W
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
 
-import org.andengine.entity.IEntity;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.list.SmartList;
@@ -137,9 +136,11 @@ public class PlanetStaticObject extends StaticObject implements ITeamObject {
                     throw new IllegalStateException("unknown building type in create building");
                 }
             }
-            IEntity entity = building.getEntity();
-            entity.setPosition(getX() + entity.getX(), getY() + entity.getY());
-            attachChild(entity);
+            StaticObject buildingStatObj = building.getEntity();
+            buildingStatObj.setSpriteGroupName(BatchingKeys.getBuildingSpriteGroup(mTeamName));
+            buildingStatObj.setPosition(
+                    getX() + buildingStatObj.getX(), getY() + buildingStatObj.getY());
+            attachChild(buildingStatObj);
             mBuildings.put(buildingId.getId(), building);
         }
         return building.buyBuilding();

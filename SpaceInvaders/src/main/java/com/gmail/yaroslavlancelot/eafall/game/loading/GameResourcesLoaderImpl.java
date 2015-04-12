@@ -78,13 +78,13 @@ public class GameResourcesLoaderImpl implements GameResourceLoader {
             SpriteGroup spriteGroup = new SpriteGroup(textureAtlas,
                     alliance.getBuildingsAmount(),
                     vertexBufferObjectManager);
-            SpriteGroupHolder.addGroup(BatchingKeys.PREFIX_BUILDING + teamName, spriteGroup);
+            SpriteGroupHolder.addGroup(BatchingKeys.getBuildingSpriteGroup(teamName), spriteGroup);
             //unit
             textureAtlas = alliance.getUnitTextureAtlas();
             spriteGroup = new SpriteGroup(textureAtlas,
                     Config.getConfig().getUnitMaximumAmount(),
                     vertexBufferObjectManager);
-            SpriteGroupHolder.addGroup(BatchingKeys.PREFIX_UNIT + teamName, spriteGroup);
+            SpriteGroupHolder.addGroup(BatchingKeys.getUnitSpriteGroup(teamName), spriteGroup);
         }
     }
 

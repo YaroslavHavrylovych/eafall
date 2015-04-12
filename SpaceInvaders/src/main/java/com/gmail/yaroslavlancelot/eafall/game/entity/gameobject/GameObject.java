@@ -1,6 +1,7 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject;
 
 import com.badlogic.gdx.math.Vector2;
+import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.BatchedSprite;
 import com.gmail.yaroslavlancelot.eafall.game.entity.BodiedSprite;
@@ -55,6 +56,8 @@ public abstract class GameObject extends BodiedSprite {
     protected GameObject(float x, float y, float width, float height, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
         super(x, y, width, height, textureRegion, vertexBufferObjectManager);
         mUniqueId = sGameObjectsTracker.getAndIncrement();
+        LoggerHelper.printInformationMessage(LoggerHelper.PERFORMANCE_TAG,
+                "objects amount: " + sGameObjectsTracker.get());
     }
 
     public static void clearCounter() {

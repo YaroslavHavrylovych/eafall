@@ -106,6 +106,7 @@ public abstract class Unit extends GameObject implements
      */
     public void init(float x, float y, String teamName) {
         setTeam(teamName);
+        setSpriteGroupName(BatchingKeys.getUnitSpriteGroup(teamName));
         ITeam team = TeamsHolder.getTeam(mTeamName);
         initTeamColorArea(team);
         initHealthBar();
