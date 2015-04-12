@@ -13,6 +13,7 @@ import com.gmail.yaroslavlancelot.eafall.game.ai.NormalBot;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
 import com.gmail.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder;
+import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 import com.gmail.yaroslavlancelot.eafall.game.constant.CollisionCategories;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
@@ -367,8 +368,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         PlanetStaticObject planetStaticObject = new PlanetStaticObject(x, y, textureRegion,
                 getVertexBufferObjectManager());
         planetStaticObject.setTeam(team.getTeamName());
-        //TODO move this to config, so you have to choose life amount for plane (small, medium, large)
-        planetStaticObject.initHealth(3000);
+        planetStaticObject.initHealth(Config.getConfig().getPlanetHealth());
         planetStaticObject.addObjectDestroyedListener(new PlanetDestroyListener(team));
         attachSprite(planetStaticObject);
         if (unitUniqueId.length > 0) {
@@ -434,21 +434,22 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
             parent = mCamera.getHUD();
         }
         if (abstractSpriteEvent instanceof DetachSpriteEvent) {
-            detachEntity(sprite, parent, ((DetachSpriteEvent) abstractSpriteEvent).isBodied());
+            detachEntity(sprite, ((DetachSpriteEvent) abstractSpriteEvent).isBodied());
         } else if (abstractSpriteEvent instanceof AttachSpriteEvent) {
             attachSprite(sprite, parent);
         }
     }
 
     /** detach entity from entity (sprite group, hud or game scene) */
-    private void detachEntity(final Sprite sprite, final Entity parent, final boolean bodied) {
+    private void detachEntity(final Sprite sprite, final boolean bodied) {
         runOnUpdateThread(new Runnable() {
             @Override
             public void run() {
                 if (bodied) {
                     ((BodiedSprite) sprite).removeBody(mPhysicsWorld);
                 }
-                parent.detachChild(sprite);
+                sprite.detachChildren();
+                sprite.detachSelf();
                 if (sprite instanceof Unit) {
                     mGameObjectsMap.remove(((Unit) sprite).getObjectUniqueId());
                 }
@@ -469,7 +470,6 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     /** used by EventBus */
     @SuppressWarnings("unused")
     public void onEvent(final RunOnUpdateThreadEvent.UpdateThreadRunnable callback) {
-        //TODO move this to thread pool
         runOnUpdateThread(new Runnable() {
             @Override
             public void run() {

@@ -7,9 +7,14 @@ public class Config {
     private final boolean mSoundsEnabled = true;
     private final boolean mTeamColorAreaEnabled = true;
     private final int mUnitMaximumAmount = 200;
+    private final int mPlanetHealth = 300000;
 
     public static Config getConfig() {
         return sConfig;
+    }
+
+    public int getPlanetHealth() {
+        return mPlanetHealth;
     }
 
     public boolean isUnitsHealthBarEnabled() {
