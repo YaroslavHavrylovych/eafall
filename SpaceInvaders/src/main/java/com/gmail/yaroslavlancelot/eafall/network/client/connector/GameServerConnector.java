@@ -42,7 +42,7 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
         registerServerMessage(WAITING_FOR_PLAYERS, WaitingForPlayersServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
-                LoggerHelper.printInformationMessageInClient(TAG, "server waiting for players");
+                LoggerHelper.printInformationMessage(TAG, "RECEIVED MESSAGE: sender = SERVER, type = " + WAITING_FOR_PLAYERS);
                 synchronized (mPreGameStartClientList) {
                     for (PreGameStartClient preGameStartClient : mPreGameStartClientList) {
                         preGameStartClient.gameWaitingForPlayers(mServerIp);
@@ -54,7 +54,7 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
         registerServerMessage(STARTING_GAME, StartingGameServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
-                LoggerHelper.printInformationMessageInClient(TAG, "starting game");
+                LoggerHelper.printInformationMessage(TAG, "RECEIVED MESSAGE: sender = SERVER, type = " + STARTING_GAME);
                 synchronized (mPreGameStartClientList) {
                     for (PreGameStartClient preGameStartClient : mPreGameStartClientList) {
                         preGameStartClient.gameStart(mServerIp);
@@ -66,7 +66,7 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
         registerServerMessage(BUILDING_CREATED, BuildingCreatedServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
-                LoggerHelper.printInformationMessageInClient(TAG, "building created");
+                LoggerHelper.printInformationMessage(TAG, "RECEIVED MESSAGE: sender = SERVER, type = " + BUILDING_CREATED);
                 BuildingCreatedServerMessage buildingCreatedServerMessage = (BuildingCreatedServerMessage) pServerMessage;
                 synchronized (mInGameClientList) {
                     for (InGameClient inGameClient : mInGameClientList) {
@@ -79,7 +79,7 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
         registerServerMessage(UNIT_CREATED, UnitCreatedServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
-                LoggerHelper.printInformationMessageInClient(TAG, "unit created");
+                LoggerHelper.printInformationMessage(TAG, "RECEIVED MESSAGE: sender = SERVER, type = " + UNIT_CREATED);
                 UnitCreatedServerMessage unitCreatedServerMessage = (UnitCreatedServerMessage) pServerMessage;
                 synchronized (mInGameClientList) {
                     for (InGameClient inGameClient : mInGameClientList) {
@@ -93,7 +93,7 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
         registerServerMessage(UNIT_MOVED, UnitChangePositionServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
-                LoggerHelper.printInformationMessageInClient(TAG, "unit moved");
+                LoggerHelper.printInformationMessage(TAG, "RECEIVED MESSAGE: sender = SERVER, type = " + UNIT_MOVED);
                 UnitChangePositionServerMessage unitChangePositionServerMessage = (UnitChangePositionServerMessage) pServerMessage;
                 synchronized (mInGameClientList) {
                     for (InGameClient inGameClient : mInGameClientList) {
@@ -106,7 +106,7 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
         registerServerMessage(GAME_OBJECT_HEALTH_CHANGED, GameObjectHealthChangedServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
-                LoggerHelper.printInformationMessageInClient(TAG, "game object health changed");
+                LoggerHelper.printInformationMessage(TAG, "RECEIVED MESSAGE: sender = SERVER, type = " + GAME_OBJECT_HEALTH_CHANGED);
                 GameObjectHealthChangedServerMessage gameObjectHealthChangedServerMessage = (GameObjectHealthChangedServerMessage) pServerMessage;
                 synchronized (mInGameClientList) {
                     for (InGameClient inGameClient : mInGameClientList) {
@@ -120,7 +120,7 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
         registerServerMessage(UNIT_FIRE, UnitFireServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
-                LoggerHelper.printInformationMessageInClient(TAG, "fireFromPosition on server");
+                LoggerHelper.printInformationMessage(TAG, "RECEIVED MESSAGE: sender = SERVER, type = " + UNIT_FIRE);
                 UnitFireServerMessage unitFireServerMessage = (UnitFireServerMessage) pServerMessage;
                 synchronized (mInGameClientList) {
                     for (InGameClient inGameClient : mInGameClientList) {
@@ -134,7 +134,7 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
         registerServerMessage(MONEY_CHANGED, MoneyChangedServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
-                LoggerHelper.printInformationMessageInClient(TAG, "money changed on server");
+                LoggerHelper.printInformationMessage(TAG, "RECEIVED MESSAGE: sender = SERVER, type = " + MONEY_CHANGED);
                 MoneyChangedServerMessage unitFireServerMessage = (MoneyChangedServerMessage) pServerMessage;
                 synchronized (mInGameClientList) {
                     for (InGameClient inGameClient : mInGameClientList) {
@@ -147,7 +147,7 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
         registerServerMessage(GAME_STARTED, GameStartedServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
-                LoggerHelper.printInformationMessageInClient(TAG, "game started");
+                LoggerHelper.printInformationMessage(TAG, "RECEIVED MESSAGE: sender = SERVER, type = " + GAME_STARTED);
                 synchronized (mInGameClientList) {
                     for (InGameClient inGameClient : mInGameClientList) {
                         inGameClient.gameStarted();
