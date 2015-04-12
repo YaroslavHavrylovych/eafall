@@ -1,2 +1,2 @@
-gradle :SpaceInvaders:clean
-gradle :SpaceInvaders:assembleDebug --no-rebuild 
+./gradlew :SpaceInvaders:clean
+./gradlew :SpaceInvaders:assembleDebug --no-rebuild 
