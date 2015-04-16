@@ -1,73 +1,59 @@
 package com.gmail.yaroslavlancelot.eafall.game.touch;
 
-import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
+import android.view.VelocityTracker;
 
-import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
-
-import org.andengine.engine.camera.SmoothCamera;
+import org.andengine.engine.camera.VelocityCamera;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.ITouchCallback;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.input.touch.detector.PinchZoomDetector;
+import org.andengine.input.touch.detector.ScrollDetector;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/** main game activity touch listener */
-public class GameSceneTouchListener implements IOnSceneTouchListener, ICameraCoordinates {
-    private final float mScreenToSceneRatio;
-    /** previous event abscissa */
-    private float mTouchY;
-    /** previous event ordinate */
-    private float mTouchX;
-    /** if user want to move camera after taking one finger from the screen just after zoom */
-    private boolean mIsInPreviousEventWasMoreThanOneFinger = false;
-    /** camera width */
-    private float mCameraMaxWidth;
-    /** camera height */
-    private float mCameraMaxHeight;
-    /** camera current width */
-    private float mCameraCurrentWidth;
-    /** camera current height */
-    private float mCameraCurrentHeight;
-    /** camera current width */
-    private float mCameraCurrentCenterX;
-    /** camera current height */
-    private float mCameraCurrentCenterY;
-    /** using for handling zoo (with two fingers) events */
-    private ScaleGestureDetector mMapZoomScaleGestureDetector;
+/**
+ * Keep the track about touch functionality and can delegate action to
+ * concrete handler. In advanced handle scroll and zoom logic.
+ */
+public class GameSceneTouchListener implements
+        IOnSceneTouchListener,
+        ICameraCoordinates,
+        PinchZoomDetector.IPinchZoomDetectorListener, //zoom
+        ScrollDetector.IScrollDetectorListener //scroll
+{
+    public static final float MAX_ZOOM_FACTOR = 5;
+    public static final float MIN_ZOOM_FACTOR = 1;
+    private PinchZoomDetector mZoomDetector;
+    private ScrollDetector mScrollDetector;
+    private float mInitialTouchZoomFactor;
+    private VelocityTracker mVelocityTracker;
     /** camera for moving */
-    private SmoothCamera mCamera;
-    /** additional touch listeners that will be invoked after this touch listener finish it's work handling */
+    private VelocityCamera mCamera;
+    /** triggers before current handler and can be triggered instead */
     private List<ITouchCallback> mSceneClickListeners = new ArrayList<ITouchCallback>(2);
 
-    public GameSceneTouchListener(SmoothCamera camera, float screenToSceneRatio) {
+    public GameSceneTouchListener(VelocityCamera camera) {
         mCamera = camera;
-        mMapZoomScaleGestureDetector = new ScaleGestureDetector(
-                EaFallApplication.getContext(), new MapZoomScaleGestureDetector());
-        mCameraCurrentWidth = mCameraMaxWidth = mCamera.getWidth();
-        mCameraCurrentHeight = mCameraMaxHeight = mCamera.getHeight();
-        mCameraCurrentCenterX = mCamera.getCenterX();
-        mCameraCurrentCenterY = mCamera.getCenterY();
-
-        mScreenToSceneRatio = screenToSceneRatio;
+        mZoomDetector = new PinchZoomDetector(this);
+        mScrollDetector = new ScrollDetector(this);
     }
 
     public float getCameraCurrentWidth() {
-        return mCameraCurrentWidth;
+        return mCamera.getWidth();
     }
 
     public float getCameraCurrentHeight() {
-        return mCameraCurrentHeight;
+        return mCamera.getHeight();
     }
 
     public float getCameraCurrentCenterX() {
-        return mCameraCurrentCenterX;
+        return mCamera.getTargetCenterX();
     }
 
     public float getCameraCurrentCenterY() {
-        return mCameraCurrentCenterY;
+        return mCamera.getTargetCenterY();
     }
 
     public float getTargetZoomFactor() {
@@ -75,7 +61,7 @@ public class GameSceneTouchListener implements IOnSceneTouchListener, ICameraCoo
     }
 
     public float getMaxZoomFactorChange() {
-        return mCamera.getMaxZoomFactorChange();
+        return 5;
     }
 
     public void registerTouchListener(ITouchCallback touchListener) {
@@ -95,60 +81,62 @@ public class GameSceneTouchListener implements IOnSceneTouchListener, ICameraCoo
             }
         }
 
-        //zoom
-        mMapZoomScaleGestureDetector.onTouchEvent(pSceneTouchEvent.getMotionEvent());
-        if (pSceneTouchEvent.getMotionEvent().getPointerCount() >= 2)
-            return mIsInPreviousEventWasMoreThanOneFinger = true;
-        float motionEventX = pSceneTouchEvent.getMotionEvent().getX();
-        float motionEventY = pSceneTouchEvent.getMotionEvent().getY();
-        if (mIsInPreviousEventWasMoreThanOneFinger && pSceneTouchEvent.getAction() != TouchEvent.ACTION_DOWN) {
-            mTouchX = motionEventX;
-            mTouchY = motionEventY;
-            mIsInPreviousEventWasMoreThanOneFinger = false;
-            return true;
+        mZoomDetector.onSceneTouchEvent(pScene, pSceneTouchEvent);
+        if (mZoomDetector.isZooming()) {
+            mScrollDetector.setEnabled(false);
+        } else {
+            if (pSceneTouchEvent.isActionDown()) {
+                mScrollDetector.setEnabled(true);
+            }
+            mScrollDetector.onTouchEvent(pSceneTouchEvent);
         }
-
-        // moving
-        switch (pSceneTouchEvent.getMotionEvent().getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                mTouchX = motionEventX;
-                mTouchY = motionEventY;
-                break;
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL:
-            case MotionEvent.ACTION_MOVE:
-                float newPositionX = mCamera.getCenterX() + (mTouchX - motionEventX) / mCamera.getZoomFactor() / mScreenToSceneRatio,
-                        newPositionY = mCamera.getCenterY() - (mTouchY - motionEventY) / mCamera.getZoomFactor() / mScreenToSceneRatio;
-                newPositionX = StaticHelper.stickToBorderOrLeftValue(newPositionX, 0, mCameraMaxWidth);
-                newPositionY = StaticHelper.stickToBorderOrLeftValue(newPositionY, 0, mCameraMaxHeight);
-                if (mCameraCurrentCenterX != newPositionX || mCameraCurrentCenterY != newPositionY) {
-                    mCamera.setCenter(newPositionX, newPositionY);
-                    mTouchX = motionEventX;
-                    mTouchY = motionEventY;
-                    mCameraCurrentCenterX = newPositionX;
-                    mCameraCurrentCenterY = newPositionY;
-                }
-                break;
-        }
-
         return true;
     }
 
-    /** used to perform scaling operations */
-    private class MapZoomScaleGestureDetector extends ScaleGestureDetector.SimpleOnScaleGestureListener {
-        private float mMaximumZoomFactor = 3.f;
-        private float mMinimumZoomFactor = 1.f;
+    @Override
+    public void onPinchZoomStarted(PinchZoomDetector pPinchZoomDetector, TouchEvent pSceneTouchEvent) {
+        mInitialTouchZoomFactor = mCamera.getZoomFactor();
+    }
 
-        @Override
-        public boolean onScale(final ScaleGestureDetector detector) {
-            float scaleFactor = detector.getScaleFactor();
-            float nextZoomFactor = mCamera.getZoomFactor() * scaleFactor;
-            nextZoomFactor = StaticHelper.stickToBorderOrLeftValue(nextZoomFactor, mMinimumZoomFactor, mMaximumZoomFactor);
-            if (nextZoomFactor != mCamera.getZoomFactor())
-                mCamera.setZoomFactor(nextZoomFactor);
-            mCameraCurrentWidth = mCamera.getWidth();
-            mCameraCurrentWidth = mCamera.getHeight();
-            return true;
-        }
+    @Override
+    public void onPinchZoom(PinchZoomDetector pPinchZoomDetector, TouchEvent pTouchEvent,
+                            float pZoomFactor) {
+        mCamera.setZoomFactor(
+                StaticHelper.stickToBorderOrLeftValue(
+                        mInitialTouchZoomFactor * pZoomFactor,
+                        MIN_ZOOM_FACTOR, MAX_ZOOM_FACTOR));
+    }
+
+    @Override
+    public void onPinchZoomFinished(PinchZoomDetector pPinchZoomDetector, TouchEvent pTouchEvent,
+                                    float pZoomFactor) {
+        //unused
+    }
+
+    @Override
+    public void onScrollStarted(ScrollDetector pScollDetector, final TouchEvent pSceneTouchEvent,
+                                int pPointerID, float pDistanceX, float pDistanceY) {
+        mVelocityTracker = VelocityTracker.obtain();// Used for smooth scroll start
+    }
+
+    @Override
+    public void onScroll(ScrollDetector pScollDetector, final TouchEvent pSceneTouchEvent,
+                         int pPointerID, float pDistanceX, float pDistanceY) {
+        // Add movement to velocity
+        this.mVelocityTracker.addMovement(pSceneTouchEvent.getMotionEvent());
+        // Move camera object (relative to zoom factor)
+        final float zoomFactor = getTargetZoomFactor();
+        mCamera.offsetCenter(-pDistanceX / zoomFactor, pDistanceY / zoomFactor);
+    }
+
+    @Override
+    public void onScrollFinished(ScrollDetector pScollDetector, final TouchEvent pSceneTouchEvent,
+                                 int pPointerID, float pDistanceX, float pDistanceY) {
+        this.mVelocityTracker.computeCurrentVelocity(1000);
+        final float velocityX = mVelocityTracker.getXVelocity();
+        final float velocityY = mVelocityTracker.getYVelocity();
+        final float zoomFactor = getTargetZoomFactor();
+        this.mCamera.fling(velocityX / zoomFactor, velocityY / zoomFactor);
+        this.mVelocityTracker.recycle();
     }
 }

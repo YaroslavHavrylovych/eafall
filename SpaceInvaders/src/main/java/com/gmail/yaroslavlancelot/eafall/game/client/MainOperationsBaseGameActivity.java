@@ -53,7 +53,7 @@ import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.ConstructionPopupButton;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.MoneyText;
 
-import org.andengine.engine.camera.SmoothCamera;
+import org.andengine.engine.camera.VelocityCamera;
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -102,7 +102,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     /** game objects contact listener */
     protected ContactListener mContactListener;
     /** game camera */
-    private SmoothCamera mCamera;
+    private VelocityCamera mCamera;
     /** scene manager */
     private SceneManager mSceneManager;
     /** resource loader */
@@ -152,8 +152,10 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         //pre-in-game
         GameObject.clearCounter();
         // init camera
-        mCamera = new SmoothCamera(0, 0, SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT,
-                SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT, 1.0f);
+        mCamera = new VelocityCamera(0, 0,
+                SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT,
+                SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT,
+                5);
         mCamera.setBounds(0, 0, SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT);
         mCamera.setBoundsEnabled(true);
         mCamera.setHUD(new HUD());
@@ -235,10 +237,10 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
                 attachSpriteGroups(scene);
                 //initSun
                 createSun();
-                // first team init
+                //planets
                 initFirstPlanet();
-                // second team init
                 initSecondPlanet();
+                //other
                 initMoneyText();
                 initPopups();
                 //pools

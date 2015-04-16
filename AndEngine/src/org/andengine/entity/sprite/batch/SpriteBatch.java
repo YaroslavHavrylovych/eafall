@@ -403,8 +403,8 @@ public class SpriteBatch extends Shape {
 
 			this.assertTexture(pTextureRegion);
             
-            float width = pEntity.getWidth();
-            float height = pEntity.getHeight();
+            final float width = pEntity.getWidth();
+			final float height = pEntity.getHeight();
 
 			if (pEntity.isRotatedOrScaledOrSkewed()) {
 				this.add(pTextureRegion, width, height, pEntity.getLocalToParentTransformation(), pRed, pGreen, pBlue, pAlpha);
@@ -420,8 +420,8 @@ public class SpriteBatch extends Shape {
 	public void drawWithoutChecks(final ITextureRegion pTextureRegion, final IEntity pEntity, final float pRed, final float pGreen, final float pBlue, final float pAlpha) {
 		if (pEntity.isVisible()) {
 
-            float width = pEntity.getWidth();
-            float height = pEntity.getHeight();
+            final float width = pEntity.getWidth();
+			final float height = pEntity.getHeight();
             
 			if (pEntity.isRotatedOrScaledOrSkewed()) {
 				this.add(pTextureRegion, width, height, pEntity.getLocalToParentTransformation(), pRed, pGreen, pBlue, pAlpha);
@@ -443,8 +443,8 @@ public class SpriteBatch extends Shape {
 
 			this.assertTexture(pTextureRegion);
 
-            float width = pEntity.getWidth();
-            float height = pEntity.getHeight();
+			final float width = pEntity.getWidth();
+			final float height = pEntity.getHeight();
 
 			if (pEntity.isRotatedOrScaledOrSkewed()) {
 				this.addWithPackedColor(pTextureRegion, width, height, pEntity.getLocalToParentTransformation(), pColorABGRPackedInt);
@@ -460,8 +460,8 @@ public class SpriteBatch extends Shape {
 	public void drawWithoutChecks(final ITextureRegion pTextureRegion, final IEntity pEntity, final float pColorABGRPackedInt) {
 		if (pEntity.isVisible()) {
 
-            float width = pEntity.getWidth();
-            float height = pEntity.getHeight();
+			final float width = pEntity.getWidth();
+			final float height = pEntity.getHeight();
             
 			if (pEntity.isRotatedOrScaledOrSkewed()) {
 				this.addWithPackedColor(pTextureRegion, width, height, pEntity.getLocalToParentTransformation(), pColorABGRPackedInt);
