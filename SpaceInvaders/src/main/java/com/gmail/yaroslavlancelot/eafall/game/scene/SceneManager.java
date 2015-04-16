@@ -4,7 +4,7 @@ import com.gmail.yaroslavlancelot.eafall.game.client.MainOperationsBaseGameActiv
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.GameScene;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.SplashScene;
 
-import org.andengine.engine.camera.SmoothCamera;
+import org.andengine.engine.camera.VelocityCamera;
 
 /**
  * Manager class for scenes
@@ -54,10 +54,9 @@ public class SceneManager {
      *
      * @return instance of SplashScene
      */
-    public GameScene createGameScene(SmoothCamera smoothCamera) {
+    public GameScene createGameScene(VelocityCamera camera) {
         mGameScene = new GameScene(mGameActivity.getVertexBufferObjectManager());
-        mGameScene.initGameSceneTouch(
-                mGameActivity.getWindowManager(), smoothCamera, mGameActivity.getMusicAndSoundsHandler());
+        mGameScene.initGameSceneTouch(camera, mGameActivity.getMusicAndSoundsHandler());
         return mGameScene;
     }
 
