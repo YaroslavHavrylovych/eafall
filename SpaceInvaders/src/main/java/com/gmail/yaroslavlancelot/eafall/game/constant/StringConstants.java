@@ -69,6 +69,10 @@ public final class StringConstants {
         return "ingame/graphics/sprites/alliance/" + allianceName.toLowerCase();
     }
 
+    private static String getPathToAllianceImages(String allianceName) {
+        return "ingame/graphics/images/alliance/" + allianceName.toLowerCase();
+    }
+
     public static String getPathToGeneralImages() {
         return GENERAL_IMAGES_PATH;
     }
@@ -79,6 +83,14 @@ public final class StringConstants {
 
     public static String getPathToUnits(String allianceName) {
         return getPathToAllianceSprites(allianceName) + "/units/";
+    }
+
+    public static String getPathToBuildings_Image(String allianceName) {
+        return getPathToAllianceImages(allianceName) + "/buildings/";
+    }
+
+    public static String getPathToUnits_Image(String allianceName) {
+        return getPathToAllianceImages(allianceName) + "/units/";
     }
 
     public static String getPathToSounds(String raceName) {

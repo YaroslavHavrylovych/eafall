@@ -5,16 +5,14 @@ import android.content.Context;
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
-import com.gmail.yaroslavlancelot.eafall.game.entity.BodiedSprite;
+import com.gmail.yaroslavlancelot.eafall.game.entity.Area;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TeamColorArea;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingType;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.loader.SpecialBuildingLoader;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.bonus.Bonus;
 
-import com.gmail.yaroslavlancelot.eafall.game.entity.Area;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
-import org.andengine.opengl.texture.region.ITextureRegion;
 
 /** dummy for special building */
 public class SpecialBuildingDummy extends BuildingDummy {
@@ -24,12 +22,8 @@ public class SpecialBuildingDummy extends BuildingDummy {
     private int mDescriptionStringId;
 
     public SpecialBuildingDummy(SpecialBuildingLoader buildingLoader) {
-        super(SizeConstants.BUILDING_SIZE, SizeConstants.BUILDING_SIZE);
+        super(SizeConstants.BUILDING_SIZE, SizeConstants.BUILDING_SIZE, 1);
         mBuildingLoader = buildingLoader;
-
-        /* how many upgrades does the building have */
-        mTeamColorAreaArray = new Area[1];
-        mTextureRegionArray = new ITextureRegion[1];
 
         TeamColorArea area = mBuildingLoader.team_color_area;
         mTeamColorAreaArray[0] = Area.getArea(area.x, area.y, area.width, area.height);
@@ -41,11 +35,6 @@ public class SpecialBuildingDummy extends BuildingDummy {
 
         mDescriptionStringId = context.getResources().getIdentifier(
                 mBuildingLoader.name + "_description", "string", context.getApplicationInfo().packageName);
-    }
-
-    @Override
-    public int getUpgrades() {
-        return 0;
     }
 
     @Override
@@ -79,10 +68,18 @@ public class SpecialBuildingDummy extends BuildingDummy {
     }
 
     @Override
-    public void loadResources(Context context, BitmapTextureAtlas textureAtlas, int x, int y, String raceName) {
-        String pathToImage = StringConstants.getPathToBuildings(raceName) + mBuildingLoader.image_name;
-        BodiedSprite.loadResource(pathToImage, context, textureAtlas, x + getWidth(), y + getHeight());
-        mTextureRegionArray[0] = TextureRegionHolder.getInstance().getElement(pathToImage);
+    public void loadSpriteResources(Context context, BitmapTextureAtlas textureAtlas, int x, int y, String allianceName) {
+        String pathToImage = StringConstants.getPathToBuildings(allianceName) + mBuildingLoader.image_name;
+        mSpriteTextureRegionArray[0] = TextureRegionHolder.addElementFromAssets(
+                pathToImage, textureAtlas, context, x + getWidth(), y + getHeight());
+    }
+
+    @Override
+    public void loadImageResources(Context context, BitmapTextureAtlas textureAtlas, int x, int y, int upgrade, String allianceName) {
+        String pathToImage = StringConstants.getPathToBuildings_Image(allianceName)
+                + mBuildingLoader.image_name;
+        mImageTextureRegionArray[0] =
+                TextureRegionHolder.addElementFromAssets(pathToImage, textureAtlas, context, x, y);
     }
 
     @Override

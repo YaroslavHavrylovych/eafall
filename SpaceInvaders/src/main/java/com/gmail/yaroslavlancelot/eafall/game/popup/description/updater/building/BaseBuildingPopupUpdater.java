@@ -116,7 +116,7 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
     protected ITextureRegion getDescriptionImage(Object objectId, String raceName) {
         IAlliance race = AllianceHolder.getInstance().getElement(raceName);
         BuildingId buildingId = (BuildingId) objectId;
-        return race.getBuildingDummy(buildingId).getTextureRegionArray(buildingId.getUpgrade());
+        return race.getBuildingDummy(buildingId).getImageTextureRegionArray(buildingId.getUpgrade());
     }
 
     @Override

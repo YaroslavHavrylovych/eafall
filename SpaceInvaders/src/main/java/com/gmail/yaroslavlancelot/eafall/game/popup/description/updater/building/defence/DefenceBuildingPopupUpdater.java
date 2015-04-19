@@ -72,6 +72,6 @@ public class DefenceBuildingPopupUpdater extends BaseBuildingPopupUpdater {
         BuildingId buildingId = (BuildingId) objectId;
         DefenceBuildingDummy dummy = (DefenceBuildingDummy) race.getBuildingDummy(buildingId);
         final int unitId = dummy.getOrbitalStationUnitId();
-        return race.getUnitDummy(unitId).getTextureRegion();
+        return race.getUnitDummy(unitId).getImageTextureRegion();
     }
 }

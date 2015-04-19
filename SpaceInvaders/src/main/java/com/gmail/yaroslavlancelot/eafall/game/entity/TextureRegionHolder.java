@@ -7,6 +7,7 @@ import com.gmail.yaroslavlancelot.eafall.general.Holder;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.texture.region.TextureRegion;
 
 /** Holds all {@link org.andengine.opengl.texture.region.ITextureRegion} used in game */
 public class TextureRegionHolder extends Holder<ITextureRegion> {
@@ -26,11 +27,11 @@ public class TextureRegionHolder extends Holder<ITextureRegion> {
      * @param y            y position to which texture should be loadGeneralGameTextures
      */
     public static ITextureRegion addElementFromAssets(String key, BitmapTextureAtlas textureAtlas, Context context, int x, int y) {
+        ITextureRegion ret;
         if (!sTextureRegionHolderUtils.isElementExist(key)) {
-            return 
-                    sTextureRegionHolderUtils.addElement(key, 
-                            BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-                                    textureAtlas, context, key, x, y));
+            TextureRegion textureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+                    textureAtlas, context, key, x, y);
+            return sTextureRegionHolderUtils.addElement(key, textureRegion);
         }
         return sTextureRegionHolderUtils.getElement(key);
     }
@@ -47,8 +48,11 @@ public class TextureRegionHolder extends Holder<ITextureRegion> {
      * @param rows         rows for tiled images
      */
     public static void addTiledElementFromAssets(String key, BitmapTextureAtlas textureAtlas, Context context, int x, int y, int columns, int rows) {
-        if (!sTextureRegionHolderUtils.isElementExist(key))
-            sTextureRegionHolderUtils.addElement(key, BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(textureAtlas, context, key, x, y, columns, rows));
+        if (!sTextureRegionHolderUtils.isElementExist(key)) {
+            sTextureRegionHolderUtils.addElement(key,
+                    BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(textureAtlas,
+                            context, key, x, y, columns, rows));
+        }
     }
 
     public static ITextureRegion getRegion(String key) {

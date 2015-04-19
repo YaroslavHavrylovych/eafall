@@ -66,7 +66,7 @@ public class BuildingsPopupItem extends ButtonSprite implements PopupItemFactory
         mBuildingSprite = new Sprite(SizeConstants.BUILDING_POPUP_IMAGE_PADDING + ITEM_IMAGE_WIDTH / 2,
                 SizeConstants.BUILDING_POPUP_ELEMENT_HEIGHT / 2 + SizeConstants.BUILDING_POPUP_IMAGE_PADDING,
                 ITEM_IMAGE_WIDTH, ITEM_IMAGE_HEIGHT,
-                dummy.getTextureRegionArray(mBuildingId.getUpgrade()),
+                dummy.getSpriteTextureRegionArray(mBuildingId.getUpgrade()),
                 getVertexBufferObjectManager());
         attachChild(mBuildingSprite);
 
