@@ -242,14 +242,14 @@ public abstract class Alliance implements IAlliance {
     protected void loadUnits_Sprites(TextureManager textureManager, Context context) {
         int unitsAmount = mUnitDummies.size();
         int textureManagerElementsInLine = (int) Math.round(Math.sqrt(unitsAmount) + 1);
-        int size = textureManagerElementsInLine * SizeConstants.UNIT_SIZE;
+        int size = textureManagerElementsInLine * SizeConstants.UNIT_FILE_SIZE;
         BitmapTextureAtlas textureAtlas = new BitmapTextureAtlas(
                 textureManager, size, size, TextureOptions.BILINEAR);
         int n, m;
         for (int i = 0; i < unitsAmount; i++) {
             UnitDummy unitDummy = mUnitDummies.valueAt(i);
-            n = (i % textureManagerElementsInLine) * unitDummy.getWidth();
-            m = (i / textureManagerElementsInLine) * unitDummy.getHeight();
+            n = (i % textureManagerElementsInLine) * SizeConstants.UNIT_FILE_SIZE;
+            m = (i / textureManagerElementsInLine) * SizeConstants.UNIT_FILE_SIZE;
             unitDummy.loadSpriteResources(context, textureAtlas, n, m);
         }
         textureAtlas.load();

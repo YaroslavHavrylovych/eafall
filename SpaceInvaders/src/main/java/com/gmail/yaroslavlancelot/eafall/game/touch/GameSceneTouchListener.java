@@ -2,6 +2,8 @@ package com.gmail.yaroslavlancelot.eafall.game.touch;
 
 import android.view.VelocityTracker;
 
+import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
+
 import org.andengine.engine.camera.VelocityCamera;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
@@ -23,7 +25,7 @@ public class GameSceneTouchListener implements
         PinchZoomDetector.IPinchZoomDetectorListener, //zoom
         ScrollDetector.IScrollDetectorListener //scroll
 {
-    public static final float MAX_ZOOM_FACTOR = 5;
+    public static final float MAX_ZOOM_FACTOR = Config.getConfig().getMaxZoomFactor();
     public static final float MIN_ZOOM_FACTOR = 1;
     private PinchZoomDetector mZoomDetector;
     private ScrollDetector mScrollDetector;

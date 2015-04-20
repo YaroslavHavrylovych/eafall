@@ -16,7 +16,8 @@ public final class SizeConstants {
     public static final int BUILDING_SIZE = 16;
     public static final int BUILDING_BIG_IMAGE_SIZE = 16;
     public static final int UNIT_SIZE = 16;
-    public static final int UNIT_BIG_IMAGE_SIZE = 16;
+    public static final int UNIT_FILE_SIZE = 36;
+    public static final int UNIT_BIG_IMAGE_SIZE = 400;
     public static final int BETWEEN_TEXTURES_PADDING = 3;
     public static final int HEALTH_BAR_HEIGHT = 3;
     public static final int TEAM_COLOR_AREA_SIZE = 4;
