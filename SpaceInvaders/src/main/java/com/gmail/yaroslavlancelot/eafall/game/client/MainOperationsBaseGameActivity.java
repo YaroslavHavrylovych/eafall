@@ -6,7 +6,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.gmail.yaroslavlancelot.eafall.BuildConfig;
 import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.ai.NormalBot;
@@ -51,6 +50,7 @@ import com.gmail.yaroslavlancelot.eafall.game.team.Team;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.ConstructionPopupButton;
+import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.MoneyText;
 
 import org.andengine.engine.camera.VelocityCamera;
@@ -64,6 +64,7 @@ import org.andengine.entity.Entity;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.text.Text;
 import org.andengine.entity.util.FPSLogger;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
@@ -72,7 +73,6 @@ import org.andengine.input.touch.controller.MultiTouch;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.adt.color.Color;
-import org.andengine.util.time.TimeConstants;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -85,9 +85,7 @@ import de.greenrobot.event.EventBus;
  * Loads resources, initialize scene, engine and etc.
  */
 public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
-    /**
-     * tag, which is used for debugging purpose
-     */
+    /** tag, which is used for debugging purpose */
     public static final String TAG = MainOperationsBaseGameActivity.class.getCanonicalName();
     /** contains whole game units/warriors */
     private final Map<Long, GameObject> mGameObjectsMap = new HashMap<Long, GameObject>();
@@ -184,19 +182,10 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     @Override
     public void onCreateResources(OnCreateResourcesCallback onCreateResourcesCallback) {
         LoggerHelper.methodInvocation(TAG, "onCreateResources");
-        if (BuildConfig.DEBUG) {
-            mEngine.registerUpdateHandler(new FPSLogger(1) {
-                @Override
-                protected void onLogFPS() {
-                    LoggerHelper.printVerboseMessage(LoggerHelper.PERFORMANCE_TAG,
-                            String.format("FPS: %.2f (MIN: %.0f ms | MAX: %.0f ms)",
-                                    this.mFrames / this.mSecondsElapsed,
-                                    this.mShortestFrame * TimeConstants.MILLISECONDS_PER_SECOND,
-                                    this.mLongestFrame * TimeConstants.MILLISECONDS_PER_SECOND));
-                }
-            });
-        }
 
+        if (Config.getConfig().isProfilingEnabled()) {
+            mGameResourceLoader.loadProfilingFonts(getTextureManager(), getFontManager());
+        }
         mGameResourceLoader.loadSplashImages(getTextureManager(), getVertexBufferObjectManager());
 
         onCreateResourcesCallback.onCreateResourcesFinished();
@@ -216,7 +205,26 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         asyncGameLoading();
     }
 
+    /** show profiling information on screen (using FPS logger) */
+    private void profile() {
+        final Text fpsText = new Text(200, SizeConstants.GAME_FIELD_HEIGHT - 50,
+                FontHolder.getInstance().getElement("profiling"),
+                "fps: 60.00", 20, getVertexBufferObjectManager());
+        fpsText.setColor(Color.GREEN);
+        mHud.attachChild(fpsText);
+        mEngine.registerUpdateHandler(new FPSLogger(1) {
+            @Override
+            protected void onLogFPS() {
+                fpsText.setText(String.format("fps: %.2f", this.mFrames / this.mSecondsElapsed));
+            }
+        });
+    }
+
     protected void asyncGameLoading() {
+        if (Config.getConfig().isProfilingEnabled()) {
+            profile();
+        }
+        //game resources
         mEngine.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback() {
             public void onTimePassed(final TimerHandler pTimerHandler) {
                 mEngine.unregisterUpdateHandler(pTimerHandler);
