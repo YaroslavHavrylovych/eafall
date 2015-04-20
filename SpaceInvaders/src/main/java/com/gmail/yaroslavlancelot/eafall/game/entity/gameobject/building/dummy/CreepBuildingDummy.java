@@ -5,16 +5,14 @@ import android.content.Context;
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
-import com.gmail.yaroslavlancelot.eafall.game.entity.BodiedSprite;
+import com.gmail.yaroslavlancelot.eafall.game.entity.Area;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TeamColorArea;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingType;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.loader.CreepBuildingLoader;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.loader.CreepBuildingUpgradeLoader;
 
-import com.gmail.yaroslavlancelot.eafall.game.entity.Area;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
-import org.andengine.opengl.texture.region.ITextureRegion;
 
 /**
  * Contains data needed to create building (wrap creation logic).
@@ -25,13 +23,9 @@ public class CreepBuildingDummy extends BuildingDummy {
     private CreepBuildingLoader mCreepBuildingLoader;
 
     public CreepBuildingDummy(CreepBuildingLoader buildingLoader) {
-        super(SizeConstants.BUILDING_SIZE, SizeConstants.BUILDING_SIZE);
+        super(SizeConstants.BUILDING_SIZE, SizeConstants.BUILDING_SIZE,
+                buildingLoader.getUpdates().size());
         mCreepBuildingLoader = buildingLoader;
-
-        /* how many upgrades does the building have */
-        int upgrades = mCreepBuildingLoader.getUpdates().size();
-        mTeamColorAreaArray = new Area[upgrades];
-        mTextureRegionArray = new ITextureRegion[upgrades];
 
         for (int i = 0; i < buildingLoader.getUpdates().size(); i++) {
             CreepBuildingUpgradeLoader upgradeLoader = buildingLoader.getUpdates().get(i);
@@ -43,11 +37,6 @@ public class CreepBuildingDummy extends BuildingDummy {
         Context context = EaFallApplication.getContext();
         mBuildingStringId = context.getResources().getIdentifier(
                 mCreepBuildingLoader.name, "string", context.getApplicationInfo().packageName);
-    }
-
-    @Override
-    public int getUpgrades() {
-        return mCreepBuildingLoader.getUpdates().size();
     }
 
     @Override
@@ -81,13 +70,25 @@ public class CreepBuildingDummy extends BuildingDummy {
     }
 
     @Override
-    public void loadResources(Context context, BitmapTextureAtlas textureAtlas, int x, int y, String raceName) {
+    public void loadSpriteResources(Context context, BitmapTextureAtlas textureAtlas,
+                                    int x, int y, String allianceName) {
         for (int i = 0; i < mCreepBuildingLoader.getUpdates().size(); i++) {
             CreepBuildingUpgradeLoader upgradeLoader = mCreepBuildingLoader.getUpdates().get(i);
-            String pathToImage = StringConstants.getPathToBuildings(raceName) + upgradeLoader.image_name;
-            BodiedSprite.loadResource(pathToImage, context, textureAtlas, x + getWidth() * i, y + getHeight() * i);
-            mTextureRegionArray[i] = TextureRegionHolder.getInstance().getElement(pathToImage);
+            String pathToSprite = StringConstants.getPathToBuildings(allianceName) + upgradeLoader.image_name;
+            mSpriteTextureRegionArray[i] = TextureRegionHolder
+                    .addElementFromAssets(pathToSprite, textureAtlas, context,
+                            x + getWidth() * i, y + getHeight() * i);
         }
+    }
+
+    @Override
+    public void loadImageResources(Context context, BitmapTextureAtlas textureAtlas,
+                                   int x, int y, int upgrade, String allianceName) {
+        CreepBuildingUpgradeLoader creepUpdate = mCreepBuildingLoader.getUpdates().get(upgrade);
+        String pathToImage = StringConstants.getPathToBuildings_Image(allianceName)
+                + creepUpdate.image_name;
+        mImageTextureRegionArray[upgrade] =
+                TextureRegionHolder.addElementFromAssets(pathToImage, textureAtlas, context, x, y);
     }
 
     @Override

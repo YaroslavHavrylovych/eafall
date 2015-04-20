@@ -155,7 +155,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         mCamera = new VelocityCamera(0, 0,
                 SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT,
                 SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT,
-                5);
+                Config.getConfig().getMaxZoomFactor());
         mCamera.setBounds(0, 0, SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT);
         mCamera.setBoundsEnabled(true);
         mCamera.setHUD(new HUD());

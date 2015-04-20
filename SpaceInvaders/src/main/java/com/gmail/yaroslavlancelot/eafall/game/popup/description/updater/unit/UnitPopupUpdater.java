@@ -64,7 +64,7 @@ public class UnitPopupUpdater extends BasePopupUpdater {
         } else {
             return null;
         }
-        return race.getUnitDummy(unitId).getTextureRegion();
+        return race.getUnitDummy(unitId).getImageTextureRegion();
     }
 
     @Override

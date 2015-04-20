@@ -55,8 +55,8 @@ public class BatchedSprite extends Sprite {
         setChildrenVisible(false);
     }
 
-    public static ITextureRegion loadResource(
-            String pathToImage, Context context, BitmapTextureAtlas textureAtlas, int x, int y) {
+    protected ITextureRegion loadResource(String pathToImage, BitmapTextureAtlas textureAtlas,
+                                              Context context, int x, int y) {
         return TextureRegionHolder.addElementFromAssets(pathToImage, textureAtlas, context, x, y);
     }
 

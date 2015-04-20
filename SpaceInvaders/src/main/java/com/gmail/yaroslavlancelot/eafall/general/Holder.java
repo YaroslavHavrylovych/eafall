@@ -32,7 +32,8 @@ public abstract class Holder<T> extends SelfCleanable {
 
     /** put object into internal map */
     public T addElement(String id, T element) {
-        return holderMap.put(id, element);
+        holderMap.put(id, element);
+        return element;
     }
 
     /**

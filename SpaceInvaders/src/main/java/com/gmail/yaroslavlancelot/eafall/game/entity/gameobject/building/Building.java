@@ -42,7 +42,7 @@ public abstract class Building implements IBuilding {
                                                        final Color teamColor,
                                                        VertexBufferObjectManager objectManager) {
         return new StaticObject(buildingDummy.getX(), buildingDummy.getY(),
-                buildingDummy.getTextureRegionArray(upgrade), objectManager) {
+                buildingDummy.getSpriteTextureRegionArray(upgrade), objectManager) {
             {
                 setCost(buildingDummy.getCost(upgrade));
                 setIncome((int) (getCost() * 0.03));

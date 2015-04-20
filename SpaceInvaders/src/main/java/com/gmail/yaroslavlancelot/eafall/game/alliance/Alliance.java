@@ -13,7 +13,6 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.D
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.SpecialBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.WealthBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.loader.BuildingListLoader;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.MovableUnitDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.loader.UnitListLoader;
@@ -26,7 +25,6 @@ import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.TextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.adt.color.Color;
 import org.simpleframework.xml.core.Persister;
 
 import java.util.SortedSet;
@@ -163,12 +161,14 @@ public abstract class Alliance implements IAlliance {
 
     protected void loadBuildings(TextureManager textureManager) {
         Context context = EaFallApplication.getContext();
-        int buildingsWithUpgradesAmount = 0;
-        for (int i = 0; i < mBuildingDummies.size(); i++) {
-            buildingsWithUpgradesAmount += mBuildingDummies.valueAt(i).getUpgrades();
-        }
+        loadBuildings_Sprites(textureManager, context);
+        loadBuildings_Images(textureManager, context);
+    }
+
+    protected void loadBuildings_Sprites(TextureManager textureManager, Context context) {
         //creating texture atlas for loading buildings
-        int textureManagerElementsInLine = (int) Math.round(Math.sqrt(buildingsWithUpgradesAmount) + 1);
+        int textureManagerElementsInLine = (int)
+                Math.round(Math.sqrt(getBuildingsWithUpgradesAmount()) + 1);
         int size = textureManagerElementsInLine * SizeConstants.BUILDING_SIZE;
         BitmapTextureAtlas textureAtlas = new BitmapTextureAtlas(
                 textureManager, size, size, TextureOptions.BILINEAR);
@@ -178,35 +178,104 @@ public abstract class Alliance implements IAlliance {
             BuildingDummy buildingDummy = mBuildingDummies.valueAt(i);
             n = (i % textureManagerElementsInLine) * buildingDummy.getWidth();
             m = (i / textureManagerElementsInLine) * buildingDummy.getHeight();
-            buildingDummy.loadResources(context, textureAtlas, n, m, getAllianceName());
+            buildingDummy.loadSpriteResources(context, textureAtlas, n, m, getAllianceName());
         }
         textureAtlas.load();
         mBuildingTextureAtlas = textureAtlas;
     }
 
+    //TODO you have to load images only for your alliance only (you=player)
+    protected void loadBuildings_Images(TextureManager textureManager, Context context) {
+        int buildingsWithUpgradesAmount = getBuildingsWithUpgradesAmount();
+        int atlases = buildingsWithUpgradesAmount % 4 == 0
+                ? buildingsWithUpgradesAmount / 4
+                : buildingsWithUpgradesAmount / 4 + 1;
+        BitmapTextureAtlas[] bitmapTextureAtlases = new BitmapTextureAtlas[atlases];
+        int imageSize = SizeConstants.BUILDING_BIG_IMAGE_SIZE;
+        int width, height = width = imageSize * 4;
+        BuildingDummy buildingDummy;
+        int atlasAbscissa = 0, atlasOrdinate = 0, atlasNumber = -1;
+        for (int i = 0; i < mBuildingDummies.size(); i++) {
+            buildingDummy = mBuildingDummies.valueAt(i);
+            for (int upgrade = 0; upgrade < buildingDummy.getUpgrades(); upgrade++) {
+                if (atlasAbscissa == 0 && atlasOrdinate == 0) {
+                    bitmapTextureAtlases[++atlasNumber] =
+                            new BitmapTextureAtlas(
+                                    textureManager, width, height, TextureOptions.BILINEAR);
+                }
+                buildingDummy.loadImageResources(context, bitmapTextureAtlases[atlasNumber],
+                        atlasAbscissa * imageSize, atlasOrdinate * imageSize,
+                        upgrade, getAllianceName());
+                if (++atlasOrdinate == 2) {
+                    atlasOrdinate = 0;
+                    atlasAbscissa++;
+                }
+                if (atlasAbscissa == 2) {
+                    atlasAbscissa = 0;
+                }
+            }
+        }
+        for (BitmapTextureAtlas textureAtlas : bitmapTextureAtlases) {
+            textureAtlas.load();
+        }
+    }
+
+    protected int getBuildingsWithUpgradesAmount() {
+        int buildingsWithUpgradesAmount = 0;
+        for (int i = 0; i < mBuildingDummies.size(); i++) {
+            buildingsWithUpgradesAmount += mBuildingDummies.valueAt(i).getUpgrades();
+        }
+        return buildingsWithUpgradesAmount;
+    }
+
     protected void loadUnits(TextureManager textureManager) {
         Context context = EaFallApplication.getContext();
+        loadUnits_Sprites(textureManager, context);
+        loadUnits_Images(textureManager, context);
+        //Init after loading. Init will create a pool, so texture atlas he to be loaded.
+        for (int i = 0; i < mUnitDummies.size(); i++) {
+            mUnitDummies.valueAt(i)
+                    .initDummy(mObjectManager, mSoundOperations, getAllianceName());
+        }
+    }
+
+    protected void loadUnits_Sprites(TextureManager textureManager, Context context) {
         int unitsAmount = mUnitDummies.size();
-
         int textureManagerElementsInLine = (int) Math.round(Math.sqrt(unitsAmount) + 1);
-        int size = textureManagerElementsInLine * SizeConstants.UNIT_SIZE;
-
+        int size = textureManagerElementsInLine * SizeConstants.UNIT_FILE_SIZE;
         BitmapTextureAtlas textureAtlas = new BitmapTextureAtlas(
                 textureManager, size, size, TextureOptions.BILINEAR);
-
         int n, m;
         for (int i = 0; i < unitsAmount; i++) {
             UnitDummy unitDummy = mUnitDummies.valueAt(i);
-            n = (i % textureManagerElementsInLine) * unitDummy.getWidth();
-            m = (i / textureManagerElementsInLine) * unitDummy.getHeight();
-            unitDummy.loadResources(context, textureAtlas, n, m);
+            n = (i % textureManagerElementsInLine) * SizeConstants.UNIT_FILE_SIZE;
+            m = (i / textureManagerElementsInLine) * SizeConstants.UNIT_FILE_SIZE;
+            unitDummy.loadSpriteResources(context, textureAtlas, n, m);
         }
         textureAtlas.load();
         mUnitTextureAtlas = textureAtlas;
-        //Init after loading. Init will create a pool, so texture atlas he to be loaded.
-        for (int i = 0; i < unitsAmount; i++) {
-            mUnitDummies.get(mUnitDummies.keyAt(i))
-                    .initDummy(mObjectManager, mSoundOperations, getAllianceName());
+    }
+
+    //TODO you have to load images only for your alliance only (you=player)
+    protected void loadUnits_Images(TextureManager textureManager, Context context) {
+        int unitsAmount = mUnitDummies.size();
+        int atlases = unitsAmount % 4 == 0 ? unitsAmount / 4 : unitsAmount / 4 + 1;
+        int imageSize = SizeConstants.UNIT_BIG_IMAGE_SIZE;
+        int width, height = width = imageSize * 4;
+        int atlasPosition;
+        int position = 0;
+        end:
+        for (int i = 0; i < atlases; i++) {
+            BitmapTextureAtlas textureAtlas =
+                    new BitmapTextureAtlas(textureManager, width, height, TextureOptions.BILINEAR);
+            for (atlasPosition = 0; atlasPosition < 4; atlasPosition++) {
+                if (position >= mUnitDummies.size()) {
+                    break end;
+                }
+                mUnitDummies.valueAt(position++).loadImageResources(context, textureAtlas,
+                        (atlasPosition % 2) * imageSize, (atlasPosition / 2) * imageSize);
+            }
+            textureAtlas.load();
         }
     }
 }

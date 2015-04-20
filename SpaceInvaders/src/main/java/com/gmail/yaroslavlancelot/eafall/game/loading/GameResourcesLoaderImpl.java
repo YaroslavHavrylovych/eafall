@@ -8,7 +8,6 @@ import com.gmail.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
-import com.gmail.yaroslavlancelot.eafall.game.entity.BodiedSprite;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.popup.PopupManager;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.DescriptionPopupHud;
@@ -99,14 +98,14 @@ public class GameResourcesLoaderImpl implements GameResourceLoader {
                         + 2 * SizeConstants.BETWEEN_TEXTURES_PADDING, TextureOptions.BILINEAR);
         //load
         int y = 0;
-        BodiedSprite.loadResource(StringConstants.FILE_HEALTH_BAR,
-                EaFallApplication.getContext(), smallObjectTexture, 0, y);
+        TextureRegionHolder.addElementFromAssets(StringConstants.FILE_HEALTH_BAR,
+                smallObjectTexture, EaFallApplication.getContext(), 0, y);
         y += SizeConstants.HEALTH_BAR_HEIGHT + SizeConstants.BETWEEN_TEXTURES_PADDING;
-        BodiedSprite.loadResource(StringConstants.FILE_BULLET,
-                EaFallApplication.getContext(), smallObjectTexture, 0, y);
+        TextureRegionHolder.addElementFromAssets(StringConstants.FILE_BULLET,
+                smallObjectTexture, EaFallApplication.getContext(), 0, y);
         y += SizeConstants.BULLET_SIZE + SizeConstants.BETWEEN_TEXTURES_PADDING;
-        BodiedSprite.loadResource(StringConstants.FILE_TEAM_COLOR,
-                EaFallApplication.getContext(), smallObjectTexture, 0, y);
+        TextureRegionHolder.addElementFromAssets(StringConstants.FILE_TEAM_COLOR,
+                smallObjectTexture, EaFallApplication.getContext(), 0, y);
         smallObjectTexture.load();
         // health bar + 9 bullets at a time per unit, and 2 player (so * 2 in addition)
         SpriteGroup spriteGroup = new SpriteGroup(smallObjectTexture,

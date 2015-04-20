@@ -156,6 +156,6 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
         BuildingId buildingId = (BuildingId) objectId;
         CreepBuildingDummy dummy = (CreepBuildingDummy) race.getBuildingDummy(buildingId);
         final int unitId = dummy.getMovableUnitId(buildingId.getUpgrade());
-        return race.getUnitDummy(unitId).getTextureRegion();
+        return race.getUnitDummy(unitId).getImageTextureRegion();
     }
 }
