@@ -1,5 +1,7 @@
 package com.gmail.yaroslavlancelot.eafall.game.loading;
 
+import android.graphics.Typeface;
+
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
@@ -17,13 +19,16 @@ import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 
 import org.andengine.entity.sprite.batch.SpriteGroup;
+import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.font.FontManager;
+import org.andengine.opengl.font.IFont;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.TextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.adt.color.Color;
 
 /** particular resource loader */
 public class GameResourcesLoaderImpl implements GameResourceLoader {
@@ -85,6 +90,14 @@ public class GameResourcesLoaderImpl implements GameResourceLoader {
                     vertexBufferObjectManager);
             SpriteGroupHolder.addGroup(BatchingKeys.getUnitSpriteGroup(teamName), spriteGroup);
         }
+    }
+
+    @Override
+    public void loadProfilingFonts(TextureManager textureManager, FontManager fontManager) {
+        IFont font = FontFactory.create(fontManager, textureManager, 256, 256,
+                Typeface.create(Typeface.DEFAULT, Typeface.BOLD), SizeConstants.MONEY_FONT_SIZE, Color.WHITE.hashCode());
+        font.load();
+        FontHolder.getInstance().addElement("profiling", font);
     }
 
     /** load images for bullets, health bars and team colors */

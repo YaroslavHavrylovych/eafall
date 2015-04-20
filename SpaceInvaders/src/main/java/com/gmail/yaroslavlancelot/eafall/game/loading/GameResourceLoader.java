@@ -9,6 +9,9 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
  * (e.g. different texture atlases for sprite groups etc).
  */
 public interface GameResourceLoader {
+    void loadProfilingFonts(TextureManager textureManager,
+                            FontManager fontManager);
+
     void loadSplashImages(TextureManager textureManager,
                           VertexBufferObjectManager vertexBufferObjectManager);
 
