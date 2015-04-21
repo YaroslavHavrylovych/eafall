@@ -55,8 +55,6 @@ import com.gmail.yaroslavlancelot.eafall.game.visual.text.MoneyText;
 
 import org.andengine.engine.camera.VelocityCamera;
 import org.andengine.engine.camera.hud.HUD;
-import org.andengine.engine.handler.timer.ITimerCallback;
-import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
@@ -201,7 +199,6 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     @Override
     public void onPopulateScene(Scene scene, OnPopulateSceneCallback onPopulateSceneCallback) {
         onPopulateSceneCallback.onPopulateSceneFinished();
-
         asyncGameLoading();
     }
 
@@ -225,9 +222,9 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
             profile();
         }
         //game resources
-        mEngine.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback() {
-            public void onTimePassed(final TimerHandler pTimerHandler) {
-                mEngine.unregisterUpdateHandler(pTimerHandler);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
                 EventBus.getDefault().register(MainOperationsBaseGameActivity.this);
                 // music
                 mMusicAndSoundsHandler = new MusicAndSoundsHandler(getSoundManager(), MainOperationsBaseGameActivity.this);
@@ -255,11 +252,15 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
                 BulletPool.init(getVertexBufferObjectManager());
                 //sound
                 mBackgroundMusic.initBackgroundMusic();
-                mBackgroundMusic.playBackgroundMusic();
-                //ready callback
-                afterGameLoaded();
+                mEngine.runOnUpdateThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        afterGameLoaded();
+                        mBackgroundMusic.playBackgroundMusic();
+                    }
+                }, true);
             }
-        }));
+        }).start();
     }
 
     private void attachSpriteGroups(Scene scene) {
