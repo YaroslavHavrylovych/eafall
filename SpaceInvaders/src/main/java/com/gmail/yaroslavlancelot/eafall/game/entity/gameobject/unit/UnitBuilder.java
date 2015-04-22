@@ -3,8 +3,8 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.Area;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage;
-import com.gmail.yaroslavlancelot.eafall.game.sound.SoundOperations;
 
+import org.andengine.audio.sound.Sound;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
@@ -12,7 +12,6 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 public abstract class UnitBuilder {
     /** holds unit image texture region (for faster unit creation) */
     protected ITextureRegion mTextureRegion;
-    protected SoundOperations mSoundOperations;
     protected VertexBufferObjectManager mObjectManager;
     /** unit health */
     protected int mHealth;
@@ -23,23 +22,18 @@ public abstract class UnitBuilder {
     protected int mAttackRadius;
     protected int mViewRadius;
     protected double mReloadTime;
-    protected String mSoundPath;
+    protected Sound mFireSound;
     protected int mWidth;
     protected int mHeight;
     private Area mTeamColorArea;
 
-    public UnitBuilder(ITextureRegion textureRegion, SoundOperations soundOperations, VertexBufferObjectManager objectManager) {
+    public UnitBuilder(ITextureRegion textureRegion, VertexBufferObjectManager objectManager) {
         mTextureRegion = textureRegion;
-        mSoundOperations = soundOperations;
         mObjectManager = objectManager;
     }
 
     public ITextureRegion getTextureRegion() {
         return mTextureRegion;
-    }
-
-    public SoundOperations getSoundOperations() {
-        return mSoundOperations;
     }
 
     public VertexBufferObjectManager getObjectManager() {
@@ -100,12 +94,12 @@ public abstract class UnitBuilder {
         return this;
     }
 
-    public String getSoundPath() {
-        return mSoundPath;
+    public Sound getFireSound() {
+        return mFireSound;
     }
 
-    public UnitBuilder setSoundPath(String soundPath) {
-        mSoundPath = soundPath;
+    public UnitBuilder setFireSound(Sound fireSound) {
+        mFireSound = fireSound;
         return this;
     }
 

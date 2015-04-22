@@ -34,6 +34,10 @@ public class Bullet extends BodiedSprite implements RunOnUpdateThreadEvent.Updat
     private final AtomicBoolean mIsObjectAlive;
     /** update time for current object */
     protected float mUpdateCycleTime = .5f;
+    private FixtureDef mBulletFixtureDef;
+    /** the maximum distance bullet can damage (it's usual 2 times distance than it's enemy) */
+    private float mMaxBulletFlyDistance;
+    private float mBulletStartX, mBulletStartY;
     /** bullet lifecycle handler */
     private TimerHandler mLifecycleHandler = new TimerHandler(mUpdateCycleTime, true, new ITimerCallback() {
         @Override
@@ -51,10 +55,6 @@ public class Bullet extends BodiedSprite implements RunOnUpdateThreadEvent.Updat
             }
         }
     });
-    private FixtureDef mBulletFixtureDef;
-    /** the maximum distance bullet can damage (it's usual 2 times distance than it's enemy) */
-    private float mMaxBulletFlyDistance;
-    private float mBulletStartX, mBulletStartY;
     /** bullet damage value */
     private Damage mDamage;
 
@@ -82,12 +82,12 @@ public class Bullet extends BodiedSprite implements RunOnUpdateThreadEvent.Updat
     public void fireFromPosition(float x, float y, BodiedSprite gameObject) {
         Vector2 target = gameObject.getBody().getPosition();
         float goalX = target.x, goalY = target.y;
-        setPosition(x, y);
         if (mPhysicBody == null) {
+            setPosition(-100, -100);
             EventBus.getDefault().post(new AttachSpriteEvent(this));
-            EventBus.getDefault().post(new CreatePhysicBodyEvent(this, sBulletBodyType, mBulletFixtureDef, x, y, 0));
+            EventBus.getDefault().post(
+                    new CreatePhysicBodyEvent(this, sBulletBodyType, mBulletFixtureDef, x, y, 0));
             mPhysicBody.setActive(false);
-            mPhysicBody.setBullet(true);
         } else {
             mPhysicBody.setTransform(x, y, 0);
         }
@@ -125,7 +125,7 @@ public class Bullet extends BodiedSprite implements RunOnUpdateThreadEvent.Updat
 
     @Override
     public void updateThreadCallback() {
-        getBody().setTransform(-100, 100, 0);
+        getBody().setTransform(-100, -100, 0);
         getBody().setActive(false);
         onBulletDestroyed();
     }

@@ -4,7 +4,6 @@ import com.gmail.yaroslavlancelot.eafall.game.alliance.imperials.Imperials;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.mutants.Mutants;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.rebels.Rebels;
 import com.gmail.yaroslavlancelot.eafall.general.Holder;
-import com.gmail.yaroslavlancelot.eafall.game.sound.SoundOperations;
 
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
@@ -31,20 +30,18 @@ public class AllianceHolder extends Holder<IAlliance> {
      *
      * @param name            alliance name
      * @param objectManager   VertexBufferObjectManager
-     * @param soundOperations SoundOperations
      */
     public static void addAllianceByName(String name,
-                                         final VertexBufferObjectManager objectManager, 
-                                         final SoundOperations soundOperations) {
+                                         final VertexBufferObjectManager objectManager) {
         IAlliance alliance;
         if (name.equals(Imperials.ALLIANCE_NAME)) {
-            alliance = new Imperials(objectManager, soundOperations);
+            alliance = new Imperials(objectManager);
         } else if (name.equals(Rebels.ALLIANCE_NAME)) {
-            alliance = new Rebels(objectManager, soundOperations);
+            alliance = new Rebels(objectManager);
         } else if (name.equals(Mutants.ALLIANCE_NAME)) {
-            alliance = new Mutants(objectManager, soundOperations);
+            alliance = new Mutants(objectManager);
         } else {
-            alliance = new Imperials(objectManager, soundOperations);
+            alliance = new Imperials(objectManager);
         }
 
         getInstance().addElement(name, alliance);
