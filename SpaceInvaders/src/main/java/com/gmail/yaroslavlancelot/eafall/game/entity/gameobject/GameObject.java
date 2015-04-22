@@ -9,7 +9,7 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IDestroyListener;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IHealthListener;
-import com.gmail.yaroslavlancelot.eafall.game.sound.SoundOperations;
+import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
 
 import org.andengine.audio.sound.Sound;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -28,12 +28,12 @@ import java.util.concurrent.atomic.AtomicLong;
 public abstract class GameObject extends BodiedSprite {
     public static final float VELOCITY_EPSILON = 0.00000001f;
     protected static final int sInvincibleObjectKey = Integer.MIN_VALUE;
+    /** used for generation new id's */
+    private static final AtomicLong sGameObjectsTracker = new AtomicLong(0);
     /** maximum object health */
     protected int mObjectMaximumHealth = sInvincibleObjectKey;
     /** game object current health (it can be undestroyable) */
     protected int mObjectCurrentHealth = sInvincibleObjectKey;
-    /** used for generation new id's */
-    private static final AtomicLong sGameObjectsTracker = new AtomicLong(0);
     /** object health bar */
     protected HealthBar mHealthBar;
     /** object damage */
@@ -105,11 +105,10 @@ public abstract class GameObject extends BodiedSprite {
         }
     }
 
-    protected void playSound(Sound sound, SoundOperations soundOperations) {
-        if (sound == null || !sound.isLoaded())
-            return;
-
-        soundOperations.playSoundDependingFromPosition(sound, getX(), getY());
+    protected void playSound(Sound sound) {
+        if (sound != null && sound.isLoaded()) {
+            SoundFactory.getInstance().playSound(sound, getX(), getY());
+        }
     }
 
     public boolean isObjectAlive() {

@@ -4,8 +4,9 @@ import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
-import com.gmail.yaroslavlancelot.eafall.game.sound.MusicAndSoundsHandler;
-import com.gmail.yaroslavlancelot.eafall.game.touch.GameSceneTouchListener;
+import com.gmail.yaroslavlancelot.eafall.game.audio.SoundOperationsImpl;
+import com.gmail.yaroslavlancelot.eafall.game.touch.GameSceneHandler;
+import com.gmail.yaroslavlancelot.eafall.game.touch.ICameraHandler;
 
 import org.andengine.engine.camera.VelocityCamera;
 import org.andengine.entity.scene.Scene;
@@ -22,6 +23,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
  */
 public class GameScene extends Scene {
     private static final String TAG = GameScene.class.getCanonicalName();
+    private GameSceneHandler mGameSceneHandler;
 
     /** set background image to the scene */
     public GameScene(VertexBufferObjectManager vertexBufferObjectManager) {
@@ -32,25 +34,23 @@ public class GameScene extends Scene {
                         vertexBufferObjectManager)));
     }
 
-    /** init scene touch events so user can collaborate with game by screen touches */
+    public ICameraHandler getCameraHandler() {
+        return mGameSceneHandler;
+    }
 
     /**
-     * Creates and init {@link com.gmail.yaroslavlancelot.eafall.game.touch.GameSceneTouchListener}
+     * Creates and init {@link GameSceneHandler}
      * and assign it to the {@link GameScene} instance.
      * <br/>
      * Set camera coordinates to music and sound handler with using
-     * {@link com.gmail.yaroslavlancelot.eafall.game.sound.MusicAndSoundsHandler#setCameraCoordinates(com.gmail.yaroslavlancelot.eafall.game.touch.ICameraCoordinates)}
+     * {@link SoundOperationsImpl#setCameraHandler(ICameraHandler)}
      *
-     * @param camera                camera to pass to the scene touch listener
-     * @param musicAndSoundsHandler will have it's initialization here
+     * @param camera camera to pass to the scene touch listener
      */
-    public void initGameSceneTouch(VelocityCamera camera,
-                                   MusicAndSoundsHandler musicAndSoundsHandler) {
-        LoggerHelper.methodInvocation(TAG, "initGameSceneTouch");
+    public void initGameSceneHandler(VelocityCamera camera) {
+        LoggerHelper.methodInvocation(TAG, "initGameSceneHandler");
         /* main scene touch listener */
-        GameSceneTouchListener gameSceneTouchListener = new GameSceneTouchListener(camera);
-        setOnSceneTouchListener(gameSceneTouchListener);
-
-        musicAndSoundsHandler.setCameraCoordinates(gameSceneTouchListener);
+        mGameSceneHandler = new GameSceneHandler(camera);
+        setOnSceneTouchListener(mGameSceneHandler);
     }
 }

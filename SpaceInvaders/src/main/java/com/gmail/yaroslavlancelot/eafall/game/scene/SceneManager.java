@@ -56,7 +56,7 @@ public class SceneManager {
      */
     public GameScene createGameScene(VelocityCamera camera) {
         mGameScene = new GameScene(mGameActivity.getVertexBufferObjectManager());
-        mGameScene.initGameSceneTouch(camera, mGameActivity.getMusicAndSoundsHandler());
+        mGameScene.initGameSceneHandler(camera);
         return mGameScene;
     }
 

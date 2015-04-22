@@ -11,8 +11,9 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.loader.UnitLoader;
-import com.gmail.yaroslavlancelot.eafall.game.sound.SoundOperations;
+import com.gmail.yaroslavlancelot.eafall.game.audio.SoundOperations;
 
+import org.andengine.audio.sound.Sound;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -48,6 +49,8 @@ public abstract class UnitDummy {
     protected ITextureRegion mSpriteTextureRegion;
     /** unit image texture region */
     protected ITextureRegion mImageTextureRegion;
+    /** unit shout sound */
+    protected Sound mFireSound;
     /** you can get unit name from the string resources by this id */
     private int mUnitStringId;
 
@@ -82,21 +85,32 @@ public abstract class UnitDummy {
                 addElementFromAssets(mPathToImage, textureAtlas, context, x, y);
     }
 
-    public abstract void initDummy(VertexBufferObjectManager objectManager,
-                                   SoundOperations soundOperations, String allianceName);
+    public void initDummy(VertexBufferObjectManager objectManager,
+                          SoundOperations soundOperations, String allianceName) {
+        //if null then the game sound disabled
+        if (soundOperations != null) {
+            mFireSound = soundOperations.loadSound(
+                    StringConstants.getPathToSounds(allianceName.toLowerCase()) + mUnitLoader.sound);
+        } else {
+            mFireSound = null;
+        }
+        initDummy(objectManager);
+    }
+
+    public abstract void initDummy(VertexBufferObjectManager objectManager);
 
     public abstract Unit constructUnit();
 
     /** create and return stationary unit builder */
-    protected UnitBuilder initBuilder(VertexBufferObjectManager objectManager, SoundOperations soundOperations, String allianceName) {
+    protected UnitBuilder initBuilder(VertexBufferObjectManager objectManager) {
         UnitBuilder unitBuilder =
-                createUnitBuilder(getSpriteTextureRegion(), soundOperations, objectManager);
+                createUnitBuilder(getSpriteTextureRegion(), objectManager);
 
         unitBuilder.setHealth(getHealth())
                 .setViewRadius(mUnitLoader.view_radius)
                 .setAttackRadius(mUnitLoader.attack_radius)
                 .setReloadTime(getReloadTime())
-                .setSoundPath(StringConstants.getPathToSounds(allianceName.toLowerCase()) + mUnitLoader.sound)
+                .setFireSound(mFireSound)
                 .setDamage(getDamage())
                 .setWidth(getWidth())
                 .setTeamColorArea(getTeamColorArea())
@@ -107,11 +121,18 @@ public abstract class UnitDummy {
     }
 
     protected abstract UnitBuilder createUnitBuilder(ITextureRegion textureRegion,
-                                                     SoundOperations soundOperations,
                                                      VertexBufferObjectManager objectManager);
+
+    public ITextureRegion getSpriteTextureRegion() {
+        return mSpriteTextureRegion;
+    }
 
     public int getHealth() {
         return mUnitLoader.health;
+    }
+
+    public float getReloadTime() {
+        return mUnitLoader.reload_time;
     }
 
     public Damage getDamage() {
@@ -120,6 +141,10 @@ public abstract class UnitDummy {
 
     public int getWidth() {
         return mWidth;
+    }
+
+    public Area getTeamColorArea() {
+        return mTeamColorArea;
     }
 
     public int getHeight() {
@@ -134,23 +159,11 @@ public abstract class UnitDummy {
         return mUnitLoader.id;
     }
 
-    public Area getTeamColorArea() {
-        return mTeamColorArea;
-    }
-
-    public ITextureRegion getSpriteTextureRegion() {
-        return mSpriteTextureRegion;
-    }
-
     public ITextureRegion getImageTextureRegion() {
         return mImageTextureRegion;
     }
 
     public int getUnitStringId() {
         return mUnitStringId;
-    }
-
-    public float getReloadTime() {
-        return mUnitLoader.reload_time;
     }
 }

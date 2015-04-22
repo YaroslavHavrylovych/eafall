@@ -12,6 +12,7 @@
     <uses-sdk
         android:minSdkVersion="10"
         android:targetSdkVersion="17"/>
+    <!-- TODO set no background to those activities, which are full screen -->
     <application
         android:icon="@drawable/icon"
         android:label="@string/app_name"

@@ -17,11 +17,11 @@ import java.util.List;
 
 /**
  * Keep the track about touch functionality and can delegate action to
- * concrete handler. In advanced handle scroll and zoom logic.
+ * concrete handler (Scroll, Pinch zoom etc). Handle camera-on-the-scene positions etc.
  */
-public class GameSceneTouchListener implements
+public class GameSceneHandler implements
         IOnSceneTouchListener,
-        ICameraCoordinates,
+        ICameraHandler,
         PinchZoomDetector.IPinchZoomDetectorListener, //zoom
         ScrollDetector.IScrollDetectorListener //scroll
 {
@@ -36,25 +36,25 @@ public class GameSceneTouchListener implements
     /** triggers before current handler and can be triggered instead */
     private List<ITouchCallback> mSceneClickListeners = new ArrayList<ITouchCallback>(2);
 
-    public GameSceneTouchListener(VelocityCamera camera) {
+    public GameSceneHandler(VelocityCamera camera) {
         mCamera = camera;
         mZoomDetector = new PinchZoomDetector(this);
         mScrollDetector = new ScrollDetector(this);
     }
 
-    public float getCameraCurrentWidth() {
+    public float getWidth() {
         return mCamera.getWidth();
     }
 
-    public float getCameraCurrentHeight() {
+    public float getHeight() {
         return mCamera.getHeight();
     }
 
-    public float getCameraCurrentCenterX() {
+    public float getCenterX() {
         return mCamera.getTargetCenterX();
     }
 
-    public float getCameraCurrentCenterY() {
+    public float getCenterY() {
         return mCamera.getTargetCenterY();
     }
 

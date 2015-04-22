@@ -19,7 +19,6 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IFireL
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.AttachSpriteEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.CreatePhysicBodyEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.RunOnUpdateThreadEvent;
-import com.gmail.yaroslavlancelot.eafall.game.sound.SoundOperations;
 import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
@@ -45,14 +44,12 @@ public abstract class Unit extends GameObject implements
     protected GameObject mObjectToAttack;
     /** callback for using to update unit visible enemies */
     protected IEnemiesFilter mEnemiesUpdater;
-    /** for sound manipulations */
-    protected SoundOperations mSoundOperations;
-    /** unit attack sound */
-    protected Sound mFireSound;
     /** last unit attack time */
     protected long mLastAttackTime;
     /** if fireFromPosition method called it will be triggered */
     protected IFireListener mUnitFireCallback;
+    /** unit shout sound */
+    protected Sound mFireSound;
     /** fixture def for bullets created by this unit */
     private FixtureDef mBulletFixtureDef;
     /** unit team name */
@@ -66,7 +63,6 @@ public abstract class Unit extends GameObject implements
     public Unit(UnitBuilder unitBuilder) {
         super(-100, -100, unitBuilder.getWidth(), unitBuilder.getHeight(),
                 unitBuilder.getTextureRegion(), unitBuilder.getObjectManager());
-        mSoundOperations = unitBuilder.getSoundOperations();
         initHealth(unitBuilder.mHealth);
         mObjectArmor = new Armor(unitBuilder.getArmor().getArmorType(),
                 unitBuilder.getArmor().getArmorValue());
@@ -75,7 +71,7 @@ public abstract class Unit extends GameObject implements
         mAttackRadius = unitBuilder.getAttackRadius();
         mViewRadius = unitBuilder.getViewRadius();
         setReloadTime(unitBuilder.getReloadTime());
-        initSound(unitBuilder.getSoundPath());
+        mFireSound = unitBuilder.getFireSound();
         if (Config.getConfig().isTeamColorAreaEnabled()) {
             mTeamColorArea = unitBuilder.getTeamColorArea();
         }
@@ -83,10 +79,6 @@ public abstract class Unit extends GameObject implements
 
     public void setReloadTime(double seconds) {
         mTimeForReload = seconds * 1000;
-    }
-
-    protected void initSound(String path) {
-        mFireSound = mSoundOperations.loadSound(path);
     }
 
     @Override
@@ -233,7 +225,7 @@ public abstract class Unit extends GameObject implements
             mUnitFireCallback.fire(getObjectUniqueId(), attackedObject.getObjectUniqueId());
         }
 
-        playSound(mFireSound, mSoundOperations);
+        playSound(mFireSound);
         Bullet bullet = BulletPool.getInstance().obtainPoolItem();
         bullet.init(mObjectDamage, mBulletFixtureDef);
 

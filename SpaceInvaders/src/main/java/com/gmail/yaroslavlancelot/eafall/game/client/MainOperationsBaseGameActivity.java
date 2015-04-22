@@ -44,7 +44,8 @@ import com.gmail.yaroslavlancelot.eafall.game.loading.GameResourcesLoaderFactory
 import com.gmail.yaroslavlancelot.eafall.game.popup.PopupManager;
 import com.gmail.yaroslavlancelot.eafall.game.popup.construction.BuildingsPopupHud;
 import com.gmail.yaroslavlancelot.eafall.game.scene.SceneManager;
-import com.gmail.yaroslavlancelot.eafall.game.sound.MusicAndSoundsHandler;
+import com.gmail.yaroslavlancelot.eafall.game.audio.BackgroundMusic;
+import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
 import com.gmail.yaroslavlancelot.eafall.game.team.Team;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamControlBehaviourType;
@@ -55,6 +56,7 @@ import com.gmail.yaroslavlancelot.eafall.game.visual.text.MoneyText;
 
 import org.andengine.engine.camera.VelocityCamera;
 import org.andengine.engine.camera.hud.HUD;
+import org.andengine.engine.options.AudioOptions;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
@@ -104,8 +106,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     /** resource loader */
     private GameResourceLoader mGameResourceLoader;
     /** background theme */
-    private MusicAndSoundsHandler mMusicAndSoundsHandler;
-    private MusicAndSoundsHandler.BackgroundMusic mBackgroundMusic;
+    private BackgroundMusic mBackgroundMusic;
 
     /**
      * Parsing alliances from the intent and save to
@@ -114,13 +115,9 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     private void createAlliances() {
         Intent intent = getIntent();
         AllianceHolder.addAllianceByName(intent.getStringExtra(StringConstants.FIRST_TEAM_ALLIANCE),
-                getVertexBufferObjectManager(), getMusicAndSoundsHandler());
+                getVertexBufferObjectManager());
         AllianceHolder.addAllianceByName(intent.getStringExtra(StringConstants.SECOND_TEAM_ALLIANCE),
-                getVertexBufferObjectManager(), getMusicAndSoundsHandler());
-    }
-
-    public MusicAndSoundsHandler getMusicAndSoundsHandler() {
-        return mMusicAndSoundsHandler;
+                getVertexBufferObjectManager());
     }
 
     @Override
@@ -171,9 +168,10 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         mGameResourceLoader = new GameResourcesLoaderFactory().getLoader();
         mSceneManager = new SceneManager(this);
         // music
-        engineOptions.getAudioOptions().setNeedsMusic(true);
-        engineOptions.getAudioOptions().setNeedsSound(true);
-
+        AudioOptions audioOptions = engineOptions.getAudioOptions();
+        audioOptions.setNeedsMusic(Config.getConfig().isMusicEnabled());
+        audioOptions.setNeedsSound(Config.getConfig().isSoundsEnabled());
+        audioOptions.getSoundOptions().setMaxSimultaneousStreams(3);
         return engineOptions;
     }
 
@@ -226,9 +224,11 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
             @Override
             public void run() {
                 EventBus.getDefault().register(MainOperationsBaseGameActivity.this);
-                // music
-                mMusicAndSoundsHandler = new MusicAndSoundsHandler(getSoundManager(), MainOperationsBaseGameActivity.this);
-                mBackgroundMusic = mMusicAndSoundsHandler.new BackgroundMusic(getMusicManager());
+                // background music and sounds
+                SoundFactory.init(getSoundManager(), MainOperationsBaseGameActivity.this);
+                mBackgroundMusic = Config.getConfig().isMusicEnabled()
+                        ? new BackgroundMusic(getMusicManager(), MainOperationsBaseGameActivity.this)
+                        : null;
                 //alliance and player
                 createAlliances();
                 createTeams();
@@ -250,15 +250,21 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
                 initPopups();
                 //pools
                 BulletPool.init(getVertexBufferObjectManager());
-                //sound
-                mBackgroundMusic.initBackgroundMusic();
-                mEngine.runOnUpdateThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        afterGameLoaded();
-                        mBackgroundMusic.playBackgroundMusic();
-                    }
-                }, true);
+                //music and sound
+                if (Config.getConfig().isSoundsEnabled()) {
+                    SoundFactory.getInstance().setCameraHandler(
+                            mSceneManager.getGameScene().getCameraHandler());
+                }
+                if (mBackgroundMusic != null) {
+                    mBackgroundMusic.initBackgroundMusic();
+                    mEngine.runOnUpdateThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            afterGameLoaded();
+                            mBackgroundMusic.playBackgroundMusic();
+                        }
+                    }, true);
+                }
             }
         }).start();
     }

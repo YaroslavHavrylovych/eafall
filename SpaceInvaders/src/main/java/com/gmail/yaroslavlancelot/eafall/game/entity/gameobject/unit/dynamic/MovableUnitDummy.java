@@ -4,7 +4,6 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitBuilder
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.loader.UnitLoader;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.pool.MovableUnitsPool;
-import com.gmail.yaroslavlancelot.eafall.game.sound.SoundOperations;
 
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -24,23 +23,10 @@ public class MovableUnitDummy extends UnitDummy {
     }
 
     @Override
-    public void initDummy(VertexBufferObjectManager objectManager, SoundOperations soundOperations, String allianceName) {
+    public void initDummy(VertexBufferObjectManager objectManager) {
         /* for unit creation */
         mPool = new MovableUnitsPool(
-                (MovableUnitBuilder) initBuilder(objectManager, soundOperations, allianceName));
-    }
-
-    /** create and return movable unit builder */
-    protected UnitBuilder initBuilder(VertexBufferObjectManager objectManager, SoundOperations soundOperations, String allianceName) {
-        return ((MovableUnitBuilder) super.initBuilder(objectManager, soundOperations, allianceName))
-                .setSpeed(getSpeed());
-    }
-
-    @Override
-    protected UnitBuilder createUnitBuilder(ITextureRegion textureRegion,
-                                            SoundOperations soundOperations,
-                                            VertexBufferObjectManager objectManager) {
-        return new MovableUnitBuilder(textureRegion, soundOperations, objectManager);
+                (MovableUnitBuilder) initBuilder(objectManager));
     }
 
     public float getSpeed() {
@@ -49,5 +35,17 @@ public class MovableUnitDummy extends UnitDummy {
 
     public MovableUnit constructUnit() {
         return mPool.obtainPoolItem();
+    }
+
+    /** create and return movable unit builder */
+    protected UnitBuilder initBuilder(VertexBufferObjectManager objectManager) {
+        return ((MovableUnitBuilder) super.initBuilder(objectManager))
+                .setSpeed(getSpeed());
+    }
+
+    @Override
+    protected UnitBuilder createUnitBuilder(ITextureRegion textureRegion,
+                                            VertexBufferObjectManager objectManager) {
+        return new MovableUnitBuilder(textureRegion, objectManager);
     }
 }

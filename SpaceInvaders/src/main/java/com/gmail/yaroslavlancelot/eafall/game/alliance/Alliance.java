@@ -18,7 +18,7 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.Mov
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.loader.UnitListLoader;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.loader.UnitLoader;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.stationary.StationaryUnitDummy;
-import com.gmail.yaroslavlancelot.eafall.game.sound.SoundOperations;
+import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
 
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
@@ -34,16 +34,14 @@ import java.util.TreeSet;
 public abstract class Alliance implements IAlliance {
     private static final String TAG = Alliance.class.getCanonicalName();
     protected VertexBufferObjectManager mObjectManager;
-    protected SoundOperations mSoundOperations;
     protected SparseArray<UnitDummy> mUnitDummies;
     protected SparseArray<BuildingDummy> mBuildingDummies;
     protected SortedSet<Integer> mSortedBuildingsSet;
     private TextureAtlas mUnitTextureAtlas;
     private TextureAtlas mBuildingTextureAtlas;
 
-    protected Alliance(final VertexBufferObjectManager objectManager, final SoundOperations soundOperations) {
+    protected Alliance(final VertexBufferObjectManager objectManager) {
         mObjectManager = objectManager;
-        mSoundOperations = soundOperations;
         initDummies();
     }
 
@@ -235,7 +233,7 @@ public abstract class Alliance implements IAlliance {
         //Init after loading. Init will create a pool, so texture atlas he to be loaded.
         for (int i = 0; i < mUnitDummies.size(); i++) {
             mUnitDummies.valueAt(i)
-                    .initDummy(mObjectManager, mSoundOperations, getAllianceName());
+                    .initDummy(mObjectManager, SoundFactory.getInstance(), getAllianceName());
         }
     }
 

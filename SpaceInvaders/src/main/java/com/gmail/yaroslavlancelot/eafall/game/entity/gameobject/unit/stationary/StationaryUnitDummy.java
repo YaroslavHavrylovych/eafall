@@ -4,7 +4,6 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitBuilder
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.loader.UnitLoader;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.pool.StationaryUnitsPool;
-import com.gmail.yaroslavlancelot.eafall.game.sound.SoundOperations;
 
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -19,20 +18,19 @@ public class StationaryUnitDummy extends UnitDummy {
     }
 
     @Override
-    public void initDummy(VertexBufferObjectManager objectManager, SoundOperations soundOperations, String allianceName) {
+    public void initDummy(VertexBufferObjectManager objectManager) {
         /* for unit creation */
         mPool = new StationaryUnitsPool(
-                (StationaryUnitBuilder) initBuilder(objectManager, soundOperations, allianceName));
-    }
-
-    @Override
-    protected UnitBuilder createUnitBuilder(ITextureRegion textureRegion,
-                                            SoundOperations soundOperations,
-                                            VertexBufferObjectManager objectManager) {
-        return new StationaryUnitBuilder(textureRegion, soundOperations, objectManager);
+                (StationaryUnitBuilder) initBuilder(objectManager));
     }
 
     public StationaryUnit constructUnit() {
         return mPool.obtainPoolItem();
+    }
+
+    @Override
+    protected UnitBuilder createUnitBuilder(ITextureRegion textureRegion,
+                                            VertexBufferObjectManager objectManager) {
+        return new StationaryUnitBuilder(textureRegion, objectManager);
     }
 }

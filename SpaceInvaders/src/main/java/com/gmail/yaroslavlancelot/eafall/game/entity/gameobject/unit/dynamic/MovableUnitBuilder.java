@@ -1,7 +1,6 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic;
 
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitBuilder;
-import com.gmail.yaroslavlancelot.eafall.game.sound.SoundOperations;
 
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -10,8 +9,8 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 public class MovableUnitBuilder extends UnitBuilder {
     private float mSpeed;
 
-    public MovableUnitBuilder(ITextureRegion textureRegion, SoundOperations soundOperations, VertexBufferObjectManager objectManager) {
-        super(textureRegion, soundOperations, objectManager);
+    public MovableUnitBuilder(ITextureRegion textureRegion, VertexBufferObjectManager objectManager) {
+        super(textureRegion, objectManager);
     }
 
     public float getSpeed() {

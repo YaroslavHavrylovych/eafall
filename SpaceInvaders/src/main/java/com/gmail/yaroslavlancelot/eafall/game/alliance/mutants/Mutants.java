@@ -4,7 +4,6 @@ import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.Alliance;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.loader.BuildingListLoader;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.loader.UnitListLoader;
-import com.gmail.yaroslavlancelot.eafall.game.sound.SoundOperations;
 
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -14,8 +13,8 @@ public class Mutants extends Alliance {
     /** race name */
     public static final String ALLIANCE_NAME = "Mutants";
 
-    public Mutants(final VertexBufferObjectManager objectManager, final SoundOperations soundOperations) {
-        super(objectManager, soundOperations);
+    public Mutants(final VertexBufferObjectManager objectManager) {
+        super(objectManager);
     }
 
     @Override
