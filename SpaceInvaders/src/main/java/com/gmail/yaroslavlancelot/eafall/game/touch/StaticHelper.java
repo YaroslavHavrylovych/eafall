@@ -11,8 +11,8 @@ public final class StaticHelper {
     private StaticHelper() {
     }
 
-    /** Check is value is in range and return new value base in this information */
-    public static float stickToBorderOrLeftValue(float value, float minValue, float maxValue) {
+    /** Ranging the value and stick to max/min if needed */
+    public static float stick(float value, float minValue, float maxValue) {
         if (value > maxValue)
             return maxValue;
         else if (value < minValue)

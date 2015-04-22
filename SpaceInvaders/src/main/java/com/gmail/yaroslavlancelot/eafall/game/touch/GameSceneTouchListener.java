@@ -104,7 +104,7 @@ public class GameSceneTouchListener implements
     public void onPinchZoom(PinchZoomDetector pPinchZoomDetector, TouchEvent pTouchEvent,
                             float pZoomFactor) {
         mCamera.setZoomFactor(
-                StaticHelper.stickToBorderOrLeftValue(
+                StaticHelper.stick(
                         mInitialTouchZoomFactor * pZoomFactor,
                         MIN_ZOOM_FACTOR, MAX_ZOOM_FACTOR));
     }
