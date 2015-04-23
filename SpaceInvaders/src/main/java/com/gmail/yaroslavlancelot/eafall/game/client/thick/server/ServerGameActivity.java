@@ -141,8 +141,6 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
     @SuppressWarnings("unused")
     /** really used by {@link de.greenrobot.event.EventBus} */
     public void onEvent(MoneyUpdatedEvent moneyUpdatedEvent) {
-        TeamControlBehaviourType behaviourType =
-                TeamsHolder.getInstance().getElement(moneyUpdatedEvent.getTeamName()).getTeamControlType();
         mGameSocketServer.sendBroadcastServerMessage(0, new MoneyChangedServerMessage(
                 moneyUpdatedEvent.getTeamName(), moneyUpdatedEvent.getMoney()));
     }
