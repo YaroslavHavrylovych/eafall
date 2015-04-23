@@ -17,10 +17,6 @@ CVS
 
 #gradle
 .gradle
-
-# Android:
-local.properties
-proguard/**
 target/**
 bin/**
 obj/**
@@ -28,20 +24,17 @@ doc/**
 gen/**
 gdb.setup
 gdbserver
+proguard/**
 
-# Eclipse:
-.settings
-.classpath
-.project
-
-# IntelliJ / Android Studio:
-.idea
+#IDE:
+*.settings
+*.classpath
+*.project
+*.idea
 build
-project.properties
 *.iml
+project.properties
 local.properties
-spaceinvaders.iml
-eafall.iml
 
 # Crashlytics
 res/values/com_crashlytics_export_strings.xml

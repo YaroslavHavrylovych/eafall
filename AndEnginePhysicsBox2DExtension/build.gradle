@@ -8,11 +8,9 @@ android {
     compileSdkVersion 19
     buildToolsVersion "19.1.0"
 
-    buildTypes {
-        debug {
-            ndk {
-                abiFilters "x86", "armeabi", "armeabi-v7a"
-            }
+    defaultConfig {
+        ndk {
+            abiFilters "x86", "armeabi", "armeabi-v7a"
         }
     }
 
