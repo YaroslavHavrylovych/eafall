@@ -11,7 +11,7 @@ public class Config {
     /*
      * Game
      */
-    private final int mUnitMaximumAmount = 200;
+    private final int mMovableUnitsLimit = 200;
     private final int mMaxZoomFactor = 7;
     private final int mPlanetHealth = 300000;
     /*
@@ -66,7 +66,7 @@ public class Config {
         return mTeamColorAreaEnabled;
     }
 
-    public int getUnitMaximumAmount() {
-        return mUnitMaximumAmount;
+    public int getMovableUnitsLimit() {
+        return mMovableUnitsLimit;
     }
 }

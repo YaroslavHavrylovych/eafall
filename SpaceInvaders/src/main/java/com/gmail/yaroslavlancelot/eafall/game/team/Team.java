@@ -1,15 +1,16 @@
 package com.gmail.yaroslavlancelot.eafall.game.team;
 
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.gmail.yaroslavlancelot.eafall.game.SharedDataCallbacks;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.money.MoneyUpdatedEvent;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.building.UpgradeBuildingEvent;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.bonus.Bonus;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.IBuilding;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetStaticObject;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.bonus.Bonus;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.MovableUnit;
+import com.gmail.yaroslavlancelot.eafall.game.eventbus.building.UpgradeBuildingEvent;
+import com.gmail.yaroslavlancelot.eafall.game.eventbus.money.MoneyUpdatedEvent;
 
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.util.adt.color.Color;
@@ -20,12 +21,17 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import de.greenrobot.event.EventBus;
 
 /** Player team implementation */
 public class Team implements ITeam {
+    /** keep track about the units amount */
+    private static final AtomicInteger sUnitsAmount = new AtomicInteger(0);
     public final int INIT_MONEY_VALUE = 5000;
+    /** used for {@link com.gmail.yaroslavlancelot.eafall.game.SharedDataCallbacks} */
+    public final String MOVABLE_UNIT_CREATED_CALLBACK_KEY;
     /** fixture def of the team (used for bullet creation) */
     protected final FixtureDef mTeamFixtureDef;
     /** current team name */
@@ -53,6 +59,7 @@ public class Team implements ITeam {
     public Team(final String teamName, IAlliance teamRace, TeamControlBehaviourType teamType) {
         mTeamObjects = new ArrayList<GameObject>(50);
         mTeamName = teamName;
+        MOVABLE_UNIT_CREATED_CALLBACK_KEY = "UNIT_CREATED_" + teamName;
         mTeamRace = teamRace;
         initBuildingsTypes(teamRace);
         mTeamControlBehaviourType = teamType;
@@ -71,6 +78,10 @@ public class Team implements ITeam {
         }
     }
 
+    public int getUnitsAmount() {
+        return sUnitsAmount.get();
+    }
+
     @Override
     public void addTeamBonus(Bonus teamBonus) {
         synchronized (mTeamObjects) {
@@ -87,18 +98,24 @@ public class Team implements ITeam {
 
     @Override
     public void addObjectToTeam(final GameObject object) {
+        if (object instanceof MovableUnit) {
+            for (Bonus bonus : mUnitBonuses) {
+                ((MovableUnit) object).addBonus(bonus, Integer.MAX_VALUE);
+            }
+            SharedDataCallbacks.valueChanged(MOVABLE_UNIT_CREATED_CALLBACK_KEY,
+                    sUnitsAmount.incrementAndGet());
+        }
         synchronized (mTeamObjects) {
             mTeamObjects.add(object);
-            if (object instanceof MovableUnit) {
-                for (Bonus bonus : mUnitBonuses) {
-                    ((MovableUnit) object).addBonus(bonus, Integer.MAX_VALUE);
-                }
-            }
         }
     }
 
     @Override
     public void removeObjectFromTeam(final GameObject object) {
+        if (object instanceof MovableUnit) {
+            SharedDataCallbacks.valueChanged(MOVABLE_UNIT_CREATED_CALLBACK_KEY,
+                    sUnitsAmount.decrementAndGet());
+        }
         synchronized (mTeamObjects) {
             mTeamObjects.remove(object);
         }

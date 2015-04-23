@@ -86,7 +86,7 @@ public class GameResourcesLoaderImpl implements GameResourceLoader {
             //unit
             textureAtlas = alliance.getUnitTextureAtlas();
             spriteGroup = new SpriteGroup(textureAtlas,
-                    Config.getConfig().getUnitMaximumAmount(),
+                    Config.getConfig().getMovableUnitsLimit(),
                     vertexBufferObjectManager);
             SpriteGroupHolder.addGroup(BatchingKeys.getUnitSpriteGroup(teamName), spriteGroup);
         }
@@ -122,7 +122,7 @@ public class GameResourcesLoaderImpl implements GameResourceLoader {
         smallObjectTexture.load();
         // health bar + 9 bullets at a time per unit, and 2 player (so * 2 in addition)
         SpriteGroup spriteGroup = new SpriteGroup(smallObjectTexture,
-                Config.getConfig().getUnitMaximumAmount() * 10 * 2, vertexBufferObjectManager);
+                Config.getConfig().getMovableUnitsLimit() * 10 * 2, vertexBufferObjectManager);
         SpriteGroupHolder.addGroup(BatchingKeys.BULLET_HEALTH_TEAM_COLOR, spriteGroup);
     }
 

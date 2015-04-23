@@ -2,10 +2,10 @@ package com.gmail.yaroslavlancelot.eafall.game.team;
 
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.bonus.Bonus;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetStaticObject;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.bonus.Bonus;
 
 import org.andengine.util.adt.color.Color;
 
@@ -13,6 +13,9 @@ import java.util.List;
 
 /** Player team interface. Each team can have only one team in opponents */
 public interface ITeam {
+    /** return current team units amount */
+    int getUnitsAmount();
+
     /**
      * add bonus which will be applied to each unit which is added to the team
      *
