@@ -8,9 +8,12 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
+import com.gmail.yaroslavlancelot.eafall.game.SharedDataCallbacks;
 import com.gmail.yaroslavlancelot.eafall.game.ai.NormalBot;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
+import com.gmail.yaroslavlancelot.eafall.game.audio.BackgroundMusic;
+import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.gmail.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 import com.gmail.yaroslavlancelot.eafall.game.constant.CollisionCategories;
@@ -44,8 +47,6 @@ import com.gmail.yaroslavlancelot.eafall.game.loading.GameResourcesLoaderFactory
 import com.gmail.yaroslavlancelot.eafall.game.popup.PopupManager;
 import com.gmail.yaroslavlancelot.eafall.game.popup.construction.BuildingsPopupHud;
 import com.gmail.yaroslavlancelot.eafall.game.scene.SceneManager;
-import com.gmail.yaroslavlancelot.eafall.game.audio.BackgroundMusic;
-import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
 import com.gmail.yaroslavlancelot.eafall.game.team.Team;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamControlBehaviourType;
@@ -53,6 +54,7 @@ import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.ConstructionPopupButton;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.MoneyText;
+import com.gmail.yaroslavlancelot.eafall.game.visual.text.MovableUnitsLimitText;
 
 import org.andengine.engine.camera.VelocityCamera;
 import org.andengine.engine.camera.hud.HUD;
@@ -246,7 +248,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
                 initFirstPlanet();
                 initSecondPlanet();
                 //other
-                initMoneyText();
+                initOnScreenText();
                 initPopups();
                 //pools
                 BulletPool.init(getVertexBufferObjectManager());
@@ -418,10 +420,10 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         return sunStaticObject;
     }
 
-    /** move money text position on screen depending on planets position */
-    private void initMoneyText() {
-        LoggerHelper.methodInvocation(TAG, "initMoneyText");
-        for (ITeam team : TeamsHolder.getInstance().getElements()) {
+    /** money text initialization */
+    private void initOnScreenText() {
+        LoggerHelper.methodInvocation(TAG, "initOnScreenText");
+        for (final ITeam team : TeamsHolder.getInstance().getElements()) {
             if (!TeamControlBehaviourType.isUserControlType(team.getTeamControlType())) continue;
             LoggerHelper.methodInvocation(TAG, "init money text for " + team.getTeamName() + " team");
             /*
@@ -431,6 +433,19 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
             MoneyText moneyText = new MoneyText(team.getTeamName(),
                     getString(R.string.money_value_prefix), getVertexBufferObjectManager());
             mHud.attachChild(moneyText);
+            final MovableUnitsLimitText limitText = new MovableUnitsLimitText(
+                    moneyText.getX(), moneyText.getY() - 2 * moneyText.getFont().getLineHeight(),
+                    getVertexBufferObjectManager());
+            mHud.attachChild(limitText);
+            final String key = ((Team) team).MOVABLE_UNIT_CREATED_CALLBACK_KEY;
+            SharedDataCallbacks.addCallback(new SharedDataCallbacks.DataChangedCallback(key) {
+                @Override
+                public void callback(String callbackKey, Object value) {
+                    if (key.equals(callbackKey)) {
+                        limitText.setValue((Integer) value);
+                    }
+                }
+            });
         }
     }
 
@@ -505,9 +520,13 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
 
     @SuppressWarnings("unused")
     /** really used by {@link de.greenrobot.event.EventBus} */
-    public void onEvent(final CreateMovableUnitEvent unitEvent) {
-        int unitKey = unitEvent.getKey();
+    public synchronized void onEvent(final CreateMovableUnitEvent unitEvent) {
         final ITeam team = TeamsHolder.getInstance().getElement(unitEvent.getTeamName());
+        //check units amount limit
+        if (team.getUnitsAmount() >= Config.getConfig().getMovableUnitsLimit()) {
+            return;
+        }
+        int unitKey = unitEvent.getKey();
         createMovableUnit(unitKey, team, unitEvent.isTopPath());
     }
 

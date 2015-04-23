@@ -1,6 +1,8 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit;
 
+import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.unit.CreateMovableUnitEvent;
+import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
 
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -43,6 +45,11 @@ public class UnitCreatorCycle implements ITimerCallback {
     @Override
     public void onTimePassed(final TimerHandler pTimerHandler) {
         for (int i = 0; i < mUnitsAmount; i++) {
+            //prevents cycle continuing when max amount reached (but its not the final check)
+            if (TeamsHolder.getTeam(mTeamName).getUnitsAmount() >=
+                    Config.getConfig().getMovableUnitsLimit()) {
+                return;
+            }
             EventBus.getDefault().post(new CreateMovableUnitEvent(mUnitKey, mTeamName, mIsTopPath));
         }
     }

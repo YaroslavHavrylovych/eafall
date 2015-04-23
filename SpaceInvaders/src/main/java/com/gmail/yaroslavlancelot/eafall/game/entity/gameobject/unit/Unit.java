@@ -31,6 +31,7 @@ import de.greenrobot.event.EventBus;
 public abstract class Unit extends GameObject implements
         ITeamObject,
         RunOnUpdateThreadEvent.UpdateThreadRunnable {
+    /** tag for logger */
     public static final String TAG = Unit.class.getCanonicalName();
     /** update time for current object */
     protected float mUpdateCycleTime = .5f;

@@ -12,7 +12,11 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import de.greenrobot.event.EventBus;
 
-/** Show money amount on the screen */
+/**
+ * Show money amount on the screen
+ *
+ * @author Yaroslav Havrylovych
+ */
 public class MoneyText extends Text {
     /** prefix which stand before money amount value */
     private String mMoneyValuePrefix;
@@ -20,7 +24,8 @@ public class MoneyText extends Text {
     private String mTeamName;
 
     public MoneyText(String teamName, String prefix, VertexBufferObjectManager pVertexBufferObjectManager) {
-        super(SizeConstants.HALF_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.MONEY_FONT_SIZE * 2 - SizeConstants.MONEY_FONT_SIZE / 2,
+        super(SizeConstants.HALF_FIELD_WIDTH,
+                SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.MONEY_FONT_SIZE * 2 - SizeConstants.MONEY_FONT_SIZE / 2,
                 FontHolder.getInstance().getElement(StringConstants.KEY_FONT_MONEY),
                 generateTextString(prefix, 0), prefix.length() + 6, pVertexBufferObjectManager);
         mMoneyValuePrefix = prefix;
