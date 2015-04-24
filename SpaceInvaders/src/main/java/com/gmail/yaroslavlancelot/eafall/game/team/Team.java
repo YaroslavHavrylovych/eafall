@@ -29,7 +29,7 @@ import de.greenrobot.event.EventBus;
 public class Team implements ITeam {
     /** keep track about the units amount */
     private static final AtomicInteger sUnitsAmount = new AtomicInteger(0);
-    public final int INIT_MONEY_VALUE = 5000;
+    public final int INIT_MONEY_VALUE = 150;
     /** used for {@link com.gmail.yaroslavlancelot.eafall.game.SharedDataCallbacks} */
     public final String MOVABLE_UNIT_CREATED_CALLBACK_KEY;
     /** fixture def of the team (used for bullet creation) */
@@ -219,6 +219,10 @@ public class Team implements ITeam {
         return mBuildingsTypesIds;
     }
 
+    /**
+     * Sync team buildings with planet buildings. So after this sync
+     * {@link #mBuildingsTypesIds} will have same upgrades as on the planet.
+     */
     private void syncBuildingsWithPlanet() {
         if (mTeamPlanet.getExistingBuildingsTypesAmount() == 0) {
             return;
@@ -234,6 +238,7 @@ public class Team implements ITeam {
             if (!planetBuildings.contains(id)) {
                 continue;
             }
+            //TODO you have to calculate position in other way
             int position = allBuildings.headSet(id).size();
             BuildingId buildingId = mBuildingsTypesIds[position];
             IBuilding building = mTeamPlanet.getBuilding(id);

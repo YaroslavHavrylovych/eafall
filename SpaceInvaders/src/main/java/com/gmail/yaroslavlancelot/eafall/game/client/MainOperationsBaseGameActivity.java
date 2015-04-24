@@ -9,7 +9,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.SharedDataCallbacks;
-import com.gmail.yaroslavlancelot.eafall.game.ai.NormalBot;
+import com.gmail.yaroslavlancelot.eafall.game.ai.VeryFirstBot;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
 import com.gmail.yaroslavlancelot.eafall.game.audio.BackgroundMusic;
@@ -451,7 +451,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
 
     protected void initBotControlledTeam(final ITeam initializingTeam) {
         LoggerHelper.methodInvocation(TAG, "initBotControlledTeam");
-        new Thread(new NormalBot(initializingTeam)).start();
+        new Thread(new VeryFirstBot(initializingTeam, MainOperationsBaseGameActivity.this)).start();
     }
 
     @SuppressWarnings("unused")
