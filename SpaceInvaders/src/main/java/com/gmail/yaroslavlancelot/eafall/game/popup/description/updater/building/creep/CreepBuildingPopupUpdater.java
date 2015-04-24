@@ -5,6 +5,7 @@ import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.IBuilding;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.CreepBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.building.BuildingsAmountChangedEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.building.CreateBuildingEvent;
@@ -13,6 +14,7 @@ import com.gmail.yaroslavlancelot.eafall.game.eventbus.description.BuildingDescr
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.description.UnitByBuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.path.ShowUnitPathChooser;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.building.BaseBuildingPopupUpdater;
+import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
 import com.gmail.yaroslavlancelot.eafall.game.touch.StaticHelper;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.TextButton;
@@ -67,27 +69,36 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
         IAlliance race = AllianceHolder.getRace(raceName);
         final BuildingId buildingId = (BuildingId) objectId;
         //button or back build
-        IBuilding building = TeamsHolder.getTeam(teamName).getTeamPlanet().getBuilding(buildingId.getId());
+        ITeam team = TeamsHolder.getTeam(teamName);
+        IBuilding building = team.getTeamPlanet().getBuilding(buildingId.getId());
+        BuildingDummy buildingDummy = race.getBuildingDummy(buildingId);
         final Object event;
         if (//user looking on upgraded version of the not created building
                 (building == null && buildingId.getUpgrade() > 0)
                         //check the building is created and in that case check the user looks on upgrade or on existing building
                         || (building != null && buildingId.getUpgrade() > building.getUpgrade())) {
-            mBuildOrBackButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_back_button));
+            mButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_back_button));
             event = new BuildingDescriptionShowEvent(
                     BuildingId.makeId(buildingId.getId(), buildingId.getUpgrade() - 1), teamName);
         } else {
-            event = new CreateBuildingEvent(mTeamName, buildingId);
+            if (team.getTeamPlanet().getBuildingsAmount(buildingId.getId())
+                    >= buildingDummy.getAmountLimit()) {
+                event = null;
+            } else {
+                event = new CreateBuildingEvent(mTeamName, buildingId);
+            }
         }
-        mBuildOrBackButton.setOnClickListener(new ButtonSprite.OnClickListener() {
+        mButton.setOnClickListener(new ButtonSprite.OnClickListener() {
             @Override
             public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                EventBus.getDefault().post(event);
+                if (event != null) {
+                    EventBus.getDefault().post(event);
+                }
             }
         });
         //button upgrade
-        mUpgradeButton.setPosition(mBuildOrBackButton.getX() + mBuildOrBackButton.getWidth() / 2
-                + BUTTON_MARGIN + mUpgradeButton.getWidth() / 2, mBuildOrBackButton.getY());
+        mUpgradeButton.setPosition(mButton.getX() + mButton.getWidth() / 2
+                + BUTTON_MARGIN + mUpgradeButton.getWidth() / 2, mButton.getY());
         boolean isUpgradeAvailable = race.isUpgradeAvailable(buildingId);
         //check if upgrades available
         if (isUpgradeAvailable) {
@@ -100,7 +111,7 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
             });
         }
         //button path
-        ButtonSprite button = isUpgradeAvailable ? mUpgradeButton : mBuildOrBackButton;
+        ButtonSprite button = isUpgradeAvailable ? mUpgradeButton : mButton;
         mPathButton.setPosition(button.getX() + button.getWidth() / 2 + BUTTON_MARGIN
                 + mPathButton.getWidth() / 2, button.getY());
         drawArea.attachChild(mPathButton);

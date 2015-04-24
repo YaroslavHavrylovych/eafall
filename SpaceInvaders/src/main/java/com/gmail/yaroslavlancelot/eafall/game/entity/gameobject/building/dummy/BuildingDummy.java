@@ -14,6 +14,8 @@ public abstract class BuildingDummy {
     protected final int mHeight;
     /** unit image width */
     protected final int mWidth;
+    /** upgrades amount */
+    protected final int mUpgrades;
     /** array which contain areas for team colors */
     protected Area[] mTeamColorAreaArray;
     /** building image (big one) texture region */
@@ -22,8 +24,6 @@ public abstract class BuildingDummy {
     protected ITextureRegion[] mImageTextureRegionArray;
     /** you can get building name from the string resources by this id */
     protected int mBuildingStringId;
-    /** upgrades amount */
-    protected final int mUpgrades;
 
     public BuildingDummy(int width, int height, int upgrades) {
         mWidth = width;
@@ -75,4 +75,6 @@ public abstract class BuildingDummy {
                                             int x, int y, int upgrade, String allianceName);
 
     public abstract BuildingType getBuildingType();
+
+    public abstract int getAmountLimit();
 }
