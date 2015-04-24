@@ -2,7 +2,11 @@ package org.andengine.entity.shape;
 
 import org.andengine.input.touch.TouchEvent;
 
-/** touch event callback */
+/**
+ * Touch event callback
+ *
+ * @author Yaroslav Havrylovych
+ */
 public interface ITouchCallback {
     /**
      * (documentation copied from {@link IShape}. Method moved to interface so we can use it separately)

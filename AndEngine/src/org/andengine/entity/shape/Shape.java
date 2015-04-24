@@ -16,7 +16,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
  * (c) 2011 Zynga Inc.
  *
  * @author Nicolas Gramlich
- * @since 11:51:27 - 13.03.2010
+ * @author Yaroslav Havrylovych (ITouchCallback)
  */
 public abstract class Shape extends Entity implements IShape, ITouchListener {
     // ===========================================================

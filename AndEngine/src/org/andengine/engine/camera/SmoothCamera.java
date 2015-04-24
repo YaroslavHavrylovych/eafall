@@ -6,7 +6,7 @@ package org.andengine.engine.camera;
  * (c) 2011 Zynga Inc.
  *
  * @author Nicolas Gramlich
- * @since 22:11:17 - 25.03.2010
+ * @author Yaroslav Havrylovych (minor changes)
  */
 public class SmoothCamera extends ZoomCamera {
     // ===========================================================

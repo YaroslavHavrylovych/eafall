@@ -3,7 +3,7 @@ package org.andengine.engine.camera;
 /**
  * <p>Smooth camera with fling possibility.</p>
  * <p/>
- * <p>The general idea and most of the code is copied from
+ * <p>The idea and most of the code is just copied from
  * <a href="https://github.com/davidschreiber/Andengine-Examples/tree/master/FlingCameraExample/AndEngine%20Fling%20Camera/src/at/mmf/andengine/examples/flingcamera">davidschreiber</a>.
  * </p>
  *

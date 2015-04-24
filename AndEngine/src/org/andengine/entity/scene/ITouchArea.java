@@ -7,7 +7,7 @@ import org.andengine.util.IMatcher;
  * (c) 2012 Zynga Inc.
  *
  * @author Nicolas Gramlich <ngramlich@zynga.com>
- * @since 15:01:18 - 27.03.2012
+ * @author Yaroslav Havrylovych (ITouchCallback)
  */
 public interface ITouchArea extends ITouchCallback {
     // ===========================================================

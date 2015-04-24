@@ -1,0 +1,19 @@
+=== AndEngine tribute ===
+[[https://github.com/nicolasgramlich/AndEngineMultiplayerExtension/tree/GLES2-AnchorCenter/|AndEngineMultiplayer]]
+(anchor-center) extension repository fork, as the main repository seems to be out of support.
+Checkout [[https://github.com/nicolasgramlich/AndEngine/blob/GLES2/README.md|original readme]]
+file to get more information.
+
+The same steps I did for the AndEngine repo which you can find [[https://bitbucket.org/yaroslav_havrylovych/andengine|here]].
+
+=== Just information ===
+Official [[http://www.andengine.org/|WebSite]]
+
+Still supported [[http://andengine-community.com/|community]]
+
+Official extension [[https://github.com/nicolasgramlich/AndEngineMultiplayerExtension/tree/GLES2-AnchorCenter/|github repo]].
+
+=== Changes ===
+I will try to write down all the //interesting//(not cosmetic) things I did/copied here: 
+
+*Gradle

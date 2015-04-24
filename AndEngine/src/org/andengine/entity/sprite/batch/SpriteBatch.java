@@ -29,7 +29,7 @@ import android.opengl.GLES20;
  * (c) 2011 Zynga Inc.
  *
  * @author Nicolas Gramlich
- * @since 11:45:48 - 14.06.2011
+ * @author Yaroslav Havrylovych (sprite positioning)
  */
 public class SpriteBatch extends Shape {
 	// ===========================================================

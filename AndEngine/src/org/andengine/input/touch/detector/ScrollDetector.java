@@ -7,7 +7,7 @@ import org.andengine.input.touch.TouchEvent;
  * (c) 2011 Zynga Inc.
  *
  * @author Nicolas Gramlich
- * @since 14:29:59 - 16.08.2010
+ * @author Yaroslav Havrylovych (minor changes)
  */
 public class ScrollDetector extends BaseDetector {
     // ===========================================================

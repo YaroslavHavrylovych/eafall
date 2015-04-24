@@ -1,0 +1,23 @@
+=== AndEngine tribute ===
+[[https://github.com/nicolasgramlich/AndEngine/tree/GLES2-AnchorCenter|AndEngine]](anchor-center) 
+repository fork, as the main repository seems to be out of support.
+Checkout [[https://github.com/nicolasgramlich/AndEngine/blob/GLES2/README.md|original readme]]
+file to get more information.
+
+=== Decision origins ===
+I did that as couldn't find any supported AndEngine repo and I had founded and fixed
+some out of the issues in the existing one. 
+
+=== Just information ===
+Official [[http://www.andengine.org/|WebSite]]
+
+Still supported [[http://andengine-community.com/|community]]
+
+Official [[https://github.com/nicolasgramlich/AndEngine/|github repo]].
+
+=== Changes ===
+I will try to write down all the //interesting//(not cosmetic) things I did/copied here: 
+
+*Gradle
+*Velocity camera
+*SpriteBatch entity positioning

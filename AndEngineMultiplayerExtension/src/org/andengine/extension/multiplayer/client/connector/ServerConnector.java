@@ -23,7 +23,6 @@ import org.andengine.util.debug.Debug;
  * (c) 2011 Zynga Inc.
  *
  * @author Nicolas Gramlich
- * @since 21:40:51 - 18.09.2009
  */
 public class ServerConnector<C extends Connection> extends Connector<C> {
 	// ===========================================================
@@ -168,7 +167,8 @@ public class ServerConnector<C extends Connection> extends Connector<C> {
 	}
 
 	/**
-	 * @deprecated Instead use {@link Ser#sendClientMessage(int, IServerMessage)} or {@link #sendClientMessage(int, boolean, IServerMessage)()}.
+         * @deprecated Instead use {@link #sendClientMessage(int, IClientMessage)}
+	 * or {@link #sendClientMessage(int, boolean, IClientMessage)}.
 	 */
 	@Deprecated
 	public void sendClientMessage(final IClientMessage pClientMessage) {

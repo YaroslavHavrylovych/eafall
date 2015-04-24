@@ -16,7 +16,7 @@ import org.andengine.util.adt.list.SmartList;
  * (c) 2011 Zynga Inc.
  *
  * @author Nicolas Gramlich
- * @since 12:10:35 - 15.06.2011
+ * @author Yaroslav Havrylovych (minor changes)
  */
 public class SpriteGroup extends DynamicSpriteBatch {
 	// ===========================================================
