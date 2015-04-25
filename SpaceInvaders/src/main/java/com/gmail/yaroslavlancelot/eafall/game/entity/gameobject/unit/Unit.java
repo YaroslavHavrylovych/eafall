@@ -102,6 +102,7 @@ public abstract class Unit extends GameObject implements
         setSpriteGroupName(BatchingKeys.getUnitSpriteGroup(teamName));
         ITeam team = TeamsHolder.getTeam(mTeamName);
         initTeamColorArea(team);
+        mObjectCurrentHealth = mObjectMaximumHealth;
         initHealthBar();
 
         boolean existingUnit;
