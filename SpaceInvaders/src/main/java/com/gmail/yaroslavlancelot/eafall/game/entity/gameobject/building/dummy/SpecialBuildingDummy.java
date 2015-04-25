@@ -87,6 +87,11 @@ public class SpecialBuildingDummy extends BuildingDummy {
         return BuildingType.SPECIAL_BUILDING;
     }
 
+    @Override
+    public int getAmountLimit() {
+        return 1;
+    }
+
     public int getDescriptionStringId() {
         return mDescriptionStringId;
     }

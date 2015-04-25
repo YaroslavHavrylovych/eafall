@@ -31,7 +31,7 @@ public class SpecialBuildingPopupUpdater extends BaseBuildingPopupUpdater {
         super.updateDescription(drawArea, objectId, raceName, teamName);
         final BuildingId buildingId = (BuildingId) objectId;
 
-        mBuildOrBackButton.setOnClickListener(new ButtonSprite.OnClickListener() {
+        mButton.setOnClickListener(new ButtonSprite.OnClickListener() {
             @Override
             public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
                 EventBus.getDefault().post(new CreateBuildingEvent(mTeamName, buildingId));

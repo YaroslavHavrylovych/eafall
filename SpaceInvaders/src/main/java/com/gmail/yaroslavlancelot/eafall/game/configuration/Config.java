@@ -12,6 +12,8 @@ public class Config {
      * Game
      */
     private final int mMovableUnitsLimit = 200;
+    private final int mCreepBuildingsLimit = 7;
+    private final int mWealthBuildingsLimit = 5;
     private final int mMaxZoomFactor = 7;
     private final int mPlanetHealth = 300000;
     /*
@@ -68,5 +70,13 @@ public class Config {
 
     public int getMovableUnitsLimit() {
         return mMovableUnitsLimit;
+    }
+
+    public int getCreepBuildingsLimit() {
+        return mCreepBuildingsLimit;
+    }
+
+    public int getWealthBuildingsLimit() {
+        return mWealthBuildingsLimit;
     }
 }

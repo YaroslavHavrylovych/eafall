@@ -30,16 +30,16 @@ import de.greenrobot.event.EventBus;
  */
 public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
     protected static final BuildingId sNoValue = null;
-    protected volatile BuildingId mBuildingId = sNoValue;
     protected static final int BUTTON_MARGIN = 20;
+    protected volatile BuildingId mBuildingId = sNoValue;
     protected volatile String mTeamName = "";
     /** basically used for display buildings amount on building image */
     protected AmountDrawer mAmountDrawer;
     /**
-     * contains logic to create a building, or if the building can't be build,
-     * sed as back button to return to previous popup state
+     * as the only available button in base building popup.
+     * Most probably served as "Build" or "Back" button.
      */
-    protected TextButton mBuildOrBackButton;
+    protected TextButton mButton;
     /** image for addition information */
     protected Sprite mAdditionDescriptionImage;
     //TODO I dont like this thing
@@ -53,8 +53,8 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
         mAmountDrawer = new AmountDrawer(vertexBufferObjectManager);
 
         //build
-        mBuildOrBackButton = new TextButton(vertexBufferObjectManager, 300, 70);
-        mScene.registerTouchArea(mBuildOrBackButton);
+        mButton = new TextButton(vertexBufferObjectManager, 300, 70);
+        mScene.registerTouchArea(mButton);
 
         initAdditionInformationArea();
 
@@ -101,7 +101,7 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
     public void clear() {
         super.clear();
         mAmountDrawer.detach();
-        mBuildOrBackButton.detachSelf();
+        mButton.detachSelf();
         if (mAdditionDescriptionImage != null) {
             mAdditionDescriptionImage.detachSelf();
             mAdditionDescriptionImage = null;
@@ -124,9 +124,9 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
         //description
         mDescriptionAreaUpdater.updateDescription(drawArea, objectId, raceName, teamName);
         //build button
-        mBuildOrBackButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_build_button));
-        mBuildOrBackButton.setPosition(mBuildOrBackButton.getWidth() / 2, mBuildOrBackButton.getHeight() / 2);
-        drawArea.attachChild(mBuildOrBackButton);
+        mButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_build_button));
+        mButton.setPosition(mButton.getWidth() / 2, mButton.getHeight() / 2);
+        drawArea.attachChild(mButton);
     }
 
     /** updates buildings amount */

@@ -84,6 +84,11 @@ public class DefenceBuildingDummy extends BuildingDummy {
         return BuildingType.DEFENCE_BUILDING;
     }
 
+    @Override
+    public int getAmountLimit() {
+        return 1;
+    }
+
     public int getOrbitalStationCreationTime() {
         return mDefenceBuildingLoader.unit_id;
     }

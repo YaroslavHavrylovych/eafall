@@ -80,6 +80,9 @@ public abstract class Building implements IBuilding {
 
     @Override
     public boolean buyBuilding() {
+        if (getAmount() >= getAmountLimit()) {
+            return false;
+        }
         ITeam team = TeamsHolder.getTeam(mTeamName);
         if (!TeamControlBehaviourType.isClientSide(team.getTeamControlType())) {
             int cost = mDummy.getCost(mUpgrade);
@@ -106,6 +109,10 @@ public abstract class Building implements IBuilding {
     @Override
     public float getY() {
         return mDummy.getY();
+    }
+
+    public int getAmountLimit() {
+        return mDummy.getAmountLimit();
     }
 
     protected void setIncome(int income) {
