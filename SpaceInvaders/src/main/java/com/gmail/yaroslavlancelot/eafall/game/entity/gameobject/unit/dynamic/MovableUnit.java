@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 /** Basic class for all dynamic game units */
@@ -179,14 +180,22 @@ public class MovableUnit extends Unit {
 
             // search for new unit to attack
             if (mEnemiesUpdater != null) {
-                List<GameObject> units = mEnemiesUpdater.getVisibleEnemiesForUnit(MovableUnit.this);
+                List<GameObject> units = mEnemiesUpdater
+                        .getEnemiesInRangeForUnit(MovableUnit.this, mAttackRadius);
+                //if nothing to attack then increase the range
+                if (units == null || units.isEmpty()) {
+                    units = mEnemiesUpdater.getVisibleEnemiesForUnit(MovableUnit.this);
+                }
+                //move or attack
                 if (units != null && !units.isEmpty()) {
-                    mObjectToAttack = units.get(0);
+                    mObjectToAttack = units.get(new Random().nextInt(units.size()));
                     attackOrMove();
                     return;
                 } else if (mEnemiesUpdater.getMainTarget() != null &&
-                        StaticHelper.getDistanceBetweenPoints(getX(), getY(), mEnemiesUpdater.getMainTarget().getX(),
+                        StaticHelper.getDistanceBetweenPoints(getX(), getY(),
+                                mEnemiesUpdater.getMainTarget().getX(),
                                 mEnemiesUpdater.getMainTarget().getY()) < mViewRadius) {
+                    //move to the enemies planet
                     mObjectToAttack = mEnemiesUpdater.getMainTarget();
                     attackOrMove();
                     return;

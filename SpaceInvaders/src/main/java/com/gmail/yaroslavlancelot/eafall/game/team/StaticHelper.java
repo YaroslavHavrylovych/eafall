@@ -27,8 +27,10 @@ public class StaticHelper {
         List<GameObject> enemies = enemyTeam.getTeamObjects();
         List<GameObject> enemiesInView = new ArrayList<GameObject>(5);
         for (GameObject enemy : enemies) {
-            if (com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path.StaticHelper.getDistanceBetweenPoints(enemy.getX(), enemy.getY(),
-                    unit.getX(), unit.getY()) < range)
+            if (com.gmail.yaroslavlancelot.eafall.game
+                    .entity.gameobject.unit.dynamic.path
+                    .StaticHelper.getDistanceBetweenPoints(enemy.getX(), enemy.getY(),
+                            unit.getX(), unit.getY()) < range)
                 enemiesInView.add(enemy);
         }
         return enemiesInView;

@@ -28,14 +28,14 @@ import de.greenrobot.event.EventBus;
 
 /** Player team implementation */
 public class Team implements ITeam {
-    /** keep track about the units amount */
-    private final AtomicInteger sUnitsAmount = new AtomicInteger(0);
     private static final String TAG = Team.class.getCanonicalName();
     public final int INIT_MONEY_VALUE = 200;
     /** used for {@link com.gmail.yaroslavlancelot.eafall.game.SharedDataCallbacks} */
     public final String MOVABLE_UNIT_CREATED_CALLBACK_KEY;
     /** fixture def of the team (used for bullet creation) */
     protected final FixtureDef mTeamFixtureDef;
+    /** keep track about the units amount */
+    private final AtomicInteger sUnitsAmount = new AtomicInteger(0);
     /** current team name */
     private final String mTeamName;
     /** race of current team */
@@ -101,6 +101,9 @@ public class Team implements ITeam {
     @Override
     public void addObjectToTeam(final GameObject object) {
         LoggerHelper.printVerboseMessage(TAG, String.format("Team(%s) object added", getTeamName()));
+        synchronized (mTeamObjects) {
+            mTeamObjects.add(object);
+        }
         if (object instanceof MovableUnit) {
             for (Bonus bonus : mUnitBonuses) {
                 ((MovableUnit) object).addBonus(bonus, Integer.MAX_VALUE);
@@ -108,20 +111,17 @@ public class Team implements ITeam {
             SharedDataCallbacks.valueChanged(MOVABLE_UNIT_CREATED_CALLBACK_KEY,
                     sUnitsAmount.incrementAndGet());
         }
-        synchronized (mTeamObjects) {
-            mTeamObjects.add(object);
-        }
     }
 
     @Override
     public void removeObjectFromTeam(final GameObject object) {
         LoggerHelper.printVerboseMessage(TAG, String.format("Team(%s) object removed", getTeamName()));
+        synchronized (mTeamObjects) {
+            mTeamObjects.remove(object);
+        }
         if (object instanceof MovableUnit) {
             SharedDataCallbacks.valueChanged(MOVABLE_UNIT_CREATED_CALLBACK_KEY,
                     sUnitsAmount.decrementAndGet());
-        }
-        synchronized (mTeamObjects) {
-            mTeamObjects.remove(object);
         }
     }
 
