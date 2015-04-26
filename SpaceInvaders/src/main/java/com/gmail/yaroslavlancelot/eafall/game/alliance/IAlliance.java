@@ -9,7 +9,7 @@ import org.andengine.opengl.texture.atlas.TextureAtlas;
 
 import java.util.SortedSet;
 
-/** abstract race interface */
+/** abstract alliance interface */
 public interface IAlliance {
     String getAllianceName();
 

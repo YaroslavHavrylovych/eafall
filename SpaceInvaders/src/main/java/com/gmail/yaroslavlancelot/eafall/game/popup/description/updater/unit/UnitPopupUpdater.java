@@ -28,10 +28,10 @@ public class UnitPopupUpdater extends BasePopupUpdater {
     }
 
     @Override
-    protected String getDescribedObjectName(Object objectId, String raceName) {
+    protected String getDescribedObjectName(Object objectId, String allianceName) {
         BuildingId buildingId = (BuildingId) objectId;
-        IAlliance race = AllianceHolder.getInstance().getElement(raceName);
-        BuildingDummy buildingDummy = race.getBuildingDummy(buildingId);
+        IAlliance alliance = AllianceHolder.getInstance().getElement(allianceName);
+        BuildingDummy buildingDummy = alliance.getBuildingDummy(buildingId);
         int unitId;
         if (buildingDummy instanceof CreepBuildingDummy) {
             unitId = ((CreepBuildingDummy) buildingDummy).getMovableUnitId(buildingId.getUpgrade());
@@ -41,7 +41,7 @@ public class UnitPopupUpdater extends BasePopupUpdater {
             return null;
         }
         return EaFallApplication.getContext().getResources()
-                .getString(race.getUnitDummy(unitId).getUnitStringId());
+                .getString(alliance.getUnitDummy(unitId).getUnitStringId());
     }
 
     @Override
@@ -52,10 +52,10 @@ public class UnitPopupUpdater extends BasePopupUpdater {
     }
 
     @Override
-    protected ITextureRegion getDescriptionImage(Object objectId, String raceName) {
+    protected ITextureRegion getDescriptionImage(Object objectId, String allianceName) {
         BuildingId buildingId = (BuildingId) objectId;
-        IAlliance race = AllianceHolder.getInstance().getElement(raceName);
-        BuildingDummy buildingDummy = race.getBuildingDummy(buildingId);
+        IAlliance alliance = AllianceHolder.getInstance().getElement(allianceName);
+        BuildingDummy buildingDummy = alliance.getBuildingDummy(buildingId);
         int unitId;
         if (buildingDummy instanceof CreepBuildingDummy) {
             unitId = ((CreepBuildingDummy) buildingDummy).getMovableUnitId(buildingId.getUpgrade());
@@ -64,17 +64,17 @@ public class UnitPopupUpdater extends BasePopupUpdater {
         } else {
             return null;
         }
-        return race.getUnitDummy(unitId).getImageTextureRegion();
+        return alliance.getUnitDummy(unitId).getImageTextureRegion();
     }
 
     @Override
-    public void updateDescription(Shape drawArea, Object objectId, String raceName, String teamName) {
+    public void updateDescription(Shape drawArea, Object objectId, String allianceName, String teamName) {
         //description
-        mDescriptionAreaUpdater.updateDescription(drawArea, objectId, raceName, teamName);
+        mDescriptionAreaUpdater.updateDescription(drawArea, objectId, allianceName, teamName);
     }
 
     @Override
-    public void updateAdditionInfo(Shape drawArea, Object objectId, String raceName, String teamName) {
-        mAdditionInformationAreaUpdater.updateDescription(drawArea, objectId, raceName, teamName);
+    public void updateAdditionInfo(Shape drawArea, Object objectId, String allianceName, String teamName) {
+        mAdditionInformationAreaUpdater.updateDescription(drawArea, objectId, allianceName, teamName);
     }
 }

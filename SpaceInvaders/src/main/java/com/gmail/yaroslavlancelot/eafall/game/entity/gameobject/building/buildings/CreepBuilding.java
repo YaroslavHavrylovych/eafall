@@ -34,7 +34,7 @@ public class CreepBuilding extends Building implements ICreepBuilding {
     public synchronized boolean buyBuilding() {
         boolean result = super.buyBuilding();
         ITeam team = TeamsHolder.getTeam(mTeamName);
-        boolean isFakePlanet = TeamControlBehaviourType.isClientSide(team.getTeamControlType());
+        boolean isFakePlanet = TeamControlBehaviourType.isClientSide(team.getControlType());
         //building was created
         if (isFakePlanet || result) {
             setIncome(mBuildingsAmount * mBuildingStaticObject.getIncome());
@@ -87,7 +87,7 @@ public class CreepBuilding extends Building implements ICreepBuilding {
         }
 
         ITeam team = TeamsHolder.getTeam(mTeamName);
-        boolean isFakePlanet = TeamControlBehaviourType.isClientSide(team.getTeamControlType());
+        boolean isFakePlanet = TeamControlBehaviourType.isClientSide(team.getControlType());
         if (!isFakePlanet) {
             int cost = mCreepBuildingDummy.getCost(nextUpgrade);
             //check money
@@ -97,7 +97,7 @@ public class CreepBuilding extends Building implements ICreepBuilding {
             //upgrade
             team.changeMoney(-cost);
         }
-        Color teamColor = TeamsHolder.getTeam(mTeamName).getTeamColor();
+        Color teamColor = TeamsHolder.getTeam(mTeamName).getColor();
         VertexBufferObjectManager objectManager =
                 mBuildingStaticObject.getVertexBufferObjectManager();
         mBuildingStaticObject = getBuildingByUpgrade(nextUpgrade, mCreepBuildingDummy, teamColor,

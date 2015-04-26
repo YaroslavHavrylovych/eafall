@@ -40,10 +40,10 @@ public class AdditionalInfoAreaUpdater extends BaseDescriptionAreaUpdater {
     }
 
     @Override
-    public void updateDescription(Shape drawArea, Object objectId, String raceName, String teamName) {
+    public void updateDescription(Shape drawArea, Object objectId, String allianceName, String teamName) {
         final BuildingId buildingId = (BuildingId) objectId;
-        IAlliance race = AllianceHolder.getInstance().getElement(raceName);
-        BuildingDummy buildingDummy = race.getBuildingDummy(buildingId);
+        IAlliance alliance = AllianceHolder.getInstance().getElement(allianceName);
+        BuildingDummy buildingDummy = alliance.getBuildingDummy(buildingId);
         int unitId;
         if (buildingDummy instanceof CreepBuildingDummy) {
             unitId = ((CreepBuildingDummy) buildingDummy).getMovableUnitId(buildingId.getUpgrade());
@@ -55,7 +55,7 @@ public class AdditionalInfoAreaUpdater extends BaseDescriptionAreaUpdater {
 
         attach(drawArea);
 
-        UnitDummy dummy = race.getUnitDummy(unitId);
+        UnitDummy dummy = alliance.getUnitDummy(unitId);
         Damage damage = dummy.getDamage();
         mAttack.setText(damage.getDamageValue() + " " + damage.getDamageType());
         Armor defence = dummy.getArmor();

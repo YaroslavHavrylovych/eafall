@@ -14,8 +14,6 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.MovableUnit;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.money.MoneyUpdatedEvent;
 import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
-import com.gmail.yaroslavlancelot.eafall.game.team.TeamControlBehaviourType;
-import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
 import com.gmail.yaroslavlancelot.eafall.network.server.GameSocketServer;
 import com.gmail.yaroslavlancelot.eafall.network.server.callbacks.InGameServer;
 import com.gmail.yaroslavlancelot.eafall.network.server.messages.BuildingCreatedServerMessage;
@@ -70,13 +68,13 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
     @Override
     protected void userWantCreateBuilding(final ITeam userTeam, BuildingId buildingId) {
         LoggerHelper.printInformationMessage(TAG, "user want to create building with id=" + buildingId);
-        PlanetStaticObject planetStaticObject = userTeam.getTeamPlanet();
+        PlanetStaticObject planetStaticObject = userTeam.getPlanet();
         if (planetStaticObject != null) {
-            boolean isBuildingCreated = userTeam.getTeamPlanet().createBuilding(buildingId);
+            boolean isBuildingCreated = userTeam.getPlanet().createBuilding(buildingId);
             LoggerHelper.printDebugMessage(TAG, "isBuildingCreated=" + isBuildingCreated);
             if (isBuildingCreated) {
                 mGameSocketServer.sendBroadcastServerMessage(0, new BuildingCreatedServerMessage(
-                        buildingId.getId(), buildingId.getUpgrade(), userTeam.getTeamName()));
+                        buildingId.getId(), buildingId.getUpgrade(), userTeam.getName()));
             }
         }
     }
@@ -92,7 +90,7 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
     protected Unit createUnit(int unitKey, ITeam unitTeam, float x, float y) {
         Unit unit = super.createUnit(unitKey, unitTeam, x, y);
 
-        mGameSocketServer.sendBroadcastServerMessage(0, new UnitCreatedServerMessage(unitTeam.getTeamName(), unitKey, unit));
+        mGameSocketServer.sendBroadcastServerMessage(0, new UnitCreatedServerMessage(unitTeam.getName(), unitKey, unit));
         unit.setGameObjectHealthChangedListener(this);
         unit.setUnitFireCallback(this);
         return unit;

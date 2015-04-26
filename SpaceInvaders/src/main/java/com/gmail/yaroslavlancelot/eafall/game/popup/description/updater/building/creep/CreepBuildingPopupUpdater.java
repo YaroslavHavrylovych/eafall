@@ -64,14 +64,14 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
     }
 
     @Override
-    public void updateDescription(Shape drawArea, Object objectId, String raceName, final String teamName) {
-        super.updateDescription(drawArea, objectId, raceName, teamName);
-        IAlliance race = AllianceHolder.getRace(raceName);
+    public void updateDescription(Shape drawArea, Object objectId, String allianceName, final String teamName) {
+        super.updateDescription(drawArea, objectId, allianceName, teamName);
+        IAlliance alliance = AllianceHolder.getAlliance(allianceName);
         final BuildingId buildingId = (BuildingId) objectId;
         //button or back build
         ITeam team = TeamsHolder.getTeam(teamName);
-        IBuilding building = team.getTeamPlanet().getBuilding(buildingId.getId());
-        BuildingDummy buildingDummy = race.getBuildingDummy(buildingId);
+        IBuilding building = team.getPlanet().getBuilding(buildingId.getId());
+        BuildingDummy buildingDummy = alliance.getBuildingDummy(buildingId);
         final Object event;
         if (//user looking on upgraded version of the not created building
                 (building == null && buildingId.getUpgrade() > 0)
@@ -81,7 +81,7 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
             event = new BuildingDescriptionShowEvent(
                     BuildingId.makeId(buildingId.getId(), buildingId.getUpgrade() - 1), teamName);
         } else {
-            if (team.getTeamPlanet().getBuildingsAmount(buildingId.getId())
+            if (team.getPlanet().getBuildingsAmount(buildingId.getId())
                     >= buildingDummy.getAmountLimit()) {
                 event = null;
             } else {
@@ -99,7 +99,7 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
         //button upgrade
         mUpgradeButton.setPosition(mButton.getX() + mButton.getWidth() / 2
                 + BUTTON_MARGIN + mUpgradeButton.getWidth() / 2, mButton.getY());
-        boolean isUpgradeAvailable = race.isUpgradeAvailable(buildingId);
+        boolean isUpgradeAvailable = alliance.isUpgradeAvailable(buildingId);
         //check if upgrades available
         if (isUpgradeAvailable) {
             drawArea.attachChild(mUpgradeButton);
@@ -139,7 +139,7 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
     }
 
     @Override
-    public void updateAdditionInfo(Shape drawArea, Object objectId, String raceName, final String teamName) {
+    public void updateAdditionInfo(Shape drawArea, Object objectId, String allianceName, final String teamName) {
         if (mAdditionDescriptionImage != null) {
             mAdditionDescriptionImage.detachSelf();
             mAdditionInfoRectangle.detachSelf();
@@ -147,7 +147,7 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
         mAdditionDescriptionImage = new Sprite(
                 drawArea.getWidth() / 2, drawArea.getHeight() / 2,
                 drawArea.getWidth(), drawArea.getHeight(),
-                getAdditionalInformationImage(objectId, raceName), mVertexBufferObjectManager);
+                getAdditionalInformationImage(objectId, allianceName), mVertexBufferObjectManager);
 
         final BuildingId buildingId = (BuildingId) objectId;
         mAdditionInfoRectangle.setTouchCallback(
@@ -162,11 +162,11 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
         drawArea.attachChild(mAdditionInfoRectangle);
     }
 
-    protected ITextureRegion getAdditionalInformationImage(Object objectId, String raceName) {
-        IAlliance race = AllianceHolder.getRace(raceName);
+    protected ITextureRegion getAdditionalInformationImage(Object objectId, String allianceName) {
+        IAlliance alliance = AllianceHolder.getAlliance(allianceName);
         BuildingId buildingId = (BuildingId) objectId;
-        CreepBuildingDummy dummy = (CreepBuildingDummy) race.getBuildingDummy(buildingId);
+        CreepBuildingDummy dummy = (CreepBuildingDummy) alliance.getBuildingDummy(buildingId);
         final int unitId = dummy.getMovableUnitId(buildingId.getUpgrade());
-        return race.getUnitDummy(unitId).getImageTextureRegion();
+        return alliance.getUnitDummy(unitId).getImageTextureRegion();
     }
 }

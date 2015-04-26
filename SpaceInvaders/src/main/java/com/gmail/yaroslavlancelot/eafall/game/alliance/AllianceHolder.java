@@ -7,7 +7,7 @@ import com.gmail.yaroslavlancelot.eafall.general.Holder;
 
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-/** you can get race instance from here */
+/** you can get alliance instance from here */
 public class AllianceHolder extends Holder<IAlliance> {
     /** current class instance (singleton implementation) */
     private final static AllianceHolder sInstance = new AllianceHolder();
@@ -15,8 +15,8 @@ public class AllianceHolder extends Holder<IAlliance> {
     private AllianceHolder() {
     }
 
-    public static IAlliance getRace(String raceName) {
-        return getInstance().getElement(raceName);
+    public static IAlliance getAlliance(String allianceName) {
+        return getInstance().getElement(allianceName);
     }
 
     public static AllianceHolder getInstance() {

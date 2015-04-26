@@ -30,8 +30,8 @@ public class DefenceBuildingPopupUpdater extends BaseBuildingPopupUpdater {
     }
 
     @Override
-    public void updateDescription(Shape drawArea, Object objectId, String raceName, final String teamName) {
-        super.updateDescription(drawArea, objectId, raceName, teamName);
+    public void updateDescription(Shape drawArea, Object objectId, String allianceName, final String teamName) {
+        super.updateDescription(drawArea, objectId, allianceName, teamName);
         final BuildingId buildingId = (BuildingId) objectId;
         final Object event = new CreateBuildingEvent(mTeamName, buildingId);
         mButton.setOnClickListener(new ButtonSprite.OnClickListener() {
@@ -43,13 +43,13 @@ public class DefenceBuildingPopupUpdater extends BaseBuildingPopupUpdater {
     }
 
     @Override
-    public void updateAdditionInfo(Shape drawArea, Object objectId, String raceName, final String teamName) {
+    public void updateAdditionInfo(Shape drawArea, Object objectId, String allianceName, final String teamName) {
         if (mAdditionDescriptionImage != null) {
             mAdditionDescriptionImage.detachSelf();
             mAdditionInfoRectangle.detachSelf();
         }
         mAdditionDescriptionImage = new Sprite(0, 0, drawArea.getWidth(), drawArea.getHeight(),
-                getAdditionalInformationImage(objectId, raceName), mVertexBufferObjectManager);
+                getAdditionalInformationImage(objectId, allianceName), mVertexBufferObjectManager);
 
         mAdditionInfoRectangle.setWidth(drawArea.getWidth());
         mAdditionInfoRectangle.setHeight(drawArea.getHeight());
@@ -67,11 +67,11 @@ public class DefenceBuildingPopupUpdater extends BaseBuildingPopupUpdater {
         drawArea.attachChild(mAdditionInfoRectangle);
     }
 
-    protected ITextureRegion getAdditionalInformationImage(Object objectId, String raceName) {
-        IAlliance race = AllianceHolder.getRace(raceName);
+    protected ITextureRegion getAdditionalInformationImage(Object objectId, String allianceName) {
+        IAlliance alliance = AllianceHolder.getAlliance(allianceName);
         BuildingId buildingId = (BuildingId) objectId;
-        DefenceBuildingDummy dummy = (DefenceBuildingDummy) race.getBuildingDummy(buildingId);
+        DefenceBuildingDummy dummy = (DefenceBuildingDummy) alliance.getBuildingDummy(buildingId);
         final int unitId = dummy.getOrbitalStationUnitId();
-        return race.getUnitDummy(unitId).getImageTextureRegion();
+        return alliance.getUnitDummy(unitId).getImageTextureRegion();
     }
 }

@@ -22,13 +22,13 @@ public class SpecialBuildingPopupUpdater extends BaseBuildingPopupUpdater {
     }
 
     @Override
-    public void updateAdditionInfo(Shape drawArea, Object objectId, String raceName, String teamName) {
+    public void updateAdditionInfo(Shape drawArea, Object objectId, String allianceName, String teamName) {
 
     }
 
     @Override
-    public void updateDescription(Shape drawArea, Object objectId, String raceName, String teamName) {
-        super.updateDescription(drawArea, objectId, raceName, teamName);
+    public void updateDescription(Shape drawArea, Object objectId, String allianceName, String teamName) {
+        super.updateDescription(drawArea, objectId, allianceName, teamName);
         final BuildingId buildingId = (BuildingId) objectId;
 
         mButton.setOnClickListener(new ButtonSprite.OnClickListener() {

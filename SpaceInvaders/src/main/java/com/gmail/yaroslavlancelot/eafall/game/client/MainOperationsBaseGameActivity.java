@@ -290,9 +290,9 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
 
     private void initPopups() {
         for (ITeam team : TeamsHolder.getInstance().getElements()) {
-            if (team.getTeamControlType() == TeamControlBehaviourType.USER_CONTROL_ON_SERVER_SIDE ||
-                    team.getTeamControlType() == TeamControlBehaviourType.USER_CONTROL_ON_CLIENT_SIDE) {
-                PopupManager.init(team.getTeamName(), mHud, mCamera, getVertexBufferObjectManager());
+            if (team.getControlType() == TeamControlBehaviourType.USER_CONTROL_ON_SERVER_SIDE ||
+                    team.getControlType() == TeamControlBehaviourType.USER_CONTROL_ON_CLIENT_SIDE) {
+                PopupManager.init(team.getName(), mHud, mCamera, getVertexBufferObjectManager());
                 //buildings
                 ConstructionPopupButton button = new ConstructionPopupButton(getVertexBufferObjectManager());
                 button.setOnClickListener(new ButtonSprite.OnClickListener() {
@@ -310,15 +310,15 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     protected void createTeams() {
         //create
         Intent intent = getIntent();
-        IAlliance race = AllianceHolder.getInstance().getElement(
+        IAlliance alliance = AllianceHolder.getInstance().getElement(
                 intent.getStringExtra(StringConstants.FIRST_TEAM_ALLIANCE));
-        mFirstTeam = createTeam(StringConstants.FIRST_TEAM_CONTROL_BEHAVIOUR_TYPE, race);
-        race = AllianceHolder.getInstance().getElement(
+        mFirstTeam = createTeam(StringConstants.FIRST_TEAM_CONTROL_BEHAVIOUR_TYPE, alliance);
+        alliance = AllianceHolder.getInstance().getElement(
                 intent.getStringExtra(StringConstants.SECOND_TEAM_ALLIANCE));
-        mSecondTeam = createTeam(StringConstants.SECOND_TEAM_CONTROL_BEHAVIOUR_TYPE, race);
+        mSecondTeam = createTeam(StringConstants.SECOND_TEAM_CONTROL_BEHAVIOUR_TYPE, alliance);
         //color
-        mFirstTeam.setTeamColor(Color.BLUE);
-        mSecondTeam.setTeamColor(Color.RED);
+        mFirstTeam.setColor(Color.BLUE);
+        mSecondTeam.setColor(Color.RED);
         //enemies
         mFirstTeam.setEnemyTeam(mSecondTeam);
         mSecondTeam.setEnemyTeam(mFirstTeam);
@@ -333,20 +333,20 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
      * @param team team to init
      */
     private void initTeam(ITeam team) {
-        TeamControlBehaviourType teamType = team.getTeamControlType();
+        TeamControlBehaviourType teamType = team.getControlType();
         initTeamFixtureDef(team);
 
         if (teamType == TeamControlBehaviourType.BOT_CONTROL_ON_SERVER_SIDE) {
             initBotControlledTeam(team);
         }
 
-        TeamsHolder.getInstance().addElement(team.getTeamName(), team);
+        TeamsHolder.getInstance().addElement(team.getName(), team);
     }
 
     protected void initTeamFixtureDef(ITeam team) {
-        TeamControlBehaviourType type = team.getTeamControlType();
+        TeamControlBehaviourType type = team.getControlType();
         boolean isRemote = TeamControlBehaviourType.isClientSide(type);
-        if (team.getTeamName().equals(StringConstants.FIRST_TEAM_CONTROL_BEHAVIOUR_TYPE)) {
+        if (team.getName().equals(StringConstants.FIRST_TEAM_CONTROL_BEHAVIOUR_TYPE)) {
             if (isRemote)
                 team.changeFixtureDefFilter(CollisionCategories.CATEGORY_TEAM1, CollisionCategories.MASKBITS_TEAM1_THIN);
             else
@@ -360,10 +360,10 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     }
 
     /** create new team depending on team control type which stored in extra */
-    protected ITeam createTeam(String teamNameInExtra, IAlliance race) {
+    protected ITeam createTeam(String teamNameInExtra, IAlliance alliance) {
         Intent intent = getIntent();
         TeamControlBehaviourType teamType = TeamControlBehaviourType.valueOf(intent.getStringExtra(teamNameInExtra));
-        return new Team(teamNameInExtra, race, teamType);
+        return new Team(teamNameInExtra, alliance, teamType);
     }
 
     /** init second team and planet */
@@ -374,7 +374,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
                 TextureRegionHolder.getRegion(StringConstants.KEY_SECOND_PLANET),
                 StringConstants.KEY_SECOND_PLANET,
                 mSecondTeam);
-        mSecondTeam.setTeamPlanet(planet);
+        mSecondTeam.setPlanet(planet);
     }
 
     /** create planet game object */
@@ -386,7 +386,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         LoggerHelper.methodInvocation(TAG, "createPlanet");
         PlanetStaticObject planetStaticObject = new PlanetStaticObject(x, y, textureRegion,
                 getVertexBufferObjectManager());
-        planetStaticObject.setTeam(team.getTeamName());
+        planetStaticObject.setTeam(team.getName());
         planetStaticObject.initHealth(Config.getConfig().getPlanetHealth());
         planetStaticObject.addObjectDestroyedListener(new PlanetDestroyListener(team));
         attachSprite(planetStaticObject);
@@ -404,7 +404,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
                 SizeConstants.HALF_FIELD_HEIGHT,
                 TextureRegionHolder.getRegion(StringConstants.KEY_FIRST_PLANET),
                 StringConstants.KEY_FIRST_PLANET, mFirstTeam);
-        mFirstTeam.setTeamPlanet(planet);
+        mFirstTeam.setPlanet(planet);
     }
 
     /** create sun */
@@ -424,13 +424,13 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     private void initOnScreenText() {
         LoggerHelper.methodInvocation(TAG, "initOnScreenText");
         for (final ITeam team : TeamsHolder.getInstance().getElements()) {
-            if (!TeamControlBehaviourType.isUserControlType(team.getTeamControlType())) continue;
-            LoggerHelper.methodInvocation(TAG, "init money text for " + team.getTeamName() + " team");
+            if (!TeamControlBehaviourType.isUserControlType(team.getControlType())) continue;
+            LoggerHelper.methodInvocation(TAG, "init money text for " + team.getName() + " team");
             /*
                 Object, which display money value to user. Only one such money text present in the screen
                 because one device can't be used by multiple users to play.
             */
-            MoneyText moneyText = new MoneyText(team.getTeamName(),
+            MoneyText moneyText = new MoneyText(team.getName(),
                     getString(R.string.money_value_prefix), getVertexBufferObjectManager());
             mHud.attachChild(moneyText);
             final MovableUnitsLimitText limitText = new MovableUnitsLimitText(
@@ -532,8 +532,8 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
 
     /** create unit with body and update it's enemies and moving path */
     protected MovableUnit createMovableUnit(int unitKey, final ITeam unitTeam, boolean isTopPath) {
-        float x = unitTeam.getTeamPlanet().getSpawnPointX(),
-                y = unitTeam.getTeamPlanet().getSpawnPointY();
+        float x = unitTeam.getPlanet().getSpawnPointX(),
+                y = unitTeam.getPlanet().getSpawnPointY();
         MovableUnit movableUnit = (MovableUnit) createUnit(unitKey, unitTeam, x, y);
         movableUnit.initMovingPath(StaticHelper.isLtrPath(x), isTopPath);
         return movableUnit;
@@ -555,11 +555,11 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
      */
     protected Unit createThinUnit(int unitKey, final ITeam unitTeam, float x, float y, long...
             unitUniqueId) {
-        final Unit unit = unitTeam.getTeamRace().getUnitDummy(unitKey).constructUnit();
+        final Unit unit = unitTeam.getAlliance().getUnitDummy(unitKey).constructUnit();
         if (unitUniqueId.length > 0) {
             unit.setObjectUniqueId(unitUniqueId[0]);
         }
-        unit.init(x, y, unitTeam.getTeamName());
+        unit.init(x, y, unitTeam.getName());
         mGameObjectsMap.put(unit.getObjectUniqueId(), unit);
         return unit;
     }

@@ -78,11 +78,11 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
     }
 
     @Override
-    public void updateImage(Shape drawArea, Object objectId, String raceName, String teamName) {
-        super.updateImage(drawArea, objectId, raceName, teamName);
+    public void updateImage(Shape drawArea, Object objectId, String allianceName, String teamName) {
+        super.updateImage(drawArea, objectId, allianceName, teamName);
         ITeam team = TeamsHolder.getInstance().getElement(teamName);
         mBuildingId = (BuildingId) objectId;
-        updateBuildingsAmount(team.getTeamPlanet().getBuildingsAmount(mBuildingId.getId()));
+        updateBuildingsAmount(team.getPlanet().getBuildingsAmount(mBuildingId.getId()));
         mTeamName = teamName;
     }
 
@@ -92,9 +92,9 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
     }
 
     @Override
-    protected String getDescribedObjectName(Object objectId, String raceName) {
+    protected String getDescribedObjectName(Object objectId, String allianceName) {
         return LocaleImpl.getInstance().getStringById
-                (AllianceHolder.getInstance().getElement(raceName).getBuildingDummy((BuildingId) objectId).getStringId());
+                (AllianceHolder.getInstance().getElement(allianceName).getBuildingDummy((BuildingId) objectId).getStringId());
     }
 
     @Override
@@ -113,16 +113,16 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
     }
 
     @Override
-    protected ITextureRegion getDescriptionImage(Object objectId, String raceName) {
-        IAlliance race = AllianceHolder.getInstance().getElement(raceName);
+    protected ITextureRegion getDescriptionImage(Object objectId, String allianceName) {
+        IAlliance alliance = AllianceHolder.getInstance().getElement(allianceName);
         BuildingId buildingId = (BuildingId) objectId;
-        return race.getBuildingDummy(buildingId).getImageTextureRegionArray(buildingId.getUpgrade());
+        return alliance.getBuildingDummy(buildingId).getImageTextureRegionArray(buildingId.getUpgrade());
     }
 
     @Override
-    public void updateDescription(Shape drawArea, Object objectId, String raceName, String teamName) {
+    public void updateDescription(Shape drawArea, Object objectId, String allianceName, String teamName) {
         //description
-        mDescriptionAreaUpdater.updateDescription(drawArea, objectId, raceName, teamName);
+        mDescriptionAreaUpdater.updateDescription(drawArea, objectId, allianceName, teamName);
         //build button
         mButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_build_button));
         mButton.setPosition(mButton.getWidth() / 2, mButton.getHeight() / 2);

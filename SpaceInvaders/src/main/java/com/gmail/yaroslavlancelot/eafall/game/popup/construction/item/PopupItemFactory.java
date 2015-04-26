@@ -16,7 +16,7 @@ public class PopupItemFactory {
     }
 
     public static interface BuildingPopupItem {
-        void setBuildingId(BuildingId buildingId, String raceName);
+        void setBuildingId(BuildingId buildingId, String allianceName);
 
         BuildingId getBuildingId();
 

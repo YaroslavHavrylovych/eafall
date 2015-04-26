@@ -54,7 +54,7 @@ public class BuildingsPopupItem extends ButtonSprite implements PopupItemFactory
     }
 
     @Override
-    public void setBuildingId(BuildingId buildingId, String raceName) {
+    public void setBuildingId(BuildingId buildingId, String allianceName) {
         // object id
         if (mBuildingId != null && mBuildingId.equals(buildingId)) {
             return;
@@ -62,7 +62,7 @@ public class BuildingsPopupItem extends ButtonSprite implements PopupItemFactory
         mBuildingId = buildingId;
 
         // image
-        BuildingDummy dummy = AllianceHolder.getRace(raceName).getBuildingDummy(mBuildingId);
+        BuildingDummy dummy = AllianceHolder.getAlliance(allianceName).getBuildingDummy(mBuildingId);
         mBuildingSprite = new Sprite(SizeConstants.BUILDING_POPUP_IMAGE_PADDING + ITEM_IMAGE_WIDTH / 2,
                 SizeConstants.BUILDING_POPUP_ELEMENT_HEIGHT / 2 + SizeConstants.BUILDING_POPUP_IMAGE_PADDING,
                 ITEM_IMAGE_WIDTH, ITEM_IMAGE_HEIGHT,

@@ -64,16 +64,16 @@ public class DescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
 
     @Override
     public void updateDescription(Shape drawArea, Object objectId,
-                                  final String raceName, final String teamName) {
-        super.updateDescription(drawArea, objectId, raceName, teamName);
+                                  final String allianceName, final String teamName) {
+        super.updateDescription(drawArea, objectId, allianceName, teamName);
         final BuildingId buildingId = (BuildingId) objectId;
-        IAlliance race = AllianceHolder.getInstance().getElement(raceName);
-        CreepBuildingDummy dummy = (CreepBuildingDummy) race.getBuildingDummy(buildingId);
+        IAlliance alliance = AllianceHolder.getInstance().getElement(allianceName);
+        CreepBuildingDummy dummy = (CreepBuildingDummy) alliance.getBuildingDummy(buildingId);
         //cost
         mCostValue.setText(Integer.toString(dummy.getCost(buildingId.getUpgrade())));
         //produced unit
         final int unitId = dummy.getMovableUnitId(buildingId.getUpgrade());
-        UnitDummy unitDummy = race.getUnitDummy(unitId);
+        UnitDummy unitDummy = alliance.getUnitDummy(unitId);
         mProducedUnitLink.setText(EaFallApplication.getContext().getResources().getString(
                 unitDummy.getUnitStringId()));
         mProducedUnitLink.setOnClickListener(new StaticHelper.OnClickListener() {
@@ -85,7 +85,7 @@ public class DescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
         //building time
         mUnitCreationTimeValue.setText(Integer.toString(dummy.getUnitCreationTime(buildingId.getUpgrade())));
         //upgrade
-        if (race.isUpgradeAvailable(buildingId)) {
+        if (alliance.isUpgradeAvailable(buildingId)) {
             updateUpgradeCost(buildingId, teamName);
             mUpgradeLink.setOnClickListener(new StaticHelper.OnClickListener() {
                 @Override
@@ -100,10 +100,10 @@ public class DescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
     }
 
     public void updateUpgradeCost(BuildingId buildingId, String teamName) {
-        IAlliance race = TeamsHolder.getTeam(teamName).getTeamRace();
-        int amount = TeamsHolder.getTeam(teamName).getTeamPlanet().getBuildingsAmount(buildingId.getId());
+        IAlliance alliance = TeamsHolder.getTeam(teamName).getAlliance();
+        int amount = TeamsHolder.getTeam(teamName).getPlanet().getBuildingsAmount(buildingId.getId());
         amount = amount == 0 ? 1 : amount;
-        int upgradeCost = amount * race.getUpgradeCost(buildingId);
+        int upgradeCost = amount * alliance.getUpgradeCost(buildingId);
         mUpgradeLink.setText(Integer.valueOf(upgradeCost).toString());
     }
 }

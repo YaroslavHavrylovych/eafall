@@ -17,8 +17,8 @@ public class SinglePlayerGameActivity extends ThickClientGameActivity {
 
     @Override
     protected void userWantCreateBuilding(final ITeam userTeam, BuildingId buildingId) {
-        PlanetStaticObject planetStaticObject = userTeam.getTeamPlanet();
+        PlanetStaticObject planetStaticObject = userTeam.getPlanet();
         if (planetStaticObject != null)
-            userTeam.getTeamPlanet().createBuilding(buildingId);
+            userTeam.getPlanet().createBuilding(buildingId);
     }
 }

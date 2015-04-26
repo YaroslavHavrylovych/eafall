@@ -47,18 +47,18 @@ public class VeryFirstBot implements Runnable {
     public void run() {
         List<BuildingId> buildingsToBuild = new ArrayList<BuildingId>(10);
         List<BuildingId> buildingsToUpgrade = new ArrayList<BuildingId>(10);
-        IAlliance alliance = mBotTeam.getTeamRace();
+        IAlliance alliance = mBotTeam.getAlliance();
         BuildingDummy buildingDummy;
         PlanetStaticObject planet;
         int amountOnPlanet;
         //planet not initialized yet
-        while (mBotTeam.getTeamPlanet() == null) {
+        while (mBotTeam.getPlanet() == null) {
             delay();
         }
         //start the bot logic
-        while (mBotTeam.getTeamPlanet() != null) {
+        while (mBotTeam.getPlanet() != null) {
             delay();
-            planet = mBotTeam.getTeamPlanet();
+            planet = mBotTeam.getPlanet();
             // win
             if (planet == null) {
                 return;

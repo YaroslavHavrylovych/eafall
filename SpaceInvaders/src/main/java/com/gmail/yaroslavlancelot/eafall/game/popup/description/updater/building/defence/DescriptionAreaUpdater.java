@@ -55,16 +55,16 @@ public class DescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
 
     @Override
     public void updateDescription(Shape drawArea, Object objectId,
-                                  final String raceName, final String teamName) {
-        super.updateDescription(drawArea, objectId, raceName, teamName);
+                                  final String allianceName, final String teamName) {
+        super.updateDescription(drawArea, objectId, allianceName, teamName);
         final BuildingId buildingId = (BuildingId) objectId;
-        IAlliance race = AllianceHolder.getInstance().getElement(raceName);
-        DefenceBuildingDummy dummy = (DefenceBuildingDummy) race.getBuildingDummy(buildingId);
+        IAlliance alliance = AllianceHolder.getInstance().getElement(allianceName);
+        DefenceBuildingDummy dummy = (DefenceBuildingDummy) alliance.getBuildingDummy(buildingId);
         //cost
         mCostValue.setText(Integer.toString(dummy.getCost(buildingId.getUpgrade())));
         //produced unit
         final int unitId = dummy.getOrbitalStationUnitId();
-        UnitDummy unitDummy = race.getUnitDummy(unitId);
+        UnitDummy unitDummy = alliance.getUnitDummy(unitId);
         mProducedUnitLink.setText(EaFallApplication.getContext().getResources().getString(
                 unitDummy.getUnitStringId()));
         mProducedUnitLink.setOnClickListener(new StaticHelper.OnClickListener() {

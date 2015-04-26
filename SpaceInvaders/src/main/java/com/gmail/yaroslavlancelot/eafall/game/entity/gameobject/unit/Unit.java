@@ -117,7 +117,7 @@ public abstract class Unit extends GameObject implements
         setBulletFixtureDef(CollisionCategories.getBulletFixtureDefByUnitCategory(
                 team.getFixtureDefUnit().filter.categoryBits));
 
-        if (team.getTeamControlType() == TeamControlBehaviourType.REMOTE_CONTROL_ON_CLIENT_SIDE) {
+        if (team.getControlType() == TeamControlBehaviourType.REMOTE_CONTROL_ON_CLIENT_SIDE) {
             removeDamage();
         }
 
@@ -140,7 +140,7 @@ public abstract class Unit extends GameObject implements
                 mTeamColorAreaSprite.setSpriteGroupName(BatchingKeys.BULLET_HEALTH_TEAM_COLOR);
                 attachChild(mTeamColorAreaSprite);
             }
-            mTeamColorAreaSprite.setColor(team.getTeamColor());
+            mTeamColorAreaSprite.setColor(team.getColor());
         }
     }
 

@@ -8,7 +8,7 @@ public enum BuildingType {
     CREEP_BUILDING,
     /** buildings which produce money amount */
     WEALTH_BUILDING,
-    /** unique for each race buildings */
+    /** unique for each alliance buildings */
     SPECIAL_BUILDING,
     /** defence (producing orbital stations) building */
     DEFENCE_BUILDING

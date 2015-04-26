@@ -68,7 +68,7 @@ public class PathChoosePopup extends PopupHud {
         mTeamName = showUnitPathChooser.getTeamName();
         mBuildingId = showUnitPathChooser.getBuildingId();
         boolean isTop =
-                ((ICreepBuilding) TeamsHolder.getTeam(mTeamName).getTeamPlanet().getBuilding(mBuildingId))
+                ((ICreepBuilding) TeamsHolder.getTeam(mTeamName).getPlanet().getBuilding(mBuildingId))
                         .isTopPath();
         if (isTop) {
             mTopCircle.setActive();
@@ -82,7 +82,7 @@ public class PathChoosePopup extends PopupHud {
 
     @Override
     public synchronized void hidePopup() {
-        ((ICreepBuilding) TeamsHolder.getTeam(mTeamName).getTeamPlanet().getBuilding(mBuildingId))
+        ((ICreepBuilding) TeamsHolder.getTeam(mTeamName).getPlanet().getBuilding(mBuildingId))
                 .setPath(mTopCircle.isActive());
         super.hidePopup();
         EventBus.getDefault().post(new HideUnitPathChooser());

@@ -68,15 +68,15 @@ public class GameResourcesLoaderImpl implements GameResourceLoader {
     }
 
     private void loadAllianceResources(TextureManager textureManager) {
-        for (IAlliance race : AllianceHolder.getInstance().getElements()) {
-            race.loadResources(textureManager);
+        for (IAlliance alliance : AllianceHolder.getInstance().getElements()) {
+            alliance.loadResources(textureManager);
         }
     }
 
     private void loadTeamResources(VertexBufferObjectManager vertexBufferObjectManager) {
         for (ITeam team : TeamsHolder.getInstance().getElements()) {
-            String teamName = team.getTeamName();
-            IAlliance alliance = team.getTeamRace();
+            String teamName = team.getName();
+            IAlliance alliance = team.getAlliance();
             //building
             TextureAtlas textureAtlas = alliance.getBuildingTextureAtlas();
             SpriteGroup spriteGroup = new SpriteGroup(textureAtlas,

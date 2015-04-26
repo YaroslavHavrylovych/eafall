@@ -10,7 +10,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class Mutants extends Alliance {
     public static final String TAG = Mutants.class.getCanonicalName();
-    /** race name */
+    /** alliance name */
     public static final String ALLIANCE_NAME = "Mutants";
 
     public Mutants(final VertexBufferObjectManager objectManager) {

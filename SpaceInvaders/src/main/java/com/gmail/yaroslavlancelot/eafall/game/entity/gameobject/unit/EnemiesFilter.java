@@ -40,6 +40,6 @@ public class EnemiesFilter implements IEnemiesFilter {
 
     @Override
     public GameObject getMainTarget() {
-        return mEnemyTeam.getTeamPlanet();
+        return mEnemyTeam.getPlanet();
     }
 }

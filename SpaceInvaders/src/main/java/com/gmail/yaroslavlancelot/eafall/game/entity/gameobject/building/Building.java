@@ -34,7 +34,7 @@ public abstract class Building implements IBuilding {
         mTeamName = teamName;
         mDummy = dummy;
         // init first creep building
-        Color teamColor = TeamsHolder.getTeam(teamName).getTeamColor();
+        Color teamColor = TeamsHolder.getTeam(teamName).getColor();
         mBuildingStaticObject = getBuildingByUpgrade(mUpgrade, dummy, teamColor, objectManager);
     }
 
@@ -84,7 +84,7 @@ public abstract class Building implements IBuilding {
             return false;
         }
         ITeam team = TeamsHolder.getTeam(mTeamName);
-        if (!TeamControlBehaviourType.isClientSide(team.getTeamControlType())) {
+        if (!TeamControlBehaviourType.isClientSide(team.getControlType())) {
             int cost = mDummy.getCost(mUpgrade);
             if (team.getMoney() < cost) {
                 return false;

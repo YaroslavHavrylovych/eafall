@@ -24,11 +24,11 @@ public abstract class BasePopupUpdater implements IPopupUpdater {
     }
 
     @Override
-    public void updateImage(Shape drawArea, Object objectId, String raceName, String teamName) {
+    public void updateImage(Shape drawArea, Object objectId, String allianceName, String teamName) {
         if (mObjectImage != null) {
             drawArea.detachChild(mObjectImage);
         }
-        ITextureRegion textureRegion = getDescriptionImage(objectId, raceName);
+        ITextureRegion textureRegion = getDescriptionImage(objectId, allianceName);
         if (textureRegion == null) {
             return;
         }
@@ -39,12 +39,12 @@ public abstract class BasePopupUpdater implements IPopupUpdater {
     }
 
     @Override
-    public void updateObjectNameText(Text text, Object objectId, String raceName) {
-        text.setText(getDescribedObjectName(objectId, raceName));
+    public void updateObjectNameText(Text text, Object objectId, String allianceName) {
+        text.setText(getDescribedObjectName(objectId, allianceName));
     }
 
     /** return description object name {@link java.lang.String} */
-    protected abstract String getDescribedObjectName(Object objectId, String raceName);
+    protected abstract String getDescribedObjectName(Object objectId, String allianceName);
 
     @Override
     public void clear() {
@@ -55,5 +55,5 @@ public abstract class BasePopupUpdater implements IPopupUpdater {
     }
 
     /** return description image */
-    protected abstract ITextureRegion getDescriptionImage(Object objectId, String raceName);
+    protected abstract ITextureRegion getDescriptionImage(Object objectId, String allianceName);
 }

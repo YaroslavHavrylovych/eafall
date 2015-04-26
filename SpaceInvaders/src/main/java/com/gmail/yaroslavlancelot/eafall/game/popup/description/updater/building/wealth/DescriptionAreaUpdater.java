@@ -39,11 +39,11 @@ public class DescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
     }
 
     @Override
-    public void updateDescription(Shape drawArea, Object objectId, String raceName, String teamName) {
-        super.updateDescription(drawArea, objectId, raceName, teamName);
+    public void updateDescription(Shape drawArea, Object objectId, String allianceName, String teamName) {
+        super.updateDescription(drawArea, objectId, allianceName, teamName);
         final BuildingId buildingId = (BuildingId) objectId;
-        IAlliance race = AllianceHolder.getInstance().getElement(raceName);
-        WealthBuildingDummy dummy = (WealthBuildingDummy) race.getBuildingDummy(buildingId);
+        IAlliance alliance = AllianceHolder.getInstance().getElement(allianceName);
+        WealthBuildingDummy dummy = (WealthBuildingDummy) alliance.getBuildingDummy(buildingId);
         //cost
         mCost.setText(Integer.toString(dummy.getCost(buildingId.getUpgrade())));
         //description

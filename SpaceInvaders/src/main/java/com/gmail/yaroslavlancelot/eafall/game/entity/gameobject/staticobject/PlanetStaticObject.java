@@ -105,7 +105,7 @@ public class PlanetStaticObject extends StaticObject implements ITeamObject {
         LoggerHelper.methodInvocation(TAG, "createBuilding");
         IBuilding building = mBuildings.get(buildingId.getId());
         if (building == null) {
-            final BuildingDummy buildingDummy = TeamsHolder.getTeam(mTeamName).getTeamRace()
+            final BuildingDummy buildingDummy = TeamsHolder.getTeam(mTeamName).getAlliance()
                     .getBuildingDummy(buildingId);
             if (buildingDummy == null) {
                 throw new IllegalArgumentException("no building with id " + buildingId);

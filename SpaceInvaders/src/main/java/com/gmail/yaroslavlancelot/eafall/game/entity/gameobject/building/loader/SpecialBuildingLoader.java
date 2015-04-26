@@ -6,7 +6,7 @@ import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
-/** gives some each race specific thing (e.g. increase units health, attack or etc) */
+/** gives some each alliance specific thing (e.g. increase units health, attack or etc) */
 @Root(name = "wealth_building")
 public class SpecialBuildingLoader {
     @Attribute(name = "name")

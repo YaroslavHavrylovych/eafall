@@ -38,8 +38,8 @@ public class Team implements ITeam {
     private final AtomicInteger sUnitsAmount = new AtomicInteger(0);
     /** current team name */
     private final String mTeamName;
-    /** race of current team */
-    private final IAlliance mTeamRace;
+    /** current team alliance */
+    private final IAlliance mAlliance;
     private final AtomicBoolean mIsFirstIncome = new AtomicBoolean(true);
     /** object related to current team */
     private final List<GameObject> mTeamObjects;
@@ -58,19 +58,19 @@ public class Team implements ITeam {
     /** bonus which will be applied to each team unit */
     private ArrayList<Bonus> mUnitBonuses = new ArrayList<Bonus>(2);
 
-    public Team(final String teamName, IAlliance teamRace, TeamControlBehaviourType teamType) {
+    public Team(final String teamName, IAlliance alliance, TeamControlBehaviourType teamType) {
         mTeamObjects = new ArrayList<GameObject>(50);
         mTeamName = teamName;
         MOVABLE_UNIT_CREATED_CALLBACK_KEY = "UNIT_CREATED_" + teamName;
-        mTeamRace = teamRace;
-        initBuildingsTypes(teamRace);
+        mAlliance = alliance;
+        initBuildingsTypes(alliance);
         mTeamControlBehaviourType = teamType;
         mTeamFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f, false);
         EventBus.getDefault().register(this);
     }
 
-    private void initBuildingsTypes(IAlliance teamRace) {
-        Set<Integer> idSet = teamRace.getBuildingsIds();
+    private void initBuildingsTypes(IAlliance allianceRace) {
+        Set<Integer> idSet = allianceRace.getBuildingsIds();
         mBuildingsTypesIds = new BuildingId[idSet.size()];
         Iterator<Integer> it = idSet.iterator();
         int id, i = 0;
@@ -85,7 +85,7 @@ public class Team implements ITeam {
     }
 
     @Override
-    public void addTeamBonus(Bonus teamBonus) {
+    public void addBonus(Bonus teamBonus) {
         synchronized (mTeamObjects) {
             mUnitBonuses.add(teamBonus);
             for (GameObject gameObject : mTeamObjects) {
@@ -100,7 +100,7 @@ public class Team implements ITeam {
 
     @Override
     public void addObjectToTeam(final GameObject object) {
-        LoggerHelper.printVerboseMessage(TAG, String.format("Team(%s) object added", getTeamName()));
+        LoggerHelper.printVerboseMessage(TAG, String.format("Team(%s) object added", getName()));
         synchronized (mTeamObjects) {
             mTeamObjects.add(object);
         }
@@ -115,7 +115,7 @@ public class Team implements ITeam {
 
     @Override
     public void removeObjectFromTeam(final GameObject object) {
-        LoggerHelper.printVerboseMessage(TAG, String.format("Team(%s) object removed", getTeamName()));
+        LoggerHelper.printVerboseMessage(TAG, String.format("Team(%s) object removed", getName()));
         synchronized (mTeamObjects) {
             mTeamObjects.remove(object);
         }
@@ -126,17 +126,17 @@ public class Team implements ITeam {
     }
 
     @Override
-    public PlanetStaticObject getTeamPlanet() {
+    public PlanetStaticObject getPlanet() {
         return mTeamPlanet;
     }
 
     @Override
-    public void setTeamPlanet(final PlanetStaticObject planet) {
+    public void setPlanet(final PlanetStaticObject planet) {
         mTeamPlanet = planet;
     }
 
     @Override
-    public void removeTeamPlanet() {
+    public void removePlanet() {
         mTeamPlanet = null;
     }
 
@@ -156,7 +156,7 @@ public class Team implements ITeam {
     }
 
     @Override
-    public String getTeamName() {
+    public String getName() {
         return mTeamName;
     }
 
@@ -168,7 +168,7 @@ public class Team implements ITeam {
     @Override
     public void setMoney(int money) {
         mMoneyAmount = money;
-        EventBus.getDefault().post(new MoneyUpdatedEvent(getTeamName(), mMoneyAmount));
+        EventBus.getDefault().post(new MoneyUpdatedEvent(getName(), mMoneyAmount));
     }
 
     @Override
@@ -187,22 +187,22 @@ public class Team implements ITeam {
     }
 
     @Override
-    public IAlliance getTeamRace() {
-        return mTeamRace;
+    public IAlliance getAlliance() {
+        return mAlliance;
     }
 
     @Override
-    public Color getTeamColor() {
+    public Color getColor() {
         return mTeamColor;
     }
 
     @Override
-    public void setTeamColor(final Color teamColor) {
+    public void setColor(final Color teamColor) {
         mTeamColor = teamColor;
     }
 
     @Override
-    public TeamControlBehaviourType getTeamControlType() {
+    public TeamControlBehaviourType getControlType() {
         return mTeamControlBehaviourType;
     }
 
@@ -232,7 +232,7 @@ public class Team implements ITeam {
             return;
         }
         Set<Integer> planetBuildings = mTeamPlanet.getExistingBuildingsTypes();
-        SortedSet<Integer> allBuildings = mTeamRace.getBuildingsIds();
+        SortedSet<Integer> allBuildings = mAlliance.getBuildingsIds();
 
         Iterator<Integer> it = allBuildings.iterator();
         int id;
@@ -258,11 +258,11 @@ public class Team implements ITeam {
     public void onEvent(final UpgradeBuildingEvent upgradeBuildingEvent) {
         ITeam team = TeamsHolder.getTeam(upgradeBuildingEvent.getTeamName());
         //check if its current team upgrade
-        if (!team.getTeamName().equals(getTeamName())) {
+        if (!team.getName().equals(getName())) {
             return;
         }
         BuildingId buildingId = upgradeBuildingEvent.getBuildingId();
-        IBuilding building = getTeamPlanet().getBuilding(buildingId.getId());
+        IBuilding building = getPlanet().getBuilding(buildingId.getId());
         if (building == null) {
             return;
         }

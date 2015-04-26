@@ -46,15 +46,15 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
     protected void userWantCreateBuilding(final ITeam userTeam, BuildingId buildingId) {
         LoggerHelper.methodInvocation(TAG, "userWantCreateBuilding");
         mGameServerConnector.sendClientMessage(0, new BuildingCreationClientMessage(
-                userTeam.getTeamName(), buildingId.getId(), buildingId.getUpgrade()));
-        LoggerHelper.printInformationMessage(TAG, "send building request team= " + userTeam.getTeamName() + ", building=" + buildingId + "");
+                userTeam.getName(), buildingId.getId(), buildingId.getUpgrade()));
+        LoggerHelper.printInformationMessage(TAG, "send building request team= " + userTeam.getName() + ", building=" + buildingId + "");
     }
 
     @Override
     public void buildingCreated(BuildingId buildingId, final String teamName) {
         LoggerHelper.methodInvocation(TAG, "buildingCreated");
         LoggerHelper.printDebugMessage(TAG, "buildingId=" + buildingId + ", teamName=" + teamName);
-        PlanetStaticObject planetStaticObject = TeamsHolder.getInstance().getElement(teamName).getTeamPlanet();
+        PlanetStaticObject planetStaticObject = TeamsHolder.getInstance().getElement(teamName).getPlanet();
         planetStaticObject.createBuilding(buildingId);
     }
 

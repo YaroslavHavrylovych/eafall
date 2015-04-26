@@ -21,7 +21,7 @@ public interface ITeam {
      *
      * @param teamBonus bonus to add
      */
-    void addTeamBonus(Bonus teamBonus);
+    void addBonus(Bonus teamBonus);
 
     /**
      * Add new {@link com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject}
@@ -39,16 +39,16 @@ public interface ITeam {
      * get team {@link com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetStaticObject}
      * which can be oly one
      */
-    PlanetStaticObject getTeamPlanet();
+    PlanetStaticObject getPlanet();
 
     /**
      * set team {@link com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetStaticObject}
      * which can be only one and if it will be destroyed then team loose
      */
-    void setTeamPlanet(PlanetStaticObject planet);
+    void setPlanet(PlanetStaticObject planet);
 
     /** removing team plane (team defeat) */
-    void removeTeamPlanet();
+    void removePlanet();
 
     /** get enemy team for the current team */
     ITeam getEnemyTeam();
@@ -60,7 +60,7 @@ public interface ITeam {
     List<GameObject> getTeamObjects();
 
     /** get current team name */
-    String getTeamName();
+    String getName();
 
     /** get team money */
     int getMoney();
@@ -78,20 +78,20 @@ public interface ITeam {
     /** team get income from all it's income objects (e.g. buildings on the planet) */
     void incomeTime();
 
-    /** get current team race */
-    IAlliance getTeamRace();
+    /** get current team alliance */
+    IAlliance getAlliance();
 
     /** return current team color */
-    Color getTeamColor();
+    Color getColor();
 
     /** set color for the team (used in like background color for team elements) */
-    void setTeamColor(Color teamColor);
+    void setColor(Color teamColor);
 
     /**
      * return {@link TeamControlBehaviourType} which different for all teams
      * (and even for one team in server and client)
      */
-    TeamControlBehaviourType getTeamControlType();
+    TeamControlBehaviourType getControlType();
 
     /** return {@link com.badlogic.gdx.physics.box2d.FixtureDef} which will be used for unit creation */
     FixtureDef getFixtureDefUnit();

@@ -14,7 +14,7 @@ public class PlanetDestroyListener extends DestroyListener {
 
     @Override
     public void objectDestroyed(final BodiedSprite gameObject) {
-        mTeam.removeTeamPlanet();
+        mTeam.removePlanet();
         super.objectDestroyed(gameObject);
     }
 }

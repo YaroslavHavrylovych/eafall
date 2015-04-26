@@ -52,7 +52,7 @@ public class DefenceBuilding extends Building {
         }
         boolean buildingBought = super.buyBuilding();
         ITeam team = TeamsHolder.getTeam(mTeamName);
-        boolean isFakePlanet = TeamControlBehaviourType.isClientSide(team.getTeamControlType());
+        boolean isFakePlanet = TeamControlBehaviourType.isClientSide(team.getControlType());
         //building was created
         if (isFakePlanet || buildingBought) {
             if (isFakePlanet) {
@@ -64,7 +64,7 @@ public class DefenceBuilding extends Building {
             return false;
         }
         //create orbital stations
-        PlanetStaticObject planet = team.getTeamPlanet();
+        PlanetStaticObject planet = team.getPlanet();
         float planetX = planet.getX(), planetY = planet.getY();
         float x, y;
         for (int i = 0; i < ORBITAL_STATIONS_AMOUNT; i++) {

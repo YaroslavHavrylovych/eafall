@@ -63,10 +63,10 @@ public class DescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
     }
 
     @Override
-    public void updateDescription(Shape drawArea, Object objectId, String raceName, final String teamName) {
+    public void updateDescription(Shape drawArea, Object objectId, String allianceName, final String teamName) {
         final BuildingId buildingId = (BuildingId) objectId;
-        IAlliance race = AllianceHolder.getInstance().getElement(raceName);
-        BuildingDummy buildingDummy = race.getBuildingDummy(buildingId);
+        IAlliance alliance = AllianceHolder.getInstance().getElement(allianceName);
+        BuildingDummy buildingDummy = alliance.getBuildingDummy(buildingId);
         int unitId;
         if (buildingDummy instanceof CreepBuildingDummy) {
             unitId = ((CreepBuildingDummy) buildingDummy).getMovableUnitId(buildingId.getUpgrade());
@@ -77,7 +77,7 @@ public class DescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
         }
 
         attach(drawArea);
-        UnitDummy unitDummy = race.getUnitDummy(unitId);
+        UnitDummy unitDummy = alliance.getUnitDummy(unitId);
 
         // building name
         mUnitBuildingNameLink.setText(LocaleImpl.getInstance().getStringById(buildingDummy.getStringId()));

@@ -26,18 +26,18 @@ public class WealthBuildingPopupUpdater extends BaseBuildingPopupUpdater {
     }
 
     @Override
-    public void updateAdditionInfo(Shape drawArea, Object objectId, String raceName, String teamName) {
+    public void updateAdditionInfo(Shape drawArea, Object objectId, String allianceName, String teamName) {
 
     }
 
     @Override
-    public void updateDescription(Shape drawArea, Object objectId, String raceName, String teamName) {
-        super.updateDescription(drawArea, objectId, raceName, teamName);
+    public void updateDescription(Shape drawArea, Object objectId, String allianceName, String teamName) {
+        super.updateDescription(drawArea, objectId, allianceName, teamName);
         final BuildingId buildingId = (BuildingId) objectId;
-        BuildingDummy buildingDummy = AllianceHolder.getRace(raceName).getBuildingDummy(buildingId);
+        BuildingDummy buildingDummy = AllianceHolder.getAlliance(allianceName).getBuildingDummy(buildingId);
         ITeam team = TeamsHolder.getTeam(teamName);
         final Object event;
-        if (team.getTeamPlanet().getBuildingsAmount(buildingId.getId())
+        if (team.getPlanet().getBuildingsAmount(buildingId.getId())
                 >= buildingDummy.getAmountLimit()) {
             event = null;
         } else {

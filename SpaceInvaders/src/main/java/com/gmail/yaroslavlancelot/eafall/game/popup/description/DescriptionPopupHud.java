@@ -98,7 +98,7 @@ public class DescriptionPopupHud extends PopupHud {
         onEvent();
         BuildingId buildingId = buildingDescriptionShowEvent.getObjectId();
         ITeam team = TeamsHolder.getInstance().getElement(buildingDescriptionShowEvent.getTeamName());
-        BuildingDummy buildingDummy = team.getTeamRace().getBuildingDummy(buildingId);
+        BuildingDummy buildingDummy = team.getAlliance().getBuildingDummy(buildingId);
         IPopupUpdater popupUpdater;
         switch (buildingDummy.getBuildingType()) {
             case CREEP_BUILDING: {
@@ -122,7 +122,7 @@ public class DescriptionPopupHud extends PopupHud {
             }
         }
         mDescriptionPopupBackground.updateDescription(popupUpdater, buildingId,
-                team.getTeamRace().getAllianceName(), team.getTeamName());
+                team.getAlliance().getAllianceName(), team.getName());
         showPopup();
     }
 
@@ -145,7 +145,7 @@ public class DescriptionPopupHud extends PopupHud {
         Object objectId = unitByBuildingDescriptionShowEvent.getBuildingId();
         ITeam team = TeamsHolder.getInstance().getElement(unitByBuildingDescriptionShowEvent.getTeamName());
         mDescriptionPopupBackground.updateDescription(mUnitsDescriptionUpdater, objectId,
-                team.getTeamRace().getAllianceName(), team.getTeamName());
+                team.getAlliance().getAllianceName(), team.getName());
         showPopup();
     }
 }

@@ -39,14 +39,14 @@ public class BuildingsPopupHud extends PopupHud {
     public BuildingsPopupHud(String teamName, Scene scene, VertexBufferObjectManager vertexBufferObjectManager) {
         super(scene);
         ITeam team = TeamsHolder.getInstance().getElement(teamName);
-        int buildingsAmount = team.getTeamRace().getBuildingsAmount();
+        int buildingsAmount = team.getAlliance().getBuildingsAmount();
 
         mPopupRectangle = new Rectangle(0, 0,
                 SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_WIDTH,
                 SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT * buildingsAmount,
                 vertexBufferObjectManager);
 
-        mTeamName = team.getTeamName();
+        mTeamName = team.getName();
         initBuildingPopupForTeam(mTeamName);
         mPopupRectangle.setX(SizeConstants.HALF_FIELD_WIDTH);
         mPopupRectangle.setY(mPopupRectangle.getHeight() / 2);
@@ -54,7 +54,7 @@ public class BuildingsPopupHud extends PopupHud {
 
     private void initBuildingPopupForTeam(String teamName) {
         ITeam team = TeamsHolder.getInstance().getElement(teamName);
-        mItems = new SparseArray<PopupItemFactory.BuildingPopupItem>(team.getTeamRace().getBuildingsAmount());
+        mItems = new SparseArray<PopupItemFactory.BuildingPopupItem>(team.getAlliance().getBuildingsAmount());
 
         syncBuildingsWithTeam(teamName);
     }
@@ -62,14 +62,14 @@ public class BuildingsPopupHud extends PopupHud {
     private void syncBuildingsWithTeam(String teamName) {
         final ITeam team = TeamsHolder.getTeam(teamName);
         BuildingId[] buildings = team.getBuildingsIds();
-        String raceName = team.getTeamRace().getAllianceName();
+        String allianceName = team.getAlliance().getAllianceName();
         int buildingsCount = buildings.length;
         int position;
         for (int id = 0; id < buildingsCount; id++) {
             position = buildingsCount - id - 1;
             // if building which should be on this position is not created at all
             if (mItems.indexOfKey(id) < 0) {
-                IEntity item = constructPopupItem(id, position, buildings[id], raceName);
+                IEntity item = constructPopupItem(id, position, buildings[id], allianceName);
                 mPopupRectangle.attachChild(item);
                 continue;
             }
@@ -77,19 +77,20 @@ public class BuildingsPopupHud extends PopupHud {
             // if building on position exist, we check it's upgrade to be sure that it's needed building
             if (mItems.get(id).getBuildingId().getUpgrade() != buildings[id].getUpgrade()) {
                 mPopupRectangle.detachChild(mItems.get(id).getItemEntity());
-                IEntity item = constructPopupItem(id, position, buildings[id], raceName);
+                IEntity item = constructPopupItem(id, position, buildings[id], allianceName);
                 mPopupRectangle.attachChild(item);
             }
         }
     }
 
-    private IEntity constructPopupItem(int id, int position, final BuildingId buildingId, String raceName) {
+    private IEntity constructPopupItem(int id, int position, final BuildingId buildingId,
+                                       String allianceName) {
         PopupItemFactory.BuildingPopupItem item = PopupItemFactory.createBuildingPopupItem(
                 mPopupRectangle.getWidth() / 2,
                 position * SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT
                         + SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT / 2,
                 mPopupRectangle.getVertexBufferObjectManager());
-        item.setBuildingId(buildingId, raceName);
+        item.setBuildingId(buildingId, allianceName);
         item.setOnClickListener(new StaticHelper.OnClickListener() {
             @Override
             public void onClick() {

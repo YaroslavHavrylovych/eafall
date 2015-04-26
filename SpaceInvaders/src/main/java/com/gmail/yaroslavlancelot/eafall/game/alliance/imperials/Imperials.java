@@ -11,7 +11,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 /** imperials */
 public class Imperials extends Alliance {
     public static final String TAG = Imperials.class.getCanonicalName();
-    /** race name */
+    /** alliance name */
     public static final String ALLIANCE_NAME = "Imperials";
 
     public Imperials(final VertexBufferObjectManager objectManager) {

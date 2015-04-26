@@ -93,8 +93,8 @@ public final class StringConstants {
         return getPathToAllianceImages(allianceName) + "/units/";
     }
 
-    public static String getPathToSounds(String raceName) {
-        return "ingame/sounds/alliance/" + raceName.toLowerCase() + SEPARATOR;
+    public static String getPathToSounds(String allianceName) {
+        return "ingame/sounds/alliance/" + allianceName.toLowerCase() + SEPARATOR;
     }
 
     public static String getPathToBackgroundMusic() {

@@ -117,15 +117,15 @@ public class DescriptionPopupBackground extends Sprite {
         return isVisible() && super.onAreaTouched(pSceneTouchEvent, touchAreaLocalX, touchAreaLocalY);
     }
 
-    public void updateDescription(IPopupUpdater updater, Object objectId, String raceName, String teamName) {
-        updater.updateImage(mImageShape, objectId, raceName, teamName);
-        updater.updateDescription(mDescriptionShape, objectId, raceName, teamName);
-        updater.updateAdditionInfo(mAdditionalInformationShape, objectId, raceName, teamName);
-        updateObjectNameText(updater, objectId, raceName);
+    public void updateDescription(IPopupUpdater updater, Object objectId, String allianceName, String teamName) {
+        updater.updateImage(mImageShape, objectId, allianceName, teamName);
+        updater.updateDescription(mDescriptionShape, objectId, allianceName, teamName);
+        updater.updateAdditionInfo(mAdditionalInformationShape, objectId, allianceName, teamName);
+        updateObjectNameText(updater, objectId, allianceName);
     }
 
-    private void updateObjectNameText(IPopupUpdater updater, Object objectId, String raceName) {
-        updater.updateObjectNameText(mObjectNameText, objectId, raceName);
+    private void updateObjectNameText(IPopupUpdater updater, Object objectId, String allianceName) {
+        updater.updateObjectNameText(mObjectNameText, objectId, allianceName);
         mObjectNameText.setX(mDescriptionShape.getX());
     }
 }
