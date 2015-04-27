@@ -27,7 +27,7 @@
             android:name="com.gmail.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity"
             android:screenOrientation="landscape"/>
         <activity
-            android:name="com.gmail.yaroslavlancelot.eafall.game.client.thin.ClientGameActivity"
+            android:name=".game.client.thin.ThinClientGameActivity"
             android:screenOrientation="landscape"/>
         <activity
             android:name="com.gmail.yaroslavlancelot.eafall.android.activities.singleplayer.PreGameCustomizationActivity"/>

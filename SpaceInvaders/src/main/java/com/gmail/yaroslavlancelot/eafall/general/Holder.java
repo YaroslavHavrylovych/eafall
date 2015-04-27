@@ -36,6 +36,11 @@ public abstract class Holder<T> extends SelfCleanable {
         return element;
     }
 
+    /** remove form the holder */
+    public T removeElement(String id) {
+        return holderMap.remove(id);
+    }
+
     /**
      * check is element has been already added
      *

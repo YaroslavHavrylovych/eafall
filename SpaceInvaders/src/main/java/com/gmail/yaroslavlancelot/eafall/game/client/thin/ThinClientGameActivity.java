@@ -2,7 +2,7 @@ package com.gmail.yaroslavlancelot.eafall.game.client.thin;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
-import com.gmail.yaroslavlancelot.eafall.game.client.MainOperationsBaseGameActivity;
+import com.gmail.yaroslavlancelot.eafall.game.client.ClientGameActivity;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetStaticObject;
@@ -19,8 +19,8 @@ import com.gmail.yaroslavlancelot.eafall.network.server.messages.UnitChangePosit
 import org.andengine.engine.options.EngineOptions;
 
 /** Used in client. Handles messages from server and send it's own in react on client operations */
-public class ClientGameActivity extends MainOperationsBaseGameActivity implements InGameClient {
-    public final static String TAG = ClientGameActivity.class.getCanonicalName();
+public class ThinClientGameActivity extends ClientGameActivity implements InGameClient {
+    public final static String TAG = ThinClientGameActivity.class.getCanonicalName();
     private volatile GameServerConnector mGameServerConnector;
 
     @Override
@@ -145,6 +145,6 @@ public class ClientGameActivity extends MainOperationsBaseGameActivity implement
 
     @Override
     public void gameStarted() {
-        replaceSplashSceneWithGameScene();
+        hideSplash();
     }
 }

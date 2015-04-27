@@ -20,7 +20,8 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
  * Shown while preparing main scene and waiting other players.
  */
 public class SplashScene extends Scene {
-    private static final String TAG = GameScene.class.getCanonicalName();
+    private static final String TAG = EaFallScene.class.getCanonicalName();
+    private static BitmapTextureAtlas splashTextureAtlas;
 
     public SplashScene(Engine engine) {
         Sprite splash = new Sprite(0, 0, TextureRegionHolder.getInstance()
@@ -32,13 +33,19 @@ public class SplashScene extends Scene {
     }
 
     public static void loadResources(Context context, TextureManager textureManager) {
-        BitmapTextureAtlas splashTextureAtlas =
+        splashTextureAtlas =
                 new BitmapTextureAtlas(textureManager, 128, 32, TextureOptions.DEFAULT);
         TextureRegionHolder.getInstance().addElement(
                 StringConstants.KEY_SPLASH_SCREEN, BitmapTextureAtlasTextureRegionFactory.createFromAsset(
                         splashTextureAtlas, context, StringConstants.FILE_SPLASH_SCREEN, 0, 0)
         );
         splashTextureAtlas.load();
+    }
+
+    public static void unloadResources() {
+        TextureRegionHolder.getInstance().removeElement(StringConstants.KEY_SPLASH_SCREEN);
+        splashTextureAtlas.unload();
+        splashTextureAtlas = null;
     }
 
 }

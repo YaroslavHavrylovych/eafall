@@ -53,7 +53,6 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
         mServerGameLoaded = true;
         if (mClientGameLoaded) {
             mGameSocketServer.sendBroadcastServerMessage(0, new GameStartedServerMessage());
-            replaceSplashSceneWithGameScene();
             registerContactCallback();
         }
     }
@@ -148,7 +147,7 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
         mClientGameLoaded = true;
         if (mServerGameLoaded) {
             mGameSocketServer.sendBroadcastServerMessage(0, new GameStartedServerMessage());
-            replaceSplashSceneWithGameScene();
+            hideSplash();
             registerContactCallback();
         }
     }

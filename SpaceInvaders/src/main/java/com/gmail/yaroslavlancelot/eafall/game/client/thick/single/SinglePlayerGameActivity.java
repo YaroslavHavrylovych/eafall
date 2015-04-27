@@ -12,7 +12,7 @@ public class SinglePlayerGameActivity extends ThickClientGameActivity {
 
     @Override
     public void afterGameLoaded() {
-        replaceSplashSceneWithGameScene();
+        hideSplash();
     }
 
     @Override

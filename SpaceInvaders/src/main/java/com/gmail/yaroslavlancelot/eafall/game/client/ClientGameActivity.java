@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
+import com.gmail.yaroslavlancelot.eafall.game.GameActivity;
 import com.gmail.yaroslavlancelot.eafall.game.SharedDataCallbacks;
 import com.gmail.yaroslavlancelot.eafall.game.ai.VeryFirstBot;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
@@ -42,36 +43,25 @@ import com.gmail.yaroslavlancelot.eafall.game.eventbus.RunOnUpdateThreadEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.building.CreateBuildingEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.unit.CreateMovableUnitEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.unit.CreateStationaryUnitEvent;
-import com.gmail.yaroslavlancelot.eafall.game.loading.GameResourceLoader;
-import com.gmail.yaroslavlancelot.eafall.game.loading.GameResourcesLoaderFactory;
 import com.gmail.yaroslavlancelot.eafall.game.popup.PopupManager;
 import com.gmail.yaroslavlancelot.eafall.game.popup.construction.BuildingsPopupHud;
-import com.gmail.yaroslavlancelot.eafall.game.scene.SceneManager;
 import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
 import com.gmail.yaroslavlancelot.eafall.game.team.Team;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.ConstructionPopupButton;
-import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.MoneyText;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.MovableUnitsLimitText;
 
-import org.andengine.engine.camera.VelocityCamera;
-import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.options.AudioOptions;
 import org.andengine.engine.options.EngineOptions;
-import org.andengine.engine.options.ScreenOrientation;
-import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.Entity;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.entity.text.Text;
-import org.andengine.entity.util.FPSLogger;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
-import org.andengine.input.touch.controller.MultiTouch;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.adt.color.Color;
@@ -86,157 +76,51 @@ import de.greenrobot.event.EventBus;
  * Main game Activity. Extends {@link BaseGameActivity} class and contains main game elements.
  * Loads resources, initialize scene, engine and etc.
  */
-public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
+public abstract class ClientGameActivity extends GameActivity {
     /** tag, which is used for debugging purpose */
-    public static final String TAG = MainOperationsBaseGameActivity.class.getCanonicalName();
+    public static final String TAG = ClientGameActivity.class.getCanonicalName();
     /** contains whole game units/warriors */
     private final Map<Long, GameObject> mGameObjectsMap = new HashMap<Long, GameObject>();
     /** first team */
     protected ITeam mSecondTeam;
     /** second team */
     protected ITeam mFirstTeam;
-    /** user static area */
-    protected HUD mHud;
     /** current game physics world */
     protected PhysicsWorld mPhysicsWorld;
     /** game objects contact listener */
     protected ContactListener mContactListener;
-    /** game camera */
-    private VelocityCamera mCamera;
-    /** scene manager */
-    private SceneManager mSceneManager;
-    /** resource loader */
-    private GameResourceLoader mGameResourceLoader;
-    /** background theme */
-    private BackgroundMusic mBackgroundMusic;
-
-    /**
-     * Parsing alliances from the intent and save to
-     * {@link com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder}
-     */
-    private void createAlliances() {
-        Intent intent = getIntent();
-        AllianceHolder.addAllianceByName(intent.getStringExtra(StringConstants.FIRST_TEAM_ALLIANCE),
-                getVertexBufferObjectManager());
-        AllianceHolder.addAllianceByName(intent.getStringExtra(StringConstants.SECOND_TEAM_ALLIANCE),
-                getVertexBufferObjectManager());
-    }
-
-    @Override
-    public synchronized void onResumeGame() {
-        super.onResumeGame();
-        if (mBackgroundMusic != null)
-            mBackgroundMusic.playBackgroundMusic();
-    }
-
-    @Override
-    public synchronized void onPauseGame() {
-        super.onPauseGame();
-        if (mBackgroundMusic != null)
-            mBackgroundMusic.pauseBackgroundMusic();
-    }
 
     @Override
     public EngineOptions onCreateEngineOptions() {
-        LoggerHelper.methodInvocation(TAG, "onCreateEngineOptions");
-        // multi-touch
-        if (!MultiTouch.isSupported(this)) {
-            LoggerHelper.printErrorMessage(TAG, "MultiTouch isn't supported");
-            finish();
-        }
-        //pre-in-game
-        GameObject.clearCounter();
-        // init camera
-        mCamera = new VelocityCamera(0, 0,
-                SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT,
-                SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT,
-                Config.getConfig().getMaxZoomFactor());
-        mCamera.setBounds(0, 0, SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT);
-        mCamera.setBoundsEnabled(true);
-        mCamera.setHUD(new HUD());
-        //hud
-        mHud = mCamera.getHUD();
-        mHud.setTouchAreaBindingOnActionDownEnabled(true);
-        mHud.setOnAreaTouchTraversalFrontToBack();
-
-        EngineOptions engineOptions = new EngineOptions(
-                true, ScreenOrientation.LANDSCAPE_FIXED, new RatioResolutionPolicy(
-                SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT), mCamera
-        );
+        EngineOptions engineOptions = super.onCreateEngineOptions();
         //physic world
         mPhysicsWorld = new PhysicsWorld(new Vector2(0, 0), false, 2, 2);
         mPhysicsWorld.setContactListener(mContactListener = new ContactListener());
-        //helpers
-        mGameResourceLoader = new GameResourcesLoaderFactory().getLoader();
-        mSceneManager = new SceneManager(this);
         // music
         AudioOptions audioOptions = engineOptions.getAudioOptions();
-        audioOptions.setNeedsMusic(Config.getConfig().isMusicEnabled());
         audioOptions.setNeedsSound(Config.getConfig().isSoundsEnabled());
         audioOptions.getSoundOptions().setMaxSimultaneousStreams(3);
         return engineOptions;
     }
 
     @Override
-    public void onCreateResources(OnCreateResourcesCallback onCreateResourcesCallback) {
-        LoggerHelper.methodInvocation(TAG, "onCreateResources");
-
-        if (Config.getConfig().isProfilingEnabled()) {
-            mGameResourceLoader.loadProfilingFonts(getTextureManager(), getFontManager());
-        }
-        mGameResourceLoader.loadSplashImages(getTextureManager(), getVertexBufferObjectManager());
-
-        onCreateResourcesCallback.onCreateResourcesFinished();
-    }
-
-    @Override
-    public void onCreateScene(final OnCreateSceneCallback onCreateSceneCallback) {
-        LoggerHelper.methodInvocation(TAG, "onCreateScene");
-        mSceneManager.createSplashScene();
-        onCreateSceneCallback.onCreateSceneFinished(mSceneManager.getSplashScene());
-    }
-
-    @Override
-    public void onPopulateScene(Scene scene, OnPopulateSceneCallback onPopulateSceneCallback) {
-        onPopulateSceneCallback.onPopulateSceneFinished();
-        asyncGameLoading();
-    }
-
-    /** show profiling information on screen (using FPS logger) */
-    private void profile() {
-        final Text fpsText = new Text(200, SizeConstants.GAME_FIELD_HEIGHT - 50,
-                FontHolder.getInstance().getElement("profiling"),
-                "fps: 60.00", 20, getVertexBufferObjectManager());
-        fpsText.setColor(Color.GREEN);
-        mHud.attachChild(fpsText);
-        mEngine.registerUpdateHandler(new FPSLogger(1) {
-            @Override
-            protected void onLogFPS() {
-                fpsText.setText(String.format("fps: %.2f", this.mFrames / this.mSecondsElapsed));
-            }
-        });
-    }
-
     protected void asyncGameLoading() {
-        if (Config.getConfig().isProfilingEnabled()) {
-            profile();
-        }
         //game resources
         new Thread(new Runnable() {
             @Override
             public void run() {
-                EventBus.getDefault().register(MainOperationsBaseGameActivity.this);
+                EventBus.getDefault().register(ClientGameActivity.this);
                 // background music and sounds
-                SoundFactory.init(getSoundManager(), MainOperationsBaseGameActivity.this);
+                SoundFactory.init(getSoundManager(), ClientGameActivity.this);
                 mBackgroundMusic = Config.getConfig().isMusicEnabled()
-                        ? new BackgroundMusic(getMusicManager(), MainOperationsBaseGameActivity.this)
+                        ? new BackgroundMusic(getMusicManager(), ClientGameActivity.this)
                         : null;
                 //alliance and player
                 createAlliances();
                 createTeams();
                 //resources
-                mGameResourceLoader.loadInGameImages(getTextureManager(), getVertexBufferObjectManager());
-                mGameResourceLoader.loadInGameFonts(getTextureManager(), getFontManager());
+                mResourcesLoader.loadImages(getTextureManager(), getVertexBufferObjectManager());
+                mResourcesLoader.loadFonts(getTextureManager(), getFontManager());
                 //scene
                 Scene scene = mSceneManager.createGameScene(mCamera);
                 scene.registerUpdateHandler(mPhysicsWorld);
@@ -255,7 +139,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
                 //music and sound
                 if (Config.getConfig().isSoundsEnabled()) {
                     SoundFactory.getInstance().setCameraHandler(
-                            mSceneManager.getGameScene().getCameraHandler());
+                            mSceneManager.getWorkingScene().getCameraHandler());
                 }
                 if (mBackgroundMusic != null) {
                     mBackgroundMusic.initBackgroundMusic();
@@ -271,6 +155,13 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
         }).start();
     }
 
+    public void hideSplash() {
+        initThickClient();
+        super.hideSplash();
+    }
+
+    protected abstract void initThickClient();
+
     private void attachSpriteGroups(Scene scene) {
         Object[] keys = SpriteGroupHolder.getsInstance().keySet().toArray();
         Arrays.sort(keys);
@@ -280,13 +171,6 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
     }
 
     public abstract void afterGameLoaded();
-
-    public void replaceSplashSceneWithGameScene() {
-        initThickClient();
-        mSceneManager.replaceSplashSceneWithGame();
-    }
-
-    protected abstract void initThickClient();
 
     private void initPopups() {
         for (ITeam team : TeamsHolder.getInstance().getElements()) {
@@ -451,7 +335,7 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
 
     protected void initBotControlledTeam(final ITeam initializingTeam) {
         LoggerHelper.methodInvocation(TAG, "initBotControlledTeam");
-        new Thread(new VeryFirstBot(initializingTeam, MainOperationsBaseGameActivity.this)).start();
+        new Thread(new VeryFirstBot(initializingTeam, ClientGameActivity.this)).start();
     }
 
     @SuppressWarnings("unused")
@@ -497,6 +381,18 @@ public abstract class MainOperationsBaseGameActivity extends BaseGameActivity {
                 parent.attachChild(sprite);
             }
         });
+    }
+
+    /**
+     * Parsing alliances from the intent and save to
+     * {@link com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder}
+     */
+    private void createAlliances() {
+        Intent intent = getIntent();
+        AllianceHolder.addAllianceByName(intent.getStringExtra(StringConstants.FIRST_TEAM_ALLIANCE),
+                getVertexBufferObjectManager());
+        AllianceHolder.addAllianceByName(intent.getStringExtra(StringConstants.SECOND_TEAM_ALLIANCE),
+                getVertexBufferObjectManager());
     }
 
     /** used by EventBus */

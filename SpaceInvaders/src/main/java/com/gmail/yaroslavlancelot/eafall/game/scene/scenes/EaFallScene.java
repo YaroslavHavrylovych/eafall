@@ -21,12 +21,12 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
  * <br/>
  * 2. Loading needed images.
  */
-public class GameScene extends Scene {
-    private static final String TAG = GameScene.class.getCanonicalName();
+public class EaFallScene extends Scene {
+    private static final String TAG = EaFallScene.class.getCanonicalName();
     private GameSceneHandler mGameSceneHandler;
 
     /** set background image to the scene */
-    public GameScene(VertexBufferObjectManager vertexBufferObjectManager) {
+    public EaFallScene(VertexBufferObjectManager vertexBufferObjectManager) {
         setBackground(new SpriteBackground(
                 new Sprite(
                         SizeConstants.HALF_FIELD_WIDTH, SizeConstants.HALF_FIELD_HEIGHT,
@@ -40,7 +40,7 @@ public class GameScene extends Scene {
 
     /**
      * Creates and init {@link GameSceneHandler}
-     * and assign it to the {@link GameScene} instance.
+     * and assign it to the {@link EaFallScene} instance.
      * <br/>
      * Set camera coordinates to music and sound handler with using
      * {@link SoundOperationsImpl#setCameraHandler(ICameraHandler)}
