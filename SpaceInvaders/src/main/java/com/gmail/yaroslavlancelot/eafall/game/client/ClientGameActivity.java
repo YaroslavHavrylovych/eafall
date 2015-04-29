@@ -45,6 +45,7 @@ import com.gmail.yaroslavlancelot.eafall.game.eventbus.unit.CreateMovableUnitEve
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.unit.CreateStationaryUnitEvent;
 import com.gmail.yaroslavlancelot.eafall.game.popup.PopupManager;
 import com.gmail.yaroslavlancelot.eafall.game.popup.construction.BuildingsPopupHud;
+import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
 import com.gmail.yaroslavlancelot.eafall.game.team.Team;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamControlBehaviourType;
@@ -104,55 +105,47 @@ public abstract class ClientGameActivity extends GameActivity {
     }
 
     @Override
-    protected void asyncGameLoading() {
+    protected void asyncResourcesLoading() {
         //game resources
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                EventBus.getDefault().register(ClientGameActivity.this);
-                // background music and sounds
-                SoundFactory.init(getSoundManager(), ClientGameActivity.this);
-                mBackgroundMusic = Config.getConfig().isMusicEnabled()
-                        ? new BackgroundMusic(getMusicManager(), ClientGameActivity.this)
-                        : null;
-                //alliance and player
-                createAlliances();
-                createTeams();
-                //resources
-                mResourcesLoader.loadImages(getTextureManager(), getVertexBufferObjectManager());
-                mResourcesLoader.loadFonts(getTextureManager(), getFontManager());
-                //scene
-                Scene scene = mSceneManager.createGameScene(mCamera);
-                scene.registerUpdateHandler(mPhysicsWorld);
-                //attach SpriteGroups to the scene
-                attachSpriteGroups(scene);
-                //initSun
-                createSun();
-                //planets
-                initFirstPlanet();
-                initSecondPlanet();
-                //other
-                initOnScreenText();
-                initPopups();
-                //pools
-                BulletPool.init(getVertexBufferObjectManager());
-                //music and sound
-                if (Config.getConfig().isSoundsEnabled()) {
-                    SoundFactory.getInstance().setCameraHandler(
-                            mSceneManager.getWorkingScene().getCameraHandler());
-                }
-                if (mBackgroundMusic != null) {
-                    mBackgroundMusic.initBackgroundMusic();
-                    mEngine.runOnUpdateThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            afterGameLoaded();
-                            mBackgroundMusic.playBackgroundMusic();
-                        }
-                    }, true);
-                }
-            }
-        }).start();
+        EventBus.getDefault().register(ClientGameActivity.this);
+        //init sounds
+        SoundFactory.init(getSoundManager(), ClientGameActivity.this);
+        //alliance and player
+        createAlliances();
+        createTeams();
+        //resources
+        mResourcesLoader.loadImages(getTextureManager(), getVertexBufferObjectManager());
+        mResourcesLoader.loadFonts(getTextureManager(), getFontManager());
+        //scene
+        EaFallScene scene = mSceneManager.getWorkingScene();
+        scene.setBackground(StringConstants.FILE_BACKGROUND, getVertexBufferObjectManager());
+        mSceneManager.getWorkingScene().registerUpdateHandler(mPhysicsWorld);
+        //attach SpriteGroups to the scene
+        attachSpriteGroups(scene);
+        //initSun
+        createSun();
+        //planets
+        initFirstPlanet();
+        initSecondPlanet();
+        //other
+        initOnScreenText();
+        initPopups();
+        //pools
+        BulletPool.init(getVertexBufferObjectManager());
+        //sound
+        if (Config.getConfig().isSoundsEnabled()) {
+            SoundFactory.getInstance().setCameraHandler(
+                    mSceneManager.getWorkingScene().getCameraHandler());
+        }
+        //music
+        if (Config.getConfig().isMusicEnabled()) {
+            mBackgroundMusic = new BackgroundMusic(
+                    StringConstants.getMusicPath() + "background_1.ogg",
+                    getMusicManager(), ClientGameActivity.this);
+            mBackgroundMusic.initBackgroundMusic();
+            mBackgroundMusic.playBackgroundMusic();
+        }
+        onResourcesLoaded();
     }
 
     public void hideSplash() {
@@ -169,8 +162,6 @@ public abstract class ClientGameActivity extends GameActivity {
             scene.attachChild(SpriteGroupHolder.getGroup((String) key));
         }
     }
-
-    public abstract void afterGameLoaded();
 
     private void initPopups() {
         for (ITeam team : TeamsHolder.getInstance().getElements()) {

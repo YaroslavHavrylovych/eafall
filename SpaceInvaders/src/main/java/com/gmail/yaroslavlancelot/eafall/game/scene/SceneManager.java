@@ -36,7 +36,7 @@ public class SceneManager {
      *
      * @return instance of SplashScene
      */
-    public SplashScene createSplashScene() {
+    public SplashScene initSplashScene() {
         return mSplashScene = new SplashScene(mGameActivity.getEngine());
     }
 
@@ -54,8 +54,8 @@ public class SceneManager {
      *
      * @return instance of SplashScene
      */
-    public EaFallScene createGameScene(VelocityCamera camera) {
-        mWorkingScene = new EaFallScene(mGameActivity.getVertexBufferObjectManager());
+    public synchronized EaFallScene initWorkingScene(VelocityCamera camera) {
+        mWorkingScene = new EaFallScene();
         mWorkingScene.initGameSceneHandler(camera);
         return mWorkingScene;
     }
@@ -65,7 +65,7 @@ public class SceneManager {
      *
      * @return instance of EaFallScene, if not created yet - got null;
      */
-    public EaFallScene getWorkingScene() {
+    public synchronized EaFallScene getWorkingScene() {
         return mWorkingScene;
     }
 

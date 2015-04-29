@@ -33,7 +33,7 @@ public class ClientResourcesLoader extends BaseResourceLoader {
     public void loadImages(TextureManager textureManager,
                            VertexBufferObjectManager vertexBufferObjectManager) {
         //background
-        loadBackground(textureManager);
+        loadBackgroundImage(StringConstants.FILE_BACKGROUND, textureManager);
         //alliance
         loadAllianceResources(textureManager);
         //players
@@ -44,15 +44,6 @@ public class ClientResourcesLoader extends BaseResourceLoader {
         loadSunAndPlanets(textureManager, vertexBufferObjectManager);
         //other
         PopupManager.loadResource(EaFallApplication.getContext(), textureManager);
-    }
-
-    /** loads game scene background */
-    public static void loadBackground(TextureManager textureManager) {
-        BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager,
-                SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT, TextureOptions.BILINEAR);
-        TextureRegionHolder.addElementFromAssets(StringConstants.FILE_BACKGROUND,
-                smallObjectTexture, EaFallApplication.getContext(), 0, 0);
-        smallObjectTexture.load();
     }
 
     private void loadAllianceResources(TextureManager textureManager) {
@@ -147,11 +138,16 @@ public class ClientResourcesLoader extends BaseResourceLoader {
 
     @Override
     public void unloadFonts(TextureManager textureManager, FontManager fontManager) {
-        //TODO implement
+        throw new UnsupportedOperationException("still not implemented");
     }
 
     @Override
     public void unloadImages() {
-        //TODO implement
+        throw new UnsupportedOperationException("still not implemented");
+    }
+
+    @Override
+    public void addImage(String path, int width, int height) {
+        throw new UnsupportedOperationException("no add image for the game");
     }
 }

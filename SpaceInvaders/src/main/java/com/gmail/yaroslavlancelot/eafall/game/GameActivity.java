@@ -44,7 +44,7 @@ public abstract class GameActivity extends BaseGameActivity {
     /** background music */
     protected BackgroundMusic mBackgroundMusic;
     /** scene manager */
-    protected SceneManager mSceneManager;
+    protected volatile SceneManager mSceneManager;
     /** resource loader */
     protected IResourcesLoader mResourcesLoader;
 
@@ -65,9 +65,15 @@ public abstract class GameActivity extends BaseGameActivity {
         mHud = mCamera.getHUD();
         mHud.setTouchAreaBindingOnActionDownEnabled(true);
         mHud.setOnAreaTouchTraversalFrontToBack();
-        //helpers
-        mResourcesLoader = new ResourceFactory().getLoader();
+        //resource manager
+        ResourceFactory.TypeResourceLoader typeResourceLoader = (ResourceFactory.TypeResourceLoader)
+                getIntent().getExtras().getSerializable(ResourceFactory.RESOURCE_LOADER);
+        mResourcesLoader = new ResourceFactory().getLoader(typeResourceLoader == null
+                ? ResourceFactory.TypeResourceLoader.CLIENT
+                : typeResourceLoader);
+        //scene manager
         mSceneManager = new SceneManager(this);
+        //other
         EngineOptions engineOptions = new EngineOptions(
                 true, ScreenOrientation.LANDSCAPE_FIXED, new RatioResolutionPolicy(
                 SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT), mCamera
@@ -93,7 +99,7 @@ public abstract class GameActivity extends BaseGameActivity {
     @Override
     public void onCreateScene(final OnCreateSceneCallback onCreateSceneCallback) {
         LoggerHelper.methodInvocation(TAG, "onCreateScene");
-        mSceneManager.createSplashScene();
+        mSceneManager.initSplashScene();
         onCreateSceneCallback.onCreateSceneFinished(mSceneManager.getSplashScene());
     }
 
@@ -103,7 +109,14 @@ public abstract class GameActivity extends BaseGameActivity {
             profile();
         }
         onPopulateSceneCallback.onPopulateSceneFinished();
-        asyncGameLoading();
+
+        mSceneManager.initWorkingScene(mCamera);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                asyncResourcesLoading();
+            }
+        }).start();
     }
 
     /** show profiling information on screen (using FPS logger) */
@@ -121,7 +134,11 @@ public abstract class GameActivity extends BaseGameActivity {
         });
     }
 
-    protected abstract void asyncGameLoading();
+    /** triggers when all initialized, splash showed and you can load resources */
+    protected abstract void asyncResourcesLoading();
+
+    /** have to be triggered after resources will be loaded */
+    public abstract void onResourcesLoaded();
 
     /** Hide splash scene and shows working scene */
     public void hideSplash() {

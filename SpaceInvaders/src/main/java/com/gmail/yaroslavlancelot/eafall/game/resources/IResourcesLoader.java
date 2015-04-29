@@ -30,4 +30,17 @@ public interface IResourcesLoader {
 
 
     void unloadProfilingFonts();
+
+    /**
+     * add images which has to be loaded in addition.
+     * <br/>
+     * Note:
+     * <br/>
+     * - image which have the size of the screen will be loaded in separate as a background.
+     * <br/>
+     * - images which are not background (we don't check but sure that they're less)
+     * will be grouped into atlases by 4
+     * (or maybe another static value amount).
+     */
+    void addImage(String path, int width, int height);
 }

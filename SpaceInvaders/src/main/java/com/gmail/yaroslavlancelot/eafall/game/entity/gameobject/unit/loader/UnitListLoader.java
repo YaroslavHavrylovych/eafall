@@ -6,7 +6,11 @@ import org.simpleframework.xml.Root;
 import java.util.ArrayList;
 import java.util.List;
 
-/** read unit list from unit-store xml file */
+/**
+ * read unit list from unit-store xml file
+ *
+ * @author Yaroslav Havrylovych
+ */
 @Root(strict = false)
 public class UnitListLoader {
     @ElementList(required = true, inline = true)

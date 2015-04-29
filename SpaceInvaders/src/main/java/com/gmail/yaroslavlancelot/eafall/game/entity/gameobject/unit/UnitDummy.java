@@ -90,7 +90,7 @@ public abstract class UnitDummy {
         //if null then the game sound disabled
         if (soundOperations != null) {
             mFireSound = soundOperations.loadSound(
-                    StringConstants.getPathToSounds(allianceName.toLowerCase()) + mUnitLoader.sound);
+                    StringConstants.getSoundsPath(allianceName.toLowerCase()) + mUnitLoader.sound);
         } else {
             mFireSound = null;
         }

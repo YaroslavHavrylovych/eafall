@@ -49,7 +49,7 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
     }
 
     @Override
-    public void afterGameLoaded() {
+    public void onResourcesLoaded() {
         mServerGameLoaded = true;
         if (mClientGameLoaded) {
             mGameSocketServer.sendBroadcastServerMessage(0, new GameStartedServerMessage());
