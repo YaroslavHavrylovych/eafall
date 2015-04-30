@@ -6,6 +6,8 @@
 
                 <xs:element name="background" maxOccurs="1" type="xs:string"/>
                 <xs:element name="music" type="xs:string"/>
+                <xs:element name="sound_select" type="xs:string"/>
+                <xs:element name="image_select" type="xs:string"/>
 
                 <xs:element name="campaign" maxOccurs="unbounded">
                     <xs:complexType>

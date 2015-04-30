@@ -97,10 +97,6 @@ public abstract class ClientGameActivity extends GameActivity {
         //physic world
         mPhysicsWorld = new PhysicsWorld(new Vector2(0, 0), false, 2, 2);
         mPhysicsWorld.setContactListener(mContactListener = new ContactListener());
-        // music
-        AudioOptions audioOptions = engineOptions.getAudioOptions();
-        audioOptions.setNeedsSound(Config.getConfig().isSoundsEnabled());
-        audioOptions.getSoundOptions().setMaxSimultaneousStreams(3);
         return engineOptions;
     }
 
@@ -108,8 +104,6 @@ public abstract class ClientGameActivity extends GameActivity {
     protected void asyncResourcesLoading() {
         //game resources
         EventBus.getDefault().register(ClientGameActivity.this);
-        //init sounds
-        SoundFactory.init(getSoundManager(), ClientGameActivity.this);
         //alliance and player
         createAlliances();
         createTeams();

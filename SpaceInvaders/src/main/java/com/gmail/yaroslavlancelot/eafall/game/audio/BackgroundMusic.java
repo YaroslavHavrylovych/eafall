@@ -41,7 +41,7 @@ public class BackgroundMusic {
     }
 
     public void initBackgroundMusic() {
-        LoggerHelper.methodInvocation(SoundOperationsImpl.TAG, "initBackgroundMusic");
+        LoggerHelper.methodInvocation(TAG, "initBackgroundMusic");
         if (mMusic != null && !mMusic.isPlaying()) {
             mMusic.setLooping(true);
         }

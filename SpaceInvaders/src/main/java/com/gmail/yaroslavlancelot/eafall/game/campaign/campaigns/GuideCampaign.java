@@ -13,7 +13,7 @@ import com.gmail.yaroslavlancelot.eafall.game.campaign.intents.CampaignIntent;
 public class GuideCampaign implements ICampaign {
     @Override
     public void startCampaignActivity(Activity activity) {
-        CampaignIntent intent = new CampaignIntent("campaign/home_page.xml");
+        CampaignIntent intent = new CampaignIntent("campaign/guide_campaign.xml");
         intent.start(activity);
     }
 

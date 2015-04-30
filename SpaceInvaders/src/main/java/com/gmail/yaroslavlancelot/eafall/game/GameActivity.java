@@ -2,6 +2,7 @@ package com.gmail.yaroslavlancelot.eafall.game;
 
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.audio.BackgroundMusic;
+import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
@@ -12,6 +13,7 @@ import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 
 import org.andengine.engine.camera.VelocityCamera;
 import org.andengine.engine.camera.hud.HUD;
+import org.andengine.engine.options.AudioOptions;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
@@ -78,8 +80,13 @@ public abstract class GameActivity extends BaseGameActivity {
                 true, ScreenOrientation.LANDSCAPE_FIXED, new RatioResolutionPolicy(
                 SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT), mCamera
         );
-
-        engineOptions.getAudioOptions().setNeedsMusic(Config.getConfig().isMusicEnabled());
+        //audio
+        AudioOptions audioOptions = engineOptions.getAudioOptions();
+        //sound
+        audioOptions.getSoundOptions().setMaxSimultaneousStreams(3);
+        audioOptions.setNeedsSound(Config.getConfig().isSoundsEnabled());
+        //music
+        audioOptions.setNeedsMusic(Config.getConfig().isMusicEnabled());
         return engineOptions;
     }
 
@@ -92,6 +99,8 @@ public abstract class GameActivity extends BaseGameActivity {
             mResourcesLoader.loadProfilingFonts(getTextureManager(), getFontManager());
         }
         mResourcesLoader.loadSplashImages(getTextureManager(), getVertexBufferObjectManager());
+        //init sounds
+        SoundFactory.init(getSoundManager(), GameActivity.this);
 
         onCreateResourcesCallback.onCreateResourcesFinished();
     }

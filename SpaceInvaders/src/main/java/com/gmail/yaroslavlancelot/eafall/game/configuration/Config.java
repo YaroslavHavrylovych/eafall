@@ -21,8 +21,8 @@ public class Config {
      */
     private final boolean mSoundsEnabled = true;
     private final boolean mMusicEnabled = true;
-    private final float mMusicVolumeMax = 1.0f;
-    private final float mSoundVolumeMax = 0.3f;
+    private final float mMusicVolumeMax = 0.4f;
+    private final float mSoundVolumeMax = 0.9f;
     /*
      * Additional
      */
