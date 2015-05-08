@@ -9,6 +9,8 @@ public interface SoundOperations {
 
     void playSound(Sound sound, float x, float y);
 
+    void playSound(Sound sound);
+
     void setCameraHandler(ICameraHandler cameraCoordinates);
 
     void setMasterVolume(final float pMasterVolume);

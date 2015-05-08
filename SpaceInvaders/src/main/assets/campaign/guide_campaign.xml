@@ -1,0 +1,30 @@
+<campaigns
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="scheme/campaign_scheme_definition.xml">
+
+    <background>graphics/images/background.png</background>
+    <music>background_1.ogg</music>
+    <sound_select>audio/sound/select.ogg</sound_select>
+    <image_select>graphics/icons/selected.png</image_select>
+
+    <campaign id="0">
+        <name>imperials_campaign</name>
+        <picture>graphics/sprites/planet_1.png</picture>
+        <width>128</width>
+        <height>128</height>
+        <position>
+            <x>960</x>
+            <y>540</y>
+        </position>
+    </campaign>
+    <campaign id="1">
+        <name>rebels_campaign</name>
+        <picture>graphics/sprites/planet_2.png</picture>
+        <width>128</width>
+        <height>128</height>
+        <position>
+            <x>300</x>
+            <y>280</y>
+        </position>
+    </campaign>
+</campaigns>

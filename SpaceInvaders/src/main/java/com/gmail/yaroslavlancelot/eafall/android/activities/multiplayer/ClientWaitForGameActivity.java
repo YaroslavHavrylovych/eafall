@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.android.activities.BaseNonGameActivity;
-import com.gmail.yaroslavlancelot.eafall.game.client.thin.ClientGameActivity;
+import com.gmail.yaroslavlancelot.eafall.game.client.thin.ThinClientGameActivity;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.imperials.Imperials;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.rebels.Rebels;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
@@ -45,7 +45,7 @@ public class ClientWaitForGameActivity extends BaseNonGameActivity implements Pr
     @Override
     public void gameStart(final String serverIP) {
         GameServerConnector.getGameServerConnector().removePreGameStartCallback(this);
-        Intent clientGameIntent = new Intent(ClientWaitForGameActivity.this, ClientGameActivity.class);
+        Intent clientGameIntent = new Intent(ClientWaitForGameActivity.this, ThinClientGameActivity.class);
         clientGameIntent.
                 putExtra(StringConstants.SECOND_TEAM_CONTROL_BEHAVIOUR_TYPE, TeamControlBehaviourType.USER_CONTROL_ON_CLIENT_SIDE.toString()).
                 putExtra(StringConstants.SECOND_TEAM_ALLIANCE, Rebels.ALLIANCE_NAME).

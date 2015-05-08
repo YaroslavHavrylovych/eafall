@@ -13,33 +13,33 @@ import java.io.File;
 public final class StringConstants {
     public static final String SEPARATOR = File.separator;
     /** images storing path */
-    public static final String GENERAL_IMAGES_PATH = "ingame/graphics/images" + SEPARATOR;
+    public static final String IMAGES_PATH = "graphics/images" + SEPARATOR;
     /** background */
-    public static String FILE_BACKGROUND = StringConstants.getPathToGeneralImages() + "background.png";
+    public static String FILE_BACKGROUND = StringConstants.getImagesPath() + "background.png";
     /** sun file name */
-    public static final String FILE_SUN = "ingame/graphics/sprites/sun.png";
+    public static final String FILE_SUN = "graphics/sprites/sun.png";
     /** splash screen file name */
-    public static final String FILE_SPLASH_SCREEN = "ingame/graphics/images/splash_screen.png";
+    public static final String FILE_SPLASH_SCREEN = "graphics/images/splash_screen.png";
     /** bullet image */
-    public static final String FILE_BULLET = "ingame/graphics/sprites/bullet/bullet.png";
+    public static final String FILE_BULLET = "graphics/sprites/bullet/bullet.png";
     /** team color area image */
-    public static final String FILE_TEAM_COLOR = "ingame/graphics/sprites/team_color_area.png";
+    public static final String FILE_TEAM_COLOR = "graphics/sprites/team_color_area.png";
     /** health bar image */
-    public static final String FILE_HEALTH_BAR = "ingame/graphics/sprites/health_bar.png";
+    public static final String FILE_HEALTH_BAR = "graphics/sprites/health_bar.png";
     /** buildings popup item background */
-    public static final String FILE_POPUP_BACKGROUND_ITEM = "ingame/graphics/images/background_popup_item.png";
+    public static final String FILE_POPUP_BACKGROUND_ITEM = "graphics/images/background_popup_item.png";
     /** description popup background */
-    public static final String FILE_DESCRIPTION_POPUP_BACKGROUND = "ingame/graphics/images/description_popup_background.png";
+    public static final String FILE_DESCRIPTION_POPUP_BACKGROUND = "graphics/images/description_popup_background.png";
     /** description popup cross (for closing) */
-    public static final String FILE_BUILDINGS_POPUP_UP_BUTTON = "ingame/graphics/icons/up_button.png";
+    public static final String FILE_BUILDINGS_POPUP_UP_BUTTON = "graphics/icons/up_button.png";
     /** game button */
-    public static final String FILE_GAME_BUTTON = "ingame/graphics/icons/game_button.png";
+    public static final String FILE_GAME_BUTTON = "graphics/icons/game_button.png";
     /** circle point */
-    public static final String FILE_CIRCLE_POINT = "ingame/graphics/icons/circle_point.png";
+    public static final String FILE_CIRCLE_POINT = "graphics/icons/circle_point.png";
     /** file name for blue planet */
-    public static final String FILE_FIRST_PLANET = "ingame/graphics/sprites/planet_1.png";
+    public static final String FILE_FIRST_PLANET = "graphics/sprites/planet_1.png";
     /** file name for red planet */
-    public static final String FILE_SECOND_PLANET = "ingame/graphics/sprites/planet_2.png";
+    public static final String FILE_SECOND_PLANET = "graphics/sprites/planet_2.png";
     /** used like key for sun static object */
     public static final String KEY_SUN = "sun_key";
     /** used like key for red planet static object */
@@ -66,15 +66,15 @@ public final class StringConstants {
     }
 
     private static String getPathToAllianceSprites(String allianceName) {
-        return "ingame/graphics/sprites/alliance/" + allianceName.toLowerCase();
+        return "graphics/sprites/alliance/" + allianceName.toLowerCase();
     }
 
     private static String getPathToAllianceImages(String allianceName) {
-        return "ingame/graphics/images/alliance/" + allianceName.toLowerCase();
+        return "graphics/images/alliance/" + allianceName.toLowerCase();
     }
 
-    public static String getPathToGeneralImages() {
-        return GENERAL_IMAGES_PATH;
+    public static String getImagesPath() {
+        return IMAGES_PATH;
     }
 
     public static String getPathToBuildings(String allianceName) {
@@ -93,11 +93,11 @@ public final class StringConstants {
         return getPathToAllianceImages(allianceName) + "/units/";
     }
 
-    public static String getPathToSounds(String allianceName) {
-        return "ingame/sounds/alliance/" + allianceName.toLowerCase() + SEPARATOR;
+    public static String getSoundsPath(String allianceName) {
+        return "audio/sound/alliance/" + allianceName.toLowerCase() + SEPARATOR;
     }
 
-    public static String getPathToBackgroundMusic() {
-        return "ingame/sounds/general/";
+    public static String getMusicPath() {
+        return "audio/music/";
     }
 }

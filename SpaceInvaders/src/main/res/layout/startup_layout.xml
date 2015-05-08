@@ -1,52 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
     <Button
-            android:id="@+id/single_game"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/startup_screen_top_button_margin"
-            android:width="@dimen/startup_screen_button_width"
-            android:height="@dimen/default_button_height"
-            android:textSize="@dimen/default_button_text_size"
-            android:text="@string/single_game"/>
+        android:id="@+id/campaign"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/startup_screen_top_button_margin"
+        android:width="@dimen/startup_screen_button_width"
+        android:height="@dimen/default_button_height"
+        android:text="@string/campaign"
+        android:textSize="@dimen/default_button_text_size"/>
 
     <Button
-            android:id="@+id/multiplayer_game"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:width="@dimen/startup_screen_button_width"
-            android:height="@dimen/default_button_height"
-            android:layout_below="@+id/single_game"
-            android:layout_centerHorizontal="true"
-            android:textSize="@dimen/default_button_text_size"
-            android:text="@string/multiplayer_game"/>
+        android:id="@+id/single_game"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/campaign"
+        android:layout_centerHorizontal="true"
+        android:width="@dimen/startup_screen_button_width"
+        android:height="@dimen/default_button_height"
+        android:text="@string/single_game"
+        android:textSize="@dimen/default_button_text_size"/>
 
     <Button
-            android:id="@+id/settings"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:width="@dimen/startup_screen_button_width"
-            android:height="@dimen/default_button_height"
-            android:layout_below="@id/multiplayer_game"
-            android:layout_centerHorizontal="true"
-            android:textSize="@dimen/default_button_text_size"
-            android:text="@string/settings"/>
+        android:id="@+id/multiplayer_game"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/single_game"
+        android:layout_centerHorizontal="true"
+        android:width="@dimen/startup_screen_button_width"
+        android:height="@dimen/default_button_height"
+        android:text="@string/multiplayer_game"
+        android:textSize="@dimen/default_button_text_size"/>
 
     <Button
-            android:id="@+id/exit"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:width="@dimen/startup_screen_button_width"
-            android:height="@dimen/default_button_height"
-            android:layout_below="@id/settings"
-            android:layout_centerHorizontal="true"
-            android:textSize="@dimen/default_button_text_size"
-            android:text="@string/exit"/>
+        android:id="@+id/settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/multiplayer_game"
+        android:layout_centerHorizontal="true"
+        android:width="@dimen/startup_screen_button_width"
+        android:height="@dimen/default_button_height"
+        android:text="@string/settings"
+        android:textSize="@dimen/default_button_text_size"/>
+
+    <Button
+        android:id="@+id/exit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/settings"
+        android:layout_centerHorizontal="true"
+        android:width="@dimen/startup_screen_button_width"
+        android:height="@dimen/default_button_height"
+        android:text="@string/exit"
+        android:textSize="@dimen/default_button_text_size"/>
 </RelativeLayout>

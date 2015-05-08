@@ -7,7 +7,7 @@ import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
 
 import de.greenrobot.event.EventBus;
 
-/** Callback after unit killing. Used method for MainOperationsBaseGameActivity class and should be placed in current class */
+/** Callback after unit killing. Used method for ClientGameActivity class and should be placed in current class */
 public class DestroyListener implements IDestroyListener {
     /** team of listening object */
     protected ITeam mTeam;

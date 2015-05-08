@@ -1,7 +1,7 @@
 package com.gmail.yaroslavlancelot.eafall.game.client.thick;
 
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
-import com.gmail.yaroslavlancelot.eafall.game.client.MainOperationsBaseGameActivity;
+import com.gmail.yaroslavlancelot.eafall.game.client.ClientGameActivity;
 import com.gmail.yaroslavlancelot.eafall.game.constant.CollisionCategories;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
@@ -12,10 +12,10 @@ import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 
 /**
- * extends {@link com.gmail.yaroslavlancelot.eafall.game.client.MainOperationsBaseGameActivity} with adding world boundaries and
+ * extends {@link ClientGameActivity} with adding world boundaries and
  * registering money update cycles (not used for client because all money logic handles on server)
  */
-public abstract class ThickClientGameActivity extends MainOperationsBaseGameActivity {
+public abstract class ThickClientGameActivity extends ClientGameActivity {
     /** tag, which is used for debugging purpose */
     public static final String TAG = ThickClientGameActivity.class.getCanonicalName();
 

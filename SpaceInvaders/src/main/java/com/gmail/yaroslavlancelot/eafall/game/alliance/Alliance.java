@@ -5,6 +5,7 @@ import android.util.SparseArray;
 
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
+import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
@@ -18,7 +19,6 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.Mov
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.loader.UnitListLoader;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.loader.UnitLoader;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.stationary.StationaryUnitDummy;
-import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
 
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
@@ -268,6 +268,9 @@ public abstract class Alliance implements IAlliance {
                     new BitmapTextureAtlas(textureManager, width, height, TextureOptions.BILINEAR);
             for (atlasPosition = 0; atlasPosition < 4; atlasPosition++) {
                 if (position >= mUnitDummies.size()) {
+                    if (atlasPosition != 0) {
+                        textureAtlas.load();
+                    }
                     break end;
                 }
                 mUnitDummies.valueAt(position++).loadImageResources(context, textureAtlas,

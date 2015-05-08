@@ -11,8 +11,8 @@ import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
 public class SinglePlayerGameActivity extends ThickClientGameActivity {
 
     @Override
-    public void afterGameLoaded() {
-        replaceSplashSceneWithGameScene();
+    public void onResourcesLoaded() {
+        hideSplash();
     }
 
     @Override

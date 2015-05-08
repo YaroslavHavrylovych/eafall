@@ -1,6 +1,4 @@
-package com.gmail.yaroslavlancelot.eafall.game.loading;
-
-import android.graphics.Typeface;
+package com.gmail.yaroslavlancelot.eafall.game.resources.loaders;
 
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
@@ -13,39 +11,29 @@ import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.popup.PopupManager;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.DescriptionPopupHud;
-import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.SplashScene;
 import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 
 import org.andengine.entity.sprite.batch.SpriteGroup;
-import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.font.FontManager;
-import org.andengine.opengl.font.IFont;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.TextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.adt.color.Color;
 
 /** particular resource loader */
-public class GameResourcesLoaderImpl implements GameResourceLoader {
-    GameResourcesLoaderImpl() {
+public class ClientResourcesLoader extends BaseResourceLoader {
+    public ClientResourcesLoader() {
     }
 
     @Override
-    public void loadSplashImages(TextureManager textureManager,
-                                 VertexBufferObjectManager vertexBufferObjectManager) {
-        SplashScene.loadResources(EaFallApplication.getContext(), textureManager);
-    }
-
-    @Override
-    public void loadInGameImages(TextureManager textureManager,
-                                 VertexBufferObjectManager vertexBufferObjectManager) {
+    public void loadImages(TextureManager textureManager,
+                           VertexBufferObjectManager vertexBufferObjectManager) {
         //background
-        loadBackground(textureManager);
+        loadBackgroundImage(StringConstants.FILE_BACKGROUND, textureManager);
         //alliance
         loadAllianceResources(textureManager);
         //players
@@ -56,15 +44,6 @@ public class GameResourcesLoaderImpl implements GameResourceLoader {
         loadSunAndPlanets(textureManager, vertexBufferObjectManager);
         //other
         PopupManager.loadResource(EaFallApplication.getContext(), textureManager);
-    }
-
-    /** loads game scene background */
-    public static void loadBackground(TextureManager textureManager) {
-        BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager,
-                SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT, TextureOptions.BILINEAR);
-        TextureRegionHolder.addElementFromAssets(StringConstants.FILE_BACKGROUND,
-                smallObjectTexture, EaFallApplication.getContext(), 0, 0);
-        smallObjectTexture.load();
     }
 
     private void loadAllianceResources(TextureManager textureManager) {
@@ -90,14 +69,6 @@ public class GameResourcesLoaderImpl implements GameResourceLoader {
                     vertexBufferObjectManager);
             SpriteGroupHolder.addGroup(BatchingKeys.getUnitSpriteGroup(teamName), spriteGroup);
         }
-    }
-
-    @Override
-    public void loadProfilingFonts(TextureManager textureManager, FontManager fontManager) {
-        IFont font = FontFactory.create(fontManager, textureManager, 256, 256,
-                Typeface.create(Typeface.DEFAULT, Typeface.BOLD), SizeConstants.MONEY_FONT_SIZE, Color.WHITE.hashCode());
-        font.load();
-        FontHolder.getInstance().addElement("profiling", font);
     }
 
     /** load images for bullets, health bars and team colors */
@@ -160,23 +131,23 @@ public class GameResourcesLoaderImpl implements GameResourceLoader {
     }
 
     @Override
-    public void loadInGameFonts(TextureManager textureManager, FontManager fontManager) {
+    public void loadFonts(TextureManager textureManager, FontManager fontManager) {
         FontHolder.loadGeneralGameFonts(fontManager, textureManager);
         DescriptionPopupHud.loadFonts(fontManager, textureManager);
     }
 
     @Override
-    public void unloadInGameFonts(TextureManager textureManager, FontManager fontManager) {
-
+    public void unloadFonts(TextureManager textureManager, FontManager fontManager) {
+        throw new UnsupportedOperationException("still not implemented");
     }
 
     @Override
-    public void unloadGameImages() {
-
+    public void unloadImages() {
+        throw new UnsupportedOperationException("still not implemented");
     }
 
     @Override
-    public void unloadSplashImages() {
-
+    public void addImage(String path, int width, int height) {
+        throw new UnsupportedOperationException("no add image for the game");
     }
 }

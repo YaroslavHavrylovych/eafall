@@ -45,6 +45,10 @@ public class SoundOperationsImpl implements SoundOperations {
 
     @Override
     public void playSound(final Sound sound, final float x, final float y) {
+        if (mCameraHandler == null) {
+            throw new UnsupportedOperationException(
+                    "can't use sound from position here, no camera handler initialized");
+        }
         if (mSoundManager.getMasterVolume() <= sMinimumSoundValue) {
             return;
         }
@@ -65,6 +69,11 @@ public class SoundOperationsImpl implements SoundOperations {
             return;
         }
         sound.setVolume(volume);
+        sound.play();
+    }
+
+    @Override
+    public void playSound(Sound sound) {
         sound.play();
     }
 

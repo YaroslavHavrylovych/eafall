@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
-import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 
 import org.andengine.audio.music.Music;
 import org.andengine.audio.music.MusicFactory;
@@ -19,11 +18,10 @@ import java.io.IOException;
  */
 public class BackgroundMusic {
     public static final String TAG = BackgroundMusic.class.getCanonicalName();
-    private Music mBackgroundMusic;
+    private Music mMusic;
 
-    public BackgroundMusic(MusicManager musicManager, Context context) {
-        mBackgroundMusic = getMusic(StringConstants.getPathToBackgroundMusic() + "background_1.ogg",
-                context, musicManager);
+    public BackgroundMusic(String path, MusicManager musicManager, Context context) {
+        mMusic = getMusic(path, context, musicManager);
         setMasterVolume(Config.getConfig().getMusicVolumeMax());
     }
 
@@ -37,23 +35,25 @@ public class BackgroundMusic {
     }
 
     public void setMasterVolume(final float masterVolume) {
-        mBackgroundMusic.setVolume(masterVolume);
+        if (mMusic != null) {
+            mMusic.setVolume(masterVolume);
+        }
     }
 
     public void initBackgroundMusic() {
-        LoggerHelper.methodInvocation(SoundOperationsImpl.TAG, "initBackgroundMusic");
-        if (mBackgroundMusic != null && !mBackgroundMusic.isPlaying()) {
-            mBackgroundMusic.setLooping(true);
+        LoggerHelper.methodInvocation(TAG, "initBackgroundMusic");
+        if (mMusic != null && !mMusic.isPlaying()) {
+            mMusic.setLooping(true);
         }
     }
 
     public void playBackgroundMusic() {
-        if (mBackgroundMusic != null && !mBackgroundMusic.isPlaying())
-            mBackgroundMusic.resume();
+        if (mMusic != null && !mMusic.isPlaying())
+            mMusic.resume();
     }
 
     public void pauseBackgroundMusic() {
-        if (mBackgroundMusic != null && mBackgroundMusic.isPlaying())
-            mBackgroundMusic.pause();
+        if (mMusic != null && mMusic.isPlaying())
+            mMusic.pause();
     }
 }

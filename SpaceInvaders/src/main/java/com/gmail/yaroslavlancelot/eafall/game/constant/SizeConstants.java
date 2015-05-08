@@ -22,6 +22,7 @@ public final class SizeConstants {
     public static final int HEALTH_BAR_HEIGHT = 3;
     public static final int TEAM_COLOR_AREA_SIZE = 4;
     public static final int BULLET_SIZE = 2;
+    public static final int SELECTOR_IMAGE_SIZE = 150;
 
     /*
      * each unit should to have some color, which will be same as color of his team.

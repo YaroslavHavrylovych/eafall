@@ -1,10 +1,9 @@
 package com.gmail.yaroslavlancelot.eafall.game.scene.scenes;
 
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
-import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
-import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
-import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.audio.SoundOperationsImpl;
+import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
+import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.touch.GameSceneHandler;
 import com.gmail.yaroslavlancelot.eafall.game.touch.ICameraHandler;
 
@@ -21,16 +20,19 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
  * <br/>
  * 2. Loading needed images.
  */
-public class GameScene extends Scene {
-    private static final String TAG = GameScene.class.getCanonicalName();
+public class EaFallScene extends Scene {
+    private static final String TAG = EaFallScene.class.getCanonicalName();
     private GameSceneHandler mGameSceneHandler;
 
+    public EaFallScene() {
+    }
+
     /** set background image to the scene */
-    public GameScene(VertexBufferObjectManager vertexBufferObjectManager) {
+    public void setBackground(String backgroundFilePath, VertexBufferObjectManager vertexBufferObjectManager) {
         setBackground(new SpriteBackground(
                 new Sprite(
                         SizeConstants.HALF_FIELD_WIDTH, SizeConstants.HALF_FIELD_HEIGHT,
-                        TextureRegionHolder.getInstance().getElement(StringConstants.FILE_BACKGROUND),
+                        TextureRegionHolder.getInstance().getElement(backgroundFilePath),
                         vertexBufferObjectManager)));
     }
 
@@ -40,7 +42,7 @@ public class GameScene extends Scene {
 
     /**
      * Creates and init {@link GameSceneHandler}
-     * and assign it to the {@link GameScene} instance.
+     * and assign it to the {@link EaFallScene} instance.
      * <br/>
      * Set camera coordinates to music and sound handler with using
      * {@link SoundOperationsImpl#setCameraHandler(ICameraHandler)}

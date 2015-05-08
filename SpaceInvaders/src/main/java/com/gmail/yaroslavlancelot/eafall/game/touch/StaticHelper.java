@@ -1,9 +1,9 @@
 package com.gmail.yaroslavlancelot.eafall.game.touch;
 
+import org.andengine.entity.IEntity;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.ITouchCallback;
-import org.andengine.entity.shape.Shape;
 import org.andengine.input.touch.TouchEvent;
 
 /** Helping functions to work with touch events */
@@ -43,14 +43,14 @@ public final class StaticHelper {
      * un-press happens (user move finger out of element in pressed state)  on touchable element.
      */
     public static class CustomTouchListener implements ITouchCallback {
+        /** used to find out is you move in bounds or not */
+        protected IEntity mObject;
         /** true if current touch is simple click (just press down and up) */
         private boolean mIsItClickEvent;
-        /** used to find out is you move in bounds or not */
-        private Shape mObject;
 
 
         /** parameters description you can see in javadoc to fields of this class */
-        public CustomTouchListener(Shape object) {
+        public CustomTouchListener(IEntity object) {
             mObject = object;
         }
 
