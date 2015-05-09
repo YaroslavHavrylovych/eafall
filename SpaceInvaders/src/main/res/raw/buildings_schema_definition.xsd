@@ -55,8 +55,8 @@
                 <xs:element name="defence_building" maxOccurs="1">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element name="position_x" type="xs:nonNegativeInteger"/>
-                            <xs:element name="position_y" type="xs:nonNegativeInteger"/>
+                            <xs:element name="position_x" type="xs:integer"/>
+                            <xs:element name="position_y" type="xs:integer"/>
                             <xs:element name="image_name" type="xs:string"/>
                             <xs:element name="cost" type="xs:nonNegativeInteger"/>
                             <xs:element name="unit_id" type="xs:nonNegativeInteger"/>
@@ -82,8 +82,8 @@
                             <xs:element name="first_build_income" type="xs:nonNegativeInteger"/>
                             <xs:element name="next_buildings_income" type="xs:nonNegativeInteger"/>
                             <xs:element name="cost" type="xs:nonNegativeInteger"/>
-                            <xs:element name="position_x" type="xs:nonNegativeInteger"/>
-                            <xs:element name="position_y" type="xs:nonNegativeInteger"/>
+                            <xs:element name="position_x" type="xs:integer"/>
+                            <xs:element name="position_y" type="xs:integer"/>
                             <xs:element name="image_name" type="xs:string"/>
                             <xs:element name="team_color_area">
                                 <xs:complexType>
@@ -111,8 +111,8 @@
                              -->
                             <xs:element name="percentage" type="xs:boolean"/>
                             <xs:element name="cost" type="xs:nonNegativeInteger"/>
-                            <xs:element name="position_x" type="xs:nonNegativeInteger"/>
-                            <xs:element name="position_y" type="xs:nonNegativeInteger"/>
+                            <xs:element name="position_x" type="xs:integer"/>
+                            <xs:element name="position_y" type="xs:integer"/>
                             <xs:element name="image_name" type="xs:string"/>
                             <xs:element name="team_color_area">
                                 <xs:complexType>

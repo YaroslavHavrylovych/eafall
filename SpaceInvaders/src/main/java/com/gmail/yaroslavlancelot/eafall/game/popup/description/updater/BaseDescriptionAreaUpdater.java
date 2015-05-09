@@ -64,7 +64,7 @@ public abstract class BaseDescriptionAreaUpdater implements IPopupUpdater.IDescr
         int fontHeight = DescriptionText.sFontSize + mBetweenDescriptionLinesSpace,
                 halfFontHeight = fontHeight / 2;
         return createDescriptionText(0,
-                SizeConstants.DESCRIPTION_POPUP_DESCRIPTION_AREA_HEIGHT -
+                SizeConstants.DESCRIPTION_POPUP_DES_AREA_HEIGHT -
                         halfFontHeight - position * fontHeight,
                 LocaleImpl.getInstance().getStringById(stringId), objectManager);
     }

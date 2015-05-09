@@ -19,10 +19,11 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-/** for using in whole application */
+/** for using in popup (generally for buildings) */
 public class TextButton extends ButtonSprite {
     private final static String sFontSizeKey = "game_button_phont_size_key";
-    private final static int sFontSize = 50;
+    private final static int sFontSize = 45;
+    private final static int padding = 30;
     private Text mText;
 
     public TextButton(VertexBufferObjectManager vertexBufferObjectManager, float width, float height) {
@@ -42,7 +43,7 @@ public class TextButton extends ButtonSprite {
     }
 
     public static void loadResources(Context context, TextureManager textureManager) {
-        BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 400, 100, TextureOptions.BILINEAR);
+        BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 400, 120, TextureOptions.BILINEAR);
         TextureRegionHolder.addTiledElementFromAssets(
                 StringConstants.FILE_GAME_BUTTON, smallObjectTexture, context, 0, 0, 2, 1);
         smallObjectTexture.load();
@@ -61,5 +62,7 @@ public class TextButton extends ButtonSprite {
             return;
         }
         mText.setText(text);
+        setWidth(mText.getWidth() + padding * 2);
+        mText.setX(getWidth() / 2);
     }
 }

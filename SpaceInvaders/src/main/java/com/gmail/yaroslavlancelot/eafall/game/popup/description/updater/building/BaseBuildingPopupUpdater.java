@@ -5,6 +5,7 @@ import android.content.Context;
 import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
+import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.building.BuildingsAmountChangedEvent;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.BasePopupUpdater;
@@ -13,6 +14,7 @@ import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.TextButton;
 import com.gmail.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 
+import org.andengine.entity.IEntity;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.Shape;
@@ -42,7 +44,7 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
     protected TextButton mButton;
     /** image for addition information */
     protected Sprite mAdditionDescriptionImage;
-    //TODO I dont like this thing
+    //TODO I dont like this thing (touch interceptor)
     /** used only for intercept touch event on addition information area */
     protected Rectangle mAdditionInfoRectangle;
     /** building description object (update description area which u pass to it) */
@@ -52,8 +54,8 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
         super(vertexBufferObjectManager, scene);
         mAmountDrawer = new AmountDrawer(vertexBufferObjectManager);
 
-        //build
-        mButton = new TextButton(vertexBufferObjectManager, 300, 70);
+        mButton = new TextButton(vertexBufferObjectManager, 300,
+                SizeConstants.DESCRIPTION_POPUP_DES_BUTTON_HEIGHT);
         mScene.registerTouchArea(mButton);
 
         initAdditionInformationArea();
@@ -82,19 +84,21 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
         super.updateImage(drawArea, objectId, allianceName, teamName);
         ITeam team = TeamsHolder.getInstance().getElement(teamName);
         mBuildingId = (BuildingId) objectId;
-        updateBuildingsAmount(team.getPlanet().getBuildingsAmount(mBuildingId.getId()));
+        updateBuildingsAmount(drawArea,
+                team.getPlanet().getBuildingsAmount(mBuildingId.getId()));
         mTeamName = teamName;
     }
 
-    private void updateBuildingsAmount(int buildingsAmount) {
+    private void updateBuildingsAmount(IEntity entity, int buildingsAmount) {
         mAmountDrawer.setText(buildingsAmount);
-        mAmountDrawer.draw(mObjectImage);
+        mAmountDrawer.draw(entity);
     }
 
     @Override
     protected String getDescribedObjectName(Object objectId, String allianceName) {
         return LocaleImpl.getInstance().getStringById
-                (AllianceHolder.getInstance().getElement(allianceName).getBuildingDummy((BuildingId) objectId).getStringId());
+                (AllianceHolder.getInstance().getElement(allianceName)
+                        .getBuildingDummy((BuildingId) objectId).getStringId());
     }
 
     @Override

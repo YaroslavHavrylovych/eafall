@@ -3,6 +3,7 @@ package com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.buildin
 import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
+import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.IBuilding;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
@@ -47,11 +48,13 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
 
     private void initButtons(VertexBufferObjectManager vertexBufferObjectManager) {
         //upgrade
-        mUpgradeButton = new TextButton(vertexBufferObjectManager, 300, 70);
+        mUpgradeButton = new TextButton(vertexBufferObjectManager, 300,
+                SizeConstants.DESCRIPTION_POPUP_DES_BUTTON_HEIGHT);
         mUpgradeButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_upgrade_button));
         mScene.registerTouchArea(mUpgradeButton);
         //path button
-        mPathButton = new TextButton(vertexBufferObjectManager, 300, 70);
+        mPathButton = new TextButton(vertexBufferObjectManager, 300,
+                SizeConstants.DESCRIPTION_POPUP_DES_BUTTON_HEIGHT);
         mPathButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_path_button));
         mScene.registerTouchArea(mPathButton);
     }

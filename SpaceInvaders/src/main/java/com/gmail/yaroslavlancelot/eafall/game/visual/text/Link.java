@@ -31,7 +31,7 @@ public class Link extends RecenterText {
     public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
         IFont font = FontFactory.create(fontManager, textureManager, 256, 256,
                 Typeface.create(Typeface.DEFAULT, Typeface.BOLD),
-                sFontSize, Color.CYAN);
+                sFontSize, Color.argb(255, 0, 18, 57));
         font.load();
         FontHolder.getInstance().addElement(sFontSizeKey, font);
     }

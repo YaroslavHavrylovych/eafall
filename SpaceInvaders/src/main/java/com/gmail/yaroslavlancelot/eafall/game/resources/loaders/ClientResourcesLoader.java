@@ -100,11 +100,12 @@ public class ClientResourcesLoader extends BaseResourceLoader {
     private void loadSunAndPlanets(TextureManager textureManager,
                                    VertexBufferObjectManager vertexBufferObjectManager) {
         BitmapTextureAtlas atlas = new BitmapTextureAtlas(textureManager,
-                SizeConstants.BETWEEN_TEXTURES_PADDING
-                        + 2 * SizeConstants.PLANET_DIAMETER,
+                Math.max(SizeConstants.FILE_SUN_DIAMETER,
+                        SizeConstants.BETWEEN_TEXTURES_PADDING
+                                + 2 * SizeConstants.FILE_PLANET_DIAMETER),
                 SizeConstants.FILE_SUN_DIAMETER
                         + SizeConstants.BETWEEN_TEXTURES_PADDING
-                        + SizeConstants.PLANET_DIAMETER,
+                        + SizeConstants.FILE_PLANET_DIAMETER,
                 TextureOptions.BILINEAR);
 
         TextureRegionHolder.getInstance().addElement(StringConstants.KEY_SUN,
@@ -121,7 +122,7 @@ public class ClientResourcesLoader extends BaseResourceLoader {
                 BitmapTextureAtlasTextureRegionFactory.createFromAsset(
                         atlas, EaFallApplication.getContext(),
                         StringConstants.FILE_SECOND_PLANET,
-                        SizeConstants.PLANET_DIAMETER + SizeConstants.BETWEEN_TEXTURES_PADDING,
+                        SizeConstants.FILE_PLANET_DIAMETER + SizeConstants.BETWEEN_TEXTURES_PADDING,
                         SizeConstants.FILE_SUN_DIAMETER + SizeConstants.BETWEEN_TEXTURES_PADDING));
 
         atlas.load();

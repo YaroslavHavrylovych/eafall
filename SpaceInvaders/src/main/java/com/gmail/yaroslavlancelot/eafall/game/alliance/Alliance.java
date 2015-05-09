@@ -167,15 +167,15 @@ public abstract class Alliance implements IAlliance {
         //creating texture atlas for loading buildings
         int textureManagerElementsInLine = (int)
                 Math.round(Math.sqrt(getBuildingsWithUpgradesAmount()) + 1);
-        int size = textureManagerElementsInLine * SizeConstants.BUILDING_SIZE;
+        int size = textureManagerElementsInLine * SizeConstants.BUILDING_IMAGE_SIZE;
         BitmapTextureAtlas textureAtlas = new BitmapTextureAtlas(
                 textureManager, size, size, TextureOptions.BILINEAR);
         //load
         int n, m;
         for (int i = 0; i < mBuildingDummies.size(); i++) {
             BuildingDummy buildingDummy = mBuildingDummies.valueAt(i);
-            n = (i % textureManagerElementsInLine) * buildingDummy.getWidth();
-            m = (i / textureManagerElementsInLine) * buildingDummy.getHeight();
+            n = (i % textureManagerElementsInLine) * SizeConstants.BUILDING_IMAGE_SIZE;
+            m = (i / textureManagerElementsInLine) * SizeConstants.BUILDING_IMAGE_SIZE;
             buildingDummy.loadSpriteResources(context, textureAtlas, n, m, getAllianceName());
         }
         textureAtlas.load();

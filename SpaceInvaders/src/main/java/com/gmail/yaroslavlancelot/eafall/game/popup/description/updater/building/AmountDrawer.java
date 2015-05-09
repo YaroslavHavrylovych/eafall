@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 
+import org.andengine.entity.IEntity;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.shape.Shape;
 import org.andengine.entity.text.Text;
@@ -26,7 +27,7 @@ public class AmountDrawer {
                 FontHolder.getInstance().getElement(sAmountFontKey), "*", 20, objectManager);
 
         mBackground = new Rectangle(0, 0, 0, 0, objectManager);
-        mBackground.setColor(1, 0, 0);
+        mBackground.setColor(org.andengine.util.adt.color.Color.TRANSPARENT);
         initBackground();
 
         mBackground.attachChild(mText);
@@ -67,15 +68,15 @@ public class AmountDrawer {
         initBackground();
     }
 
-    public void draw(Shape area) {
+    public void draw(IEntity entity) {
         mBackground.setPosition(
-                area.getWidth() - mBackground.getWidth() / 2,
-                area.getHeight() - mBackground.getHeight() / 2);
-        attachTo(area);
+                entity.getWidth() - mBackground.getWidth() / 2,
+                entity.getHeight() - mBackground.getHeight() / 2);
+        attachTo(entity);
     }
 
-    private void attachTo(Shape area) {
-        area.attachChild(mBackground);
+    private void attachTo(IEntity entity) {
+        entity.attachChild(mBackground);
     }
 
     public void detach() {

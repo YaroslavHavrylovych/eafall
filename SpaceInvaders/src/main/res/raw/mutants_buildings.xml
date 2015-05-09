@@ -4,8 +4,8 @@
     <!-- 10 -->
     <units_building name="water_cave">
         <id>10</id>
-        <position_x>48</position_x>
-        <position_y>32</position_y>
+        <position_x>6</position_x>
+        <position_y>47</position_y>
         <upgrades>
             <upgrade id="0">
                 <image_name>water_cave.png</image_name>
@@ -48,8 +48,8 @@
     <!-- 20 -->
     <units_building name="invisible_plain">
         <id>20</id>
-        <position_x>64</position_x>
-        <position_y>32</position_y>
+        <position_x>1</position_x>
+        <position_y>-6</position_y>
         <upgrades>
             <upgrade id="0">
                 <image_name>invisible_plain.png</image_name>
@@ -80,8 +80,8 @@
     <!-- 30 -->
     <units_building name="hydra_pond">
         <id>30</id>
-        <position_x>80</position_x>
-        <position_y>48</position_y>
+        <position_x>87</position_x>
+        <position_y>34</position_y>
         <upgrades>
             <upgrade id="0">
                 <image_name>hydra_pond.png</image_name>
@@ -112,8 +112,8 @@
     <!-- 40 -->
     <units_building name="poison_cave">
         <id>40</id>
-        <position_x>80</position_x>
-        <position_y>64</position_y>
+        <position_x>-83</position_x>
+        <position_y>-9</position_y>
         <upgrades>
             <upgrade id="0">
                 <image_name>poison_cave.png</image_name>
@@ -144,8 +144,8 @@
     <!-- 50 -->
     <units_building name="web">
         <id>50</id>
-        <position_x>64</position_x>
-        <position_y>48</position_y>
+        <position_x>62</position_x>
+        <position_y>-70</position_y>
         <upgrades>
             <upgrade id="0">
                 <image_name>web.png</image_name>
@@ -176,8 +176,8 @@
     <!-- 60 -->
     <units_building name="mountain_cave">
         <id>60</id>
-        <position_x>48</position_x>
-        <position_y>80</position_y>
+        <position_x>-65</position_x>
+        <position_y>84</position_y>
         <upgrades>
             <upgrade id="0">
                 <image_name>mountain_cave.png</image_name>
@@ -208,8 +208,8 @@
     <!-- 70 -->
     <units_building name="hell">
         <id>70</id>
-        <position_x>32</position_x>
-        <position_y>48</position_y>
+        <position_x>-8</position_x>
+        <position_y>-82</position_y>
         <upgrades>
             <upgrade id="0">
                 <image_name>hell.png</image_name>
@@ -238,9 +238,9 @@
         </upgrades>
     </units_building>
     <defence_building name="bastion">
-        <position_x>32</position_x>
-        <position_y>64</position_y>
-        <image_name>hell.png</image_name>
+        <position_x>-9</position_x>
+        <position_y>105</position_y>
+        <image_name>bastion.png</image_name>
         <cost>600</cost>
         <unit_id>250</unit_id>
         <building_time>25</building_time>
@@ -255,9 +255,9 @@
         <first_build_income>20</first_build_income>
         <next_buildings_income>2</next_buildings_income>
         <cost>350</cost>
-        <position_x>56</position_x>
-        <position_y>56</position_y>
-        <image_name>hell.png</image_name>
+        <position_x>-9</position_x>
+        <position_y>105</position_y>
+        <image_name>bastion.png</image_name>
         <team_color_area>
             <x>0</x>
             <y>5</y>
@@ -270,9 +270,9 @@
         <value>10</value>
         <percentage>true</percentage>
         <cost>350</cost>
-        <position_x>96</position_x>
-        <position_y>96</position_y>
-        <image_name>hell.png</image_name>
+        <position_x>-9</position_x>
+        <position_y>105</position_y>
+        <image_name>bastion.png</image_name>
         <team_color_area>
             <x>0</x>
             <y>5</y>

@@ -1,5 +1,7 @@
 package com.gmail.yaroslavlancelot.eafall.game.popup.description.updater;
 
+import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
+
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.Shape;
 import org.andengine.entity.sprite.Sprite;
@@ -32,8 +34,11 @@ public abstract class BasePopupUpdater implements IPopupUpdater {
         if (textureRegion == null) {
             return;
         }
+        int doubled_padding = 2 * SizeConstants.DESCRIPTION_POPUP_IMAGE_PADDING;
+        int width = (int) drawArea.getWidth() - doubled_padding;
+        int height = (int) drawArea.getHeight() - doubled_padding;
         mObjectImage = new Sprite(drawArea.getWidth() / 2, drawArea.getHeight() / 2,
-                drawArea.getWidth(), drawArea.getHeight(),
+                width, height,
                 textureRegion, mVertexBufferObjectManager);
         drawArea.attachChild(mObjectImage);
     }
