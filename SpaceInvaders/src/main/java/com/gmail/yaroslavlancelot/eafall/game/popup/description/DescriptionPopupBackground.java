@@ -1,7 +1,6 @@
 package com.gmail.yaroslavlancelot.eafall.game.popup.description;
 
 import android.content.Context;
-import android.opengl.GLES20;
 
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
@@ -23,6 +22,7 @@ import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.adt.align.HorizontalAlign;
 import org.andengine.util.adt.color.Color;
 
 /**
@@ -93,8 +93,9 @@ public class DescriptionPopupBackground extends Sprite {
     private void initObjectNameText() {
         IFont font = FontHolder.getInstance().getElement(sDescriptionFontKey);
         mObjectNameText = new Text(SizeConstants.DESCRIPTION_POPUP_HEADER_TEXT_X,
-                SizeConstants.DESCRIPTION_POPUP_HEADER_TEXT_Y,
+                SizeConstants.DESCRIPTION_POPUP_HEADER_SINGLE_ROW_Y,
                 font, "", 20, getVertexBufferObjectManager());
+        mObjectNameText.setHorizontalAlign(HorizontalAlign.CENTER);
         attachChild(mObjectNameText);
     }
 
@@ -112,7 +113,7 @@ public class DescriptionPopupBackground extends Sprite {
         //described object name font
         final ITexture fontTexture = new BitmapTextureAtlas(textureManager, 512, 256);
         IFont font = FontFactory.createFromAsset(fontManager, fontTexture,
-                EaFallApplication.getContext().getAssets(), "fonts/description_header.ttf",
+                EaFallApplication.getContext().getAssets(), "fonts/MyriadPro-Regular.ttf",
                 SizeConstants.DESCRIPTION_POPUP_HEADER_FONT_SIZE, true,
                 android.graphics.Color.argb(255, 196, 248, 255));
         font.load();

@@ -48,7 +48,6 @@ public class PopupManager {
 
     public static void loadResource(Context context, TextureManager textureManager) {
         BuildingsPopupHud.loadResource(context, textureManager);
-        ConstructionPopupButton.loadResources(context, textureManager);
         DescriptionPopupHud.loadResources(context, textureManager);
         PathChoosePopup.loadResources(context, textureManager);
     }

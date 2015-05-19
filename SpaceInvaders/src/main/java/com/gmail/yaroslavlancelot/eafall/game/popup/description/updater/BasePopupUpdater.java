@@ -45,7 +45,13 @@ public abstract class BasePopupUpdater implements IPopupUpdater {
 
     @Override
     public void updateObjectNameText(Text text, Object objectId, String allianceName) {
-        text.setText(getDescribedObjectName(objectId, allianceName));
+        String value = getDescribedObjectName(objectId, allianceName);
+        //for multiple words, last always on the next row
+        int ind = value.lastIndexOf(" ");
+        if (ind != -1) {
+            value = new StringBuilder(value).replace(ind, ind + 1, "\n").toString();
+        }
+        text.setText(value);
     }
 
     /** return description object name {@link java.lang.String} */

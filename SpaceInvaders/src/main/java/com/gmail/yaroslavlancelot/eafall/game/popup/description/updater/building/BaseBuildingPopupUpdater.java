@@ -77,16 +77,17 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
 
     public static void loadResources(Context context, TextureManager textureManager) {
         TextButton.loadResources(context, textureManager);
+        AmountDrawer.loadResources(context, textureManager);
     }
 
     @Override
     public void updateImage(Shape drawArea, Object objectId, String allianceName, String teamName) {
-        super.updateImage(drawArea, objectId, allianceName, teamName);
         ITeam team = TeamsHolder.getInstance().getElement(teamName);
         mBuildingId = (BuildingId) objectId;
         updateBuildingsAmount(drawArea,
                 team.getPlanet().getBuildingsAmount(mBuildingId.getId()));
         mTeamName = teamName;
+        super.updateImage(drawArea, objectId, allianceName, teamName);
     }
 
     private void updateBuildingsAmount(IEntity entity, int buildingsAmount) {

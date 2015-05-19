@@ -13,7 +13,7 @@ import com.gmail.yaroslavlancelot.eafall.game.popup.PopupManager;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.DescriptionPopupHud;
 import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
-import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
+import com.gmail.yaroslavlancelot.eafall.game.visual.text.MoneyText;
 
 import org.andengine.entity.sprite.batch.SpriteGroup;
 import org.andengine.opengl.font.FontManager;
@@ -133,7 +133,7 @@ public class ClientResourcesLoader extends BaseResourceLoader {
 
     @Override
     public void loadFonts(TextureManager textureManager, FontManager fontManager) {
-        FontHolder.loadGeneralGameFonts(fontManager, textureManager);
+        MoneyText.loadFont(fontManager, textureManager);
         DescriptionPopupHud.loadFonts(fontManager, textureManager);
     }
 

@@ -1,8 +1,6 @@
 package com.gmail.yaroslavlancelot.eafall.game.visual.text;
 
-import android.graphics.Color;
-import android.graphics.Typeface;
-
+import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.touch.StaticHelper;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
@@ -10,13 +8,17 @@ import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.font.IFont;
+import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.TextureManager;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /** used in description popup */
 public class Link extends RecenterText {
-    private final static String sFontSizeKey = "link_phont_size_key";
+    private final static String sFontSizeKey = "link_font_size_key";
     private final static int sFontSize = SizeConstants.DESCRIPTION_POPUP_TEXT_SIZE;
+    private static int sColorUnpressed = android.graphics.Color.argb(255, 0, 18, 57);
+    private static int sColorPressed = org.andengine.util.adt.color.Color.BLUE.getABGRPackedInt();
     private volatile StaticHelper.OnClickListener mOnClickListener;
 
     public Link(float x, float y, VertexBufferObjectManager vertexBufferObjectManager) {
@@ -29,9 +31,10 @@ public class Link extends RecenterText {
     }
 
     public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
-        IFont font = FontFactory.create(fontManager, textureManager, 256, 256,
-                Typeface.create(Typeface.DEFAULT, Typeface.BOLD),
-                sFontSize, Color.argb(255, 0, 18, 57));
+        final ITexture fontTexture = new BitmapTextureAtlas(textureManager, 512, 256);
+        IFont font = FontFactory.createFromAsset(fontManager, fontTexture,
+                EaFallApplication.getContext().getAssets(), "fonts/MyriadPro-Regular.ttf",
+                sFontSize, true, sColorUnpressed);
         font.load();
         FontHolder.getInstance().addElement(sFontSizeKey, font);
     }
@@ -52,13 +55,13 @@ public class Link extends RecenterText {
         @Override
         public void press() {
             super.press();
-            setColor(org.andengine.util.adt.color.Color.BLUE);
+            setColor(sColorPressed);
         }
 
         @Override
         public void unPress() {
             super.unPress();
-            setColor(org.andengine.util.adt.color.Color.CYAN);
+            setColor(sColorUnpressed);
         }
 
         @Override

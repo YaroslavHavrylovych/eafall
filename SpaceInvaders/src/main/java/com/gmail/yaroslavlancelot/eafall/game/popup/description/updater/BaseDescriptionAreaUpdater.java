@@ -15,7 +15,8 @@ import java.util.List;
 public abstract class BaseDescriptionAreaUpdater implements IPopupUpdater.IDescriptionAreaUpdater {
     /* default values */
     /** space between different description lines */
-    protected int mBetweenDescriptionLinesSpace = 5;
+    protected int mBetweenDescriptionLinesSpace =
+            SizeConstants.DESCRIPTION_POPUP_TEXT_VERTICAL_PADDING;
     /** space between description test and the link (e.g. unit health :(mSpace)health_value */
     protected int mSpace = 6;
 
@@ -63,9 +64,8 @@ public abstract class BaseDescriptionAreaUpdater implements IPopupUpdater.IDescr
     protected DescriptionText createDescriptionText(int position, int stringId, VertexBufferObjectManager objectManager) {
         int fontHeight = DescriptionText.sFontSize + mBetweenDescriptionLinesSpace,
                 halfFontHeight = fontHeight / 2;
-        return createDescriptionText(0,
-                SizeConstants.DESCRIPTION_POPUP_DES_AREA_HEIGHT -
-                        halfFontHeight - position * fontHeight,
+        return createDescriptionText(0, SizeConstants.DESCRIPTION_POPUP_DES_AREA_HEIGHT
+                        - halfFontHeight - position * fontHeight,
                 LocaleImpl.getInstance().getStringById(stringId), objectManager);
     }
 

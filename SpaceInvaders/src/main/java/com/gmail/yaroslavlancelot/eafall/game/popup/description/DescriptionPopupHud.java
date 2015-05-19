@@ -18,6 +18,7 @@ import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.unit.Uni
 import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
 import com.gmail.yaroslavlancelot.eafall.game.touch.StaticHelper;
+import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.ConstructionPopupButton;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.DescriptionText;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.Link;
 
@@ -81,6 +82,7 @@ public class DescriptionPopupHud extends PopupHud {
     }
 
     public static void loadResources(Context context, TextureManager textureManager) {
+        ConstructionPopupButton.loadResources(context, textureManager);
         DescriptionPopupBackground.loadResources(context, textureManager);
         BaseBuildingPopupUpdater.loadResources(context, textureManager);
     }
