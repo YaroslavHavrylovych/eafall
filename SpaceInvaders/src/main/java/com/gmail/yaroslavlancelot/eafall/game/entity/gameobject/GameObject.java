@@ -2,6 +2,7 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject;
 
 import com.badlogic.gdx.math.Vector2;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
+import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.BatchedSprite;
 import com.gmail.yaroslavlancelot.eafall.game.entity.BodiedSprite;
@@ -9,7 +10,6 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IDestroyListener;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IHealthListener;
-import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
 
 import org.andengine.audio.sound.Sound;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -30,6 +30,7 @@ public abstract class GameObject extends BodiedSprite {
     protected static final int sInvincibleObjectKey = Integer.MIN_VALUE;
     /** used for generation new id's */
     private static final AtomicLong sGameObjectsTracker = new AtomicLong(0);
+    private static final String TAG = GameObject.class.getCanonicalName();
     /** maximum object health */
     protected int mObjectMaximumHealth = sInvincibleObjectKey;
     /** game object current health (it can be undestroyable) */
@@ -138,8 +139,8 @@ public abstract class GameObject extends BodiedSprite {
             mGameObjectHealthChangedListener.gameObjectHealthChanged(mUniqueId, mObjectCurrentHealth);
         }
         if (mObjectCurrentHealth < 0) {
+            onNegativeHealth();
             if (mObjectDestroyedListener != null) {
-                onNegativeHealth();
                 for (IDestroyListener listener : mObjectDestroyedListener) {
                     listener.objectDestroyed(this);
                 }
@@ -152,6 +153,7 @@ public abstract class GameObject extends BodiedSprite {
     }
 
     protected void onNegativeHealth() {
+        LoggerHelper.methodInvocation(TAG, "onNegativeHealth");
     }
 
     public Armor getObjectArmor() {

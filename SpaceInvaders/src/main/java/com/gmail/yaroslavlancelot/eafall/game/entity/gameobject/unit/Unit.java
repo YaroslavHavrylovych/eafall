@@ -2,6 +2,7 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit;
 
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 import com.gmail.yaroslavlancelot.eafall.game.constant.CollisionCategories;
@@ -24,6 +25,7 @@ import com.gmail.yaroslavlancelot.eafall.game.team.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
 
 import org.andengine.audio.sound.Sound;
+import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 
 import de.greenrobot.event.EventBus;
 
@@ -98,20 +100,26 @@ public abstract class Unit extends GameObject implements
      * WARNING: unit team name have to be assigned before init() trigger
      */
     public void init(float x, float y, String teamName) {
+        LoggerHelper.methodInvocation(TAG, "init(float, float, String)");
         setTeam(teamName);
         setSpriteGroupName(BatchingKeys.getUnitSpriteGroup(teamName));
         ITeam team = TeamsHolder.getTeam(mTeamName);
         initTeamColorArea(team);
-        mObjectCurrentHealth = mObjectMaximumHealth;
+        setHealth(mObjectMaximumHealth);
         initHealthBar();
 
         boolean existingUnit;
+        float posX = x / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
+                posY = y / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
+                angle = 0f;
         if (getBody() == null) {
-            existingUnit = true;
-            EventBus.getDefault().post(new CreatePhysicBodyEvent(this, getBodyType(), team.getFixtureDefUnit()));
+            existingUnit = false;
+            EventBus.getDefault().post(new CreatePhysicBodyEvent(this, getBodyType(),
+                    team.getFixtureDefUnit(), posX, posY, angle));
         } else {
             getBody().setActive(true);
-            existingUnit = false;
+            getBody().setTransform(posX, posY, angle);
+            existingUnit = true;
         }
 
         setBulletFixtureDef(CollisionCategories.getBulletFixtureDefByUnitCategory(
@@ -121,8 +129,7 @@ public abstract class Unit extends GameObject implements
             removeDamage();
         }
 
-        setPosition(x, y);
-        if (existingUnit) {
+        if (!existingUnit) {
             EventBus.getDefault().post(new AttachSpriteEvent(this));
         }
         team.addObjectToTeam(this);
@@ -180,6 +187,13 @@ public abstract class Unit extends GameObject implements
         mTeamColorAreaSprite.setRotation(angleInDeg);
     }
 
+    private void updateTeamColorPosition() {
+        if (mTeamColorAreaSprite == null || mTeamColorArea == null) {
+            return;
+        }
+        mTeamColorAreaSprite.setPosition(getX() + mTeamColorArea.left, getY() + mTeamColorArea.top);
+    }
+
     public abstract BodyDef.BodyType getBodyType();
 
     public void setBulletFixtureDef(FixtureDef bulletFixtureDef) {
@@ -188,13 +202,6 @@ public abstract class Unit extends GameObject implements
 
     public void removeDamage() {
         mObjectDamage.removeDamage();
-    }
-
-    private void updateTeamColorPosition() {
-        if (mTeamColorAreaSprite == null || mTeamColorArea == null) {
-            return;
-        }
-        mTeamColorAreaSprite.setPosition(getX() + mTeamColorArea.left, getY() + mTeamColorArea.top);
     }
 
     /** define unit behaviour/lifecycle */

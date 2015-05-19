@@ -453,7 +453,8 @@ public abstract class ClientGameActivity extends GameActivity {
         FixtureDef fixtureDef = createPhysicBodyEvent.getFixtureDef();
         Body body = PhysicsFactory.createCircleBody(mPhysicsWorld, gameObject, bodyType, fixtureDef);
         if (createPhysicBodyEvent.isCustomBodyTransform()) {
-            body.setTransform(createPhysicBodyEvent.getX(), createPhysicBodyEvent.getY(), createPhysicBodyEvent.getAngle());
+            body.setTransform(createPhysicBodyEvent.getX(),
+                    createPhysicBodyEvent.getY(), createPhysicBodyEvent.getAngle());
         }
         mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(gameObject, body, true, false));
         gameObject.setBody(body);
