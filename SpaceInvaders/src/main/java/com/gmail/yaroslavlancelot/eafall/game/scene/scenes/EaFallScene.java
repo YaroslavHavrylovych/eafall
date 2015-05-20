@@ -9,9 +9,12 @@ import com.gmail.yaroslavlancelot.eafall.game.touch.ICameraHandler;
 
 import org.andengine.engine.camera.VelocityCamera;
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.scene.background.SpriteBackground;
+import org.andengine.entity.scene.background.AutoParallaxBackground;
+import org.andengine.entity.scene.background.ParallaxBackground;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+
+import java.util.Random;
 
 /**
  * Game scene
@@ -23,17 +26,22 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 public class EaFallScene extends Scene {
     private static final String TAG = EaFallScene.class.getCanonicalName();
     private GameSceneHandler mGameSceneHandler;
+    private Sprite mBackgroundSprite;
 
     public EaFallScene() {
     }
 
     /** set background image to the scene */
     public void setBackground(String backgroundFilePath, VertexBufferObjectManager vertexBufferObjectManager) {
-        setBackground(new SpriteBackground(
-                new Sprite(
-                        SizeConstants.HALF_FIELD_WIDTH, SizeConstants.HALF_FIELD_HEIGHT,
-                        TextureRegionHolder.getInstance().getElement(backgroundFilePath),
-                        vertexBufferObjectManager)));
+        AutoParallaxBackground background = new AutoParallaxBackground(0, 0, 0, 20);
+        background.setParallaxValue(new Random().nextInt(SizeConstants.GAME_FIELD_WIDTH));
+        mBackgroundSprite = new Sprite(
+                SizeConstants.HALF_FIELD_WIDTH, SizeConstants.HALF_FIELD_HEIGHT,
+                TextureRegionHolder.getInstance().getElement(backgroundFilePath),
+                vertexBufferObjectManager);
+        background.attachParallaxEntity(
+                new ParallaxBackground.ParallaxEntity(1, mBackgroundSprite));
+        setBackground(background);
     }
 
     public ICameraHandler getCameraHandler() {
@@ -52,7 +60,13 @@ public class EaFallScene extends Scene {
     public void initGameSceneHandler(VelocityCamera camera) {
         LoggerHelper.methodInvocation(TAG, "initGameSceneHandler");
         /* main scene touch listener */
-        mGameSceneHandler = new GameSceneHandler(camera);
+        mGameSceneHandler = new GameSceneHandler(camera) {
+            @Override
+            public void setZoomFactor(float zoomFactor) {
+                super.setZoomFactor(zoomFactor);
+                mBackgroundSprite.setScale(zoomFactor - (zoomFactor - 1) / 2.7f);
+            }
+        };
         setOnSceneTouchListener(mGameSceneHandler);
     }
 }

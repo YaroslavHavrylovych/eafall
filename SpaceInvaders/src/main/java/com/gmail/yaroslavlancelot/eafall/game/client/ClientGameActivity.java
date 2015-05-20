@@ -54,7 +54,6 @@ import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.ConstructionPopupBu
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.MoneyText;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.MovableUnitsLimitText;
 
-import org.andengine.engine.options.AudioOptions;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.entity.Entity;
 import org.andengine.entity.scene.Scene;
@@ -278,11 +277,9 @@ public abstract class ClientGameActivity extends GameActivity {
 
     /** create sun */
     protected SunStaticObject createSun() {
-        ITextureRegion textureRegion = TextureRegionHolder.getRegion(StringConstants.KEY_SUN);
-
         SunStaticObject sunStaticObject = new SunStaticObject(
                 SizeConstants.HALF_FIELD_WIDTH, SizeConstants.HALF_FIELD_HEIGHT,
-                textureRegion, mEngine.getVertexBufferObjectManager());
+                mEngine.getVertexBufferObjectManager());
         attachSprite(sunStaticObject);
         mGameObjectsMap.put(sunStaticObject.getObjectUniqueId(), sunStaticObject);
         onEvent(new CreatePhysicBodyEvent(sunStaticObject));

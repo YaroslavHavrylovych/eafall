@@ -16,8 +16,10 @@ public final class StringConstants {
     public static final String IMAGES_PATH = "graphics/images" + SEPARATOR;
     /** background */
     public static String FILE_BACKGROUND = StringConstants.getImagesPath() + "background.png";
-    /** sun file name */
-    public static final String FILE_SUN = "graphics/sprites/sun.png";
+    /** sun file name (top image) */
+    public static final String FILE_SUN = "graphics/sprites/sun/sun.png";
+    /** sun file name (bottom image) */
+    public static final String FILE_SUN_HAZE = "graphics/sprites/sun/sun_haze.png";
     /** splash screen file name */
     public static final String FILE_SPLASH_SCREEN = "graphics/images/splash_screen.png";
     /** bullet image */
@@ -43,7 +45,9 @@ public final class StringConstants {
     /** file name for red planet */
     public static final String FILE_SECOND_PLANET = "graphics/sprites/planet_2.png";
     /** used like key for sun static object */
-    public static final String KEY_SUN = "sun_key";
+    public static final String KEY_SUN_HAZE = "sun_key_top";
+    /** used like key for sun static object */
+    public static final String KEY_SUN = "sun_key_bottom";
     /** used like key for red planet static object */
     public static final String KEY_SECOND_PLANET = "red_planet_key";
     /** used like key for blue planet static object */

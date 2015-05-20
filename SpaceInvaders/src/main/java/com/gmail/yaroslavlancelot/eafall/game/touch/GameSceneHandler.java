@@ -103,10 +103,13 @@ public class GameSceneHandler implements
     @Override
     public void onPinchZoom(PinchZoomDetector pPinchZoomDetector, TouchEvent pTouchEvent,
                             float pZoomFactor) {
-        mCamera.setZoomFactor(
-                StaticHelper.stick(
-                        mInitialTouchZoomFactor * pZoomFactor,
-                        MIN_ZOOM_FACTOR, MAX_ZOOM_FACTOR));
+        setZoomFactor(StaticHelper.stick(
+                mInitialTouchZoomFactor * pZoomFactor,
+                MIN_ZOOM_FACTOR, MAX_ZOOM_FACTOR));
+    }
+
+    public void setZoomFactor(float zoomFactor) {
+        mCamera.setZoomFactor(zoomFactor);
     }
 
     @Override

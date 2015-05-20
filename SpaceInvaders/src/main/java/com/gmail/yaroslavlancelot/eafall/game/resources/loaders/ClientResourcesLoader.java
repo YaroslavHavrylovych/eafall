@@ -99,35 +99,40 @@ public class ClientResourcesLoader extends BaseResourceLoader {
 
     private void loadSunAndPlanets(TextureManager textureManager,
                                    VertexBufferObjectManager vertexBufferObjectManager) {
+        int padding = SizeConstants.BETWEEN_TEXTURES_PADDING;
         BitmapTextureAtlas atlas = new BitmapTextureAtlas(textureManager,
-                Math.max(SizeConstants.FILE_SUN_DIAMETER,
-                        SizeConstants.BETWEEN_TEXTURES_PADDING
-                                + 2 * SizeConstants.FILE_PLANET_DIAMETER),
+                Math.max(padding + 2 * SizeConstants.FILE_SUN_DIAMETER,
+                        padding + 2 * SizeConstants.FILE_PLANET_DIAMETER),
                 SizeConstants.FILE_SUN_DIAMETER
                         + SizeConstants.BETWEEN_TEXTURES_PADDING
                         + SizeConstants.FILE_PLANET_DIAMETER,
                 TextureOptions.BILINEAR);
-
+        //sun
         TextureRegionHolder.getInstance().addElement(StringConstants.KEY_SUN,
                 BitmapTextureAtlasTextureRegionFactory.createFromAsset(
                         atlas, EaFallApplication.getContext(),
                         StringConstants.FILE_SUN, 0, 0));
+        TextureRegionHolder.getInstance().addElement(StringConstants.KEY_SUN_HAZE,
+                BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+                        atlas, EaFallApplication.getContext(),
+                        StringConstants.FILE_SUN_HAZE,
+                        SizeConstants.FILE_SUN_DIAMETER + padding, 0));
+        //planets
         TextureRegionHolder.getInstance().addElement(StringConstants.KEY_FIRST_PLANET,
                 BitmapTextureAtlasTextureRegionFactory.createFromAsset(
                         atlas, EaFallApplication.getContext(),
                         StringConstants.FILE_FIRST_PLANET,
-                        0,
-                        SizeConstants.FILE_SUN_DIAMETER + SizeConstants.BETWEEN_TEXTURES_PADDING));
+                        0, SizeConstants.FILE_SUN_DIAMETER + padding));
         TextureRegionHolder.getInstance().addElement(StringConstants.KEY_SECOND_PLANET,
                 BitmapTextureAtlasTextureRegionFactory.createFromAsset(
                         atlas, EaFallApplication.getContext(),
                         StringConstants.FILE_SECOND_PLANET,
-                        SizeConstants.FILE_PLANET_DIAMETER + SizeConstants.BETWEEN_TEXTURES_PADDING,
-                        SizeConstants.FILE_SUN_DIAMETER + SizeConstants.BETWEEN_TEXTURES_PADDING));
+                        SizeConstants.FILE_PLANET_DIAMETER + padding,
+                        SizeConstants.FILE_SUN_DIAMETER + padding));
 
         atlas.load();
         //sun + planets SpriteGroup
-        SpriteGroup spriteGroup = new SpriteGroup(atlas, 3, vertexBufferObjectManager);
+        SpriteGroup spriteGroup = new SpriteGroup(atlas, 4, vertexBufferObjectManager);
         SpriteGroupHolder.addGroup(BatchingKeys.SUN_PLANET, spriteGroup);
     }
 
