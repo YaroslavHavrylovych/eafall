@@ -11,6 +11,7 @@ import org.andengine.entity.shape.ITouchCallback;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.input.touch.detector.PinchZoomDetector;
 import org.andengine.input.touch.detector.ScrollDetector;
+import org.andengine.util.math.MathUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,14 @@ public class GameSceneHandler implements
     public GameSceneHandler(VelocityCamera camera) {
         mCamera = camera;
         mZoomDetector = new PinchZoomDetector(this);
+        initPinchZoomMinimumDistance(mZoomDetector);
         mScrollDetector = new ScrollDetector(this);
+    }
+
+    private static void initPinchZoomMinimumDistance(PinchZoomDetector zoomDetector) {
+        zoomDetector.setTriggerPinchZoomMinimumDistance(
+                Math.max(Config.getConfig().getDisplayWidth(),
+                        Config.getConfig().getDisplayHeight()) / 100);
     }
 
     public float getWidth() {
@@ -103,9 +111,10 @@ public class GameSceneHandler implements
     @Override
     public void onPinchZoom(PinchZoomDetector pPinchZoomDetector, TouchEvent pTouchEvent,
                             float pZoomFactor) {
-        setZoomFactor(StaticHelper.stick(
+        setZoomFactor(MathUtils.bringToBounds(
                 mInitialTouchZoomFactor * pZoomFactor,
                 MIN_ZOOM_FACTOR, MAX_ZOOM_FACTOR));
+//        mCamera.setCenter(mCameraCenterX, mCameraCenterY);
     }
 
     public void setZoomFactor(float zoomFactor) {
@@ -115,7 +124,7 @@ public class GameSceneHandler implements
     @Override
     public void onPinchZoomFinished(PinchZoomDetector pPinchZoomDetector, TouchEvent pTouchEvent,
                                     float pZoomFactor) {
-        //unused
+//        mCamera.setCenter(mCameraCenterX, mCameraCenterY);
     }
 
     @Override

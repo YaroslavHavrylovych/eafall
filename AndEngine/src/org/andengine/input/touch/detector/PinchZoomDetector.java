@@ -1,145 +1,163 @@
 package org.andengine.input.touch.detector;
 
+import android.view.MotionEvent;
+
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.math.MathUtils;
-
-import android.view.MotionEvent;
 
 /**
  * (c) 2010 Nicolas Gramlich
  * (c) 2011 Zynga Inc.
  *
  * @author Nicolas Gramlich
- * @since 19:16:19 - 04.11.2010
+ * @author Yarolav Havrylovych
  */
 public class PinchZoomDetector extends BaseDetector {
-	// ===========================================================
-	// Constants
-	// ===========================================================
+    // ===========================================================
+    // Constants
+    // ===========================================================
 
-	private static final float TRIGGER_PINCHZOOM_MINIMUM_DISTANCE_DEFAULT = 10;
+    private static final float TRIGGER_PINCHZOOM_MINIMUM_DISTANCE_DEFAULT = 10;
 
-	// ===========================================================
-	// Fields
-	// ===========================================================
+    // ===========================================================
+    // Fields
+    // ===========================================================
 
-	private final IPinchZoomDetectorListener mPinchZoomDetectorListener;
+    private final IPinchZoomDetectorListener mPinchZoomDetectorListener;
 
-	private float mInitialDistance;
-	private float mCurrentDistance;
+    private float mInitialDistance;
+    private float mCurrentDistance;
+    private float mTriggerPinchZoomMinimumDistance = TRIGGER_PINCHZOOM_MINIMUM_DISTANCE_DEFAULT;
 
-	private boolean mPinchZooming;
+    private boolean mPinchZooming;
 
-	// ===========================================================
-	// Constructors
-	// ===========================================================
+    // ===========================================================
+    // Constructors
+    // ===========================================================
 
-	public PinchZoomDetector(final IPinchZoomDetectorListener pPinchZoomDetectorListener) {
-		this.mPinchZoomDetectorListener = pPinchZoomDetectorListener;
-	}
+    public PinchZoomDetector(final IPinchZoomDetectorListener pPinchZoomDetectorListener) {
+        this.mPinchZoomDetectorListener = pPinchZoomDetectorListener;
+    }
 
-	// ===========================================================
-	// Getter & Setter
-	// ===========================================================
+    // ===========================================================
+    // Getter & Setter
+    // ===========================================================
 
-	public boolean isZooming() {
-		return this.mPinchZooming;
-	}
+    public boolean isZooming() {
+        return this.mPinchZooming;
+    }
 
-	// ===========================================================
-	// Methods for/from SuperClass/Interfaces
-	// ===========================================================
+    public void setTriggerPinchZoomMinimumDistance(float triggerPinchZoomMinimumDistance) {
+        this.mTriggerPinchZoomMinimumDistance = triggerPinchZoomMinimumDistance;
+    }
 
-	/**
-	 * When {@link #isZooming()} this method will call through to {@link IPinchZoomDetectorListener#onPinchZoomFinished(PinchZoomDetector, TouchEvent, float)}.
-	 */
-	@Override
-	public void reset() {
-		if (this.mPinchZooming) {
-			this.mPinchZoomDetectorListener.onPinchZoomFinished(this, null, this.getZoomFactor());
-		}
+    public float getTriggerPinchZoomMinimumDistance() {
+        return this.mTriggerPinchZoomMinimumDistance;
+    }
 
-		this.mInitialDistance = 0;
-		this.mCurrentDistance = 0;
-		this.mPinchZooming = false;
-	}
+    // ===========================================================
+    // Methods for/from SuperClass/Interfaces
+    // ===========================================================
 
-	@Override
-	public boolean onManagedTouchEvent(final TouchEvent pSceneTouchEvent) {
-		final MotionEvent motionEvent = pSceneTouchEvent.getMotionEvent();
+    /**
+     * When {@link #isZooming()} this method will call through to {@link IPinchZoomDetectorListener#onPinchZoomFinished(PinchZoomDetector, TouchEvent, float)}.
+     */
+    @Override
+    public void reset() {
+        if (this.mPinchZooming) {
+            this.mPinchZoomDetectorListener.onPinchZoomFinished(this, null, this.getZoomFactor());
+        }
 
-		final int action = motionEvent.getAction() & MotionEvent.ACTION_MASK;
+        this.mInitialDistance = 0;
+        this.mCurrentDistance = 0;
+        this.mPinchZooming = false;
+    }
 
-		switch (action) {
-			case MotionEvent.ACTION_POINTER_DOWN:
-				if (!this.mPinchZooming && PinchZoomDetector.hasTwoOrMorePointers(motionEvent)) {
-					this.mInitialDistance = PinchZoomDetector.calculatePointerDistance(motionEvent);
-					this.mCurrentDistance = this.mInitialDistance;
-					if (this.mInitialDistance > PinchZoomDetector.TRIGGER_PINCHZOOM_MINIMUM_DISTANCE_DEFAULT) {
-						this.mPinchZooming = true;
-						this.mPinchZoomDetectorListener.onPinchZoomStarted(this, pSceneTouchEvent);
-					}
-				}
-				break;
-			case MotionEvent.ACTION_CANCEL:
-			case MotionEvent.ACTION_UP:
-			case MotionEvent.ACTION_POINTER_UP:
-				if (this.mPinchZooming) {
-					this.mPinchZooming = false;
-					this.mPinchZoomDetectorListener.onPinchZoomFinished(this, pSceneTouchEvent, this.getZoomFactor());
-				}
-				break;
-			case MotionEvent.ACTION_MOVE:
-				if (this.mPinchZooming) {
-					if (PinchZoomDetector.hasTwoOrMorePointers(motionEvent)) {
-						this.mCurrentDistance = PinchZoomDetector.calculatePointerDistance(motionEvent);
-						if (this.mCurrentDistance > PinchZoomDetector.TRIGGER_PINCHZOOM_MINIMUM_DISTANCE_DEFAULT) {
-							this.mPinchZoomDetectorListener.onPinchZoom(this, pSceneTouchEvent, this.getZoomFactor());
-						}
-					} else {
-						this.mPinchZooming = false;
-						this.mPinchZoomDetectorListener.onPinchZoomFinished(this, pSceneTouchEvent, this.getZoomFactor());
-					}
-				}
-				break;
-		}
-		return true;
-	}
+    @Override
+    public boolean onManagedTouchEvent(final TouchEvent pSceneTouchEvent) {
+        final MotionEvent motionEvent = pSceneTouchEvent.getMotionEvent();
 
-	private float getZoomFactor() {
-		return this.mCurrentDistance / this.mInitialDistance;
-	}
+        final int action = motionEvent.getAction() & MotionEvent.ACTION_MASK;
 
-	// ===========================================================
-	// Methods
-	// ===========================================================
+        switch (action) {
+            case MotionEvent.ACTION_POINTER_DOWN:
+                if (!this.mPinchZooming && PinchZoomDetector.hasTwoPointers(motionEvent)) {
+                    this.mInitialDistance = PinchZoomDetector.calculatePointerDistance(motionEvent);
+                    this.mCurrentDistance = this.mInitialDistance;
+                    if (this.mInitialDistance > this.mTriggerPinchZoomMinimumDistance) {
+                        this.mPinchZooming = true;
+                        this.mPinchZoomDetectorListener.onPinchZoomStarted(this, pSceneTouchEvent);
+                    }
+                }
+                break;
+            case MotionEvent.ACTION_CANCEL:
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_POINTER_UP:
+                if (this.mPinchZooming) {
+                    this.mPinchZooming = false;
+                    this.mPinchZoomDetectorListener.onPinchZoomFinished(this, pSceneTouchEvent, this.getZoomFactor());
+                }
+                break;
+            case MotionEvent.ACTION_MOVE:
+                if (this.mPinchZooming) {
+                    if (PinchZoomDetector.hasTwoPointers(motionEvent)) {
+                        this.mCurrentDistance = PinchZoomDetector.calculatePointerDistance(motionEvent);
+                        if (this.mCurrentDistance > this.mTriggerPinchZoomMinimumDistance) {
+                            this.mPinchZoomDetectorListener.onPinchZoom(this, pSceneTouchEvent, this.getZoomFactor());
+                        }
+                    } else {
+                        this.mPinchZooming = false;
+                        this.mPinchZoomDetectorListener.onPinchZoomFinished(this, pSceneTouchEvent, this.getZoomFactor());
+                    }
+                }
+                break;
+        }
+        return true;
+    }
 
-	/**
-	 * Calculate the euclidian distance between the first two fingers.
-	 */
-	private static float calculatePointerDistance(final MotionEvent pMotionEvent) {
-		return MathUtils.distance(pMotionEvent.getX(0), pMotionEvent.getY(0), pMotionEvent.getX(1), pMotionEvent.getY(1));
-	}
+    /**
+     * check is there only two pointers (touches) present currently.
+     * <br/>
+     * one used for scroll
+     * <br/>
+     * more than two can be used for some other thing
+     */
+    private static boolean hasTwoPointers(final MotionEvent pMotionEvent) {
+        return pMotionEvent.getPointerCount() == 2;
+    }
 
-	private static boolean hasTwoOrMorePointers(final MotionEvent pMotionEvent) {
-		return pMotionEvent.getPointerCount() >= 2;
-	}
+    // ===========================================================
+    // Methods
+    // ===========================================================
 
-	// ===========================================================
-	// Inner and Anonymous Classes
-	// ===========================================================
+    /**
+     * Calculate the euclidian distance between the first two fingers.
+     */
+    private static float calculatePointerDistance(final MotionEvent pMotionEvent) {
+        return MathUtils.distance(pMotionEvent.getX(0), pMotionEvent.getY(0), pMotionEvent.getX(1), pMotionEvent.getY(1));
+    }
 
-	public static interface IPinchZoomDetectorListener {
-		// ===========================================================
-		// Constants
-		// ===========================================================
+    private float getZoomFactor() {
+        return this.mCurrentDistance / this.mInitialDistance;
+    }
 
-		// ===========================================================
-		// Methods
-		// ===========================================================
+    // ===========================================================
+    // Inner and Anonymous Classes
+    // ===========================================================
 
-		public void onPinchZoomStarted(final PinchZoomDetector pPinchZoomDetector, final TouchEvent pSceneTouchEvent);
-		public void onPinchZoom(final PinchZoomDetector pPinchZoomDetector, final TouchEvent pTouchEvent, final float pZoomFactor);
-		public void onPinchZoomFinished(final PinchZoomDetector pPinchZoomDetector, final TouchEvent pTouchEvent, final float pZoomFactor);
-	}
+    public interface IPinchZoomDetectorListener {
+        // ===========================================================
+        // Constants
+        // ===========================================================
+
+        // ===========================================================
+        // Methods
+        // ===========================================================
+
+        void onPinchZoomStarted(final PinchZoomDetector pPinchZoomDetector, final TouchEvent pSceneTouchEvent);
+
+        void onPinchZoom(final PinchZoomDetector pPinchZoomDetector, final TouchEvent pTouchEvent, final float pZoomFactor);
+
+        void onPinchZoomFinished(final PinchZoomDetector pPinchZoomDetector, final TouchEvent pTouchEvent, final float pZoomFactor);
+    }
 }

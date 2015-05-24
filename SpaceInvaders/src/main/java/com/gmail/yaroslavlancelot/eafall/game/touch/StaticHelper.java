@@ -11,17 +11,8 @@ public final class StaticHelper {
     private StaticHelper() {
     }
 
-    /** Ranging the value and stick to max/min if needed */
-    public static float stick(float value, float minValue, float maxValue) {
-        if (value > maxValue)
-            return maxValue;
-        else if (value < minValue)
-            return minValue;
-        return value;
-    }
-
     /** touch listener that always return true */
-    public static enum EmptyTouch implements ITouchCallback {
+    public enum EmptyTouch implements ITouchCallback {
         INSTANCE;
 
         public static EmptyTouch getInstance() {
@@ -34,7 +25,7 @@ public final class StaticHelper {
         }
     }
 
-    public static interface OnClickListener {
+    public interface OnClickListener {
         void onClick();
     }
 
