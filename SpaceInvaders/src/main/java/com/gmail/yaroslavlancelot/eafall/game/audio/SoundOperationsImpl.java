@@ -53,9 +53,9 @@ public class SoundOperationsImpl implements SoundOperations {
             return;
         }
 
-        float xDistanceVector = mCameraHandler.getCenterX() - x;
+        float xDistanceVector = mCameraHandler.getTargetCenterX() - x;
         float xDistance = Math.abs(xDistanceVector);
-        float yDistance = Math.abs(mCameraHandler.getCenterY() - y);
+        float yDistance = Math.abs(mCameraHandler.getTargetCenterY() - y);
 
         if (xDistance > (mCameraHandler.getWidth() / 2)
                 || (yDistance > mCameraHandler.getHeight() / 2)) {

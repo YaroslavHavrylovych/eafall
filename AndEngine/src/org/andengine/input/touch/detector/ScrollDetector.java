@@ -7,7 +7,7 @@ import org.andengine.input.touch.TouchEvent;
  * (c) 2011 Zynga Inc.
  *
  * @author Nicolas Gramlich
- * @author Yaroslav Havrylovych (minor changes)
+ * @author Yaroslav Havrylovych
  */
 public class ScrollDetector extends BaseDetector {
     // ===========================================================
@@ -168,7 +168,7 @@ public class ScrollDetector extends BaseDetector {
     // Inner and Anonymous Classes
     // ===========================================================
 
-    public static interface IScrollDetectorListener {
+    public interface IScrollDetectorListener {
         // ===========================================================
         // Constants
         // ===========================================================
@@ -177,17 +177,17 @@ public class ScrollDetector extends BaseDetector {
         // Methods
         // ===========================================================
 
-        public void onScrollStarted(final ScrollDetector pScollDetector,
+        void onScrollStarted(final ScrollDetector pScrollDetector,
                                     final TouchEvent pSceneTouchEvent,
                                     final int pPointerID, final float pDistanceX,
                                     final float pDistanceY);
 
-        public void onScroll(final ScrollDetector pScollDetector,
+        void onScroll(final ScrollDetector pScrollDetector,
                              final TouchEvent pSceneTouchEvent,
                              final int pPointerID, final float pDistanceX,
                              final float pDistanceY);
 
-        public void onScrollFinished(final ScrollDetector pScollDetector,
+        void onScrollFinished(final ScrollDetector pScrollDetector,
                                      final TouchEvent pSceneTouchEvent,
                                      final int pPointerID, final float pDistanceX,
                                      final float pDistanceY);

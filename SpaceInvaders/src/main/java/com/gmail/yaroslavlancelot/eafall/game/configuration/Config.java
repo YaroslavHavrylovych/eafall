@@ -18,13 +18,13 @@ public class Config {
      */
     private final boolean mUnitsHealthBarEnabled = true;
     private final boolean mTeamColorAreaEnabled = false;
+    private final int mMaxZoomFactor = 6;
     /*
      * Game
      */
     private final int mMovableUnitsLimit = 200;
     private final int mCreepBuildingsLimit = 7;
     private final int mWealthBuildingsLimit = 5;
-    private final int mMaxZoomFactor = 7;
     private final int mPlanetHealth = 300000;
     /*
      * Sound and music
@@ -43,8 +43,8 @@ public class Config {
         Display display = windowManager.getDefaultDisplay();
         DisplayMetrics metrics = new DisplayMetrics();
         display.getMetrics(metrics);
-        mDisplayWidth = metrics.widthPixels;
-        mDisplayHeight = metrics.heightPixels;
+        mDisplayWidth = Math.max(metrics.widthPixels, metrics.heightPixels);
+        mDisplayHeight = Math.min(metrics.widthPixels, metrics.heightPixels);
     }
 
     public static void init(Context context) {
