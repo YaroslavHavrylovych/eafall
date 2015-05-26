@@ -63,10 +63,18 @@ public class EaFallScene extends Scene {
         LoggerHelper.methodInvocation(TAG, "initGameSceneHandler");
         /* main scene touch listener */
         mGameSceneHandler = new GameSceneHandler(camera) {
+            //TODO make it smoother
             @Override
             public void setZoomFactor(float zoomFactor) {
                 super.setZoomFactor(zoomFactor);
                 mBackgroundSprite.setScale(zoomFactor - (zoomFactor - 1) / 2.7f);
+            }
+
+            @Override
+            public void centerChanged(final float x, final float y) {
+                //TODO limit operation calls (with delta as time is so unstable) to prevent blinking (image can't be redrawn so often as it's big)
+                float multiplier = mBackgroundSprite.getScaleY() / getZoomFactor();
+                mBackgroundSprite.setY(mBackgroundSprite.getHeight() - getCenterY() * multiplier);
             }
         };
         setOnSceneTouchListener(mGameSceneHandler);

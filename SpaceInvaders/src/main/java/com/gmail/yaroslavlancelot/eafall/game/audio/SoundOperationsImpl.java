@@ -53,9 +53,9 @@ public class SoundOperationsImpl implements SoundOperations {
             return;
         }
 
-        float xDistanceVector = mCameraHandler.getTargetCenterX() - x;
+        float xDistanceVector = mCameraHandler.getCenterX() - x;
         float xDistance = Math.abs(xDistanceVector);
-        float yDistance = Math.abs(mCameraHandler.getTargetCenterY() - y);
+        float yDistance = Math.abs(mCameraHandler.getCenterY() - y);
 
         if (xDistance > (mCameraHandler.getWidth() / 2)
                 || (yDistance > mCameraHandler.getHeight() / 2)) {
@@ -63,7 +63,7 @@ public class SoundOperationsImpl implements SoundOperations {
         }
 
         float divider = mCameraHandler.getMaxZoomFactorChange() + 1
-                - mCameraHandler.getTargetZoomFactor(); //from 1 till maxZoomFactorChange
+                - mCameraHandler.getZoomFactor(); //from 1 till maxZoomFactorChange
         float volume = 1.0f / divider;
         if (volume <= sMinimumSoundValue) {
             return;

@@ -15,6 +15,7 @@ public class EaFallCamera extends VelocityCamera {
     // ===========================================================
     // Fields
     // ===========================================================
+    private ICenterChangedCallback mCenterChangedCallback;
 
     // ===========================================================
     // Constructors
@@ -27,9 +28,28 @@ public class EaFallCamera extends VelocityCamera {
     // Getter & Setter
     // ===========================================================
 
+    /**
+     * set callback on camera center change
+     *
+     * @param centerChangedCallback callback to be triggered
+     */
+    public void setCenterChangedCallback(final ICenterChangedCallback centerChangedCallback) {
+        mCenterChangedCallback = centerChangedCallback;
+    }
+
+
     // ===========================================================
     // Methods for/from SuperClass/Interfaces
     // ===========================================================
+
+    @Override
+    public void set(final float pXMin, final float pYMin, final float pXMax, final float pYMax) {
+        super.set(pXMin, pYMin, pXMax, pYMax);
+        if (mCenterChangedCallback != null) {
+            mCenterChangedCallback.centerChanged(getCenterX(), getCenterY());
+        }
+    }
+
 
     // ===========================================================
     // Methods
@@ -38,4 +58,14 @@ public class EaFallCamera extends VelocityCamera {
     // ===========================================================
     // Inner and Anonymous Classes
     // ===========================================================
+    public interface ICenterChangedCallback {
+        /**
+         * triggers after {@link EaFallCamera#set(float, float, float, float)} operation (as it points
+         * when center was changed)
+         *
+         * @param x camera new x
+         * @param y camera new y
+         */
+        void centerChanged(float x, float y);
+    }
 }

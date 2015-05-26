@@ -8,11 +8,11 @@ public interface ICameraHandler {
 
     float getHeight();
 
-    float getTargetCenterX();
+    float getCenterX();
 
-    float getTargetCenterY();
+    float getCenterY();
 
-    float getTargetZoomFactor();
+    float getZoomFactor();
 
     float getMaxZoomFactorChange();
 }

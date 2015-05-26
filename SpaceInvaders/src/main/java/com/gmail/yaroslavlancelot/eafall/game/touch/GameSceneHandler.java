@@ -25,6 +25,7 @@ import java.util.List;
 public class GameSceneHandler implements
         IOnSceneTouchListener,
         ICameraHandler,
+        EaFallCamera.ICenterChangedCallback,
         PinchZoomDetector.IPinchZoomDetectorListener, //zoom
         ScrollDetector.IScrollDetectorListener //scroll
 {
@@ -66,6 +67,7 @@ public class GameSceneHandler implements
 
     public GameSceneHandler(EaFallCamera camera) {
         mCamera = camera;
+        camera.setCenterChangedCallback(this);
         //scroll
         mScrollDetector = new ScrollDetector(this);
         //zoom
@@ -90,16 +92,16 @@ public class GameSceneHandler implements
         return mCamera.getHeight();
     }
 
-    public float getTargetCenterX() {
-        return mCamera.getTargetCenterX();
+    public float getCenterX() {
+        return mCamera.getCenterX();
     }
 
-    public float getTargetCenterY() {
-        return mCamera.getTargetCenterY();
+    public float getCenterY() {
+        return mCamera.getCenterY();
     }
 
-    public float getTargetZoomFactor() {
-        return mCamera.getTargetZoomFactor();
+    public float getZoomFactor() {
+        return mCamera.getZoomFactor();
     }
 
     public float getMaxZoomFactorChange() {
@@ -176,7 +178,7 @@ public class GameSceneHandler implements
         // Add movement to velocity
         this.mVelocityTracker.addMovement(pSceneTouchEvent.getMotionEvent());
         // Move camera object (relative to zoom factor)
-        final float zoomFactor = getTargetZoomFactor();
+        final float zoomFactor = getZoomFactor();
         mCamera.offsetCenter(-pDistanceX / zoomFactor, pDistanceY / zoomFactor);
     }
 
@@ -186,9 +188,14 @@ public class GameSceneHandler implements
         this.mVelocityTracker.computeCurrentVelocity(1000);
         final float velocityX = mVelocityTracker.getXVelocity();
         final float velocityY = mVelocityTracker.getYVelocity();
-        final float zoomFactor = getTargetZoomFactor();
+        final float zoomFactor = getZoomFactor();
         this.mCamera.fling(velocityX / zoomFactor, velocityY / zoomFactor);
         this.mVelocityTracker.recycle();
+    }
+
+    @Override
+    public void centerChanged(final float x, final float y) {
+        //unused here
     }
 
     // ===========================================================
@@ -209,8 +216,7 @@ public class GameSceneHandler implements
 
     /**
      * Set camera center in closer to zoom center position when we zoom-in
-     * TODO later pay attention tha zoom center point has always to be under the two fingers
-     * TODO it will change the logic/math of this method
+     * TODO later pay attention tha zoom center point has always to be under the two fingers it will change the logic/math of this method
      *
      * @param zoomChange changes in zoom factor between previous and new zoom
      */
