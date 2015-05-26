@@ -3,9 +3,9 @@ package com.gmail.yaroslavlancelot.eafall.game.touch;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 
+import com.gmail.yaroslavlancelot.eafall.game.camera.EaFallCamera;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 
-import org.andengine.engine.camera.VelocityCamera;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.ITouchCallback;
@@ -40,7 +40,7 @@ public class GameSceneHandler implements
     // ===========================================================
 
     /** camera for moving */
-    private VelocityCamera mCamera;
+    private EaFallCamera mCamera;
     /*
      * Pinch Zoom
      */
@@ -64,7 +64,7 @@ public class GameSceneHandler implements
     // Constructors
     // ===========================================================
 
-    public GameSceneHandler(VelocityCamera camera) {
+    public GameSceneHandler(EaFallCamera camera) {
         mCamera = camera;
         //scroll
         mScrollDetector = new ScrollDetector(this);
@@ -103,7 +103,7 @@ public class GameSceneHandler implements
     }
 
     public float getMaxZoomFactorChange() {
-        return 5;
+        return MAX_ZOOM_FACTOR;
     }
 
     // ===========================================================
@@ -195,6 +195,10 @@ public class GameSceneHandler implements
     // Methods
     // ===========================================================
 
+    private static void initPinchZoomMinimumDistance(PinchZoomDetector zoomDetector) {
+        zoomDetector.setTriggerPinchZoomMinimumDistance(Config.getConfig().getDisplayWidth() / 25);
+    }
+
     public void registerTouchListener(ITouchCallback touchListener) {
         mSceneClickListeners.add(touchListener);
     }
@@ -233,10 +237,6 @@ public class GameSceneHandler implements
         //surface camera center position
         mCamera.setCenter(mSurface_CameraCenterPosition[Constants.VERTEX_INDEX_X],
                 mSurface_CameraCenterPosition[Constants.VERTEX_INDEX_Y]);
-    }
-
-    private static void initPinchZoomMinimumDistance(PinchZoomDetector zoomDetector) {
-        zoomDetector.setTriggerPinchZoomMinimumDistance(Config.getConfig().getDisplayWidth() / 25);
     }
 
     // ===========================================================

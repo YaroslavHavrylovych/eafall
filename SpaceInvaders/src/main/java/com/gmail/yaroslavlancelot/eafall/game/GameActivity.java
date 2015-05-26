@@ -3,6 +3,7 @@ package com.gmail.yaroslavlancelot.eafall.game;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.audio.BackgroundMusic;
 import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
+import com.gmail.yaroslavlancelot.eafall.game.camera.EaFallCamera;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
@@ -11,7 +12,6 @@ import com.gmail.yaroslavlancelot.eafall.game.resources.ResourceFactory;
 import com.gmail.yaroslavlancelot.eafall.game.scene.SceneManager;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 
-import org.andengine.engine.camera.VelocityCamera;
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.options.AudioOptions;
 import org.andengine.engine.options.EngineOptions;
@@ -42,7 +42,7 @@ public abstract class GameActivity extends BaseGameActivity {
     /** user static area */
     protected HUD mHud;
     /** game camera */
-    protected VelocityCamera mCamera;
+    protected EaFallCamera mCamera;
     /** background music */
     protected BackgroundMusic mBackgroundMusic;
     /** scene manager */
@@ -56,7 +56,7 @@ public abstract class GameActivity extends BaseGameActivity {
         //pre-in-game
         GameObject.clearCounter();
         // init camera
-        mCamera = new VelocityCamera(0, 0,
+        mCamera = new EaFallCamera(0, 0,
                 SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT,
                 SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT,
                 Config.getConfig().getMaxZoomFactor());
@@ -128,6 +128,20 @@ public abstract class GameActivity extends BaseGameActivity {
         }).start();
     }
 
+    @Override
+    public synchronized void onResumeGame() {
+        super.onResumeGame();
+        if (mBackgroundMusic != null)
+            mBackgroundMusic.playBackgroundMusic();
+    }
+
+    @Override
+    public synchronized void onPauseGame() {
+        super.onPauseGame();
+        if (mBackgroundMusic != null)
+            mBackgroundMusic.pauseBackgroundMusic();
+    }
+
     /** show profiling information on screen (using FPS logger) */
     protected void profile() {
         final Text fpsText = new Text(200, SizeConstants.GAME_FIELD_HEIGHT - 50,
@@ -152,19 +166,5 @@ public abstract class GameActivity extends BaseGameActivity {
     /** Hide splash scene and shows working scene */
     public void hideSplash() {
         mSceneManager.hideSplash();
-    }
-
-    @Override
-    public synchronized void onResumeGame() {
-        super.onResumeGame();
-        if (mBackgroundMusic != null)
-            mBackgroundMusic.playBackgroundMusic();
-    }
-
-    @Override
-    public synchronized void onPauseGame() {
-        super.onPauseGame();
-        if (mBackgroundMusic != null)
-            mBackgroundMusic.pauseBackgroundMusic();
     }
 }
