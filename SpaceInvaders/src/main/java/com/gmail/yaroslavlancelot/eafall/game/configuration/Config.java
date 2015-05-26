@@ -1,20 +1,30 @@
 package com.gmail.yaroslavlancelot.eafall.game.configuration;
 
+import android.content.Context;
+import android.util.DisplayMetrics;
+import android.view.Display;
+import android.view.WindowManager;
+
 /** game configuration params */
 public class Config {
-    private static final Config sConfig = new Config();
+    private static Config sConfig;
     /*
-    * Graphic
-    */
+     * Display
+     */
+    private final int mDisplayWidth;
+    private final int mDisplayHeight;
+    /*
+     * Graphic
+     */
     private final boolean mUnitsHealthBarEnabled = true;
     private final boolean mTeamColorAreaEnabled = false;
+    private final int mMaxZoomFactor = 6;
     /*
      * Game
      */
     private final int mMovableUnitsLimit = 200;
     private final int mCreepBuildingsLimit = 7;
     private final int mWealthBuildingsLimit = 5;
-    private final int mMaxZoomFactor = 7;
     private final int mPlanetHealth = 300000;
     /*
      * Sound and music
@@ -27,6 +37,19 @@ public class Config {
      * Additional
      */
     private final boolean mProfilingEnabled = true;
+
+    public Config(Context context) {
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = windowManager.getDefaultDisplay();
+        DisplayMetrics metrics = new DisplayMetrics();
+        display.getMetrics(metrics);
+        mDisplayWidth = Math.max(metrics.widthPixels, metrics.heightPixels);
+        mDisplayHeight = Math.min(metrics.widthPixels, metrics.heightPixels);
+    }
+
+    public static void init(Context context) {
+        sConfig = new Config(context);
+    }
 
     public static Config getConfig() {
         return sConfig;
@@ -78,5 +101,13 @@ public class Config {
 
     public int getWealthBuildingsLimit() {
         return mWealthBuildingsLimit;
+    }
+
+    public int getDisplayWidth() {
+        return mDisplayWidth;
+    }
+
+    public int getDisplayHeight() {
+        return mDisplayHeight;
     }
 }

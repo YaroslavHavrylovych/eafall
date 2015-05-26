@@ -8,9 +8,9 @@ public interface ICameraHandler {
 
     float getHeight();
 
-    float getCenterX();
+    float getTargetCenterX();
 
-    float getCenterY();
+    float getTargetCenterY();
 
     float getTargetZoomFactor();
 

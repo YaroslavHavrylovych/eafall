@@ -1,27 +1,79 @@
 package com.gmail.yaroslavlancelot.eafall.game.touch;
 
+import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
+
+import org.andengine.engine.camera.Camera;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.ITouchCallback;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.util.Constants;
 
 /** Helping functions to work with touch events */
 public final class StaticHelper {
     private StaticHelper() {
     }
 
-    /** Ranging the value and stick to max/min if needed */
-    public static float stick(float value, float minValue, float maxValue) {
-        if (value > maxValue)
-            return maxValue;
-        else if (value < minValue)
-            return minValue;
-        return value;
+    /**
+     * Converts screen coordinates (e.g. from motion event) to surface coordinates from camera.
+     * <br/>
+     * Pay attention that screen coordinates begin point is top-left meanwhile for surface
+     * it's bottoms-left
+     *
+     * @param camera             surface of which will be used to get bounds
+     * @param screenCoordinates  point screen coordinates
+     * @param surfaceCoordinates calculation result
+     */
+    public static void convertScreenToSurfaceCoordinates(final Camera camera,
+                                                         final float[] screenCoordinates,
+                                                         final float[] surfaceCoordinates) {
+        Config config = Config.getConfig();
+        //abscissa
+        surfaceCoordinates[Constants.VERTEX_INDEX_X] = camera.getXMin()
+                + screenCoordinates[Constants.VERTEX_INDEX_X] * camera.getWidth()
+                / config.getDisplayWidth();
+        //ordinate
+        float screenHeight = config.getDisplayHeight();
+        surfaceCoordinates[Constants.VERTEX_INDEX_Y] = camera.getYMin()
+                + (screenHeight - screenCoordinates[Constants.VERTEX_INDEX_Y])
+                * camera.getHeight() / screenHeight;
+    }
+
+    /**
+     * Converts camera surface coordinates to local camera coordinates
+     *
+     * @param camera             surface of which will be used to get bounds
+     * @param surfaceCoordinates point surface coordinates
+     * @param cameraCoordinates  calculation result
+     */
+    public static void convertSurfaceToCameraCoordinates(final Camera camera,
+                                                         final float[] surfaceCoordinates,
+                                                         final float[] cameraCoordinates) {
+        cameraCoordinates[Constants.VERTEX_INDEX_X] =
+                surfaceCoordinates[Constants.VERTEX_INDEX_X] - camera.getXMin();
+        cameraCoordinates[Constants.VERTEX_INDEX_Y] =
+                surfaceCoordinates[Constants.VERTEX_INDEX_Y] - camera.getYMin();
+    }
+
+    /**
+     * Converts local camera coordinates to surface coordinates
+     *
+     * @param camera             surface of which will be used to get bounds
+     * @param cameraCoordinates  point in camera local coordinates
+     * @param surfaceCoordinates calculation result
+     */
+    public static void convertCameraToSurfaceCoordinates(final Camera camera,
+                                                         final float[] cameraCoordinates,
+                                                         final float[] surfaceCoordinates) {
+        surfaceCoordinates[Constants.VERTEX_INDEX_X] =
+                camera.getXMin() + cameraCoordinates[Constants.VERTEX_INDEX_X];
+        surfaceCoordinates[Constants.VERTEX_INDEX_Y] =
+                camera.getYMin() + cameraCoordinates[Constants.VERTEX_INDEX_Y];
     }
 
     /** touch listener that always return true */
-    public static enum EmptyTouch implements ITouchCallback {
+    public enum EmptyTouch implements ITouchCallback {
         INSTANCE;
 
         public static EmptyTouch getInstance() {
@@ -34,7 +86,7 @@ public final class StaticHelper {
         }
     }
 
-    public static interface OnClickListener {
+    public interface OnClickListener {
         void onClick();
     }
 
@@ -52,18 +104,6 @@ public final class StaticHelper {
         /** parameters description you can see in javadoc to fields of this class */
         public CustomTouchListener(IEntity object) {
             mObject = object;
-        }
-
-        @Override
-        public boolean onAreaTouched(final TouchEvent event, float touchAreaLocalX, float touchAreaLocalY) {
-            if (event.isActionDown()) {
-                press();
-            } else if (event.isActionCancel() || !contains(touchAreaLocalX, touchAreaLocalY)) {
-                unPress();
-            } else if (event.isActionUp() && mIsItClickEvent) {
-                click();
-            }
-            return true;
         }
 
         /** element was pressed callback */
@@ -93,6 +133,18 @@ public final class StaticHelper {
         /** callback after click on element happens. User touch down and up finger on element without cancelling or move outside */
         public void click() {
             unPress();
+        }
+
+        @Override
+        public boolean onAreaTouched(final TouchEvent event, float touchAreaLocalX, float touchAreaLocalY) {
+            if (event.isActionDown()) {
+                press();
+            } else if (event.isActionCancel() || !contains(touchAreaLocalX, touchAreaLocalY)) {
+                unPress();
+            } else if (event.isActionUp() && mIsItClickEvent) {
+                click();
+            }
+            return true;
         }
     }
 
