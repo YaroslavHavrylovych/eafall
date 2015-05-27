@@ -155,7 +155,7 @@ public class Camera implements IUpdateHandler {
 		final float dX = pCenterX - this.getCenterX();
 		final float dY = pCenterY - this.getCenterY();
 
-		moveCenter(dX, dY);
+		this.moveCenter(dX, dY);
 	}
 
 	protected void moveCenter(final float pDeltaX, final float pDeltaY) {

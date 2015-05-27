@@ -15,12 +15,15 @@ public class EaFallCamera extends VelocityCamera {
     // ===========================================================
     // Fields
     // ===========================================================
-    private ICenterChangedCallback mCenterChangedCallback;
+    protected boolean mSmoothZoomInProgress;
+    private ICameraMoveCallbacks mCenterChangedCallback;
 
     // ===========================================================
     // Constructors
     // ===========================================================
-    public EaFallCamera(final float pX, final float pY, final float pWidth, final float pHeight, final float pMaxVelocityX, final float pMaxVelocityY, final float pMaxZoomFactorChange) {
+    public EaFallCamera(final float pX, final float pY, final float pWidth, final float pHeight,
+                        final float pMaxVelocityX, final float pMaxVelocityY,
+                        final float pMaxZoomFactorChange) {
         super(pX, pY, pWidth, pHeight, pMaxVelocityX, pMaxVelocityY, pMaxZoomFactorChange);
     }
 
@@ -29,27 +32,44 @@ public class EaFallCamera extends VelocityCamera {
     // ===========================================================
 
     /**
+     * @return true if smooth zoom is currently working and false if it's done
+     */
+    public boolean isSmoothZoomInProgress() {
+        return mSmoothZoomInProgress;
+    }
+
+    /**
      * set callback on camera center change
      *
      * @param centerChangedCallback callback to be triggered
      */
-    public void setCenterChangedCallback(final ICenterChangedCallback centerChangedCallback) {
+    public void setCenterChangedCallback(final ICameraMoveCallbacks centerChangedCallback) {
         mCenterChangedCallback = centerChangedCallback;
     }
-
 
     // ===========================================================
     // Methods for/from SuperClass/Interfaces
     // ===========================================================
 
     @Override
-    public void set(final float pXMin, final float pYMin, final float pXMax, final float pYMax) {
-        super.set(pXMin, pYMin, pXMax, pYMax);
+    protected void moveCenter(final float pDeltaX, final float pDeltaY) {
+        super.moveCenter(pDeltaX, pDeltaY);
         if (mCenterChangedCallback != null) {
-            mCenterChangedCallback.centerChanged(getCenterX(), getCenterY());
+            mCenterChangedCallback.cameraMove(pDeltaX, pDeltaY);
         }
     }
 
+    @Override
+    protected void onSmoothZoomStarted() {
+        super.onSmoothZoomStarted();
+        mSmoothZoomInProgress = true;
+    }
+
+    @Override
+    protected void onSmoothZoomFinished() {
+        super.onSmoothZoomFinished();
+        mSmoothZoomInProgress = false;
+    }
 
     // ===========================================================
     // Methods
@@ -58,14 +78,14 @@ public class EaFallCamera extends VelocityCamera {
     // ===========================================================
     // Inner and Anonymous Classes
     // ===========================================================
-    public interface ICenterChangedCallback {
+    public interface ICameraMoveCallbacks {
+
         /**
-         * triggers after {@link EaFallCamera#set(float, float, float, float)} operation (as it points
-         * when center was changed)
+         * triggers after {@link EaFallCamera#moveCenter(float, float)}
          *
-         * @param x camera new x
-         * @param y camera new y
+         * @param deltaX x increasing value
+         * @param deltaY y increasing value
          */
-        void centerChanged(float x, float y);
+        void cameraMove(float deltaX, float deltaY);
     }
 }

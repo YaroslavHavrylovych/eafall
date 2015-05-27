@@ -29,6 +29,7 @@ public class EaFallScene extends Scene {
     private static final String TAG = EaFallScene.class.getCanonicalName();
     private GameSceneHandler mGameSceneHandler;
     private Sprite mBackgroundSprite;
+    private AutoParallaxBackground mBackground;
 
     public EaFallScene() {
     }
@@ -43,11 +44,13 @@ public class EaFallScene extends Scene {
         background.setParallaxValue(new Random().nextInt(SizeConstants.GAME_FIELD_WIDTH));
         mBackgroundSprite = new Sprite(
                 SizeConstants.HALF_FIELD_WIDTH, SizeConstants.HALF_FIELD_HEIGHT,
+                SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT,
                 TextureRegionHolder.getInstance().getElement(backgroundFilePath),
                 vertexBufferObjectManager);
         background.attachParallaxEntity(
                 new ParallaxBackground.ParallaxEntity(1, mBackgroundSprite));
         setBackground(background);
+        mBackground = background;
     }
 
     /**
@@ -63,18 +66,30 @@ public class EaFallScene extends Scene {
         LoggerHelper.methodInvocation(TAG, "initGameSceneHandler");
         /* main scene touch listener */
         mGameSceneHandler = new GameSceneHandler(camera) {
-            //TODO make it smoother
-            @Override
-            public void setZoomFactor(float zoomFactor) {
-                super.setZoomFactor(zoomFactor);
-                mBackgroundSprite.setScale(zoomFactor - (zoomFactor - 1) / 2.7f);
-            }
+            private float mPreviousZoomFactor = MIN_ZOOM_FACTOR;
 
             @Override
-            public void centerChanged(final float x, final float y) {
-                //TODO limit operation calls (with delta as time is so unstable) to prevent blinking (image can't be redrawn so often as it's big)
-                float multiplier = mBackgroundSprite.getScaleY() / getZoomFactor();
-                mBackgroundSprite.setY(mBackgroundSprite.getHeight() - getCenterY() * multiplier);
+            public void cameraMove(final float deltaX, final float deltaY) {
+                super.cameraMove(deltaX, deltaY);
+
+                if (smoothZoomInProgress()) {
+                    float zoomFactor = getZoomFactor();
+                    if (mPreviousZoomFactor - zoomFactor != 0.0f) {
+                        mPreviousZoomFactor = zoomFactor;
+                        mBackgroundSprite.setScale(zoomFactor - (zoomFactor - 1) / 2.7f);
+                    }
+                }
+
+                if (deltaX != 0.0) {
+                    mBackground.changeParallax(-deltaX * mBackgroundSprite.getScaleY() / getZoomFactor());
+                }
+
+                if (deltaY != 0.0) {
+                    float multiplier = Math.min(0.92f, mBackgroundSprite.getScaleY() /
+                            getZoomFactor());
+                    float delta = SizeConstants.HALF_FIELD_HEIGHT - getCenterY();
+                    mBackgroundSprite.setY(SizeConstants.HALF_FIELD_HEIGHT + delta * multiplier);
+                }
             }
         };
         setOnSceneTouchListener(mGameSceneHandler);

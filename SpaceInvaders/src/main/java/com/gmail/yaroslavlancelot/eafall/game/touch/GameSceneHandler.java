@@ -21,11 +21,13 @@ import java.util.List;
 /**
  * Keep the track about touch functionality and can delegate action to
  * concrete handler (Scroll, Pinch zoom etc). Handle camera-on-the-scene positions etc.
+ *
+ * @author Yaroslav Havrylovych
  */
 public class GameSceneHandler implements
         IOnSceneTouchListener,
         ICameraHandler,
-        EaFallCamera.ICenterChangedCallback,
+        EaFallCamera.ICameraMoveCallbacks,
         PinchZoomDetector.IPinchZoomDetectorListener, //zoom
         ScrollDetector.IScrollDetectorListener //scroll
 {
@@ -80,10 +82,6 @@ public class GameSceneHandler implements
     // Getter & Setter
     // ===========================================================
 
-    public void setZoomFactor(float zoomFactor) {
-        mCamera.setZoomFactor(zoomFactor);
-    }
-
     public float getWidth() {
         return mCamera.getWidth();
     }
@@ -104,13 +102,13 @@ public class GameSceneHandler implements
         return mCamera.getZoomFactor();
     }
 
+    private void setZoomFactor(float zoomFactor) {
+        mCamera.setZoomFactor(zoomFactor);
+    }
+
     public float getMaxZoomFactorChange() {
         return MAX_ZOOM_FACTOR;
     }
-
-    // ===========================================================
-    // Methods for/from SuperClass/Interfaces
-    // ===========================================================
 
     @Override
     public boolean onSceneTouchEvent(final Scene pScene, final TouchEvent pSceneTouchEvent) {
@@ -132,6 +130,10 @@ public class GameSceneHandler implements
         }
         return true;
     }
+
+    // ===========================================================
+    // Methods for/from SuperClass/Interfaces
+    // ===========================================================
 
     @Override
     public void onPinchZoomStarted(PinchZoomDetector pPinchZoomDetector, TouchEvent pSceneTouchEvent) {
@@ -194,16 +196,20 @@ public class GameSceneHandler implements
     }
 
     @Override
-    public void centerChanged(final float x, final float y) {
+    public void cameraMove(final float deltaX, final float deltaY) {
         //unused here
+    }
+
+    private static void initPinchZoomMinimumDistance(PinchZoomDetector zoomDetector) {
+        zoomDetector.setTriggerPinchZoomMinimumDistance(Config.getConfig().getDisplayWidth() / 25);
     }
 
     // ===========================================================
     // Methods
     // ===========================================================
 
-    private static void initPinchZoomMinimumDistance(PinchZoomDetector zoomDetector) {
-        zoomDetector.setTriggerPinchZoomMinimumDistance(Config.getConfig().getDisplayWidth() / 25);
+    public boolean smoothZoomInProgress() {
+        return mCamera.isSmoothZoomInProgress();
     }
 
     public void registerTouchListener(ITouchCallback touchListener) {
