@@ -100,10 +100,10 @@ public class Camera implements IUpdateHandler {
 	}
 
 	public void set(final float pXMin, final float pYMin, final float pXMax, final float pYMax) {
-		this.mXMin = pXMin;
-		this.mXMax = pXMax;
-		this.mYMin = pYMin;
-		this.mYMax = pYMax;
+		setXMin(pXMin);
+		setYMin(pYMin);
+		setXMax(pXMax);
+		setYMax(pYMax);
 	}
 
 	public float getZNear() {
@@ -155,10 +155,12 @@ public class Camera implements IUpdateHandler {
 		final float dX = pCenterX - this.getCenterX();
 		final float dY = pCenterY - this.getCenterY();
 
-		this.mXMin += dX;
-		this.mXMax += dX;
-		this.mYMin += dY;
-		this.mYMax += dY;
+		this.moveCenter(dX, dY);
+	}
+
+	protected void moveCenter(final float pDeltaX, final float pDeltaY) {
+		this.set(this.mXMin + pDeltaX, this.mYMin + pDeltaY,
+				this.mXMax + pDeltaX, this.mYMax + pDeltaY);
 	}
 
 	public void offsetCenter(final float pX, final float pY) {

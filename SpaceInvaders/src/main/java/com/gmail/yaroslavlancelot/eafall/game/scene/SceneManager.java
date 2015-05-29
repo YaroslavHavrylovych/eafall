@@ -1,17 +1,17 @@
 package com.gmail.yaroslavlancelot.eafall.game.scene;
 
 import com.gmail.yaroslavlancelot.eafall.game.GameActivity;
+import com.gmail.yaroslavlancelot.eafall.game.camera.EaFallCamera;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.SplashScene;
-
-import org.andengine.engine.camera.VelocityCamera;
 
 /**
  * Manager class for scenes
  * Creates and stores and changes scenes
+ *
+ * @author Yaroslav Havrylovych
  */
 public class SceneManager {
-
     /** tag, which is used for debugging purpose */
     public static final String TAG = SceneManager.class.getCanonicalName();
 
@@ -54,7 +54,7 @@ public class SceneManager {
      *
      * @return instance of SplashScene
      */
-    public synchronized EaFallScene initWorkingScene(VelocityCamera camera) {
+    public synchronized EaFallScene initWorkingScene(EaFallCamera camera) {
         mWorkingScene = new EaFallScene();
         mWorkingScene.initGameSceneHandler(camera);
         return mWorkingScene;

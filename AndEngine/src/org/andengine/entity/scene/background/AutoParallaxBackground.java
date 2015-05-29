@@ -7,7 +7,7 @@ package org.andengine.entity.scene.background;
  * (c) 2011 Zynga Inc.
  *
  * @author Nicolas Gramlich
- * @since 19:44:31 - 19.07.2010
+ * @author Yaroslav Havrylovych
  */
 public class AutoParallaxBackground extends ParallaxBackground {
 	// ===========================================================
@@ -36,6 +36,15 @@ public class AutoParallaxBackground extends ParallaxBackground {
 
 	public void setParallaxChangePerSecond(final float pParallaxChangePerSecond) {
 		this.mParallaxChangePerSecond = pParallaxChangePerSecond;
+	}
+
+	/**
+	 * change existing parallax value by value passed in params
+	 *
+	 * @param delta value which will be added to existing parallax value
+	 */
+	public void changeParallax(final float delta) {
+		setParallaxValue(mParallaxValue + delta);
 	}
 
 	// ===========================================================

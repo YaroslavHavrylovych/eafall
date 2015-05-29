@@ -3,9 +3,9 @@ package com.gmail.yaroslavlancelot.eafall.game.touch;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 
+import com.gmail.yaroslavlancelot.eafall.game.camera.EaFallCamera;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 
-import org.andengine.engine.camera.VelocityCamera;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.ITouchCallback;
@@ -21,10 +21,13 @@ import java.util.List;
 /**
  * Keep the track about touch functionality and can delegate action to
  * concrete handler (Scroll, Pinch zoom etc). Handle camera-on-the-scene positions etc.
+ *
+ * @author Yaroslav Havrylovych
  */
 public class GameSceneHandler implements
         IOnSceneTouchListener,
         ICameraHandler,
+        EaFallCamera.ICameraMoveCallbacks,
         PinchZoomDetector.IPinchZoomDetectorListener, //zoom
         ScrollDetector.IScrollDetectorListener //scroll
 {
@@ -40,7 +43,7 @@ public class GameSceneHandler implements
     // ===========================================================
 
     /** camera for moving */
-    private VelocityCamera mCamera;
+    private EaFallCamera mCamera;
     /*
      * Pinch Zoom
      */
@@ -64,8 +67,9 @@ public class GameSceneHandler implements
     // Constructors
     // ===========================================================
 
-    public GameSceneHandler(VelocityCamera camera) {
+    public GameSceneHandler(EaFallCamera camera) {
         mCamera = camera;
+        camera.setCenterChangedCallback(this);
         //scroll
         mScrollDetector = new ScrollDetector(this);
         //zoom
@@ -78,10 +82,6 @@ public class GameSceneHandler implements
     // Getter & Setter
     // ===========================================================
 
-    public void setZoomFactor(float zoomFactor) {
-        mCamera.setZoomFactor(zoomFactor);
-    }
-
     public float getWidth() {
         return mCamera.getWidth();
     }
@@ -90,25 +90,25 @@ public class GameSceneHandler implements
         return mCamera.getHeight();
     }
 
-    public float getTargetCenterX() {
-        return mCamera.getTargetCenterX();
+    public float getCenterX() {
+        return mCamera.getCenterX();
     }
 
-    public float getTargetCenterY() {
-        return mCamera.getTargetCenterY();
+    public float getCenterY() {
+        return mCamera.getCenterY();
     }
 
-    public float getTargetZoomFactor() {
-        return mCamera.getTargetZoomFactor();
+    public float getZoomFactor() {
+        return mCamera.getZoomFactor();
+    }
+
+    private void setZoomFactor(float zoomFactor) {
+        mCamera.setZoomFactor(zoomFactor);
     }
 
     public float getMaxZoomFactorChange() {
-        return 5;
+        return MAX_ZOOM_FACTOR;
     }
-
-    // ===========================================================
-    // Methods for/from SuperClass/Interfaces
-    // ===========================================================
 
     @Override
     public boolean onSceneTouchEvent(final Scene pScene, final TouchEvent pSceneTouchEvent) {
@@ -130,6 +130,10 @@ public class GameSceneHandler implements
         }
         return true;
     }
+
+    // ===========================================================
+    // Methods for/from SuperClass/Interfaces
+    // ===========================================================
 
     @Override
     public void onPinchZoomStarted(PinchZoomDetector pPinchZoomDetector, TouchEvent pSceneTouchEvent) {
@@ -176,7 +180,7 @@ public class GameSceneHandler implements
         // Add movement to velocity
         this.mVelocityTracker.addMovement(pSceneTouchEvent.getMotionEvent());
         // Move camera object (relative to zoom factor)
-        final float zoomFactor = getTargetZoomFactor();
+        final float zoomFactor = getZoomFactor();
         mCamera.offsetCenter(-pDistanceX / zoomFactor, pDistanceY / zoomFactor);
     }
 
@@ -186,14 +190,27 @@ public class GameSceneHandler implements
         this.mVelocityTracker.computeCurrentVelocity(1000);
         final float velocityX = mVelocityTracker.getXVelocity();
         final float velocityY = mVelocityTracker.getYVelocity();
-        final float zoomFactor = getTargetZoomFactor();
+        final float zoomFactor = getZoomFactor();
         this.mCamera.fling(velocityX / zoomFactor, velocityY / zoomFactor);
         this.mVelocityTracker.recycle();
+    }
+
+    @Override
+    public void cameraMove(final float deltaX, final float deltaY) {
+        //unused here
+    }
+
+    private static void initPinchZoomMinimumDistance(PinchZoomDetector zoomDetector) {
+        zoomDetector.setTriggerPinchZoomMinimumDistance(Config.getConfig().getDisplayWidth() / 25);
     }
 
     // ===========================================================
     // Methods
     // ===========================================================
+
+    public boolean smoothZoomInProgress() {
+        return mCamera.isSmoothZoomInProgress();
+    }
 
     public void registerTouchListener(ITouchCallback touchListener) {
         mSceneClickListeners.add(touchListener);
@@ -205,8 +222,7 @@ public class GameSceneHandler implements
 
     /**
      * Set camera center in closer to zoom center position when we zoom-in
-     * TODO later pay attention tha zoom center point has always to be under the two fingers
-     * TODO it will change the logic/math of this method
+     * TODO later pay attention tha zoom center point has always to be under the two fingers it will change the logic/math of this method
      *
      * @param zoomChange changes in zoom factor between previous and new zoom
      */
@@ -233,10 +249,6 @@ public class GameSceneHandler implements
         //surface camera center position
         mCamera.setCenter(mSurface_CameraCenterPosition[Constants.VERTEX_INDEX_X],
                 mSurface_CameraCenterPosition[Constants.VERTEX_INDEX_Y]);
-    }
-
-    private static void initPinchZoomMinimumDistance(PinchZoomDetector zoomDetector) {
-        zoomDetector.setTriggerPinchZoomMinimumDistance(Config.getConfig().getDisplayWidth() / 25);
     }
 
     // ===========================================================
