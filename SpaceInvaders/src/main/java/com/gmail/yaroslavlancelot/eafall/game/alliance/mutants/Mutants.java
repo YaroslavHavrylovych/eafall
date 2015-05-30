@@ -23,9 +23,8 @@ public class Mutants extends Alliance {
     }
 
     @Override
-    public void loadResources(final TextureManager textureManager) {
+    public void loadAllianceResources(final TextureManager textureManager) {
         loadBuildings(textureManager);
-
         loadUnits(textureManager);
     }
 

@@ -35,9 +35,9 @@ public abstract class Alliance implements IAlliance {
     private static final String TAG = Alliance.class.getCanonicalName();
     protected VertexBufferObjectManager mObjectManager;
     protected SparseArray<UnitDummy> mUnitDummies;
+    protected SortedSet<Integer> mUnitsIds;
     protected SparseArray<BuildingDummy> mBuildingDummies;
-    protected SortedSet<Integer> mSortedBuildingsSet;
-    private TextureAtlas mUnitTextureAtlas;
+    protected SortedSet<Integer> mBuildingsIds;
     private TextureAtlas mBuildingTextureAtlas;
 
     protected Alliance(final VertexBufferObjectManager objectManager) {
@@ -45,12 +45,92 @@ public abstract class Alliance implements IAlliance {
         initDummies();
     }
 
-    private void initDummies() {
-        unitsDummies(getUnitListLoader());
-        buildingDummies(getBuildingListLoader());
+    protected abstract UnitListLoader getUnitListLoader();
+
+    protected abstract BuildingListLoader getBuildingListLoader();
+
+    protected int getBuildingsWithUpgradesAmount() {
+        int buildingsWithUpgradesAmount = 0;
+        for (int i = 0; i < mBuildingDummies.size(); i++) {
+            buildingsWithUpgradesAmount += mBuildingDummies.valueAt(i).getUpgrades();
+        }
+        return buildingsWithUpgradesAmount;
     }
 
-    private void unitsDummies(UnitListLoader unitListLoader) {
+    @Override
+    public int getBuildingsAmount() {
+        return mBuildingDummies.size();
+    }
+
+    @Override
+    public TextureAtlas getBuildingTextureAtlas() {
+        return mBuildingTextureAtlas;
+    }
+
+    @Override
+    public SortedSet<Integer> getBuildingsIds() {
+        return mBuildingsIds;
+    }
+
+    @Override
+    public SortedSet<Integer> getUnitsIds() {
+        return mUnitsIds;
+    }
+
+    @Override
+    public int getBuildingCost(BuildingId buildingId) {
+        return getBuildingDummy(buildingId).getCost(buildingId.getUpgrade());
+    }
+
+    public BitmapTextureAtlas loadUnitsToTexture(String teamName, TextureManager textureManager) {
+        int unitsAmount = mUnitDummies.size();
+        int textureManagerElementsInLine = (int) Math.round(Math.sqrt(unitsAmount) + 1);
+        int size = textureManagerElementsInLine * SizeConstants.UNIT_FILE_SIZE;
+        BitmapTextureAtlas textureAtlas = new BitmapTextureAtlas(
+                textureManager, size, size, TextureOptions.BILINEAR);
+        int n, m;
+        for (int i = 0; i < unitsAmount; i++) {
+            UnitDummy unitDummy = mUnitDummies.valueAt(i);
+            n = (i % textureManagerElementsInLine) * SizeConstants.UNIT_FILE_SIZE;
+            m = (i / textureManagerElementsInLine) * SizeConstants.UNIT_FILE_SIZE;
+            unitDummy.loadSpriteResources(teamName, textureAtlas, n, m);
+        }
+        textureAtlas.load();
+        return textureAtlas;
+    }
+
+    @Override
+    public UnitDummy getUnitDummy(int unitId) {
+        return mUnitDummies.get(unitId);
+    }
+
+    @Override
+    public BuildingDummy getBuildingDummy(BuildingId buildingId) {
+        return mBuildingDummies.get(buildingId.getId());
+    }
+
+    @Override
+    public int getUpgradeCost(BuildingId buildingId) {
+        BuildingDummy dummy = mBuildingDummies.get(buildingId.getId());
+        if (buildingId.getUpgrade() + 1 >= dummy.getUpgrades()) {
+            return -1;
+        }
+        int cost = dummy.getCost(buildingId.getUpgrade() + 1);
+        return (int) Math.round(cost * 0.5 + 1);
+    }
+
+    @Override
+    public boolean isUpgradeAvailable(BuildingId buildingId) {
+        BuildingDummy dummy = mBuildingDummies.get(buildingId.getId());
+        return buildingId.getUpgrade() + 1 < dummy.getUpgrades();
+    }
+
+    private void initDummies() {
+        initUnitDummies(getUnitListLoader());
+        initBuildingDummies(getBuildingListLoader());
+    }
+
+    private void initUnitDummies(UnitListLoader unitListLoader) {
         int unitsAmount = unitListLoader.getList().size();
         mUnitDummies = new SparseArray<UnitDummy>(unitsAmount);
         UnitDummy unitDummy;
@@ -63,11 +143,14 @@ public abstract class Alliance implements IAlliance {
             }
             mUnitDummies.put(unitDummy.getId(), unitDummy);
         }
+
+        mUnitsIds = new TreeSet<Integer>();
+        for (int i = 0; i < mUnitDummies.size(); i++) {
+            mUnitsIds.add(mUnitDummies.keyAt(i));
+        }
     }
 
-    protected abstract UnitListLoader getUnitListLoader();
-
-    private void buildingDummies(BuildingListLoader buildingListLoader) {
+    private void initBuildingDummies(BuildingListLoader buildingListLoader) {
         int unitBuildingsAmount = buildingListLoader.getList().size();
         //+3 it's addition buildings (i.e. +defence, +wealth, + special buildings)
         mBuildingDummies = new SparseArray<BuildingDummy>(unitBuildingsAmount + 3);
@@ -87,63 +170,10 @@ public abstract class Alliance implements IAlliance {
         buildingDummy = new SpecialBuildingDummy(buildingListLoader.specialBuildingLoader);
         mBuildingDummies.put(buildingDummy.getBuildingId(), buildingDummy);
 
-        mSortedBuildingsSet = new TreeSet<Integer>();
+        mBuildingsIds = new TreeSet<Integer>();
         for (int i = 0; i < mBuildingDummies.size(); i++) {
-            mSortedBuildingsSet.add(mBuildingDummies.keyAt(i));
+            mBuildingsIds.add(mBuildingDummies.keyAt(i));
         }
-    }
-
-    protected abstract BuildingListLoader getBuildingListLoader();
-
-    @Override
-    public int getBuildingsAmount() {
-        return mBuildingDummies.size();
-    }
-
-    @Override
-    public int getBuildingCost(BuildingId buildingId) {
-        return getBuildingDummy(buildingId).getCost(buildingId.getUpgrade());
-    }
-
-    @Override
-    public TextureAtlas getUnitTextureAtlas() {
-        return mUnitTextureAtlas;
-    }
-
-    @Override
-    public TextureAtlas getBuildingTextureAtlas() {
-        return mBuildingTextureAtlas;
-    }
-
-    @Override
-    public UnitDummy getUnitDummy(int unitId) {
-        return mUnitDummies.get(unitId);
-    }
-
-    @Override
-    public BuildingDummy getBuildingDummy(BuildingId buildingId) {
-        return mBuildingDummies.get(buildingId.getId());
-    }
-
-    @Override
-    public SortedSet<Integer> getBuildingsIds() {
-        return mSortedBuildingsSet;
-    }
-
-    @Override
-    public int getUpgradeCost(BuildingId buildingId) {
-        BuildingDummy dummy = mBuildingDummies.get(buildingId.getId());
-        if (buildingId.getUpgrade() + 1 >= dummy.getUpgrades()) {
-            return -1;
-        }
-        int cost = dummy.getCost(buildingId.getUpgrade() + 1);
-        return (int) Math.round(cost * 0.5 + 1);
-    }
-
-    @Override
-    public boolean isUpgradeAvailable(BuildingId buildingId) {
-        BuildingDummy dummy = mBuildingDummies.get(buildingId.getId());
-        return buildingId.getUpgrade() + 1 < dummy.getUpgrades();
     }
 
     protected <T> T loadObjects(int rawId, Class<T> cls) {
@@ -182,7 +212,6 @@ public abstract class Alliance implements IAlliance {
         mBuildingTextureAtlas = textureAtlas;
     }
 
-    //TODO you have to load images only for your alliance only (you=player)
     protected void loadBuildings_Images(TextureManager textureManager, Context context) {
         int buildingsWithUpgradesAmount = getBuildingsWithUpgradesAmount();
         int atlases = buildingsWithUpgradesAmount % 4 == 0
@@ -218,43 +247,16 @@ public abstract class Alliance implements IAlliance {
         }
     }
 
-    protected int getBuildingsWithUpgradesAmount() {
-        int buildingsWithUpgradesAmount = 0;
-        for (int i = 0; i < mBuildingDummies.size(); i++) {
-            buildingsWithUpgradesAmount += mBuildingDummies.valueAt(i).getUpgrades();
-        }
-        return buildingsWithUpgradesAmount;
-    }
-
     protected void loadUnits(TextureManager textureManager) {
         Context context = EaFallApplication.getContext();
-        loadUnits_Sprites(textureManager, context);
         loadUnits_Images(textureManager, context);
         //Init after loading. Init will create a pool, so texture atlas he to be loaded.
         for (int i = 0; i < mUnitDummies.size(); i++) {
             mUnitDummies.valueAt(i)
-                    .initDummy(mObjectManager, SoundFactory.getInstance(), getAllianceName());
+                    .initDummy(SoundFactory.getInstance(), getAllianceName());
         }
     }
 
-    protected void loadUnits_Sprites(TextureManager textureManager, Context context) {
-        int unitsAmount = mUnitDummies.size();
-        int textureManagerElementsInLine = (int) Math.round(Math.sqrt(unitsAmount) + 1);
-        int size = textureManagerElementsInLine * SizeConstants.UNIT_FILE_SIZE;
-        BitmapTextureAtlas textureAtlas = new BitmapTextureAtlas(
-                textureManager, size, size, TextureOptions.BILINEAR);
-        int n, m;
-        for (int i = 0; i < unitsAmount; i++) {
-            UnitDummy unitDummy = mUnitDummies.valueAt(i);
-            n = (i % textureManagerElementsInLine) * SizeConstants.UNIT_FILE_SIZE;
-            m = (i / textureManagerElementsInLine) * SizeConstants.UNIT_FILE_SIZE;
-            unitDummy.loadSpriteResources(context, textureAtlas, n, m);
-        }
-        textureAtlas.load();
-        mUnitTextureAtlas = textureAtlas;
-    }
-
-    //TODO you have to load images only for your alliance only (you=player)
     protected void loadUnits_Images(TextureManager textureManager, Context context) {
         int unitsAmount = mUnitDummies.size();
         int atlases = unitsAmount % 4 == 0 ? unitsAmount / 4 : unitsAmount / 4 + 1;

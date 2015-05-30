@@ -6,10 +6,6 @@ import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 import com.gmail.yaroslavlancelot.eafall.game.constant.CollisionCategories;
-import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
-import com.gmail.yaroslavlancelot.eafall.game.entity.Area;
-import com.gmail.yaroslavlancelot.eafall.game.entity.BatchedSprite;
-import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.Bullet;
 import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.BulletPool;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
@@ -21,7 +17,6 @@ import com.gmail.yaroslavlancelot.eafall.game.eventbus.AttachSpriteEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.CreatePhysicBodyEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.RunOnUpdateThreadEvent;
 import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
-import com.gmail.yaroslavlancelot.eafall.game.team.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
 
 import org.andengine.audio.sound.Sound;
@@ -57,10 +52,6 @@ public abstract class Unit extends GameObject implements
     private FixtureDef mBulletFixtureDef;
     /** unit team name */
     private volatile String mTeamName;
-    /** hold position of current unit team color region (relative the unit) */
-    private Area mTeamColorArea;
-    /** unit team color */
-    private BatchedSprite mTeamColorAreaSprite;
 
     /** create unit from appropriate builder */
     public Unit(UnitBuilder unitBuilder) {
@@ -75,13 +66,37 @@ public abstract class Unit extends GameObject implements
         mViewRadius = unitBuilder.getViewRadius();
         setReloadTime(unitBuilder.getReloadTime());
         mFireSound = unitBuilder.getFireSound();
-        if (Config.getConfig().isTeamColorAreaEnabled()) {
-            mTeamColorArea = unitBuilder.getTeamColorArea();
+    }
+
+    public abstract BodyDef.BodyType getBodyType();
+
+    protected boolean isReloadFinished() {
+        long time = System.currentTimeMillis();
+        if (time - mLastAttackTime < mTimeForReload) {
+            return false;
         }
+        mLastAttackTime = time;
+        return true;
+    }
+
+    public int getViewRadius() {
+        return mViewRadius;
     }
 
     public void setReloadTime(double seconds) {
         mTimeForReload = seconds * 1000;
+    }
+
+    public void setBulletFixtureDef(FixtureDef bulletFixtureDef) {
+        mBulletFixtureDef = bulletFixtureDef;
+    }
+
+    public void setUnitFireCallback(IFireListener unitFireCallback) {
+        mUnitFireCallback = unitFireCallback;
+    }
+
+    public void setEnemiesUpdater(final IEnemiesFilter enemiesUpdater) {
+        mEnemiesUpdater = enemiesUpdater;
     }
 
     @Override
@@ -89,66 +104,6 @@ public abstract class Unit extends GameObject implements
         getBody().setTransform(-100, -100, 0);
         getBody().setActive(false);
         onUnitDestroyed();
-    }
-
-    protected void onUnitDestroyed() {
-    }
-
-    /**
-     * Init unit after creation. You need manually trigger this method after constructor at the time
-     * when you want to init and attach this (totally working)  unit
-     * WARNING: unit team name have to be assigned before init() trigger
-     */
-    public void init(float x, float y, String teamName) {
-        LoggerHelper.methodInvocation(TAG, "init(float, float, String)");
-        setTeam(teamName);
-        setSpriteGroupName(BatchingKeys.getUnitSpriteGroup(teamName));
-        ITeam team = TeamsHolder.getTeam(mTeamName);
-        initTeamColorArea(team);
-        setHealth(mObjectMaximumHealth);
-        initHealthBar();
-
-        boolean existingUnit;
-        float posX = x / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
-                posY = y / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
-                angle = 0f;
-        if (getBody() == null) {
-            existingUnit = false;
-            EventBus.getDefault().post(new CreatePhysicBodyEvent(this, getBodyType(),
-                    team.getFixtureDefUnit(), posX, posY, angle));
-        } else {
-            getBody().setActive(true);
-            getBody().setTransform(posX, posY, angle);
-            existingUnit = true;
-        }
-
-        setBulletFixtureDef(CollisionCategories.getBulletFixtureDefByUnitCategory(
-                team.getFixtureDefUnit().filter.categoryBits));
-
-        if (team.getControlType() == TeamControlBehaviourType.REMOTE_CONTROL_ON_CLIENT_SIDE) {
-            removeDamage();
-        }
-
-        if (!existingUnit) {
-            EventBus.getDefault().post(new AttachSpriteEvent(this));
-        }
-        team.addObjectToTeam(this);
-    }
-
-    private void initTeamColorArea(ITeam team) {
-        if (Config.getConfig().isTeamColorAreaEnabled()) {
-            if (mTeamColorAreaSprite == null) {
-                initChildren();
-                mTeamColorAreaSprite = new BatchedSprite(
-                        getX() + mTeamColorArea.left, getY() + mTeamColorArea.top,
-                        mTeamColorArea.width, mTeamColorArea.height,
-                        TextureRegionHolder.getRegion(StringConstants.FILE_HEALTH_BAR),
-                        getVertexBufferObjectManager());
-                mTeamColorAreaSprite.setSpriteGroupName(BatchingKeys.BULLET_HEALTH_TEAM_COLOR);
-                attachChild(mTeamColorAreaSprite);
-            }
-            mTeamColorAreaSprite.setColor(team.getColor());
-        }
     }
 
     @Override
@@ -169,35 +124,56 @@ public abstract class Unit extends GameObject implements
     }
 
     @Override
-    public void setPosition(float pX, float pY) {
-        super.setPosition(pX, pY);
-        updateTeamColorPosition();
+    public String getTeam() {
+        return mTeamName;
     }
 
     @Override
-    public void rotate(float angleInDeg) {
-        super.rotate(angleInDeg);
-        updateTeamColorRotation(angleInDeg);
+    public void setTeam(String teamName) {
+        mTeamName = teamName;
+        setSpriteGroupName(BatchingKeys.getUnitSpriteGroup(teamName));
     }
 
-    private void updateTeamColorRotation(float angleInDeg) {
-        if (mTeamColorArea == null || mTeamColorAreaSprite == null) {
-            return;
+    protected void onUnitDestroyed() {
+    }
+
+    /**
+     * Init unit after creation. You need manually trigger this method after constructor at the time
+     * when you want to init and attach this (totally working)  unit
+     * <br/>
+     * WARNING: unit team name have to be assigned before init() triggers
+     */
+    public void init(float x, float y) {
+        LoggerHelper.methodInvocation(TAG, "init(float, float, String)");
+        ITeam team = TeamsHolder.getTeam(mTeamName);
+        setHealth(mObjectMaximumHealth);
+        initHealthBar();
+
+        boolean existingUnit;
+        float posX = x / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
+                posY = y / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
+                angle = 0f;
+        if (getBody() == null) {
+            existingUnit = false;
+            EventBus.getDefault().post(new CreatePhysicBodyEvent(this, getBodyType(),
+                    team.getFixtureDefUnit(), posX, posY, angle));
+        } else {
+            getBody().setActive(true);
+            getBody().setTransform(posX, posY, angle);
+            existingUnit = true;
         }
-        mTeamColorAreaSprite.setRotation(angleInDeg);
-    }
 
-    private void updateTeamColorPosition() {
-        if (mTeamColorAreaSprite == null || mTeamColorArea == null) {
-            return;
+        setBulletFixtureDef(CollisionCategories.getBulletFixtureDefByUnitCategory(
+                team.getFixtureDefUnit().filter.categoryBits));
+
+        if (team.getControlType() == ITeam.ControlType.REMOTE_CONTROL_ON_CLIENT_SIDE) {
+            removeDamage();
         }
-        mTeamColorAreaSprite.setPosition(getX() + mTeamColorArea.left, getY() + mTeamColorArea.top);
-    }
 
-    public abstract BodyDef.BodyType getBodyType();
-
-    public void setBulletFixtureDef(FixtureDef bulletFixtureDef) {
-        mBulletFixtureDef = bulletFixtureDef;
+        if (!existingUnit) {
+            EventBus.getDefault().post(new AttachSpriteEvent(this));
+        }
+        team.addObjectToTeam(this);
     }
 
     public void removeDamage() {
@@ -206,14 +182,6 @@ public abstract class Unit extends GameObject implements
 
     /** define unit behaviour/lifecycle */
     public abstract void registerUpdateHandler();
-
-    public void setUnitFireCallback(IFireListener unitFireCallback) {
-        mUnitFireCallback = unitFireCallback;
-    }
-
-    public void setEnemiesUpdater(final IEnemiesFilter enemiesUpdater) {
-        mEnemiesUpdater = enemiesUpdater;
-    }
 
     public void fire(GameObject objectToAttack) {
         attackGoal(objectToAttack);
@@ -247,31 +215,8 @@ public abstract class Unit extends GameObject implements
      */
     protected abstract void rotationBeforeFire(GameObject attackedObject);
 
-    protected boolean isReloadFinished() {
-        long time = System.currentTimeMillis();
-        if (time - mLastAttackTime < mTimeForReload) {
-            return false;
-        }
-        mLastAttackTime = time;
-        return true;
-    }
-
     /**
      * where the bullet will appear during the fire operation
      */
     protected abstract void setBulletFirePosition(GameObject attackedObject, Bullet bullet);
-
-    public int getViewRadius() {
-        return mViewRadius;
-    }
-
-    @Override
-    public String getTeam() {
-        return mTeamName;
-    }
-
-    @Override
-    public void setTeam(String teamName) {
-        mTeamName = teamName;
-    }
 }

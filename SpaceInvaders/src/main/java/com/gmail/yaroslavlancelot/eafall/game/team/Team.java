@@ -1,19 +1,32 @@
 package com.gmail.yaroslavlancelot.eafall.game.team;
 
+import android.util.SparseArray;
+
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.SharedDataCallbacks;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
+import com.gmail.yaroslavlancelot.eafall.game.entity.AfterInitializationPool;
+import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.IBuilding;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetStaticObject;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitBuilder;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.bonus.Bonus;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.MovableUnit;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.MovableUnitBuilder;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.pool.MovableUnitsPool;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.pool.StationaryUnitsPool;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.stationary.StationaryUnitBuilder;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.building.UpgradeBuildingEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.money.MoneyUpdatedEvent;
 
 import org.andengine.extension.physics.box2d.PhysicsFactory;
+import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
 
 import java.util.ArrayList;
@@ -52,36 +65,129 @@ public class Team implements ITeam {
     /** team color */
     private Color mTeamColor = new Color(100, 100, 100);
     /** team control type */
-    private TeamControlBehaviourType mTeamControlBehaviourType;
+    private ControlType mControlType;
     /** array of buildings which team can build */
     private BuildingId[] mBuildingsTypesIds;
     /** bonus which will be applied to each team unit */
     private ArrayList<Bonus> mUnitBonuses = new ArrayList<Bonus>(2);
+    /** units pools */
+    private SparseArray<AfterInitializationPool<Unit>> mUnitsPools;
 
-    public Team(final String teamName, IAlliance alliance, TeamControlBehaviourType teamType) {
+    public Team(final String teamName, IAlliance alliance, ControlType teamType) {
         mTeamObjects = new ArrayList<GameObject>(50);
         mTeamName = teamName;
         MOVABLE_UNIT_CREATED_CALLBACK_KEY = "UNIT_CREATED_" + teamName;
         mAlliance = alliance;
         initBuildingsTypes(alliance);
-        mTeamControlBehaviourType = teamType;
+        mControlType = teamType;
         mTeamFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f, false);
         EventBus.getDefault().register(this);
     }
 
-    private void initBuildingsTypes(IAlliance allianceRace) {
-        Set<Integer> idSet = allianceRace.getBuildingsIds();
-        mBuildingsTypesIds = new BuildingId[idSet.size()];
-        Iterator<Integer> it = idSet.iterator();
-        int id, i = 0;
-        while (it.hasNext()) {
-            id = it.next();
-            mBuildingsTypesIds[i++] = BuildingId.makeId(id, 0);
-        }
-    }
-
     public int getUnitsAmount() {
         return sUnitsAmount.get();
+    }
+
+    @Override
+    public PlanetStaticObject getPlanet() {
+        return mTeamPlanet;
+    }
+
+    @Override
+    public void setPlanet(final PlanetStaticObject planet) {
+        mTeamPlanet = planet;
+    }
+
+    @Override
+    public ITeam getEnemyTeam() {
+        return mEnemyTeam;
+    }
+
+    @Override
+    public void setEnemyTeam(final ITeam enemyTeam) {
+        mEnemyTeam = enemyTeam;
+    }
+
+    @Override
+    public List<GameObject> getTeamObjects() {
+        return mTeamObjects;
+    }
+
+    @Override
+    public String getName() {
+        return mTeamName;
+    }
+
+    @Override
+    public int getMoney() {
+        return mMoneyAmount;
+    }
+
+    @Override
+    public void setMoney(int money) {
+        mMoneyAmount = money;
+        EventBus.getDefault().post(new MoneyUpdatedEvent(getName(), mMoneyAmount));
+    }
+
+    @Override
+    public IAlliance getAlliance() {
+        return mAlliance;
+    }
+
+    @Override
+    public Color getColor() {
+        return mTeamColor;
+    }
+
+    @Override
+    public void setColor(final Color teamColor) {
+        mTeamColor = teamColor;
+    }
+
+    @Override
+    public ControlType getControlType() {
+        return mControlType;
+    }
+
+    @Override
+    public FixtureDef getFixtureDefUnit() {
+        return mTeamFixtureDef;
+    }
+
+    @Override
+    public BuildingId[] getBuildingsIds() {
+        syncBuildingsWithPlanet();
+        return mBuildingsTypesIds;
+    }
+
+    @Override
+    public Unit constructUnit(final int unitKey) {
+        return mUnitsPools.get(unitKey).obtainPoolItem();
+    }
+
+    @Override
+    public void createUnitPool(VertexBufferObjectManager vertexManager) {
+        IAlliance alliance = getAlliance();
+        Set<Integer> ids = alliance.getUnitsIds();
+        mUnitsPools = new SparseArray<AfterInitializationPool<Unit>>(
+                ids.size());
+        ITextureRegion textureRegion;
+        UnitDummy dummy;
+        AfterInitializationPool pool;
+        UnitBuilder unitBuilder;
+        for (int id : ids) {
+            dummy = alliance.getUnitDummy(id);
+            textureRegion = TextureRegionHolder.getRegion(dummy.getTextureRegionKey(getName()));
+            unitBuilder = dummy.createBuilder(textureRegion, vertexManager);
+            if (unitBuilder instanceof MovableUnitBuilder) {
+                pool = new MovableUnitsPool((MovableUnitBuilder) unitBuilder, getName());
+            } else if (unitBuilder instanceof StationaryUnitBuilder) {
+                pool = new StationaryUnitsPool((StationaryUnitBuilder) unitBuilder, getName());
+            } else {
+                throw new IllegalStateException("unknown unit builder type " + unitBuilder);
+            }
+            mUnitsPools.put(id, pool);
+        }
     }
 
     @Override
@@ -126,49 +232,8 @@ public class Team implements ITeam {
     }
 
     @Override
-    public PlanetStaticObject getPlanet() {
-        return mTeamPlanet;
-    }
-
-    @Override
-    public void setPlanet(final PlanetStaticObject planet) {
-        mTeamPlanet = planet;
-    }
-
-    @Override
     public void removePlanet() {
         mTeamPlanet = null;
-    }
-
-    @Override
-    public ITeam getEnemyTeam() {
-        return mEnemyTeam;
-    }
-
-    @Override
-    public void setEnemyTeam(final ITeam enemyTeam) {
-        mEnemyTeam = enemyTeam;
-    }
-
-    @Override
-    public List<GameObject> getTeamObjects() {
-        return mTeamObjects;
-    }
-
-    @Override
-    public String getName() {
-        return mTeamName;
-    }
-
-    @Override
-    public int getMoney() {
-        return mMoneyAmount;
-    }
-
-    @Override
-    public void setMoney(int money) {
-        mMoneyAmount = money;
-        EventBus.getDefault().post(new MoneyUpdatedEvent(getName(), mMoneyAmount));
     }
 
     @Override
@@ -187,40 +252,20 @@ public class Team implements ITeam {
     }
 
     @Override
-    public IAlliance getAlliance() {
-        return mAlliance;
-    }
-
-    @Override
-    public Color getColor() {
-        return mTeamColor;
-    }
-
-    @Override
-    public void setColor(final Color teamColor) {
-        mTeamColor = teamColor;
-    }
-
-    @Override
-    public TeamControlBehaviourType getControlType() {
-        return mTeamControlBehaviourType;
-    }
-
-    @Override
-    public FixtureDef getFixtureDefUnit() {
-        return mTeamFixtureDef;
-    }
-
-    @Override
     public void changeFixtureDefFilter(short category, short maskBits) {
         mTeamFixtureDef.filter.categoryBits = category;
         mTeamFixtureDef.filter.maskBits = maskBits;
     }
 
-    @Override
-    public BuildingId[] getBuildingsIds() {
-        syncBuildingsWithPlanet();
-        return mBuildingsTypesIds;
+    private void initBuildingsTypes(IAlliance allianceRace) {
+        Set<Integer> idSet = allianceRace.getBuildingsIds();
+        mBuildingsTypesIds = new BuildingId[idSet.size()];
+        Iterator<Integer> it = idSet.iterator();
+        int id, i = 0;
+        while (it.hasNext()) {
+            id = it.next();
+            mBuildingsTypesIds[i++] = BuildingId.makeId(id, 0);
+        }
     }
 
     /**

@@ -6,19 +6,22 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.Mov
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.MovableUnitBuilder;
 
 /** used to create concrete object pool */
+//TODO create UnitPool later (common func for unit and orbital station have to be there)
 public class MovableUnitsPool extends AfterInitializationPool<MovableUnit> {
     public static final String TAG = MovableUnitsPool.class.getCanonicalName();
     private final MovableUnitBuilder mMovableUnitBuilder;
+    private final String mTeamName;
 
-    public MovableUnitsPool(MovableUnitBuilder unitBuilder) {
+    public MovableUnitsPool(MovableUnitBuilder unitBuilder, String teamName) {
         mMovableUnitBuilder = unitBuilder;
+        mTeamName = teamName;
         initPool(2, 2);
     }
 
     @Override
     protected MovableUnit allocatePoolItem() {
         LoggerHelper.printVerboseMessage(TAG, "New movable unit allocated. Available items count=" + getAvailableItems());
-        return new MovableUnit(mMovableUnitBuilder) {
+        MovableUnit movableUnit = new MovableUnit(mMovableUnitBuilder) {
             @Override
             protected void onUnitDestroyed() {
                 super.onUnitDestroyed();
@@ -26,5 +29,7 @@ public class MovableUnitsPool extends AfterInitializationPool<MovableUnit> {
                 recycle(this);
             }
         };
+        movableUnit.setTeam(mTeamName);
+        return movableUnit;
     }
 }

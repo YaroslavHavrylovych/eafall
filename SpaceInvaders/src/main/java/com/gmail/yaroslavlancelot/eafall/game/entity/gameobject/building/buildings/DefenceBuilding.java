@@ -6,7 +6,6 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.D
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.unit.CreateStationaryUnitEvent;
 import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
-import com.gmail.yaroslavlancelot.eafall.game.team.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
 
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -52,7 +51,7 @@ public class DefenceBuilding extends Building {
         }
         boolean buildingBought = super.buyBuilding();
         ITeam team = TeamsHolder.getTeam(mTeamName);
-        boolean isFakePlanet = TeamControlBehaviourType.isClientSide(team.getControlType());
+        boolean isFakePlanet = ITeam.ControlType.isClientSide(team.getControlType());
         //building was created
         if (isFakePlanet || buildingBought) {
             if (isFakePlanet) {

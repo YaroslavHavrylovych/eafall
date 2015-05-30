@@ -24,8 +24,6 @@ public final class StringConstants {
     public static final String FILE_SPLASH_SCREEN = "graphics/images/splash_screen.png";
     /** bullet image */
     public static final String FILE_BULLET = "graphics/sprites/bullet/bullet.png";
-    /** team color area image */
-    public static final String FILE_TEAM_COLOR = "graphics/sprites/team_color_area.png";
     /** health bar image */
     public static final String FILE_HEALTH_BAR = "graphics/sprites/health_bar.png";
     /** buildings popup item background */

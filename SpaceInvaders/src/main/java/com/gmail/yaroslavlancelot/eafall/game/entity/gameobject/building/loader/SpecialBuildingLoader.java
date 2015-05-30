@@ -1,7 +1,5 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.loader;
 
-import com.gmail.yaroslavlancelot.eafall.game.entity.TeamColorArea;
-
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -32,7 +30,4 @@ public class SpecialBuildingLoader {
 
     @Element(name = "image_name")
     public String image_name;
-
-    @Element(name = "team_color_area")
-    public TeamColorArea team_color_area;
 }

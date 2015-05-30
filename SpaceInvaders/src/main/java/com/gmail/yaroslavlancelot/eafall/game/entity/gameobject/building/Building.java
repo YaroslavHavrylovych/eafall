@@ -4,7 +4,6 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.B
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.StaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.building.BuildingsAmountChangedEvent;
 import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
-import com.gmail.yaroslavlancelot.eafall.game.team.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
 
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -84,7 +83,7 @@ public abstract class Building implements IBuilding {
             return false;
         }
         ITeam team = TeamsHolder.getTeam(mTeamName);
-        if (!TeamControlBehaviourType.isClientSide(team.getControlType())) {
+        if (!ITeam.ControlType.isClientSide(team.getControlType())) {
             int cost = mDummy.getCost(mUpgrade);
             if (team.getMoney() < cost) {
                 return false;
@@ -92,9 +91,9 @@ public abstract class Building implements IBuilding {
             team.changeMoney(-cost);
         }
         if (mBuildingsAmount <= 0) {
-            mBuildingsAmount = 0;
+            setBuildingsAmount(0);
         }
-        mBuildingsAmount++;
+        setBuildingsAmount(mBuildingsAmount + 1);
         EventBus.getDefault().post(new BuildingsAmountChangedEvent(mTeamName,
                 BuildingId.makeId(mDummy.getBuildingId(), mUpgrade),
                 mBuildingsAmount));

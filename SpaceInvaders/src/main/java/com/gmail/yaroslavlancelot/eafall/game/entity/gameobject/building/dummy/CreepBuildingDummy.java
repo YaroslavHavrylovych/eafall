@@ -6,8 +6,6 @@ import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
-import com.gmail.yaroslavlancelot.eafall.game.entity.Area;
-import com.gmail.yaroslavlancelot.eafall.game.entity.TeamColorArea;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingType;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.loader.CreepBuildingLoader;
@@ -28,21 +26,9 @@ public class CreepBuildingDummy extends BuildingDummy {
                 buildingLoader.getUpdates().size());
         mCreepBuildingLoader = buildingLoader;
 
-        for (int i = 0; i < buildingLoader.getUpdates().size(); i++) {
-            CreepBuildingUpgradeLoader upgradeLoader = buildingLoader.getUpdates().get(i);
-            TeamColorArea area = upgradeLoader.team_color_area;
-            mTeamColorAreaArray[i] = Area.getArea(area.x, area.y, area.width, area.height);
-            upgradeLoader.team_color_area = null;
-        }
-
         Context context = EaFallApplication.getContext();
         mBuildingStringId = context.getResources().getIdentifier(
                 mCreepBuildingLoader.name, "string", context.getApplicationInfo().packageName);
-    }
-
-    @Override
-    public int getCost(int upgrade) {
-        return mCreepBuildingLoader.getUpdates().get(upgrade).cost;
     }
 
     @Override
@@ -56,11 +42,6 @@ public class CreepBuildingDummy extends BuildingDummy {
     }
 
     @Override
-    public Area getTeamColorAreaArray(int upgrade) {
-        return mTeamColorAreaArray[upgrade];
-    }
-
-    @Override
     public int getBuildingId() {
         return mCreepBuildingLoader.id;
     }
@@ -68,6 +49,21 @@ public class CreepBuildingDummy extends BuildingDummy {
     @Override
     public int getStringId() {
         return mBuildingStringId;
+    }
+
+    @Override
+    public BuildingType getBuildingType() {
+        return BuildingType.CREEP_BUILDING;
+    }
+
+    @Override
+    public int getAmountLimit() {
+        return Config.getConfig().getCreepBuildingsLimit();
+    }
+
+    @Override
+    public int getCost(int upgrade) {
+        return mCreepBuildingLoader.getUpdates().get(upgrade).cost;
     }
 
     @Override
@@ -90,16 +86,6 @@ public class CreepBuildingDummy extends BuildingDummy {
                 + creepUpdate.image_name;
         mImageTextureRegionArray[upgrade] =
                 TextureRegionHolder.addElementFromAssets(pathToImage, textureAtlas, context, x, y);
-    }
-
-    @Override
-    public BuildingType getBuildingType() {
-        return BuildingType.CREEP_BUILDING;
-    }
-
-    @Override
-    public int getAmountLimit() {
-        return Config.getConfig().getCreepBuildingsLimit();
     }
 
     public int getUnitCreationTime(int upgrade) {

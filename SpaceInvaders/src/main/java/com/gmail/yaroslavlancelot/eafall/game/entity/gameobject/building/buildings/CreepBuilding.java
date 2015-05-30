@@ -6,7 +6,6 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.C
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitCreatorCycle;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
-import com.gmail.yaroslavlancelot.eafall.game.team.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
 
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -34,7 +33,7 @@ public class CreepBuilding extends Building implements ICreepBuilding {
     public synchronized boolean buyBuilding() {
         boolean result = super.buyBuilding();
         ITeam team = TeamsHolder.getTeam(mTeamName);
-        boolean isClientSide = TeamControlBehaviourType.isClientSide(team.getControlType());
+        boolean isClientSide = ITeam.ControlType.isClientSide(team.getControlType());
         //building was created
         if (isClientSide || result) {
             setIncome(mBuildingsAmount * mBuildingStaticObject.getIncome());
@@ -87,7 +86,7 @@ public class CreepBuilding extends Building implements ICreepBuilding {
         }
 
         ITeam team = TeamsHolder.getTeam(mTeamName);
-        boolean isFakePlanet = TeamControlBehaviourType.isClientSide(team.getControlType());
+        boolean isFakePlanet = ITeam.ControlType.isClientSide(team.getControlType());
         if (!isFakePlanet) {
             int cost = mCreepBuildingDummy.getCost(nextUpgrade);
             //check money

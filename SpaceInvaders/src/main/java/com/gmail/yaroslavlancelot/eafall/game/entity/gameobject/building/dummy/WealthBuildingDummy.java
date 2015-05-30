@@ -6,8 +6,6 @@ import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
-import com.gmail.yaroslavlancelot.eafall.game.entity.Area;
-import com.gmail.yaroslavlancelot.eafall.game.entity.TeamColorArea;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingType;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.loader.WealthBuildingLoader;
@@ -25,10 +23,6 @@ public class WealthBuildingDummy extends BuildingDummy {
         super(SizeConstants.BUILDING_SIZE, SizeConstants.BUILDING_SIZE, 1);
         mBuildingLoader = buildingLoader;
 
-        TeamColorArea area = mBuildingLoader.team_color_area;
-        mTeamColorAreaArray[0] = Area.getArea(area.x, area.y, area.width, area.height);
-        mBuildingLoader.team_color_area = null;
-
         Context context = EaFallApplication.getContext();
         mBuildingStringId = context.getResources().getIdentifier(
                 mBuildingLoader.name, "string", context.getApplicationInfo().packageName);
@@ -37,9 +31,16 @@ public class WealthBuildingDummy extends BuildingDummy {
                 mBuildingLoader.name + "_description", "string", context.getApplicationInfo().packageName);
     }
 
-    @Override
-    public int getCost(int upgrade) {
-        return mBuildingLoader.cost;
+    public int getDescriptionStringId() {
+        return mDescriptionStringId;
+    }
+
+    public int getFirstBuildingIncome() {
+        return mBuildingLoader.first_build_income;
+    }
+
+    public int getNextBuildingsIncome() {
+        return mBuildingLoader.next_buildings_income;
     }
 
     @Override
@@ -53,11 +54,6 @@ public class WealthBuildingDummy extends BuildingDummy {
     }
 
     @Override
-    public Area getTeamColorAreaArray(int upgrade) {
-        return mTeamColorAreaArray[0];
-    }
-
-    @Override
     public int getBuildingId() {
         return BUILDING_ID;
     }
@@ -65,6 +61,21 @@ public class WealthBuildingDummy extends BuildingDummy {
     @Override
     public int getStringId() {
         return mBuildingStringId;
+    }
+
+    @Override
+    public BuildingType getBuildingType() {
+        return BuildingType.WEALTH_BUILDING;
+    }
+
+    @Override
+    public int getAmountLimit() {
+        return Config.getConfig().getWealthBuildingsLimit();
+    }
+
+    @Override
+    public int getCost(int upgrade) {
+        return mBuildingLoader.cost;
     }
 
     @Override
@@ -80,27 +91,5 @@ public class WealthBuildingDummy extends BuildingDummy {
                 + mBuildingLoader.image_name;
         mImageTextureRegionArray[0] =
                 TextureRegionHolder.addElementFromAssets(pathToImage, textureAtlas, context, x, y);
-    }
-
-    @Override
-    public BuildingType getBuildingType() {
-        return BuildingType.WEALTH_BUILDING;
-    }
-
-    @Override
-    public int getAmountLimit() {
-        return Config.getConfig().getWealthBuildingsLimit();
-    }
-
-    public int getDescriptionStringId() {
-        return mDescriptionStringId;
-    }
-
-    public int getFirstBuildingIncome() {
-        return mBuildingLoader.first_build_income;
-    }
-
-    public int getNextBuildingsIncome() {
-        return mBuildingLoader.next_buildings_income;
     }
 }

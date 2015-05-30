@@ -20,7 +20,7 @@ public class HealthBar {
                 mHealthBarWidth, SizeConstants.HEALTH_BAR_HEIGHT,
                 TextureRegionHolder.getInstance().getElement(StringConstants.FILE_HEALTH_BAR),
                 vertexBufferObjectManager);
-        mHealthBarRectangle.setSpriteGroupName(BatchingKeys.BULLET_HEALTH_TEAM_COLOR);
+        mHealthBarRectangle.setSpriteGroupName(BatchingKeys.BULLET_AND_HEALTH);
     }
 
     private void setHealthBarWidth(float healthBarWidth) {
