@@ -51,21 +51,20 @@ public class PlanetStaticObject extends StaticObject implements ITeamObject {
         setSpriteGroupName(BatchingKeys.SUN_PLANET);
     }
 
-    private void initSpawnPoint() {
-        float x;
-        if (getX() < SizeConstants.HALF_FIELD_WIDTH) {
-            x = SizeConstants.PLANET_DIAMETER + SizeConstants.ADDITION_MARGIN_FOR_PLANET + SizeConstants.UNIT_SIZE;
-        } else {
-            x = getX() - SizeConstants.PLANET_DIAMETER / 2
-                    - SizeConstants.UNIT_SIZE - SizeConstants.ADDITION_MARGIN_FOR_PLANET;
-        }
-        setSpawnPoint(x, getY());
+    public float getSpawnPointX() {
+        return mSpawnPointX;
     }
 
-    /** set unit spawn point */
-    public void setSpawnPoint(float spawnPointX, float spawnPointY) {
-        mSpawnPointX = spawnPointX;
-        mSpawnPointY = spawnPointY;
+    public float getSpawnPointY() {
+        return mSpawnPointY;
+    }
+
+    public int getExistingBuildingsTypesAmount() {
+        return mBuildings.size();
+    }
+
+    public Set<Integer> getExistingBuildingsTypes() {
+        return mBuildings.keySet();
     }
 
     @Override
@@ -85,12 +84,32 @@ public class PlanetStaticObject extends StaticObject implements ITeamObject {
         return value + (int) (value * (((float) percentIncrease) / 100));
     }
 
-    public float getSpawnPointX() {
-        return mSpawnPointX;
+    @Override
+    public String getTeam() {
+        return mTeamName;
     }
 
-    public float getSpawnPointY() {
-        return mSpawnPointY;
+    @Override
+    public void setTeam(String teamName) {
+        mTeamName = teamName;
+        initHealthBar();
+    }
+
+    private void initSpawnPoint() {
+        float x;
+        if (getX() < SizeConstants.HALF_FIELD_WIDTH) {
+            x = SizeConstants.PLANET_DIAMETER + SizeConstants.ADDITION_MARGIN_FOR_PLANET + SizeConstants.UNIT_SIZE;
+        } else {
+            x = getX() - SizeConstants.PLANET_DIAMETER / 2
+                    - SizeConstants.UNIT_SIZE - SizeConstants.ADDITION_MARGIN_FOR_PLANET;
+        }
+        setSpawnPoint(x, getY());
+    }
+
+    /** set unit spawn point */
+    public void setSpawnPoint(float spawnPointX, float spawnPointY) {
+        mSpawnPointX = spawnPointX;
+        mSpawnPointY = spawnPointY;
     }
 
     /**
@@ -140,8 +159,11 @@ public class PlanetStaticObject extends StaticObject implements ITeamObject {
             buildingStatObj.setSpriteGroupName(BatchingKeys.getBuildingSpriteGroup(mTeamName));
             buildingStatObj.setPosition(
                     getX() + buildingStatObj.getX(), getY() + buildingStatObj.getY());
-            attachChild(buildingStatObj);
             mBuildings.put(buildingId.getId(), building);
+        }
+        boolean result = building.buyBuilding();
+        if (result && building.getAmount() == 1) {
+            attachChild(building.getEntity());
         }
         return building.buyBuilding();
     }
@@ -153,26 +175,7 @@ public class PlanetStaticObject extends StaticObject implements ITeamObject {
         return buildings.getAmount();
     }
 
-    public int getExistingBuildingsTypesAmount() {
-        return mBuildings.size();
-    }
-
-    public Set<Integer> getExistingBuildingsTypes() {
-        return mBuildings.keySet();
-    }
-
     public IBuilding getBuilding(int id) {
         return mBuildings.get(id);
-    }
-
-    @Override
-    public String getTeam() {
-        return mTeamName;
-    }
-
-    @Override
-    public void setTeam(String teamName) {
-        mTeamName = teamName;
-        initHealthBar();
     }
 }
