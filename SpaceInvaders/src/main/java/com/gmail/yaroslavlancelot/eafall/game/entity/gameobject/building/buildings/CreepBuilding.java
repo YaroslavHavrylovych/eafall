@@ -34,11 +34,11 @@ public class CreepBuilding extends Building implements ICreepBuilding {
     public synchronized boolean buyBuilding() {
         boolean result = super.buyBuilding();
         ITeam team = TeamsHolder.getTeam(mTeamName);
-        boolean isFakePlanet = TeamControlBehaviourType.isClientSide(team.getControlType());
+        boolean isClientSide = TeamControlBehaviourType.isClientSide(team.getControlType());
         //building was created
-        if (isFakePlanet || result) {
+        if (isClientSide || result) {
             setIncome(mBuildingsAmount * mBuildingStaticObject.getIncome());
-            if (isFakePlanet) {
+            if (isClientSide) {
                 return true;
             }
         }
