@@ -87,7 +87,7 @@ abstract class BaseResourceLoader implements IResourcesLoader {
     protected IBitmapTextureAtlasSource createColoredTextureAtlasSource(Color color,
                                                                         int width, int height) {
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_4444);
-        bitmap.eraseColor(color.getABGRPackedInt());
+        bitmap.eraseColor(color.getARGBPackedInt());
         return new BitmapTextureAtlasSource(bitmap);
     }
 
