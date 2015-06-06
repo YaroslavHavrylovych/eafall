@@ -4,8 +4,8 @@ import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.client.ClientGameActivity;
 import com.gmail.yaroslavlancelot.eafall.game.constant.CollisionCategories;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
-import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
-import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
+import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
+import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -55,8 +55,8 @@ public abstract class ThickClientGameActivity extends ClientGameActivity {
 
         @Override
         public void onTimePassed(final TimerHandler pTimerHandler) {
-            for (ITeam team : TeamsHolder.getInstance().getElements()) {
-                team.incomeTime();
+            for (IPlayer player : PlayersHolder.getInstance().getElements()) {
+                player.incomeTime();
             }
         }
     }

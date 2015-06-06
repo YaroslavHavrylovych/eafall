@@ -4,18 +4,18 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.Buildin
 
 public class BuildingDescriptionShowEvent {
     private BuildingId mBuildingId;
-    private String mTeamName;
+    private String mPlayerName;
 
-    public BuildingDescriptionShowEvent(BuildingId buildingId, String teamName) {
+    public BuildingDescriptionShowEvent(BuildingId buildingId, String playerName) {
         mBuildingId = buildingId;
-        mTeamName = teamName;
+        mPlayerName = playerName;
     }
 
     public BuildingId getObjectId() {
         return mBuildingId;
     }
 
-    public String getTeamName() {
-        return mTeamName;
+    public String getPlayerName() {
+        return mPlayerName;
     }
 }

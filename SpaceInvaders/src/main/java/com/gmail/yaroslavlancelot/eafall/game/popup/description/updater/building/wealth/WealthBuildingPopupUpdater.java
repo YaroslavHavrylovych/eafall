@@ -5,8 +5,8 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.Buildin
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.building.CreateBuildingEvent;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.building.BaseBuildingPopupUpdater;
-import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
-import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
+import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
+import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.Shape;
@@ -26,22 +26,22 @@ public class WealthBuildingPopupUpdater extends BaseBuildingPopupUpdater {
     }
 
     @Override
-    public void updateAdditionInfo(Shape drawArea, Object objectId, String allianceName, String teamName) {
+    public void updateAdditionInfo(Shape drawArea, Object objectId, String allianceName, String playerName) {
 
     }
 
     @Override
-    public void updateDescription(Shape drawArea, Object objectId, String allianceName, String teamName) {
-        super.updateDescription(drawArea, objectId, allianceName, teamName);
+    public void updateDescription(Shape drawArea, Object objectId, String allianceName, String playerName) {
+        super.updateDescription(drawArea, objectId, allianceName, playerName);
         final BuildingId buildingId = (BuildingId) objectId;
         BuildingDummy buildingDummy = AllianceHolder.getAlliance(allianceName).getBuildingDummy(buildingId);
-        ITeam team = TeamsHolder.getTeam(teamName);
+        IPlayer player = PlayersHolder.getPlayer(playerName);
         final Object event;
-        if (team.getPlanet().getBuildingsAmount(buildingId.getId())
+        if (player.getPlanet().getBuildingsAmount(buildingId.getId())
                 >= buildingDummy.getAmountLimit()) {
             event = null;
         } else {
-            event = new CreateBuildingEvent(mTeamName, buildingId);
+            event = new CreateBuildingEvent(mPlayerName, buildingId);
         }
         mButton.setOnClickListener(new ButtonSprite.OnClickListener() {
             @Override

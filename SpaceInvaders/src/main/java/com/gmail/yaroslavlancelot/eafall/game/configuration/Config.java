@@ -27,7 +27,7 @@ public class Config {
     private final int mCreepBuildingsLimit = 7;
     private final int mWealthBuildingsLimit = 5;
     private final int mPlanetHealth = 300000;
-    private final Color mTeamSwapColor = new Color(46.0f/255.0f, 37.0f/255.0f, 118.0f/255.0f);
+    private final Color mPlayerSwapColor = new Color(46.0f/255.0f, 37.0f/255.0f, 118.0f/255.0f);
     /*
      * Sound and music
      */
@@ -109,7 +109,7 @@ public class Config {
         return mDisplayHeight;
     }
 
-    public Color getTeamSwapColor() {
-        return mTeamSwapColor;
+    public Color getPlayerSwapColor() {
+        return mPlayerSwapColor;
     }
 }

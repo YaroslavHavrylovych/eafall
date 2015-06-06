@@ -36,7 +36,7 @@ public abstract class BaseDescriptionAreaUpdater implements IPopupUpdater.IDescr
     /** update description values (e.g. new building appear) */
     @Override
     public void updateDescription(Shape drawArea, Object objectId,
-                                  final String allianceName, final String teamName) {
+                                  final String allianceName, final String playerName) {
         attach(drawArea);
     }
 

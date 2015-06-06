@@ -14,11 +14,11 @@ public class BatchingKeys {
     public final static String PREFIX_BUILDING = "03_building_";
     public final static String PREFIX_UNIT = "04_unit_";
 
-    public static String getUnitSpriteGroup(String teamName) {
-        return PREFIX_UNIT + teamName;
+    public static String getUnitSpriteGroup(String playerName) {
+        return PREFIX_UNIT + playerName;
     }
 
-    public static String getBuildingSpriteGroup(String teamName) {
-        return PREFIX_BUILDING + teamName;
+    public static String getBuildingSpriteGroup(String playerName) {
+        return PREFIX_BUILDING + playerName;
     }
 }

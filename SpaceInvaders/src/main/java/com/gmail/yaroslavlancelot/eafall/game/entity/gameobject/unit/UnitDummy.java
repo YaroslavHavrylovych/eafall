@@ -11,7 +11,7 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.loader.UnitLoader;
-import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
+import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
 import org.andengine.audio.sound.Sound;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
@@ -106,13 +106,13 @@ public abstract class UnitDummy {
         return mUnitStringId;
     }
 
-    public ITextureRegion loadSpriteResources(String teamName, BitmapTextureAtlas textureAtlas,
+    public ITextureRegion loadSpriteResources(String playerName, BitmapTextureAtlas textureAtlas,
                                               int x, int y) {
         IBitmapTextureAtlasSource source = AssetBitmapTextureAtlasSource.create(EaFallApplication
                 .getContext().getAssets(), mPathToSprite);
         ColorSwapBitmapTextureAtlasSource colorSource = new ColorSwapBitmapTextureAtlasSource
-                (source, Config.getConfig().getTeamSwapColor(), TeamsHolder.getTeam(teamName).getColor());
-        return TextureRegionHolder.addElementFromSource(getTextureRegionKey(teamName),
+                (source, Config.getConfig().getPlayerSwapColor(), PlayersHolder.getPlayer(playerName).getColor());
+        return TextureRegionHolder.addElementFromSource(getTextureRegionKey(playerName),
                 textureAtlas, colorSource, x, y);
     }
 
@@ -122,8 +122,8 @@ public abstract class UnitDummy {
                 addElementFromAssets(mPathToImage, textureAtlas, context, x, y);
     }
 
-    public String getTextureRegionKey(String teamName) {
-        return mPathToSprite + teamName;
+    public String getTextureRegionKey(String playerName) {
+        return mPathToSprite + playerName;
     }
 
     public void initDummy(SoundOperations soundOperations, String allianceName) {

@@ -9,8 +9,8 @@ import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.building.BuildingsAmountChangedEvent;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.BasePopupUpdater;
-import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
-import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
+import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
+import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.TextButton;
 import com.gmail.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 
@@ -34,7 +34,7 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
     protected static final BuildingId sNoValue = null;
     protected static final int BUTTON_MARGIN = 20;
     protected volatile BuildingId mBuildingId = sNoValue;
-    protected volatile String mTeamName = "";
+    protected volatile String mPlayerName = "";
     /** basically used for display buildings amount on building image */
     protected AmountDrawer mAmountDrawer;
     /**
@@ -81,13 +81,13 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
     }
 
     @Override
-    public void updateImage(Shape drawArea, Object objectId, String allianceName, String teamName) {
-        ITeam team = TeamsHolder.getInstance().getElement(teamName);
+    public void updateImage(Shape drawArea, Object objectId, String allianceName, String playerName) {
+        IPlayer player = PlayersHolder.getInstance().getElement(playerName);
         mBuildingId = (BuildingId) objectId;
         updateBuildingsAmount(drawArea,
-                team.getPlanet().getBuildingsAmount(mBuildingId.getId()));
-        mTeamName = teamName;
-        super.updateImage(drawArea, objectId, allianceName, teamName);
+                player.getPlanet().getBuildingsAmount(mBuildingId.getId()));
+        mPlayerName = playerName;
+        super.updateImage(drawArea, objectId, allianceName, playerName);
     }
 
     private void updateBuildingsAmount(IEntity entity, int buildingsAmount) {
@@ -113,7 +113,7 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
             mAdditionInfoRectangle.detachSelf();
         }
         mBuildingId = sNoValue;
-        mTeamName = "";
+        mPlayerName = "";
         mDescriptionAreaUpdater.clearDescription();
     }
 
@@ -125,9 +125,9 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
     }
 
     @Override
-    public void updateDescription(Shape drawArea, Object objectId, String allianceName, String teamName) {
+    public void updateDescription(Shape drawArea, Object objectId, String allianceName, String playerName) {
         //description
-        mDescriptionAreaUpdater.updateDescription(drawArea, objectId, allianceName, teamName);
+        mDescriptionAreaUpdater.updateDescription(drawArea, objectId, allianceName, playerName);
         //build button
         mButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_build_button));
         mButton.setPosition(mButton.getWidth() / 2, mButton.getHeight() / 2);
@@ -136,7 +136,7 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
 
     /** updates buildings amount */
     public void onEvent(final BuildingsAmountChangedEvent buildingsAmountChangedEvent) {
-        if (!mTeamName.equals(buildingsAmountChangedEvent.getTeamName())
+        if (!mPlayerName.equals(buildingsAmountChangedEvent.getPlayerName())
                 || !mBuildingId.equals(buildingsAmountChangedEvent.getBuildingId())) {
             return;
         }

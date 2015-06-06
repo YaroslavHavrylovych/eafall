@@ -7,7 +7,7 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.IBuildi
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.CreepBuilding;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetStaticObject;
-import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
+import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 
 import org.andengine.ui.activity.BaseGameActivity;
 
@@ -33,13 +33,13 @@ import java.util.Random;
 public class VeryFirstBot implements Runnable {
     public static final String TAG = VeryFirstBot.class.getCanonicalName();
     public static final int DELAY_BETWEEN_ITERATIONS = 500;
-    private final ITeam mBotTeam;
+    private final IPlayer mBotPlayer;
     //TODO it's tmp. Remove later.
     private BaseGameActivity mBaseGameActivity;
 
-    public VeryFirstBot(ITeam botTeam, BaseGameActivity baseGameActivity) {
+    public VeryFirstBot(IPlayer botPlayer, BaseGameActivity baseGameActivity) {
         LoggerHelper.methodInvocation(TAG, "VeryFirstBot");
-        mBotTeam = botTeam;
+        mBotPlayer = botPlayer;
         mBaseGameActivity = baseGameActivity;
     }
 
@@ -47,27 +47,27 @@ public class VeryFirstBot implements Runnable {
     public void run() {
         List<BuildingId> buildingsToBuild = new ArrayList<BuildingId>(10);
         List<BuildingId> buildingsToUpgrade = new ArrayList<BuildingId>(10);
-        IAlliance alliance = mBotTeam.getAlliance();
+        IAlliance alliance = mBotPlayer.getAlliance();
         BuildingDummy buildingDummy;
         PlanetStaticObject planet;
         int amountOnPlanet;
         //planet not initialized yet
-        while (mBotTeam.getPlanet() == null) {
+        while (mBotPlayer.getPlanet() == null) {
             delay();
         }
         //start the bot logic
-        while (mBotTeam.getPlanet() != null) {
+        while (mBotPlayer.getPlanet() != null) {
             delay();
-            planet = mBotTeam.getPlanet();
+            planet = mBotPlayer.getPlanet();
             // win
             if (planet == null) {
                 return;
             }
-            int money = mBotTeam.getMoney();
+            int money = mBotPlayer.getMoney();
             buildingsToBuild.clear();
             buildingsToUpgrade.clear();
 
-            BuildingId[] buildingIds = mBotTeam.getBuildingsIds();
+            BuildingId[] buildingIds = mBotPlayer.getBuildingsIds();
             //1. Calculate list of buildings you can build this or next income.
             //2. Calculate list of buildings, with not less than 3 (three) building ready,
             //you can upgrade this or next income.

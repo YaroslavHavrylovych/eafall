@@ -3,8 +3,8 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.StaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.building.BuildingsAmountChangedEvent;
-import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
-import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
+import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
+import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
@@ -13,8 +13,8 @@ import de.greenrobot.event.EventBus;
 
 /** general buildings functionality */
 public abstract class Building implements IBuilding {
-    /** current building team name */
-    protected final String mTeamName;
+    /** current building player name */
+    protected final String mPlayerName;
     /** current building group type */
     private final BuildingType mBuildingType;
     /** current building dummy */
@@ -28,17 +28,17 @@ public abstract class Building implements IBuilding {
     /** income which give all buildings of the current type (can be in percents) */
     private int mIncome;
 
-    public Building(BuildingDummy dummy, VertexBufferObjectManager objectManager, String teamName) {
+    public Building(BuildingDummy dummy, VertexBufferObjectManager objectManager, String playerName) {
         mBuildingType = dummy.getBuildingType();
-        mTeamName = teamName;
+        mPlayerName = playerName;
         mDummy = dummy;
         // init first creep building
-        Color teamColor = TeamsHolder.getTeam(teamName).getColor();
-        mBuildingStaticObject = getBuildingByUpgrade(mUpgrade, dummy, teamColor, objectManager);
+        Color playerColor = PlayersHolder.getPlayer(playerName).getColor();
+        mBuildingStaticObject = getBuildingByUpgrade(mUpgrade, dummy, playerColor, objectManager);
     }
 
     protected static StaticObject getBuildingByUpgrade(final int upgrade, final BuildingDummy buildingDummy,
-                                                       final Color teamColor,
+                                                       final Color playerColor,
                                                        VertexBufferObjectManager objectManager) {
         return new StaticObject(buildingDummy.getX(), buildingDummy.getY(),
                 buildingDummy.getSpriteTextureRegionArray(upgrade), objectManager) {
@@ -82,19 +82,19 @@ public abstract class Building implements IBuilding {
         if (getAmount() >= getAmountLimit()) {
             return false;
         }
-        ITeam team = TeamsHolder.getTeam(mTeamName);
-        if (!ITeam.ControlType.isClientSide(team.getControlType())) {
+        IPlayer player = PlayersHolder.getPlayer(mPlayerName);
+        if (!IPlayer.ControlType.isClientSide(player.getControlType())) {
             int cost = mDummy.getCost(mUpgrade);
-            if (team.getMoney() < cost) {
+            if (player.getMoney() < cost) {
                 return false;
             }
-            team.changeMoney(-cost);
+            player.changeMoney(-cost);
         }
         if (mBuildingsAmount <= 0) {
             setBuildingsAmount(0);
         }
         setBuildingsAmount(mBuildingsAmount + 1);
-        EventBus.getDefault().post(new BuildingsAmountChangedEvent(mTeamName,
+        EventBus.getDefault().post(new BuildingsAmountChangedEvent(mPlayerName,
                 BuildingId.makeId(mDummy.getBuildingId(), mUpgrade),
                 mBuildingsAmount));
         return true;

@@ -7,11 +7,11 @@ import android.widget.Button;
 import android.widget.Spinner;
 
 import com.gmail.yaroslavlancelot.eafall.R;
-import com.gmail.yaroslavlancelot.eafall.game.alliance.mutants.Mutants;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.imperials.Imperials;
+import com.gmail.yaroslavlancelot.eafall.game.alliance.mutants.Mutants;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.rebels.Rebels;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
-import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
+import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 
 /**
  * Base class for pre game customization.
@@ -20,7 +20,8 @@ import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
  */
 public abstract class PreGameCustomizationBaseActivity extends BaseNonGameActivity {
     protected Button mStartTheGame;
-    protected Spinner mAlliance1;;
+    protected Spinner mAlliance1;
+    ;
     protected Spinner mAlliance2;
 
     @Override
@@ -38,13 +39,13 @@ public abstract class PreGameCustomizationBaseActivity extends BaseNonGameActivi
      * intent and start an activity class of which is passed with the params.
      *
      * @param activityToStartClass activity to start class
-     * @param team1                first team control type
-     * @param team2                second team control type
+     * @param player1              first player control type
+     * @param player2              second player control type
      * @return initialized click listener or null if activityToStartClass is null
      */
     protected View.OnClickListener getStartButtonOnClick(final Class activityToStartClass,
-                                                         final ITeam.ControlType team1,
-                                                         final ITeam.ControlType team2) {
+                                                         final IPlayer.ControlType player1,
+                                                         final IPlayer.ControlType player2) {
         if (activityToStartClass == null) {
             return null;
         }
@@ -54,10 +55,10 @@ public abstract class PreGameCustomizationBaseActivity extends BaseNonGameActivi
                 Intent singleGameIntent = new Intent(PreGameCustomizationBaseActivity.this, activityToStartClass);
 
                 singleGameIntent.
-                        putExtra(StringConstants.FIRST_TEAM_CONTROL_BEHAVIOUR_TYPE, team1.toString()).
-                        putExtra(StringConstants.FIRST_TEAM_ALLIANCE, getAllianceName(mAlliance1)).
-                        putExtra(StringConstants.SECOND_TEAM_CONTROL_BEHAVIOUR_TYPE, team2.toString()).
-                        putExtra(StringConstants.SECOND_TEAM_ALLIANCE, getAllianceName(mAlliance2));
+                        putExtra(StringConstants.FIRST_PLAYER_CONTROL_BEHAVIOUR_TYPE, player1.toString()).
+                        putExtra(StringConstants.FIRST_PLAYER_ALLIANCE, getAllianceName(mAlliance1)).
+                        putExtra(StringConstants.SECOND_PLAYER_CONTROL_BEHAVIOUR_TYPE, player2.toString()).
+                        putExtra(StringConstants.SECOND_PLAYER_ALLIANCE, getAllianceName(mAlliance2));
                 ;
                 startActivity(singleGameIntent);
             }

@@ -1,45 +1,45 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit;
 
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
-import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
-import com.gmail.yaroslavlancelot.eafall.game.team.StaticHelper;
+import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
+import com.gmail.yaroslavlancelot.eafall.game.player.StaticHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /** filter enemies by some criteria */
 public class EnemiesFilter implements IEnemiesFilter {
-    private ITeam mEnemyTeam;
+    private IPlayer mEnemyPlayer;
 
     private EnemiesFilter() {
     }
 
-    private EnemiesFilter(ITeam enemyTeam) {
-        mEnemyTeam = enemyTeam;
+    private EnemiesFilter(IPlayer enemyPlayer) {
+        mEnemyPlayer = enemyPlayer;
     }
 
-    public static IEnemiesFilter getSimpleUnitEnemiesUpdater(ITeam team) {
-        return new EnemiesFilter(team);
+    public static IEnemiesFilter getSimpleUnitEnemiesUpdater(IPlayer player) {
+        return new EnemiesFilter(player);
     }
 
     @Override
     public List<GameObject> getVisibleEnemiesForUnit(final Unit unit) {
-        return StaticHelper.getVisibleEnemiesForUnit(unit, mEnemyTeam);
+        return StaticHelper.getVisibleEnemiesForUnit(unit, mEnemyPlayer);
     }
 
     @Override
     public List<GameObject> getEnemiesInRangeForUnit(Unit unit, int range) {
-        return StaticHelper.getEnemiesInRangeForUnit(unit, range, mEnemyTeam);
+        return StaticHelper.getEnemiesInRangeForUnit(unit, range, mEnemyPlayer);
     }
 
     @Override
     public List<GameObject> getEnemiesObjects() {
-        List<GameObject> list = new ArrayList<GameObject>(mEnemyTeam.getTeamObjects());
+        List<GameObject> list = new ArrayList<GameObject>(mEnemyPlayer.getPlayerObjects());
         return list;
     }
 
     @Override
     public GameObject getMainTarget() {
-        return mEnemyTeam.getPlanet();
+        return mEnemyPlayer.getPlanet();
     }
 }

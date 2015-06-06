@@ -15,8 +15,8 @@ import com.gmail.yaroslavlancelot.eafall.game.eventbus.description.BuildingDescr
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.description.UnitByBuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.path.ShowUnitPathChooser;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.building.BaseBuildingPopupUpdater;
-import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
-import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
+import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
+import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.touch.StaticHelper;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.TextButton;
 import com.gmail.yaroslavlancelot.eafall.general.locale.LocaleImpl;
@@ -67,13 +67,13 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
     }
 
     @Override
-    public void updateDescription(Shape drawArea, Object objectId, String allianceName, final String teamName) {
-        super.updateDescription(drawArea, objectId, allianceName, teamName);
+    public void updateDescription(Shape drawArea, Object objectId, String allianceName, final String playerName) {
+        super.updateDescription(drawArea, objectId, allianceName, playerName);
         IAlliance alliance = AllianceHolder.getAlliance(allianceName);
         final BuildingId buildingId = (BuildingId) objectId;
         //button or back build
-        ITeam team = TeamsHolder.getTeam(teamName);
-        IBuilding building = team.getPlanet().getBuilding(buildingId.getId());
+        IPlayer player = PlayersHolder.getPlayer(playerName);
+        IBuilding building = player.getPlanet().getBuilding(buildingId.getId());
         BuildingDummy buildingDummy = alliance.getBuildingDummy(buildingId);
         final Object event;
         if (//user looking on upgraded version of the not created building
@@ -82,13 +82,13 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
                         || (building != null && buildingId.getUpgrade() > building.getUpgrade())) {
             mButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_back_button));
             event = new BuildingDescriptionShowEvent(
-                    BuildingId.makeId(buildingId.getId(), buildingId.getUpgrade() - 1), teamName);
+                    BuildingId.makeId(buildingId.getId(), buildingId.getUpgrade() - 1), playerName);
         } else {
-            if (team.getPlanet().getBuildingsAmount(buildingId.getId())
+            if (player.getPlanet().getBuildingsAmount(buildingId.getId())
                     >= buildingDummy.getAmountLimit()) {
                 event = null;
             } else {
-                event = new CreateBuildingEvent(mTeamName, buildingId);
+                event = new CreateBuildingEvent(mPlayerName, buildingId);
             }
         }
         mButton.setOnClickListener(new ButtonSprite.OnClickListener() {
@@ -109,7 +109,7 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
             mUpgradeButton.setOnClickListener(new ButtonSprite.OnClickListener() {
                 @Override
                 public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                    EventBus.getDefault().post(new UpgradeBuildingEvent(mTeamName, buildingId));
+                    EventBus.getDefault().post(new UpgradeBuildingEvent(mPlayerName, buildingId));
                 }
             });
         }
@@ -121,7 +121,7 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
         mPathButton.setOnClickListener(new ButtonSprite.OnClickListener() {
             @Override
             public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                EventBus.getDefault().post(new ShowUnitPathChooser(teamName, buildingId.getId()));
+                EventBus.getDefault().post(new ShowUnitPathChooser(playerName, buildingId.getId()));
             }
         });
         if (building != null && buildingId.getUpgrade() == building.getUpgrade()) {
@@ -136,13 +136,13 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
         super.onEvent(buildingsAmountChangedEvent);
         if (mDescriptionAreaUpdater instanceof com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.building.creep.DescriptionAreaUpdater) {
             ((com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.building.creep.DescriptionAreaUpdater)
-                    mDescriptionAreaUpdater).updateUpgradeCost(buildingsAmountChangedEvent.getBuildingId(), buildingsAmountChangedEvent.getTeamName());
+                    mDescriptionAreaUpdater).updateUpgradeCost(buildingsAmountChangedEvent.getBuildingId(), buildingsAmountChangedEvent.getPlayerName());
         }
         mPathButton.setVisible(true);
     }
 
     @Override
-    public void updateAdditionInfo(Shape drawArea, Object objectId, String allianceName, final String teamName) {
+    public void updateAdditionInfo(Shape drawArea, Object objectId, String allianceName, final String playerName) {
         if (mAdditionDescriptionImage != null) {
             mAdditionDescriptionImage.detachSelf();
             mAdditionInfoRectangle.detachSelf();
@@ -158,7 +158,7 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
                     @Override
                     public void click() {
                         super.click();
-                        EventBus.getDefault().post(new UnitByBuildingDescriptionShowEvent(buildingId, teamName));
+                        EventBus.getDefault().post(new UnitByBuildingDescriptionShowEvent(buildingId, playerName));
                     }
                 });
         mAdditionInfoRectangle.attachChild(mAdditionDescriptionImage);

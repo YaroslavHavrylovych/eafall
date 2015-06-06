@@ -3,7 +3,7 @@ package com.gmail.yaroslavlancelot.eafall.game.client.thick.single;
 import com.gmail.yaroslavlancelot.eafall.game.client.thick.ThickClientGameActivity;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetStaticObject;
-import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
+import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 
 /**
  * Single player game
@@ -16,9 +16,9 @@ public class SinglePlayerGameActivity extends ThickClientGameActivity {
     }
 
     @Override
-    protected void userWantCreateBuilding(final ITeam userTeam, BuildingId buildingId) {
-        PlanetStaticObject planetStaticObject = userTeam.getPlanet();
+    protected void userWantCreateBuilding(final IPlayer userPlayer, BuildingId buildingId) {
+        PlanetStaticObject planetStaticObject = userPlayer.getPlanet();
         if (planetStaticObject != null)
-            userTeam.getPlanet().createBuilding(buildingId);
+            userPlayer.getPlanet().createBuilding(buildingId);
     }
 }

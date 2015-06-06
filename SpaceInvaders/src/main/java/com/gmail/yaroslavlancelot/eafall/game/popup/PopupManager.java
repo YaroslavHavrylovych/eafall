@@ -23,13 +23,13 @@ public class PopupManager {
     private Map<String, PopupHud> mPopups = new HashMap<String, PopupHud>(3);
 
 
-    private PopupManager(String teamName, Scene scene, Camera camera, VertexBufferObjectManager objectManager) {
+    private PopupManager(String playerName, Scene scene, Camera camera, VertexBufferObjectManager objectManager) {
         //description
         PopupHud popup = new DescriptionPopupHud(scene, objectManager);
         popup.setCamera(camera);
         mPopups.put(DescriptionPopupHud.KEY, popup);
         // buildings
-        popup = new BuildingsPopupHud(teamName, scene, objectManager);
+        popup = new BuildingsPopupHud(playerName, scene, objectManager);
         popup.setCamera(camera);
         mPopups.put(BuildingsPopupHud.KEY, popup);
         //path
@@ -55,14 +55,14 @@ public class PopupManager {
     /**
      * Create an instance of PopupManager. You can use it as singleton with {@link PopupManager#getInstance()}
      *
-     * @param teamName      popup is used by some user. User related to its team. This team name you need to pass.
+     * @param playerName      popup is used by some user. User related to its player. This player name you need to pass.
      * @param scene         in general it's a Hud. Most of popups you will see in the Hud.
      * @param camera        for setting camera to popup
      * @param objectManager VertexBufferObjectManager
      * @return initiated popup with using {@link PopupManager#getInstance()}
      */
-    public static PopupManager init(String teamName, Scene scene, Camera camera, VertexBufferObjectManager objectManager) {
-        sPopupManager = new PopupManager(teamName, scene, camera, objectManager);
+    public static PopupManager init(String playerName, Scene scene, Camera camera, VertexBufferObjectManager objectManager) {
+        sPopupManager = new PopupManager(playerName, scene, camera, objectManager);
         return getInstance();
     }
 

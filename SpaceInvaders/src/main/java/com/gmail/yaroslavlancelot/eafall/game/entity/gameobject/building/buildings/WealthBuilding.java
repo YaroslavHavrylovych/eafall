@@ -7,8 +7,8 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /** building for increasing existing wealth in percents */
 public class WealthBuilding extends Building {
-    public WealthBuilding(final WealthBuildingDummy dummy, VertexBufferObjectManager objectManager, String teamName) {
-        super(dummy, objectManager, teamName);
+    public WealthBuilding(final WealthBuildingDummy dummy, VertexBufferObjectManager objectManager, String playerName) {
+        super(dummy, objectManager, playerName);
     }
 
     @Override

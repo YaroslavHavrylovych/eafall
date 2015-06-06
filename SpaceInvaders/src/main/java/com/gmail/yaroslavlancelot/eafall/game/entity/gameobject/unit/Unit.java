@@ -9,15 +9,15 @@ import com.gmail.yaroslavlancelot.eafall.game.constant.CollisionCategories;
 import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.Bullet;
 import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.BulletPool;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.ITeamObject;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.IPlayerObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IFireListener;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.AttachSpriteEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.CreatePhysicBodyEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.RunOnUpdateThreadEvent;
-import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
-import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
+import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
+import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
 import org.andengine.audio.sound.Sound;
 import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
@@ -26,7 +26,7 @@ import de.greenrobot.event.EventBus;
 
 /** base class for dynamic and static/unmovable objects which can attack other objects */
 public abstract class Unit extends GameObject implements
-        ITeamObject,
+        IPlayerObject,
         RunOnUpdateThreadEvent.UpdateThreadRunnable {
     /** tag for logger */
     public static final String TAG = Unit.class.getCanonicalName();
@@ -50,8 +50,8 @@ public abstract class Unit extends GameObject implements
     protected Sound mFireSound;
     /** fixture def for bullets created by this unit */
     private FixtureDef mBulletFixtureDef;
-    /** unit team name */
-    private volatile String mTeamName;
+    /** unit player name */
+    private volatile String mPlayerName;
 
     /** create unit from appropriate builder */
     public Unit(UnitBuilder unitBuilder) {
@@ -117,21 +117,21 @@ public abstract class Unit extends GameObject implements
     protected void onNegativeHealth() {
         super.onNegativeHealth();
         clearUpdateHandlers();
-        if (mTeamName != null) {
-            TeamsHolder.getTeam(mTeamName).removeObjectFromTeam(this);
+        if (mPlayerName != null) {
+            PlayersHolder.getPlayer(mPlayerName).removeObjectFromPlayer(this);
         }
         EventBus.getDefault().post(this);
     }
 
     @Override
-    public String getTeam() {
-        return mTeamName;
+    public String getPlayer() {
+        return mPlayerName;
     }
 
     @Override
-    public void setTeam(String teamName) {
-        mTeamName = teamName;
-        setSpriteGroupName(BatchingKeys.getUnitSpriteGroup(teamName));
+    public void setPlayer(String playerName) {
+        mPlayerName = playerName;
+        setSpriteGroupName(BatchingKeys.getUnitSpriteGroup(playerName));
     }
 
     protected void onUnitDestroyed() {
@@ -141,11 +141,11 @@ public abstract class Unit extends GameObject implements
      * Init unit after creation. You need manually trigger this method after constructor at the time
      * when you want to init and attach this (totally working)  unit
      * <br/>
-     * WARNING: unit team name have to be assigned before init() triggers
+     * WARNING: unit player name have to be assigned before init() triggers
      */
     public void init(float x, float y) {
         LoggerHelper.methodInvocation(TAG, "init(float, float, String)");
-        ITeam team = TeamsHolder.getTeam(mTeamName);
+        IPlayer player = PlayersHolder.getPlayer(mPlayerName);
         setHealth(mObjectMaximumHealth);
         initHealthBar();
 
@@ -156,7 +156,7 @@ public abstract class Unit extends GameObject implements
         if (getBody() == null) {
             existingUnit = false;
             EventBus.getDefault().post(new CreatePhysicBodyEvent(this, getBodyType(),
-                    team.getFixtureDefUnit(), posX, posY, angle));
+                    player.getFixtureDefUnit(), posX, posY, angle));
         } else {
             getBody().setActive(true);
             getBody().setTransform(posX, posY, angle);
@@ -164,16 +164,16 @@ public abstract class Unit extends GameObject implements
         }
 
         setBulletFixtureDef(CollisionCategories.getBulletFixtureDefByUnitCategory(
-                team.getFixtureDefUnit().filter.categoryBits));
+                player.getFixtureDefUnit().filter.categoryBits));
 
-        if (team.getControlType() == ITeam.ControlType.REMOTE_CONTROL_ON_CLIENT_SIDE) {
+        if (player.getControlType() == IPlayer.ControlType.REMOTE_CONTROL_ON_CLIENT_SIDE) {
             removeDamage();
         }
 
         if (!existingUnit) {
             EventBus.getDefault().post(new AttachSpriteEvent(this));
         }
-        team.addObjectToTeam(this);
+        player.addObjectToPlayer(this);
     }
 
     public void removeDamage() {

@@ -10,7 +10,7 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitDummy;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.description.UnitByBuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.BaseDescriptionAreaUpdater;
-import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
+import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.touch.StaticHelper;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.DescriptionText;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.Link;
@@ -64,8 +64,8 @@ public class DescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
 
     @Override
     public void updateDescription(Shape drawArea, Object objectId,
-                                  final String allianceName, final String teamName) {
-        super.updateDescription(drawArea, objectId, allianceName, teamName);
+                                  final String allianceName, final String playerName) {
+        super.updateDescription(drawArea, objectId, allianceName, playerName);
         final BuildingId buildingId = (BuildingId) objectId;
         IAlliance alliance = AllianceHolder.getInstance().getElement(allianceName);
         CreepBuildingDummy dummy = (CreepBuildingDummy) alliance.getBuildingDummy(buildingId);
@@ -79,18 +79,18 @@ public class DescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
         mProducedUnitLink.setOnClickListener(new StaticHelper.OnClickListener() {
             @Override
             public void onClick() {
-                EventBus.getDefault().post(new UnitByBuildingDescriptionShowEvent(buildingId, teamName));
+                EventBus.getDefault().post(new UnitByBuildingDescriptionShowEvent(buildingId, playerName));
             }
         });
         //building time
         mUnitCreationTimeValue.setText(Integer.toString(dummy.getUnitCreationTime(buildingId.getUpgrade())));
         //upgrade
         if (alliance.isUpgradeAvailable(buildingId)) {
-            updateUpgradeCost(buildingId, teamName);
+            updateUpgradeCost(buildingId, playerName);
             mUpgradeLink.setOnClickListener(new StaticHelper.OnClickListener() {
                 @Override
                 public void onClick() {
-                    EventBus.getDefault().post(new BuildingDescriptionShowEvent(buildingId.getNextUpgrade(), teamName));
+                    EventBus.getDefault().post(new BuildingDescriptionShowEvent(buildingId.getNextUpgrade(), playerName));
                 }
             });
         } else {
@@ -99,9 +99,9 @@ public class DescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
         }
     }
 
-    public void updateUpgradeCost(BuildingId buildingId, String teamName) {
-        IAlliance alliance = TeamsHolder.getTeam(teamName).getAlliance();
-        int amount = TeamsHolder.getTeam(teamName).getPlanet().getBuildingsAmount(buildingId.getId());
+    public void updateUpgradeCost(BuildingId buildingId, String playerName) {
+        IAlliance alliance = PlayersHolder.getPlayer(playerName).getAlliance();
+        int amount = PlayersHolder.getPlayer(playerName).getPlanet().getBuildingsAmount(buildingId.getId());
         amount = amount == 0 ? 1 : amount;
         int upgradeCost = amount * alliance.getUpgradeCost(buildingId);
         mUpgradeLink.setText(Integer.valueOf(upgradeCost).toString());

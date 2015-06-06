@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * each visible element on the screen which can be assigned to on or other team and can take
+ * each visible element on the screen which can be assigned to on or other player and can take
  * participation in object collaboration extends this class (e.g. units, planets, sun etc)
  */
 public abstract class GameObject extends BodiedSprite {

@@ -31,7 +31,7 @@ public interface IAlliance {
 
     int getBuildingCost(BuildingId buildingId);
 
-    /** load alliance (team independent) resources */
+    /** load alliance (player independent) resources */
     void loadAllianceResources(TextureManager textureManager);
 
     /**
@@ -41,11 +41,11 @@ public interface IAlliance {
      * .TextureRegionHolder} with the key assigned by unit dummy (for now it's
      * value which you can get by {@link UnitDummy#getTextureRegionKey(String)})
      *
-     * @param teamName       team name to get unit color for create unit texture
+     * @param playerName       player name to get unit color for create unit texture
      * @param textureManager texture manager to create texture atlas (which returns)
-     * @return loaded texture atlas (with units for particular team in it)
+     * @return loaded texture atlas (with units for particular player in it)
      */
-    BitmapTextureAtlas loadUnitsToTexture(String teamName, TextureManager textureManager);
+    BitmapTextureAtlas loadUnitsToTexture(String playerName, TextureManager textureManager);
 
     /**
      * get the particular unit dummy

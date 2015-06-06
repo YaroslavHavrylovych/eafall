@@ -13,7 +13,7 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.Pla
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.MovableUnit;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.money.MoneyUpdatedEvent;
-import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
+import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.network.server.GameSocketServer;
 import com.gmail.yaroslavlancelot.eafall.network.server.callbacks.InGameServer;
 import com.gmail.yaroslavlancelot.eafall.network.server.messages.BuildingCreatedServerMessage;
@@ -58,38 +58,38 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
     }
 
     @Override
-    protected PlanetStaticObject createPlanet(float x, float y, ITextureRegion textureRegion, String key, ITeam team, long... uniquesId) {
-        PlanetStaticObject planetStaticObject = super.createPlanet(x, y, textureRegion, key, team, uniquesId);
+    protected PlanetStaticObject createPlanet(float x, float y, ITextureRegion textureRegion, String key, IPlayer player, long... uniquesId) {
+        PlanetStaticObject planetStaticObject = super.createPlanet(x, y, textureRegion, key, player, uniquesId);
         planetStaticObject.setGameObjectHealthChangedListener(this);
         return planetStaticObject;
     }
 
     @Override
-    protected void userWantCreateBuilding(final ITeam userTeam, BuildingId buildingId) {
+    protected void userWantCreateBuilding(final IPlayer userPlayer, BuildingId buildingId) {
         LoggerHelper.printInformationMessage(TAG, "user want to create building with id=" + buildingId);
-        PlanetStaticObject planetStaticObject = userTeam.getPlanet();
+        PlanetStaticObject planetStaticObject = userPlayer.getPlanet();
         if (planetStaticObject != null) {
-            boolean isBuildingCreated = userTeam.getPlanet().createBuilding(buildingId);
+            boolean isBuildingCreated = userPlayer.getPlanet().createBuilding(buildingId);
             LoggerHelper.printDebugMessage(TAG, "isBuildingCreated=" + isBuildingCreated);
             if (isBuildingCreated) {
                 mGameSocketServer.sendBroadcastServerMessage(0, new BuildingCreatedServerMessage(
-                        buildingId.getId(), buildingId.getUpgrade(), userTeam.getName()));
+                        buildingId.getId(), buildingId.getUpgrade(), userPlayer.getName()));
             }
         }
     }
 
     @Override
-    protected MovableUnit createMovableUnit(int unitKey, ITeam unitTeam, boolean isTopPath) {
-        MovableUnit unit = super.createMovableUnit(unitKey, unitTeam, isTopPath);
+    protected MovableUnit createMovableUnit(int unitKey, IPlayer unitPlayer, boolean isTopPath) {
+        MovableUnit unit = super.createMovableUnit(unitKey, unitPlayer, isTopPath);
         unit.setVelocityChangedListener(this);
         return unit;
     }
 
     @Override
-    protected Unit createUnit(int unitKey, ITeam unitTeam, float x, float y) {
-        Unit unit = super.createUnit(unitKey, unitTeam, x, y);
+    protected Unit createUnit(int unitKey, IPlayer unitPlayer, float x, float y) {
+        Unit unit = super.createUnit(unitKey, unitPlayer, x, y);
 
-        mGameSocketServer.sendBroadcastServerMessage(0, new UnitCreatedServerMessage(unitTeam.getName(), unitKey, unit));
+        mGameSocketServer.sendBroadcastServerMessage(0, new UnitCreatedServerMessage(unitPlayer.getName(), unitKey, unit));
         unit.setGameObjectHealthChangedListener(this);
         unit.setUnitFireCallback(this);
         return unit;
@@ -139,7 +139,7 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
     /** really used by {@link de.greenrobot.event.EventBus} */
     public void onEvent(MoneyUpdatedEvent moneyUpdatedEvent) {
         mGameSocketServer.sendBroadcastServerMessage(0, new MoneyChangedServerMessage(
-                moneyUpdatedEvent.getTeamName(), moneyUpdatedEvent.getMoney()));
+                moneyUpdatedEvent.getPlayerName(), moneyUpdatedEvent.getMoney()));
     }
 
     @Override

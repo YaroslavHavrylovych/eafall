@@ -8,8 +8,8 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.Buildin
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.MovableUnit;
-import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
-import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
+import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
+import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.network.client.callbacks.InGameClient;
 import com.gmail.yaroslavlancelot.eafall.network.client.connector.GameServerConnector;
 import com.gmail.yaroslavlancelot.eafall.network.client.messages.BuildingCreationClientMessage;
@@ -43,28 +43,28 @@ public class ThinClientGameActivity extends ClientGameActivity implements InGame
     }
 
     @Override
-    protected void userWantCreateBuilding(final ITeam userTeam, BuildingId buildingId) {
+    protected void userWantCreateBuilding(final IPlayer userPlayer, BuildingId buildingId) {
         LoggerHelper.methodInvocation(TAG, "userWantCreateBuilding");
         mGameServerConnector.sendClientMessage(0, new BuildingCreationClientMessage(
-                userTeam.getName(), buildingId.getId(), buildingId.getUpgrade()));
-        LoggerHelper.printInformationMessage(TAG, "send building request team= " + userTeam.getName() + ", building=" + buildingId + "");
+                userPlayer.getName(), buildingId.getId(), buildingId.getUpgrade()));
+        LoggerHelper.printInformationMessage(TAG, "send building request player= " + userPlayer.getName() + ", building=" + buildingId + "");
     }
 
     @Override
-    public void buildingCreated(BuildingId buildingId, final String teamName) {
+    public void buildingCreated(BuildingId buildingId, final String playerName) {
         LoggerHelper.methodInvocation(TAG, "buildingCreated");
-        LoggerHelper.printDebugMessage(TAG, "buildingId=" + buildingId + ", teamName=" + teamName);
-        PlanetStaticObject planetStaticObject = TeamsHolder.getInstance().getElement(teamName).getPlanet();
+        LoggerHelper.printDebugMessage(TAG, "buildingId=" + buildingId + ", playerName=" + playerName);
+        PlanetStaticObject planetStaticObject = PlayersHolder.getInstance().getElement(playerName).getPlanet();
         planetStaticObject.createBuilding(buildingId);
     }
 
     @Override
-    public void unitCreated(final String teamName, final int unitId, final float x, final float y, final long unitUniqueId) {
+    public void unitCreated(final String playerName, final int unitId, final float x, final float y, final long unitUniqueId) {
         LoggerHelper.printDebugMessage(TAG, "unitCreated=" + unitUniqueId + "(" + x + "," + y + ")");
         runOnUpdateThread(new Runnable() {
             @Override
             public void run() {
-                createThinUnit(unitId, TeamsHolder.getInstance().getElement(teamName), x, y, unitUniqueId);
+                createThinUnit(unitId, PlayersHolder.getInstance().getElement(playerName), x, y, unitUniqueId);
             }
         });
     }
@@ -137,10 +137,10 @@ public class ThinClientGameActivity extends ClientGameActivity implements InGame
     }
 
     @Override
-    public void moneyChanged(String teamName, int money) {
-        ITeam team = TeamsHolder.getInstance().getElement(teamName);
-        if (team == null) return;
-        team.setMoney(money);
+    public void moneyChanged(String playerName, int money) {
+        IPlayer player = PlayersHolder.getInstance().getElement(playerName);
+        if (player == null) return;
+        player.setMoney(money);
     }
 
     @Override

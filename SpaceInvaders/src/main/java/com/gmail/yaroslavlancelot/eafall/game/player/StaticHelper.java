@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.eafall.game.team;
+package com.gmail.yaroslavlancelot.eafall.game.player;
 
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
@@ -6,25 +6,25 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import java.util.ArrayList;
 import java.util.List;
 
-/** General operations with {@link com.gmail.yaroslavlancelot.eafall.game.team.ITeam} interface */
+/** General operations with {@link IPlayer} interface */
 public class StaticHelper {
     private StaticHelper() {
     }
 
-    /** will invoke {@code TeamUtils#getEnemiesInRangeForUnit} with passed range as visible unit area */
-    public static List<GameObject> getVisibleEnemiesForUnit(final Unit unit, ITeam enemyTeam) {
-        return getEnemiesInRangeForUnit(unit, unit.getViewRadius(), enemyTeam);
+    /** will invoke {@code PlayerUtils#getEnemiesInRangeForUnit} with passed range as visible unit area */
+    public static List<GameObject> getVisibleEnemiesForUnit(final Unit unit, IPlayer enemyPlayer) {
+        return getEnemiesInRangeForUnit(unit, unit.getViewRadius(), enemyPlayer);
     }
 
     /**
      * Create and return list of enemies for given unit which are in particular range about him
      *
      * @param unit      enemies of this will be returned
-     * @param enemyTeam give unit enemy team
+     * @param enemyPlayer give unit enemy player
      * @return list of all unit enemies in the given area
      */
-    public static List<GameObject> getEnemiesInRangeForUnit(final Unit unit, int range, ITeam enemyTeam) {
-        List<GameObject> enemies = enemyTeam.getTeamObjects();
+    public static List<GameObject> getEnemiesInRangeForUnit(final Unit unit, int range, IPlayer enemyPlayer) {
+        List<GameObject> enemies = enemyPlayer.getPlayerObjects();
         List<GameObject> enemiesInView = new ArrayList<GameObject>(5);
         for (GameObject enemy : enemies) {
             if (com.gmail.yaroslavlancelot.eafall.game

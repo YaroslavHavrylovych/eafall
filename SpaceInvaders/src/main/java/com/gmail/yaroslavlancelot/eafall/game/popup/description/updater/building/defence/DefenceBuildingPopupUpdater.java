@@ -30,10 +30,10 @@ public class DefenceBuildingPopupUpdater extends BaseBuildingPopupUpdater {
     }
 
     @Override
-    public void updateDescription(Shape drawArea, Object objectId, String allianceName, final String teamName) {
-        super.updateDescription(drawArea, objectId, allianceName, teamName);
+    public void updateDescription(Shape drawArea, Object objectId, String allianceName, final String playerName) {
+        super.updateDescription(drawArea, objectId, allianceName, playerName);
         final BuildingId buildingId = (BuildingId) objectId;
-        final Object event = new CreateBuildingEvent(mTeamName, buildingId);
+        final Object event = new CreateBuildingEvent(mPlayerName, buildingId);
         mButton.setOnClickListener(new ButtonSprite.OnClickListener() {
             @Override
             public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
@@ -43,7 +43,7 @@ public class DefenceBuildingPopupUpdater extends BaseBuildingPopupUpdater {
     }
 
     @Override
-    public void updateAdditionInfo(Shape drawArea, Object objectId, String allianceName, final String teamName) {
+    public void updateAdditionInfo(Shape drawArea, Object objectId, String allianceName, final String playerName) {
         if (mAdditionDescriptionImage != null) {
             mAdditionDescriptionImage.detachSelf();
             mAdditionInfoRectangle.detachSelf();
@@ -60,7 +60,7 @@ public class DefenceBuildingPopupUpdater extends BaseBuildingPopupUpdater {
                     @Override
                     public void click() {
                         super.click();
-                        EventBus.getDefault().post(new UnitByBuildingDescriptionShowEvent(buildingId, teamName));
+                        EventBus.getDefault().post(new UnitByBuildingDescriptionShowEvent(buildingId, playerName));
                     }
                 });
         mAdditionInfoRectangle.attachChild(mAdditionDescriptionImage);

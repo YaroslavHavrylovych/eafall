@@ -11,8 +11,8 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.Buildin
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.popup.PopupHud;
 import com.gmail.yaroslavlancelot.eafall.game.popup.construction.item.PopupItemFactory;
-import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
-import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
+import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
+import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.touch.StaticHelper;
 
 import org.andengine.entity.IEntity;
@@ -30,39 +30,39 @@ public class BuildingsPopupHud extends PopupHud {
     public static final String TAG = BuildingsPopupHud.class.getCanonicalName();
     /** for popup manager */
     public static final String KEY = TAG;
-    /** building of this team popup is showing */
-    private final String mTeamName;
+    /** building of this player popup is showing */
+    private final String mPlayerName;
 
     /** The key is the serial number of the building in the list of the buildings */
     private SparseArray<PopupItemFactory.BuildingPopupItem> mItems;
 
-    public BuildingsPopupHud(String teamName, Scene scene, VertexBufferObjectManager vertexBufferObjectManager) {
+    public BuildingsPopupHud(String playerName, Scene scene, VertexBufferObjectManager vertexBufferObjectManager) {
         super(scene);
-        ITeam team = TeamsHolder.getInstance().getElement(teamName);
-        int buildingsAmount = team.getAlliance().getBuildingsAmount();
+        IPlayer player = PlayersHolder.getInstance().getElement(playerName);
+        int buildingsAmount = player.getAlliance().getBuildingsAmount();
 
         mPopupRectangle = new Rectangle(0, 0,
                 SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_WIDTH,
                 SizeConstants.BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT * buildingsAmount,
                 vertexBufferObjectManager);
 
-        mTeamName = team.getName();
-        initBuildingPopupForTeam(mTeamName);
+        mPlayerName = player.getName();
+        initBuildingPopupForPlayer(mPlayerName);
         mPopupRectangle.setX(SizeConstants.HALF_FIELD_WIDTH);
         mPopupRectangle.setY(mPopupRectangle.getHeight() / 2);
     }
 
-    private void initBuildingPopupForTeam(String teamName) {
-        ITeam team = TeamsHolder.getInstance().getElement(teamName);
-        mItems = new SparseArray<PopupItemFactory.BuildingPopupItem>(team.getAlliance().getBuildingsAmount());
+    private void initBuildingPopupForPlayer(String playerName) {
+        IPlayer player = PlayersHolder.getInstance().getElement(playerName);
+        mItems = new SparseArray<PopupItemFactory.BuildingPopupItem>(player.getAlliance().getBuildingsAmount());
 
-        syncBuildingsWithTeam(teamName);
+        syncBuildingsWithPlayer(playerName);
     }
 
-    private void syncBuildingsWithTeam(String teamName) {
-        final ITeam team = TeamsHolder.getTeam(teamName);
-        BuildingId[] buildings = team.getBuildingsIds();
-        String allianceName = team.getAlliance().getAllianceName();
+    private void syncBuildingsWithPlayer(String playerName) {
+        final IPlayer player = PlayersHolder.getPlayer(playerName);
+        BuildingId[] buildings = player.getBuildingsIds();
+        String allianceName = player.getAlliance().getAllianceName();
         int buildingsCount = buildings.length;
         int position;
         for (int id = 0; id < buildingsCount; id++) {
@@ -95,7 +95,7 @@ public class BuildingsPopupHud extends PopupHud {
             @Override
             public void onClick() {
                 LoggerHelper.printDebugMessage(TAG, "showPopup building description");
-                EventBus.getDefault().post(new BuildingDescriptionShowEvent(buildingId, mTeamName));
+                EventBus.getDefault().post(new BuildingDescriptionShowEvent(buildingId, mPlayerName));
             }
         });
         mItems.put(id, item);
@@ -111,7 +111,7 @@ public class BuildingsPopupHud extends PopupHud {
 
     @Override
     public synchronized void showPopup() {
-        syncBuildingsWithTeam(mTeamName);
+        syncBuildingsWithPlayer(mPlayerName);
         super.showPopup();
     }
 }

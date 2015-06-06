@@ -7,8 +7,8 @@ import java.io.File;
  * <br/>
  * Note:
  * <br/>
- * <b>Blue team</b> SAME as <i>first team</i> and same as <i>left team</i>
- * <b>Red team</b> SAME as <i>second team</i> and same as <i>right team</i>
+ * <b>Blue player</b> SAME as <i>first player</i> and same as <i>left player</i>
+ * <b>Red player</b> SAME as <i>second player</i> and same as <i>right player</i>
  */
 public final class StringConstants {
     public static final String SEPARATOR = File.separator;
@@ -50,14 +50,14 @@ public final class StringConstants {
     public static final String KEY_SECOND_PLANET = "red_planet_key";
     /** used like key for blue planet static object */
     public static final String KEY_FIRST_PLANET = "blue_planet_key";
-    /** red team name */
-    public static final String SECOND_TEAM_CONTROL_BEHAVIOUR_TYPE = "second_team_CONTROL_BEHAVIOUR_TYPE";
-    /** blue team alliance */
-    public static final String FIRST_TEAM_ALLIANCE = "first_team_alliance";
-    /** red team alliance */
-    public static final String SECOND_TEAM_ALLIANCE = "second_team_alliance";
-    /** blue team name */
-    public static final String FIRST_TEAM_CONTROL_BEHAVIOUR_TYPE = "first_team_CONTROL_BEHAVIOUR_TYPE";
+    /** red player name */
+    public static final String SECOND_PLAYER_CONTROL_BEHAVIOUR_TYPE = "second_player_CONTROL_BEHAVIOUR_TYPE";
+    /** blue player alliance */
+    public static final String FIRST_PLAYER_ALLIANCE = "first_player_alliance";
+    /** red player alliance */
+    public static final String SECOND_PLAYER_ALLIANCE = "second_player_alliance";
+    /** blue player name */
+    public static final String FIRST_PLAYER_CONTROL_BEHAVIOUR_TYPE = "first_player_CONTROL_BEHAVIOUR_TYPE";
     /** key used to identify money font */
     public static final String KEY_FONT_MONEY = "key_money_font";
     /** splash screen key */

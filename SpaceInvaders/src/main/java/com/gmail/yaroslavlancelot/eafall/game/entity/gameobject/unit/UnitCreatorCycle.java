@@ -2,7 +2,7 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit;
 
 import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.unit.CreateMovableUnitEvent;
-import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
+import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -14,16 +14,16 @@ import de.greenrobot.event.EventBus;
  */
 public class UnitCreatorCycle implements ITimerCallback {
     private final int mUnitKey;
-    private final String mTeamName;
+    private final String mPlayerName;
     private volatile int mUnitsAmount;
     private volatile boolean mIsTopPath;
 
-    public UnitCreatorCycle(String teamName, int unitKey, boolean isTopPath) {
-        this(teamName, unitKey, 0, isTopPath);
+    public UnitCreatorCycle(String playerName, int unitKey, boolean isTopPath) {
+        this(playerName, unitKey, 0, isTopPath);
     }
 
-    public UnitCreatorCycle(String teamName, int unitKey, int unitsAmount, boolean isTopPath) {
-        mTeamName = teamName;
+    public UnitCreatorCycle(String playerName, int unitKey, int unitsAmount, boolean isTopPath) {
+        mPlayerName = playerName;
         mUnitKey = unitKey;
         mUnitsAmount = unitsAmount;
         mIsTopPath = isTopPath;
@@ -46,11 +46,11 @@ public class UnitCreatorCycle implements ITimerCallback {
     public void onTimePassed(final TimerHandler pTimerHandler) {
         for (int i = 0; i < mUnitsAmount; i++) {
             //prevents cycle continuing when max amount reached (but its not the final check)
-            if (TeamsHolder.getTeam(mTeamName).getUnitsAmount() >=
+            if (PlayersHolder.getPlayer(mPlayerName).getUnitsAmount() >=
                     Config.getConfig().getMovableUnitsLimit()) {
                 return;
             }
-            EventBus.getDefault().post(new CreateMovableUnitEvent(mUnitKey, mTeamName, mIsTopPath));
+            EventBus.getDefault().post(new CreateMovableUnitEvent(mUnitKey, mPlayerName, mIsTopPath));
         }
     }
 }
