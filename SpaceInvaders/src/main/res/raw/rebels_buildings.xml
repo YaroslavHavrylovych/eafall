@@ -12,24 +12,12 @@
                 <cost>110</cost>
                 <unit_id>10</unit_id>
                 <building_time>8</building_time>
-                <team_color_area>
-                    <x>4</x>
-                    <y>4</y>
-                    <width>8</width>
-                    <height>8</height>
-                </team_color_area>
             </upgrade>
             <upgrade id="1">
                 <image_name>underground.png</image_name>
                 <cost>200</cost>
                 <unit_id>11</unit_id>
                 <building_time>10</building_time>
-                <team_color_area>
-                    <x>0</x>
-                    <y>0</y>
-                    <width>16</width>
-                    <height>16</height>
-                </team_color_area>
             </upgrade>
         </upgrades>
     </units_building>
@@ -44,24 +32,12 @@
                 <cost>170</cost>
                 <unit_id>20</unit_id>
                 <building_time>14</building_time>
-                <team_color_area>
-                    <x>7</x>
-                    <y>7</y>
-                    <width>2</width>
-                    <height>2</height>
-                </team_color_area>
             </upgrade>
             <upgrade id="1">
                 <image_name>factory.png</image_name>
                 <cost>300</cost>
                 <unit_id>21</unit_id>
                 <building_time>15</building_time>
-                <team_color_area>
-                    <x>7</x>
-                    <y>7</y>
-                    <width>2</width>
-                    <height>2</height>
-                </team_color_area>
             </upgrade>
         </upgrades>
     </units_building>
@@ -76,12 +52,6 @@
                 <cost>170</cost>
                 <unit_id>30</unit_id>
                 <building_time>17</building_time>
-                <team_color_area>
-                    <x>0</x>
-                    <y>0</y>
-                    <width>16</width>
-                    <height>16</height>
-                </team_color_area>
             </upgrade>
         </upgrades>
     </units_building>
@@ -96,36 +66,18 @@
                 <cost>220</cost>
                 <unit_id>40</unit_id>
                 <building_time>14</building_time>
-                <team_color_area>
-                    <x>6</x>
-                    <y>6</y>
-                    <width>4</width>
-                    <height>4</height>
-                </team_color_area>
             </upgrade>
             <upgrade id="1">
                 <image_name>hospital.png</image_name>
                 <cost>180</cost>
                 <unit_id>41</unit_id>
                 <building_time>11</building_time>
-                <team_color_area>
-                    <x>6</x>
-                    <y>6</y>
-                    <width>4</width>
-                    <height>4</height>
-                </team_color_area>
             </upgrade>
             <upgrade id="2">
                 <image_name>hospital.png</image_name>
                 <cost>350</cost>
                 <unit_id>42</unit_id>
                 <building_time>15</building_time>
-                <team_color_area>
-                    <x>6</x>
-                    <y>6</y>
-                    <width>4</width>
-                    <height>4</height>
-                </team_color_area>
             </upgrade>
         </upgrades>
     </units_building>
@@ -140,24 +92,12 @@
                 <cost>250</cost>
                 <unit_id>50</unit_id>
                 <building_time>10</building_time>
-                <team_color_area>
-                    <x>13</x>
-                    <y>4</y>
-                    <width>2</width>
-                    <height>8</height>
-                </team_color_area>
             </upgrade>
             <upgrade id="1">
                 <image_name>minery.png</image_name>
                 <cost>270</cost>
                 <unit_id>51</unit_id>
                 <building_time>15</building_time>
-                <team_color_area>
-                    <x>13</x>
-                    <y>4</y>
-                    <width>2</width>
-                    <height>8</height>
-                </team_color_area>
             </upgrade>
         </upgrades>
     </units_building>
@@ -172,24 +112,12 @@
                 <cost>350</cost>
                 <unit_id>60</unit_id>
                 <building_time>17</building_time>
-                <team_color_area>
-                    <x>3</x>
-                    <y>6</y>
-                    <width>10</width>
-                    <height>3</height>
-                </team_color_area>
             </upgrade>
             <upgrade id="1">
                 <image_name>artillery.png</image_name>
                 <cost>350</cost>
                 <unit_id>61</unit_id>
                 <building_time>20</building_time>
-                <team_color_area>
-                    <x>3</x>
-                    <y>6</y>
-                    <width>10</width>
-                    <height>3</height>
-                </team_color_area>
             </upgrade>
         </upgrades>
     </units_building>
@@ -204,24 +132,12 @@
                 <cost>400</cost>
                 <unit_id>70</unit_id>
                 <building_time>14</building_time>
-                <team_color_area>
-                    <x>0</x>
-                    <y>5</y>
-                    <width>16</width>
-                    <height>11</height>
-                </team_color_area>
             </upgrade>
             <upgrade id="1">
                 <image_name>sabotage_center.png</image_name>
                 <cost>500</cost>
                 <unit_id>71</unit_id>
                 <building_time>15</building_time>
-                <team_color_area>
-                    <x>0</x>
-                    <y>5</y>
-                    <width>16</width>
-                    <height>11</height>
-                </team_color_area>
             </upgrade>
         </upgrades>
     </units_building>
@@ -232,12 +148,6 @@
         <cost>600</cost>
         <unit_id>250</unit_id>
         <building_time>25</building_time>
-        <team_color_area>
-            <x>2</x>
-            <y>10</y>
-            <width>11</width>
-            <height>5</height>
-        </team_color_area>
     </defence_building>
     <wealth_building name="caches">
         <first_build_income>20</first_build_income>
@@ -246,12 +156,6 @@
         <position_x>56</position_x>
         <position_y>56</position_y>
         <image_name>sabotage_center.png</image_name>
-        <team_color_area>
-            <x>0</x>
-            <y>5</y>
-            <width>16</width>
-            <height>11</height>
-        </team_color_area>
     </wealth_building>
     <special_building name="space_material">
         <characteristic>avoid_attack</characteristic>
@@ -261,11 +165,5 @@
         <position_x>96</position_x>
         <position_y>96</position_y>
         <image_name>sabotage_center.png</image_name>
-        <team_color_area>
-            <x>0</x>
-            <y>5</y>
-            <width>16</width>
-            <height>11</height>
-        </team_color_area>
     </special_building>
 </buildings>

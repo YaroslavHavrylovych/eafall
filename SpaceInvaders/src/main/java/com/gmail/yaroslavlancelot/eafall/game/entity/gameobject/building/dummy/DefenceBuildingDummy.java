@@ -5,8 +5,6 @@ import android.content.Context;
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
-import com.gmail.yaroslavlancelot.eafall.game.entity.Area;
-import com.gmail.yaroslavlancelot.eafall.game.entity.TeamColorArea;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingType;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.loader.DefenceBuildingLoader;
@@ -24,18 +22,17 @@ public class DefenceBuildingDummy extends BuildingDummy {
         super(SizeConstants.BUILDING_SIZE, SizeConstants.BUILDING_SIZE, 1);
         mDefenceBuildingLoader = buildingLoader;
 
-        TeamColorArea area = buildingLoader.team_color_area;
-        mTeamColorAreaArray[0] = Area.getArea(area.x, area.y, area.width, area.height);
-        buildingLoader.team_color_area = null;
-
         Context context = EaFallApplication.getContext();
         mBuildingStringId = context.getResources().getIdentifier(
                 buildingLoader.name, "string", context.getApplicationInfo().packageName);
     }
 
-    @Override
-    public int getCost(int upgrade) {
-        return mDefenceBuildingLoader.cost;
+    public int getOrbitalStationCreationTime() {
+        return mDefenceBuildingLoader.building_time;
+    }
+
+    public int getOrbitalStationUnitId() {
+        return mDefenceBuildingLoader.unit_id;
     }
 
     @Override
@@ -49,11 +46,6 @@ public class DefenceBuildingDummy extends BuildingDummy {
     }
 
     @Override
-    public Area getTeamColorAreaArray(int upgrade) {
-        return mTeamColorAreaArray[0];
-    }
-
-    @Override
     public int getBuildingId() {
         return BUILDING_ID;
     }
@@ -61,6 +53,21 @@ public class DefenceBuildingDummy extends BuildingDummy {
     @Override
     public int getStringId() {
         return mBuildingStringId;
+    }
+
+    @Override
+    public BuildingType getBuildingType() {
+        return BuildingType.DEFENCE_BUILDING;
+    }
+
+    @Override
+    public int getAmountLimit() {
+        return 1;
+    }
+
+    @Override
+    public int getCost(int upgrade) {
+        return mDefenceBuildingLoader.cost;
     }
 
     @Override
@@ -77,23 +84,5 @@ public class DefenceBuildingDummy extends BuildingDummy {
                 + mDefenceBuildingLoader.image_name;
         mImageTextureRegionArray[0] =
                 TextureRegionHolder.addElementFromAssets(pathToImage, textureAtlas, context, x, y);
-    }
-
-    @Override
-    public BuildingType getBuildingType() {
-        return BuildingType.DEFENCE_BUILDING;
-    }
-
-    @Override
-    public int getAmountLimit() {
-        return 1;
-    }
-
-    public int getOrbitalStationCreationTime() {
-        return mDefenceBuildingLoader.unit_id;
-    }
-
-    public int getOrbitalStationUnitId() {
-        return mDefenceBuildingLoader.unit_id;
     }
 }

@@ -1,7 +1,5 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.loader;
 
-import com.gmail.yaroslavlancelot.eafall.game.entity.TeamColorArea;
-
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -44,7 +42,4 @@ public class UnitLoader {
 
     @Element(name = "sound")
     public String sound;
-
-    @Element(name = "team_color_area")
-    public TeamColorArea team_color_area;
 }

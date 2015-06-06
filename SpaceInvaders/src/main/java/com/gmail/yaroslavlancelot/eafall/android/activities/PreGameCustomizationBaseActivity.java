@@ -11,7 +11,7 @@ import com.gmail.yaroslavlancelot.eafall.game.alliance.mutants.Mutants;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.imperials.Imperials;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.rebels.Rebels;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
-import com.gmail.yaroslavlancelot.eafall.game.team.TeamControlBehaviourType;
+import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
 
 /**
  * Base class for pre game customization.
@@ -43,8 +43,8 @@ public abstract class PreGameCustomizationBaseActivity extends BaseNonGameActivi
      * @return initialized click listener or null if activityToStartClass is null
      */
     protected View.OnClickListener getStartButtonOnClick(final Class activityToStartClass,
-                                                         final TeamControlBehaviourType team1,
-                                                         final TeamControlBehaviourType team2) {
+                                                         final ITeam.ControlType team1,
+                                                         final ITeam.ControlType team2) {
         if (activityToStartClass == null) {
             return null;
         }

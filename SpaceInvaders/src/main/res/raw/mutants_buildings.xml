@@ -12,36 +12,18 @@
                 <cost>150</cost>
                 <unit_id>10</unit_id>
                 <building_time>6</building_time>
-                <team_color_area>
-                    <x>4</x>
-                    <y>4</y>
-                    <width>8</width>
-                    <height>8</height>
-                </team_color_area>
             </upgrade>
             <upgrade id="1">
                 <image_name>water_cave.png</image_name>
                 <cost>200</cost>
                 <unit_id>11</unit_id>
                 <building_time>10</building_time>
-                <team_color_area>
-                    <x>4</x>
-                    <y>4</y>
-                    <width>8</width>
-                    <height>8</height>
-                </team_color_area>
             </upgrade>
             <upgrade id="2">
                 <image_name>water_cave.png</image_name>
                 <cost>350</cost>
                 <unit_id>12</unit_id>
                 <building_time>10</building_time>
-                <team_color_area>
-                    <x>4</x>
-                    <y>4</y>
-                    <width>8</width>
-                    <height>8</height>
-                </team_color_area>
             </upgrade>
         </upgrades>
     </units_building>
@@ -56,24 +38,12 @@
                 <cost>150</cost>
                 <unit_id>20</unit_id>
                 <building_time>12</building_time>
-                <team_color_area>
-                    <x>7</x>
-                    <y>7</y>
-                    <width>2</width>
-                    <height>2</height>
-                </team_color_area>
             </upgrade>
             <upgrade id="1">
                 <image_name>invisible_plain.png</image_name>
                 <cost>250</cost>
                 <unit_id>21</unit_id>
                 <building_time>14</building_time>
-                <team_color_area>
-                    <x>7</x>
-                    <y>7</y>
-                    <width>2</width>
-                    <height>2</height>
-                </team_color_area>
             </upgrade>
         </upgrades>
     </units_building>
@@ -88,24 +58,12 @@
                 <cost>220</cost>
                 <unit_id>30</unit_id>
                 <building_time>12</building_time>
-                <team_color_area>
-                    <x>0</x>
-                    <y>0</y>
-                    <width>16</width>
-                    <height>16</height>
-                </team_color_area>
             </upgrade>
             <upgrade id="1">
                 <image_name>hydra_pond.png</image_name>
                 <cost>450</cost>
                 <unit_id>31</unit_id>
                 <building_time>12</building_time>
-                <team_color_area>
-                    <x>0</x>
-                    <y>0</y>
-                    <width>16</width>
-                    <height>16</height>
-                </team_color_area>
             </upgrade>
         </upgrades>
     </units_building>
@@ -120,24 +78,12 @@
                 <cost>200</cost>
                 <unit_id>40</unit_id>
                 <building_time>12</building_time>
-                <team_color_area>
-                    <x>6</x>
-                    <y>6</y>
-                    <width>4</width>
-                    <height>4</height>
-                </team_color_area>
             </upgrade>
             <upgrade id="0">
                 <image_name>poison_cave.png</image_name>
                 <cost>310</cost>
                 <unit_id>41</unit_id>
                 <building_time>14</building_time>
-                <team_color_area>
-                    <x>6</x>
-                    <y>6</y>
-                    <width>4</width>
-                    <height>4</height>
-                </team_color_area>
             </upgrade>
         </upgrades>
     </units_building>
@@ -152,24 +98,12 @@
                 <cost>240</cost>
                 <unit_id>50</unit_id>
                 <building_time>14</building_time>
-                <team_color_area>
-                    <x>13</x>
-                    <y>4</y>
-                    <width>2</width>
-                    <height>8</height>
-                </team_color_area>
             </upgrade>
             <upgrade id="1">
                 <image_name>web.png</image_name>
                 <cost>200</cost>
                 <unit_id>51</unit_id>
                 <building_time>16</building_time>
-                <team_color_area>
-                    <x>13</x>
-                    <y>4</y>
-                    <width>2</width>
-                    <height>8</height>
-                </team_color_area>
             </upgrade>
         </upgrades>
     </units_building>
@@ -184,24 +118,12 @@
                 <cost>320</cost>
                 <unit_id>60</unit_id>
                 <building_time>14</building_time>
-                <team_color_area>
-                    <x>3</x>
-                    <y>6</y>
-                    <width>10</width>
-                    <height>3</height>
-                </team_color_area>
             </upgrade>
             <upgrade id="1">
                 <image_name>mountain_cave.png</image_name>
                 <cost>300</cost>
                 <unit_id>61</unit_id>
                 <building_time>12</building_time>
-                <team_color_area>
-                    <x>3</x>
-                    <y>6</y>
-                    <width>10</width>
-                    <height>3</height>
-                </team_color_area>
             </upgrade>
         </upgrades>
     </units_building>
@@ -216,24 +138,12 @@
                 <cost>400</cost>
                 <unit_id>70</unit_id>
                 <building_time>16</building_time>
-                <team_color_area>
-                    <x>0</x>
-                    <y>5</y>
-                    <width>16</width>
-                    <height>11</height>
-                </team_color_area>
             </upgrade>
             <upgrade id="1">
                 <image_name>hell.png</image_name>
                 <cost>500</cost>
                 <unit_id>71</unit_id>
                 <building_time>15</building_time>
-                <team_color_area>
-                    <x>0</x>
-                    <y>5</y>
-                    <width>16</width>
-                    <height>11</height>
-                </team_color_area>
             </upgrade>
         </upgrades>
     </units_building>
@@ -244,12 +154,6 @@
         <cost>600</cost>
         <unit_id>250</unit_id>
         <building_time>25</building_time>
-        <team_color_area>
-            <x>2</x>
-            <y>10</y>
-            <width>11</width>
-            <height>5</height>
-        </team_color_area>
     </defence_building>
     <wealth_building name="reptile_city">
         <first_build_income>20</first_build_income>
@@ -258,12 +162,6 @@
         <position_x>-9</position_x>
         <position_y>105</position_y>
         <image_name>bastion.png</image_name>
-        <team_color_area>
-            <x>0</x>
-            <y>5</y>
-            <width>16</width>
-            <height>11</height>
-        </team_color_area>
     </wealth_building>
     <special_building name="king_of_snakes">
         <characteristic>attack</characteristic>
@@ -273,11 +171,5 @@
         <position_x>-9</position_x>
         <position_y>105</position_y>
         <image_name>bastion.png</image_name>
-        <team_color_area>
-            <x>0</x>
-            <y>5</y>
-            <width>16</width>
-            <height>11</height>
-        </team_color_area>
     </special_building>
 </buildings>

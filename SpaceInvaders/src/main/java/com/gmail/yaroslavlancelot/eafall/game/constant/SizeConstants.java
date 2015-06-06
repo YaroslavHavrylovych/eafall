@@ -22,7 +22,6 @@ public final class SizeConstants {
     public static final int UNIT_BIG_IMAGE_SIZE = 400;
     public static final int BETWEEN_TEXTURES_PADDING = 3;
     public static final int HEALTH_BAR_HEIGHT = 3;
-    public static final int TEAM_COLOR_AREA_SIZE = 4;
     public static final int BULLET_SIZE = 2;
     public static final int SELECTOR_IMAGE_SIZE = 150;
 
@@ -33,8 +32,8 @@ public final class SizeConstants {
     public static final int BUILDING_POPUP_INVOCATION_BUTTON_SIZE = 100;
     public static final int BUILDING_POPUP_ELEMENT_HEIGHT = 60;
     public static final int BUILDING_POPUP_IMAGE_PADDING = 10;
-    public static final int BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT = BUILDING_POPUP_ELEMENT_HEIGHT +
-            2 * BUILDING_POPUP_IMAGE_PADDING;
+    public static final int BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT =
+            BUILDING_POPUP_ELEMENT_HEIGHT + 2 * BUILDING_POPUP_IMAGE_PADDING;
     public static final int BUILDING_POPUP_BACKGROUND_ITEM_WIDTH = 600;
 
 

@@ -37,49 +37,72 @@ public class ClientResourcesLoader extends BaseResourceLoader {
         //alliance
         loadAllianceResources(textureManager);
         //players
-        loadTeamResources(vertexBufferObjectManager);
+        loadTeamResources(textureManager, vertexBufferObjectManager);
         //bullets and health bars
-        loadBulletAndHealthBarAndTeamColor(textureManager, vertexBufferObjectManager);
+        loadBulletAndHealthBar(textureManager, vertexBufferObjectManager);
         //sun and planets
         loadSunAndPlanets(textureManager, vertexBufferObjectManager);
         //other
         PopupManager.loadResource(EaFallApplication.getContext(), textureManager);
     }
 
+    @Override
+    public void loadFonts(TextureManager textureManager, FontManager fontManager) {
+        MoneyText.loadFont(fontManager, textureManager);
+        DescriptionPopupHud.loadFonts(fontManager, textureManager);
+    }
+
+    @Override
+    public void unloadFonts(TextureManager textureManager, FontManager fontManager) {
+        throw new UnsupportedOperationException("still not implemented");
+    }
+
+    @Override
+    public void unloadImages() {
+        throw new UnsupportedOperationException("still not implemented");
+    }
+
+    @Override
+    public void addImage(String path, int width, int height) {
+        throw new UnsupportedOperationException("no add image for the game");
+    }
+
     private void loadAllianceResources(TextureManager textureManager) {
         for (IAlliance alliance : AllianceHolder.getInstance().getElements()) {
-            alliance.loadResources(textureManager);
+            alliance.loadAllianceResources(textureManager);
         }
     }
 
-    private void loadTeamResources(VertexBufferObjectManager vertexBufferObjectManager) {
+    private void loadTeamResources(TextureManager textureManager, VertexBufferObjectManager
+            vertexBufferObjectManager) {
         for (ITeam team : TeamsHolder.getInstance().getElements()) {
             String teamName = team.getName();
             IAlliance alliance = team.getAlliance();
-            //building
+            //building SpriteGroup
             TextureAtlas textureAtlas = alliance.getBuildingTextureAtlas();
             SpriteGroup spriteGroup = new SpriteGroup(textureAtlas,
                     alliance.getBuildingsAmount(),
                     vertexBufferObjectManager);
             SpriteGroupHolder.addGroup(BatchingKeys.getBuildingSpriteGroup(teamName), spriteGroup);
-            //unit
-            textureAtlas = alliance.getUnitTextureAtlas();
+            //unit SpriteGroup
+            textureAtlas = alliance.loadUnitsToTexture(teamName, textureManager);
             spriteGroup = new SpriteGroup(textureAtlas,
                     Config.getConfig().getMovableUnitsLimit(),
                     vertexBufferObjectManager);
             SpriteGroupHolder.addGroup(BatchingKeys.getUnitSpriteGroup(teamName), spriteGroup);
+            //unit pool
+            team.createUnitPool(vertexBufferObjectManager);
         }
     }
 
     /** load images for bullets, health bars and team colors */
-    private void loadBulletAndHealthBarAndTeamColor(
+    private void loadBulletAndHealthBar(
             TextureManager textureManager,
             VertexBufferObjectManager vertexBufferObjectManager) {
         BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager,
                 SizeConstants.UNIT_SIZE,
                 SizeConstants.BULLET_SIZE + SizeConstants.HEALTH_BAR_HEIGHT
-                        + SizeConstants.TEAM_COLOR_AREA_SIZE
-                        + 2 * SizeConstants.BETWEEN_TEXTURES_PADDING, TextureOptions.BILINEAR);
+                        + SizeConstants.BETWEEN_TEXTURES_PADDING, TextureOptions.BILINEAR);
         //load
         int y = 0;
         TextureRegionHolder.addElementFromAssets(StringConstants.FILE_HEALTH_BAR,
@@ -87,14 +110,11 @@ public class ClientResourcesLoader extends BaseResourceLoader {
         y += SizeConstants.HEALTH_BAR_HEIGHT + SizeConstants.BETWEEN_TEXTURES_PADDING;
         TextureRegionHolder.addElementFromAssets(StringConstants.FILE_BULLET,
                 smallObjectTexture, EaFallApplication.getContext(), 0, y);
-        y += SizeConstants.BULLET_SIZE + SizeConstants.BETWEEN_TEXTURES_PADDING;
-        TextureRegionHolder.addElementFromAssets(StringConstants.FILE_TEAM_COLOR,
-                smallObjectTexture, EaFallApplication.getContext(), 0, y);
         smallObjectTexture.load();
         // health bar + 9 bullets at a time per unit, and 2 player (so * 2 in addition)
         SpriteGroup spriteGroup = new SpriteGroup(smallObjectTexture,
                 Config.getConfig().getMovableUnitsLimit() * 10 * 2, vertexBufferObjectManager);
-        SpriteGroupHolder.addGroup(BatchingKeys.BULLET_HEALTH_TEAM_COLOR, spriteGroup);
+        SpriteGroupHolder.addGroup(BatchingKeys.BULLET_AND_HEALTH, spriteGroup);
     }
 
     private void loadSunAndPlanets(TextureManager textureManager,
@@ -134,26 +154,5 @@ public class ClientResourcesLoader extends BaseResourceLoader {
         //sun + planets SpriteGroup
         SpriteGroup spriteGroup = new SpriteGroup(atlas, 4, vertexBufferObjectManager);
         SpriteGroupHolder.addGroup(BatchingKeys.SUN_PLANET, spriteGroup);
-    }
-
-    @Override
-    public void loadFonts(TextureManager textureManager, FontManager fontManager) {
-        MoneyText.loadFont(fontManager, textureManager);
-        DescriptionPopupHud.loadFonts(fontManager, textureManager);
-    }
-
-    @Override
-    public void unloadFonts(TextureManager textureManager, FontManager fontManager) {
-        throw new UnsupportedOperationException("still not implemented");
-    }
-
-    @Override
-    public void unloadImages() {
-        throw new UnsupportedOperationException("still not implemented");
-    }
-
-    @Override
-    public void addImage(String path, int width, int height) {
-        throw new UnsupportedOperationException("no add image for the game");
     }
 }

@@ -14,12 +14,6 @@
         <speed>170</speed>
         <reload_time>1.5</reload_time>
         <sound>electrical_1s.ogg</sound>
-        <team_color_area>
-            <x>2</x>
-            <y>8</y>
-            <width>12</width>
-            <height>3</height>
-        </team_color_area>
     </unit>
     <unit name="mechanical_soldier">
         <id>11</id>
@@ -33,12 +27,6 @@
         <speed>170</speed>
         <reload_time>1.4</reload_time>
         <sound>electrical_1s.ogg</sound>
-        <team_color_area>
-            <x>2</x>
-            <y>8</y>
-            <width>12</width>
-            <height>3</height>
-        </team_color_area>
     </unit>
     <!-- factory -->
     <unit name="oplot_u">
@@ -53,12 +41,6 @@
         <speed>120</speed>
         <reload_time>2.5</reload_time>
         <sound>annihilation_1s.ogg</sound>
-        <team_color_area>
-            <x>7</x>
-            <y>3</y>
-            <width>2</width>
-            <height>8</height>
-        </team_color_area>
     </unit>
     <unit name="oplot_m">
         <id>21</id>
@@ -72,12 +54,6 @@
         <speed>110</speed>
         <reload_time>3.2</reload_time>
         <sound>annihilation_1s.ogg</sound>
-        <team_color_area>
-            <x>7</x>
-            <y>3</y>
-            <width>2</width>
-            <height>8</height>
-        </team_color_area>
     </unit>
     <!-- bomos -->
     <unit name="suicide">
@@ -92,12 +68,6 @@
         <speed>100</speed>
         <reload_time>0</reload_time>
         <sound>electrical_1s.ogg</sound>
-        <team_color_area>
-            <x>2</x>
-            <y>11</y>
-            <width>11</width>
-            <height>3</height>
-        </team_color_area>
     </unit>
     <!-- hospital -->
     <unit name="priest">
@@ -112,12 +82,6 @@
         <speed>140</speed>
         <reload_time>1.7</reload_time>
         <sound>magnetic_1s.ogg</sound>
-        <team_color_area>
-            <x>5</x>
-            <y>5</y>
-            <width>6</width>
-            <height>6</height>
-        </team_color_area>
     </unit>
     <unit name="doctor">
         <id>41</id>
@@ -131,12 +95,6 @@
         <speed>150</speed>
         <reload_time>1.3</reload_time>
         <sound>magnetic_1s.ogg</sound>
-        <team_color_area>
-            <x>5</x>
-            <y>5</y>
-            <width>6</width>
-            <height>6</height>
-        </team_color_area>
     </unit>
     <unit name="shaman">
         <id>42</id>
@@ -150,12 +108,6 @@
         <speed>140</speed>
         <reload_time>1.3</reload_time>
         <sound>magnetic_1s.ogg</sound>
-        <team_color_area>
-            <x>5</x>
-            <y>5</y>
-            <width>6</width>
-            <height>6</height>
-        </team_color_area>
     </unit>
     <!-- minery -->
     <unit name="engineer">
@@ -170,12 +122,6 @@
         <speed>110</speed>
         <reload_time>2.2</reload_time>
         <sound>higgs_3s.ogg</sound>
-        <team_color_area>
-            <x>6</x>
-            <y>6</y>
-            <width>4</width>
-            <height>4</height>
-        </team_color_area>
     </unit>
     <unit name="exploder">
         <id>51</id>
@@ -189,12 +135,6 @@
         <speed>120</speed>
         <reload_time>1.9</reload_time>
         <sound>higgs_3s.ogg</sound>
-        <team_color_area>
-            <x>6</x>
-            <y>6</y>
-            <width>4</width>
-            <height>4</height>
-        </team_color_area>
     </unit>
     <!-- 60 -->
     <unit name="ballista">
@@ -209,12 +149,6 @@
         <speed>60</speed>
         <reload_time>3.5</reload_time>
         <sound>annihilation_1s.ogg</sound>
-        <team_color_area>
-            <x>6</x>
-            <y>1</y>
-            <width>4</width>
-            <height>4</height>
-        </team_color_area>
     </unit>
     <unit name="thor">
         <id>61</id>
@@ -228,12 +162,6 @@
         <speed>70</speed>
         <reload_time>3.9</reload_time>
         <sound>annihilation_1s.ogg</sound>
-        <team_color_area>
-            <x>6</x>
-            <y>1</y>
-            <width>4</width>
-            <height>4</height>
-        </team_color_area>
     </unit>
     <!-- 70 -->
     <unit name="recruiter">
@@ -248,12 +176,6 @@
         <speed>100</speed>
         <reload_time>1.8</reload_time>
         <sound>annihilation_1s.ogg</sound>
-        <team_color_area>
-            <x>6</x>
-            <y>1</y>
-            <width>4</width>
-            <height>4</height>
-        </team_color_area>
     </unit>
     <unit name="saboteur">
         <id>71</id>
@@ -267,12 +189,6 @@
         <speed>100</speed>
         <reload_time>1.9</reload_time>
         <sound>annihilation_1s.ogg</sound>
-        <team_color_area>
-            <x>6</x>
-            <y>1</y>
-            <width>4</width>
-            <height>4</height>
-        </team_color_area>
     </unit>
     <!-- orbital station -->
     <unit name="orbital_station">
@@ -287,11 +203,5 @@
         <speed>1</speed>
         <reload_time>2</reload_time>
         <sound>annihilation_1s.ogg</sound>
-        <team_color_area>
-            <x>6</x>
-            <y>1</y>
-            <width>4</width>
-            <height>4</height>
-        </team_color_area>
     </unit>
 </units>

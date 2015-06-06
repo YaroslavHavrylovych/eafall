@@ -65,7 +65,7 @@ public class Bullet extends BodiedSprite implements RunOnUpdateThreadEvent.Updat
     public Bullet(int width, int height, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
         super(-100, -100, width, height, textureRegion, vertexBufferObjectManager);
         mIsObjectAlive = new AtomicBoolean(true);
-        setSpriteGroupName(BatchingKeys.BULLET_HEALTH_TEAM_COLOR);
+        setSpriteGroupName(BatchingKeys.BULLET_AND_HEALTH);
     }
 
     public void init(Damage damage, FixtureDef fixtureDef) {

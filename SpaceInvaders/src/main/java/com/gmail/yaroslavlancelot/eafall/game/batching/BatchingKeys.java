@@ -9,7 +9,7 @@ package com.gmail.yaroslavlancelot.eafall.game.batching;
  * the smallest value will be the bottom one).
  */
 public class BatchingKeys {
-    public final static String BULLET_HEALTH_TEAM_COLOR = "00_bullets_and_health_bars_and_team_color";
+    public final static String BULLET_AND_HEALTH = "00_bullets_and_health_bars";
     public final static String SUN_PLANET = "01_sun_and_planets";
     public final static String PREFIX_BUILDING = "03_building_";
     public final static String PREFIX_UNIT = "04_unit_";

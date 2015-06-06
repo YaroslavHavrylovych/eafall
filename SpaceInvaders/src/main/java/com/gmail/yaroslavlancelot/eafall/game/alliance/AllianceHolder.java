@@ -33,7 +33,11 @@ public class AllianceHolder extends Holder<IAlliance> {
      */
     public static void addAllianceByName(String name,
                                          final VertexBufferObjectManager objectManager) {
-        IAlliance alliance;
+        IAlliance alliance = getAlliance(name);
+        //if alliance is already loaded then no need to load the data again
+        if(alliance != null) {
+            return;
+        }
         if (name.equals(Imperials.ALLIANCE_NAME)) {
             alliance = new Imperials(objectManager);
         } else if (name.equals(Rebels.ALLIANCE_NAME)) {

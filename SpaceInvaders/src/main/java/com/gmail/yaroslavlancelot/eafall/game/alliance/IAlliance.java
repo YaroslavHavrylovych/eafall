@@ -6,31 +6,56 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitDummy;
 
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.atlas.TextureAtlas;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 
 import java.util.SortedSet;
 
-/** abstract alliance interface */
+/**
+ * abstract alliance interface
+ *
+ * @author Yaroslav Havrylovych
+ */
 public interface IAlliance {
     String getAllianceName();
 
     int getBuildingsAmount();
 
-    int getBuildingCost(BuildingId buildingId);
-
-    /** returns units texture atlas */
-    TextureAtlas getUnitTextureAtlas();
-
     /** returns buildings texture atlas */
     TextureAtlas getBuildingTextureAtlas();
 
-    void loadResources(TextureManager textureManager);
+    /** returns all buildings ids without upgrades */
+    SortedSet<Integer> getBuildingsIds();
 
+    /** returns all buildings ids without upgrades */
+    SortedSet<Integer> getUnitsIds();
+
+    int getBuildingCost(BuildingId buildingId);
+
+    /** load alliance (team independent) resources */
+    void loadAllianceResources(TextureManager textureManager);
+
+    /**
+     * Creates texture atlas and loads units (sprites) to it.
+     * <br/>
+     * Unit texture save in {@link com.gmail.yaroslavlancelot.eafall.game.entity
+     * .TextureRegionHolder} with the key assigned by unit dummy (for now it's
+     * value which you can get by {@link UnitDummy#getTextureRegionKey(String)})
+     *
+     * @param teamName       team name to get unit color for create unit texture
+     * @param textureManager texture manager to create texture atlas (which returns)
+     * @return loaded texture atlas (with units for particular team in it)
+     */
+    BitmapTextureAtlas loadUnitsToTexture(String teamName, TextureManager textureManager);
+
+    /**
+     * get the particular unit dummy
+     *
+     * @param unitId id to identify the unit dummy
+     * @return unit dummy instance
+     */
     UnitDummy getUnitDummy(int unitId);
 
     BuildingDummy getBuildingDummy(BuildingId buildingId);
-
-    /** returns all buildings ids without upgrades */
-    SortedSet<Integer> getBuildingsIds();
 
     /**
      * calculate the building upgrade cost consuming that only one building needs the upgrade

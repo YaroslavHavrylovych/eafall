@@ -5,6 +5,8 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
 
+import org.andengine.util.adt.color.Color;
+
 /** game configuration params */
 public class Config {
     private static Config sConfig;
@@ -17,7 +19,6 @@ public class Config {
      * Graphic
      */
     private final boolean mUnitsHealthBarEnabled = true;
-    private final boolean mTeamColorAreaEnabled = false;
     private final int mMaxZoomFactor = 6;
     /*
      * Game
@@ -26,6 +27,7 @@ public class Config {
     private final int mCreepBuildingsLimit = 7;
     private final int mWealthBuildingsLimit = 5;
     private final int mPlanetHealth = 300000;
+    private final Color mTeamSwapColor = new Color(46.0f/255.0f, 37.0f/255.0f, 118.0f/255.0f);
     /*
      * Sound and music
      */
@@ -87,10 +89,6 @@ public class Config {
         return mMusicEnabled;
     }
 
-    public boolean isTeamColorAreaEnabled() {
-        return mTeamColorAreaEnabled;
-    }
-
     public int getMovableUnitsLimit() {
         return mMovableUnitsLimit;
     }
@@ -109,5 +107,9 @@ public class Config {
 
     public int getDisplayHeight() {
         return mDisplayHeight;
+    }
+
+    public Color getTeamSwapColor() {
+        return mTeamSwapColor;
     }
 }

@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import com.gmail.yaroslavlancelot.eafall.android.activities.PreGameCustomizationBaseActivity;
 import com.gmail.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity;
-import com.gmail.yaroslavlancelot.eafall.game.team.TeamControlBehaviourType;
+import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
 
 public class PreGameCustomizationActivity extends PreGameCustomizationBaseActivity {
     @Override
@@ -15,8 +15,8 @@ public class PreGameCustomizationActivity extends PreGameCustomizationBaseActivi
 
     private void initStartButton() {
         mStartTheGame.setOnClickListener(getStartButtonOnClick(
-                SinglePlayerGameActivity.class, TeamControlBehaviourType.USER_CONTROL_ON_SERVER_SIDE,
-                TeamControlBehaviourType.BOT_CONTROL_ON_SERVER_SIDE
+                SinglePlayerGameActivity.class, ITeam.ControlType.USER_CONTROL_ON_SERVER_SIDE,
+                ITeam.ControlType.BOT_CONTROL_ON_SERVER_SIDE
         ));
     }
 }

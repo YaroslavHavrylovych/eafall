@@ -14,12 +14,6 @@
         <speed>90</speed>
         <reload_time>1.2</reload_time>
         <sound>electrical_1s.ogg</sound>
-        <team_color_area>
-            <x>2</x>
-            <y>8</y>
-            <width>12</width>
-            <height>3</height>
-        </team_color_area>
     </unit>
     <unit name="tortoise">
         <id>11</id>
@@ -33,12 +27,6 @@
         <speed>80</speed>
         <reload_time>1.9</reload_time>
         <sound>electrical_1s.ogg</sound>
-        <team_color_area>
-            <x>2</x>
-            <y>8</y>
-            <width>12</width>
-            <height>3</height>
-        </team_color_area>
     </unit>
     <unit name="dragon">
         <id>12</id>
@@ -52,12 +40,6 @@
         <speed>70</speed>
         <reload_time>2.1</reload_time>
         <sound>electrical_1s.ogg</sound>
-        <team_color_area>
-            <x>2</x>
-            <y>8</y>
-            <width>12</width>
-            <height>3</height>
-        </team_color_area>
     </unit>
     <!-- invisible plain -->
     <unit name="scorpion">
@@ -72,12 +54,6 @@
         <speed>210</speed>
         <reload_time>1.5</reload_time>
         <sound>annihilation_1s.ogg</sound>
-        <team_color_area>
-            <x>7</x>
-            <y>3</y>
-            <width>2</width>
-            <height>8</height>
-        </team_color_area>
     </unit>
     <unit name="king_scorpion">
         <id>21</id>
@@ -91,12 +67,6 @@
         <speed>210</speed>
         <reload_time>1.2</reload_time>
         <sound>annihilation_1s.ogg</sound>
-        <team_color_area>
-            <x>7</x>
-            <y>3</y>
-            <width>2</width>
-            <height>8</height>
-        </team_color_area>
     </unit>
     <!-- hydra pond -->
     <unit name="young_hydra">
@@ -111,12 +81,6 @@
         <speed>80</speed>
         <reload_time>2.3</reload_time>
         <sound>electrical_1s.ogg</sound>
-        <team_color_area>
-            <x>2</x>
-            <y>11</y>
-            <width>11</width>
-            <height>3</height>
-        </team_color_area>
     </unit>
     <unit name="hydra">
         <id>31</id>
@@ -130,12 +94,6 @@
         <speed>60</speed>
         <reload_time>2.2</reload_time>
         <sound>electrical_1s.ogg</sound>
-        <team_color_area>
-            <x>2</x>
-            <y>11</y>
-            <width>11</width>
-            <height>3</height>
-        </team_color_area>
     </unit>
     <!-- poison cave -->
     <unit name="eel">
@@ -150,12 +108,6 @@
         <speed>70</speed>
         <reload_time>1.8</reload_time>
         <sound>magnetic_1s.ogg</sound>
-        <team_color_area>
-            <x>5</x>
-            <y>5</y>
-            <width>6</width>
-            <height>6</height>
-        </team_color_area>
     </unit>
     <unit name="cobra">
         <id>41</id>
@@ -169,12 +121,6 @@
         <speed>80</speed>
         <reload_time>1.9</reload_time>
         <sound>magnetic_1s.ogg</sound>
-        <team_color_area>
-            <x>5</x>
-            <y>5</y>
-            <width>6</width>
-            <height>6</height>
-        </team_color_area>
     </unit>
     <!-- web -->
     <unit name="spider1">
@@ -189,12 +135,6 @@
         <speed>160</speed>
         <reload_time>2.5</reload_time>
         <sound>higgs_3s.ogg</sound>
-        <team_color_area>
-            <x>6</x>
-            <y>6</y>
-            <width>4</width>
-            <height>4</height>
-        </team_color_area>
     </unit>
     <unit name="spider2">
         <id>51</id>
@@ -208,12 +148,6 @@
         <speed>160</speed>
         <reload_time>2.2</reload_time>
         <sound>higgs_3s.ogg</sound>
-        <team_color_area>
-            <x>6</x>
-            <y>6</y>
-            <width>4</width>
-            <height>4</height>
-        </team_color_area>
     </unit>
     <!-- 60 -->
     <unit name="bat">
@@ -228,12 +162,6 @@
         <speed>90</speed>
         <reload_time>1.5</reload_time>
         <sound>annihilation_1s.ogg</sound>
-        <team_color_area>
-            <x>6</x>
-            <y>1</y>
-            <width>4</width>
-            <height>4</height>
-        </team_color_area>
     </unit>
     <unit name="vampire">
         <id>61</id>
@@ -247,12 +175,6 @@
         <speed>100</speed>
         <reload_time>1.4</reload_time>
         <sound>annihilation_1s.ogg</sound>
-        <team_color_area>
-            <x>6</x>
-            <y>1</y>
-            <width>4</width>
-            <height>4</height>
-        </team_color_area>
     </unit>
     <!-- 70 -->
     <unit name="agat">
@@ -267,12 +189,6 @@
         <speed>150</speed>
         <reload_time>1.7</reload_time>
         <sound>annihilation_1s.ogg</sound>
-        <team_color_area>
-            <x>6</x>
-            <y>1</y>
-            <width>4</width>
-            <height>4</height>
-        </team_color_area>
     </unit>
     <unit name="kak">
         <id>71</id>
@@ -286,12 +202,6 @@
         <speed>160</speed>
         <reload_time>2.0</reload_time>
         <sound>annihilation_1s.ogg</sound>
-        <team_color_area>
-            <x>6</x>
-            <y>1</y>
-            <width>4</width>
-            <height>4</height>
-        </team_color_area>
     </unit>
     <!-- orbital station -->
     <unit name="orbital_station">
@@ -306,11 +216,5 @@
         <speed>1</speed>
         <reload_time>2</reload_time>
         <sound>annihilation_1s.ogg</sound>
-        <team_color_area>
-            <x>6</x>
-            <y>1</y>
-            <width>4</width>
-            <height>4</height>
-        </team_color_area>
     </unit>
 </units>

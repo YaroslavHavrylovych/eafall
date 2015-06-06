@@ -48,7 +48,6 @@ import com.gmail.yaroslavlancelot.eafall.game.popup.construction.BuildingsPopupH
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
 import com.gmail.yaroslavlancelot.eafall.game.team.Team;
-import com.gmail.yaroslavlancelot.eafall.game.team.TeamControlBehaviourType;
 import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.ConstructionPopupButton;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.MoneyText;
@@ -158,8 +157,8 @@ public abstract class ClientGameActivity extends GameActivity {
 
     private void initPopups() {
         for (ITeam team : TeamsHolder.getInstance().getElements()) {
-            if (team.getControlType() == TeamControlBehaviourType.USER_CONTROL_ON_SERVER_SIDE ||
-                    team.getControlType() == TeamControlBehaviourType.USER_CONTROL_ON_CLIENT_SIDE) {
+            if (team.getControlType() == ITeam.ControlType.USER_CONTROL_ON_SERVER_SIDE ||
+                    team.getControlType() == ITeam.ControlType.USER_CONTROL_ON_CLIENT_SIDE) {
                 PopupManager.init(team.getName(), mHud, mCamera, getVertexBufferObjectManager());
                 //buildings
                 ConstructionPopupButton button = new ConstructionPopupButton(getVertexBufferObjectManager());
@@ -201,10 +200,10 @@ public abstract class ClientGameActivity extends GameActivity {
      * @param team team to init
      */
     private void initTeam(ITeam team) {
-        TeamControlBehaviourType teamType = team.getControlType();
+        ITeam.ControlType teamType = team.getControlType();
         initTeamFixtureDef(team);
 
-        if (teamType == TeamControlBehaviourType.BOT_CONTROL_ON_SERVER_SIDE) {
+        if (teamType == ITeam.ControlType.BOT_CONTROL_ON_SERVER_SIDE) {
             initBotControlledTeam(team);
         }
 
@@ -212,8 +211,8 @@ public abstract class ClientGameActivity extends GameActivity {
     }
 
     protected void initTeamFixtureDef(ITeam team) {
-        TeamControlBehaviourType type = team.getControlType();
-        boolean isRemote = TeamControlBehaviourType.isClientSide(type);
+        ITeam.ControlType type = team.getControlType();
+        boolean isRemote = ITeam.ControlType.isClientSide(type);
         if (team.getName().equals(StringConstants.FIRST_TEAM_CONTROL_BEHAVIOUR_TYPE)) {
             if (isRemote)
                 team.changeFixtureDefFilter(CollisionCategories.CATEGORY_TEAM1, CollisionCategories.MASKBITS_TEAM1_THIN);
@@ -230,7 +229,7 @@ public abstract class ClientGameActivity extends GameActivity {
     /** create new team depending on team control type which stored in extra */
     protected ITeam createTeam(String teamNameInExtra, IAlliance alliance) {
         Intent intent = getIntent();
-        TeamControlBehaviourType teamType = TeamControlBehaviourType.valueOf(intent.getStringExtra(teamNameInExtra));
+        ITeam.ControlType teamType = ITeam.ControlType.valueOf(intent.getStringExtra(teamNameInExtra));
         return new Team(teamNameInExtra, alliance, teamType);
     }
 
@@ -290,7 +289,7 @@ public abstract class ClientGameActivity extends GameActivity {
     private void initOnScreenText() {
         LoggerHelper.methodInvocation(TAG, "initOnScreenText");
         for (final ITeam team : TeamsHolder.getInstance().getElements()) {
-            if (!TeamControlBehaviourType.isUserControlType(team.getControlType())) continue;
+            if (!ITeam.ControlType.isUserControlType(team.getControlType())) continue;
             LoggerHelper.methodInvocation(TAG, "init money text for " + team.getName() + " team");
             /*
                 Object, which display money value to user. Only one such money text present in the screen
@@ -433,11 +432,11 @@ public abstract class ClientGameActivity extends GameActivity {
      */
     protected Unit createThinUnit(int unitKey, final ITeam unitTeam, float x, float y, long...
             unitUniqueId) {
-        final Unit unit = unitTeam.getAlliance().getUnitDummy(unitKey).constructUnit();
+        final Unit unit = unitTeam.constructUnit(unitKey);
         if (unitUniqueId.length > 0) {
             unit.setObjectUniqueId(unitUniqueId[0]);
         }
-        unit.init(x, y, unitTeam.getName());
+        unit.init(x, y);
         mGameObjectsMap.put(unit.getObjectUniqueId(), unit);
         return unit;
     }

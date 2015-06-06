@@ -24,7 +24,7 @@ public class Imperials extends Alliance {
     }
 
     @Override
-    public void loadResources(final TextureManager textureManager) {
+    public void loadAllianceResources(final TextureManager textureManager) {
         loadUnits(textureManager);
         loadBuildings(textureManager);
     }
