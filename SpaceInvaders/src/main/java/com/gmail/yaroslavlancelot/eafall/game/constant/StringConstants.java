@@ -9,13 +9,13 @@ import java.io.File;
  * <br/>
  * <b>Blue player</b> SAME as <i>first player</i> and same as <i>left player</i>
  * <b>Red player</b> SAME as <i>second player</i> and same as <i>right player</i>
+ *
+ * @author Yaroslav Havrylovych
  */
 public final class StringConstants {
     public static final String SEPARATOR = File.separator;
     /** images storing path */
     public static final String IMAGES_PATH = "graphics/images" + SEPARATOR;
-    /** background */
-    public static String FILE_BACKGROUND = StringConstants.getImagesPath() + "background.png";
     /** sun file name (top image) */
     public static final String FILE_SUN = "graphics/sprites/sun/sun.png";
     /** sun file name (bottom image) */
@@ -24,8 +24,6 @@ public final class StringConstants {
     public static final String FILE_SPLASH_SCREEN = "graphics/images/splash_screen.png";
     /** bullet image */
     public static final String FILE_BULLET = "graphics/sprites/bullet/bullet.png";
-    /** health bar image */
-    public static final String FILE_HEALTH_BAR = "graphics/sprites/health_bar.png";
     /** buildings popup item background */
     public static final String FILE_POPUP_BACKGROUND_ITEM = "graphics/images/background_popup_item.png";
     /** description popup background */
@@ -62,11 +60,21 @@ public final class StringConstants {
     public static final String KEY_FONT_MONEY = "key_money_font";
     /** splash screen key */
     public static final String KEY_SPLASH_SCREEN = "key_splash_screen";
+    /** background */
+    public static String FILE_BACKGROUND = StringConstants.getImagesPath() + "background.png";
 
     /**
      * private constructor
      */
     private StringConstants() {
+    }
+
+    public static String getImagesPath() {
+        return IMAGES_PATH;
+    }
+
+    public static String getMusicPath() {
+        return "audio/music/";
     }
 
     private static String getPathToAllianceSprites(String allianceName) {
@@ -75,10 +83,6 @@ public final class StringConstants {
 
     private static String getPathToAllianceImages(String allianceName) {
         return "graphics/images/alliance/" + allianceName.toLowerCase();
-    }
-
-    public static String getImagesPath() {
-        return IMAGES_PATH;
     }
 
     public static String getPathToBuildings(String allianceName) {
@@ -99,9 +103,5 @@ public final class StringConstants {
 
     public static String getSoundsPath(String allianceName) {
         return "audio/sound/alliance/" + allianceName.toLowerCase() + SEPARATOR;
-    }
-
-    public static String getMusicPath() {
-        return "audio/music/";
     }
 }

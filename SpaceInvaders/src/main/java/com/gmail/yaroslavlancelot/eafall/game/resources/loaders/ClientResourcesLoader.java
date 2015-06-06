@@ -9,10 +9,11 @@ import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
-import com.gmail.yaroslavlancelot.eafall.game.popup.PopupManager;
-import com.gmail.yaroslavlancelot.eafall.game.popup.description.DescriptionPopupHud;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.HealthBar;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
+import com.gmail.yaroslavlancelot.eafall.game.popup.PopupManager;
+import com.gmail.yaroslavlancelot.eafall.game.popup.description.DescriptionPopupHud;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.MoneyText;
 
 import org.andengine.entity.sprite.batch.SpriteGroup;
@@ -22,9 +23,16 @@ import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.TextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.texture.atlas.bitmap.source.IBitmapTextureAtlasSource;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-/** particular resource loader */
+/**
+ * Client resource loader (alliances, players etc).
+ * <br/>
+ * Resources which are used in the game.
+ *
+ * @author Yaroslav Havrylovych
+ */
 public class ClientResourcesLoader extends BaseResourceLoader {
     public ClientResourcesLoader() {
     }
@@ -100,18 +108,27 @@ public class ClientResourcesLoader extends BaseResourceLoader {
             TextureManager textureManager,
             VertexBufferObjectManager vertexBufferObjectManager) {
         BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager,
-                SizeConstants.UNIT_SIZE,
-                SizeConstants.BULLET_SIZE + SizeConstants.HEALTH_BAR_HEIGHT
-                        + SizeConstants.BETWEEN_TEXTURES_PADDING, TextureOptions.BILINEAR);
+                Math.max(SizeConstants.BULLET_SIZE, SizeConstants.HEALTH_BAR_FILE_SIZE),
+                SizeConstants.BULLET_SIZE
+                        + 2 * SizeConstants.HEALTH_BAR_FILE_SIZE
+                        + 2 * SizeConstants.BETWEEN_TEXTURES_PADDING, TextureOptions.BILINEAR);
         //load
         int y = 0;
-        TextureRegionHolder.addElementFromAssets(StringConstants.FILE_HEALTH_BAR,
-                smallObjectTexture, EaFallApplication.getContext(), 0, y);
-        y += SizeConstants.HEALTH_BAR_HEIGHT + SizeConstants.BETWEEN_TEXTURES_PADDING;
+        IBitmapTextureAtlasSource atlasSource;
+        int colorSize = SizeConstants.HEALTH_BAR_FILE_SIZE;
+        for (IPlayer player : PlayersHolder.getInstance().getElements()) {
+            atlasSource = createColoredTextureAtlasSource(player.getColor(),
+                    colorSize, colorSize);
+            TextureRegionHolder.addElementFromSource(
+                    HealthBar.getHealthBarTextureRegionKey(player.getName()),
+                    smallObjectTexture, atlasSource, 0, y);
+            y += colorSize + SizeConstants.BETWEEN_TEXTURES_PADDING;
+        }
         TextureRegionHolder.addElementFromAssets(StringConstants.FILE_BULLET,
                 smallObjectTexture, EaFallApplication.getContext(), 0, y);
         smallObjectTexture.load();
         // health bar + 9 bullets at a time per unit, and 2 player (so * 2 in addition)
+        //TODO check the situation when units doesn't have health bar
         SpriteGroup spriteGroup = new SpriteGroup(smallObjectTexture,
                 Config.getConfig().getMovableUnitsLimit() * 10 * 2, vertexBufferObjectManager);
         SpriteGroupHolder.addGroup(BatchingKeys.BULLET_AND_HEALTH, spriteGroup);

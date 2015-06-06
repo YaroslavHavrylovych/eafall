@@ -22,8 +22,10 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * each visible element on the screen which can be assigned to on or other player and can take
+ * Each visible element on the screen which can be assigned to on or other player and can take
  * participation in object collaboration extends this class (e.g. units, planets, sun etc)
+ *
+ * @author Yaroslav Havrylovych
  */
 public abstract class GameObject extends BodiedSprite {
     public static final float VELOCITY_EPSILON = 0.00000001f;
@@ -61,20 +63,12 @@ public abstract class GameObject extends BodiedSprite {
                 "objects amount: " + sGameObjectsTracker.get());
     }
 
-    public static void clearCounter() {
-        sGameObjectsTracker.set(0);
-    }
-
     public long getObjectUniqueId() {
         return mUniqueId;
     }
 
     public void setObjectUniqueId(long id) {
         mUniqueId = id;
-    }
-
-    public void setGameObjectHealthChangedListener(IHealthListener gameObjectHealthChangedListener) {
-        mGameObjectHealthChangedListener = gameObjectHealthChangedListener;
     }
 
     public int getObjectStringId() {
@@ -85,46 +79,32 @@ public abstract class GameObject extends BodiedSprite {
         mObjectStringId = id;
     }
 
-    public void initHealth(int objectMaximumHealth) {
-        initHealth(objectMaximumHealth, objectMaximumHealth);
-    }
-
-    protected void initHealth(int objectMaximumHealth, int objectCurrentHealth) {
-        mObjectCurrentHealth = objectCurrentHealth;
-        mObjectMaximumHealth = objectMaximumHealth;
-    }
-
-    protected void initHealthBar() {
-        initChildren();
-        mHealthBar = new HealthBar(getVertexBufferObjectManager(), getWidth());
-        attachChild(mHealthBar.getHealthBarSprite());
-    }
-
-    protected void initChildren() {
-        if (mChildren == null) {
-            mChildren = new SmartList<BatchedSprite>(2);
-        }
-    }
-
-    protected void playSound(Sound sound) {
-        if (sound != null && sound.isLoaded()) {
-            SoundFactory.getInstance().playSound(sound, getX(), getY());
-        }
-    }
-
     public boolean isObjectAlive() {
         return (mObjectCurrentHealth > 0 || mObjectCurrentHealth == sInvincibleObjectKey) && mPhysicBody != null;
     }
 
-    public void addObjectDestroyedListener(final IDestroyListener objectDestroyedListener) {
-        mObjectDestroyedListener.add(objectDestroyedListener);
+    public Armor getObjectArmor() {
+        return mObjectArmor;
     }
 
-    public void damageObject(final Damage damage) {
-        if (mObjectCurrentHealth == sInvincibleObjectKey) return;
-        int objectHealth = mObjectCurrentHealth - mObjectArmor.getDamage(damage);
+    public Damage getObjectDamage() {
+        return mObjectDamage;
+    }
 
-        setHealth(objectHealth);
+    public int getObjectCurrentHealth() {
+        return mObjectCurrentHealth;
+    }
+
+    public int getMaximumObjectHealth() {
+        return mObjectMaximumHealth;
+    }
+
+    public float getRotationAngle() {
+        return getRotation();
+    }
+
+    public void setGameObjectHealthChangedListener(IHealthListener gameObjectHealthChangedListener) {
+        mGameObjectHealthChangedListener = gameObjectHealthChangedListener;
     }
 
     /**
@@ -152,61 +132,14 @@ public abstract class GameObject extends BodiedSprite {
         }
     }
 
-    protected void onNegativeHealth() {
-        LoggerHelper.methodInvocation(TAG, "onNegativeHealth");
-    }
-
-    public Armor getObjectArmor() {
-        return mObjectArmor;
-    }
-
-    public Damage getObjectDamage() {
-        return mObjectDamage;
-    }
-
-    public int getObjectCurrentHealth() {
-        return mObjectCurrentHealth;
-    }
-
-    public int getMaximumObjectHealth() {
-        return mObjectMaximumHealth;
-    }
-
     @Override
     public void setPosition(float pX, float pY) {
         super.setPosition(pX, pY);
         updateHealthBarPosition();
     }
 
-    private void updateHealthBarPosition() {
-        if (mHealthBar != null) {
-            mHealthBar.setPosition(getX() - getWidth() / 2,
-                    getY() + getHeight() / 2 + SizeConstants.HEALTH_BAR_HEIGHT);
-        }
-    }
-
-    /** rotate all objects which hold current game object (and children) exclude health bar */
-    public void rotate(float angleInDeg) {
-        setRotation(angleInDeg);
-    }
-
-    public float getRotationAngle() {
-        return getRotation();
-    }
-
-    /**
-     * physic body will change rotation (in radiance) to point it's head to the target.
-     *
-     * @param x target abscissa coordinate
-     * @param y target ordinate coordinate
-     * @return angle value if current angle needs to be changed and null if physic body already in position
-     */
-    public float getDirection(float x, float y) {
-        // next till the end will calculate angle
-        float currentX = getX(),
-                currentY = getY();
-
-        return getDirection(currentX, currentY, x, y);
+    public static void clearCounter() {
+        sGameObjectsTracker.set(0);
     }
 
     /**
@@ -226,6 +159,79 @@ public abstract class GameObject extends BodiedSprite {
 
         if (startX > x) return newAngle + 3 * MathConstants.PI / 2;
         return MathConstants.PI / 2 - newAngle;
+    }
+
+    public void initHealth(int objectMaximumHealth) {
+        initHealth(objectMaximumHealth, objectMaximumHealth);
+    }
+
+    protected void initHealth(int objectMaximumHealth, int objectCurrentHealth) {
+        mObjectCurrentHealth = objectCurrentHealth;
+        mObjectMaximumHealth = objectMaximumHealth;
+    }
+
+    protected void initHealthBar() {
+        if (!(this instanceof IPlayerObject)) {
+            return;
+        }
+        initChildren();
+        mHealthBar = new HealthBar(((IPlayerObject) this).getPlayer(),
+                getWidth(), getVertexBufferObjectManager());
+        attachChild(mHealthBar.getHealthBarSprite());
+    }
+
+    protected void initChildren() {
+        if (mChildren == null) {
+            mChildren = new SmartList<BatchedSprite>(2);
+        }
+    }
+
+    protected void playSound(Sound sound) {
+        if (sound != null && sound.isLoaded()) {
+            SoundFactory.getInstance().playSound(sound, getX(), getY());
+        }
+    }
+
+    public void addObjectDestroyedListener(final IDestroyListener objectDestroyedListener) {
+        mObjectDestroyedListener.add(objectDestroyedListener);
+    }
+
+    public void damageObject(final Damage damage) {
+        if (mObjectCurrentHealth == sInvincibleObjectKey) return;
+        int objectHealth = mObjectCurrentHealth - mObjectArmor.getDamage(damage);
+
+        setHealth(objectHealth);
+    }
+
+    protected void onNegativeHealth() {
+        LoggerHelper.methodInvocation(TAG, "onNegativeHealth");
+    }
+
+    private void updateHealthBarPosition() {
+        if (mHealthBar != null) {
+            mHealthBar.setPosition(getX() - getWidth() / 2,
+                    getY() + getHeight() / 2 + SizeConstants.HEALTH_BAR_HEIGHT);
+        }
+    }
+
+    /** rotate all objects which hold current game object (and children) exclude health bar */
+    public void rotate(float angleInDeg) {
+        setRotation(angleInDeg);
+    }
+
+    /**
+     * physic body will change rotation (in radiance) to point it's head to the target.
+     *
+     * @param x target abscissa coordinate
+     * @param y target ordinate coordinate
+     * @return angle value if current angle needs to be changed and null if physic body already in position
+     */
+    public float getDirection(float x, float y) {
+        // next till the end will calculate angle
+        float currentX = getX(),
+                currentY = getY();
+
+        return getDirection(currentX, currentY, x, y);
     }
 
     /** set physic body velocity */
