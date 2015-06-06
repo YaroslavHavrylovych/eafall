@@ -257,8 +257,8 @@ public class Team implements ITeam {
         mTeamFixtureDef.filter.maskBits = maskBits;
     }
 
-    private void initBuildingsTypes(IAlliance allianceRace) {
-        Set<Integer> idSet = allianceRace.getBuildingsIds();
+    private void initBuildingsTypes(IAlliance alliance) {
+        Set<Integer> idSet = alliance.getBuildingsIds();
         mBuildingsTypesIds = new BuildingId[idSet.size()];
         Iterator<Integer> it = idSet.iterator();
         int id, i = 0;
