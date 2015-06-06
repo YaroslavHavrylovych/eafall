@@ -10,11 +10,11 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.stationary.
 public class StationaryUnitsPool extends AfterInitializationPool<StationaryUnit> {
     public static final String TAG = StationaryUnitsPool.class.getCanonicalName();
     private final StationaryUnitBuilder mStationaryUnitBuilder;
-    private final String mTeamName;
+    private final String mPlayerName;
 
-    public StationaryUnitsPool(StationaryUnitBuilder unitBuilder, String teamName) {
+    public StationaryUnitsPool(StationaryUnitBuilder unitBuilder, String playerName) {
         mStationaryUnitBuilder = unitBuilder;
-        mTeamName = teamName;
+        mPlayerName = playerName;
         initPool(3, 1);
     }
 
@@ -29,7 +29,7 @@ public class StationaryUnitsPool extends AfterInitializationPool<StationaryUnit>
                 recycle(this);
             }
         };
-        stationaryUnit.setTeam(mTeamName);
+        stationaryUnit.setPlayer(mPlayerName);
         return stationaryUnit;
     }
 }

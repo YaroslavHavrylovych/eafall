@@ -19,7 +19,7 @@ public class Bonus extends SelfCleanable {
     private BonusType mBonusType;
     /**
      * Decides can current bonus be imposed with other bonuses <br/>
-     * General example for this is team bonuses. They are for all units and
+     * General example for this is player bonuses. They are for all units and
      * unit can have other bonuses at the same time which are not coupled together.
      */
     private boolean mImposed;

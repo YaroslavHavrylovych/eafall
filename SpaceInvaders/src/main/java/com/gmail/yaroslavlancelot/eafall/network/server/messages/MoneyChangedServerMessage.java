@@ -9,28 +9,28 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class MoneyChangedServerMessage extends ServerMessage implements ServerMessagesConstants {
-    private String mTeamName;
+    private String mPlayerName;
     private int mMoney;
 
     @Deprecated
     public MoneyChangedServerMessage() {
     }
 
-    public MoneyChangedServerMessage(String teamName, int money) {
-        mTeamName = teamName;
+    public MoneyChangedServerMessage(String playerName, int money) {
+        mPlayerName = playerName;
         mMoney = money;
     }
 
     @Override
     protected void onReadTransmissionData(DataInputStream pDataInputStream) throws IOException {
         mMoney = pDataInputStream.readInt();
-        mTeamName = pDataInputStream.readUTF();
+        mPlayerName = pDataInputStream.readUTF();
     }
 
     @Override
     protected void onWriteTransmissionData(DataOutputStream pDataOutputStream) throws IOException {
         pDataOutputStream.writeInt(mMoney);
-        pDataOutputStream.writeUTF(mTeamName);
+        pDataOutputStream.writeUTF(mPlayerName);
     }
 
     @Override
@@ -38,8 +38,8 @@ public class MoneyChangedServerMessage extends ServerMessage implements ServerMe
         return MONEY_CHANGED;
     }
 
-    public String getTeamName() {
-        return mTeamName;
+    public String getPlayerName() {
+        return mPlayerName;
     }
 
     public int getMoney() {

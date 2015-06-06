@@ -11,8 +11,8 @@ import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.popup.PopupManager;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.DescriptionPopupHud;
-import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
-import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
+import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
+import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.MoneyText;
 
 import org.andengine.entity.sprite.batch.SpriteGroup;
@@ -37,7 +37,7 @@ public class ClientResourcesLoader extends BaseResourceLoader {
         //alliance
         loadAllianceResources(textureManager);
         //players
-        loadTeamResources(textureManager, vertexBufferObjectManager);
+        loadPlayerResources(textureManager, vertexBufferObjectManager);
         //bullets and health bars
         loadBulletAndHealthBar(textureManager, vertexBufferObjectManager);
         //sun and planets
@@ -73,29 +73,29 @@ public class ClientResourcesLoader extends BaseResourceLoader {
         }
     }
 
-    private void loadTeamResources(TextureManager textureManager, VertexBufferObjectManager
+    private void loadPlayerResources(TextureManager textureManager, VertexBufferObjectManager
             vertexBufferObjectManager) {
-        for (ITeam team : TeamsHolder.getInstance().getElements()) {
-            String teamName = team.getName();
-            IAlliance alliance = team.getAlliance();
+        for (IPlayer player : PlayersHolder.getInstance().getElements()) {
+            String playerName = player.getName();
+            IAlliance alliance = player.getAlliance();
             //building SpriteGroup
             TextureAtlas textureAtlas = alliance.getBuildingTextureAtlas();
             SpriteGroup spriteGroup = new SpriteGroup(textureAtlas,
                     alliance.getBuildingsAmount(),
                     vertexBufferObjectManager);
-            SpriteGroupHolder.addGroup(BatchingKeys.getBuildingSpriteGroup(teamName), spriteGroup);
+            SpriteGroupHolder.addGroup(BatchingKeys.getBuildingSpriteGroup(playerName), spriteGroup);
             //unit SpriteGroup
-            textureAtlas = alliance.loadUnitsToTexture(teamName, textureManager);
+            textureAtlas = alliance.loadUnitsToTexture(playerName, textureManager);
             spriteGroup = new SpriteGroup(textureAtlas,
                     Config.getConfig().getMovableUnitsLimit(),
                     vertexBufferObjectManager);
-            SpriteGroupHolder.addGroup(BatchingKeys.getUnitSpriteGroup(teamName), spriteGroup);
+            SpriteGroupHolder.addGroup(BatchingKeys.getUnitSpriteGroup(playerName), spriteGroup);
             //unit pool
-            team.createUnitPool(vertexBufferObjectManager);
+            player.createUnitPool(vertexBufferObjectManager);
         }
     }
 
-    /** load images for bullets, health bars and team colors */
+    /** load images for bullets, health bars and player colors */
     private void loadBulletAndHealthBar(
             TextureManager textureManager,
             VertexBufferObjectManager vertexBufferObjectManager) {

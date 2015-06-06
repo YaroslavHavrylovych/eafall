@@ -68,13 +68,13 @@ public class UnitPopupUpdater extends BasePopupUpdater {
     }
 
     @Override
-    public void updateDescription(Shape drawArea, Object objectId, String allianceName, String teamName) {
+    public void updateDescription(Shape drawArea, Object objectId, String allianceName, String playerName) {
         //description
-        mDescriptionAreaUpdater.updateDescription(drawArea, objectId, allianceName, teamName);
+        mDescriptionAreaUpdater.updateDescription(drawArea, objectId, allianceName, playerName);
     }
 
     @Override
-    public void updateAdditionInfo(Shape drawArea, Object objectId, String allianceName, String teamName) {
-        mAdditionInformationAreaUpdater.updateDescription(drawArea, objectId, allianceName, teamName);
+    public void updateAdditionInfo(Shape drawArea, Object objectId, String allianceName, String playerName) {
+        mAdditionInformationAreaUpdater.updateDescription(drawArea, objectId, allianceName, playerName);
     }
 }

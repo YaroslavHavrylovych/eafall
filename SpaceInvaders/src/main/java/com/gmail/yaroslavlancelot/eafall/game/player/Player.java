@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.eafall.game.team;
+package com.gmail.yaroslavlancelot.eafall.game.player;
 
 import android.util.SparseArray;
 
@@ -39,48 +39,48 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import de.greenrobot.event.EventBus;
 
-/** Player team implementation */
-public class Team implements ITeam {
-    private static final String TAG = Team.class.getCanonicalName();
+/** Player player implementation */
+public class Player implements IPlayer {
+    private static final String TAG = Player.class.getCanonicalName();
     public final int INIT_MONEY_VALUE = 200;
     /** used for {@link com.gmail.yaroslavlancelot.eafall.game.SharedDataCallbacks} */
     public final String MOVABLE_UNIT_CREATED_CALLBACK_KEY;
-    /** fixture def of the team (used for bullet creation) */
-    protected final FixtureDef mTeamFixtureDef;
+    /** fixture def of the player (used for bullet creation) */
+    protected final FixtureDef mPlayerFixtureDef;
     /** keep track about the units amount */
     private final AtomicInteger sUnitsAmount = new AtomicInteger(0);
-    /** current team name */
-    private final String mTeamName;
-    /** current team alliance */
+    /** current player name */
+    private final String mPlayerName;
+    /** current player alliance */
     private final IAlliance mAlliance;
     private final AtomicBoolean mIsFirstIncome = new AtomicBoolean(true);
-    /** object related to current team */
-    private final List<GameObject> mTeamObjects;
-    /** current team main planet */
-    private volatile PlanetStaticObject mTeamPlanet;
-    /** team to fight with */
-    private ITeam mEnemyTeam;
-    /** current team money amount */
+    /** object related to current player */
+    private final List<GameObject> mPlayerObjects;
+    /** current player main planet */
+    private volatile PlanetStaticObject mPlayerPlanet;
+    /** player to fight with */
+    private IPlayer mEnemyPlayer;
+    /** current player money amount */
     private volatile int mMoneyAmount;
-    /** team color */
-    private Color mTeamColor = new Color(100, 100, 100);
-    /** team control type */
+    /** player color */
+    private Color mPlayerColor = new Color(100, 100, 100);
+    /** player control type */
     private ControlType mControlType;
-    /** array of buildings which team can build */
+    /** array of buildings which player can build */
     private BuildingId[] mBuildingsTypesIds;
-    /** bonus which will be applied to each team unit */
+    /** bonus which will be applied to each player unit */
     private ArrayList<Bonus> mUnitBonuses = new ArrayList<Bonus>(2);
     /** units pools */
     private SparseArray<AfterInitializationPool<Unit>> mUnitsPools;
 
-    public Team(final String teamName, IAlliance alliance, ControlType teamType) {
-        mTeamObjects = new ArrayList<GameObject>(50);
-        mTeamName = teamName;
-        MOVABLE_UNIT_CREATED_CALLBACK_KEY = "UNIT_CREATED_" + teamName;
+    public Player(final String playerName, IAlliance alliance, ControlType playerType) {
+        mPlayerObjects = new ArrayList<GameObject>(50);
+        mPlayerName = playerName;
+        MOVABLE_UNIT_CREATED_CALLBACK_KEY = "UNIT_CREATED_" + playerName;
         mAlliance = alliance;
         initBuildingsTypes(alliance);
-        mControlType = teamType;
-        mTeamFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f, false);
+        mControlType = playerType;
+        mPlayerFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f, false);
         EventBus.getDefault().register(this);
     }
 
@@ -90,32 +90,32 @@ public class Team implements ITeam {
 
     @Override
     public PlanetStaticObject getPlanet() {
-        return mTeamPlanet;
+        return mPlayerPlanet;
     }
 
     @Override
     public void setPlanet(final PlanetStaticObject planet) {
-        mTeamPlanet = planet;
+        mPlayerPlanet = planet;
     }
 
     @Override
-    public ITeam getEnemyTeam() {
-        return mEnemyTeam;
+    public IPlayer getEnemyPlayer() {
+        return mEnemyPlayer;
     }
 
     @Override
-    public void setEnemyTeam(final ITeam enemyTeam) {
-        mEnemyTeam = enemyTeam;
+    public void setEnemyPlayer(final IPlayer enemyPlayer) {
+        mEnemyPlayer = enemyPlayer;
     }
 
     @Override
-    public List<GameObject> getTeamObjects() {
-        return mTeamObjects;
+    public List<GameObject> getPlayerObjects() {
+        return mPlayerObjects;
     }
 
     @Override
     public String getName() {
-        return mTeamName;
+        return mPlayerName;
     }
 
     @Override
@@ -136,12 +136,12 @@ public class Team implements ITeam {
 
     @Override
     public Color getColor() {
-        return mTeamColor;
+        return mPlayerColor;
     }
 
     @Override
-    public void setColor(final Color teamColor) {
-        mTeamColor = teamColor;
+    public void setColor(final Color playerColor) {
+        mPlayerColor = playerColor;
     }
 
     @Override
@@ -151,7 +151,7 @@ public class Team implements ITeam {
 
     @Override
     public FixtureDef getFixtureDefUnit() {
-        return mTeamFixtureDef;
+        return mPlayerFixtureDef;
     }
 
     @Override
@@ -191,24 +191,24 @@ public class Team implements ITeam {
     }
 
     @Override
-    public void addBonus(Bonus teamBonus) {
-        synchronized (mTeamObjects) {
-            mUnitBonuses.add(teamBonus);
-            for (GameObject gameObject : mTeamObjects) {
+    public void addBonus(Bonus playerBonus) {
+        synchronized (mPlayerObjects) {
+            mUnitBonuses.add(playerBonus);
+            for (GameObject gameObject : mPlayerObjects) {
                 if (!(gameObject instanceof MovableUnit)) {
                     continue;
                 }
                 MovableUnit unit = (MovableUnit) gameObject;
-                unit.addBonus(teamBonus, Integer.MAX_VALUE);
+                unit.addBonus(playerBonus, Integer.MAX_VALUE);
             }
         }
     }
 
     @Override
-    public void addObjectToTeam(final GameObject object) {
-        LoggerHelper.printVerboseMessage(TAG, String.format("Team(%s) object added", getName()));
-        synchronized (mTeamObjects) {
-            mTeamObjects.add(object);
+    public void addObjectToPlayer(final GameObject object) {
+        LoggerHelper.printVerboseMessage(TAG, String.format("Player(%s) object added", getName()));
+        synchronized (mPlayerObjects) {
+            mPlayerObjects.add(object);
         }
         if (object instanceof MovableUnit) {
             for (Bonus bonus : mUnitBonuses) {
@@ -220,10 +220,10 @@ public class Team implements ITeam {
     }
 
     @Override
-    public void removeObjectFromTeam(final GameObject object) {
-        LoggerHelper.printVerboseMessage(TAG, String.format("Team(%s) object removed", getName()));
-        synchronized (mTeamObjects) {
-            mTeamObjects.remove(object);
+    public void removeObjectFromPlayer(final GameObject object) {
+        LoggerHelper.printVerboseMessage(TAG, String.format("Player(%s) object removed", getName()));
+        synchronized (mPlayerObjects) {
+            mPlayerObjects.remove(object);
         }
         if (object instanceof MovableUnit) {
             SharedDataCallbacks.valueChanged(MOVABLE_UNIT_CREATED_CALLBACK_KEY,
@@ -233,7 +233,7 @@ public class Team implements ITeam {
 
     @Override
     public void removePlanet() {
-        mTeamPlanet = null;
+        mPlayerPlanet = null;
     }
 
     @Override
@@ -243,18 +243,18 @@ public class Team implements ITeam {
 
     @Override
     public void incomeTime() {
-        if (mTeamPlanet == null) return;
+        if (mPlayerPlanet == null) return;
         if (mIsFirstIncome.getAndSet(false)) {
             changeMoney(INIT_MONEY_VALUE);
             return;
         }
-        changeMoney(mTeamPlanet.getIncome());
+        changeMoney(mPlayerPlanet.getIncome());
     }
 
     @Override
     public void changeFixtureDefFilter(short category, short maskBits) {
-        mTeamFixtureDef.filter.categoryBits = category;
-        mTeamFixtureDef.filter.maskBits = maskBits;
+        mPlayerFixtureDef.filter.categoryBits = category;
+        mPlayerFixtureDef.filter.maskBits = maskBits;
     }
 
     private void initBuildingsTypes(IAlliance alliance) {
@@ -269,14 +269,14 @@ public class Team implements ITeam {
     }
 
     /**
-     * Sync team buildings with planet buildings. So after this sync
+     * Sync player buildings with planet buildings. So after this sync
      * {@link #mBuildingsTypesIds} will have same upgrades as on the planet.
      */
     private void syncBuildingsWithPlanet() {
-        if (mTeamPlanet.getExistingBuildingsTypesAmount() == 0) {
+        if (mPlayerPlanet.getExistingBuildingsTypesAmount() == 0) {
             return;
         }
-        Set<Integer> planetBuildings = mTeamPlanet.getExistingBuildingsTypes();
+        Set<Integer> planetBuildings = mPlayerPlanet.getExistingBuildingsTypes();
         SortedSet<Integer> allBuildings = mAlliance.getBuildingsIds();
 
         Iterator<Integer> it = allBuildings.iterator();
@@ -290,7 +290,7 @@ public class Team implements ITeam {
             //TODO you have to calculate position in other way
             int position = allBuildings.headSet(id).size();
             BuildingId buildingId = mBuildingsTypesIds[position];
-            IBuilding building = mTeamPlanet.getBuilding(id);
+            IBuilding building = mPlayerPlanet.getBuilding(id);
             if (buildingId.getUpgrade() == building.getUpgrade()) {
                 continue;
             }
@@ -301,9 +301,9 @@ public class Team implements ITeam {
     @SuppressWarnings("unused")
     /** really used by {@link de.greenrobot.event.EventBus} */
     public void onEvent(final UpgradeBuildingEvent upgradeBuildingEvent) {
-        ITeam team = TeamsHolder.getTeam(upgradeBuildingEvent.getTeamName());
-        //check if its current team upgrade
-        if (!team.getName().equals(getName())) {
+        IPlayer player = PlayersHolder.getPlayer(upgradeBuildingEvent.getPlayerName());
+        //check if its current player upgrade
+        if (!player.getName().equals(getName())) {
             return;
         }
         BuildingId buildingId = upgradeBuildingEvent.getBuildingId();

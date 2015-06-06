@@ -10,11 +10,11 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.Mov
 public class MovableUnitsPool extends AfterInitializationPool<MovableUnit> {
     public static final String TAG = MovableUnitsPool.class.getCanonicalName();
     private final MovableUnitBuilder mMovableUnitBuilder;
-    private final String mTeamName;
+    private final String mPlayerName;
 
-    public MovableUnitsPool(MovableUnitBuilder unitBuilder, String teamName) {
+    public MovableUnitsPool(MovableUnitBuilder unitBuilder, String playerName) {
         mMovableUnitBuilder = unitBuilder;
-        mTeamName = teamName;
+        mPlayerName = playerName;
         initPool(2, 2);
     }
 
@@ -29,7 +29,7 @@ public class MovableUnitsPool extends AfterInitializationPool<MovableUnit> {
                 recycle(this);
             }
         };
-        movableUnit.setTeam(mTeamName);
+        movableUnit.setPlayer(mPlayerName);
         return movableUnit;
     }
 }

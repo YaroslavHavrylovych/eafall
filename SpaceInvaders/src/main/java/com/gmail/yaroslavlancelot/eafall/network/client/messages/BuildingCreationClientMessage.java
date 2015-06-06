@@ -11,28 +11,28 @@ import java.io.IOException;
 
 public class BuildingCreationClientMessage extends ClientMessage implements ClientMessagesConstants {
     private BuildingId mBuildingId;
-    private String mTeamName;
+    private String mPlayerName;
 
     @Deprecated
     public BuildingCreationClientMessage() {
     }
 
-    public BuildingCreationClientMessage(String teamName, int buildingId, int upgrade) {
+    public BuildingCreationClientMessage(String playerName, int buildingId, int upgrade) {
         mBuildingId = BuildingId.makeId(buildingId, upgrade);
-        mTeamName = teamName;
+        mPlayerName = playerName;
     }
 
     public BuildingId getBuildingId() {
         return mBuildingId;
     }
 
-    public String getTeamName() {
-        return mTeamName;
+    public String getPlayerName() {
+        return mPlayerName;
     }
 
     @Override
     protected void onReadTransmissionData(final DataInputStream pDataInputStream) throws IOException {
-        mTeamName = pDataInputStream.readUTF();
+        mPlayerName = pDataInputStream.readUTF();
         int id = pDataInputStream.readInt();
         int upgrade = pDataInputStream.readInt();
         mBuildingId = BuildingId.makeId(id, upgrade);
@@ -40,7 +40,7 @@ public class BuildingCreationClientMessage extends ClientMessage implements Clie
 
     @Override
     protected void onWriteTransmissionData(final DataOutputStream pDataOutputStream) throws IOException {
-        pDataOutputStream.writeUTF(mTeamName);
+        pDataOutputStream.writeUTF(mPlayerName);
         pDataOutputStream.writeInt(mBuildingId.getId());
         pDataOutputStream.writeInt(mBuildingId.getUpgrade());
     }

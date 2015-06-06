@@ -6,29 +6,29 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.Buildin
 public class BuildingsAmountChangedEvent {
     private final BuildingId mBuildingId;
     private final int mNewBuildingsAmount;
-    private final String mTeamName;
+    private final String mPlayerName;
 
     /**
      * building created event
      *
-     * @param teamName           team name to create a building
-     * @param buildingId         building buildingId in team
+     * @param playerName           player name to create a building
+     * @param buildingId         building buildingId in player
      * @param newBuildingsAmount new buildings amount
      */
-    public BuildingsAmountChangedEvent(final String teamName, BuildingId buildingId, int newBuildingsAmount) {
+    public BuildingsAmountChangedEvent(final String playerName, BuildingId buildingId, int newBuildingsAmount) {
         mBuildingId = buildingId;
-        mTeamName = teamName;
+        mPlayerName = playerName;
         mNewBuildingsAmount = newBuildingsAmount;
     }
 
-    /** returns building key/id in team */
+    /** returns building key/id in player */
     public BuildingId getBuildingId() {
         return mBuildingId;
     }
 
-    /** team to create building */
-    public String getTeamName() {
-        return mTeamName;
+    /** player to create building */
+    public String getPlayerName() {
+        return mPlayerName;
     }
 
     public int getNewBuildingsAmount() {

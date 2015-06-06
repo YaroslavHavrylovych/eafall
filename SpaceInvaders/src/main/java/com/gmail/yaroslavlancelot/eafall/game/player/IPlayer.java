@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.eafall.game.team;
+package com.gmail.yaroslavlancelot.eafall.game.player;
 
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
@@ -14,56 +14,56 @@ import org.andengine.util.adt.color.Color;
 import java.util.List;
 
 /**
- * Player team interface. Each team can have only one team in opponents
+ * Player player interface. Each player can have only one player in opponents
  *
  * @author Yaroslav Havrylovych
  */
-public interface ITeam {
-    /** return current team units amount */
+public interface IPlayer {
+    /** return current player units amount */
     int getUnitsAmount();
 
     /**
-     * get team {@link com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetStaticObject}
+     * get player {@link com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetStaticObject}
      * which can be oly one
      */
     PlanetStaticObject getPlanet();
 
     /**
-     * set team {@link com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetStaticObject}
-     * which can be only one and if it will be destroyed then team loose
+     * set player {@link com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetStaticObject}
+     * which can be only one and if it will be destroyed then player loose
      */
     void setPlanet(PlanetStaticObject planet);
 
-    /** get enemy team for the current team */
-    ITeam getEnemyTeam();
+    /** get enemy player for the current player */
+    IPlayer getEnemyPlayer();
 
-    /** set enemy team */
-    void setEnemyTeam(ITeam enemyTeam);
+    /** set enemy player */
+    void setEnemyPlayer(IPlayer enemyPlayer);
 
-    /** get list of all {@link com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject} for the current team */
-    List<GameObject> getTeamObjects();
+    /** get list of all {@link com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject} for the current player */
+    List<GameObject> getPlayerObjects();
 
-    /** get current team name */
+    /** get current player name */
     String getName();
 
-    /** get team money */
+    /** get player money */
     int getMoney();
 
     /** set money value */
     void setMoney(int money);
 
-    /** get current team alliance */
+    /** get current player alliance */
     IAlliance getAlliance();
 
-    /** return current team color */
+    /** return current player color */
     Color getColor();
 
-    /** set color for the team (used in like background color for team elements) */
-    void setColor(Color teamColor);
+    /** set color for the player (used in like background color for player elements) */
+    void setColor(Color playerColor);
 
     /**
-     * return {@link ControlType} which different for all teams
-     * (and even for one team in server and client)
+     * return {@link ControlType} which different for all players
+     * (and even for one player in server and client)
      */
     ControlType getControlType();
 
@@ -76,7 +76,7 @@ public interface ITeam {
     /**
      * Obtain unit from the pool or create new one.
      * <br/>
-     * unit will not be added as team object, you have to do it manually
+     * unit will not be added as player object, you have to do it manually
      *
      * @param unitKey unit id
      * @return created unit
@@ -91,61 +91,61 @@ public interface ITeam {
     void createUnitPool(VertexBufferObjectManager vertexManager);
 
     /**
-     * add bonus which will be applied to each unit which is added to the team
+     * add bonus which will be applied to each unit which is added to the player
      *
-     * @param teamBonus bonus to add
+     * @param playerBonus bonus to add
      */
-    void addBonus(Bonus teamBonus);
+    void addBonus(Bonus playerBonus);
 
     /**
      * Add new {@link com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject}
-     * to a team. If this is the unit, then bonuses will be added during this method.
+     * to a player. If this is the unit, then bonuses will be added during this method.
      */
-    void addObjectToTeam(GameObject object);
+    void addObjectToPlayer(GameObject object);
 
     /**
      * Remove {@link com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject}
-     * from the team team.
+     * from the player player.
      */
-    void removeObjectFromTeam(GameObject object);
+    void removeObjectFromPlayer(GameObject object);
 
-    /** removing team plane (team defeat) */
+    /** removing player plane (player defeat) */
     void removePlanet();
 
     /**
-     * change current team money
+     * change current player money
      *
      * @param delta value for which money will change (can be less then zero)
      */
     void changeMoney(int delta);
 
-    /** team get income from all it's income objects (e.g. buildings on the planet) */
+    /** player get income from all it's income objects (e.g. buildings on the planet) */
     void incomeTime();
 
-    /** set category and maskBit for current team units */
+    /** set category and maskBit for current player units */
     void changeFixtureDefFilter(short category, short maskBits);
 
-    /** Constant to define what team control type will be used */
+    /** Constant to define what player control type will be used */
     enum ControlType {
         /*
          * SERVER SIDE
          */
-        /** point that team controlled by user and it's server side */
+        /** point that player controlled by user and it's server side */
         USER_CONTROL_ON_SERVER_SIDE,
-        /** point that team controlled remotely and it's server side */
+        /** point that player controlled remotely and it's server side */
         REMOTE_CONTROL_ON_SERVER_SIDE,
-        /** point that team control by bot (p.s. it's always on server side) */
+        /** point that player control by bot (p.s. it's always on server side) */
         BOT_CONTROL_ON_SERVER_SIDE,
 
         /*
          * CLIENT SIDE
          */
-        /** point that team controlled by user and it's client side */
+        /** point that player controlled by user and it's client side */
         USER_CONTROL_ON_CLIENT_SIDE,
-        /** point that team controlled remotely and it's client side */
+        /** point that player controlled remotely and it's client side */
         REMOTE_CONTROL_ON_CLIENT_SIDE;
 
-        /** returns true if type parameter is team type controlled by user (remote or local) */
+        /** returns true if type parameter is player type controlled by user (remote or local) */
         public static boolean isUserControlType(ControlType type) {
             return type == ControlType.USER_CONTROL_ON_SERVER_SIDE || type == ControlType.USER_CONTROL_ON_CLIENT_SIDE;
         }

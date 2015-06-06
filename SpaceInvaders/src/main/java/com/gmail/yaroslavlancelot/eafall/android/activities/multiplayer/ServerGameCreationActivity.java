@@ -12,7 +12,7 @@ import com.gmail.yaroslavlancelot.eafall.game.alliance.imperials.Imperials;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.rebels.Rebels;
 import com.gmail.yaroslavlancelot.eafall.game.client.thick.server.ServerGameActivity;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
-import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
+import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.network.server.GameSocketServer;
 import com.gmail.yaroslavlancelot.eafall.network.server.callbacks.PreGameStartServer;
 import com.gmail.yaroslavlancelot.eafall.network.server.connector.ClientConnectorListener;
@@ -80,12 +80,12 @@ public class ServerGameCreationActivity extends BaseNonGameActivity implements P
                 mGameSocketServer = null;
                 Intent startServerIntent = new Intent(ServerGameCreationActivity.this, ServerGameActivity.class);
                 startServerIntent.
-                        putExtra(StringConstants.SECOND_TEAM_CONTROL_BEHAVIOUR_TYPE,
-                                ITeam.ControlType.REMOTE_CONTROL_ON_SERVER_SIDE.toString()).
-                        putExtra(StringConstants.SECOND_TEAM_ALLIANCE, Rebels.ALLIANCE_NAME).
-                        putExtra(StringConstants.FIRST_TEAM_ALLIANCE, Imperials.ALLIANCE_NAME).
-                        putExtra(StringConstants.FIRST_TEAM_CONTROL_BEHAVIOUR_TYPE,
-                                ITeam.ControlType.USER_CONTROL_ON_SERVER_SIDE.toString());
+                        putExtra(StringConstants.SECOND_PLAYER_CONTROL_BEHAVIOUR_TYPE,
+                                IPlayer.ControlType.REMOTE_CONTROL_ON_SERVER_SIDE.toString()).
+                        putExtra(StringConstants.SECOND_PLAYER_ALLIANCE, Rebels.ALLIANCE_NAME).
+                        putExtra(StringConstants.FIRST_PLAYER_ALLIANCE, Imperials.ALLIANCE_NAME).
+                        putExtra(StringConstants.FIRST_PLAYER_CONTROL_BEHAVIOUR_TYPE,
+                                IPlayer.ControlType.USER_CONTROL_ON_SERVER_SIDE.toString());
                 startActivity(startServerIntent);
             }
         });

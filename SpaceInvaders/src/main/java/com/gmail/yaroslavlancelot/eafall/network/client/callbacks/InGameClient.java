@@ -5,9 +5,9 @@ import com.gmail.yaroslavlancelot.eafall.network.server.messages.UnitChangePosit
 
 public interface InGameClient {
 
-    void buildingCreated(BuildingId buildingId, String teamName);
+    void buildingCreated(BuildingId buildingId, String playerName);
 
-    void unitCreated(String teamName, int unitId, float x, float y, long uniqueId);
+    void unitCreated(String playerName, int unitId, float x, float y, long uniqueId);
 
     void unitMoved(UnitChangePositionServerMessage unitChangePositionServerMessage);
 
@@ -15,7 +15,7 @@ public interface InGameClient {
 
     void unitFire(long gameObjectUniqueId, long attackedGameObjectUniqueId);
 
-    void moneyChanged(String teamName, int money);
+    void moneyChanged(String playerName, int money);
 
     void gameStarted();
 }

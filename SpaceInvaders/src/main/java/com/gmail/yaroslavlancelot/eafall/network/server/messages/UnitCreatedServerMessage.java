@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class UnitCreatedServerMessage extends ServerMessage implements ServerMessagesConstants {
     private int mUnitId;
-    private String mTeamName;
+    private String mPlayerName;
     private float mX, mY;
     private long mUnitUniqueId;
 
@@ -20,9 +20,9 @@ public class UnitCreatedServerMessage extends ServerMessage implements ServerMes
     public UnitCreatedServerMessage() {
     }
 
-    public UnitCreatedServerMessage(String teamName, int unitId, Unit unit) {
+    public UnitCreatedServerMessage(String playerName, int unitId, Unit unit) {
         mUnitId = unitId;
-        mTeamName = teamName;
+        mPlayerName = playerName;
         mX = unit.getX();
         mY = unit.getY();
         mUnitUniqueId = unit.getObjectUniqueId();
@@ -31,7 +31,7 @@ public class UnitCreatedServerMessage extends ServerMessage implements ServerMes
     @Override
     protected void onReadTransmissionData(final DataInputStream pDataInputStream) throws IOException {
         mUnitId = pDataInputStream.readInt();
-        mTeamName = pDataInputStream.readUTF();
+        mPlayerName = pDataInputStream.readUTF();
         mX = pDataInputStream.readFloat();
         mY = pDataInputStream.readFloat();
         mUnitUniqueId = pDataInputStream.readLong();
@@ -40,7 +40,7 @@ public class UnitCreatedServerMessage extends ServerMessage implements ServerMes
     @Override
     protected void onWriteTransmissionData(final DataOutputStream pDataOutputStream) throws IOException {
         pDataOutputStream.writeInt(mUnitId);
-        pDataOutputStream.writeUTF(mTeamName);
+        pDataOutputStream.writeUTF(mPlayerName);
         pDataOutputStream.writeFloat(mX);
         pDataOutputStream.writeFloat(mY);
         pDataOutputStream.writeLong(mUnitUniqueId);
@@ -59,8 +59,8 @@ public class UnitCreatedServerMessage extends ServerMessage implements ServerMes
         return mX;
     }
 
-    public String getTeamName() {
-        return mTeamName;
+    public String getPlayerName() {
+        return mPlayerName;
     }
 
     public int getUnitId() {

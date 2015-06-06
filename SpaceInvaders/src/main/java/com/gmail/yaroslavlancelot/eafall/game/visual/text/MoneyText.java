@@ -28,16 +28,16 @@ import de.greenrobot.event.EventBus;
 public class MoneyText extends Text {
     /** prefix which stand before money amount value */
     private String mMoneyValuePrefix;
-    /** team, money of which will be displayed */
-    private String mTeamName;
+    /** player, money of which will be displayed */
+    private String mPlayerName;
 
-    public MoneyText(String teamName, String prefix, VertexBufferObjectManager pVertexBufferObjectManager) {
+    public MoneyText(String playerName, String prefix, VertexBufferObjectManager pVertexBufferObjectManager) {
         super(SizeConstants.HALF_FIELD_WIDTH,
                 SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.MONEY_FONT_SIZE * 2 - SizeConstants.MONEY_FONT_SIZE / 2,
                 FontHolder.getInstance().getElement(StringConstants.KEY_FONT_MONEY),
                 generateTextString(prefix, 0), prefix.length() + 6, pVertexBufferObjectManager);
         mMoneyValuePrefix = prefix;
-        mTeamName = teamName;
+        mPlayerName = playerName;
         EventBus.getDefault().register(this);
     }
 
@@ -56,7 +56,7 @@ public class MoneyText extends Text {
     @SuppressWarnings("unused")
     /** really used by {@link de.greenrobot.event.EventBus} */
     public void onEvent(MoneyUpdatedEvent moneyUpdatedEvent) {
-        if (!mTeamName.equals(moneyUpdatedEvent.getTeamName())) return;
+        if (!mPlayerName.equals(moneyUpdatedEvent.getPlayerName())) return;
         setText(generateTextString(mMoneyValuePrefix, moneyUpdatedEvent.getMoney()));
     }
 

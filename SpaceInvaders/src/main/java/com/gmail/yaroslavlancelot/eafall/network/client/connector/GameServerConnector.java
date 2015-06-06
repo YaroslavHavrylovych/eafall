@@ -70,7 +70,7 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
                 BuildingCreatedServerMessage buildingCreatedServerMessage = (BuildingCreatedServerMessage) pServerMessage;
                 synchronized (mInGameClientList) {
                     for (InGameClient inGameClient : mInGameClientList) {
-                        inGameClient.buildingCreated(buildingCreatedServerMessage.getBuildingId(), buildingCreatedServerMessage.getTeamName());
+                        inGameClient.buildingCreated(buildingCreatedServerMessage.getBuildingId(), buildingCreatedServerMessage.getPlayerName());
                     }
                 }
             }
@@ -83,7 +83,7 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
                 UnitCreatedServerMessage unitCreatedServerMessage = (UnitCreatedServerMessage) pServerMessage;
                 synchronized (mInGameClientList) {
                     for (InGameClient inGameClient : mInGameClientList) {
-                        inGameClient.unitCreated(unitCreatedServerMessage.getTeamName(), unitCreatedServerMessage.getUnitId(),
+                        inGameClient.unitCreated(unitCreatedServerMessage.getPlayerName(), unitCreatedServerMessage.getUnitId(),
                                 unitCreatedServerMessage.getX(), unitCreatedServerMessage.getY(), unitCreatedServerMessage.getUnitUniqueId());
                     }
                 }
@@ -138,7 +138,7 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
                 MoneyChangedServerMessage unitFireServerMessage = (MoneyChangedServerMessage) pServerMessage;
                 synchronized (mInGameClientList) {
                     for (InGameClient inGameClient : mInGameClientList) {
-                        inGameClient.moneyChanged(unitFireServerMessage.getTeamName(), unitFireServerMessage.getMoney());
+                        inGameClient.moneyChanged(unitFireServerMessage.getPlayerName(), unitFireServerMessage.getMoney());
                     }
                 }
             }

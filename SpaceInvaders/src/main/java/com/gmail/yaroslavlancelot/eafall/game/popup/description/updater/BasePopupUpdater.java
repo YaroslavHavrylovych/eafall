@@ -26,7 +26,7 @@ public abstract class BasePopupUpdater implements IPopupUpdater {
     }
 
     @Override
-    public void updateImage(Shape drawArea, Object objectId, String allianceName, String teamName) {
+    public void updateImage(Shape drawArea, Object objectId, String allianceName, String playerName) {
         if (mObjectImage != null) {
             drawArea.detachChild(mObjectImage);
         }

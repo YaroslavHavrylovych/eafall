@@ -82,7 +82,7 @@ public abstract class Alliance implements IAlliance {
         return getBuildingDummy(buildingId).getCost(buildingId.getUpgrade());
     }
 
-    public BitmapTextureAtlas loadUnitsToTexture(String teamName, TextureManager textureManager) {
+    public BitmapTextureAtlas loadUnitsToTexture(String playerName, TextureManager textureManager) {
         int unitsAmount = mUnitDummies.size();
         int textureManagerElementsInLine = (int) Math.round(Math.sqrt(unitsAmount) + 1);
         int size = textureManagerElementsInLine * SizeConstants.UNIT_FILE_SIZE;
@@ -93,7 +93,7 @@ public abstract class Alliance implements IAlliance {
             UnitDummy unitDummy = mUnitDummies.valueAt(i);
             n = (i % textureManagerElementsInLine) * SizeConstants.UNIT_FILE_SIZE;
             m = (i / textureManagerElementsInLine) * SizeConstants.UNIT_FILE_SIZE;
-            unitDummy.loadSpriteResources(teamName, textureAtlas, n, m);
+            unitDummy.loadSpriteResources(playerName, textureAtlas, n, m);
         }
         textureAtlas.load();
         return textureAtlas;

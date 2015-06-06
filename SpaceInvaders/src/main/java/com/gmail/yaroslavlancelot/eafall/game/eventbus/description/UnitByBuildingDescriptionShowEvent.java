@@ -5,18 +5,18 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.Buildin
 /** showPopup unit in description popup */
 public class UnitByBuildingDescriptionShowEvent {
     private BuildingId mUnitId;
-    private String mTeamName;
+    private String mPlayerName;
 
-    public UnitByBuildingDescriptionShowEvent(BuildingId unitId, String teamName) {
+    public UnitByBuildingDescriptionShowEvent(BuildingId unitId, String playerName) {
         mUnitId = unitId;
-        mTeamName = teamName;
+        mPlayerName = playerName;
     }
 
     public BuildingId getBuildingId() {
         return mUnitId;
     }
 
-    public String getTeamName() {
-        return mTeamName;
+    public String getPlayerName() {
+        return mPlayerName;
     }
 }

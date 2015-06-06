@@ -171,8 +171,8 @@
 
     <!-- descriptions -->
     <string name="earth_artifact_description">By 10\u0025 increase each unit health</string>
-    <string name="space_material_description">Give 10\u0025 chance for team each unit \nto avoid an attack</string>
-    <string name="king_of_snakes_description">By 10\u0025 increase an attack for the \n team each unit</string>
+    <string name="space_material_description">Give 10\u0025 chance for player each unit \nto avoid an attack</string>
+    <string name="king_of_snakes_description">By 10\u0025 increase an attack for the \n player each unit</string>
     <string name="municipality_description">First created building increase by 20\u0025\n to the income.\nEach next adds \n1\u0025 t existing value.</string>
     <string name="caches_description">First created building increase by 20\u0025\n to the income.\nEach next adds \n1\u0025 t existing value.</string>
     <string name="reptile_city_description">First created building increase by 20\u0025\n to the income.\nEach next adds \n1\u0025 t existing value.</string>

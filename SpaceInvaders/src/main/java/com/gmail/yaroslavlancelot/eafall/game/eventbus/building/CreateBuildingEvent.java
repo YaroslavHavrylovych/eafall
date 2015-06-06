@@ -5,26 +5,26 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.Buildin
 /** holds data need for building creation */
 public class CreateBuildingEvent {
     private final BuildingId mBuildingId;
-    private final String mTeamName;
+    private final String mPlayerName;
 
     /**
      * building creation event
      *
-     * @param teamName   team name to create a building
-     * @param buildingId building buildingId in team
+     * @param playerName   player name to create a building
+     * @param buildingId building buildingId in player
      */
-    public CreateBuildingEvent(final String teamName, BuildingId buildingId) {
+    public CreateBuildingEvent(final String playerName, BuildingId buildingId) {
         mBuildingId = buildingId;
-        mTeamName = teamName;
+        mPlayerName = playerName;
     }
 
-    /** returns building key in team */
+    /** returns building key in player */
     public BuildingId getBuildingId() {
         return mBuildingId;
     }
 
-    /** team to create building */
-    public String getTeamName() {
-        return mTeamName;
+    /** player to create building */
+    public String getPlayerName() {
+        return mPlayerName;
     }
 }

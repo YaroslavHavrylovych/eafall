@@ -2,14 +2,14 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildi
 
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.Building;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.SpecialBuildingDummy;
-import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
+import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /** building which give specific to each alliance bonus */
 public class SpecialBuilding extends Building {
-    public SpecialBuilding(final SpecialBuildingDummy dummy, VertexBufferObjectManager objectManager, String teamName) {
-        super(dummy, objectManager, teamName);
+    public SpecialBuilding(final SpecialBuildingDummy dummy, VertexBufferObjectManager objectManager, String playerName) {
+        super(dummy, objectManager, playerName);
     }
 
     @Override
@@ -24,7 +24,7 @@ public class SpecialBuilding extends Building {
         }
         boolean buildingBought = super.buyBuilding();
         if (buildingBought) {
-            TeamsHolder.getTeam(mTeamName).addBonus(((SpecialBuildingDummy) mDummy).getBonus());
+            PlayersHolder.getPlayer(mPlayerName).addBonus(((SpecialBuildingDummy) mDummy).getBonus());
         }
         return buildingBought;
     }

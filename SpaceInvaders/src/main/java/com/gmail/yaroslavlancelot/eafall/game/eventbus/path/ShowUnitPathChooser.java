@@ -1,16 +1,16 @@
 package com.gmail.yaroslavlancelot.eafall.game.eventbus.path;
 
 public class ShowUnitPathChooser {
-    private String mTeamName;
+    private String mPlayerName;
     private int mBuildingId;
 
-    public ShowUnitPathChooser(String teamName, int buildingId) {
-        mTeamName = teamName;
+    public ShowUnitPathChooser(String playerName, int buildingId) {
+        mPlayerName = playerName;
         mBuildingId = buildingId;
     }
 
-    public String getTeamName() {
-        return mTeamName;
+    public String getPlayerName() {
+        return mPlayerName;
     }
 
     public int getBuildingId() {

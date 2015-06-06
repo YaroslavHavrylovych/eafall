@@ -5,8 +5,8 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.Buildin
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.CreepBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitCreatorCycle;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.description.BuildingDescriptionShowEvent;
-import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
-import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
+import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
+import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.IEntity;
@@ -24,16 +24,16 @@ public class CreepBuilding extends Building implements ICreepBuilding {
     /** building produce units which will go by the top path */
     private boolean mIsTopPath = true;
 
-    public CreepBuilding(final CreepBuildingDummy dummy, VertexBufferObjectManager objectManager, String teamName) {
-        super(dummy, objectManager, teamName);
+    public CreepBuilding(final CreepBuildingDummy dummy, VertexBufferObjectManager objectManager, String playerName) {
+        super(dummy, objectManager, playerName);
         mCreepBuildingDummy = dummy;
     }
 
     @Override
     public synchronized boolean buyBuilding() {
         boolean result = super.buyBuilding();
-        ITeam team = TeamsHolder.getTeam(mTeamName);
-        boolean isClientSide = ITeam.ControlType.isClientSide(team.getControlType());
+        IPlayer player = PlayersHolder.getPlayer(mPlayerName);
+        boolean isClientSide = IPlayer.ControlType.isClientSide(player.getControlType());
         //building was created
         if (isClientSide || result) {
             setIncome(mBuildingsAmount * mBuildingStaticObject.getIncome());
@@ -49,7 +49,7 @@ public class CreepBuilding extends Building implements ICreepBuilding {
 
         //first building created
         if (mUnitCreatorCycle == null) {
-            mUnitCreatorCycle = new UnitCreatorCycle(mTeamName,
+            mUnitCreatorCycle = new UnitCreatorCycle(mPlayerName,
                     mCreepBuildingDummy.getMovableUnitId(mUpgrade), isTopPath());
             mBuildingStaticObject.registerUpdateHandler(new TimerHandler(
                     mCreepBuildingDummy.getUnitCreationTime(mUpgrade), true, mUnitCreatorCycle));
@@ -85,25 +85,25 @@ public class CreepBuilding extends Building implements ICreepBuilding {
             return false;
         }
 
-        ITeam team = TeamsHolder.getTeam(mTeamName);
-        boolean isFakePlanet = ITeam.ControlType.isClientSide(team.getControlType());
+        IPlayer player = PlayersHolder.getPlayer(mPlayerName);
+        boolean isFakePlanet = IPlayer.ControlType.isClientSide(player.getControlType());
         if (!isFakePlanet) {
             int cost = mCreepBuildingDummy.getCost(nextUpgrade);
             //check money
-            if (team.getMoney() < cost) {
+            if (player.getMoney() < cost) {
                 return false;
             }
             //upgrade
-            team.changeMoney(-cost);
+            player.changeMoney(-cost);
         }
-        Color teamColor = TeamsHolder.getTeam(mTeamName).getColor();
+        Color playerColor = PlayersHolder.getPlayer(mPlayerName).getColor();
         VertexBufferObjectManager objectManager =
                 mBuildingStaticObject.getVertexBufferObjectManager();
-        mBuildingStaticObject = getBuildingByUpgrade(nextUpgrade, mCreepBuildingDummy, teamColor,
+        mBuildingStaticObject = getBuildingByUpgrade(nextUpgrade, mCreepBuildingDummy, playerColor,
                 objectManager);
         if (!isFakePlanet) {
             mBuildingStaticObject.clearUpdateHandlers();
-            mUnitCreatorCycle = new UnitCreatorCycle(mTeamName,
+            mUnitCreatorCycle = new UnitCreatorCycle(mPlayerName,
                     mCreepBuildingDummy.getMovableUnitId(nextUpgrade),
                     mBuildingsAmount, isTopPath());
             mBuildingStaticObject.registerUpdateHandler(new TimerHandler(20, true, mUnitCreatorCycle));
@@ -117,7 +117,7 @@ public class CreepBuilding extends Building implements ICreepBuilding {
         mUpgrade = nextUpgrade;
         //change description popup
         EventBus.getDefault().post(new BuildingDescriptionShowEvent(
-                BuildingId.makeId(mCreepBuildingDummy.getBuildingId(), nextUpgrade), mTeamName));
+                BuildingId.makeId(mCreepBuildingDummy.getBuildingId(), nextUpgrade), mPlayerName));
         return true;
     }
 }

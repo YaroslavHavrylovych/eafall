@@ -69,7 +69,7 @@ public class GameSocketServer extends SocketServer<SocketConnectionClientConnect
                 LoggerHelper.printInformationMessage(TAG, "RECEIVED MESSAGE: sender = CLIENT, type = " + BUILDING_CREATION);
                 BuildingCreationClientMessage message = (BuildingCreationClientMessage) pClientMessage;
                 //ToDo Remove EventBus
-                EventBus.getDefault().post(new CreateBuildingEvent(message.getTeamName(), message.getBuildingId()));
+                EventBus.getDefault().post(new CreateBuildingEvent(message.getPlayerName(), message.getBuildingId()));
             }
         });
 

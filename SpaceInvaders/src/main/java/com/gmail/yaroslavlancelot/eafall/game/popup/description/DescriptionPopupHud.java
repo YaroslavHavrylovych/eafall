@@ -15,8 +15,8 @@ import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.building
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.building.special.SpecialBuildingPopupUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.building.wealth.WealthBuildingPopupUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.unit.UnitPopupUpdater;
-import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
-import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
+import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
+import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.touch.StaticHelper;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.ConstructionPopupButton;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.DescriptionText;
@@ -99,8 +99,8 @@ public class DescriptionPopupHud extends PopupHud {
     public void onEvent(final BuildingDescriptionShowEvent buildingDescriptionShowEvent) {
         onEvent();
         BuildingId buildingId = buildingDescriptionShowEvent.getObjectId();
-        ITeam team = TeamsHolder.getInstance().getElement(buildingDescriptionShowEvent.getTeamName());
-        BuildingDummy buildingDummy = team.getAlliance().getBuildingDummy(buildingId);
+        IPlayer player = PlayersHolder.getInstance().getElement(buildingDescriptionShowEvent.getPlayerName());
+        BuildingDummy buildingDummy = player.getAlliance().getBuildingDummy(buildingId);
         IPopupUpdater popupUpdater;
         switch (buildingDummy.getBuildingType()) {
             case CREEP_BUILDING: {
@@ -124,7 +124,7 @@ public class DescriptionPopupHud extends PopupHud {
             }
         }
         mDescriptionPopupBackground.updateDescription(popupUpdater, buildingId,
-                team.getAlliance().getAllianceName(), team.getName());
+                player.getAlliance().getAllianceName(), player.getName());
         showPopup();
     }
 
@@ -145,9 +145,9 @@ public class DescriptionPopupHud extends PopupHud {
     public void onEvent(final UnitByBuildingDescriptionShowEvent unitByBuildingDescriptionShowEvent) {
         onEvent();
         Object objectId = unitByBuildingDescriptionShowEvent.getBuildingId();
-        ITeam team = TeamsHolder.getInstance().getElement(unitByBuildingDescriptionShowEvent.getTeamName());
+        IPlayer player = PlayersHolder.getInstance().getElement(unitByBuildingDescriptionShowEvent.getPlayerName());
         mDescriptionPopupBackground.updateDescription(mUnitsDescriptionUpdater, objectId,
-                team.getAlliance().getAllianceName(), team.getName());
+                player.getAlliance().getAllianceName(), player.getName());
         showPopup();
     }
 }

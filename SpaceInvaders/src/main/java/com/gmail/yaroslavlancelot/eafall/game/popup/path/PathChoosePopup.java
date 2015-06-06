@@ -9,7 +9,7 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildin
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.path.HideUnitPathChooser;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.path.ShowUnitPathChooser;
 import com.gmail.yaroslavlancelot.eafall.game.popup.PopupHud;
-import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
+import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.touch.StaticHelper;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.CirclePointButton;
 
@@ -27,7 +27,7 @@ public class PathChoosePopup extends PopupHud {
     public static final String KEY = PathChoosePopup.class.getCanonicalName();
     private CirclePointButton mTopCircle;
     private CirclePointButton mBottomCircle;
-    private String mTeamName;
+    private String mPlayerName;
     private int mBuildingId;
 
     public PathChoosePopup(Scene scene, VertexBufferObjectManager vertexBufferObjectManager) {
@@ -65,10 +65,10 @@ public class PathChoosePopup extends PopupHud {
     @SuppressWarnings("unused")
     /** really used by {@link de.greenrobot.event.EventBus} */
     public void onEvent(final ShowUnitPathChooser showUnitPathChooser) {
-        mTeamName = showUnitPathChooser.getTeamName();
+        mPlayerName = showUnitPathChooser.getPlayerName();
         mBuildingId = showUnitPathChooser.getBuildingId();
         boolean isTop =
-                ((ICreepBuilding) TeamsHolder.getTeam(mTeamName).getPlanet().getBuilding(mBuildingId))
+                ((ICreepBuilding) PlayersHolder.getPlayer(mPlayerName).getPlanet().getBuilding(mBuildingId))
                         .isTopPath();
         if (isTop) {
             mTopCircle.setActive();
@@ -82,7 +82,7 @@ public class PathChoosePopup extends PopupHud {
 
     @Override
     public synchronized void hidePopup() {
-        ((ICreepBuilding) TeamsHolder.getTeam(mTeamName).getPlanet().getBuilding(mBuildingId))
+        ((ICreepBuilding) PlayersHolder.getPlayer(mPlayerName).getPlanet().getBuilding(mBuildingId))
                 .setPath(mTopCircle.isActive());
         super.hidePopup();
         EventBus.getDefault().post(new HideUnitPathChooser());

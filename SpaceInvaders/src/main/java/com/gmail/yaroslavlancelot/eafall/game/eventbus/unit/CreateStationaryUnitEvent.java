@@ -3,21 +3,21 @@ package com.gmail.yaroslavlancelot.eafall.game.eventbus.unit;
 /** holds data need for unit creation */
 public class CreateStationaryUnitEvent {
     private final int mKey;
-    private final String mTeamName;
+    private final String mPlayerName;
     private final float mX;
     private final float mY;
 
     /**
      * unit creation event
      *
-     * @param key      unit key in team
-     * @param teamName team name to create a unit
+     * @param key      unit key in player
+     * @param playerName player name to create a unit
      * @param x        abscissa
      * @param y        ordinate
      */
-    public CreateStationaryUnitEvent(int key, final String teamName, float x, float y) {
+    public CreateStationaryUnitEvent(int key, final String playerName, float x, float y) {
         mKey = key;
-        mTeamName = teamName;
+        mPlayerName = playerName;
         mX = x;
         mY = y;
     }
@@ -30,13 +30,13 @@ public class CreateStationaryUnitEvent {
         return mY;
     }
 
-    /** returns unit key in team */
+    /** returns unit key in player */
     public int getKey() {
         return mKey;
     }
 
-    /** team to create unit */
-    public String getTeamName() {
-        return mTeamName;
+    /** player to create unit */
+    public String getPlayerName() {
+        return mPlayerName;
     }
 }

@@ -46,9 +46,9 @@ import com.gmail.yaroslavlancelot.eafall.game.eventbus.unit.CreateStationaryUnit
 import com.gmail.yaroslavlancelot.eafall.game.popup.PopupManager;
 import com.gmail.yaroslavlancelot.eafall.game.popup.construction.BuildingsPopupHud;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
-import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
-import com.gmail.yaroslavlancelot.eafall.game.team.Team;
-import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
+import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
+import com.gmail.yaroslavlancelot.eafall.game.player.Player;
+import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.ConstructionPopupButton;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.MoneyText;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.MovableUnitsLimitText;
@@ -80,10 +80,10 @@ public abstract class ClientGameActivity extends GameActivity {
     public static final String TAG = ClientGameActivity.class.getCanonicalName();
     /** contains whole game units/warriors */
     private final Map<Long, GameObject> mGameObjectsMap = new HashMap<Long, GameObject>();
-    /** first team */
-    protected ITeam mSecondTeam;
-    /** second team */
-    protected ITeam mFirstTeam;
+    /** first player */
+    protected IPlayer mSecondPlayer;
+    /** second player */
+    protected IPlayer mFirstPlayer;
     /** current game physics world */
     protected PhysicsWorld mPhysicsWorld;
     /** game objects contact listener */
@@ -104,7 +104,7 @@ public abstract class ClientGameActivity extends GameActivity {
         EventBus.getDefault().register(ClientGameActivity.this);
         //alliance and player
         createAlliances();
-        createTeams();
+        createPlayers();
         //resources
         mResourcesLoader.loadImages(getTextureManager(), getVertexBufferObjectManager());
         mResourcesLoader.loadFonts(getTextureManager(), getFontManager());
@@ -156,10 +156,10 @@ public abstract class ClientGameActivity extends GameActivity {
     }
 
     private void initPopups() {
-        for (ITeam team : TeamsHolder.getInstance().getElements()) {
-            if (team.getControlType() == ITeam.ControlType.USER_CONTROL_ON_SERVER_SIDE ||
-                    team.getControlType() == ITeam.ControlType.USER_CONTROL_ON_CLIENT_SIDE) {
-                PopupManager.init(team.getName(), mHud, mCamera, getVertexBufferObjectManager());
+        for (IPlayer player : PlayersHolder.getInstance().getElements()) {
+            if (player.getControlType() == IPlayer.ControlType.USER_CONTROL_ON_SERVER_SIDE ||
+                    player.getControlType() == IPlayer.ControlType.USER_CONTROL_ON_CLIENT_SIDE) {
+                PopupManager.init(player.getName(), mHud, mCamera, getVertexBufferObjectManager());
                 //buildings
                 ConstructionPopupButton button = new ConstructionPopupButton(getVertexBufferObjectManager());
                 button.setOnClickListener(new ButtonSprite.OnClickListener() {
@@ -174,88 +174,88 @@ public abstract class ClientGameActivity extends GameActivity {
         }
     }
 
-    protected void createTeams() {
+    protected void createPlayers() {
         //create
         Intent intent = getIntent();
         IAlliance alliance = AllianceHolder.getInstance().getElement(
-                intent.getStringExtra(StringConstants.FIRST_TEAM_ALLIANCE));
-        mFirstTeam = createTeam(StringConstants.FIRST_TEAM_CONTROL_BEHAVIOUR_TYPE, alliance);
+                intent.getStringExtra(StringConstants.FIRST_PLAYER_ALLIANCE));
+        mFirstPlayer = createPlayer(StringConstants.FIRST_PLAYER_CONTROL_BEHAVIOUR_TYPE, alliance);
         alliance = AllianceHolder.getInstance().getElement(
-                intent.getStringExtra(StringConstants.SECOND_TEAM_ALLIANCE));
-        mSecondTeam = createTeam(StringConstants.SECOND_TEAM_CONTROL_BEHAVIOUR_TYPE, alliance);
+                intent.getStringExtra(StringConstants.SECOND_PLAYER_ALLIANCE));
+        mSecondPlayer = createPlayer(StringConstants.SECOND_PLAYER_CONTROL_BEHAVIOUR_TYPE, alliance);
         //color
-        mFirstTeam.setColor(Color.BLUE);
-        mSecondTeam.setColor(Color.RED);
+        mFirstPlayer.setColor(Color.BLUE);
+        mSecondPlayer.setColor(Color.RED);
         //enemies
-        mFirstTeam.setEnemyTeam(mSecondTeam);
-        mSecondTeam.setEnemyTeam(mFirstTeam);
+        mFirstPlayer.setEnemyPlayer(mSecondPlayer);
+        mSecondPlayer.setEnemyPlayer(mFirstPlayer);
         //other
-        initTeam(mFirstTeam);
-        initTeam(mSecondTeam);
+        initPlayer(mFirstPlayer);
+        initPlayer(mSecondPlayer);
     }
 
     /**
-     * initialize team (init user or bot team, or do nothing if team control from remote)
+     * initialize player (init user or bot player, or do nothing if player control from remote)
      *
-     * @param team team to init
+     * @param player player to init
      */
-    private void initTeam(ITeam team) {
-        ITeam.ControlType teamType = team.getControlType();
-        initTeamFixtureDef(team);
+    private void initPlayer(IPlayer player) {
+        IPlayer.ControlType playerType = player.getControlType();
+        initPlayerFixtureDef(player);
 
-        if (teamType == ITeam.ControlType.BOT_CONTROL_ON_SERVER_SIDE) {
-            initBotControlledTeam(team);
+        if (playerType == IPlayer.ControlType.BOT_CONTROL_ON_SERVER_SIDE) {
+            initBotControlledPlayer(player);
         }
 
-        TeamsHolder.getInstance().addElement(team.getName(), team);
+        PlayersHolder.getInstance().addElement(player.getName(), player);
     }
 
-    protected void initTeamFixtureDef(ITeam team) {
-        ITeam.ControlType type = team.getControlType();
-        boolean isRemote = ITeam.ControlType.isClientSide(type);
-        if (team.getName().equals(StringConstants.FIRST_TEAM_CONTROL_BEHAVIOUR_TYPE)) {
+    protected void initPlayerFixtureDef(IPlayer player) {
+        IPlayer.ControlType type = player.getControlType();
+        boolean isRemote = IPlayer.ControlType.isClientSide(type);
+        if (player.getName().equals(StringConstants.FIRST_PLAYER_CONTROL_BEHAVIOUR_TYPE)) {
             if (isRemote)
-                team.changeFixtureDefFilter(CollisionCategories.CATEGORY_TEAM1, CollisionCategories.MASKBITS_TEAM1_THIN);
+                player.changeFixtureDefFilter(CollisionCategories.CATEGORY_PLAYER1, CollisionCategories.MASKBITS_PLAYER1_THIN);
             else
-                team.changeFixtureDefFilter(CollisionCategories.CATEGORY_TEAM1, CollisionCategories.MASKBITS_TEAM1_THICK);
+                player.changeFixtureDefFilter(CollisionCategories.CATEGORY_PLAYER1, CollisionCategories.MASKBITS_PLAYER1_THICK);
             return;
         }
         if (isRemote)
-            team.changeFixtureDefFilter(CollisionCategories.CATEGORY_TEAM2, CollisionCategories.MASKBITS_TEAM2_THIN);
+            player.changeFixtureDefFilter(CollisionCategories.CATEGORY_PLAYER2, CollisionCategories.MASKBITS_PLAYER2_THIN);
         else
-            team.changeFixtureDefFilter(CollisionCategories.CATEGORY_TEAM2, CollisionCategories.MASKBITS_TEAM2_THICK);
+            player.changeFixtureDefFilter(CollisionCategories.CATEGORY_PLAYER2, CollisionCategories.MASKBITS_PLAYER2_THICK);
     }
 
-    /** create new team depending on team control type which stored in extra */
-    protected ITeam createTeam(String teamNameInExtra, IAlliance alliance) {
+    /** create new player depending on player control type which stored in extra */
+    protected IPlayer createPlayer(String playerNameInExtra, IAlliance alliance) {
         Intent intent = getIntent();
-        ITeam.ControlType teamType = ITeam.ControlType.valueOf(intent.getStringExtra(teamNameInExtra));
-        return new Team(teamNameInExtra, alliance, teamType);
+        IPlayer.ControlType playerType = IPlayer.ControlType.valueOf(intent.getStringExtra(playerNameInExtra));
+        return new Player(playerNameInExtra, alliance, playerType);
     }
 
-    /** init second team and planet */
+    /** init second player and planet */
     protected void initSecondPlanet() {
         PlanetStaticObject planet = createPlanet(
                 SizeConstants.GAME_FIELD_WIDTH - SizeConstants.PLANET_DIAMETER / 2 - SizeConstants.ADDITION_MARGIN_FOR_PLANET,
                 SizeConstants.HALF_FIELD_HEIGHT,
                 TextureRegionHolder.getRegion(StringConstants.KEY_SECOND_PLANET),
                 StringConstants.KEY_SECOND_PLANET,
-                mSecondTeam);
-        mSecondTeam.setPlanet(planet);
+                mSecondPlayer);
+        mSecondPlayer.setPlanet(planet);
     }
 
     /** create planet game object */
     protected PlanetStaticObject createPlanet(float x, float y,
                                               ITextureRegion textureRegion,
                                               String key,
-                                              ITeam team,
+                                              IPlayer player,
                                               long... unitUniqueId) {
         LoggerHelper.methodInvocation(TAG, "createPlanet");
         PlanetStaticObject planetStaticObject = new PlanetStaticObject(x, y, textureRegion,
                 getVertexBufferObjectManager());
-        planetStaticObject.setTeam(team.getName());
+        planetStaticObject.setPlayer(player.getName());
         planetStaticObject.initHealth(Config.getConfig().getPlanetHealth());
-        planetStaticObject.addObjectDestroyedListener(new PlanetDestroyListener(team));
+        planetStaticObject.addObjectDestroyedListener(new PlanetDestroyListener(player));
         attachSprite(planetStaticObject);
         if (unitUniqueId.length > 0) {
             planetStaticObject.setObjectUniqueId(unitUniqueId[0]);
@@ -265,13 +265,13 @@ public abstract class ClientGameActivity extends GameActivity {
         return planetStaticObject;
     }
 
-    /** init first team and planet */
+    /** init first player and planet */
     protected void initFirstPlanet() {
         PlanetStaticObject planet = createPlanet(SizeConstants.PLANET_DIAMETER / 2 + SizeConstants.ADDITION_MARGIN_FOR_PLANET,
                 SizeConstants.HALF_FIELD_HEIGHT,
                 TextureRegionHolder.getRegion(StringConstants.KEY_FIRST_PLANET),
-                StringConstants.KEY_FIRST_PLANET, mFirstTeam);
-        mFirstTeam.setPlanet(planet);
+                StringConstants.KEY_FIRST_PLANET, mFirstPlayer);
+        mFirstPlayer.setPlanet(planet);
     }
 
     /** create sun */
@@ -288,21 +288,21 @@ public abstract class ClientGameActivity extends GameActivity {
     /** money text initialization */
     private void initOnScreenText() {
         LoggerHelper.methodInvocation(TAG, "initOnScreenText");
-        for (final ITeam team : TeamsHolder.getInstance().getElements()) {
-            if (!ITeam.ControlType.isUserControlType(team.getControlType())) continue;
-            LoggerHelper.methodInvocation(TAG, "init money text for " + team.getName() + " team");
+        for (final IPlayer player : PlayersHolder.getInstance().getElements()) {
+            if (!IPlayer.ControlType.isUserControlType(player.getControlType())) continue;
+            LoggerHelper.methodInvocation(TAG, "init money text for " + player.getName() + " player");
             /*
                 Object, which display money value to user. Only one such money text present in the screen
                 because one device can't be used by multiple users to play.
             */
-            MoneyText moneyText = new MoneyText(team.getName(),
+            MoneyText moneyText = new MoneyText(player.getName(),
                     getString(R.string.money_value_prefix), getVertexBufferObjectManager());
             mHud.attachChild(moneyText);
             final MovableUnitsLimitText limitText = new MovableUnitsLimitText(
                     moneyText.getX(), moneyText.getY() - 2 * moneyText.getFont().getLineHeight(),
                     getVertexBufferObjectManager());
             mHud.attachChild(limitText);
-            final String key = ((Team) team).MOVABLE_UNIT_CREATED_CALLBACK_KEY;
+            final String key = ((Player) player).MOVABLE_UNIT_CREATED_CALLBACK_KEY;
             SharedDataCallbacks.addCallback(new SharedDataCallbacks.DataChangedCallback(key) {
                 @Override
                 public void callback(String callbackKey, Object value) {
@@ -314,9 +314,9 @@ public abstract class ClientGameActivity extends GameActivity {
         }
     }
 
-    protected void initBotControlledTeam(final ITeam initializingTeam) {
-        LoggerHelper.methodInvocation(TAG, "initBotControlledTeam");
-        new Thread(new VeryFirstBot(initializingTeam, ClientGameActivity.this)).start();
+    protected void initBotControlledPlayer(final IPlayer initializingPlayer) {
+        LoggerHelper.methodInvocation(TAG, "initBotControlledPlayer");
+        new Thread(new VeryFirstBot(initializingPlayer, ClientGameActivity.this)).start();
     }
 
     @SuppressWarnings("unused")
@@ -370,9 +370,9 @@ public abstract class ClientGameActivity extends GameActivity {
      */
     private void createAlliances() {
         Intent intent = getIntent();
-        AllianceHolder.addAllianceByName(intent.getStringExtra(StringConstants.FIRST_TEAM_ALLIANCE),
+        AllianceHolder.addAllianceByName(intent.getStringExtra(StringConstants.FIRST_PLAYER_ALLIANCE),
                 getVertexBufferObjectManager());
-        AllianceHolder.addAllianceByName(intent.getStringExtra(StringConstants.SECOND_TEAM_ALLIANCE),
+        AllianceHolder.addAllianceByName(intent.getStringExtra(StringConstants.SECOND_PLAYER_ALLIANCE),
                 getVertexBufferObjectManager());
     }
 
@@ -390,49 +390,49 @@ public abstract class ClientGameActivity extends GameActivity {
     @SuppressWarnings("unused")
     /** really used by {@link de.greenrobot.event.EventBus} */
     public void onEvent(final CreateBuildingEvent createBuildingEvent) {
-        userWantCreateBuilding(TeamsHolder.getInstance().getElement(createBuildingEvent.getTeamName()), createBuildingEvent.getBuildingId());
+        userWantCreateBuilding(PlayersHolder.getInstance().getElement(createBuildingEvent.getPlayerName()), createBuildingEvent.getBuildingId());
     }
 
-    protected abstract void userWantCreateBuilding(ITeam userTeam, BuildingId buildingId);
+    protected abstract void userWantCreateBuilding(IPlayer userPlayer, BuildingId buildingId);
 
     @SuppressWarnings("unused")
     /** really used by {@link de.greenrobot.event.EventBus} */
     public synchronized void onEvent(final CreateMovableUnitEvent unitEvent) {
-        final ITeam team = TeamsHolder.getInstance().getElement(unitEvent.getTeamName());
+        final IPlayer player = PlayersHolder.getInstance().getElement(unitEvent.getPlayerName());
         //check units amount limit
-        if (team.getUnitsAmount() >= Config.getConfig().getMovableUnitsLimit()) {
+        if (player.getUnitsAmount() >= Config.getConfig().getMovableUnitsLimit()) {
             return;
         }
         int unitKey = unitEvent.getKey();
-        createMovableUnit(unitKey, team, unitEvent.isTopPath());
+        createMovableUnit(unitKey, player, unitEvent.isTopPath());
     }
 
     /** create unit with body and update it's enemies and moving path */
-    protected MovableUnit createMovableUnit(int unitKey, final ITeam unitTeam, boolean isTopPath) {
-        float x = unitTeam.getPlanet().getSpawnPointX(),
-                y = unitTeam.getPlanet().getSpawnPointY();
-        MovableUnit movableUnit = (MovableUnit) createUnit(unitKey, unitTeam, x, y);
+    protected MovableUnit createMovableUnit(int unitKey, final IPlayer unitPlayer, boolean isTopPath) {
+        float x = unitPlayer.getPlanet().getSpawnPointX(),
+                y = unitPlayer.getPlanet().getSpawnPointY();
+        MovableUnit movableUnit = (MovableUnit) createUnit(unitKey, unitPlayer, x, y);
         movableUnit.initMovingPath(StaticHelper.isLtrPath(x), isTopPath);
         return movableUnit;
     }
 
     /** create unit */
-    protected Unit createUnit(int unitKey, final ITeam unitTeam, float x, float y) {
-        Unit unit = createThinUnit(unitKey, unitTeam,
+    protected Unit createUnit(int unitKey, final IPlayer unitPlayer, float x, float y) {
+        Unit unit = createThinUnit(unitKey, unitPlayer,
                 x - SizeConstants.UNIT_SIZE / 2,
                 y - SizeConstants.UNIT_SIZE / 2);
         unit.registerUpdateHandler();
-        unit.setEnemiesUpdater(EnemiesFilter.getSimpleUnitEnemiesUpdater(unitTeam.getEnemyTeam()));
+        unit.setEnemiesUpdater(EnemiesFilter.getSimpleUnitEnemiesUpdater(unitPlayer.getEnemyPlayer()));
         return unit;
     }
 
     /**
-     * create unit (with physic body) in particular position and add it to team.
+     * create unit (with physic body) in particular position and add it to player.
      * Thin unit - unit without enemies update handler and behaviour update handler.
      */
-    protected Unit createThinUnit(int unitKey, final ITeam unitTeam, float x, float y, long...
+    protected Unit createThinUnit(int unitKey, final IPlayer unitPlayer, float x, float y, long...
             unitUniqueId) {
-        final Unit unit = unitTeam.constructUnit(unitKey);
+        final Unit unit = unitPlayer.constructUnit(unitKey);
         if (unitUniqueId.length > 0) {
             unit.setObjectUniqueId(unitUniqueId[0]);
         }
@@ -465,8 +465,8 @@ public abstract class ClientGameActivity extends GameActivity {
     /** really used by {@link de.greenrobot.event.EventBus} */
     public void onEvent(final CreateStationaryUnitEvent unitEvent) {
         int unitKey = unitEvent.getKey();
-        final ITeam team = TeamsHolder.getInstance().getElement(unitEvent.getTeamName());
-        StationaryUnit unit = (StationaryUnit) createUnit(unitKey, team,
+        final IPlayer player = PlayersHolder.getInstance().getElement(unitEvent.getPlayerName());
+        StationaryUnit unit = (StationaryUnit) createUnit(unitKey, player,
                 unitEvent.getX(), unitEvent.getY());
     }
 

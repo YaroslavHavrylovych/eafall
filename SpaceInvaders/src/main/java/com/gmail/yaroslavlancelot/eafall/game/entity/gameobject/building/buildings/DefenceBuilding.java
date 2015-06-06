@@ -5,8 +5,8 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.Buildin
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.DefenceBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.unit.CreateStationaryUnitEvent;
-import com.gmail.yaroslavlancelot.eafall.game.team.ITeam;
-import com.gmail.yaroslavlancelot.eafall.game.team.TeamsHolder;
+import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
+import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
@@ -34,8 +34,8 @@ public class DefenceBuilding extends Building {
     /** building dummy link */
     private DefenceBuildingDummy mDefenceBuildingDummy;
 
-    public DefenceBuilding(final DefenceBuildingDummy dummy, VertexBufferObjectManager objectManager, String teamName) {
-        super(dummy, objectManager, teamName);
+    public DefenceBuilding(final DefenceBuildingDummy dummy, VertexBufferObjectManager objectManager, String playerName) {
+        super(dummy, objectManager, playerName);
         mDefenceBuildingDummy = dummy;
     }
 
@@ -50,8 +50,8 @@ public class DefenceBuilding extends Building {
             return false;
         }
         boolean buildingBought = super.buyBuilding();
-        ITeam team = TeamsHolder.getTeam(mTeamName);
-        boolean isFakePlanet = ITeam.ControlType.isClientSide(team.getControlType());
+        IPlayer player = PlayersHolder.getPlayer(mPlayerName);
+        boolean isFakePlanet = IPlayer.ControlType.isClientSide(player.getControlType());
         //building was created
         if (isFakePlanet || buildingBought) {
             if (isFakePlanet) {
@@ -63,7 +63,7 @@ public class DefenceBuilding extends Building {
             return false;
         }
         //create orbital stations
-        PlanetStaticObject planet = team.getPlanet();
+        PlanetStaticObject planet = player.getPlanet();
         float planetX = planet.getX(), planetY = planet.getY();
         float x, y;
         for (int i = 0; i < ORBITAL_STATIONS_AMOUNT; i++) {
@@ -71,7 +71,7 @@ public class DefenceBuilding extends Building {
             x = planetX + ((planetX < sGameFieldCenterX) ? x : -x);
             y = planetY + sOrbitalStationsPositions[i][1];
             EventBus.getDefault().post(new CreateStationaryUnitEvent(mDefenceBuildingDummy.getBuildingId(),
-                    mTeamName, x, y));
+                    mPlayerName, x, y));
         }
         return true;
     }

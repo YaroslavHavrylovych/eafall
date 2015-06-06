@@ -55,8 +55,8 @@ public class DescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
 
     @Override
     public void updateDescription(Shape drawArea, Object objectId,
-                                  final String allianceName, final String teamName) {
-        super.updateDescription(drawArea, objectId, allianceName, teamName);
+                                  final String allianceName, final String playerName) {
+        super.updateDescription(drawArea, objectId, allianceName, playerName);
         final BuildingId buildingId = (BuildingId) objectId;
         IAlliance alliance = AllianceHolder.getInstance().getElement(allianceName);
         DefenceBuildingDummy dummy = (DefenceBuildingDummy) alliance.getBuildingDummy(buildingId);
@@ -70,7 +70,7 @@ public class DescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
         mProducedUnitLink.setOnClickListener(new StaticHelper.OnClickListener() {
             @Override
             public void onClick() {
-                EventBus.getDefault().post(new UnitByBuildingDescriptionShowEvent(buildingId, teamName));
+                EventBus.getDefault().post(new UnitByBuildingDescriptionShowEvent(buildingId, playerName));
             }
         });
         //building time
