@@ -110,10 +110,11 @@ public abstract class UnitDummy {
                                               int x, int y) {
         IBitmapTextureAtlasSource source = AssetBitmapTextureAtlasSource.create(EaFallApplication
                 .getContext().getAssets(), mPathToSprite);
-        ColorSwapBitmapTextureAtlasSource colorSource = new ColorSwapBitmapTextureAtlasSource
-                (source, Config.getConfig().getPlayerSwapColor(), PlayersHolder.getPlayer(playerName).getColor());
+        ColorSwapBitmapTextureAtlasSource textureSource = new ColorSwapBitmapTextureAtlasSource
+                (source, Config.getConfig().getPlayerSwapColor(),
+                        PlayersHolder.getPlayer(playerName).getColor());
         return TextureRegionHolder.addElementFromSource(getTextureRegionKey(playerName),
-                textureAtlas, colorSource, x, y);
+                textureAtlas, textureSource, x, y);
     }
 
     public void loadImageResources(Context context, BitmapTextureAtlas

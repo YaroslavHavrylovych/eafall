@@ -2,6 +2,8 @@ package com.gmail.yaroslavlancelot.eafall.game.constant;
 
 /**
  * contains constants used in measuring game objects size
+ *
+ * @author Yaroslav Havrylovych
  */
 public final class SizeConstants {
     /* general */
@@ -22,6 +24,7 @@ public final class SizeConstants {
     public static final int UNIT_BIG_IMAGE_SIZE = 400;
     public static final int BETWEEN_TEXTURES_PADDING = 3;
     public static final int HEALTH_BAR_HEIGHT = 3;
+    public static final int HEALTH_BAR_FILE_SIZE = 3;
     public static final int BULLET_SIZE = 2;
     public static final int SELECTOR_IMAGE_SIZE = 150;
 
