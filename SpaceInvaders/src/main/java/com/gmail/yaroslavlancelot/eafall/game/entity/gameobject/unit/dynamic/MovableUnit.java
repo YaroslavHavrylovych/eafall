@@ -1,9 +1,6 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
-import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.Bullet;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IVelocityListener;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
@@ -13,7 +10,6 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.pat
 
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
-import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 import org.andengine.util.math.MathUtils;
 
 import java.util.HashMap;
@@ -68,14 +64,6 @@ public class MovableUnit extends Unit {
     @Override
     protected void rotationBeforeFire(GameObject attackedObject) {
         rotate(MathUtils.radToDeg(getDirection(attackedObject.getX(), attackedObject.getY())));
-    }
-
-    @Override
-    protected void setBulletFirePosition(GameObject attackedObject, Bullet bullet) {
-        Vector2 objectPosition = getBody().getPosition();
-        bullet.fireFromPosition(objectPosition.x + SizeConstants.UNIT_SIZE / 2 / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
-                objectPosition.y - Bullet.BULLET_SIZE / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
-                attackedObject);
     }
 
     /** remove all bonus from the unit */
@@ -223,7 +211,7 @@ public class MovableUnit extends Unit {
                     - mObjectToAttack.getWidth() / 2
                     - getWidth() / 2;
             if (distanceToTarget < mAttackRadius) {
-                attackGoal(mObjectToAttack);
+                attackTarget(mObjectToAttack);
                 // stay on position
                 setUnitLinearVelocity(0, 0);
             } else {

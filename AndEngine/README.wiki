@@ -22,3 +22,4 @@ I will try to write down all the //interesting//(not cosmetic) things I did/copi
 *Velocity camera
 *SpriteBatch entity positioning
 *ParallaxBackground changes in ParallaxEntity#onDraw(GLState, Camera,float) to work normally with ZoomCamera
+*reset(float pDuration, float pFromX, float pFromY, float pToX, float pToY) added to MoveModifier

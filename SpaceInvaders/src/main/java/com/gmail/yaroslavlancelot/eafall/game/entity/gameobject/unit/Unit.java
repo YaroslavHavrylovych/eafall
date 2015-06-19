@@ -1,11 +1,9 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit;
 
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
-import com.gmail.yaroslavlancelot.eafall.game.constant.CollisionCategories;
 import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.Bullet;
 import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.BulletPool;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
@@ -44,12 +42,10 @@ public abstract class Unit extends GameObject implements
     protected IEnemiesFilter mEnemiesUpdater;
     /** last unit attack time */
     protected long mLastAttackTime;
-    /** if fireFromPosition method called it will be triggered */
+    /** if fire method called it will be triggered */
     protected IFireListener mUnitFireCallback;
     /** unit shout sound */
     protected Sound mFireSound;
-    /** fixture def for bullets created by this unit */
-    private FixtureDef mBulletFixtureDef;
     /** unit player name */
     private volatile String mPlayerName;
 
@@ -85,10 +81,6 @@ public abstract class Unit extends GameObject implements
 
     public void setReloadTime(double seconds) {
         mTimeForReload = seconds * 1000;
-    }
-
-    public void setBulletFixtureDef(FixtureDef bulletFixtureDef) {
-        mBulletFixtureDef = bulletFixtureDef;
     }
 
     public void setUnitFireCallback(IFireListener unitFireCallback) {
@@ -163,9 +155,6 @@ public abstract class Unit extends GameObject implements
             existingUnit = true;
         }
 
-        setBulletFixtureDef(CollisionCategories.getBulletFixtureDefByUnitCategory(
-                player.getFixtureDefUnit().filter.categoryBits));
-
         if (player.getControlType() == IPlayer.ControlType.REMOTE_CONTROL_ON_CLIENT_SIDE) {
             removeDamage();
         }
@@ -184,10 +173,10 @@ public abstract class Unit extends GameObject implements
     public abstract void registerUpdateHandler();
 
     public void fire(GameObject objectToAttack) {
-        attackGoal(objectToAttack);
+        attackTarget(objectToAttack);
     }
 
-    protected void attackGoal(GameObject attackedObject) {
+    protected void attackTarget(GameObject attackedObject) {
         if (attackedObject == null) {
             return;
         }
@@ -204,9 +193,8 @@ public abstract class Unit extends GameObject implements
 
         playSound(mFireSound);
         Bullet bullet = BulletPool.getInstance().obtainPoolItem();
-        bullet.init(mObjectDamage, mBulletFixtureDef);
 
-        setBulletFirePosition(attackedObject, bullet);
+        bulletFire(attackedObject, bullet);
     }
 
     /**
@@ -218,5 +206,7 @@ public abstract class Unit extends GameObject implements
     /**
      * where the bullet will appear during the fire operation
      */
-    protected abstract void setBulletFirePosition(GameObject attackedObject, Bullet bullet);
+    protected void bulletFire(GameObject attackedObject, Bullet bullet) {
+        bullet.fire(mObjectDamage, getX(), getY(), attackedObject);
+    }
 }

@@ -44,7 +44,7 @@ public class Player implements IPlayer {
     private static final String TAG = Player.class.getCanonicalName();
     public final int INIT_MONEY_VALUE = 200;
     /** used for {@link com.gmail.yaroslavlancelot.eafall.game.SharedDataCallbacks} */
-    public final String MOVABLE_UNIT_CREATED_CALLBACK_KEY;
+    public final String MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY;
     /** fixture def of the player (used for bullet creation) */
     protected final FixtureDef mPlayerFixtureDef;
     /** keep track about the units amount */
@@ -76,7 +76,7 @@ public class Player implements IPlayer {
     public Player(final String playerName, IAlliance alliance, ControlType playerType) {
         mPlayerObjects = new ArrayList<GameObject>(50);
         mPlayerName = playerName;
-        MOVABLE_UNIT_CREATED_CALLBACK_KEY = "UNIT_CREATED_" + playerName;
+        MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY = "UNIT_CREATED_" + playerName;
         mAlliance = alliance;
         initBuildingsTypes(alliance);
         mControlType = playerType;
@@ -214,7 +214,7 @@ public class Player implements IPlayer {
             for (Bonus bonus : mUnitBonuses) {
                 ((MovableUnit) object).addBonus(bonus, Integer.MAX_VALUE);
             }
-            SharedDataCallbacks.valueChanged(MOVABLE_UNIT_CREATED_CALLBACK_KEY,
+            SharedDataCallbacks.valueChanged(MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY,
                     sUnitsAmount.incrementAndGet());
         }
     }
@@ -226,7 +226,7 @@ public class Player implements IPlayer {
             mPlayerObjects.remove(object);
         }
         if (object instanceof MovableUnit) {
-            SharedDataCallbacks.valueChanged(MOVABLE_UNIT_CREATED_CALLBACK_KEY,
+            SharedDataCallbacks.valueChanged(MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY,
                     sUnitsAmount.decrementAndGet());
         }
     }

@@ -22,7 +22,6 @@ import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.BatchedSprite;
 import com.gmail.yaroslavlancelot.eafall.game.entity.BodiedSprite;
-import com.gmail.yaroslavlancelot.eafall.game.entity.ContactListener;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.BulletPool;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
@@ -86,15 +85,12 @@ public abstract class ClientGameActivity extends GameActivity {
     protected IPlayer mFirstPlayer;
     /** current game physics world */
     protected PhysicsWorld mPhysicsWorld;
-    /** game objects contact listener */
-    protected ContactListener mContactListener;
 
     @Override
     public EngineOptions onCreateEngineOptions() {
         EngineOptions engineOptions = super.onCreateEngineOptions();
         //physic world
         mPhysicsWorld = new PhysicsWorld(new Vector2(0, 0), false, 2, 2);
-        mPhysicsWorld.setContactListener(mContactListener = new ContactListener());
         return engineOptions;
     }
 
@@ -302,7 +298,7 @@ public abstract class ClientGameActivity extends GameActivity {
                     moneyText.getX(), moneyText.getY() - 2 * moneyText.getFont().getLineHeight(),
                     getVertexBufferObjectManager());
             mHud.attachChild(limitText);
-            final String key = ((Player) player).MOVABLE_UNIT_CREATED_CALLBACK_KEY;
+            final String key = ((Player) player).MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY;
             SharedDataCallbacks.addCallback(new SharedDataCallbacks.DataChangedCallback(key) {
                 @Override
                 public void callback(String callbackKey, Object value) {

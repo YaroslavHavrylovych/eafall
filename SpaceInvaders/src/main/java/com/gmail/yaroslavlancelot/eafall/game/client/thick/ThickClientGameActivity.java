@@ -4,6 +4,7 @@ import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.client.ClientGameActivity;
 import com.gmail.yaroslavlancelot.eafall.game.constant.CollisionCategories;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
+import com.gmail.yaroslavlancelot.eafall.game.entity.ContactListener;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
@@ -18,13 +19,17 @@ import org.andengine.extension.physics.box2d.PhysicsFactory;
 public abstract class ThickClientGameActivity extends ClientGameActivity {
     /** tag, which is used for debugging purpose */
     public static final String TAG = ThickClientGameActivity.class.getCanonicalName();
+    /** game objects contact listener */
+    protected ContactListener mContactListener;
 
     /**
      * initialize physic world. For using in child classes without accessing private fields.
      */
     @Override
     protected void initThickClient() {
-        mHud.registerUpdateHandler(new TimerHandler(MoneyUpdateCycle.MONEY_UPDATE_TIME, true, new MoneyUpdateCycle()));
+        mPhysicsWorld.setContactListener(mContactListener = new ContactListener());
+        mHud.registerUpdateHandler(new TimerHandler(MoneyUpdateCycle.MONEY_UPDATE_TIME,
+                true, new MoneyUpdateCycle()));
         createBounds();
     }
 
