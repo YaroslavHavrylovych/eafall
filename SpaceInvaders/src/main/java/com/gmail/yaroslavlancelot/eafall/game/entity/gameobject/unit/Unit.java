@@ -13,7 +13,6 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IFireListener;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.AttachSpriteEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.CreatePhysicBodyEvent;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.RunOnUpdateThreadEvent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
@@ -24,8 +23,7 @@ import de.greenrobot.event.EventBus;
 
 /** base class for dynamic and static/unmovable objects which can attack other objects */
 public abstract class Unit extends GameObject implements
-        IPlayerObject,
-        RunOnUpdateThreadEvent.UpdateThreadRunnable {
+        IPlayerObject {
     /** tag for logger */
     public static final String TAG = Unit.class.getCanonicalName();
     /** update time for current object */
@@ -92,13 +90,6 @@ public abstract class Unit extends GameObject implements
     }
 
     @Override
-    public void updateThreadCallback() {
-        getBody().setTransform(-100, -100, 0);
-        getBody().setActive(false);
-        onUnitDestroyed();
-    }
-
-    @Override
     protected void initHealthBar() {
         if (Config.getConfig().isUnitsHealthBarEnabled()) {
             super.initHealthBar();
@@ -112,7 +103,9 @@ public abstract class Unit extends GameObject implements
         if (mPlayerName != null) {
             PlayersHolder.getPlayer(mPlayerName).removeObjectFromPlayer(this);
         }
-        EventBus.getDefault().post(this);
+        getBody().setTransform(-100, -100, 0);
+        getBody().setActive(false);
+        onUnitDestroyed();
     }
 
     @Override

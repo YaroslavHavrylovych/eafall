@@ -38,7 +38,6 @@ import com.gmail.yaroslavlancelot.eafall.game.eventbus.AbstractSpriteEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.AttachSpriteEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.CreatePhysicBodyEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.DetachSpriteEvent;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.RunOnUpdateThreadEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.building.CreateBuildingEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.unit.CreateMovableUnitEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.unit.CreateStationaryUnitEvent;
@@ -370,17 +369,6 @@ public abstract class ClientGameActivity extends GameActivity {
                 getVertexBufferObjectManager());
         AllianceHolder.addAllianceByName(intent.getStringExtra(StringConstants.SECOND_PLAYER_ALLIANCE),
                 getVertexBufferObjectManager());
-    }
-
-    /** used by EventBus */
-    @SuppressWarnings("unused")
-    public void onEvent(final RunOnUpdateThreadEvent.UpdateThreadRunnable callback) {
-        runOnUpdateThread(new Runnable() {
-            @Override
-            public void run() {
-                callback.updateThreadCallback();
-            }
-        });
     }
 
     @SuppressWarnings("unused")
