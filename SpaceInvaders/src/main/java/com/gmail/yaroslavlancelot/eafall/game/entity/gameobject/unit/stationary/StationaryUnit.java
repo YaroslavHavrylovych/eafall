@@ -1,18 +1,12 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.stationary;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
-import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.Bullet;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path.StaticHelper;
 
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
-import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
-
-import java.util.List;
 
 /** Basic class for all stationary/unmovable game units ( */
 public class StationaryUnit extends Unit {
@@ -39,23 +33,17 @@ public class StationaryUnit extends Unit {
     protected void rotationBeforeFire(GameObject attackedObject) {
     }
 
-    @Override
-    protected void setBulletFirePosition(GameObject attackedObject, Bullet bullet) {
-        Vector2 objectPosition = getBody().getPosition();
-        bullet.fireFromPosition(objectPosition.x + SizeConstants.UNIT_SIZE / 2 / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
-                objectPosition.y - Bullet.BULLET_SIZE / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
-                attackedObject);
-    }
-
     /** stationary unit behaviour */
     protected class StationaryUnitTimerCallback implements ITimerCallback {
         @Override
         public void onTimePassed(TimerHandler pTimerHandler) {
             // check for anything to attack
-            if (mObjectToAttack != null && mObjectToAttack != mEnemiesUpdater.getMainTarget() &&
-                    mObjectToAttack.isObjectAlive() && StaticHelper.getDistanceBetweenPoints(getX(), getY(),
-                    mObjectToAttack.getX(), mObjectToAttack.getY()) < mAttackRadius) {
-                attackGoal(mObjectToAttack);
+            if (mObjectToAttack != null && mObjectToAttack.isObjectAlive()
+                    && StaticHelper
+                    .getDistanceBetweenPoints(
+                            getX(), getY(), mObjectToAttack.getX(), mObjectToAttack.getY())
+                    < mAttackRadius) {
+                attackTarget(mObjectToAttack);
                 return;
             } else {
                 // we can't reach previously attacked unit
@@ -63,14 +51,8 @@ public class StationaryUnit extends Unit {
             }
 
             // search for new unit to attack
-            if (mEnemiesUpdater != null) {
-                List<GameObject> units = mEnemiesUpdater.getEnemiesInRangeForUnit(StationaryUnit.this, mAttackRadius);
-                if (units != null && !units.isEmpty()) {
-                    mObjectToAttack = units.get(0);
-                    attackGoal(mObjectToAttack);
-                    return;
-                }
-            }
+            mObjectToAttack = mEnemiesUpdater
+                    .getFirstEnemyInRange(StationaryUnit.this, mAttackRadius);
         }
     }
 }

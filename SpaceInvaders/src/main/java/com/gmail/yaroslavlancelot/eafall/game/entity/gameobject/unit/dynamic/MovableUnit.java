@@ -1,9 +1,6 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
-import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.Bullet;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IVelocityListener;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
@@ -13,14 +10,11 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.pat
 
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
-import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 import org.andengine.util.math.MathUtils;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 
 /** Basic class for all dynamic game units */
@@ -49,10 +43,12 @@ public class MovableUnit extends Unit {
         mMaxVelocity = unitBuilder.getSpeed();
     }
 
-    @Override
-    protected void onNegativeHealth() {
-        removeBonuses();
-        super.onNegativeHealth();
+    public int getChanceToAvoidAnAttack() {
+        return mChanceToAvoidAnAttack;
+    }
+
+    public void setVelocityChangedListener(IVelocityListener velocityChangedListener) {
+        mVelocityChangedListener = velocityChangedListener;
     }
 
     @Override
@@ -61,28 +57,20 @@ public class MovableUnit extends Unit {
     }
 
     @Override
+    protected void onNegativeHealth() {
+        removeBonuses();
+        super.onNegativeHealth();
+    }
+
+    @Override
     public void registerUpdateHandler() {
+        //TODO no need to create object each time
         registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new SimpleUnitTimerCallback()));
     }
 
     @Override
     protected void rotationBeforeFire(GameObject attackedObject) {
         rotate(MathUtils.radToDeg(getDirection(attackedObject.getX(), attackedObject.getY())));
-    }
-
-    @Override
-    protected void setBulletFirePosition(GameObject attackedObject, Bullet bullet) {
-        Vector2 objectPosition = getBody().getPosition();
-        bullet.fireFromPosition(objectPosition.x + SizeConstants.UNIT_SIZE / 2 / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
-                objectPosition.y - Bullet.BULLET_SIZE / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
-                attackedObject);
-    }
-
-    /** remove all bonus from the unit */
-    public void removeBonuses() {
-        synchronized (mBonuses) {
-            mBonuses.clear();
-        }
     }
 
     @Override
@@ -94,8 +82,11 @@ public class MovableUnit extends Unit {
         }
     }
 
-    public int getChanceToAvoidAnAttack() {
-        return mChanceToAvoidAnAttack;
+    /** remove all bonus from the unit */
+    public void removeBonuses() {
+        synchronized (mBonuses) {
+            mBonuses.clear();
+        }
     }
 
     /**
@@ -152,10 +143,6 @@ public class MovableUnit extends Unit {
         }
     }
 
-    public void setVelocityChangedListener(IVelocityListener velocityChangedListener) {
-        mVelocityChangedListener = velocityChangedListener;
-    }
-
     /** used for update current object in game loop */
     protected class SimpleUnitTimerCallback implements ITimerCallback {
         private float[] mTwoDimensionFloatArray = new float[2];
@@ -163,46 +150,50 @@ public class MovableUnit extends Unit {
 
         @Override
         public void onTimePassed(TimerHandler pTimerHandler) {
+            //The whole bunch of operations is on the UPDATE THREAD!!!
+
             // update bonuses
             if (((int) System.currentTimeMillis()) - mLastBonusUpdateTime > sBonusUpdateTime) {
                 updateBonuses();
             }
-            // check for units to attack
-            if (mObjectToAttack != null && mObjectToAttack != mEnemiesUpdater.getMainTarget() &&
-                    mObjectToAttack.isObjectAlive() && StaticHelper.getDistanceBetweenPoints(getX(), getY(),
-                    mObjectToAttack.getX(), mObjectToAttack.getY()) < mViewRadius) {
-                attackOrMove();
+
+            //TODO maybe it's reasonable to save unit id to check if it the same unit before attack?
+            //TODO and the save unit id for stationary unit as well
+            if (mObjectToAttack == null) {
+                mObjectToAttack = mEnemiesUpdater
+                        .getFirstEnemyInRange(MovableUnit.this, mAttackRadius);
+                //attack founded enemy
+                if (mObjectToAttack != null) {
+                    attackTarget(mObjectToAttack);
+                    return;
+                } else {
+                    mObjectToAttack = mEnemiesUpdater
+                            .getFirstEnemyInRange(MovableUnit.this, getViewRadius());
+                    //chase founded object
+                    if (mObjectToAttack != null) {
+                        // pursuit attacked unit
+                        moveToPoint(mObjectToAttack.getX(), mObjectToAttack.getY());
+                        return;
+                    }
+                }
+            }
+
+            if (mObjectToAttack != null) {
+                if (!mObjectToAttack.isObjectAlive() || !attackOrMove(mObjectToAttack)) {
+                    //object not in the view
+                    mObjectToAttack = null;
+                }
                 return;
             } else {
-                // we don't see previously attacked unit
-                mObjectToAttack = null;
-            }
-
-            // search for new unit to attack
-            if (mEnemiesUpdater != null) {
-                List<GameObject> units = mEnemiesUpdater
-                        .getEnemiesInRangeForUnit(MovableUnit.this, mAttackRadius);
-                //if nothing to attack then increase the range
-                if (units == null || units.isEmpty()) {
-                    units = mEnemiesUpdater.getVisibleEnemiesForUnit(MovableUnit.this);
-                }
-                //move or attack
-                if (units != null && !units.isEmpty()) {
-                    mObjectToAttack = units.get(new Random().nextInt(units.size()));
-                    attackOrMove();
-                    return;
-                } else if (mEnemiesUpdater.getMainTarget() != null &&
-                        StaticHelper.getDistanceBetweenPoints(getX(), getY(),
-                                mEnemiesUpdater.getMainTarget().getX(),
-                                mEnemiesUpdater.getMainTarget().getY()) < mViewRadius) {
-                    //move to the enemies planet
-                    mObjectToAttack = mEnemiesUpdater.getMainTarget();
-                    attackOrMove();
-                    return;
+                GameObject mainTarget = mEnemiesUpdater.getMainTarget();
+                if (mainTarget != null && mainTarget.isObjectAlive()) {
+                    //if main target in view or in attack range
+                    if (attackOrMove(mainTarget)) {
+                        return;
+                    }
                 }
             }
-
-            // move by path, without attack other units
+            // move by path (no units in visible range)
             mTwoDimensionFloatArray[0] = getX();
             mTwoDimensionFloatArray[1] = getY();
             mUnitPath.getNextPathPoint(mTwoDimensionFloatArray, mTwoDimensionFloatArray);
@@ -211,25 +202,29 @@ public class MovableUnit extends Unit {
         }
 
         /**
-         * Call it when target in view radius.
-         * This method will move unit closer to target or shoot if it in attack radius.
+         * Attacks or moves closer to target unit if in range
+         *
+         * @param enemy enemy game object (e.g. unit) to attack or chase)
+         * @return true - if the enemy unit was attacked or chased by this unit
+         * <br/>
+         * false - if the enemy unit not in the range.
          */
-        private void attackOrMove() {
+        private boolean attackOrMove(GameObject enemy) {
             // check if we already can attack
             float distanceToTarget = StaticHelper.getDistanceBetweenPoints(getX(), getY(),
-                    mObjectToAttack.getX(), mObjectToAttack.getY())
+                    enemy.getX(), enemy.getY())
                     //minus both objects radius to have distance between objects corners
                     //instead of distance between centers
-                    - mObjectToAttack.getWidth() / 2
-                    - getWidth() / 2;
+                    - enemy.getWidth() / 2 - getWidth() / 2;
             if (distanceToTarget < mAttackRadius) {
-                attackGoal(mObjectToAttack);
-                // stay on position
-                setUnitLinearVelocity(0, 0);
-            } else {
+                attackTarget(enemy);
+            } else if (distanceToTarget < getViewRadius()) {
                 // pursuit attacked unit
-                moveToPoint(mObjectToAttack.getX(), mObjectToAttack.getY());
+                moveToPoint(enemy.getX(), enemy.getY());
+            } else {
+                return false;
             }
+            return true;
         }
 
         private void moveToPoint(float x, float y) {

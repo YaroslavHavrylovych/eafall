@@ -1,11 +1,10 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit;
 
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
+import com.gmail.yaroslavlancelot.eafall.game.audio.LimitedSoundWrapper;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
-import com.gmail.yaroslavlancelot.eafall.game.constant.CollisionCategories;
 import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.Bullet;
 import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.BulletPool;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
@@ -13,21 +12,23 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.IPlayerObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IFireListener;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.filtering.IEnemiesFilter;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.AttachSpriteEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.CreatePhysicBodyEvent;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.RunOnUpdateThreadEvent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
-import org.andengine.audio.sound.Sound;
 import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 
 import de.greenrobot.event.EventBus;
 
-/** base class for dynamic and static/unmovable objects which can attack other objects */
+/**
+ * base class for dynamic and static/unmovable objects which can attack other objects
+ *
+ * @author Yaroslav Havrylovych
+ */
 public abstract class Unit extends GameObject implements
-        IPlayerObject,
-        RunOnUpdateThreadEvent.UpdateThreadRunnable {
+        IPlayerObject {
     /** tag for logger */
     public static final String TAG = Unit.class.getCanonicalName();
     /** update time for current object */
@@ -44,12 +45,10 @@ public abstract class Unit extends GameObject implements
     protected IEnemiesFilter mEnemiesUpdater;
     /** last unit attack time */
     protected long mLastAttackTime;
-    /** if fireFromPosition method called it will be triggered */
+    /** if fire method called it will be triggered */
     protected IFireListener mUnitFireCallback;
     /** unit shout sound */
-    protected Sound mFireSound;
-    /** fixture def for bullets created by this unit */
-    private FixtureDef mBulletFixtureDef;
+    protected LimitedSoundWrapper mFireSound;
     /** unit player name */
     private volatile String mPlayerName;
 
@@ -87,23 +86,12 @@ public abstract class Unit extends GameObject implements
         mTimeForReload = seconds * 1000;
     }
 
-    public void setBulletFixtureDef(FixtureDef bulletFixtureDef) {
-        mBulletFixtureDef = bulletFixtureDef;
-    }
-
     public void setUnitFireCallback(IFireListener unitFireCallback) {
         mUnitFireCallback = unitFireCallback;
     }
 
     public void setEnemiesUpdater(final IEnemiesFilter enemiesUpdater) {
         mEnemiesUpdater = enemiesUpdater;
-    }
-
-    @Override
-    public void updateThreadCallback() {
-        getBody().setTransform(-100, -100, 0);
-        getBody().setActive(false);
-        onUnitDestroyed();
     }
 
     @Override
@@ -117,10 +105,10 @@ public abstract class Unit extends GameObject implements
     protected void onNegativeHealth() {
         super.onNegativeHealth();
         clearUpdateHandlers();
-        if (mPlayerName != null) {
-            PlayersHolder.getPlayer(mPlayerName).removeObjectFromPlayer(this);
-        }
-        EventBus.getDefault().post(this);
+        PlayersHolder.getPlayer(mPlayerName).removeObjectFromPlayer(this);
+        getBody().setTransform(-100, -100, 0);
+        getBody().setActive(false);
+        onUnitDestroyed();
     }
 
     @Override
@@ -163,9 +151,6 @@ public abstract class Unit extends GameObject implements
             existingUnit = true;
         }
 
-        setBulletFixtureDef(CollisionCategories.getBulletFixtureDefByUnitCategory(
-                player.getFixtureDefUnit().filter.categoryBits));
-
         if (player.getControlType() == IPlayer.ControlType.REMOTE_CONTROL_ON_CLIENT_SIDE) {
             removeDamage();
         }
@@ -184,13 +169,11 @@ public abstract class Unit extends GameObject implements
     public abstract void registerUpdateHandler();
 
     public void fire(GameObject objectToAttack) {
-        attackGoal(objectToAttack);
+        attackTarget(objectToAttack);
     }
 
-    protected void attackGoal(GameObject attackedObject) {
-        if (attackedObject == null) {
-            return;
-        }
+    protected void attackTarget(GameObject attackedObject) {
+        setUnitLinearVelocity(0, 0);
 
         rotationBeforeFire(attackedObject);
 
@@ -204,9 +187,8 @@ public abstract class Unit extends GameObject implements
 
         playSound(mFireSound);
         Bullet bullet = BulletPool.getInstance().obtainPoolItem();
-        bullet.init(mObjectDamage, mBulletFixtureDef);
 
-        setBulletFirePosition(attackedObject, bullet);
+        bulletFire(attackedObject, bullet);
     }
 
     /**
@@ -218,5 +200,7 @@ public abstract class Unit extends GameObject implements
     /**
      * where the bullet will appear during the fire operation
      */
-    protected abstract void setBulletFirePosition(GameObject attackedObject, Bullet bullet);
+    protected void bulletFire(GameObject attackedObject, Bullet bullet) {
+        bullet.fire(mObjectDamage, getX(), getY(), attackedObject);
+    }
 }

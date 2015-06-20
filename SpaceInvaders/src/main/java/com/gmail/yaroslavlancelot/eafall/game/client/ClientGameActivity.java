@@ -22,7 +22,6 @@ import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.BatchedSprite;
 import com.gmail.yaroslavlancelot.eafall.game.entity.BodiedSprite;
-import com.gmail.yaroslavlancelot.eafall.game.entity.ContactListener;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.BulletPool;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
@@ -30,25 +29,24 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.Buildin
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetDestroyListener;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.SunStaticObject;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.EnemiesFilter;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.MovableUnit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path.StaticHelper;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.filtering.EnemiesFilterFactory;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.stationary.StationaryUnit;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.AbstractSpriteEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.AttachSpriteEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.CreatePhysicBodyEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.DetachSpriteEvent;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.RunOnUpdateThreadEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.building.CreateBuildingEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.unit.CreateMovableUnitEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.unit.CreateStationaryUnitEvent;
-import com.gmail.yaroslavlancelot.eafall.game.popup.PopupManager;
-import com.gmail.yaroslavlancelot.eafall.game.popup.construction.BuildingsPopupHud;
-import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.Player;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
+import com.gmail.yaroslavlancelot.eafall.game.popup.PopupManager;
+import com.gmail.yaroslavlancelot.eafall.game.popup.construction.BuildingsPopupHud;
+import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.ConstructionPopupButton;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.MoneyText;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.MovableUnitsLimitText;
@@ -86,15 +84,12 @@ public abstract class ClientGameActivity extends GameActivity {
     protected IPlayer mFirstPlayer;
     /** current game physics world */
     protected PhysicsWorld mPhysicsWorld;
-    /** game objects contact listener */
-    protected ContactListener mContactListener;
 
     @Override
     public EngineOptions onCreateEngineOptions() {
         EngineOptions engineOptions = super.onCreateEngineOptions();
         //physic world
         mPhysicsWorld = new PhysicsWorld(new Vector2(0, 0), false, 2, 2);
-        mPhysicsWorld.setContactListener(mContactListener = new ContactListener());
         return engineOptions;
     }
 
@@ -302,7 +297,7 @@ public abstract class ClientGameActivity extends GameActivity {
                     moneyText.getX(), moneyText.getY() - 2 * moneyText.getFont().getLineHeight(),
                     getVertexBufferObjectManager());
             mHud.attachChild(limitText);
-            final String key = ((Player) player).MOVABLE_UNIT_CREATED_CALLBACK_KEY;
+            final String key = ((Player) player).MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY;
             SharedDataCallbacks.addCallback(new SharedDataCallbacks.DataChangedCallback(key) {
                 @Override
                 public void callback(String callbackKey, Object value) {
@@ -376,17 +371,6 @@ public abstract class ClientGameActivity extends GameActivity {
                 getVertexBufferObjectManager());
     }
 
-    /** used by EventBus */
-    @SuppressWarnings("unused")
-    public void onEvent(final RunOnUpdateThreadEvent.UpdateThreadRunnable callback) {
-        runOnUpdateThread(new Runnable() {
-            @Override
-            public void run() {
-                callback.updateThreadCallback();
-            }
-        });
-    }
-
     @SuppressWarnings("unused")
     /** really used by {@link de.greenrobot.event.EventBus} */
     public void onEvent(final CreateBuildingEvent createBuildingEvent) {
@@ -421,8 +405,8 @@ public abstract class ClientGameActivity extends GameActivity {
         Unit unit = createThinUnit(unitKey, unitPlayer,
                 x - SizeConstants.UNIT_SIZE / 2,
                 y - SizeConstants.UNIT_SIZE / 2);
+        unit.setEnemiesUpdater(EnemiesFilterFactory.getFilter(unitPlayer.getEnemyPlayer()));
         unit.registerUpdateHandler();
-        unit.setEnemiesUpdater(EnemiesFilter.getSimpleUnitEnemiesUpdater(unitPlayer.getEnemyPlayer()));
         return unit;
     }
 

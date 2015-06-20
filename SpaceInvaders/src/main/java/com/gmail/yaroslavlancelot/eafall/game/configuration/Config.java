@@ -27,10 +27,11 @@ public class Config {
     private final int mCreepBuildingsLimit = 7;
     private final int mWealthBuildingsLimit = 5;
     private final int mPlanetHealth = 300000;
-    private final Color mPlayerSwapColor = new Color(46.0f/255.0f, 37.0f/255.0f, 118.0f/255.0f);
+    private final Color mPlayerSwapColor = new Color(46.0f / 255.0f, 37.0f / 255.0f, 118.0f / 255.0f);
     /*
      * Sound and music
      */
+    private final int mMaxSimultaneousSoundStreams = 4;
     private final boolean mSoundsEnabled = true;
     private final boolean mMusicEnabled = true;
     private final float mMusicVolumeMax = 0.4f;
@@ -49,16 +50,16 @@ public class Config {
         mDisplayHeight = Math.min(metrics.widthPixels, metrics.heightPixels);
     }
 
-    public static void init(Context context) {
-        sConfig = new Config(context);
-    }
-
     public static Config getConfig() {
         return sConfig;
     }
 
     public int getMaxZoomFactor() {
         return mMaxZoomFactor;
+    }
+
+    public int getMaxSimultaneousSoundStreams() {
+        return mMaxSimultaneousSoundStreams;
     }
 
     public boolean isProfilingEnabled() {
@@ -111,5 +112,9 @@ public class Config {
 
     public Color getPlayerSwapColor() {
         return mPlayerSwapColor;
+    }
+
+    public static void init(Context context) {
+        sConfig = new Config(context);
     }
 }

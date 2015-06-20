@@ -67,6 +67,11 @@ public class MoveModifier extends DoubleValueSpanEntityModifier {
 		pEntity.setPosition(pX, pY);
 	}
 
+	@Override
+	public void reset(final float pDuration, final float pFromX, final float pFromY, final float pToX, final float pToY) {
+		super.reset(pDuration, pFromX, pToX, pFromY, pToY);
+	}
+
 	// ===========================================================
 	// Methods
 	// ===========================================================

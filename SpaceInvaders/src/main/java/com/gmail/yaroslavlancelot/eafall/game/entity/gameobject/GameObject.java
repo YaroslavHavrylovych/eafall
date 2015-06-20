@@ -1,7 +1,7 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject;
 
-import com.badlogic.gdx.math.Vector2;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
+import com.gmail.yaroslavlancelot.eafall.game.audio.LimitedSoundWrapper;
 import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.BatchedSprite;
@@ -11,7 +11,6 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IDestroyListener;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IHealthListener;
 
-import org.andengine.audio.sound.Sound;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.list.SmartList;
@@ -28,7 +27,6 @@ import java.util.concurrent.atomic.AtomicLong;
  * @author Yaroslav Havrylovych
  */
 public abstract class GameObject extends BodiedSprite {
-    public static final float VELOCITY_EPSILON = 0.00000001f;
     protected static final int sInvincibleObjectKey = Integer.MIN_VALUE;
     /** used for generation new id's */
     private static final AtomicLong sGameObjectsTracker = new AtomicLong(0);
@@ -58,7 +56,6 @@ public abstract class GameObject extends BodiedSprite {
 
     protected GameObject(float x, float y, float width, float height, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
         super(x, y, width, height, textureRegion, vertexBufferObjectManager);
-        mUniqueId = sGameObjectsTracker.getAndIncrement();
         LoggerHelper.printInformationMessage(LoggerHelper.PERFORMANCE_TAG,
                 "objects amount: " + sGameObjectsTracker.get());
     }
@@ -80,7 +77,8 @@ public abstract class GameObject extends BodiedSprite {
     }
 
     public boolean isObjectAlive() {
-        return (mObjectCurrentHealth > 0 || mObjectCurrentHealth == sInvincibleObjectKey) && mPhysicBody != null;
+        return (mObjectCurrentHealth > 0 || mObjectCurrentHealth == sInvincibleObjectKey)
+                && mPhysicBody != null;
     }
 
     public Armor getObjectArmor() {
@@ -162,6 +160,7 @@ public abstract class GameObject extends BodiedSprite {
     }
 
     public void initHealth(int objectMaximumHealth) {
+        mUniqueId = sGameObjectsTracker.getAndIncrement();
         initHealth(objectMaximumHealth, objectMaximumHealth);
     }
 
@@ -186,7 +185,7 @@ public abstract class GameObject extends BodiedSprite {
         }
     }
 
-    protected void playSound(Sound sound) {
+    protected void playSound(LimitedSoundWrapper sound) {
         if (sound != null && sound.isLoaded()) {
             SoundFactory.getInstance().playSound(sound, getX(), getY());
         }
@@ -236,11 +235,6 @@ public abstract class GameObject extends BodiedSprite {
 
     /** set physic body velocity */
     public void setUnitLinearVelocity(float x, float y) {
-        Vector2 velocity = getBody().getLinearVelocity();
-        if (Math.abs(velocity.x - x) < VELOCITY_EPSILON && Math.abs(velocity.y - y) < VELOCITY_EPSILON) {
-            return;
-        }
-
         mPhysicBody.setLinearVelocity(x, y);
     }
 }

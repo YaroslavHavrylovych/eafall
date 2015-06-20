@@ -82,22 +82,31 @@ public class GameSceneHandler implements
     // Getter & Setter
     // ===========================================================
 
-    public float getWidth() {
-        return mCamera.getWidth();
-    }
-
-    public float getHeight() {
-        return mCamera.getHeight();
-    }
-
-    public float getCenterX() {
-        return mCamera.getCenterX();
-    }
-
-    public float getCenterY() {
+    protected float getCenterY() {
         return mCamera.getCenterY();
     }
 
+    @Override
+    public float getMaxX() {
+        return mCamera.getXMax();
+    }
+
+    @Override
+    public float getMaxY() {
+        return mCamera.getYMax();
+    }
+
+    @Override
+    public float getMinX() {
+        return mCamera.getXMin();
+    }
+
+    @Override
+    public float getMinY() {
+        return mCamera.getYMin();
+    }
+
+    @Override
     public float getZoomFactor() {
         return mCamera.getZoomFactor();
     }
@@ -106,9 +115,10 @@ public class GameSceneHandler implements
         mCamera.setZoomFactor(zoomFactor);
     }
 
-    public float getMaxZoomFactorChange() {
-        return MAX_ZOOM_FACTOR;
-    }
+
+    // ===========================================================
+    // Methods for/from SuperClass/Interfaces
+    // ===========================================================
 
     @Override
     public boolean onSceneTouchEvent(final Scene pScene, final TouchEvent pSceneTouchEvent) {
@@ -130,10 +140,6 @@ public class GameSceneHandler implements
         }
         return true;
     }
-
-    // ===========================================================
-    // Methods for/from SuperClass/Interfaces
-    // ===========================================================
 
     @Override
     public void onPinchZoomStarted(PinchZoomDetector pPinchZoomDetector, TouchEvent pSceneTouchEvent) {
@@ -200,13 +206,13 @@ public class GameSceneHandler implements
         //unused here
     }
 
-    private static void initPinchZoomMinimumDistance(PinchZoomDetector zoomDetector) {
-        zoomDetector.setTriggerPinchZoomMinimumDistance(Config.getConfig().getDisplayWidth() / 25);
-    }
-
     // ===========================================================
     // Methods
     // ===========================================================
+
+    private static void initPinchZoomMinimumDistance(PinchZoomDetector zoomDetector) {
+        zoomDetector.setTriggerPinchZoomMinimumDistance(Config.getConfig().getDisplayWidth() / 25);
+    }
 
     public boolean smoothZoomInProgress() {
         return mCamera.isSmoothZoomInProgress();

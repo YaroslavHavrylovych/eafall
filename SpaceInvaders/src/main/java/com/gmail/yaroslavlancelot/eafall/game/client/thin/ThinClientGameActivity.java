@@ -122,7 +122,7 @@ public class ThinClientGameActivity extends ClientGameActivity implements InGame
             return;
         }
         if (!(gameObject instanceof Unit)) {
-            LoggerHelper.printErrorMessage(TAG, "attacker is not unit in fireFromPosition operation");
+            LoggerHelper.printErrorMessage(TAG, "attacker is not unit in fire operation");
             return;
         }
         runOnUpdateThread(new Runnable() {
