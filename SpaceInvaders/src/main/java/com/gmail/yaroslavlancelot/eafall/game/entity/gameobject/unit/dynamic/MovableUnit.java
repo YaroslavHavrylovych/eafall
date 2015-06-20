@@ -45,10 +45,12 @@ public class MovableUnit extends Unit {
         mMaxVelocity = unitBuilder.getSpeed();
     }
 
-    @Override
-    protected void onNegativeHealth() {
-        removeBonuses();
-        super.onNegativeHealth();
+    public int getChanceToAvoidAnAttack() {
+        return mChanceToAvoidAnAttack;
+    }
+
+    public void setVelocityChangedListener(IVelocityListener velocityChangedListener) {
+        mVelocityChangedListener = velocityChangedListener;
     }
 
     @Override
@@ -57,20 +59,20 @@ public class MovableUnit extends Unit {
     }
 
     @Override
+    protected void onNegativeHealth() {
+        removeBonuses();
+        super.onNegativeHealth();
+    }
+
+    @Override
     public void registerUpdateHandler() {
+        //TODO no need to create object each time
         registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new SimpleUnitTimerCallback()));
     }
 
     @Override
     protected void rotationBeforeFire(GameObject attackedObject) {
         rotate(MathUtils.radToDeg(getDirection(attackedObject.getX(), attackedObject.getY())));
-    }
-
-    /** remove all bonus from the unit */
-    public void removeBonuses() {
-        synchronized (mBonuses) {
-            mBonuses.clear();
-        }
     }
 
     @Override
@@ -82,8 +84,11 @@ public class MovableUnit extends Unit {
         }
     }
 
-    public int getChanceToAvoidAnAttack() {
-        return mChanceToAvoidAnAttack;
+    /** remove all bonus from the unit */
+    public void removeBonuses() {
+        synchronized (mBonuses) {
+            mBonuses.clear();
+        }
     }
 
     /**
@@ -138,10 +143,6 @@ public class MovableUnit extends Unit {
             mChanceToAvoidAnAttack = Bonus.getBonusByType(bonusSet,
                     Bonus.BonusType.AVOID_ATTACK_CHANCE, 0);
         }
-    }
-
-    public void setVelocityChangedListener(IVelocityListener velocityChangedListener) {
-        mVelocityChangedListener = velocityChangedListener;
     }
 
     /** used for update current object in game loop */

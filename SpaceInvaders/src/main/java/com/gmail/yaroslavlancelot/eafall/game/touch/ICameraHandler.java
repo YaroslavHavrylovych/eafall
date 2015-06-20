@@ -4,15 +4,13 @@ package com.gmail.yaroslavlancelot.eafall.game.touch;
  * For getting coordinates of current camera to scene position
  */
 public interface ICameraHandler {
-    float getWidth();
+    float getMaxX();
 
-    float getHeight();
+    float getMaxY();
 
-    float getCenterX();
+    float getMinX();
 
-    float getCenterY();
+    float getMinY();
 
     float getZoomFactor();
-
-    float getMaxZoomFactorChange();
 }

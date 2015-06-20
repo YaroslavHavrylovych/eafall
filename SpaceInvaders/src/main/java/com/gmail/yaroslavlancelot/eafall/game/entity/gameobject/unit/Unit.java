@@ -21,7 +21,11 @@ import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 
 import de.greenrobot.event.EventBus;
 
-/** base class for dynamic and static/unmovable objects which can attack other objects */
+/**
+ * base class for dynamic and static/unmovable objects which can attack other objects
+ *
+ * @author Yaroslav Havrylovych
+ */
 public abstract class Unit extends GameObject implements
         IPlayerObject {
     /** tag for logger */
@@ -100,9 +104,7 @@ public abstract class Unit extends GameObject implements
     protected void onNegativeHealth() {
         super.onNegativeHealth();
         clearUpdateHandlers();
-        if (mPlayerName != null) {
-            PlayersHolder.getPlayer(mPlayerName).removeObjectFromPlayer(this);
-        }
+        PlayersHolder.getPlayer(mPlayerName).removeObjectFromPlayer(this);
         getBody().setTransform(-100, -100, 0);
         getBody().setActive(false);
         onUnitDestroyed();
