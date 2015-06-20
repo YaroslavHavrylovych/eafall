@@ -83,7 +83,8 @@ public abstract class GameActivity extends BaseGameActivity {
         //audio
         AudioOptions audioOptions = engineOptions.getAudioOptions();
         //sound
-        audioOptions.getSoundOptions().setMaxSimultaneousStreams(3);
+        audioOptions.getSoundOptions().setMaxSimultaneousStreams(
+                Config.getConfig().getMaxSimultaneousSoundStreams());
         audioOptions.setNeedsSound(Config.getConfig().isSoundsEnabled());
         //music
         audioOptions.setNeedsMusic(Config.getConfig().isMusicEnabled());

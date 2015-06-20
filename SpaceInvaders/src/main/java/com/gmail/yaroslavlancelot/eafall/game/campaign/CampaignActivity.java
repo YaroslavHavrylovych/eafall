@@ -6,6 +6,7 @@ import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.GameActivity;
 import com.gmail.yaroslavlancelot.eafall.game.audio.BackgroundMusic;
+import com.gmail.yaroslavlancelot.eafall.game.audio.LimitedSoundWrapper;
 import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.gmail.yaroslavlancelot.eafall.game.campaign.intents.CampaignIntent;
 import com.gmail.yaroslavlancelot.eafall.game.campaign.loader.CampaignDataLoader;
@@ -18,7 +19,6 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 import com.gmail.yaroslavlancelot.eafall.game.touch.StaticHelper;
 
-import org.andengine.audio.sound.Sound;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.scene.Scene;
@@ -39,7 +39,7 @@ import java.util.List;
 public class CampaignActivity extends GameActivity {
     private String mCampaignFileName;
     private CampaignListLoader mCampaignListLoader;
-    private Sound mSelectSound;
+    private LimitedSoundWrapper mSelectSound;
     private Sprite mSelectImage;
 
     @Override

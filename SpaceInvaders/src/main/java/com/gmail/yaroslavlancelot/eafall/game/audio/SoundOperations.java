@@ -2,16 +2,14 @@ package com.gmail.yaroslavlancelot.eafall.game.audio;
 
 import com.gmail.yaroslavlancelot.eafall.game.touch.ICameraHandler;
 
-import org.andengine.audio.sound.Sound;
-
 public interface SoundOperations {
-    Sound loadSound(String path);
-
-    void playSound(Sound sound, float x, float y);
-
-    void playSound(Sound sound);
-
     void setCameraHandler(ICameraHandler cameraCoordinates);
 
     void setMasterVolume(final float pMasterVolume);
+
+    LimitedSoundWrapper loadSound(String path);
+
+    void playSound(LimitedSoundWrapper sound, float x, float y);
+
+    void playSound(LimitedSoundWrapper sound);
 }

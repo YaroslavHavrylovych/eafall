@@ -3,6 +3,7 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit;
 import android.content.Context;
 
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
+import com.gmail.yaroslavlancelot.eafall.game.audio.LimitedSoundWrapper;
 import com.gmail.yaroslavlancelot.eafall.game.audio.SoundOperations;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
@@ -13,7 +14,6 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.loader.UnitLoader;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
-import org.andengine.audio.sound.Sound;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.source.AssetBitmapTextureAtlasSource;
 import org.andengine.opengl.texture.atlas.bitmap.source.ColorSwapBitmapTextureAtlasSource;
@@ -49,7 +49,7 @@ public abstract class UnitDummy {
     /** unit image texture region */
     protected ITextureRegion mImageTextureRegion;
     /** unit shout sound */
-    protected Sound mFireSound;
+    protected LimitedSoundWrapper mFireSound;
     /** you can get unit name from the string resources by this id */
     private int mUnitStringId;
 

@@ -1,6 +1,7 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject;
 
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
+import com.gmail.yaroslavlancelot.eafall.game.audio.LimitedSoundWrapper;
 import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.BatchedSprite;
@@ -10,7 +11,6 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IDestroyListener;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IHealthListener;
 
-import org.andengine.audio.sound.Sound;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.list.SmartList;
@@ -185,7 +185,7 @@ public abstract class GameObject extends BodiedSprite {
         }
     }
 
-    protected void playSound(Sound sound) {
+    protected void playSound(LimitedSoundWrapper sound) {
         if (sound != null && sound.isLoaded()) {
             SoundFactory.getInstance().playSound(sound, getX(), getY());
         }
