@@ -74,7 +74,7 @@ public class Player implements IPlayer {
     private SparseArray<AfterInitializationPool<Unit>> mUnitsPools;
 
     public Player(final String playerName, IAlliance alliance, ControlType playerType) {
-        mPlayerObjects = new ArrayList<GameObject>(50);
+        mPlayerObjects = new ArrayList<GameObject>(200);
         mPlayerName = playerName;
         MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY = "UNIT_CREATED_" + playerName;
         mAlliance = alliance;

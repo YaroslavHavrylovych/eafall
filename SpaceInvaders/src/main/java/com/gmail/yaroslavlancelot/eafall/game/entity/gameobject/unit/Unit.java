@@ -12,6 +12,7 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.IPlayerObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IFireListener;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.filtering.IEnemiesFilter;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.AttachSpriteEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.CreatePhysicBodyEvent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
@@ -172,9 +173,7 @@ public abstract class Unit extends GameObject implements
     }
 
     protected void attackTarget(GameObject attackedObject) {
-        if (attackedObject == null) {
-            return;
-        }
+        setUnitLinearVelocity(0, 0);
 
         rotationBeforeFire(attackedObject);
 
