@@ -2,6 +2,7 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit;
 
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
+import com.gmail.yaroslavlancelot.eafall.game.audio.LimitedSoundWrapper;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.Bullet;
@@ -16,7 +17,6 @@ import com.gmail.yaroslavlancelot.eafall.game.eventbus.CreatePhysicBodyEvent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
-import org.andengine.audio.sound.Sound;
 import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 
 import de.greenrobot.event.EventBus;
@@ -47,7 +47,7 @@ public abstract class Unit extends GameObject implements
     /** if fire method called it will be triggered */
     protected IFireListener mUnitFireCallback;
     /** unit shout sound */
-    protected Sound mFireSound;
+    protected LimitedSoundWrapper mFireSound;
     /** unit player name */
     private volatile String mPlayerName;
 

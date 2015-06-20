@@ -1,9 +1,9 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit;
 
+import com.gmail.yaroslavlancelot.eafall.game.audio.LimitedSoundWrapper;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage;
 
-import org.andengine.audio.sound.Sound;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
@@ -21,7 +21,7 @@ public abstract class UnitBuilder {
     protected int mAttackRadius;
     protected int mViewRadius;
     protected double mReloadTime;
-    protected Sound mFireSound;
+    protected LimitedSoundWrapper mFireSound;
     protected int mWidth;
     protected int mHeight;
 
@@ -92,11 +92,11 @@ public abstract class UnitBuilder {
         return this;
     }
 
-    public Sound getFireSound() {
+    public LimitedSoundWrapper getFireSound() {
         return mFireSound;
     }
 
-    public UnitBuilder setFireSound(Sound fireSound) {
+    public UnitBuilder setFireSound(LimitedSoundWrapper fireSound) {
         mFireSound = fireSound;
         return this;
     }

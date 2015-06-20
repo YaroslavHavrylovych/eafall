@@ -6,7 +6,6 @@ import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 import com.gmail.yaroslavlancelot.eafall.game.touch.ICameraHandler;
 
-import org.andengine.audio.sound.Sound;
 import org.andengine.audio.sound.SoundFactory;
 import org.andengine.audio.sound.SoundManager;
 import org.andengine.util.math.MathUtils;
@@ -31,13 +30,22 @@ public class SoundOperationsImpl implements SoundOperations {
     }
 
     @Override
-    public Sound loadSound(final String path) {
+    public void setCameraHandler(ICameraHandler cameraHandler) {
+        mCameraHandler = cameraHandler;
+    }
+
+    @Override
+    public void setMasterVolume(float masterVolume) {
+        mSoundManager.setMasterVolume(masterVolume >= 1.0f ? 0.99f : masterVolume);
+    }
+
+    @Override
+    public LimitedSoundWrapper loadSound(final String path) {
         return getSound(path, mContext, mSoundManager);
     }
 
     @Override
-    public void playSound(final Sound sound, final float x, final float y) {
-        //TODO limit the sounds before sending it to playSound method
+    public void playSound(final LimitedSoundWrapper sound, final float x, final float y) {
         if (!(MathUtils.isInBounds(mCameraHandler.getMinX(), mCameraHandler.getMaxX(), x)
                 && MathUtils.isInBounds(mCameraHandler.getMinY(), mCameraHandler.getMaxY(), y))) {
             return;
@@ -47,23 +55,14 @@ public class SoundOperationsImpl implements SoundOperations {
     }
 
     @Override
-    public void playSound(Sound sound) {
-        sound.play();
+    public void playSound(LimitedSoundWrapper sound) {
+        sound.checkedPlay();
     }
 
-    @Override
-    public void setCameraHandler(ICameraHandler cameraHandler) {
-        mCameraHandler = cameraHandler;
-    }
-
-    @Override
-    public void setMasterVolume(float masterVolume) {
-        mSoundManager.setMasterVolume(masterVolume);
-    }
-
-    public static Sound getSound(String path, Context context, SoundManager soundManager) {
+    public static LimitedSoundWrapper getSound(String path, Context context, SoundManager soundManager) {
         try {
-            return SoundFactory.createSoundFromAsset(soundManager, context, path);
+            return new LimitedSoundWrapper(SoundFactory.createSoundFromAsset(soundManager, context,
+                    path));
         } catch (IOException e) {
             LoggerHelper.printErrorMessage(TAG, "can't instantiate sounds");
         }
