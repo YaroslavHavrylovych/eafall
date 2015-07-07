@@ -48,6 +48,7 @@ import com.gmail.yaroslavlancelot.eafall.game.popup.PopupManager;
 import com.gmail.yaroslavlancelot.eafall.game.popup.construction.BuildingsPopupHud;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.ConstructionPopupButton;
+import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.MenuPopupButton;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.MoneyText;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.MovableUnitsLimitText;
 
@@ -60,6 +61,7 @@ import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.adt.color.Color;
 
@@ -115,7 +117,7 @@ public abstract class ClientGameActivity extends GameActivity {
         initFirstPlanet();
         initSecondPlanet();
         //other
-        initOnScreenText();
+        initHudElements();
         initPopups();
         //pools
         BulletPool.init(getVertexBufferObjectManager());
@@ -280,9 +282,9 @@ public abstract class ClientGameActivity extends GameActivity {
         return sunStaticObject;
     }
 
-    /** money text initialization */
-    private void initOnScreenText() {
-        LoggerHelper.methodInvocation(TAG, "initOnScreenText");
+    /** init all HUD stuff */
+    private void initHudElements() {
+        LoggerHelper.methodInvocation(TAG, "initHudElements");
         for (final IPlayer player : PlayersHolder.getInstance().getElements()) {
             if (!IPlayer.ControlType.isUserControlType(player.getControlType())) continue;
             LoggerHelper.methodInvocation(TAG, "init money text for " + player.getName() + " player");
@@ -290,11 +292,17 @@ public abstract class ClientGameActivity extends GameActivity {
                 Object, which display money value to user. Only one such money text present in the screen
                 because one device can't be used by multiple users to play.
             */
+            VertexBufferObjectManager objectManager = getVertexBufferObjectManager();
+            //money
             MoneyText moneyText = new MoneyText(player.getName(),
-                    getString(R.string.money_value_prefix), getVertexBufferObjectManager());
+                    getString(R.string.money_value_prefix), objectManager);
             mHud.attachChild(moneyText);
+            //menu
+            MenuPopupButton menuButton = new MenuPopupButton(objectManager);
+            mHud.attachChild(menuButton);
+            //TODO take a look on this text, I don't it's positioned like that (not place but code)
             final MovableUnitsLimitText limitText = new MovableUnitsLimitText(
-                    moneyText.getX(), moneyText.getY() - 2 * moneyText.getFont().getLineHeight(),
+                    moneyText.getX(), SizeConstants.GAME_FIELD_HEIGHT - 130,
                     getVertexBufferObjectManager());
             mHud.attachChild(limitText);
             final String key = ((Player) player).MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY;

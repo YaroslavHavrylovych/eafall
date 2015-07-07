@@ -1,13 +1,13 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building;
 
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.health.IHealthBar;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.StaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.building.BuildingsAmountChangedEvent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.adt.color.Color;
 
 import de.greenrobot.event.EventBus;
 
@@ -33,23 +33,15 @@ public abstract class Building implements IBuilding {
         mPlayerName = playerName;
         mDummy = dummy;
         // init first creep building
-        Color playerColor = PlayersHolder.getPlayer(playerName).getColor();
-        mBuildingStaticObject = getBuildingByUpgrade(mUpgrade, dummy, playerColor, objectManager);
+        mBuildingStaticObject = getBuildingByUpgrade(mUpgrade, dummy, objectManager);
     }
 
-    protected static StaticObject getBuildingByUpgrade(final int upgrade, final BuildingDummy buildingDummy,
-                                                       final Color playerColor,
-                                                       VertexBufferObjectManager objectManager) {
-        return new StaticObject(buildingDummy.getX(), buildingDummy.getY(),
-                buildingDummy.getSpriteTextureRegionArray(upgrade), objectManager) {
-            {
-                setCost(buildingDummy.getCost(upgrade));
-                setIncome((int) (getCost() * 0.03));
-                setWidth(buildingDummy.getWidth());
-                setHeight(buildingDummy.getWidth());
-                setObjectStringId(buildingDummy.getStringId());
-            }
-        };
+    public int getAmountLimit() {
+        return mDummy.getAmountLimit();
+    }
+
+    protected void setBuildingsAmount(int buildingsAmount) {
+        mBuildingsAmount = buildingsAmount;
     }
 
     @Override
@@ -110,15 +102,27 @@ public abstract class Building implements IBuilding {
         return mDummy.getY();
     }
 
-    public int getAmountLimit() {
-        return mDummy.getAmountLimit();
-    }
-
     protected void setIncome(int income) {
         mIncome = income;
     }
 
-    protected void setBuildingsAmount(int buildingsAmount) {
-        mBuildingsAmount = buildingsAmount;
+    protected static StaticObject getBuildingByUpgrade(final int upgrade,
+                                                       final BuildingDummy buildingDummy,
+                                                       VertexBufferObjectManager objectManager) {
+        return new StaticObject(buildingDummy.getX(), buildingDummy.getY(),
+                buildingDummy.getSpriteTextureRegionArray(upgrade), objectManager) {
+            {
+                setCost(buildingDummy.getCost(upgrade));
+                setIncome((int) (getCost() * 0.03));
+                setWidth(buildingDummy.getWidth());
+                setHeight(buildingDummy.getWidth());
+                setObjectStringId(buildingDummy.getStringId());
+            }
+
+            @Override
+            protected IHealthBar createHealthBar() {
+                return null;
+            }
+        };
     }
 }

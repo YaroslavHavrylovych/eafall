@@ -32,8 +32,8 @@ public class MoneyText extends Text {
     private String mPlayerName;
 
     public MoneyText(String playerName, String prefix, VertexBufferObjectManager pVertexBufferObjectManager) {
-        super(SizeConstants.HALF_FIELD_WIDTH,
-                SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.MONEY_FONT_SIZE * 2 - SizeConstants.MONEY_FONT_SIZE / 2,
+        super(200,
+                SizeConstants.GAME_FIELD_HEIGHT - 90,
                 FontHolder.getInstance().getElement(StringConstants.KEY_FONT_MONEY),
                 generateTextString(prefix, 0), prefix.length() + 6, pVertexBufferObjectManager);
         mMoneyValuePrefix = prefix;

@@ -28,11 +28,16 @@ public final class SizeConstants {
     public static final int BULLET_SIZE = 2;
     public static final int SELECTOR_IMAGE_SIZE = 150;
 
+    /* menu */
+    public static final int MENU_BUTTON_WIDTH = 137;
+    public static final int MENU_BUTTON_HEIGHT = 49;
+
     /* money */
     public static final int MONEY_FONT_SIZE = 35;
 
     /* building popup */
-    public static final int BUILDING_POPUP_INVOCATION_BUTTON_SIZE = 100;
+    public static final int BUILDING_POPUP_INVOCATION_BUTTON_WIDTH = MENU_BUTTON_WIDTH;
+    public static final int BUILDING_POPUP_INVOCATION_BUTTON_HEIGHT = MENU_BUTTON_HEIGHT;
     public static final int BUILDING_POPUP_ELEMENT_HEIGHT = 60;
     public static final int BUILDING_POPUP_IMAGE_PADDING = 10;
     public static final int BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT =

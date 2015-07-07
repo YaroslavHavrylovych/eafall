@@ -9,8 +9,10 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.Bullet;
 import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.BulletPool;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.IPlayerObject;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.health.UnitHealthBar;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.health.IHealthBar;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IFireListener;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.filtering.IEnemiesFilter;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.AttachSpriteEvent;
@@ -99,6 +101,11 @@ public abstract class Unit extends GameObject implements
         if (Config.getConfig().isUnitsHealthBarEnabled()) {
             super.initHealthBar();
         }
+    }
+
+    @Override
+    protected IHealthBar createHealthBar() {
+        return new UnitHealthBar(getPlayer(), getWidth(), getVertexBufferObjectManager());
     }
 
     @Override

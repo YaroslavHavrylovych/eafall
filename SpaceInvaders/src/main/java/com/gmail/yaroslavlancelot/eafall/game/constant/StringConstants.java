@@ -30,6 +30,8 @@ public final class StringConstants {
     public static final String FILE_DESCRIPTION_POPUP_BACKGROUND = "graphics/images/description_popup_background.png";
     /** description popup cross (for closing) */
     public static final String FILE_BUILDINGS_POPUP_UP_BUTTON = "graphics/icons/up_button.png";
+    /** game menu button */
+    public static final String FILE_MENU_BUTTON = "graphics/icons/menu_button.png";
     /** amount value background */
     public static final String FILE_AMOUNT_VALUE_BACKGROUND = "graphics/icons/amount_value_background.png";
     /** game button */

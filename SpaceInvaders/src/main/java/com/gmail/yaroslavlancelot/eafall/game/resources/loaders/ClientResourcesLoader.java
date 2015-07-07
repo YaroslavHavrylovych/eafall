@@ -9,7 +9,7 @@ import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.HealthBar;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.health.UnitHealthBar;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.popup.PopupManager;
@@ -120,7 +120,7 @@ public class ClientResourcesLoader extends BaseResourceLoader {
             atlasSource = createColoredTextureAtlasSource(player.getColor(),
                     colorSize, colorSize);
             TextureRegionHolder.addElementFromSource(
-                    HealthBar.getHealthBarTextureRegionKey(player.getName()),
+                    UnitHealthBar.getHealthBarTextureRegionKey(player.getName()),
                     smallObjectTexture, atlasSource, 0, y);
             y += colorSize + SizeConstants.BETWEEN_TEXTURES_PADDING;
         }

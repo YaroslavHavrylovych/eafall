@@ -1,10 +1,12 @@
-package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject;
+package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.health;
 
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.BatchedSprite;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.health.IHealthBar;
 
+import org.andengine.entity.IEntity;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -14,11 +16,11 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
  *
  * @author Yaroslav Havrylovych
  */
-public class HealthBar {
+public class UnitHealthBar implements IHealthBar {
     private BatchedSprite mHealthBarRectangle;
     private float mHealthBarWidth = SizeConstants.UNIT_SIZE;
 
-    public HealthBar(String player, float healthBarWidth, VertexBufferObjectManager
+    public UnitHealthBar(String player, float healthBarWidth, VertexBufferObjectManager
             vertexBufferObjectManager) {
         setHealthBarWidth(healthBarWidth);
         ITextureRegion textureRegion = TextureRegionHolder.getInstance().getElement(
@@ -30,7 +32,7 @@ public class HealthBar {
         mHealthBarRectangle.setSpriteGroupName(BatchingKeys.BULLET_AND_HEALTH);
     }
 
-    public Sprite getHealthBarSprite() {
+    private Sprite getHealthBarSprite() {
         return mHealthBarRectangle;
     }
 
@@ -38,10 +40,12 @@ public class HealthBar {
         mHealthBarWidth = healthBarWidth;
     }
 
-    public static String getHealthBarTextureRegionKey(String player) {
-        return "health_bar_" + player;
+    @Override
+    public void attachHealthBar(final IEntity parent) {
+        parent.attachChild(getHealthBarSprite());
     }
 
+    @Override
     public void setPosition(float x, float y) {
         mHealthBarRectangle.setPosition(x + mHealthBarRectangle.getWidth() / 2,
                 y + mHealthBarRectangle.getHeight() / 2);
@@ -49,6 +53,10 @@ public class HealthBar {
 
     public void redrawHealthBar(int healthMax, int actualHealth) {
         redrawHealthBar(healthMax, actualHealth, mHealthBarWidth);
+    }
+
+    public static String getHealthBarTextureRegionKey(String player) {
+        return "health_bar_" + player;
     }
 
     private void redrawHealthBar(int healthMax, int actualHealth, float healthBarWidth) {
