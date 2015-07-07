@@ -210,7 +210,7 @@ public abstract class GameObject extends BodiedSprite {
     private void updateHealthBarPosition() {
         if (mHealthBar != null) {
             mHealthBar.setPosition(getX() - getWidth() / 2,
-                    getY() + getHeight() / 2 + SizeConstants.HEALTH_BAR_HEIGHT);
+                    getY() + getHeight() / 2 + SizeConstants.UNIT_HEALTH_BAR_HEIGHT);
         }
     }
 

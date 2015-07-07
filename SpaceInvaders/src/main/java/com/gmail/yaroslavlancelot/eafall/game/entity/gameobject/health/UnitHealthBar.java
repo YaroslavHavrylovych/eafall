@@ -4,7 +4,6 @@ import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.BatchedSprite;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.health.IHealthBar;
 
 import org.andengine.entity.IEntity;
 import org.andengine.entity.sprite.Sprite;
@@ -27,7 +26,7 @@ public class UnitHealthBar implements IHealthBar {
                 getHealthBarTextureRegionKey(player));
         //create health bar sprite
         mHealthBarRectangle = new BatchedSprite(0, 0,
-                mHealthBarWidth, SizeConstants.HEALTH_BAR_HEIGHT, textureRegion,
+                mHealthBarWidth, SizeConstants.UNIT_HEALTH_BAR_HEIGHT, textureRegion,
                 vertexBufferObjectManager);
         mHealthBarRectangle.setSpriteGroupName(BatchingKeys.BULLET_AND_HEALTH);
     }

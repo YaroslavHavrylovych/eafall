@@ -38,6 +38,8 @@ public final class StringConstants {
     public static final String FILE_GAME_BUTTON = "graphics/icons/game_button.png";
     /** circle point */
     public static final String FILE_CIRCLE_POINT = "graphics/icons/circle_point.png";
+    /** health bar carcass */
+    public static final String FILE_HEALTH_BAR_CARCASS = "graphics/icons/health_bar_carcass.png";
     /** file name for blue planet */
     public static final String FILE_FIRST_PLANET = "graphics/sprites/planet_1.png";
     /** file name for red planet */

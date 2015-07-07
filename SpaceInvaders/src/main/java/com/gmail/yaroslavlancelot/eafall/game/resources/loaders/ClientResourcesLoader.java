@@ -1,5 +1,7 @@
 package com.gmail.yaroslavlancelot.eafall.game.resources.loaders;
 
+import android.content.Context;
+
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
@@ -14,6 +16,8 @@ import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.popup.PopupManager;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.DescriptionPopupHud;
+import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.MenuPopupButton;
+import com.gmail.yaroslavlancelot.eafall.game.visual.other.HealthBarCarcassSprite;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.MoneyText;
 
 import org.andengine.entity.sprite.batch.SpriteGroup;
@@ -51,7 +55,10 @@ public class ClientResourcesLoader extends BaseResourceLoader {
         //sun and planets
         loadSunAndPlanets(textureManager, vertexBufferObjectManager);
         //other
-        PopupManager.loadResource(EaFallApplication.getContext(), textureManager);
+        Context context = EaFallApplication.getContext();
+        PopupManager.loadResource(context, textureManager);
+        MenuPopupButton.loadResources(context, textureManager);
+        HealthBarCarcassSprite.loadResources(textureManager);
     }
 
     @Override
@@ -108,14 +115,14 @@ public class ClientResourcesLoader extends BaseResourceLoader {
             TextureManager textureManager,
             VertexBufferObjectManager vertexBufferObjectManager) {
         BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager,
-                Math.max(SizeConstants.BULLET_SIZE, SizeConstants.HEALTH_BAR_FILE_SIZE),
+                Math.max(SizeConstants.BULLET_SIZE, SizeConstants.UNIT_HEALTH_BAR_FILE_SIZE),
                 SizeConstants.BULLET_SIZE
-                        + 2 * SizeConstants.HEALTH_BAR_FILE_SIZE
+                        + 2 * SizeConstants.UNIT_HEALTH_BAR_FILE_SIZE
                         + 2 * SizeConstants.BETWEEN_TEXTURES_PADDING, TextureOptions.BILINEAR);
         //load
         int y = 0;
         IBitmapTextureAtlasSource atlasSource;
-        int colorSize = SizeConstants.HEALTH_BAR_FILE_SIZE;
+        int colorSize = SizeConstants.UNIT_HEALTH_BAR_FILE_SIZE;
         for (IPlayer player : PlayersHolder.getInstance().getElements()) {
             atlasSource = createColoredTextureAtlasSource(player.getColor(),
                     colorSize, colorSize);

@@ -49,6 +49,7 @@ import com.gmail.yaroslavlancelot.eafall.game.popup.construction.BuildingsPopupH
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.ConstructionPopupButton;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.MenuPopupButton;
+import com.gmail.yaroslavlancelot.eafall.game.visual.other.HealthBarCarcassSprite;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.MoneyText;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.MovableUnitsLimitText;
 
@@ -300,6 +301,9 @@ public abstract class ClientGameActivity extends GameActivity {
             //menu
             MenuPopupButton menuButton = new MenuPopupButton(objectManager);
             mHud.attachChild(menuButton);
+            //health carcass
+            HealthBarCarcassSprite healthBarCarcassSprite = new HealthBarCarcassSprite(objectManager);
+            mHud.attachChild(healthBarCarcassSprite);
             //TODO take a look on this text, I don't it's positioned like that (not place but code)
             final MovableUnitsLimitText limitText = new MovableUnitsLimitText(
                     moneyText.getX(), SizeConstants.GAME_FIELD_HEIGHT - 130,

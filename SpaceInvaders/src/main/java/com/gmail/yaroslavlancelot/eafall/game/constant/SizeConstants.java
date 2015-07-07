@@ -23,10 +23,12 @@ public final class SizeConstants {
     public static final int UNIT_FILE_SIZE = 36;
     public static final int UNIT_BIG_IMAGE_SIZE = 400;
     public static final int BETWEEN_TEXTURES_PADDING = 3;
-    public static final int HEALTH_BAR_HEIGHT = 3;
-    public static final int HEALTH_BAR_FILE_SIZE = 3;
     public static final int BULLET_SIZE = 2;
     public static final int SELECTOR_IMAGE_SIZE = 150;
+    public static final int HEALTH_BAR_CARCASS_WIDTH = 524;
+    public static final int HEALTH_BAR_CARCASS_HEIGHT = 49;
+    public static final int UNIT_HEALTH_BAR_HEIGHT = 3;
+    public static final int UNIT_HEALTH_BAR_FILE_SIZE = 3;
 
     /* menu */
     public static final int MENU_BUTTON_WIDTH = 137;

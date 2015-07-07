@@ -1,25 +1,20 @@
-package com.gmail.yaroslavlancelot.eafall.game.visual.buttons;
+package com.gmail.yaroslavlancelot.eafall.game.visual.other;
 
-import android.content.Context;
-
+import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 
-import org.andengine.entity.sprite.ButtonSprite;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
-import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-
-import de.greenrobot.event.EventBus;
 
 /**
  * @author Yaroslav Havrylovych
  */
-//TODO load it in a SpriteBatch with other hud buttons
-public class MenuPopupButton extends ButtonSprite {
+public class HealthBarCarcassSprite extends Sprite {
     // ===========================================================
     // Constants
     // ===========================================================
@@ -31,17 +26,16 @@ public class MenuPopupButton extends ButtonSprite {
     // ===========================================================
     // Constructors
     // ===========================================================
-    public MenuPopupButton(final VertexBufferObjectManager vertexBufferObjectManager) {
+    public HealthBarCarcassSprite(final VertexBufferObjectManager vertexBufferObjectManager) {
         super(SizeConstants.GAME_FIELD_WIDTH / 2,
-                SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.MENU_BUTTON_HEIGHT / 2,
-                (ITiledTextureRegion) TextureRegionHolder.getInstance()
-                        .getElement(StringConstants.FILE_MENU_BUTTON),
+                SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.HEALTH_BAR_CARCASS_HEIGHT / 2,
+                TextureRegionHolder.getInstance()
+                        .getElement(StringConstants.FILE_HEALTH_BAR_CARCASS),
                 vertexBufferObjectManager);
-        setWidth(SizeConstants.MENU_BUTTON_WIDTH);
-        setHeight(SizeConstants.MENU_BUTTON_HEIGHT);
-        setAlpha(.8f);
+        setWidth(SizeConstants.HEALTH_BAR_CARCASS_WIDTH);
+        setHeight(SizeConstants.HEALTH_BAR_CARCASS_HEIGHT);
+        setAlpha(.85f);
     }
-
 
     // ===========================================================
     // Getter & Setter
@@ -54,12 +48,12 @@ public class MenuPopupButton extends ButtonSprite {
     // ===========================================================
     // Methods
     // ===========================================================
-    public static void loadResources(Context context, TextureManager textureManager) {
+    public static void loadResources(final TextureManager textureManager) {
         BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager,
-                2 * SizeConstants.MENU_BUTTON_WIDTH, SizeConstants.MENU_BUTTON_HEIGHT,
+                SizeConstants.HEALTH_BAR_CARCASS_WIDTH, SizeConstants.HEALTH_BAR_CARCASS_HEIGHT,
                 TextureOptions.BILINEAR);
-        TextureRegionHolder.addTiledElementFromAssets(
-                StringConstants.FILE_MENU_BUTTON, smallObjectTexture, context, 0, 0, 2, 1);
+        TextureRegionHolder.addElementFromAssets(StringConstants.FILE_HEALTH_BAR_CARCASS,
+                smallObjectTexture, EaFallApplication.getContext(), 0, 0);
         smallObjectTexture.load();
     }
 
