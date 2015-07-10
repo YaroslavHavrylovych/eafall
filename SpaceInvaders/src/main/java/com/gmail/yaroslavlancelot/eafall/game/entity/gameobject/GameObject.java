@@ -10,6 +10,7 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IDestroyListener;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IHealthListener;
+import com.gmail.yaroslavlancelot.eafall.game.entity.health.IHealthBar;
 
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -33,10 +34,10 @@ public abstract class GameObject extends BodiedSprite {
     private static final String TAG = GameObject.class.getCanonicalName();
     /** maximum object health */
     protected int mObjectMaximumHealth = sInvincibleObjectKey;
-    /** game object current health (it can be undestroyable) */
+    /** game object current health (it can't be destroyed) */
     protected int mObjectCurrentHealth = sInvincibleObjectKey;
     /** object health bar */
-    protected HealthBar mHealthBar;
+    protected IHealthBar mHealthBar;
     /** object damage */
     protected Damage mObjectDamage;
     /** object armor */
@@ -170,14 +171,14 @@ public abstract class GameObject extends BodiedSprite {
     }
 
     protected void initHealthBar() {
-        if (!(this instanceof IPlayerObject)) {
-            return;
+        mHealthBar = createHealthBar();
+        if (mHealthBar != null) {
+            initChildren();
+            mHealthBar.attachHealthBar(this);
         }
-        initChildren();
-        mHealthBar = new HealthBar(((IPlayerObject) this).getPlayer(),
-                getWidth(), getVertexBufferObjectManager());
-        attachChild(mHealthBar.getHealthBarSprite());
     }
+
+    protected abstract IHealthBar createHealthBar();
 
     protected void initChildren() {
         if (mChildren == null) {
@@ -209,7 +210,7 @@ public abstract class GameObject extends BodiedSprite {
     private void updateHealthBarPosition() {
         if (mHealthBar != null) {
             mHealthBar.setPosition(getX() - getWidth() / 2,
-                    getY() + getHeight() / 2 + SizeConstants.HEALTH_BAR_HEIGHT);
+                    getY() + getHeight() / 2 + SizeConstants.UNIT_HEALTH_BAR_HEIGHT);
         }
     }
 

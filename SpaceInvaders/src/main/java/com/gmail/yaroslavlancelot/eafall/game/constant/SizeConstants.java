@@ -23,16 +23,23 @@ public final class SizeConstants {
     public static final int UNIT_FILE_SIZE = 36;
     public static final int UNIT_BIG_IMAGE_SIZE = 400;
     public static final int BETWEEN_TEXTURES_PADDING = 3;
-    public static final int HEALTH_BAR_HEIGHT = 3;
-    public static final int HEALTH_BAR_FILE_SIZE = 3;
     public static final int BULLET_SIZE = 2;
     public static final int SELECTOR_IMAGE_SIZE = 150;
+    public static final int HEALTH_BAR_CARCASS_WIDTH = 524;
+    public static final int HEALTH_BAR_CARCASS_HEIGHT = 49;
+    public static final int UNIT_HEALTH_BAR_HEIGHT = 3;
+    public static final int UNIT_HEALTH_BAR_FILE_SIZE = 3;
+
+    /* menu */
+    public static final int MENU_BUTTON_WIDTH = 137;
+    public static final int MENU_BUTTON_HEIGHT = 49;
 
     /* money */
     public static final int MONEY_FONT_SIZE = 35;
 
     /* building popup */
-    public static final int BUILDING_POPUP_INVOCATION_BUTTON_SIZE = 100;
+    public static final int BUILDING_POPUP_INVOCATION_BUTTON_WIDTH = MENU_BUTTON_WIDTH;
+    public static final int BUILDING_POPUP_INVOCATION_BUTTON_HEIGHT = MENU_BUTTON_HEIGHT;
     public static final int BUILDING_POPUP_ELEMENT_HEIGHT = 60;
     public static final int BUILDING_POPUP_IMAGE_PADDING = 10;
     public static final int BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT =

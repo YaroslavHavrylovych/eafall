@@ -15,6 +15,7 @@ import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
 import com.gmail.yaroslavlancelot.eafall.game.audio.BackgroundMusic;
 import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
+import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.gmail.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 import com.gmail.yaroslavlancelot.eafall.game.constant.CollisionCategories;
@@ -48,6 +49,8 @@ import com.gmail.yaroslavlancelot.eafall.game.popup.PopupManager;
 import com.gmail.yaroslavlancelot.eafall.game.popup.construction.BuildingsPopupHud;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.ConstructionPopupButton;
+import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.MenuPopupButton;
+import com.gmail.yaroslavlancelot.eafall.game.visual.other.HealthBarCarcassSprite;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.MoneyText;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.MovableUnitsLimitText;
 
@@ -56,10 +59,12 @@ import org.andengine.entity.Entity;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.sprite.batch.SpriteGroup;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.adt.color.Color;
 
@@ -108,14 +113,14 @@ public abstract class ClientGameActivity extends GameActivity {
         scene.setBackground(StringConstants.FILE_BACKGROUND, getVertexBufferObjectManager());
         mSceneManager.getWorkingScene().registerUpdateHandler(mPhysicsWorld);
         //attach SpriteGroups to the scene
-        attachSpriteGroups(scene);
+        attachSpriteGroups(scene, BatchingKeys.BatchTag.GAME_SCENE.value());
         //initSun
         createSun();
         //planets
         initFirstPlanet();
         initSecondPlanet();
         //other
-        initOnScreenText();
+        initHudElements();
         initPopups();
         //pools
         BulletPool.init(getVertexBufferObjectManager());
@@ -142,11 +147,22 @@ public abstract class ClientGameActivity extends GameActivity {
 
     protected abstract void initThickClient();
 
-    private void attachSpriteGroups(Scene scene) {
+    /**
+     * attache {@link SpriteGroup} returned with {@link SpriteGroupHolder#getElements()}
+     * to the scene if SpriteGroup has tag which equal to groupKey
+     *
+     * @param scene    to attach SpriteGroups
+     * @param groupKey SpriteGroup tag
+     */
+    private void attachSpriteGroups(Scene scene, int groupKey) {
         Object[] keys = SpriteGroupHolder.getsInstance().keySet().toArray();
         Arrays.sort(keys);
+        SpriteGroup spriteGroup;
         for (Object key : keys) {
-            scene.attachChild(SpriteGroupHolder.getGroup((String) key));
+            spriteGroup = SpriteGroupHolder.getGroup((String) key);
+            if (spriteGroup.getTag() == groupKey) {
+                scene.attachChild(spriteGroup);
+            }
         }
     }
 
@@ -280,9 +296,10 @@ public abstract class ClientGameActivity extends GameActivity {
         return sunStaticObject;
     }
 
-    /** money text initialization */
-    private void initOnScreenText() {
-        LoggerHelper.methodInvocation(TAG, "initOnScreenText");
+    /** init all HUD stuff */
+    private void initHudElements() {
+        LoggerHelper.methodInvocation(TAG, "initHudElements");
+        attachSpriteGroups(mHud, BatchingKeys.BatchTag.GAME_HUD.value());
         for (final IPlayer player : PlayersHolder.getInstance().getElements()) {
             if (!IPlayer.ControlType.isUserControlType(player.getControlType())) continue;
             LoggerHelper.methodInvocation(TAG, "init money text for " + player.getName() + " player");
@@ -290,11 +307,20 @@ public abstract class ClientGameActivity extends GameActivity {
                 Object, which display money value to user. Only one such money text present in the screen
                 because one device can't be used by multiple users to play.
             */
+            VertexBufferObjectManager objectManager = getVertexBufferObjectManager();
+            //money
             MoneyText moneyText = new MoneyText(player.getName(),
-                    getString(R.string.money_value_prefix), getVertexBufferObjectManager());
+                    getString(R.string.money_value_prefix), objectManager);
             mHud.attachChild(moneyText);
+            //menu
+            MenuPopupButton menuButton = new MenuPopupButton(objectManager);
+            mHud.attachChild(menuButton);
+            //health carcass
+            HealthBarCarcassSprite healthBarCarcassSprite = new HealthBarCarcassSprite(objectManager);
+            SpriteGroupHolder.getGroup(BatchingKeys.PLAYER_HEALTH).attachChild(healthBarCarcassSprite);
+            //TODO take a look on this text, I don't it's positioned like that (not place but code)
             final MovableUnitsLimitText limitText = new MovableUnitsLimitText(
-                    moneyText.getX(), moneyText.getY() - 2 * moneyText.getFont().getLineHeight(),
+                    moneyText.getX(), SizeConstants.GAME_FIELD_HEIGHT - 130,
                     getVertexBufferObjectManager());
             mHud.attachChild(limitText);
             final String key = ((Player) player).MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY;

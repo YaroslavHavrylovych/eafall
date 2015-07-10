@@ -6,6 +6,7 @@ import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.gmail.yaroslavlancelot.eafall.game.camera.EaFallCamera;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
+import com.gmail.yaroslavlancelot.eafall.game.engine.AlphaToChildrenHud;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.resources.IResourcesLoader;
 import com.gmail.yaroslavlancelot.eafall.game.resources.ResourceFactory;
@@ -62,11 +63,12 @@ public abstract class GameActivity extends BaseGameActivity {
                 Config.getConfig().getMaxZoomFactor());
         mCamera.setBounds(0, 0, SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT);
         mCamera.setBoundsEnabled(true);
-        mCamera.setHUD(new HUD());
+        mCamera.setHUD(new AlphaToChildrenHud());
         //hud
         mHud = mCamera.getHUD();
         mHud.setTouchAreaBindingOnActionDownEnabled(true);
         mHud.setOnAreaTouchTraversalFrontToBack();
+        mHud.setAlpha(Config.getConfig().getHudAlpha());
         //resource manager
         ResourceFactory.TypeResourceLoader typeResourceLoader = (ResourceFactory.TypeResourceLoader)
                 getIntent().getExtras().getSerializable(ResourceFactory.RESOURCE_LOADER);

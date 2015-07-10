@@ -3,9 +3,9 @@ package com.gmail.yaroslavlancelot.eafall.game.popup;
 import android.content.Context;
 
 import com.gmail.yaroslavlancelot.eafall.game.popup.construction.BuildingsPopupHud;
-import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.ConstructionPopupButton;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.DescriptionPopupHud;
 import com.gmail.yaroslavlancelot.eafall.game.popup.path.PathChoosePopup;
+import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.MenuPopupButton;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.Scene;
@@ -40,10 +40,8 @@ public class PopupManager {
         initStateChangingListeners();
     }
 
-    private void initStateChangingListeners() {
-        for (String key : mPopups.keySet()) {
-            mPopups.get(key).setStateChangingListener(new StateChangingImpl(key));
-        }
+    public static PopupManager getInstance() {
+        return sPopupManager;
     }
 
     public static void loadResource(Context context, TextureManager textureManager) {
@@ -55,7 +53,7 @@ public class PopupManager {
     /**
      * Create an instance of PopupManager. You can use it as singleton with {@link PopupManager#getInstance()}
      *
-     * @param playerName      popup is used by some user. User related to its player. This player name you need to pass.
+     * @param playerName    popup is used by some user. User related to its player. This player name you need to pass.
      * @param scene         in general it's a Hud. Most of popups you will see in the Hud.
      * @param camera        for setting camera to popup
      * @param objectManager VertexBufferObjectManager
@@ -66,14 +64,16 @@ public class PopupManager {
         return getInstance();
     }
 
-    public static PopupManager getInstance() {
-        return sPopupManager;
-    }
-
     /** return needed popup instance */
     public static IPopup getPopup(String key) {
         PopupManager popupManager = getInstance();
         return getInstance() == null ? null : popupManager.mPopups.get(key);
+    }
+
+    private void initStateChangingListeners() {
+        for (String key : mPopups.keySet()) {
+            mPopups.get(key).setStateChangingListener(new StateChangingImpl(key));
+        }
     }
 
     private class StateChangingImpl implements PopupHud.StateChangingListener {

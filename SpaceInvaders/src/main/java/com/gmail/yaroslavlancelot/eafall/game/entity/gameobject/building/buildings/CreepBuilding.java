@@ -11,7 +11,6 @@ import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.IEntity;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.adt.color.Color;
 
 import de.greenrobot.event.EventBus;
 
@@ -96,11 +95,10 @@ public class CreepBuilding extends Building implements ICreepBuilding {
             //upgrade
             player.changeMoney(-cost);
         }
-        Color playerColor = PlayersHolder.getPlayer(mPlayerName).getColor();
         VertexBufferObjectManager objectManager =
                 mBuildingStaticObject.getVertexBufferObjectManager();
-        mBuildingStaticObject = getBuildingByUpgrade(nextUpgrade, mCreepBuildingDummy, playerColor,
-                objectManager);
+        mBuildingStaticObject
+                = getBuildingByUpgrade(nextUpgrade, mCreepBuildingDummy, objectManager);
         if (!isFakePlanet) {
             mBuildingStaticObject.clearUpdateHandlers();
             mUnitCreatorCycle = new UnitCreatorCycle(mPlayerName,

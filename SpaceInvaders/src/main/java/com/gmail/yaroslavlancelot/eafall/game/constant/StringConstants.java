@@ -30,12 +30,18 @@ public final class StringConstants {
     public static final String FILE_DESCRIPTION_POPUP_BACKGROUND = "graphics/images/description_popup_background.png";
     /** description popup cross (for closing) */
     public static final String FILE_BUILDINGS_POPUP_UP_BUTTON = "graphics/icons/up_button.png";
+    /** game menu button */
+    public static final String FILE_MENU_BUTTON = "graphics/icons/menu_button.png";
     /** amount value background */
     public static final String FILE_AMOUNT_VALUE_BACKGROUND = "graphics/icons/amount_value_background.png";
     /** game button */
     public static final String FILE_GAME_BUTTON = "graphics/icons/game_button.png";
     /** circle point */
     public static final String FILE_CIRCLE_POINT = "graphics/icons/circle_point.png";
+    /** health bar for display player health */
+    public static final String FILE_HEALTH_BAR_PLAYER = "graphics/sprites/health/health";
+    /** health bar carcass */
+    public static final String FILE_HEALTH_BAR_CARCASS = "graphics/icons/health_bar_carcass.png";
     /** file name for blue planet */
     public static final String FILE_FIRST_PLANET = "graphics/sprites/planet_1.png";
     /** file name for red planet */

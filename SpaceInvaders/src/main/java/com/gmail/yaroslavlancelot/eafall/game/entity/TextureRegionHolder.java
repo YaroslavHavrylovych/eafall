@@ -6,6 +6,7 @@ import com.gmail.yaroslavlancelot.eafall.general.Holder;
 
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.source.IBitmapTextureAtlasSource;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
@@ -36,6 +37,38 @@ public class TextureRegionHolder extends Holder<ITextureRegion> {
      */
     public static ITextureRegion addElementFromAssets(String key, BitmapTextureAtlas textureAtlas, Context context, int x, int y) {
         return addElementFromAssets(key, key, textureAtlas, context, x, y);
+    }
+
+    /**
+     * add element to texture atlas and add it to {@link TextureRegionHolder}
+     * <br/>
+     * invokes {@link TextureRegionHolder#addElementFromAssets(String, String, BitmapTextureAtlas, Context, int, int)}
+     *
+     * @param key          path to file. Used like element key for {@link TextureRegionHolder}.
+     * @param textureAtlas texture atlas to loadGeneralGameTextures texture
+     * @param context      app context
+     */
+    public static ITextureRegion addElementFromAssets(String key, BuildableBitmapTextureAtlas textureAtlas, Context context) {
+        return addElementFromAssets(key, key, textureAtlas, context);
+    }
+
+    /**
+     * add element to texture atlas and add it to {@link TextureRegionHolder}
+     *
+     * @param key          Used like element key for {@link TextureRegionHolder}.
+     * @param path         path to file.
+     * @param textureAtlas texture atlas to loadGeneralGameTextures texture
+     * @param context      app context
+     */
+    public static ITextureRegion addElementFromAssets(String key, String path,
+                                                      BuildableBitmapTextureAtlas textureAtlas,
+                                                      Context context) {
+        if (!sTextureRegionHolderUtils.isElementExist(key)) {
+            TextureRegion textureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+                    textureAtlas, context, path);
+            return sTextureRegionHolderUtils.addElement(key, textureRegion);
+        }
+        return sTextureRegionHolderUtils.getElement(key);
     }
 
     /**
