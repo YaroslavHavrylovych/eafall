@@ -1,4 +1,6 @@
 # Custom folders
+captures/**
+captures
 wiki/**
 wiki
 
