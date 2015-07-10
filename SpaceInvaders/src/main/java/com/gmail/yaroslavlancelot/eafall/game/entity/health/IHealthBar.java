@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.health;
+package com.gmail.yaroslavlancelot.eafall.game.entity.health;
 
 import org.andengine.entity.IEntity;
 

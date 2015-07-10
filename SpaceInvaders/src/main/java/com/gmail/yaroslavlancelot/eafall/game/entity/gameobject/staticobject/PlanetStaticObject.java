@@ -18,7 +18,9 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.D
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.SpecialBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.WealthBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.Armor;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.health.IHealthBar;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path.StaticHelper;
+import com.gmail.yaroslavlancelot.eafall.game.entity.health.IHealthBar;
+import com.gmail.yaroslavlancelot.eafall.game.entity.health.PlayerHealthBar;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -98,7 +100,8 @@ public class PlanetStaticObject extends StaticObject implements IPlayerObject {
 
     @Override
     protected IHealthBar createHealthBar() {
-        return null;
+        return new PlayerHealthBar(mPlayerName, getVertexBufferObjectManager(),
+                StaticHelper.isLtrPath(getX()));
     }
 
     private void initSpawnPoint() {

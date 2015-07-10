@@ -55,9 +55,22 @@ public class BatchedSprite extends Sprite {
         setChildrenVisible(false);
     }
 
-    protected ITextureRegion loadResource(String pathToImage, BitmapTextureAtlas textureAtlas,
-                                              Context context, int x, int y) {
-        return TextureRegionHolder.addElementFromAssets(pathToImage, textureAtlas, context, x, y);
+    /**
+     * Invokes {@link BatchedSprite#BatchedSprite(float, float, float, float, ITextureRegion, VertexBufferObjectManager)}
+     * with width and height from the textureRegion
+     */
+    public BatchedSprite(float pX, float pY, ITextureRegion textureRegion,
+                         VertexBufferObjectManager pVertexBufferObjectManager) {
+        this(pX, pY, textureRegion.getWidth(), textureRegion.getHeight(),
+                textureRegion, pVertexBufferObjectManager);
+    }
+
+    public String getSpriteGroupName() {
+        return mSpriteGroupName;
+    }
+
+    public void setSpriteGroupName(String spriteGroupName) {
+        mSpriteGroupName = spriteGroupName;
     }
 
     @Override
@@ -82,11 +95,8 @@ public class BatchedSprite extends Sprite {
         return false;
     }
 
-    public String getSpriteGroupName() {
-        return mSpriteGroupName;
-    }
-
-    public void setSpriteGroupName(String spriteGroupName) {
-        mSpriteGroupName = spriteGroupName;
+    protected ITextureRegion loadResource(String pathToImage, BitmapTextureAtlas textureAtlas,
+                                          Context context, int x, int y) {
+        return TextureRegionHolder.addElementFromAssets(pathToImage, textureAtlas, context, x, y);
     }
 }

@@ -1,5 +1,7 @@
 package com.gmail.yaroslavlancelot.eafall.game.batching;
 
+import org.andengine.entity.IEntity;
+
 /**
  * Existing sprite groups keys.
  * <br/>
@@ -13,6 +15,7 @@ public class BatchingKeys {
     public final static String SUN_PLANET = "01_sun_and_planets";
     public final static String PREFIX_BUILDING = "03_building_";
     public final static String PREFIX_UNIT = "04_unit_";
+    public final static String PLAYER_HEALTH = "05_player_health";
 
     public static String getUnitSpriteGroup(String playerName) {
         return PREFIX_UNIT + playerName;
@@ -20,5 +23,25 @@ public class BatchingKeys {
 
     public static String getBuildingSpriteGroup(String playerName) {
         return PREFIX_BUILDING + playerName;
+    }
+
+
+    /**
+     * Can be added with {@link IEntity#setTag(int)}. Mark who has to be
+     * the entity parent.
+     */
+    public enum BatchTag {
+        GAME_SCENE(IEntity.TAG_DEFAULT),
+        GAME_HUD(IEntity.TAG_DEFAULT + 1);
+
+        private final int mValue;
+
+        BatchTag(int value) {
+            mValue = value;
+        }
+
+        public int value() {
+            return mValue;
+        }
     }
 }

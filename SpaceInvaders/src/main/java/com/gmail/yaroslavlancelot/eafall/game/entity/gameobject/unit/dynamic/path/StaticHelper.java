@@ -88,11 +88,7 @@ public class StaticHelper {
      */
     public static boolean isLtrPath(float xPosition) {
         float min = xPosition - xArrayForward[0];
-        if (Math.abs(min) < Math.abs(xPosition - xArrayBackward[0])) {
-            return true;
-        } else {
-            return false;
-        }
+        return Math.abs(min) < Math.abs(xPosition - xArrayBackward[0]);
     }
 
 }

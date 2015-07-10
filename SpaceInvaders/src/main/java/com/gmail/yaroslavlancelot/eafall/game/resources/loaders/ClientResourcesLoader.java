@@ -11,13 +11,13 @@ import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.health.UnitHealthBar;
+import com.gmail.yaroslavlancelot.eafall.game.entity.health.PlayerHealthBar;
+import com.gmail.yaroslavlancelot.eafall.game.entity.health.UnitHealthBar;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.popup.PopupManager;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.DescriptionPopupHud;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.MenuPopupButton;
-import com.gmail.yaroslavlancelot.eafall.game.visual.other.HealthBarCarcassSprite;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.MoneyText;
 
 import org.andengine.entity.sprite.batch.SpriteGroup;
@@ -51,14 +51,13 @@ public class ClientResourcesLoader extends BaseResourceLoader {
         //players
         loadPlayerResources(textureManager, vertexBufferObjectManager);
         //bullets and health bars
-        loadBulletAndHealthBar(textureManager, vertexBufferObjectManager);
+        loadBulletAndUnitHealthBar(textureManager, vertexBufferObjectManager);
         //sun and planets
         loadSunAndPlanets(textureManager, vertexBufferObjectManager);
         //other
         Context context = EaFallApplication.getContext();
         PopupManager.loadResource(context, textureManager);
         MenuPopupButton.loadResources(context, textureManager);
-        HealthBarCarcassSprite.loadResources(textureManager);
     }
 
     @Override
@@ -111,15 +110,17 @@ public class ClientResourcesLoader extends BaseResourceLoader {
     }
 
     /** load images for bullets, health bars and player colors */
-    private void loadBulletAndHealthBar(
+    private void loadBulletAndUnitHealthBar(
             TextureManager textureManager,
             VertexBufferObjectManager vertexBufferObjectManager) {
+        //player health bar
+        PlayerHealthBar.loadResources(textureManager, vertexBufferObjectManager);
+        //unit health bar
         BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager,
                 Math.max(SizeConstants.BULLET_SIZE, SizeConstants.UNIT_HEALTH_BAR_FILE_SIZE),
                 SizeConstants.BULLET_SIZE
                         + 2 * SizeConstants.UNIT_HEALTH_BAR_FILE_SIZE
                         + 2 * SizeConstants.BETWEEN_TEXTURES_PADDING, TextureOptions.BILINEAR);
-        //load
         int y = 0;
         IBitmapTextureAtlasSource atlasSource;
         int colorSize = SizeConstants.UNIT_HEALTH_BAR_FILE_SIZE;
@@ -131,8 +132,10 @@ public class ClientResourcesLoader extends BaseResourceLoader {
                     smallObjectTexture, atlasSource, 0, y);
             y += colorSize + SizeConstants.BETWEEN_TEXTURES_PADDING;
         }
+        //bullets
         TextureRegionHolder.addElementFromAssets(StringConstants.FILE_BULLET,
                 smallObjectTexture, EaFallApplication.getContext(), 0, y);
+
         smallObjectTexture.load();
         // health bar + 9 bullets at a time per unit, and 2 player (so * 2 in addition)
         //TODO check the situation when units doesn't have health bar

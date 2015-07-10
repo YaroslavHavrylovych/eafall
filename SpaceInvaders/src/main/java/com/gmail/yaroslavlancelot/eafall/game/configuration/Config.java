@@ -20,13 +20,14 @@ public class Config {
      */
     private final boolean mUnitsHealthBarEnabled = true;
     private final int mMaxZoomFactor = 6;
+    private final float mHudAlpha = 0.85f;
     /*
      * Game
      */
     private final int mMovableUnitsLimit = 200;
     private final int mCreepBuildingsLimit = 7;
     private final int mWealthBuildingsLimit = 5;
-    private final int mPlanetHealth = 300000;
+    private final int mPlanetHealth = 3000;
     private final Color mPlayerSwapColor = new Color(46.0f / 255.0f, 37.0f / 255.0f, 118.0f / 255.0f);
     /*
      * Sound and music
@@ -112,6 +113,10 @@ public class Config {
 
     public Color getPlayerSwapColor() {
         return mPlayerSwapColor;
+    }
+
+    public float getHudAlpha() {
+        return mHudAlpha;
     }
 
     public static void init(Context context) {

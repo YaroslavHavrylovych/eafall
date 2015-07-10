@@ -8,9 +8,9 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.BatchedSprite;
 import com.gmail.yaroslavlancelot.eafall.game.entity.BodiedSprite;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.health.IHealthBar;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IDestroyListener;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IHealthListener;
+import com.gmail.yaroslavlancelot.eafall.game.entity.health.IHealthBar;
 
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;

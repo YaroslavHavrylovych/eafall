@@ -34,7 +34,6 @@ public class HealthBarCarcassSprite extends Sprite {
                 vertexBufferObjectManager);
         setWidth(SizeConstants.HEALTH_BAR_CARCASS_WIDTH);
         setHeight(SizeConstants.HEALTH_BAR_CARCASS_HEIGHT);
-        setAlpha(.85f);
     }
 
     // ===========================================================
@@ -48,6 +47,7 @@ public class HealthBarCarcassSprite extends Sprite {
     // ===========================================================
     // Methods
     // ===========================================================
+    @SuppressWarnings("unused")
     public static void loadResources(final TextureManager textureManager) {
         BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager,
                 SizeConstants.HEALTH_BAR_CARCASS_WIDTH, SizeConstants.HEALTH_BAR_CARCASS_HEIGHT,

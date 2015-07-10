@@ -15,6 +15,7 @@ import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
 import com.gmail.yaroslavlancelot.eafall.game.audio.BackgroundMusic;
 import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
+import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.gmail.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 import com.gmail.yaroslavlancelot.eafall.game.constant.CollisionCategories;
@@ -58,6 +59,7 @@ import org.andengine.entity.Entity;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.sprite.batch.SpriteGroup;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
@@ -111,7 +113,7 @@ public abstract class ClientGameActivity extends GameActivity {
         scene.setBackground(StringConstants.FILE_BACKGROUND, getVertexBufferObjectManager());
         mSceneManager.getWorkingScene().registerUpdateHandler(mPhysicsWorld);
         //attach SpriteGroups to the scene
-        attachSpriteGroups(scene);
+        attachSpriteGroups(scene, BatchingKeys.BatchTag.GAME_SCENE.value());
         //initSun
         createSun();
         //planets
@@ -145,11 +147,22 @@ public abstract class ClientGameActivity extends GameActivity {
 
     protected abstract void initThickClient();
 
-    private void attachSpriteGroups(Scene scene) {
+    /**
+     * attache {@link SpriteGroup} returned with {@link SpriteGroupHolder#getElements()}
+     * to the scene if SpriteGroup has tag which equal to groupKey
+     *
+     * @param scene    to attach SpriteGroups
+     * @param groupKey SpriteGroup tag
+     */
+    private void attachSpriteGroups(Scene scene, int groupKey) {
         Object[] keys = SpriteGroupHolder.getsInstance().keySet().toArray();
         Arrays.sort(keys);
+        SpriteGroup spriteGroup;
         for (Object key : keys) {
-            scene.attachChild(SpriteGroupHolder.getGroup((String) key));
+            spriteGroup = SpriteGroupHolder.getGroup((String) key);
+            if (spriteGroup.getTag() == groupKey) {
+                scene.attachChild(spriteGroup);
+            }
         }
     }
 
@@ -286,6 +299,7 @@ public abstract class ClientGameActivity extends GameActivity {
     /** init all HUD stuff */
     private void initHudElements() {
         LoggerHelper.methodInvocation(TAG, "initHudElements");
+        attachSpriteGroups(mHud, BatchingKeys.BatchTag.GAME_HUD.value());
         for (final IPlayer player : PlayersHolder.getInstance().getElements()) {
             if (!IPlayer.ControlType.isUserControlType(player.getControlType())) continue;
             LoggerHelper.methodInvocation(TAG, "init money text for " + player.getName() + " player");
@@ -303,7 +317,7 @@ public abstract class ClientGameActivity extends GameActivity {
             mHud.attachChild(menuButton);
             //health carcass
             HealthBarCarcassSprite healthBarCarcassSprite = new HealthBarCarcassSprite(objectManager);
-            mHud.attachChild(healthBarCarcassSprite);
+            SpriteGroupHolder.getGroup(BatchingKeys.PLAYER_HEALTH).attachChild(healthBarCarcassSprite);
             //TODO take a look on this text, I don't it's positioned like that (not place but code)
             final MovableUnitsLimitText limitText = new MovableUnitsLimitText(
                     moneyText.getX(), SizeConstants.GAME_FIELD_HEIGHT - 130,

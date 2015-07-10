@@ -13,8 +13,6 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-import de.greenrobot.event.EventBus;
-
 /**
  * @author Yaroslav Havrylovych
  */
@@ -39,7 +37,6 @@ public class MenuPopupButton extends ButtonSprite {
                 vertexBufferObjectManager);
         setWidth(SizeConstants.MENU_BUTTON_WIDTH);
         setHeight(SizeConstants.MENU_BUTTON_HEIGHT);
-        setAlpha(.8f);
     }
 
 

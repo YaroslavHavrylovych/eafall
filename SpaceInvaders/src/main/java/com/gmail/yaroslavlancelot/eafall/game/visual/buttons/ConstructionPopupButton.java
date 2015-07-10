@@ -27,7 +27,6 @@ public class ConstructionPopupButton extends ButtonSprite {
                 vertexBufferObjectManager);
         setWidth(SizeConstants.BUILDING_POPUP_INVOCATION_BUTTON_WIDTH);
         setHeight(SizeConstants.BUILDING_POPUP_INVOCATION_BUTTON_HEIGHT);
-        setAlpha(.8f);
         //TODO delete this if PathChooser popup which cover the whole screen doesn't exist
         EventBus.getDefault().register(this);
     }
