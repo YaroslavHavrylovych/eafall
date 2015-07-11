@@ -59,8 +59,8 @@ public final class SizeConstants {
     //image
     public static final int DESCRIPTION_POPUP_IMAGE_HEIGHT = 400;
     public static final int DESCRIPTION_POPUP_IMAGE_WIDTH = 400;
-    public static final int DESCRIPTION_POPUP_IMAGE_X = 395;
-    public static final int DESCRIPTION_POPUP_IMAGE_Y = 295;
+    public static final int DESCRIPTION_POPUP_IMAGE_X = 388;
+    public static final int DESCRIPTION_POPUP_IMAGE_Y = 301;
     public static final int DESCRIPTION_POPUP_IMAGE_PADDING = 30;
     // description area
     public static final int DESCRIPTION_POPUP_DES_AREA_HEIGHT = 335;
