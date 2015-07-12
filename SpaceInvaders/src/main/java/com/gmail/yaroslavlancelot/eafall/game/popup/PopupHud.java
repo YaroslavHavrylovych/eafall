@@ -1,12 +1,11 @@
 package com.gmail.yaroslavlancelot.eafall.game.popup;
 
-import com.gmail.yaroslavlancelot.eafall.game.touch.StaticHelper;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
+import com.gmail.yaroslavlancelot.eafall.game.touch.StaticHelper;
 
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.primitive.Rectangle;
-import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.scene.Scene;
 
 /** Base popups class. Touch on HUD except any hud element will cause popup closing */
@@ -16,6 +15,7 @@ public abstract class PopupHud extends HUD implements IPopup {
     /** represent boolean value which true if popup is showing now and false in other way */
     protected boolean mIsPopupShowing;
     /** area for popup (all other area is transparent) */
+    //TODO replace it with entity and replace instead of attach
     protected Rectangle mPopupRectangle;
     /** popup attached scene */
     private Scene mScene;
@@ -37,6 +37,10 @@ public abstract class PopupHud extends HUD implements IPopup {
         });
     }
 
+    public void setStateChangingListener(StateChangingListener stateChangingListener) {
+        mStateChangingListener = stateChangingListener;
+    }
+
     /**
      * check is popup is showing and if it's not detach all elements and unregister
      * all touch areas for mPopupRectangle
@@ -50,9 +54,7 @@ public abstract class PopupHud extends HUD implements IPopup {
         IEntity child;
         for (int i = 0; i < mPopupRectangle.getChildCount(); i++) {
             child = mPopupRectangle.getChildByIndex(i);
-            if (child instanceof ITouchArea) {
-                unregisterTouchArea(child);
-            }
+            unregisterTouchArea(child);
         }
         detachChild(mPopupRectangle);
         unregisterTouchArea(mPopupRectangle);
@@ -60,11 +62,6 @@ public abstract class PopupHud extends HUD implements IPopup {
         if (mStateChangingListener != null) {
             mStateChangingListener.afterHiding();
         }
-    }
-
-    /** detach from the screen */
-    protected void detachPopup() {
-        mScene.clearChildScene();
     }
 
     /**
@@ -83,9 +80,7 @@ public abstract class PopupHud extends HUD implements IPopup {
         IEntity child;
         for (int i = 0; i < mPopupRectangle.getChildCount(); i++) {
             child = mPopupRectangle.getChildByIndex(i);
-            if (child instanceof ITouchArea) {
-                registerTouchArea(child);
-            }
+            registerTouchArea(child);
         }
         attachChild(mPopupRectangle);
         registerTouchArea(mPopupRectangle);
@@ -108,16 +103,17 @@ public abstract class PopupHud extends HUD implements IPopup {
         return mIsPopupShowing;
     }
 
+    /** detach from the screen */
+    protected void detachPopup() {
+        mScene.clearChildScene();
+    }
+
     /** attach to the screen */
     protected void attachPopup() {
         mScene.setChildScene(this);
     }
 
-    public void setStateChangingListener(StateChangingListener stateChangingListener) {
-        mStateChangingListener = stateChangingListener;
-    }
-
-    public static interface StateChangingListener {
+    public interface StateChangingListener {
         void beforeShowing();
 
         void afterHiding();

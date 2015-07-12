@@ -25,7 +25,9 @@ public final class StringConstants {
     /** bullet image */
     public static final String FILE_BULLET = "graphics/sprites/bullet/bullet.png";
     /** buildings popup item background */
-    public static final String FILE_POPUP_BACKGROUND_ITEM = "graphics/images/background_popup_item.png";
+    public static final String FILE_CONSTRUCTIONS_POPUP_ITEM = "graphics/images/constructions_popup_item.png";
+    /** construction popup */
+    public static final String FILE_CONSTRUCTIONS_POPUP = "graphics/images/constructions_popup.png";
     /** description popup background */
     public static final String FILE_DESCRIPTION_POPUP_BACKGROUND = "graphics/images/description_popup_background.png";
     /** description popup cross (for closing) */

@@ -46,7 +46,7 @@ import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.Player;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.popup.PopupManager;
-import com.gmail.yaroslavlancelot.eafall.game.popup.construction.BuildingsPopupHud;
+import com.gmail.yaroslavlancelot.eafall.game.popup.construction.ConstructionsPopupHud;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.ConstructionPopupButton;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.MenuPopupButton;
@@ -176,7 +176,7 @@ public abstract class ClientGameActivity extends GameActivity {
                 button.setOnClickListener(new ButtonSprite.OnClickListener() {
                     @Override
                     public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                        PopupManager.getPopup(BuildingsPopupHud.KEY).triggerPopup();
+                        PopupManager.getPopup(ConstructionsPopupHud.KEY).triggerPopup();
                     }
                 });
                 mHud.attachChild(button);

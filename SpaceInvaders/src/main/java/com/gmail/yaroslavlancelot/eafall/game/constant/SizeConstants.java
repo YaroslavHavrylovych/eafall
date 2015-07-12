@@ -37,14 +37,22 @@ public final class SizeConstants {
     /* money */
     public static final int MONEY_FONT_SIZE = 35;
 
-    /* building popup */
-    public static final int BUILDING_POPUP_INVOCATION_BUTTON_WIDTH = MENU_BUTTON_WIDTH;
-    public static final int BUILDING_POPUP_INVOCATION_BUTTON_HEIGHT = MENU_BUTTON_HEIGHT;
-    public static final int BUILDING_POPUP_ELEMENT_HEIGHT = 60;
-    public static final int BUILDING_POPUP_IMAGE_PADDING = 10;
-    public static final int BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT =
-            BUILDING_POPUP_ELEMENT_HEIGHT + 2 * BUILDING_POPUP_IMAGE_PADDING;
-    public static final int BUILDING_POPUP_BACKGROUND_ITEM_WIDTH = 600;
+    /* constructions popup */
+    public static final int CONSTRUCTIONS_POPUP_INVOCATION_BUTTON_WIDTH = MENU_BUTTON_WIDTH;
+    public static final int CONSTRUCTIONS_POPUP_INVOCATION_BUTTON_HEIGHT = MENU_BUTTON_HEIGHT;
+    public static final int CONSTRUCTIONS_POPUP_ELEMENT_NAME_Y = 8;
+    public static final int CONSTRUCTIONS_POPUP_ELEMENT_NAME_X = 157;
+    public static final int CONSTRUCTIONS_POPUP_ELEMENT_IMAGE_X = 81;
+    public static final int CONSTRUCTIONS_POPUP_ELEMENT_IMAGE_Y = 59;
+    public static final int CONSTRUCTIONS_POPUP_ELEMENT_IMAGE_SIZE = 103;
+    public static final int CONSTRUCTIONS_POPUP_ELEMENT_HEIGHT = 123;
+    public static final int CONSTRUCTIONS_POPUP_ELEMENT_WIDTH = 623;
+    public static final int CONSTRUCTIONS_POPUP_ROWS = 6;
+    public static final int CONSTRUCTIONS_POPUP_FIRST_ROW_Y = 165;
+    public static final int CONSTRUCTIONS_POPUP_FIRST_COLUMN_X = 123;
+    public static final int CONSTRUCTIONS_POPUP_SECOND_COLUMN_X = 766;
+    public static final int CONSTRUCTIONS_POPUP_WIDTH = 1512;
+    public static final int CONSTRUCTIONS_POPUP_HEIGHT = 950;
 
 
     /** description popup */

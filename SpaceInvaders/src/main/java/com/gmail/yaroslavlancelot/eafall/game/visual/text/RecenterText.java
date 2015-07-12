@@ -16,7 +16,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
  * <br/>
  * In addition when you set the text, x is the left corner of the text (not the center)
  */
-public abstract class RecenterText extends Text {
+public class RecenterText extends Text {
     public RecenterText(float pX, float pY, IFont pFont, CharSequence pText, VertexBufferObjectManager pVertexBufferObjectManager) {
         super(pX, pY, pFont, pText, pVertexBufferObjectManager);
     }
