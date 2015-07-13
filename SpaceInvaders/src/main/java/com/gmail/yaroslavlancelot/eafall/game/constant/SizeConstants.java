@@ -40,12 +40,17 @@ public final class SizeConstants {
     /* constructions popup */
     public static final int CONSTRUCTIONS_POPUP_INVOCATION_BUTTON_WIDTH = MENU_BUTTON_WIDTH;
     public static final int CONSTRUCTIONS_POPUP_INVOCATION_BUTTON_HEIGHT = MENU_BUTTON_HEIGHT;
-    public static final int CONSTRUCTIONS_POPUP_ELEMENT_NAME_X = 157;
-    public static final int CONSTRUCTIONS_POPUP_ELEMENT_IMAGE_X = 81;
-    public static final int CONSTRUCTIONS_POPUP_ELEMENT_IMAGE_Y = 59;
-    public static final int CONSTRUCTIONS_POPUP_ELEMENT_IMAGE_SIZE = 103;
     public static final int CONSTRUCTIONS_POPUP_ELEMENT_HEIGHT = 123;
     public static final int CONSTRUCTIONS_POPUP_ELEMENT_WIDTH = 623;
+    public static final int CONSTRUCTIONS_POPUP_ELEMENT_NAME_X = 157;
+    public static final int CONSTRUCTIONS_POPUP_ELEMENT_IMAGE_X = 81;
+    public static final int CONSTRUCTIONS_POPUP_ELEMENT_OXYGEN_IMAGE_X = 487;
+    public static final int CONSTRUCTIONS_POPUP_ELEMENT_OXYGEN_IMAGE_Y =
+            CONSTRUCTIONS_POPUP_ELEMENT_HEIGHT / 2 + 5;
+    public static final int CONSTRUCTIONS_POPUP_ELEMENT_OXYGEN_VALUE_X = 527;
+    public static final int CONSTRUCTIONS_POPUP_ELEMENT_OXYGEN_OFFSET = 10;
+    public static final int CONSTRUCTIONS_POPUP_ELEMENT_IMAGE_Y = 59;
+    public static final int CONSTRUCTIONS_POPUP_ELEMENT_IMAGE_SIZE = 103;
     public static final int CONSTRUCTIONS_POPUP_ROWS = 6;
     public static final int CONSTRUCTIONS_POPUP_FIRST_ROW_Y = 165;
     public static final int CONSTRUCTIONS_POPUP_FIRST_COLUMN_X = 123;
@@ -84,6 +89,11 @@ public final class SizeConstants {
     public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_WIDTH = 270; //310 background size
     public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_X = 1585;
     public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_Y = 232;
+
+    //hud game icons
+    public static final int HUD_ENERGY = 50;
+    public static final int HUD_OXYGEN = 70;
+    public static final int HUD_CLOCK = 59;
 
 
     private SizeConstants() {

@@ -16,6 +16,7 @@ import org.andengine.entity.IEntity;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
+import org.andengine.opengl.font.FontUtils;
 import org.andengine.opengl.font.IFont;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -44,6 +45,7 @@ public class ConstructionPopupItem extends ButtonSprite implements Constructions
     /* popup elements */
     private Sprite mConstructionSprite;
     private Text mConstructionName;
+    private Text mConstructionCost;
 
     ConstructionPopupItem(float x, float y, VertexBufferObjectManager objectManager) {
         super(x, y,
@@ -94,6 +96,22 @@ public class ConstructionPopupItem extends ButtonSprite implements Constructions
 
         // text
         attachChild(constructNameText(dummy.getStringId()));
+        //oxygen picture
+        attachChild(new Sprite(SizeConstants.CONSTRUCTIONS_POPUP_ELEMENT_OXYGEN_IMAGE_X,
+                SizeConstants.CONSTRUCTIONS_POPUP_ELEMENT_OXYGEN_IMAGE_Y,
+                TextureRegionHolder.getRegion(StringConstants.FILE_OXYGEN),
+                getVertexBufferObjectManager()));
+        //oxygen value
+        attachChild(constructCostText(dummy.getCost(buildingId.getUpgrade())));
+    }
+
+    private IEntity constructCostText(final int cost) {
+        IFont font = FontHolder.getInstance().getElement(FONT);
+        mConstructionCost = new RecenterText(
+                SizeConstants.CONSTRUCTIONS_POPUP_ELEMENT_OXYGEN_VALUE_X,
+                SizeConstants.CONSTRUCTIONS_POPUP_ELEMENT_HEIGHT / 2,
+                font, Integer.toString(cost), getVertexBufferObjectManager());
+        return mConstructionCost;
     }
 
     private Text constructNameText(int objectNameId) {
@@ -101,7 +119,7 @@ public class ConstructionPopupItem extends ButtonSprite implements Constructions
         mConstructionName = new RecenterText(
                 SizeConstants.CONSTRUCTIONS_POPUP_ELEMENT_NAME_X,
                 SizeConstants.CONSTRUCTIONS_POPUP_ELEMENT_HEIGHT / 2,
-                font, getObjectNameById(objectNameId), getVertexBufferObjectManager());
+                font, getObjectNameById(objectNameId, font), getVertexBufferObjectManager());
         return mConstructionName;
     }
 
@@ -113,11 +131,15 @@ public class ConstructionPopupItem extends ButtonSprite implements Constructions
      * @param id object string id
      * @return the object name instantiated text
      */
-    private String getObjectNameById(int id) {
+    private String getObjectNameById(int id, IFont font) {
         String value = LocaleImpl.getInstance().getStringById(id);
-        int ind = value.lastIndexOf(" ");
-        if (ind != -1) {
-            value = new StringBuilder(value).replace(ind, ind + 1, "\n").toString();
+        float length = FontUtils.measureText(font, value);
+        if (length >= SizeConstants.CONSTRUCTIONS_POPUP_ELEMENT_OXYGEN_IMAGE_X
+                - SizeConstants.CONSTRUCTIONS_POPUP_ELEMENT_OXYGEN_OFFSET) {
+            int ind = value.lastIndexOf(" ");
+            if (ind != -1) {
+                value = new StringBuilder(value).replace(ind, ind + 1, "\n").toString();
+            }
         }
         return value;
     }

@@ -30,20 +30,8 @@ public final class StringConstants {
     public static final String FILE_CONSTRUCTIONS_POPUP = "graphics/images/constructions_popup.png";
     /** description popup background */
     public static final String FILE_DESCRIPTION_POPUP_BACKGROUND = "graphics/images/description_popup_background.png";
-    /** description popup cross (for closing) */
-    public static final String FILE_BUILDINGS_POPUP_UP_BUTTON = "graphics/icons/up_button.png";
-    /** game menu button */
-    public static final String FILE_MENU_BUTTON = "graphics/icons/menu_button.png";
-    /** amount value background */
-    public static final String FILE_AMOUNT_VALUE_BACKGROUND = "graphics/icons/amount_value_background.png";
-    /** game button */
-    public static final String FILE_GAME_BUTTON = "graphics/icons/game_button.png";
-    /** circle point */
-    public static final String FILE_CIRCLE_POINT = "graphics/icons/circle_point.png";
     /** health bar for display player health */
     public static final String FILE_HEALTH_BAR_PLAYER = "graphics/sprites/health/health";
-    /** health bar carcass */
-    public static final String FILE_HEALTH_BAR_CARCASS = "graphics/icons/health_bar_carcass.png";
     /** file name for blue planet */
     public static final String FILE_FIRST_PLANET = "graphics/sprites/planet_1.png";
     /** file name for red planet */
@@ -68,6 +56,24 @@ public final class StringConstants {
     public static final String KEY_FONT_MONEY = "key_money_font";
     /** splash screen key */
     public static final String KEY_SPLASH_SCREEN = "key_splash_screen";
+    /** description popup cross (for closing) */
+    public static final String FILE_BUILDINGS_POPUP_UP_BUTTON = "graphics/icons/up_button.png";
+    /** game menu button */
+    public static final String FILE_MENU_BUTTON = "graphics/icons/menu_button.png";
+    /** amount value background */
+    public static final String FILE_AMOUNT_VALUE_BACKGROUND = "graphics/icons/amount_value_background.png";
+    /** game button */
+    public static final String FILE_GAME_BUTTON = "graphics/icons/game_button.png";
+    /** circle point */
+    public static final String FILE_CIRCLE_POINT = "graphics/icons/circle_point.png";
+    /** energy icon */
+    public static final String FILE_ENERGY = "graphics/icons/energy.png";
+    /** oxygen icon */
+    public static final String FILE_OXYGEN = "graphics/icons/oxygen.png";
+    /** clock icon */
+    public static final String FILE_CLOCK = "graphics/icons/clock.png";
+    /** health bar carcass */
+    public static final String FILE_HEALTH_BAR_CARCASS = "graphics/icons/health_bar_carcass.png";
     /** background */
     public static String FILE_BACKGROUND = StringConstants.getImagesPath() + "background.png";
 
