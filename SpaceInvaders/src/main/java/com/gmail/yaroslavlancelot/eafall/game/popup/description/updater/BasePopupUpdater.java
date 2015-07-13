@@ -12,6 +12,8 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 /**
  * Description popup can present different objects. General actions for all of them you
  * can use with extending current class
+ *
+ * @author Yaroslav Havrylovych
  */
 public abstract class BasePopupUpdater implements IPopupUpdater {
     protected final VertexBufferObjectManager mVertexBufferObjectManager;
@@ -54,9 +56,6 @@ public abstract class BasePopupUpdater implements IPopupUpdater {
         text.setText(value);
     }
 
-    /** return description object name {@link java.lang.String} */
-    protected abstract String getDescribedObjectName(Object objectId, String allianceName);
-
     @Override
     public void clear() {
         if (mObjectImage != null) {
@@ -64,6 +63,9 @@ public abstract class BasePopupUpdater implements IPopupUpdater {
             mObjectImage = null;
         }
     }
+
+    /** return description object name {@link java.lang.String} */
+    protected abstract String getDescribedObjectName(Object objectId, String allianceName);
 
     /** return description image */
     protected abstract ITextureRegion getDescriptionImage(Object objectId, String allianceName);

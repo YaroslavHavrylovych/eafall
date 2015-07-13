@@ -14,6 +14,8 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
  * AndeEngine {@link org.andengine.entity.text.Text} wrapper. Extend existing func with
  * re-center text if the content was changed. Used to fix left side of the text on the same position.
  * <br/>
+ * Respects line-breaks
+ * <br/>
  * In addition when you set the text, x is the left corner of the text (not the center)
  */
 public class RecenterText extends Text {
@@ -94,7 +96,7 @@ public class RecenterText extends Text {
         CharSequence oldText = getText();
         super.setText(pText);
         setX(getX() +
-                (pText == null ? 0 : FontUtils.measureText(getFont(), pText) / 2) -
-                (oldText == null ? 0 : FontUtils.measureText(getFont(), oldText) / 2));
+                (pText == null ? 0 : FontUtils.measureMultipleLineText(getFont(), pText) / 2) -
+                (oldText == null ? 0 : FontUtils.measureMultipleLineText(getFont(), oldText) / 2));
     }
 }

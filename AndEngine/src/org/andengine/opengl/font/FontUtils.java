@@ -39,8 +39,28 @@ public class FontUtils {
 	// ===========================================================
 	// Methods
 	// ===========================================================
+    /**
+     * measure char {@link CharSequence} given font respecting line-breaks
+     *
+     * @param pFont the text font
+     * @param pText the text to measure
+     * @return the width of the longest line of pText (\n is a breaker)
+     */
+    public static float measureMultipleLineText(final IFont pFont, final CharSequence pText) {
+        String text = pText.toString();
+        if(text.contains("\n")) {
+            String[] splitText = text.split("\n");
+            float maxWidth = 0;
+            for(String str: splitText) {
+                maxWidth = Math.max(maxWidth, measureText(pFont, str));
+            }
+            return maxWidth;
+        }
+        return FontUtils.measureText(pFont, pText, null);
+    }
 
-	/**
+
+    /**
 	 * @param pFont
 	 * @param pText
 	 * @return the width of pText.

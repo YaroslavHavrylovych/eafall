@@ -40,7 +40,6 @@ public final class SizeConstants {
     /* constructions popup */
     public static final int CONSTRUCTIONS_POPUP_INVOCATION_BUTTON_WIDTH = MENU_BUTTON_WIDTH;
     public static final int CONSTRUCTIONS_POPUP_INVOCATION_BUTTON_HEIGHT = MENU_BUTTON_HEIGHT;
-    public static final int CONSTRUCTIONS_POPUP_ELEMENT_NAME_Y = 8;
     public static final int CONSTRUCTIONS_POPUP_ELEMENT_NAME_X = 157;
     public static final int CONSTRUCTIONS_POPUP_ELEMENT_IMAGE_X = 81;
     public static final int CONSTRUCTIONS_POPUP_ELEMENT_IMAGE_Y = 59;

@@ -20,6 +20,12 @@ import org.andengine.opengl.font.IFont;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
+/**
+ * The Player`s constructions popup item.
+ * In most is just a clickable area with the image and it's description.
+ *
+ * @author Yaroslav Havrylovych
+ */
 public class ConstructionPopupItem extends ButtonSprite implements ConstructionsPopupItemFactory.BuildingPopupItem {
     /** buildings popup element height */
     private static final int POPUP_ELEMENT_WIDTH = SizeConstants.CONSTRUCTIONS_POPUP_ELEMENT_WIDTH;
@@ -90,15 +96,29 @@ public class ConstructionPopupItem extends ButtonSprite implements Constructions
         attachChild(constructNameText(dummy.getStringId()));
     }
 
-    //TODO center the text
-    //TODO and split the line if needed
     private Text constructNameText(int objectNameId) {
-        String textString = LocaleImpl.getInstance().getStringById(objectNameId);
         IFont font = FontHolder.getInstance().getElement(FONT);
         mConstructionName = new RecenterText(
                 SizeConstants.CONSTRUCTIONS_POPUP_ELEMENT_NAME_X,
-                SizeConstants.CONSTRUCTIONS_POPUP_ELEMENT_NAME_Y + font.getLineHeight() / 2,
-                font, textString, getVertexBufferObjectManager());
+                SizeConstants.CONSTRUCTIONS_POPUP_ELEMENT_HEIGHT / 2,
+                font, getObjectNameById(objectNameId), getVertexBufferObjectManager());
         return mConstructionName;
+    }
+
+    /**
+     * creates string for give object by id.
+     * <br/>
+     * can insert line-breaks if multiple words present (line-break placed before the last word)
+     *
+     * @param id object string id
+     * @return the object name instantiated text
+     */
+    private String getObjectNameById(int id) {
+        String value = LocaleImpl.getInstance().getStringById(id);
+        int ind = value.lastIndexOf(" ");
+        if (ind != -1) {
+            value = new StringBuilder(value).replace(ind, ind + 1, "\n").toString();
+        }
+        return value;
     }
 }
