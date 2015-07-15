@@ -17,8 +17,8 @@ import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.popup.PopupManager;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.DescriptionPopupHud;
+import com.gmail.yaroslavlancelot.eafall.game.scene.hud.EaFallHud;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.MenuPopupButton;
-import com.gmail.yaroslavlancelot.eafall.game.visual.text.MoneyText;
 
 import org.andengine.entity.sprite.batch.SpriteGroup;
 import org.andengine.opengl.font.FontManager;
@@ -55,7 +55,7 @@ public class ClientResourcesLoader extends BaseResourceLoader {
         //sun and planets
         loadSunAndPlanets(textureManager, vertexBufferObjectManager);
         //oxygen, energy and time
-        loadHudGameIcons(textureManager);
+        EaFallHud.loadResource(EaFallApplication.getContext(), textureManager);
         //other
         Context context = EaFallApplication.getContext();
         PopupManager.loadResource(context, textureManager);
@@ -64,7 +64,7 @@ public class ClientResourcesLoader extends BaseResourceLoader {
 
     @Override
     public void loadFonts(TextureManager textureManager, FontManager fontManager) {
-        MoneyText.loadFont(fontManager, textureManager);
+        EaFallHud.loadFonts(fontManager, textureManager);
         DescriptionPopupHud.loadFonts(fontManager, textureManager);
     }
 
@@ -81,26 +81,6 @@ public class ClientResourcesLoader extends BaseResourceLoader {
     @Override
     public void addImage(String path, int width, int height) {
         throw new UnsupportedOperationException("no add image for the game");
-    }
-
-    private void loadHudGameIcons(final TextureManager textureManager) {
-        int padding = SizeConstants.BETWEEN_TEXTURES_PADDING;
-        int firstRowHeight = Math.max(SizeConstants.HUD_ENERGY, SizeConstants.HUD_OXYGEN) + padding;
-        BitmapTextureAtlas textureAtlas = new BitmapTextureAtlas(
-                textureManager,
-                SizeConstants.HUD_ENERGY
-                        + SizeConstants.HUD_OXYGEN
-                        + padding,
-                firstRowHeight
-                        + SizeConstants.HUD_CLOCK, TextureOptions.BILINEAR);
-        Context context = EaFallApplication.getContext();
-        TextureRegionHolder.addElementFromAssets(StringConstants.FILE_ENERGY,
-                textureAtlas, context, 0, 0);
-        TextureRegionHolder.addElementFromAssets(StringConstants.FILE_OXYGEN,
-                textureAtlas, context, SizeConstants.HUD_ENERGY + padding, 0);
-        TextureRegionHolder.addElementFromAssets(StringConstants.FILE_CLOCK,
-                textureAtlas, context, 0, firstRowHeight);
-        textureAtlas.load();
     }
 
     private void loadAllianceResources(TextureManager textureManager) {

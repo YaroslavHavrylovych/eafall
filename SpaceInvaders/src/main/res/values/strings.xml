@@ -119,7 +119,6 @@
 
     <!-- general -->
     <string name="app_name">SpaceInvaders</string>
-    <string name="money_value_prefix">Money : </string>
     <string name="exit">Exit</string>
     <string name="back">Back</string>
     <string name="connect">Connect</string>

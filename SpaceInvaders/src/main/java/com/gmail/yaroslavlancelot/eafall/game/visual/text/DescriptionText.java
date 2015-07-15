@@ -16,7 +16,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 /** text used in description popup */
 public class DescriptionText extends RecenterText {
     public final static int sFontSize = SizeConstants.DESCRIPTION_POPUP_TEXT_SIZE;
-    public final static String sFontKey = "description_text_font_size_key";
+    public final static String sFontKey = "description_text_font_key";
 
     public DescriptionText(float x, float y, VertexBufferObjectManager vertexBufferObjectManager) {
         this(x, y, "*", vertexBufferObjectManager);

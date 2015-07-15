@@ -47,8 +47,8 @@ public class UnitPath implements IUnitPath {
             return;
         }
         // if it's not
-        float distanceToNextPoint = StaticHelper.getDistanceBetweenPoints(xArray[mCurrentPointIndex], yArray[mCurrentPointIndex], x, y);
-        if (distanceToNextPoint < StaticHelper.MIN_DISTANCE_TO_SWITCH_TO_ANOTHER_POINT) {
+        float distanceToNextPoint = PathHelper.getDistanceBetweenPoints(xArray[mCurrentPointIndex], yArray[mCurrentPointIndex], x, y);
+        if (distanceToNextPoint < PathHelper.MIN_DISTANCE_TO_SWITCH_TO_ANOTHER_POINT) {
             mCurrentPointIndex++;
         }
         nextPoint[0] = xArray[mCurrentPointIndex];

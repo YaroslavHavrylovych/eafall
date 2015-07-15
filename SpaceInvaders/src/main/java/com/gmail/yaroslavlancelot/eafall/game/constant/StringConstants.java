@@ -52,8 +52,6 @@ public final class StringConstants {
     public static final String SECOND_PLAYER_ALLIANCE = "second_player_alliance";
     /** blue player name */
     public static final String FIRST_PLAYER_CONTROL_BEHAVIOUR_TYPE = "first_player_CONTROL_BEHAVIOUR_TYPE";
-    /** key used to identify money font */
-    public static final String KEY_FONT_MONEY = "key_money_font";
     /** splash screen key */
     public static final String KEY_SPLASH_SCREEN = "key_splash_screen";
     /** description popup cross (for closing) */
@@ -66,12 +64,14 @@ public final class StringConstants {
     public static final String FILE_GAME_BUTTON = "graphics/icons/game_button.png";
     /** circle point */
     public static final String FILE_CIRCLE_POINT = "graphics/icons/circle_point.png";
-    /** energy icon */
-    public static final String FILE_ENERGY = "graphics/icons/energy.png";
-    /** oxygen icon */
+    /** hud energy icon */
+    public static final String FILE_SHUTTLE_HUD = "graphics/icons/shuttle_hud.png";
+    /** oxygen icon for popup */
     public static final String FILE_OXYGEN = "graphics/icons/oxygen.png";
-    /** clock icon */
-    public static final String FILE_CLOCK = "graphics/icons/clock.png";
+    /** hud oxygen icon */
+    public static final String FILE_OXYGEN_HUD = "graphics/icons/oxygen_hud.png";
+    /** hud clock icon */
+    public static final String FILE_CLOCK_HUD = "graphics/icons/clock_hud.png";
     /** health bar carcass */
     public static final String FILE_HEALTH_BAR_CARCASS = "graphics/icons/health_bar_carcass.png";
     /** background */

@@ -2,6 +2,7 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.filtering;
 
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path.PathHelper;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 
 import java.util.ArrayList;
@@ -36,10 +37,8 @@ public class StaticHelper {
         //update cycle can cause arrays overhead
         List<GameObject> enemiesInView = new ArrayList<GameObject>(5);
         for (GameObject enemy : enemies) {
-            if (com.gmail.yaroslavlancelot.eafall.game
-                    .entity.gameobject.unit.dynamic.path
-                    .StaticHelper.getDistanceBetweenPoints(enemy.getX(), enemy.getY(),
-                            unit.getX(), unit.getY()) < range)
+            if (PathHelper.getDistanceBetweenPoints(enemy.getX(), enemy.getY(),
+                    unit.getX(), unit.getY()) < range)
                 enemiesInView.add(enemy);
         }
         return enemiesInView;
@@ -74,8 +73,7 @@ public class StaticHelper {
         float smallestDistance = 0f;
         for (GameObject enemy : enemyPlayer.getPlayerObjects()) {
             float distance =
-                    com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit
-                            .dynamic.path.StaticHelper.getDistanceBetweenPoints(
+                    PathHelper.getDistanceBetweenPoints(
                             enemy.getX(), enemy.getY(), unit.getX(), unit.getY());
             if (distance < smallestDistance) {
                 smallestDistance = distance;
@@ -100,9 +98,7 @@ public class StaticHelper {
      * @return true if distance less than range and false in other way
      */
     static boolean checkRange(float range, float x1, float y1, float x2, float y2) {
-        return com.gmail.yaroslavlancelot.eafall.game
-                .entity.gameobject.unit.dynamic.path
-                .StaticHelper.getDistanceBetweenPoints(x1, y1, x2, y2) < range;
+        return PathHelper.getDistanceBetweenPoints(x1, y1, x2, y2) < range;
     }
 
 

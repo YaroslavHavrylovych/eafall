@@ -6,7 +6,7 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IVeloc
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.bonus.Bonus;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path.IUnitPath;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path.StaticHelper;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path.PathHelper;
 
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -109,7 +109,7 @@ public class MovableUnit extends Unit {
     }
 
     public void initMovingPath(boolean ltr, boolean top) {
-        mUnitPath = StaticHelper.createUnitPath(ltr, top);
+        mUnitPath = PathHelper.createUnitPath(ltr, top);
     }
 
     /** remove bonuses which are supposed to die because of passes time */
@@ -211,7 +211,7 @@ public class MovableUnit extends Unit {
          */
         private boolean attackOrMove(GameObject enemy) {
             // check if we already can attack
-            float distanceToTarget = StaticHelper.getDistanceBetweenPoints(getX(), getY(),
+            float distanceToTarget = PathHelper.getDistanceBetweenPoints(getX(), getY(),
                     enemy.getX(), enemy.getY())
                     //minus both objects radius to have distance between objects corners
                     //instead of distance between centers

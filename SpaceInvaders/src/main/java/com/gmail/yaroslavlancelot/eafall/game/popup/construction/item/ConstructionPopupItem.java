@@ -97,6 +97,7 @@ public class ConstructionPopupItem extends ButtonSprite implements Constructions
         // text
         attachChild(constructNameText(dummy.getStringId()));
         //oxygen picture
+        //TODO this picture loads in another class. Can we move it here? (and create one or two SpriteBatches for handling everything in this popup
         attachChild(new Sprite(SizeConstants.CONSTRUCTIONS_POPUP_ELEMENT_OXYGEN_IMAGE_X,
                 SizeConstants.CONSTRUCTIONS_POPUP_ELEMENT_OXYGEN_IMAGE_Y,
                 TextureRegionHolder.getRegion(StringConstants.FILE_OXYGEN),

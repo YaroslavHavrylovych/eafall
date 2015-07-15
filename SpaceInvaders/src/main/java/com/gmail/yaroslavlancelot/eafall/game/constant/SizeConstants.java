@@ -30,12 +30,24 @@ public final class SizeConstants {
     public static final int UNIT_HEALTH_BAR_HEIGHT = 3;
     public static final int UNIT_HEALTH_BAR_FILE_SIZE = 3;
 
-    /* menu */
+    /* HUD */
+    //positions
+    public static final int HUD_VALUE_OFFSET = 10;
+    public static final int HUD_VALUE_TEXT_OFFSET = 30 + HUD_VALUE_OFFSET;
+    public static final int HUD_VALUE_TEXT_FONT_SIZE = 35;
+    public static final int HUD_VALUES_Y_PADDING = 60;
+    public static final int HUD_VALUES_X_LEFT = 37;
+    //7 - max hud text elements amount
+    public static final int HUD_VALUES_X_RIGHT =
+            GAME_FIELD_WIDTH - HUD_VALUES_X_LEFT - HUD_VALUE_OFFSET - 150;
+    //sizes
     public static final int MENU_BUTTON_WIDTH = 137;
     public static final int MENU_BUTTON_HEIGHT = 49;
-
-    /* money */
     public static final int MONEY_FONT_SIZE = 35;
+    public static final int HUD_OXYGEN = 36;
+    public static final int ICON_OXYGEN = 70;
+    public static final int HUD_ENERGY = 42;
+    public static final int HUD_CLOCK = 42;
 
     /* constructions popup */
     public static final int CONSTRUCTIONS_POPUP_INVOCATION_BUTTON_WIDTH = MENU_BUTTON_WIDTH;
@@ -59,7 +71,7 @@ public final class SizeConstants {
     public static final int CONSTRUCTIONS_POPUP_HEIGHT = 950;
 
 
-    /** description popup */
+    /* description popup */
     // general
     public static final int DESCRIPTION_POPUP_HEIGHT = 666;
     public static final int DESCRIPTION_POPUP_WIDTH = SizeConstants.GAME_FIELD_WIDTH;
@@ -89,11 +101,6 @@ public final class SizeConstants {
     public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_WIDTH = 270; //310 background size
     public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_X = 1585;
     public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_Y = 232;
-
-    //hud game icons
-    public static final int HUD_ENERGY = 50;
-    public static final int HUD_OXYGEN = 70;
-    public static final int HUD_CLOCK = 59;
 
 
     private SizeConstants() {

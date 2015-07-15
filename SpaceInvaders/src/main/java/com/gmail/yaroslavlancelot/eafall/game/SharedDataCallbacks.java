@@ -3,6 +3,7 @@ package com.gmail.yaroslavlancelot.eafall.game;
 import java.util.ArrayList;
 import java.util.List;
 
+//TODO maybe use it only for player data (units, oxygen etc) and rename and move it
 /**
  * Contains callback (which added and removed manually) which triggered by key from
  * {@link SharedDataCallbacks#valueChanged(String, Object)}. So if you subscribe to
