@@ -68,6 +68,28 @@ public final class FloatBoundsUtils {
 		return (pXMinA <= pXMinB) && (pYMinA <= pYMinB) && (pXMaxA >= pXMaxB) && (pYMaxA >= pYMaxB);
 	}
 
+	/**
+	 * Proportionally decrease/increase values in size array so the biggest value
+	 * wouldn't exceed maxSize value
+	 *
+	 * @param size    two dimensional float array
+	 * @param maxSize max value bound
+	 */
+	public static final void proportionallyBound(float[] size, float maxSize) {
+		float val0, val1, proportion;
+		if (size[0] > size[1]) {
+			val0 = maxSize;
+			proportion = size[1] / size[0];
+			val1 = val0 * proportion;
+		} else {
+			val1 = maxSize;
+			proportion = size[0] / size[1];
+			val0 = val1 * proportion;
+		}
+		size[0] = val0;
+		size[1] = val1;
+	}
+
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================

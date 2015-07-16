@@ -6,7 +6,6 @@ import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.game.audio.LimitedSoundWrapper;
 import com.gmail.yaroslavlancelot.eafall.game.audio.SoundOperations;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
-import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.Armor;
@@ -38,10 +37,6 @@ public abstract class UnitDummy {
      * retrieved separate from unit creation if needed
      */
     protected final String mPathToImage;
-    /** unit image height */
-    protected final int mHeight;
-    /** unit image width */
-    protected final int mWidth;
     /** unit damage */
     protected final Damage mUnitDamage;
     /** unit armor */
@@ -59,8 +54,6 @@ public abstract class UnitDummy {
                 .getPathToUnits(allianceName.toLowerCase()) + mUnitLoader.name + ".png";
         mPathToImage = StringConstants
                 .getPathToUnits_Image(allianceName.toLowerCase()) + mUnitLoader.name + ".png";
-        mHeight = SizeConstants.UNIT_SIZE;
-        mWidth = SizeConstants.UNIT_SIZE;
 
         mUnitDamage = new Damage(mUnitLoader.damage, mUnitLoader.damage_value);
         mUnitArmor = new Armor(mUnitLoader.armor, mUnitLoader.armor_value);
@@ -80,14 +73,6 @@ public abstract class UnitDummy {
 
     public Damage getDamage() {
         return mUnitDamage;
-    }
-
-    public int getWidth() {
-        return mWidth;
-    }
-
-    public int getHeight() {
-        return mHeight;
     }
 
     public Armor getArmor() {
@@ -149,8 +134,6 @@ public abstract class UnitDummy {
                 .setReloadTime(getReloadTime())
                 .setFireSound(mFireSound)
                 .setDamage(getDamage())
-                .setWidth(getWidth())
-                .setHeight(getHeight())
                 .setArmor(getArmor());
 
         return unitBuilder;

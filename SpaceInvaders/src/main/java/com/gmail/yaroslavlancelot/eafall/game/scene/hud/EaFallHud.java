@@ -180,6 +180,7 @@ public class EaFallHud extends HUD {
                 initPopups(player, camera, vertexManager);
                 initOxygen(player, list, xPos, vertexManager);
                 initMovableUnitsLimit(player, list, xPos, vertexManager);
+                player.setMoney(5000);
             } else {
                 initMovableUnitsLimit(player, list, xPos, vertexManager);
             }

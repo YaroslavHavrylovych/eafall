@@ -1,15 +1,17 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit;
 
 import com.gmail.yaroslavlancelot.eafall.game.audio.LimitedSoundWrapper;
+import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage;
 
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.adt.spatial.bounds.util.FloatBoundsUtils;
 
 /** unit Builder, for unit children faster creation */
 public abstract class UnitBuilder {
-    /** holds unit image texture region (for faster unit creation) */
+    /** holds unit sprite texture region (for faster unit creation) */
     protected ITextureRegion mTextureRegion;
     protected VertexBufferObjectManager mObjectManager;
     /** unit health */
@@ -22,12 +24,14 @@ public abstract class UnitBuilder {
     protected int mViewRadius;
     protected double mReloadTime;
     protected LimitedSoundWrapper mFireSound;
-    protected int mWidth;
-    protected int mHeight;
+    protected float[] size = new float[2];
 
     public UnitBuilder(ITextureRegion textureRegion, VertexBufferObjectManager objectManager) {
         mTextureRegion = textureRegion;
         mObjectManager = objectManager;
+        size[0] = textureRegion.getWidth();
+        size[1] = textureRegion.getHeight();
+        FloatBoundsUtils.proportionallyBound(size, SizeConstants.UNIT_SIZE);
     }
 
     public ITextureRegion getTextureRegion() {
@@ -101,21 +105,11 @@ public abstract class UnitBuilder {
         return this;
     }
 
-    public int getWidth() {
-        return mWidth;
+    public float getWidth() {
+        return size[0];
     }
 
-    public UnitBuilder setWidth(int width) {
-        mWidth = width;
-        return this;
-    }
-
-    public int getHeight() {
-        return mHeight;
-    }
-
-    public UnitBuilder setHeight(int height) {
-        mHeight = height;
-        return this;
+    public float getHeight() {
+        return size[1];
     }
 }
