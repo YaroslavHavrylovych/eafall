@@ -41,7 +41,7 @@ public class Config {
     /*
      * Additional
      */
-    private final boolean mProfilingEnabled = true;
+    private final boolean mProfilingEnabled = false;
 
     public Config(Context context) {
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);

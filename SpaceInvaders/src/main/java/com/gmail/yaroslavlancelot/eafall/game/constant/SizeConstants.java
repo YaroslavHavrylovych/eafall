@@ -100,7 +100,7 @@ public final class SizeConstants {
     public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_HEIGHT = 245; //285 background size
     public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_WIDTH = 270; //310 background size
     public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_X = 1585;
-    public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_Y = 232;
+    public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_Y = 240;
 
 
     private SizeConstants() {
