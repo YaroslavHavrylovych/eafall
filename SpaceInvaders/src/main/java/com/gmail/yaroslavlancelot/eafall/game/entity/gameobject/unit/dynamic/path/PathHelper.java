@@ -5,7 +5,7 @@ import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import org.andengine.util.math.MathUtils;
 
 /** Common operation with unit path */
-public class StaticHelper {
+public class PathHelper {
     /**
      * if user going to check point than, because of unit inertia, unit should begin to move to another path point
      * when unit approximately reach goal point (in epsilon of goal point).
@@ -41,7 +41,7 @@ public class StaticHelper {
             SizeConstants.GAME_FIELD_HEIGHT * 4 / 5,
             SizeConstants.GAME_FIELD_HEIGHT / 2 + SizeConstants.PLANET_DIAMETER / 2};
 
-    private StaticHelper() {
+    private PathHelper() {
     }
 
     /**
@@ -87,6 +87,16 @@ public class StaticHelper {
      * @return true if unit should move from left to right and false if vice versa
      */
     public static boolean isLtrPath(float xPosition) {
+        return isLeftSide(xPosition);
+    }
+
+    /**
+     * calculate to which side of the screen the point belongs to (by passed abscissa)
+     *
+     * @param xPosition point abscissa
+     * @return true if point belongs to the left side of the screen and false in other case
+     */
+    public static boolean isLeftSide(float xPosition) {
         float min = xPosition - xArrayForward[0];
         return Math.abs(min) < Math.abs(xPosition - xArrayBackward[0]);
     }

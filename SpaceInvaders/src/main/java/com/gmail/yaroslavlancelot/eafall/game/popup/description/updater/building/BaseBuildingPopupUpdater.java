@@ -44,9 +44,6 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
     protected TextButton mButton;
     /** image for addition information */
     protected Sprite mAdditionDescriptionImage;
-    //TODO I dont like this thing (touch interceptor)
-    /** used only for intercept touch event on addition information area */
-    protected Rectangle mAdditionInfoRectangle;
     /** building description object (update description area which u pass to it) */
     protected IDescriptionAreaUpdater mDescriptionAreaUpdater;
 
@@ -58,15 +55,15 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
                 SizeConstants.DESCRIPTION_POPUP_DES_BUTTON_HEIGHT);
         mScene.registerTouchArea(mButton);
 
-        initAdditionInformationArea();
-
         EventBus.getDefault().register(this);
     }
 
-    private void initAdditionInformationArea() {
-        mAdditionInfoRectangle = new Rectangle(0, 0, 10, 10, mVertexBufferObjectManager);
-        mAdditionInfoRectangle.setColor(Color.TRANSPARENT);
-        mScene.registerTouchArea(mAdditionInfoRectangle);
+    @Override
+    public void updateAdditionInfo(final Shape drawArea, final Object objectId, final String allianceName, final String playerName) {
+        if (mAdditionDescriptionImage != null) {
+            mScene.unregisterTouchArea(mAdditionDescriptionImage);
+            mAdditionDescriptionImage.detachSelf();
+        }
     }
 
     public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
@@ -108,9 +105,9 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
         mAmountDrawer.detach();
         mButton.detachSelf();
         if (mAdditionDescriptionImage != null) {
+            mScene.unregisterTouchArea(mAdditionDescriptionImage);
             mAdditionDescriptionImage.detachSelf();
             mAdditionDescriptionImage = null;
-            mAdditionInfoRectangle.detachSelf();
         }
         mBuildingId = sNoValue;
         mPlayerName = "";

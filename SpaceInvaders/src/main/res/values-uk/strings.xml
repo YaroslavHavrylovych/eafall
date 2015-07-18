@@ -119,7 +119,6 @@
 
     <!-- general -->
     <string name="app_name">Космічні Загарбники</string>
-    <string name="money_value_prefix">Гроші : </string>
     <string name="exit">Вихід</string>
     <string name="back">Назад</string>
     <string name="connect">З’єднати</string>

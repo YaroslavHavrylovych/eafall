@@ -14,9 +14,9 @@ import com.gmail.yaroslavlancelot.eafall.game.eventbus.building.UpgradeBuildingE
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.description.UnitByBuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.path.ShowUnitPathChooser;
-import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.building.BaseBuildingPopupUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
+import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.building.BaseBuildingPopupUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.touch.StaticHelper;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.TextButton;
 import com.gmail.yaroslavlancelot.eafall.general.locale.LocaleImpl;
@@ -24,7 +24,6 @@ import com.gmail.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.Shape;
 import org.andengine.entity.sprite.ButtonSprite;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
@@ -46,17 +45,23 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
         initButtons(vertexBufferObjectManager);
     }
 
-    private void initButtons(VertexBufferObjectManager vertexBufferObjectManager) {
-        //upgrade
-        mUpgradeButton = new TextButton(vertexBufferObjectManager, 300,
-                SizeConstants.DESCRIPTION_POPUP_DES_BUTTON_HEIGHT);
-        mUpgradeButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_upgrade_button));
-        mScene.registerTouchArea(mUpgradeButton);
-        //path button
-        mPathButton = new TextButton(vertexBufferObjectManager, 300,
-                SizeConstants.DESCRIPTION_POPUP_DES_BUTTON_HEIGHT);
-        mPathButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_path_button));
-        mScene.registerTouchArea(mPathButton);
+    @Override
+    public void updateAdditionInfo(Shape drawArea, Object objectId, String allianceName, final String playerName) {
+        super.updateAdditionInfo(drawArea, objectId, allianceName, playerName);
+
+        ITextureRegion textureRegion = getAdditionalInformationImage(objectId, allianceName);
+        mAdditionDescriptionImage = drawInArea(drawArea, textureRegion);
+
+        final BuildingId buildingId = (BuildingId) objectId;
+        mAdditionDescriptionImage.setTouchCallback(
+                new StaticHelper.CustomTouchListener(mAdditionDescriptionImage) {
+                    @Override
+                    public void click() {
+                        super.click();
+                        EventBus.getDefault().post(new UnitByBuildingDescriptionShowEvent(buildingId, playerName));
+                    }
+                });
+        mScene.registerTouchArea(mAdditionDescriptionImage);
     }
 
     @Override
@@ -141,28 +146,17 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
         mPathButton.setVisible(true);
     }
 
-    @Override
-    public void updateAdditionInfo(Shape drawArea, Object objectId, String allianceName, final String playerName) {
-        if (mAdditionDescriptionImage != null) {
-            mAdditionDescriptionImage.detachSelf();
-            mAdditionInfoRectangle.detachSelf();
-        }
-        mAdditionDescriptionImage = new Sprite(
-                drawArea.getWidth() / 2, drawArea.getHeight() / 2,
-                drawArea.getWidth(), drawArea.getHeight(),
-                getAdditionalInformationImage(objectId, allianceName), mVertexBufferObjectManager);
-
-        final BuildingId buildingId = (BuildingId) objectId;
-        mAdditionInfoRectangle.setTouchCallback(
-                new StaticHelper.CustomTouchListener(mAdditionDescriptionImage) {
-                    @Override
-                    public void click() {
-                        super.click();
-                        EventBus.getDefault().post(new UnitByBuildingDescriptionShowEvent(buildingId, playerName));
-                    }
-                });
-        mAdditionInfoRectangle.attachChild(mAdditionDescriptionImage);
-        drawArea.attachChild(mAdditionInfoRectangle);
+    private void initButtons(VertexBufferObjectManager vertexBufferObjectManager) {
+        //upgrade
+        mUpgradeButton = new TextButton(vertexBufferObjectManager, 300,
+                SizeConstants.DESCRIPTION_POPUP_DES_BUTTON_HEIGHT);
+        mUpgradeButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_upgrade_button));
+        mScene.registerTouchArea(mUpgradeButton);
+        //path button
+        mPathButton = new TextButton(vertexBufferObjectManager, 300,
+                SizeConstants.DESCRIPTION_POPUP_DES_BUTTON_HEIGHT);
+        mPathButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_path_button));
+        mScene.registerTouchArea(mPathButton);
     }
 
     protected ITextureRegion getAdditionalInformationImage(Object objectId, String allianceName) {

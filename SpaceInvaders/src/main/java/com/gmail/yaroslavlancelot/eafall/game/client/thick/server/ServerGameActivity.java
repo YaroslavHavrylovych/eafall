@@ -2,6 +2,7 @@ package com.gmail.yaroslavlancelot.eafall.game.client.thick.server;
 
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
+import com.gmail.yaroslavlancelot.eafall.game.SharedDataCallbacks;
 import com.gmail.yaroslavlancelot.eafall.game.client.thick.ThickClientGameActivity;
 import com.gmail.yaroslavlancelot.eafall.game.entity.ContactListener;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
@@ -12,8 +13,9 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IVeloc
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.MovableUnit;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.money.MoneyUpdatedEvent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
+import com.gmail.yaroslavlancelot.eafall.game.player.Player;
+import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.network.server.GameSocketServer;
 import com.gmail.yaroslavlancelot.eafall.network.server.callbacks.InGameServer;
 import com.gmail.yaroslavlancelot.eafall.network.server.messages.BuildingCreatedServerMessage;
@@ -46,15 +48,6 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
         mGameSocketServer = GameSocketServer.getGameSocketServer();
         mGameSocketServer.addInGameCallback(ServerGameActivity.this);
         return super.onCreateEngineOptions();
-    }
-
-    @Override
-    public void onResourcesLoaded() {
-        mServerGameLoaded = true;
-        if (mClientGameLoaded) {
-            mGameSocketServer.sendBroadcastServerMessage(0, new GameStartedServerMessage());
-            registerContactCallback();
-        }
     }
 
     @Override
@@ -95,6 +88,42 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
         return unit;
     }
 
+    @Override
+    public void onResourcesLoaded() {
+        mServerGameLoaded = true;
+        if (mClientGameLoaded) {
+            mGameSocketServer.sendBroadcastServerMessage(0, new GameStartedServerMessage());
+            registerContactCallback();
+        }
+    }
+
+    @Override
+    public void velocityChanged(final GameObject unit) {
+        if (unit instanceof MovableUnit)
+            mGameSocketServer.sendBroadcastServerMessage(0, new UnitChangePositionServerMessage((MovableUnit) unit));
+    }
+
+    @Override
+    public void gameObjectHealthChanged(long unitUniqueId, int newUnitHealth) {
+        mGameSocketServer.sendBroadcastServerMessage(0, new GameObjectHealthChangedServerMessage(unitUniqueId, newUnitHealth));
+    }
+
+    @Override
+    public void fire(long gameObjectUniqueId, long attackedGameObjectUniqueId) {
+        mGameSocketServer.sendBroadcastServerMessage(0, new UnitFireServerMessage(gameObjectUniqueId, attackedGameObjectUniqueId));
+    }
+
+    @Override
+    public void gameLoaded() {
+        mClientGameLoaded = true;
+        if (mServerGameLoaded) {
+            mGameSocketServer.sendBroadcastServerMessage(0, new GameStartedServerMessage());
+            hideSplash();
+            registerContactCallback();
+        }
+        initMoney();
+    }
+
     @SuppressWarnings("unused")
     /** really used by {@link de.greenrobot.event.EventBus} */
     public void registerContactCallback() {
@@ -119,36 +148,16 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
         }
     }
 
-    @Override
-    public void velocityChanged(final GameObject unit) {
-        if (unit instanceof MovableUnit)
-            mGameSocketServer.sendBroadcastServerMessage(0, new UnitChangePositionServerMessage((MovableUnit) unit));
-    }
-
-    @Override
-    public void gameObjectHealthChanged(long unitUniqueId, int newUnitHealth) {
-        mGameSocketServer.sendBroadcastServerMessage(0, new GameObjectHealthChangedServerMessage(unitUniqueId, newUnitHealth));
-    }
-
-    @Override
-    public void fire(long gameObjectUniqueId, long attackedGameObjectUniqueId) {
-        mGameSocketServer.sendBroadcastServerMessage(0, new UnitFireServerMessage(gameObjectUniqueId, attackedGameObjectUniqueId));
-    }
-
-    @SuppressWarnings("unused")
-    /** really used by {@link de.greenrobot.event.EventBus} */
-    public void onEvent(MoneyUpdatedEvent moneyUpdatedEvent) {
-        mGameSocketServer.sendBroadcastServerMessage(0, new MoneyChangedServerMessage(
-                moneyUpdatedEvent.getPlayerName(), moneyUpdatedEvent.getMoney()));
-    }
-
-    @Override
-    public void gameLoaded() {
-        mClientGameLoaded = true;
-        if (mServerGameLoaded) {
-            mGameSocketServer.sendBroadcastServerMessage(0, new GameStartedServerMessage());
-            hideSplash();
-            registerContactCallback();
+    private void initMoney() {
+        for (final IPlayer player : PlayersHolder.getInstance().getElements()) {
+            final String key = ((Player) player).OXYGEN_CHANGED_CALLBACK_KEY;
+            SharedDataCallbacks.addCallback(new SharedDataCallbacks.DataChangedCallback(key) {
+                @Override
+                public void callback(String callbackKey, Object value) {
+                    mGameSocketServer.sendBroadcastServerMessage(0, new MoneyChangedServerMessage(
+                            player.getName(), (Integer) value));
+                }
+            });
         }
     }
 }

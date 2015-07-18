@@ -30,24 +30,48 @@ public final class SizeConstants {
     public static final int UNIT_HEALTH_BAR_HEIGHT = 3;
     public static final int UNIT_HEALTH_BAR_FILE_SIZE = 3;
 
-    /* menu */
+    /* HUD */
+    //positions
+    public static final int HUD_VALUE_OFFSET = 10;
+    public static final int HUD_VALUE_TEXT_OFFSET = 30 + HUD_VALUE_OFFSET;
+    public static final int HUD_VALUE_TEXT_FONT_SIZE = 35;
+    public static final int HUD_VALUES_Y_PADDING = 60;
+    public static final int HUD_VALUES_X_LEFT = 37;
+    //7 - max hud text elements amount
+    public static final int HUD_VALUES_X_RIGHT =
+            GAME_FIELD_WIDTH - HUD_VALUES_X_LEFT - HUD_VALUE_OFFSET - 150;
+    //sizes
     public static final int MENU_BUTTON_WIDTH = 137;
     public static final int MENU_BUTTON_HEIGHT = 49;
-
-    /* money */
     public static final int MONEY_FONT_SIZE = 35;
+    public static final int HUD_OXYGEN = 36;
+    public static final int ICON_OXYGEN = 70;
+    public static final int HUD_ENERGY = 42;
+    public static final int HUD_CLOCK = 42;
 
-    /* building popup */
-    public static final int BUILDING_POPUP_INVOCATION_BUTTON_WIDTH = MENU_BUTTON_WIDTH;
-    public static final int BUILDING_POPUP_INVOCATION_BUTTON_HEIGHT = MENU_BUTTON_HEIGHT;
-    public static final int BUILDING_POPUP_ELEMENT_HEIGHT = 60;
-    public static final int BUILDING_POPUP_IMAGE_PADDING = 10;
-    public static final int BUILDING_POPUP_BACKGROUND_ITEM_HEIGHT =
-            BUILDING_POPUP_ELEMENT_HEIGHT + 2 * BUILDING_POPUP_IMAGE_PADDING;
-    public static final int BUILDING_POPUP_BACKGROUND_ITEM_WIDTH = 600;
+    /* constructions popup */
+    public static final int CONSTRUCTIONS_POPUP_INVOCATION_BUTTON_WIDTH = MENU_BUTTON_WIDTH;
+    public static final int CONSTRUCTIONS_POPUP_INVOCATION_BUTTON_HEIGHT = MENU_BUTTON_HEIGHT;
+    public static final int CONSTRUCTIONS_POPUP_ELEMENT_HEIGHT = 123;
+    public static final int CONSTRUCTIONS_POPUP_ELEMENT_WIDTH = 623;
+    public static final int CONSTRUCTIONS_POPUP_ELEMENT_NAME_X = 157;
+    public static final int CONSTRUCTIONS_POPUP_ELEMENT_IMAGE_X = 81;
+    public static final int CONSTRUCTIONS_POPUP_ELEMENT_OXYGEN_IMAGE_X = 487;
+    public static final int CONSTRUCTIONS_POPUP_ELEMENT_OXYGEN_IMAGE_Y =
+            CONSTRUCTIONS_POPUP_ELEMENT_HEIGHT / 2 + 5;
+    public static final int CONSTRUCTIONS_POPUP_ELEMENT_OXYGEN_VALUE_X = 527;
+    public static final int CONSTRUCTIONS_POPUP_ELEMENT_OXYGEN_OFFSET = 10;
+    public static final int CONSTRUCTIONS_POPUP_ELEMENT_IMAGE_Y = 59;
+    public static final int CONSTRUCTIONS_POPUP_ELEMENT_IMAGE_SIZE = 103;
+    public static final int CONSTRUCTIONS_POPUP_ROWS = 6;
+    public static final int CONSTRUCTIONS_POPUP_FIRST_ROW_Y = 165;
+    public static final int CONSTRUCTIONS_POPUP_FIRST_COLUMN_X = 123;
+    public static final int CONSTRUCTIONS_POPUP_SECOND_COLUMN_X = 766;
+    public static final int CONSTRUCTIONS_POPUP_WIDTH = 1512;
+    public static final int CONSTRUCTIONS_POPUP_HEIGHT = 950;
 
 
-    /** description popup */
+    /* description popup */
     // general
     public static final int DESCRIPTION_POPUP_HEIGHT = 666;
     public static final int DESCRIPTION_POPUP_WIDTH = SizeConstants.GAME_FIELD_WIDTH;
@@ -59,8 +83,8 @@ public final class SizeConstants {
     //image
     public static final int DESCRIPTION_POPUP_IMAGE_HEIGHT = 400;
     public static final int DESCRIPTION_POPUP_IMAGE_WIDTH = 400;
-    public static final int DESCRIPTION_POPUP_IMAGE_X = 395;
-    public static final int DESCRIPTION_POPUP_IMAGE_Y = 295;
+    public static final int DESCRIPTION_POPUP_IMAGE_X = 388;
+    public static final int DESCRIPTION_POPUP_IMAGE_Y = 301;
     public static final int DESCRIPTION_POPUP_IMAGE_PADDING = 30;
     // description area
     public static final int DESCRIPTION_POPUP_DES_AREA_HEIGHT = 335;
@@ -76,7 +100,7 @@ public final class SizeConstants {
     public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_HEIGHT = 245; //285 background size
     public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_WIDTH = 270; //310 background size
     public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_X = 1585;
-    public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_Y = 232;
+    public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_Y = 240;
 
 
     private SizeConstants() {

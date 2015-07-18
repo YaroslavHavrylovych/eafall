@@ -6,14 +6,13 @@ import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.gmail.yaroslavlancelot.eafall.game.camera.EaFallCamera;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
-import com.gmail.yaroslavlancelot.eafall.game.engine.AlphaToChildrenHud;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.resources.IResourcesLoader;
 import com.gmail.yaroslavlancelot.eafall.game.resources.ResourceFactory;
 import com.gmail.yaroslavlancelot.eafall.game.scene.SceneManager;
+import com.gmail.yaroslavlancelot.eafall.game.scene.hud.EaFallHud;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 
-import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.options.AudioOptions;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
@@ -41,7 +40,7 @@ public abstract class GameActivity extends BaseGameActivity {
     /** tag, which is used for debugging purpose */
     public static final String TAG = GameActivity.class.getCanonicalName();
     /** user static area */
-    protected HUD mHud;
+    protected EaFallHud mHud;
     /** game camera */
     protected EaFallCamera mCamera;
     /** background music */
@@ -63,12 +62,12 @@ public abstract class GameActivity extends BaseGameActivity {
                 Config.getConfig().getMaxZoomFactor());
         mCamera.setBounds(0, 0, SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT);
         mCamera.setBoundsEnabled(true);
-        mCamera.setHUD(new AlphaToChildrenHud());
         //hud
-        mHud = mCamera.getHUD();
+        mHud = new EaFallHud();
         mHud.setTouchAreaBindingOnActionDownEnabled(true);
         mHud.setOnAreaTouchTraversalFrontToBack();
         mHud.setAlpha(Config.getConfig().getHudAlpha());
+        mCamera.setHUD(mHud);
         //resource manager
         ResourceFactory.TypeResourceLoader typeResourceLoader = (ResourceFactory.TypeResourceLoader)
                 getIntent().getExtras().getSerializable(ResourceFactory.RESOURCE_LOADER);
@@ -147,7 +146,8 @@ public abstract class GameActivity extends BaseGameActivity {
 
     /** show profiling information on screen (using FPS logger) */
     protected void profile() {
-        final Text fpsText = new Text(200, SizeConstants.GAME_FIELD_HEIGHT - 50,
+        final Text fpsText = new Text(
+                SizeConstants.GAME_FIELD_WIDTH / 2, SizeConstants.GAME_FIELD_HEIGHT - 150,
                 FontHolder.getInstance().getElement("profiling"),
                 "fps: 60.00", 20, getVertexBufferObjectManager());
         fpsText.setColor(Color.GREEN);

@@ -21,20 +21,20 @@ import de.greenrobot.event.EventBus;
 public class ConstructionPopupButton extends ButtonSprite {
     public ConstructionPopupButton(VertexBufferObjectManager vertexBufferObjectManager) {
         super(SizeConstants.GAME_FIELD_WIDTH / 2,
-                SizeConstants.BUILDING_POPUP_INVOCATION_BUTTON_HEIGHT / 2,
+                SizeConstants.CONSTRUCTIONS_POPUP_INVOCATION_BUTTON_HEIGHT / 2,
                 (ITiledTextureRegion) TextureRegionHolder.getInstance()
                         .getElement(StringConstants.FILE_BUILDINGS_POPUP_UP_BUTTON),
                 vertexBufferObjectManager);
-        setWidth(SizeConstants.BUILDING_POPUP_INVOCATION_BUTTON_WIDTH);
-        setHeight(SizeConstants.BUILDING_POPUP_INVOCATION_BUTTON_HEIGHT);
+        setWidth(SizeConstants.CONSTRUCTIONS_POPUP_INVOCATION_BUTTON_WIDTH);
+        setHeight(SizeConstants.CONSTRUCTIONS_POPUP_INVOCATION_BUTTON_HEIGHT);
         //TODO delete this if PathChooser popup which cover the whole screen doesn't exist
         EventBus.getDefault().register(this);
     }
 
     public static void loadResources(Context context, TextureManager textureManager) {
         BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager,
-                2 * SizeConstants.BUILDING_POPUP_INVOCATION_BUTTON_WIDTH,
-                SizeConstants.BUILDING_POPUP_INVOCATION_BUTTON_HEIGHT,
+                2 * SizeConstants.CONSTRUCTIONS_POPUP_INVOCATION_BUTTON_WIDTH,
+                SizeConstants.CONSTRUCTIONS_POPUP_INVOCATION_BUTTON_HEIGHT,
                 TextureOptions.BILINEAR);
         TextureRegionHolder.addTiledElementFromAssets(
                 StringConstants.FILE_BUILDINGS_POPUP_UP_BUTTON, smallObjectTexture, context, 0, 0, 2, 1);

@@ -3,7 +3,7 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.stationary
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path.StaticHelper;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path.PathHelper;
 
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -39,7 +39,7 @@ public class StationaryUnit extends Unit {
         public void onTimePassed(TimerHandler pTimerHandler) {
             // check for anything to attack
             if (mObjectToAttack != null && mObjectToAttack.isObjectAlive()
-                    && StaticHelper
+                    && PathHelper
                     .getDistanceBetweenPoints(
                             getX(), getY(), mObjectToAttack.getX(), mObjectToAttack.getY())
                     < mAttackRadius) {

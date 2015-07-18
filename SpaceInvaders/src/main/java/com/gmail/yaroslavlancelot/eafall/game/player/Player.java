@@ -22,7 +22,6 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.pool.Movabl
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.pool.StationaryUnitsPool;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.stationary.StationaryUnitBuilder;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.building.UpgradeBuildingEvent;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.money.MoneyUpdatedEvent;
 
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -45,6 +44,8 @@ public class Player implements IPlayer {
     public final int INIT_MONEY_VALUE = 200;
     /** used for {@link com.gmail.yaroslavlancelot.eafall.game.SharedDataCallbacks} */
     public final String MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY;
+    /** used for {@link com.gmail.yaroslavlancelot.eafall.game.SharedDataCallbacks} */
+    public final String OXYGEN_CHANGED_CALLBACK_KEY;
     /** fixture def of the player (used for bullet creation) */
     protected final FixtureDef mPlayerFixtureDef;
     /** keep track about the units amount */
@@ -77,6 +78,7 @@ public class Player implements IPlayer {
         mPlayerObjects = new ArrayList<GameObject>(200);
         mPlayerName = playerName;
         MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY = "UNIT_CREATED_" + playerName;
+        OXYGEN_CHANGED_CALLBACK_KEY = "OXYGEN_CHANGED_" + playerName;
         mAlliance = alliance;
         initBuildingsTypes(alliance);
         mControlType = playerType;
@@ -126,7 +128,7 @@ public class Player implements IPlayer {
     @Override
     public void setMoney(int money) {
         mMoneyAmount = money;
-        EventBus.getDefault().post(new MoneyUpdatedEvent(getName(), mMoneyAmount));
+        SharedDataCallbacks.valueChanged(OXYGEN_CHANGED_CALLBACK_KEY, mMoneyAmount);
     }
 
     @Override

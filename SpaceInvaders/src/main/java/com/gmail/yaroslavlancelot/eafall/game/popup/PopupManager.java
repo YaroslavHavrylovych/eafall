@@ -2,10 +2,9 @@ package com.gmail.yaroslavlancelot.eafall.game.popup;
 
 import android.content.Context;
 
-import com.gmail.yaroslavlancelot.eafall.game.popup.construction.BuildingsPopupHud;
+import com.gmail.yaroslavlancelot.eafall.game.popup.construction.ConstructionsPopupHud;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.DescriptionPopupHud;
 import com.gmail.yaroslavlancelot.eafall.game.popup.path.PathChoosePopup;
-import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.MenuPopupButton;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.Scene;
@@ -29,9 +28,9 @@ public class PopupManager {
         popup.setCamera(camera);
         mPopups.put(DescriptionPopupHud.KEY, popup);
         // buildings
-        popup = new BuildingsPopupHud(playerName, scene, objectManager);
+        popup = new ConstructionsPopupHud(playerName, scene, objectManager);
         popup.setCamera(camera);
-        mPopups.put(BuildingsPopupHud.KEY, popup);
+        mPopups.put(ConstructionsPopupHud.KEY, popup);
         //path
         popup = new PathChoosePopup(scene, objectManager);
         popup.setCamera(camera);
@@ -45,7 +44,7 @@ public class PopupManager {
     }
 
     public static void loadResource(Context context, TextureManager textureManager) {
-        BuildingsPopupHud.loadResource(context, textureManager);
+        ConstructionsPopupHud.loadResource(context, textureManager);
         DescriptionPopupHud.loadResources(context, textureManager);
         PathChoosePopup.loadResources(context, textureManager);
     }

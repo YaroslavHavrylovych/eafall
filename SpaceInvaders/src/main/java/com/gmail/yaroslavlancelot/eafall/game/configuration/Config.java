@@ -28,6 +28,7 @@ public class Config {
     private final int mCreepBuildingsLimit = 7;
     private final int mWealthBuildingsLimit = 5;
     private final int mPlanetHealth = 3000;
+    private final int mMaxOxygenAmount = 2000;
     private final Color mPlayerSwapColor = new Color(46.0f / 255.0f, 37.0f / 255.0f, 118.0f / 255.0f);
     /*
      * Sound and music
@@ -40,7 +41,7 @@ public class Config {
     /*
      * Additional
      */
-    private final boolean mProfilingEnabled = true;
+    private final boolean mProfilingEnabled = false;
 
     public Config(Context context) {
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -117,6 +118,10 @@ public class Config {
 
     public float getHudAlpha() {
         return mHudAlpha;
+    }
+
+    public int getMaxOxygenAmount() {
+        return mMaxOxygenAmount;
     }
 
     public static void init(Context context) {

@@ -2,24 +2,24 @@ package com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.buildin
 
 import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.building.CreateBuildingEvent;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.description.UnitByBuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.DefenceBuildingDummy;
+import com.gmail.yaroslavlancelot.eafall.game.eventbus.building.CreateBuildingEvent;
+import com.gmail.yaroslavlancelot.eafall.game.eventbus.description.UnitByBuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.building.BaseBuildingPopupUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.touch.StaticHelper;
 
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.Shape;
 import org.andengine.entity.sprite.ButtonSprite;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import de.greenrobot.event.EventBus;
 
 /**
- * For DEFENCE building : <br/>
+ * For DEFENCE building :
+ * <br/>
  * updates buildings description popup
  */
 public class DefenceBuildingPopupUpdater extends BaseBuildingPopupUpdater {
@@ -27,6 +27,25 @@ public class DefenceBuildingPopupUpdater extends BaseBuildingPopupUpdater {
     public DefenceBuildingPopupUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         super(vertexBufferObjectManager, scene);
         mDescriptionAreaUpdater = new DescriptionAreaUpdater(vertexBufferObjectManager, scene);
+    }
+
+    @Override
+    public void updateAdditionInfo(Shape drawArea, Object objectId, String allianceName, final String playerName) {
+        super.updateAdditionInfo(drawArea, objectId, allianceName, playerName);
+
+        ITextureRegion textureRegion = getAdditionalInformationImage(objectId, allianceName);
+        mAdditionDescriptionImage = drawInArea(drawArea, textureRegion);
+
+        final BuildingId buildingId = (BuildingId) objectId;
+        mAdditionDescriptionImage.setTouchCallback(
+                new StaticHelper.CustomTouchListener(mAdditionDescriptionImage) {
+                    @Override
+                    public void click() {
+                        super.click();
+                        EventBus.getDefault().post(new UnitByBuildingDescriptionShowEvent(buildingId, playerName));
+                    }
+                });
+        mScene.registerTouchArea(mAdditionDescriptionImage);
     }
 
     @Override
@@ -40,31 +59,6 @@ public class DefenceBuildingPopupUpdater extends BaseBuildingPopupUpdater {
                 EventBus.getDefault().post(event);
             }
         });
-    }
-
-    @Override
-    public void updateAdditionInfo(Shape drawArea, Object objectId, String allianceName, final String playerName) {
-        if (mAdditionDescriptionImage != null) {
-            mAdditionDescriptionImage.detachSelf();
-            mAdditionInfoRectangle.detachSelf();
-        }
-        mAdditionDescriptionImage = new Sprite(0, 0, drawArea.getWidth(), drawArea.getHeight(),
-                getAdditionalInformationImage(objectId, allianceName), mVertexBufferObjectManager);
-
-        mAdditionInfoRectangle.setWidth(drawArea.getWidth());
-        mAdditionInfoRectangle.setHeight(drawArea.getHeight());
-
-        final BuildingId buildingId = (BuildingId) objectId;
-        mAdditionInfoRectangle.setTouchCallback(
-                new StaticHelper.CustomTouchListener(mAdditionDescriptionImage) {
-                    @Override
-                    public void click() {
-                        super.click();
-                        EventBus.getDefault().post(new UnitByBuildingDescriptionShowEvent(buildingId, playerName));
-                    }
-                });
-        mAdditionInfoRectangle.attachChild(mAdditionDescriptionImage);
-        drawArea.attachChild(mAdditionInfoRectangle);
     }
 
     protected ITextureRegion getAdditionalInformationImage(Object objectId, String allianceName) {

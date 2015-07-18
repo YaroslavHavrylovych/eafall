@@ -17,8 +17,8 @@ import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.popup.PopupManager;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.DescriptionPopupHud;
+import com.gmail.yaroslavlancelot.eafall.game.scene.hud.EaFallHud;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.MenuPopupButton;
-import com.gmail.yaroslavlancelot.eafall.game.visual.text.MoneyText;
 
 import org.andengine.entity.sprite.batch.SpriteGroup;
 import org.andengine.opengl.font.FontManager;
@@ -54,6 +54,8 @@ public class ClientResourcesLoader extends BaseResourceLoader {
         loadBulletAndUnitHealthBar(textureManager, vertexBufferObjectManager);
         //sun and planets
         loadSunAndPlanets(textureManager, vertexBufferObjectManager);
+        //oxygen, energy and time
+        EaFallHud.loadResource(EaFallApplication.getContext(), textureManager);
         //other
         Context context = EaFallApplication.getContext();
         PopupManager.loadResource(context, textureManager);
@@ -62,7 +64,7 @@ public class ClientResourcesLoader extends BaseResourceLoader {
 
     @Override
     public void loadFonts(TextureManager textureManager, FontManager fontManager) {
-        MoneyText.loadFont(fontManager, textureManager);
+        EaFallHud.loadFonts(fontManager, textureManager);
         DescriptionPopupHud.loadFonts(fontManager, textureManager);
     }
 
