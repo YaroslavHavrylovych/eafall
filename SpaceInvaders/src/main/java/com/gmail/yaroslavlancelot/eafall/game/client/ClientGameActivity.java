@@ -94,8 +94,24 @@ public abstract class ClientGameActivity extends GameActivity {
         //resources
         mResourcesLoader.loadImages(getTextureManager(), getVertexBufferObjectManager());
         mResourcesLoader.loadFonts(getTextureManager(), getFontManager());
-        //scene
-        EaFallScene scene = mSceneManager.getWorkingScene();
+        //music
+        if (Config.getConfig().isMusicEnabled()) {
+            mBackgroundMusic = new BackgroundMusic(
+                    StringConstants.getMusicPath() + "background_1.ogg",
+                    getMusicManager(), ClientGameActivity.this);
+            mBackgroundMusic.initBackgroundMusic();
+            mBackgroundMusic.playBackgroundMusic();
+        }
+        onResourcesLoaded();
+    }
+
+    @Override
+    protected void initWorkingScene() {
+        super.initWorkingScene();
+    }
+
+    @Override
+    protected void onPopulateWorkingScene(final EaFallScene scene) {
         scene.setBackground(StringConstants.FILE_BACKGROUND, getVertexBufferObjectManager());
         mSceneManager.getWorkingScene().registerUpdateHandler(mPhysicsWorld);
         //attach SpriteGroups to the scene
@@ -114,15 +130,6 @@ public abstract class ClientGameActivity extends GameActivity {
             SoundFactory.getInstance().setCameraHandler(
                     mSceneManager.getWorkingScene().getCameraHandler());
         }
-        //music
-        if (Config.getConfig().isMusicEnabled()) {
-            mBackgroundMusic = new BackgroundMusic(
-                    StringConstants.getMusicPath() + "background_1.ogg",
-                    getMusicManager(), ClientGameActivity.this);
-            mBackgroundMusic.initBackgroundMusic();
-            mBackgroundMusic.playBackgroundMusic();
-        }
-        onResourcesLoaded();
     }
 
     public void hideSplash() {

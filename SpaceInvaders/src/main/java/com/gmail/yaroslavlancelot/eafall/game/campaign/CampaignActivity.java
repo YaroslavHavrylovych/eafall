@@ -37,6 +37,7 @@ import java.util.List;
  * @author Yaroslav Havrylovych
  */
 public class CampaignActivity extends GameActivity {
+    private final static String SELECTED_IMAGE = "graphics/icons/selected.png";
     private String mCampaignFileName;
     private CampaignListLoader mCampaignListLoader;
     private LimitedSoundWrapper mSelectSound;
@@ -62,7 +63,7 @@ public class CampaignActivity extends GameActivity {
         for (CampaignDataLoader dataLoader : mCampaignListLoader.getList()) {
             mResourcesLoader.addImage(dataLoader.picture, dataLoader.width, dataLoader.height);
         }
-        mResourcesLoader.addImage(mCampaignListLoader.image_select,
+        mResourcesLoader.addImage(SELECTED_IMAGE,
                 SizeConstants.SELECTOR_IMAGE_SIZE, SizeConstants.SELECTOR_IMAGE_SIZE);
         //loading resources
         mResourcesLoader.loadImages(getTextureManager(), getVertexBufferObjectManager());
@@ -70,8 +71,6 @@ public class CampaignActivity extends GameActivity {
         if (Config.getConfig().isSoundsEnabled()) {
             mSelectSound = SoundFactory.getInstance().loadSound(mCampaignListLoader.sound_select);
         }
-        //scene populating
-        populateScene();
         //music
         if (Config.getConfig().isMusicEnabled()) {
             mBackgroundMusic = new BackgroundMusic(
@@ -85,22 +84,18 @@ public class CampaignActivity extends GameActivity {
 
     @Override
     public void onResourcesLoaded() {
+        super.onResourcesLoaded();
         hideSplash();
     }
 
-    private <T> T loadObjects(String path, Class<T> cls) {
-        T ret = null;
-        Context context = EaFallApplication.getContext();
-        try {
-            ret = new Persister().read(cls, context.getAssets().open(path));
-        } catch (Exception e) {
-            LoggerHelper.printErrorMessage(TAG, "File read exception = " + e.getMessage());
-        }
-        return ret;
+    @Override
+    protected void initWorkingScene() {
+        mSceneManager.initWorkingScene(mCamera, mCampaignListLoader.parallax_background);
+        onPopulateWorkingScene(mSceneManager.getWorkingScene());
     }
 
-    private void populateScene() {
-        EaFallScene scene = mSceneManager.getWorkingScene();
+    @Override
+    protected void onPopulateWorkingScene(final EaFallScene scene) {
         VertexBufferObjectManager objectManager = getVertexBufferObjectManager();
         //background
         scene.setBackground(mCampaignListLoader.background, objectManager);
@@ -117,11 +112,22 @@ public class CampaignActivity extends GameActivity {
         }
         //selected
         mSelectImage = new Sprite(0, 0,
-                TextureRegionHolder.getRegion(mCampaignListLoader.image_select), objectManager);
+                TextureRegionHolder.getRegion(SELECTED_IMAGE), objectManager);
         mSelectImage.setVisible(false);
         scene.attachChild(mSelectImage);
         click(elementsList.get(0), false);
         mSelectImage.setVisible(true);
+    }
+
+    private <T> T loadObjects(String path, Class<T> cls) {
+        T ret = null;
+        Context context = EaFallApplication.getContext();
+        try {
+            ret = new Persister().read(cls, context.getAssets().open(path));
+        } catch (Exception e) {
+            LoggerHelper.printErrorMessage(TAG, "File read exception = " + e.getMessage());
+        }
+        return ret;
     }
 
     private void click(IEntity entity, boolean sound) {

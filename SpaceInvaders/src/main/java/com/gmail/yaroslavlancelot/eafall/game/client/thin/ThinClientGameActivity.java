@@ -32,6 +32,7 @@ public class ThinClientGameActivity extends ClientGameActivity implements InGame
 
     @Override
     public void onResourcesLoaded() {
+        super.onResourcesLoaded();
         LoggerHelper.methodInvocation(TAG, "onResourcesLoaded");
         mGameServerConnector.sendClientMessage(0, new GameLoadedClientMessage());
         LoggerHelper.printInformationMessage(TAG, "send gameLoaded");

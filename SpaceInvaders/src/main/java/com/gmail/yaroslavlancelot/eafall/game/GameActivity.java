@@ -11,6 +11,7 @@ import com.gmail.yaroslavlancelot.eafall.game.resources.IResourcesLoader;
 import com.gmail.yaroslavlancelot.eafall.game.resources.ResourceFactory;
 import com.gmail.yaroslavlancelot.eafall.game.scene.SceneManager;
 import com.gmail.yaroslavlancelot.eafall.game.scene.hud.EaFallHud;
+import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 
 import org.andengine.engine.options.AudioOptions;
@@ -121,7 +122,6 @@ public abstract class GameActivity extends BaseGameActivity {
         }
         onPopulateSceneCallback.onPopulateSceneFinished();
 
-        mSceneManager.initWorkingScene(mCamera);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -164,7 +164,16 @@ public abstract class GameActivity extends BaseGameActivity {
     protected abstract void asyncResourcesLoading();
 
     /** have to be triggered after resources will be loaded */
-    public abstract void onResourcesLoaded();
+    public void onResourcesLoaded() {
+        initWorkingScene();
+    }
+
+    protected void initWorkingScene() {
+        mSceneManager.initWorkingScene(mCamera);
+        onPopulateWorkingScene(mSceneManager.getWorkingScene());
+    }
+
+    protected abstract void onPopulateWorkingScene(EaFallScene scene);
 
     /** Hide splash scene and shows working scene */
     public void hideSplash() {

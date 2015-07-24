@@ -32,15 +32,6 @@ public class SceneManager {
     }
 
     /**
-     * Creates and stores splash scene
-     *
-     * @return instance of SplashScene
-     */
-    public SplashScene initSplashScene() {
-        return mSplashScene = new SplashScene(mGameActivity.getEngine());
-    }
-
-    /**
      * Returns stored SplashScene instance
      *
      * @return instance of SplashScene, if not created yet - got null;
@@ -50,23 +41,40 @@ public class SceneManager {
     }
 
     /**
-     * Creates and stores game scene
-     *
-     * @return instance of SplashScene
-     */
-    public synchronized EaFallScene initWorkingScene(EaFallCamera camera) {
-        mWorkingScene = new EaFallScene();
-        mWorkingScene.initGameSceneHandler(camera);
-        return mWorkingScene;
-    }
-
-    /**
      * Returns stored EaFallScene instance
      *
      * @return instance of EaFallScene, if not created yet - got null;
      */
     public synchronized EaFallScene getWorkingScene() {
         return mWorkingScene;
+    }
+
+    /**
+     * Creates and stores splash scene
+     *
+     * @return instance of SplashScene
+     */
+    public SplashScene initSplashScene() {
+        return mSplashScene = new SplashScene(mGameActivity.getEngine());
+    }
+
+    /**
+     * Creates and stores game scene
+     *
+     * @return instance of SplashScene
+     */
+    public synchronized EaFallScene initWorkingScene(EaFallCamera camera, boolean parallax) {
+        mWorkingScene = new EaFallScene(parallax);
+        mWorkingScene.initGameSceneHandler(camera);
+        return mWorkingScene;
+    }
+
+    /**
+     * just invocation of {@link SceneManager#initWorkingScene(EaFallCamera, boolean)}
+     * with true as boolean param
+     */
+    public synchronized EaFallScene initWorkingScene(EaFallCamera camera) {
+        return this.initWorkingScene(camera, true);
     }
 
     /**
