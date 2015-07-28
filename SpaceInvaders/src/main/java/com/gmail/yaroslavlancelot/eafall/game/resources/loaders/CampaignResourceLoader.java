@@ -2,6 +2,7 @@ package com.gmail.yaroslavlancelot.eafall.game.resources.loaders;
 
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
+import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.TextButton;
 
 import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.texture.TextureManager;
@@ -22,10 +23,14 @@ public class CampaignResourceLoader extends BaseResourceLoader {
         loadBackgroundImage(textureManager);
         //images
         loadImagesList(textureManager);
+        //button
+        TextButton.loadResources(EaFallApplication.getContext(), textureManager);
     }
 
     @Override
     public void loadFonts(TextureManager textureManager, FontManager fontManager) {
+        //button
+        TextButton.loadFonts(fontManager, textureManager);
     }
 
     @Override

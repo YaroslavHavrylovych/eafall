@@ -7,7 +7,8 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
-import com.gmail.yaroslavlancelot.eafall.game.GameActivity;
+import com.gmail.yaroslavlancelot.eafall.game.EaFallActivity;
+import com.gmail.yaroslavlancelot.eafall.game.SharedDataCallbacks;
 import com.gmail.yaroslavlancelot.eafall.game.ai.VeryFirstBot;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
@@ -64,7 +65,7 @@ import de.greenrobot.event.EventBus;
  * Main game Activity. Extends {@link BaseGameActivity} class and contains main game elements.
  * Loads resources, initialize scene, engine and etc.
  */
-public abstract class ClientGameActivity extends GameActivity {
+public abstract class ClientGameActivity extends EaFallActivity {
     /** tag, which is used for debugging purpose */
     public static final String TAG = ClientGameActivity.class.getCanonicalName();
     /** contains whole game units/warriors */
@@ -85,7 +86,7 @@ public abstract class ClientGameActivity extends GameActivity {
     }
 
     @Override
-    protected void asyncResourcesLoading() {
+    protected void loadResources() {
         //game resources
         EventBus.getDefault().register(ClientGameActivity.this);
         //alliance and player
@@ -103,6 +104,16 @@ public abstract class ClientGameActivity extends GameActivity {
             mBackgroundMusic.playBackgroundMusic();
         }
         onResourcesLoaded();
+    }
+
+    @Override
+    protected void unloadResources() {
+        LoggerHelper.methodInvocation(TAG, "unloadResources");
+        SharedDataCallbacks.removeCallbacks();
+        mSceneManager.clearWorkingScene();
+        //TODO unload phys bodies before this if needed
+        //TODO unload fonts in resource manager
+        //TODO unload textures in resource manager
     }
 
     @Override

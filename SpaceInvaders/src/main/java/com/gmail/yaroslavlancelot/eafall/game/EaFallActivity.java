@@ -24,6 +24,8 @@ import org.andengine.entity.util.FPSLogger;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.adt.color.Color;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 /**
  * Base activity for all activities which has to use AndEngine.
  * <br/>
@@ -37,9 +39,11 @@ import org.andengine.util.adt.color.Color;
  *
  * @author Yaroslav Havrylovych
  */
-public abstract class GameActivity extends BaseGameActivity {
+public abstract class EaFallActivity extends BaseGameActivity {
     /** tag, which is used for debugging purpose */
-    public static final String TAG = GameActivity.class.getCanonicalName();
+    public static final String TAG = EaFallActivity.class.getCanonicalName();
+    /** resources loaded flag */
+    protected final AtomicBoolean mResourcesLoaded = new AtomicBoolean(false);
     /** user static area */
     protected EaFallHud mHud;
     /** game camera */
@@ -103,7 +107,7 @@ public abstract class GameActivity extends BaseGameActivity {
         }
         mResourcesLoader.loadSplashImages(getTextureManager(), getVertexBufferObjectManager());
         //init sounds
-        SoundFactory.init(getSoundManager(), GameActivity.this);
+        SoundFactory.init(getSoundManager(), EaFallActivity.this);
 
         onCreateResourcesCallback.onCreateResourcesFinished();
     }
@@ -122,26 +126,52 @@ public abstract class GameActivity extends BaseGameActivity {
         }
         onPopulateSceneCallback.onPopulateSceneFinished();
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                asyncResourcesLoading();
-            }
-        }).start();
+        startAsyncResourceLoading();
     }
 
     @Override
-    public synchronized void onResumeGame() {
+    public void onResumeGame() {
         super.onResumeGame();
         if (mBackgroundMusic != null)
             mBackgroundMusic.playBackgroundMusic();
     }
 
     @Override
-    public synchronized void onPauseGame() {
+    public void onPauseGame() {
         super.onPauseGame();
         if (mBackgroundMusic != null)
             mBackgroundMusic.pauseBackgroundMusic();
+    }
+
+    protected void startAsyncResourceLoading() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (mResourcesLoaded) {
+                    if (mResourcesLoaded.get()) {
+                        return;
+                    }
+                    loadResources();
+                    mResourcesLoaded.set(true);
+                }
+            }
+        }).start();
+    }
+
+    protected void startAsyncResourcesUnloading() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (mResourcesLoaded) {
+                    if (!mResourcesLoaded.get()) {
+                        return;
+                    }
+                    mSceneManager.clearWorkingScene();
+                    unloadResources();
+                    mResourcesLoaded.set(false);
+                }
+            }
+        }).start();
     }
 
     /** show profiling information on screen (using FPS logger) */
@@ -161,7 +191,10 @@ public abstract class GameActivity extends BaseGameActivity {
     }
 
     /** triggers when all initialized, splash showed and you can load resources */
-    protected abstract void asyncResourcesLoading();
+    protected abstract void loadResources();
+
+    /** not splash, only game resources */
+    protected abstract void unloadResources();
 
     /** have to be triggered after resources will be loaded */
     public void onResourcesLoaded() {
@@ -178,5 +211,7 @@ public abstract class GameActivity extends BaseGameActivity {
     /** Hide splash scene and shows working scene */
     public void hideSplash() {
         mSceneManager.hideSplash();
+        mSceneManager.clearSplashScene();
+        mResourcesLoader.unloadSplashImages();
     }
 }

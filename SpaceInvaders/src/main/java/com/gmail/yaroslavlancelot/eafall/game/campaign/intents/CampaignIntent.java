@@ -1,7 +1,6 @@
 package com.gmail.yaroslavlancelot.eafall.game.campaign.intents;
 
 import android.app.Activity;
-import android.content.Intent;
 
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.game.campaign.CampaignActivity;
@@ -12,16 +11,26 @@ import com.gmail.yaroslavlancelot.eafall.game.resources.ResourceFactory;
  *
  * @author Yaroslav Havrylovych
  */
-public class CampaignIntent extends Intent {
+public class CampaignIntent extends StartableIntent {
     public static final String CAMPAIGN_FILE_NAME = "campaign_file_name";
+    private static final String DEFAULT_CAMPAIGN = "guide_campaign";
+
 
     public CampaignIntent(String campaignFileName) {
         super(EaFallApplication.getContext(), CampaignActivity.class);
-        putExtra(CAMPAIGN_FILE_NAME, campaignFileName);
+        putExtra(CAMPAIGN_FILE_NAME, getPathToCampaign(campaignFileName));
         putExtra(ResourceFactory.RESOURCE_LOADER, ResourceFactory.TypeResourceLoader.CAMPAIGN);
+    }
+
+    public CampaignIntent() {
+        this(DEFAULT_CAMPAIGN);
     }
 
     public void start(Activity activity) {
         activity.startActivity(this);
+    }
+
+    public static String getPathToCampaign(String campaignName) {
+        return "campaign/" + campaignName + ".xml";
     }
 }
