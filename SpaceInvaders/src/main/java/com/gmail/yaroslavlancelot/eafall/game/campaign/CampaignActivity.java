@@ -10,9 +10,12 @@ import com.gmail.yaroslavlancelot.eafall.game.audio.BackgroundMusic;
 import com.gmail.yaroslavlancelot.eafall.game.audio.LimitedSoundWrapper;
 import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.gmail.yaroslavlancelot.eafall.game.campaign.intents.CampaignIntent;
+import com.gmail.yaroslavlancelot.eafall.game.campaign.intents.MissionIntent;
+import com.gmail.yaroslavlancelot.eafall.game.campaign.intents.StartableIntent;
 import com.gmail.yaroslavlancelot.eafall.game.campaign.loader.CampaignDataLoader;
 import com.gmail.yaroslavlancelot.eafall.game.campaign.loader.CampaignListLoader;
 import com.gmail.yaroslavlancelot.eafall.game.campaign.loader.PositionLoader;
+import com.gmail.yaroslavlancelot.eafall.game.campaign.loader.mission.MissionDataLoader;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
@@ -145,7 +148,7 @@ public class CampaignActivity extends EaFallActivity {
             public void onClick(final ButtonSprite pButtonSprite, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
                 CampaignDataLoader campaignDataLoader = getCampaign(mSelectImage.getTag());
                 if (campaignDataLoader.isMission()) {
-                    startMission();
+                    startMission(campaignDataLoader.mission);
                 } else {
                     updateCampaignActivity(campaignDataLoader);
                 }
@@ -154,8 +157,10 @@ public class CampaignActivity extends EaFallActivity {
         });
     }
 
-    private void startMission() {
-        //TODO implement
+    private void startMission(final MissionDataLoader missionData) {
+        finish();
+        StartableIntent campaignIntent = new MissionIntent(missionData);
+        campaignIntent.start(CampaignActivity.this);
     }
 
     private void updateCampaignActivity(final CampaignDataLoader campaignDataLoader) {

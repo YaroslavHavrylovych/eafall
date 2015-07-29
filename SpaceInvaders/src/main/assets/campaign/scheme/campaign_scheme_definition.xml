@@ -5,7 +5,8 @@
             <xs:sequence>
 
                 <xs:element name="background" maxOccurs="1" minOccurs="0" type="xs:string"/>
-                <xs:element name="parallax_background" maxOccurs="1" type="xs:boolean" minOccurs="0"/>
+                <xs:element name="parallax_background" maxOccurs="1" type="xs:boolean"
+                            minOccurs="0"/>
                 <xs:element name="music" type="xs:string"/>
                 <xs:element name="sound_select" type="xs:string"/>
 
@@ -28,11 +29,16 @@
                             <xs:element name="mission" minOccurs="0">
                                 <xs:complexType>
                                     <xs:sequence>
-                                        <xs:element name="config" type="xs:string"/>
+                                        <xs:element name="name" type="xs:string"/>
+                                        <xs:element name="player_alliance" type="xs:string"/>
+                                        <xs:element name="opponent_alliance" type="xs:string"/>
                                         <!-- mission type, time and all addition params -->
                                         <xs:element name="definition">
                                             <xs:complexType>
                                                 <xs:sequence>
+                                                    <!-- mission time limit -->
+                                                    <xs:element name="time_limit"
+                                                                type="xs:nonNegativeInteger"/>
                                                     <!--
                                                     type: collect 500 gold,
                                                     survive for some time,
@@ -40,20 +46,21 @@
                                                     default - destroy enemies
                                                     -->
                                                     <xs:element name="type" type="xs:string"/>
-                                                    <!-- mission time limit -->
-                                                    <xs:element name="time_limit"
-                                                                type="xs:nonNegativeInteger"/>
                                                     <!--
                                                     additional field used to
                                                     add mission description.
                                                     E.g. if the goal to win with particular unit type
                                                     then here will be the unit type
                                                     -->
-                                                    <xs:element name="additional" type="xs:string"/>
+                                                    <xs:element name="value"
+                                                                minOccurs="0"
+                                                                type="xs:string"/>
                                                 </xs:sequence>
                                             </xs:complexType>
                                         </xs:element>
                                     </xs:sequence>
+                                    <xs:attribute name="id" type="xs:nonNegativeInteger"
+                                                  use="required"/>
                                 </xs:complexType>
                             </xs:element>
                         </xs:sequence>

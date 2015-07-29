@@ -127,6 +127,7 @@ public interface IPlayer {
 
     /** Constant to define what player control type will be used */
     enum ControlType {
+        //TODO this used in extras as String param. Need to use it as enum (enum can be passed in extras as it serialized)
         /*
          * SERVER SIDE
          */

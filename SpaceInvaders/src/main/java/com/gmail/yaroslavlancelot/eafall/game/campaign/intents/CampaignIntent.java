@@ -1,7 +1,5 @@
 package com.gmail.yaroslavlancelot.eafall.game.campaign.intents;
 
-import android.app.Activity;
-
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.game.campaign.CampaignActivity;
 import com.gmail.yaroslavlancelot.eafall.game.resources.ResourceFactory;
@@ -24,10 +22,6 @@ public class CampaignIntent extends StartableIntent {
 
     public CampaignIntent() {
         this(DEFAULT_CAMPAIGN);
-    }
-
-    public void start(Activity activity) {
-        activity.startActivity(this);
     }
 
     public static String getPathToCampaign(String campaignName) {
