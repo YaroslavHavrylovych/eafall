@@ -1,5 +1,7 @@
 package com.gmail.yaroslavlancelot.eafall.game;
 
+import com.gmail.yaroslavlancelot.eafall.general.SelfCleanable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,12 +16,17 @@ import java.util.List;
  *
  * @author Yaroslav Havrylovych
  */
-public class SharedDataCallbacks {
-    private static final SharedDataCallbacks sInstance = new SharedDataCallbacks();
+public class SharedDataCallbacks extends SelfCleanable {
+    private static final SharedDataCallbacks SHARED_DATA_CALLBACKS = new SharedDataCallbacks();
     private final List<DataChangedCallback> mCallbacks = new ArrayList<DataChangedCallback>(5);
 
     public static SharedDataCallbacks getInstance() {
-        return sInstance;
+        return SHARED_DATA_CALLBACKS;
+    }
+
+    @Override
+    public void clear() {
+        removeCallbacks();
     }
 
     public static boolean addCallback(DataChangedCallback callback) {

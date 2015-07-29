@@ -8,7 +8,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.EaFallActivity;
-import com.gmail.yaroslavlancelot.eafall.game.SharedDataCallbacks;
 import com.gmail.yaroslavlancelot.eafall.game.ai.VeryFirstBot;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
@@ -57,6 +56,7 @@ import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.adt.color.Color;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import de.greenrobot.event.EventBus;
@@ -109,11 +109,18 @@ public abstract class ClientGameActivity extends EaFallActivity {
     @Override
     protected void unloadResources() {
         LoggerHelper.methodInvocation(TAG, "unloadResources");
-        SharedDataCallbacks.removeCallbacks();
-        mSceneManager.clearWorkingScene();
-        //TODO unload phys bodies before this if needed
-        //TODO unload fonts in resource manager
-        //TODO unload textures in resource manager
+        runOnUpdateThread(new Runnable() {
+            @Override
+            public void run() {
+                Iterator<Body> it = mPhysicsWorld.getBodies();
+                while (it.hasNext()) {
+                    Body body = it.next();
+                    mPhysicsWorld.destroyBody(body);
+                }
+                mPhysicsWorld.clearPhysicsConnectors();
+                mPhysicsWorld.clearForces();
+            }
+        });
     }
 
     @Override

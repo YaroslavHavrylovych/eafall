@@ -9,7 +9,7 @@ import java.util.List;
  */
 public abstract class SelfCleanable {
     /** hold current class instance to simplify it's clearing */
-    private static final List<SelfCleanable> sInstanceHolder = new ArrayList<SelfCleanable>(7);
+    private static final List<SelfCleanable> sInstanceHolder = new ArrayList<SelfCleanable>(10);
 
     protected SelfCleanable() {
         synchronized (sInstanceHolder) {

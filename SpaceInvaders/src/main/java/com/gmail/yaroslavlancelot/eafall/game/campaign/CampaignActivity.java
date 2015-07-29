@@ -162,10 +162,10 @@ public class CampaignActivity extends EaFallActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                unloadResources();
                 mResourcesLoader.loadSplashImages(getTextureManager(), getVertexBufferObjectManager());
                 mSceneManager.initSplashScene();
                 mSceneManager.showSplash();
-                unloadResources();
                 mCampaignFileName = CampaignIntent.getPathToCampaign(campaignDataLoader.name);
                 loadResources();
             }

@@ -13,6 +13,7 @@ import com.gmail.yaroslavlancelot.eafall.game.scene.SceneManager;
 import com.gmail.yaroslavlancelot.eafall.game.scene.hud.EaFallHud;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
+import com.gmail.yaroslavlancelot.eafall.general.SelfCleanable;
 
 import org.andengine.engine.options.AudioOptions;
 import org.andengine.engine.options.EngineOptions;
@@ -143,6 +144,12 @@ public abstract class EaFallActivity extends BaseGameActivity {
             mBackgroundMusic.pauseBackgroundMusic();
     }
 
+    @Override
+    public void onBackPressed() {
+        startAsyncResourcesUnloading();
+        super.onBackPressed();
+    }
+
     protected void startAsyncResourceLoading() {
         new Thread(new Runnable() {
             @Override
@@ -167,6 +174,9 @@ public abstract class EaFallActivity extends BaseGameActivity {
                         return;
                     }
                     mSceneManager.clearWorkingScene();
+                    mResourcesLoader.clear();
+                    SelfCleanable.clearMemory();
+                    getTextureManager().markTexturesToUnload();
                     unloadResources();
                     mResourcesLoaded.set(false);
                 }

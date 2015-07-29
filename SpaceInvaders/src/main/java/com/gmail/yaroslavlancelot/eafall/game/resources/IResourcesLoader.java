@@ -28,6 +28,8 @@ public interface IResourcesLoader {
 
     void unloadSplashImages();
 
+    void clear();
+
 
     void unloadProfilingFonts();
 

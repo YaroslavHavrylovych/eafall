@@ -54,6 +54,11 @@ abstract class BaseResourceLoader implements IResourcesLoader {
     }
 
     @Override
+    public void clear() {
+        mImagesList.clear();
+    }
+
+    @Override
     public synchronized void unloadProfilingFonts() {
         IFont font = FontHolder.getInstance().removeElement(sProfiling);
         font.unload();
@@ -114,5 +119,4 @@ abstract class BaseResourceLoader implements IResourcesLoader {
             return mBitmap;
         }
     }
-
 }
