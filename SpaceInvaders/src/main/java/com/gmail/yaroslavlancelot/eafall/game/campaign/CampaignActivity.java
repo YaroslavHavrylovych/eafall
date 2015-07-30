@@ -23,6 +23,7 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 import com.gmail.yaroslavlancelot.eafall.game.touch.StaticHelper;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.TextButton;
+import com.gmail.yaroslavlancelot.eafall.general.SelfCleanable;
 
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.entity.IEntity;
@@ -59,6 +60,24 @@ public class CampaignActivity extends EaFallActivity {
     }
 
     @Override
+    public void onCreateResources(final OnCreateResourcesCallback onCreateResourcesCallback) {
+        super.onCreateResources(onCreateResourcesCallback);
+        // we loading sounds and music here and
+        // wouldn't reload this sounds when reloading the campaign screen
+        //sound
+        if (Config.getConfig().isSoundsEnabled()) {
+            mSelectSound = SoundFactory.getInstance().loadSound("audio/sound/select.ogg");
+        }
+        //music
+        if (Config.getConfig().isMusicEnabled()) {
+            mBackgroundMusic = new BackgroundMusic(
+                    StringConstants.getMusicPath() + "background_1.ogg",
+                    getMusicManager(), CampaignActivity.this);
+            mBackgroundMusic.initBackgroundMusic();
+        }
+    }
+
+    @Override
     public void onPopulateScene(Scene scene, OnPopulateSceneCallback onPopulateSceneCallback) {
         super.onPopulateScene(scene, onPopulateSceneCallback);
     }
@@ -77,23 +96,7 @@ public class CampaignActivity extends EaFallActivity {
         //loading resources
         mResourcesLoader.loadImages(getTextureManager(), getVertexBufferObjectManager());
         mResourcesLoader.loadFonts(getTextureManager(), getFontManager());
-        //sound
-        if (Config.getConfig().isSoundsEnabled()) {
-            mSelectSound = SoundFactory.getInstance().loadSound(mCampaignListLoader.sound_select);
-        }
-        //music
-        if (Config.getConfig().isMusicEnabled()) {
-            mBackgroundMusic = new BackgroundMusic(
-                    StringConstants.getMusicPath() + mCampaignListLoader.music,
-                    getMusicManager(), CampaignActivity.this);
-            mBackgroundMusic.initBackgroundMusic();
-            mBackgroundMusic.playBackgroundMusic();
-        }
         onResourcesLoaded();
-    }
-
-    @Override
-    protected void unloadResources() {
     }
 
     @Override
@@ -152,29 +155,33 @@ public class CampaignActivity extends EaFallActivity {
                 } else {
                     updateCampaignActivity(campaignDataLoader);
                 }
-
             }
         });
     }
 
     private void startMission(final MissionDataLoader missionData) {
+        mResourcesLoader.unloadImages(getTextureManager());
+        SelfCleanable.clearMemory();
         finish();
         StartableIntent campaignIntent = new MissionIntent(missionData);
         campaignIntent.start(CampaignActivity.this);
     }
 
     private void updateCampaignActivity(final CampaignDataLoader campaignDataLoader) {
-        new Thread(new Runnable() {
+        Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                unloadResources();
                 mResourcesLoader.loadSplashImages(getTextureManager(), getVertexBufferObjectManager());
                 mSceneManager.initSplashScene();
                 mSceneManager.showSplash();
                 mCampaignFileName = CampaignIntent.getPathToCampaign(campaignDataLoader.name);
+                mResourcesLoader.unloadImages(getTextureManager());
+                TextureRegionHolder.getInstance().clear();
                 loadResources();
             }
-        }).start();
+        });
+        thread.setDaemon(true);
+        thread.start();
     }
 
     /**

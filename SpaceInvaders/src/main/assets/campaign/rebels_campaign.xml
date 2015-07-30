@@ -4,8 +4,6 @@
 
     <background>graphics/images/background.png</background>
     <parallax_background>false</parallax_background>
-    <music>background_1.ogg</music>
-    <sound_select>audio/sound/select.ogg</sound_select>
 
     <campaign id="0">
         <name>imperials_campaign</name>

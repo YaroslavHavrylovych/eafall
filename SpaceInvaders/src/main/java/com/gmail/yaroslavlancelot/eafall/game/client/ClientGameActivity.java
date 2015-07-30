@@ -101,26 +101,8 @@ public abstract class ClientGameActivity extends EaFallActivity {
                     StringConstants.getMusicPath() + "background_1.ogg",
                     getMusicManager(), ClientGameActivity.this);
             mBackgroundMusic.initBackgroundMusic();
-            mBackgroundMusic.playBackgroundMusic();
         }
         onResourcesLoaded();
-    }
-
-    @Override
-    protected void unloadResources() {
-        LoggerHelper.methodInvocation(TAG, "unloadResources");
-        runOnUpdateThread(new Runnable() {
-            @Override
-            public void run() {
-                Iterator<Body> it = mPhysicsWorld.getBodies();
-                while (it.hasNext()) {
-                    Body body = it.next();
-                    mPhysicsWorld.destroyBody(body);
-                }
-                mPhysicsWorld.clearPhysicsConnectors();
-                mPhysicsWorld.clearForces();
-            }
-        });
     }
 
     @Override

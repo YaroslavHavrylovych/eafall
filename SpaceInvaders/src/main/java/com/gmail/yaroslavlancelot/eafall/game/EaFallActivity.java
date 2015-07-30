@@ -13,7 +13,6 @@ import com.gmail.yaroslavlancelot.eafall.game.scene.SceneManager;
 import com.gmail.yaroslavlancelot.eafall.game.scene.hud.EaFallHud;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
-import com.gmail.yaroslavlancelot.eafall.general.SelfCleanable;
 
 import org.andengine.engine.options.AudioOptions;
 import org.andengine.engine.options.EngineOptions;
@@ -24,8 +23,6 @@ import org.andengine.entity.text.Text;
 import org.andengine.entity.util.FPSLogger;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.adt.color.Color;
-
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Base activity for all activities which has to use AndEngine.
@@ -43,8 +40,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public abstract class EaFallActivity extends BaseGameActivity {
     /** tag, which is used for debugging purpose */
     public static final String TAG = EaFallActivity.class.getCanonicalName();
-    /** resources loaded flag */
-    protected final AtomicBoolean mResourcesLoaded = new AtomicBoolean(false);
     /** user static area */
     protected EaFallHud mHud;
     /** game camera */
@@ -133,55 +128,28 @@ public abstract class EaFallActivity extends BaseGameActivity {
     @Override
     public void onResumeGame() {
         super.onResumeGame();
-        if (mBackgroundMusic != null)
+        if (mBackgroundMusic != null) {
             mBackgroundMusic.playBackgroundMusic();
+        }
     }
 
     @Override
     public void onPauseGame() {
         super.onPauseGame();
-        if (mBackgroundMusic != null)
+        if (mBackgroundMusic != null) {
             mBackgroundMusic.pauseBackgroundMusic();
-    }
-
-    @Override
-    public void onBackPressed() {
-        startAsyncResourcesUnloading();
-        super.onBackPressed();
+        }
     }
 
     protected void startAsyncResourceLoading() {
-        new Thread(new Runnable() {
+        Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                synchronized (mResourcesLoaded) {
-                    if (mResourcesLoaded.get()) {
-                        return;
-                    }
-                    loadResources();
-                    mResourcesLoaded.set(true);
-                }
+                loadResources();
             }
-        }).start();
-    }
-
-    protected void startAsyncResourcesUnloading() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                synchronized (mResourcesLoaded) {
-                    if (!mResourcesLoaded.get()) {
-                        return;
-                    }
-                    mSceneManager.clearWorkingScene();
-                    mResourcesLoader.clear();
-                    SelfCleanable.clearMemory();
-                    getTextureManager().markTexturesToUnload();
-                    unloadResources();
-                    mResourcesLoaded.set(false);
-                }
-            }
-        }).start();
+        });
+        thread.setDaemon(true);
+        thread.start();
     }
 
     /** show profiling information on screen (using FPS logger) */
@@ -203,9 +171,6 @@ public abstract class EaFallActivity extends BaseGameActivity {
     /** triggers when all initialized, splash showed and you can load resources */
     protected abstract void loadResources();
 
-    /** not splash, only game resources */
-    protected abstract void unloadResources();
-
     /** have to be triggered after resources will be loaded */
     public void onResourcesLoaded() {
         initWorkingScene();
@@ -223,5 +188,8 @@ public abstract class EaFallActivity extends BaseGameActivity {
         mSceneManager.hideSplash();
         mSceneManager.clearSplashScene();
         mResourcesLoader.unloadSplashImages();
+        if (mBackgroundMusic != null) {
+            mBackgroundMusic.playBackgroundMusic();
+        }
     }
 }

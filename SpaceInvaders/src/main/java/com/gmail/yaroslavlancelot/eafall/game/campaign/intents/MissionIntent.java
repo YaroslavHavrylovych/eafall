@@ -28,7 +28,7 @@ public class MissionIntent extends StartableIntent {
     public MissionIntent(MissionDataLoader missionData) {
         super(EaFallApplication.getContext(), SinglePlayerGameActivity.class);
         putExtra(ResourceFactory.RESOURCE_LOADER, ResourceFactory.TypeResourceLoader.CLIENT);
-        putExtra(StringConstants.FIRST_PLAYER_CONTROL_BEHAVIOUR_TYPE, IPlayer.ControlType.USER_CONTROL_ON_CLIENT_SIDE.toString());
+        putExtra(StringConstants.FIRST_PLAYER_CONTROL_BEHAVIOUR_TYPE, IPlayer.ControlType.USER_CONTROL_ON_SERVER_SIDE.toString());
         putExtra(StringConstants.FIRST_PLAYER_ALLIANCE, missionData.player_alliance);
         putExtra(StringConstants.SECOND_PLAYER_CONTROL_BEHAVIOUR_TYPE, IPlayer.ControlType.BOT_CONTROL_ON_SERVER_SIDE.toString());
         putExtra(StringConstants.SECOND_PLAYER_ALLIANCE, missionData.opponent_alliance);
