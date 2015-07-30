@@ -23,7 +23,6 @@ public abstract class SelfCleanable {
             for (SelfCleanable holder : sInstanceHolder) {
                 holder.clear();
             }
-            sInstanceHolder.clear();
         }
     }
 

@@ -39,13 +39,15 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
  */
 public class ClientResourcesLoader extends BaseResourceLoader {
     public ClientResourcesLoader() {
+        addImage(StringConstants.FILE_BACKGROUND,
+                SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT);
     }
 
     @Override
     public void loadImages(TextureManager textureManager,
                            VertexBufferObjectManager vertexBufferObjectManager) {
         //background
-        loadBackgroundImage(StringConstants.FILE_BACKGROUND, textureManager);
+        loadBigImages(textureManager);
         //alliance
         loadAllianceResources(textureManager);
         //players
@@ -69,18 +71,13 @@ public class ClientResourcesLoader extends BaseResourceLoader {
     }
 
     @Override
-    public void unloadFonts(TextureManager textureManager, FontManager fontManager) {
-        throw new UnsupportedOperationException("still not implemented");
+    public void unloadFonts(final FontManager fontManager) {
+        throw new UnsupportedOperationException("fonts unloading not supported in the game");
     }
 
     @Override
-    public void unloadImages() {
-        throw new UnsupportedOperationException("still not implemented");
-    }
-
-    @Override
-    public void addImage(String path, int width, int height) {
-        throw new UnsupportedOperationException("no add image for the game");
+    public void unloadImages(final TextureManager textureManager) {
+        throw new UnsupportedOperationException("resources unloading not supported in the game");
     }
 
     private void loadAllianceResources(TextureManager textureManager) {
