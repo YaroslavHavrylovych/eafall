@@ -45,7 +45,7 @@ public class BuildableTextureAtlas<S extends ITextureAtlasSource, T extends ITex
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
-	public T getBitmapTextureAtlas() {
+	public T getTextureAtlas() {
 		return mTextureAtlas;
 	}
 

@@ -115,7 +115,7 @@ abstract class BaseResourceLoader implements IResourcesLoader {
         }
 
         textureAtlas.load();
-        return textureAtlas.getBitmapTextureAtlas();
+        return textureAtlas.getTextureAtlas();
     }
 
     /** create texture atlas source out of bitmap */
