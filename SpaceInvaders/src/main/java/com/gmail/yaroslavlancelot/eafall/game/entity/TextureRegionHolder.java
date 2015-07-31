@@ -2,6 +2,7 @@ package com.gmail.yaroslavlancelot.eafall.game.entity;
 
 import android.content.Context;
 
+import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.general.Holder;
 
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
@@ -15,6 +16,7 @@ import org.andengine.opengl.texture.region.TextureRegion;
 public class TextureRegionHolder extends Holder<ITextureRegion> {
     /** current class instance (singleton realization) */
     private final static TextureRegionHolder sTextureRegionHolderUtils = new TextureRegionHolder();
+    private static final String TAG = TextureRegionHolder.class.getCanonicalName();
 
     private TextureRegionHolder() {
     }
@@ -68,6 +70,7 @@ public class TextureRegionHolder extends Holder<ITextureRegion> {
                     textureAtlas, context, path);
             return sTextureRegionHolderUtils.addElement(key, textureRegion);
         }
+        LoggerHelper.printWarnMessage(TAG, "resource with the key=" + key + " exist");
         return sTextureRegionHolderUtils.getElement(key);
     }
 
@@ -88,6 +91,7 @@ public class TextureRegionHolder extends Holder<ITextureRegion> {
                     textureAtlas, context, path, x, y);
             return sTextureRegionHolderUtils.addElement(key, textureRegion);
         }
+        LoggerHelper.printWarnMessage(TAG, "resource with the key=" + key + " exist");
         return sTextureRegionHolderUtils.getElement(key);
     }
 
@@ -106,6 +110,7 @@ public class TextureRegionHolder extends Holder<ITextureRegion> {
                     (textureAtlas, source, x, y);
             return sTextureRegionHolderUtils.addElement(key, textureRegion);
         }
+        LoggerHelper.printWarnMessage(TAG, "resource with the key=" + key + " exist");
         return sTextureRegionHolderUtils.getElement(key);
     }
 
@@ -126,6 +131,7 @@ public class TextureRegionHolder extends Holder<ITextureRegion> {
                     BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(textureAtlas,
                             context, key, x, y, columns, rows));
         }
+        LoggerHelper.printWarnMessage(TAG, "resource with the key=" + key + " exist");
     }
 
     public static ITextureRegion getRegion(String key) {

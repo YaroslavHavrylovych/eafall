@@ -1,13 +1,15 @@
 package com.gmail.yaroslavlancelot.eafall.game.resources.loaders;
 
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
-import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
+import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.TextButton;
 
 import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.texture.TextureManager;
-import org.andengine.opengl.texture.TextureOptions;
-import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
+import org.andengine.opengl.texture.atlas.TextureAtlas;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Used to load resource for guide campaign (the campaign home page)
@@ -15,51 +17,34 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
  * @author Yaroslav Havrylovych
  */
 public class CampaignResourceLoader extends BaseResourceLoader {
+    private List<TextureAtlas> mAtlases = new ArrayList<TextureAtlas>(5);
+
     @Override
     public void loadImages(TextureManager textureManager,
                            VertexBufferObjectManager vertexBufferObjectManager) {
         //background
-        loadBackgroundImage(textureManager);
+        mAtlases.addAll(loadBigImages(textureManager));
         //images
-        loadImagesList(textureManager);
+        mAtlases.add(loadSmallImages(textureManager));
+        //button
+        mAtlases.add(TextButton.loadResources(EaFallApplication.getContext(), textureManager));
     }
 
     @Override
     public void loadFonts(TextureManager textureManager, FontManager fontManager) {
+        //button
+        TextButton.loadFonts(fontManager, textureManager);
     }
 
     @Override
-    public void unloadFonts(TextureManager textureManager, FontManager fontManager) {
+    public void unloadFonts(final FontManager fontManager) {
+        throw new UnsupportedOperationException("fonts unloading not supported in campaign");
     }
 
     @Override
-    public void unloadImages() {
-    }
-
-    private void loadImagesList(TextureManager textureManager) {
-        int imagesAmount = mImagesList.size();
-        int atlases = imagesAmount % 4 == 0 ? imagesAmount / 4 : imagesAmount / 4 + 1;
-        int imageSize = 400;
-        int width, height = width = imageSize * 4;
-        int atlasPosition;
-        int position = 0;
-        end:
-        for (int i = 0; i < atlases; i++) {
-            BitmapTextureAtlas textureAtlas =
-                    new BitmapTextureAtlas(textureManager, width, height, TextureOptions.BILINEAR);
-            for (atlasPosition = 0; atlasPosition < 4; atlasPosition++) {
-                if (position >= imagesAmount) {
-                    if (atlasPosition != 0) {
-                        textureAtlas.load();
-                    }
-                    break end;
-                }
-                TextureRegionHolder.
-                        addElementFromAssets(mImagesList.get(position++),
-                                textureAtlas, EaFallApplication.getContext(),
-                                (atlasPosition % 2) * imageSize, (atlasPosition / 2) * imageSize);
-            }
-            textureAtlas.load();
+    public void unloadImages(final TextureManager textureManager) {
+        for (TextureAtlas textureAtlas : mAtlases) {
+            textureAtlas.unload();
         }
     }
 }

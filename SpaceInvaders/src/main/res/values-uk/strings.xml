@@ -175,4 +175,14 @@
     <string name="municipality_description">Перший створений будинок додає 20\u0025\nдо прибутку золота.\nКожен наступний будинок додає\n1% до існуючої кількості.</string>
     <string name="caches_description">Перший створений будинок додає 20\u0025\nдо прибутку золота.\nКожен наступний будинок додає\n1% до існуючої кількості.</string>
     <string name="reptile_city_description">Перший створений будинок додає 20\u0025\nдо прибутку золота.\nКожен наступний будинок додає\n1% до існуючої кількості.</string>
+    <!-- /descriptions -->
+
+
+    <!-- campaign -->
+    <!-- guide campaign -->
+    <string name="campaign_guide_start">Почати</string>
+    <string name="campaign_guide_enter">Оглянути</string>
+    <!-- /guide campaign -->
+
+    <!-- /campaign -->
 </resources>

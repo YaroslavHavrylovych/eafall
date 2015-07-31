@@ -28,10 +28,12 @@ import java.util.Random;
 public class EaFallScene extends Scene {
     private static final String TAG = EaFallScene.class.getCanonicalName();
     private GameSceneHandler mGameSceneHandler;
+    private boolean mParallax;
     private Sprite mBackgroundSprite;
     private AutoParallaxBackground mBackground;
 
-    public EaFallScene() {
+    public EaFallScene(boolean parallax) {
+        mParallax = parallax;
     }
 
     public ICameraHandler getCameraHandler() {
@@ -40,16 +42,19 @@ public class EaFallScene extends Scene {
 
     /** set background image to the scene */
     public void setBackground(String backgroundFilePath, VertexBufferObjectManager vertexBufferObjectManager) {
-        AutoParallaxBackground background = new AutoParallaxBackground(0, 0, 0, 20);
-        background.setParallaxValue(new Random().nextInt(SizeConstants.GAME_FIELD_WIDTH));
         mBackgroundSprite = new Sprite(
                 SizeConstants.HALF_FIELD_WIDTH, SizeConstants.HALF_FIELD_HEIGHT,
                 SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT,
                 TextureRegionHolder.getInstance().getElement(backgroundFilePath),
                 vertexBufferObjectManager);
+        AutoParallaxBackground background = new AutoParallaxBackground(0, 0, 0, 0);
+        background.setParallaxValue(new Random().nextInt(SizeConstants.GAME_FIELD_WIDTH));
         background.attachParallaxEntity(
                 new ParallaxBackground.ParallaxEntity(1, mBackgroundSprite));
         setBackground(background);
+        if (mParallax) {
+            background.setParallaxChangePerSecond(20);
+        }
         mBackground = background;
     }
 

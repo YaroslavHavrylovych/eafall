@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
-import com.gmail.yaroslavlancelot.eafall.game.GameActivity;
+import com.gmail.yaroslavlancelot.eafall.game.EaFallActivity;
 import com.gmail.yaroslavlancelot.eafall.game.ai.VeryFirstBot;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
@@ -56,6 +56,7 @@ import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.adt.color.Color;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import de.greenrobot.event.EventBus;
@@ -64,7 +65,7 @@ import de.greenrobot.event.EventBus;
  * Main game Activity. Extends {@link BaseGameActivity} class and contains main game elements.
  * Loads resources, initialize scene, engine and etc.
  */
-public abstract class ClientGameActivity extends GameActivity {
+public abstract class ClientGameActivity extends EaFallActivity {
     /** tag, which is used for debugging purpose */
     public static final String TAG = ClientGameActivity.class.getCanonicalName();
     /** contains whole game units/warriors */
@@ -85,7 +86,7 @@ public abstract class ClientGameActivity extends GameActivity {
     }
 
     @Override
-    protected void asyncResourcesLoading() {
+    protected void loadResources() {
         //game resources
         EventBus.getDefault().register(ClientGameActivity.this);
         //alliance and player
@@ -94,8 +95,23 @@ public abstract class ClientGameActivity extends GameActivity {
         //resources
         mResourcesLoader.loadImages(getTextureManager(), getVertexBufferObjectManager());
         mResourcesLoader.loadFonts(getTextureManager(), getFontManager());
-        //scene
-        EaFallScene scene = mSceneManager.getWorkingScene();
+        //music
+        if (Config.getConfig().isMusicEnabled()) {
+            mBackgroundMusic = new BackgroundMusic(
+                    StringConstants.getMusicPath() + "background_1.ogg",
+                    getMusicManager(), ClientGameActivity.this);
+            mBackgroundMusic.initBackgroundMusic();
+        }
+        onResourcesLoaded();
+    }
+
+    @Override
+    protected void initWorkingScene() {
+        super.initWorkingScene();
+    }
+
+    @Override
+    protected void onPopulateWorkingScene(final EaFallScene scene) {
         scene.setBackground(StringConstants.FILE_BACKGROUND, getVertexBufferObjectManager());
         mSceneManager.getWorkingScene().registerUpdateHandler(mPhysicsWorld);
         //attach SpriteGroups to the scene
@@ -114,15 +130,6 @@ public abstract class ClientGameActivity extends GameActivity {
             SoundFactory.getInstance().setCameraHandler(
                     mSceneManager.getWorkingScene().getCameraHandler());
         }
-        //music
-        if (Config.getConfig().isMusicEnabled()) {
-            mBackgroundMusic = new BackgroundMusic(
-                    StringConstants.getMusicPath() + "background_1.ogg",
-                    getMusicManager(), ClientGameActivity.this);
-            mBackgroundMusic.initBackgroundMusic();
-            mBackgroundMusic.playBackgroundMusic();
-        }
-        onResourcesLoaded();
     }
 
     public void hideSplash() {

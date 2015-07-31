@@ -7,8 +7,8 @@ import android.view.View;
 import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.android.activities.multiplayer.GameServersListActivity;
 import com.gmail.yaroslavlancelot.eafall.android.activities.singleplayer.PreGameCustomizationActivity;
-import com.gmail.yaroslavlancelot.eafall.game.campaign.CampaignFactory;
-import com.gmail.yaroslavlancelot.eafall.game.campaign.ICampaign;
+import com.gmail.yaroslavlancelot.eafall.game.campaign.intents.CampaignIntent;
+import com.gmail.yaroslavlancelot.eafall.game.campaign.intents.StartableIntent;
 
 /**
  * first game activity with menu etc.
@@ -34,10 +34,8 @@ public class StartupActivity extends BaseNonGameActivity {
         campaignButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                ICampaign campaign =
-                        CampaignFactory.getInstance().getCampaign(
-                                CampaignFactory.TypeCampaign.GUIDE_CAMPAIGN);
-                campaign.startCampaignActivity(StartupActivity.this);
+                StartableIntent campaignIntent = new CampaignIntent();
+                campaignIntent.start(StartupActivity.this);
             }
         });
     }

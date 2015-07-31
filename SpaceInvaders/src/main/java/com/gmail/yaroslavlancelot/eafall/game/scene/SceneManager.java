@@ -1,9 +1,12 @@
 package com.gmail.yaroslavlancelot.eafall.game.scene;
 
-import com.gmail.yaroslavlancelot.eafall.game.GameActivity;
+import com.gmail.yaroslavlancelot.eafall.game.EaFallActivity;
 import com.gmail.yaroslavlancelot.eafall.game.camera.EaFallCamera;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.SplashScene;
+
+import org.andengine.entity.IEntity;
+import org.andengine.entity.scene.Scene;
 
 /**
  * Manager class for scenes
@@ -20,24 +23,15 @@ public class SceneManager {
     /** game scene */
     private EaFallScene mWorkingScene;
     /** main game activity */
-    private GameActivity mGameActivity;
+    private EaFallActivity mEaFallActivity;
 
     /**
      * Constructs SceneManager using engine and game activity
      *
-     * @param gameActivity any instance of game activity
+     * @param eaFallActivity any instance of game activity
      */
-    public SceneManager(GameActivity gameActivity) {
-        mGameActivity = gameActivity;
-    }
-
-    /**
-     * Creates and stores splash scene
-     *
-     * @return instance of SplashScene
-     */
-    public SplashScene initSplashScene() {
-        return mSplashScene = new SplashScene(mGameActivity.getEngine());
+    public SceneManager(EaFallActivity eaFallActivity) {
+        mEaFallActivity = eaFallActivity;
     }
 
     /**
@@ -50,23 +44,97 @@ public class SceneManager {
     }
 
     /**
-     * Creates and stores game scene
-     *
-     * @return instance of SplashScene
-     */
-    public synchronized EaFallScene initWorkingScene(EaFallCamera camera) {
-        mWorkingScene = new EaFallScene();
-        mWorkingScene.initGameSceneHandler(camera);
-        return mWorkingScene;
-    }
-
-    /**
      * Returns stored EaFallScene instance
      *
      * @return instance of EaFallScene, if not created yet - got null;
      */
     public synchronized EaFallScene getWorkingScene() {
         return mWorkingScene;
+    }
+
+    /**
+     * Creates and stores splash scene
+     *
+     * @return instance of SplashScene
+     */
+    public SplashScene initSplashScene() {
+        return mSplashScene = new SplashScene(mEaFallActivity.getEngine());
+    }
+
+    /**
+     * remove scenes and detaches all entities
+     */
+    public void clear() {
+        clearSplashScene();
+        clearWorkingScene();
+    }
+
+    /**
+     * clear working scene and detaches all entities
+     */
+    public void clearWorkingScene() {
+        if (mWorkingScene != null) {
+            detachFromEntity(mWorkingScene);
+            clearScene(mWorkingScene);
+            mWorkingScene = null;
+        }
+    }
+
+    /**
+     * clear splash scene and detaches all entities
+     */
+    public void clearSplashScene() {
+        if (mSplashScene != null) {
+            detachFromEntity(mSplashScene);
+            clearScene(mSplashScene);
+            mSplashScene = null;
+        }
+    }
+
+    /**
+     * call native scene methods to detach everything
+     *
+     * @param scene {@link Scene} to work with
+     */
+    private void clearScene(Scene scene) {
+        scene.clearChildScene();
+        scene.detachChildren();
+        scene.reset();
+        scene.detachSelf();
+    }
+
+    /**
+     * recursively detaches all entities children and the entity itself
+     *
+     * @param entity entity to detach
+     */
+    private void detachFromEntity(IEntity entity) {
+        if (entity == null) {
+            return;
+        }
+        for (int i = 0; i < entity.getChildCount(); i++) {
+            detachFromEntity(entity.getFirstChild());
+            entity.detachSelf();
+        }
+    }
+
+    /**
+     * Creates and stores game scene
+     *
+     * @return instance of SplashScene
+     */
+    public synchronized EaFallScene initWorkingScene(EaFallCamera camera, boolean parallax) {
+        mWorkingScene = new EaFallScene(parallax);
+        mWorkingScene.initGameSceneHandler(camera);
+        return mWorkingScene;
+    }
+
+    /**
+     * just invocation of {@link SceneManager#initWorkingScene(EaFallCamera, boolean)}
+     * with true as boolean param
+     */
+    public synchronized EaFallScene initWorkingScene(EaFallCamera camera) {
+        return this.initWorkingScene(camera, true);
     }
 
     /**
@@ -79,6 +147,16 @@ public class SceneManager {
             throw new IllegalStateException("mSplashScene or mWorkingScene have not been initialized");
         }
         mSplashScene.detachSelf();
-        mGameActivity.getEngine().setScene(mWorkingScene);
+        mEaFallActivity.getEngine().setScene(mWorkingScene);
+    }
+
+    /**
+     * showing splash scene
+     */
+    public void showSplash() {
+        if (mSplashScene == null) {
+            throw new IllegalStateException("mSplashScene have not been initialized");
+        }
+        mEaFallActivity.getEngine().setScene(mSplashScene);
     }
 }

@@ -33,6 +33,16 @@ public final class LoggerHelper {
     }
 
     /**
+     * Print in warn some message
+     *
+     * @param tag     log TAG
+     * @param message message text
+     */
+    public static void printWarnMessage(String tag, String message) {
+        Log.w(tag, message);
+    }
+
+    /**
      * Print in information message
      *
      * @param tag     log TAG

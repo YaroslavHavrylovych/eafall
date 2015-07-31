@@ -7,6 +7,7 @@ import org.andengine.opengl.texture.ITextureStateListener;
 import org.andengine.opengl.texture.PixelFormat;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.ITextureAtlas;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder;
 import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder.TextureAtlasBuilderException;
@@ -44,6 +45,9 @@ public class BuildableTextureAtlas<S extends ITextureAtlasSource, T extends ITex
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
+	public T getTextureAtlas() {
+		return mTextureAtlas;
+	}
 
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces

@@ -33,4 +33,8 @@ public class CampaignDataLoader {
 
     @Element(name = "mission", required = false)
     public MissionDataLoader mission;
+
+    public boolean isMission() {
+        return mission != null;
+    }
 }

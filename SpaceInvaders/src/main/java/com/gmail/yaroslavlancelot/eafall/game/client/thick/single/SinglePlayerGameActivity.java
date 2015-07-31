@@ -12,6 +12,7 @@ public class SinglePlayerGameActivity extends ThickClientGameActivity {
 
     @Override
     public void onResourcesLoaded() {
+        super.onResourcesLoaded();
         hideSplash();
     }
 

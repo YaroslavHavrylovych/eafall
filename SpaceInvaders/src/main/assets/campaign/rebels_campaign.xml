@@ -4,8 +4,6 @@
 
     <background>graphics/images/background.png</background>
     <parallax_background>false</parallax_background>
-    <music>background_1.ogg</music>
-    <sound_select>audio/sound/select.ogg</sound_select>
 
     <campaign id="0">
         <name>imperials_campaign</name>
@@ -14,7 +12,7 @@
         <height>128</height>
         <position>
             <x>960</x>
-            <y>540</y>
+            <y>280</y>
         </position>
     </campaign>
     <campaign id="1">

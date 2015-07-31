@@ -102,6 +102,13 @@ public final class SizeConstants {
     public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_X = 1585;
     public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_Y = 240;
 
+    /* campaign */
+    public static final int CAMPAIGN_START_BUTTON_WIDTH = 200;
+    public static final int CAMPAIGN_START_BUTTON_HEIGHT = 75;
+    public static final int CAMPAIGN_START_BUTTON_X = GAME_FIELD_WIDTH -
+            CAMPAIGN_START_BUTTON_WIDTH / 2;
+    public static final int CAMPAIGN_START_BUTTON_Y = CAMPAIGN_START_BUTTON_HEIGHT / 2;
+
 
     private SizeConstants() {
     }

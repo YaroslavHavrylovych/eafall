@@ -15,12 +15,12 @@ public class AllianceHolder extends Holder<IAlliance> {
     private AllianceHolder() {
     }
 
-    public static IAlliance getAlliance(String allianceName) {
-        return getInstance().getElement(allianceName);
-    }
-
     public static AllianceHolder getInstance() {
         return sInstance;
+    }
+
+    public static IAlliance getAlliance(String allianceName) {
+        return getInstance().getElement(allianceName);
     }
 
     /**
@@ -28,14 +28,14 @@ public class AllianceHolder extends Holder<IAlliance> {
      * If there is no alliance with the given name, then Imperials will be used as the alliance
      * for the given name.
      *
-     * @param name            alliance name
-     * @param objectManager   VertexBufferObjectManager
+     * @param name          alliance name
+     * @param objectManager VertexBufferObjectManager
      */
     public static void addAllianceByName(String name,
                                          final VertexBufferObjectManager objectManager) {
         IAlliance alliance = getAlliance(name);
         //if alliance is already loaded then no need to load the data again
-        if(alliance != null) {
+        if (alliance != null) {
             return;
         }
         if (name.equals(Imperials.ALLIANCE_NAME)) {
@@ -45,7 +45,7 @@ public class AllianceHolder extends Holder<IAlliance> {
         } else if (name.equals(Mutants.ALLIANCE_NAME)) {
             alliance = new Mutants(objectManager);
         } else {
-            alliance = new Imperials(objectManager);
+            throw new IllegalArgumentException("unknown alliance wants to rule the world (sent as param)");
         }
 
         getInstance().addElement(name, alliance);

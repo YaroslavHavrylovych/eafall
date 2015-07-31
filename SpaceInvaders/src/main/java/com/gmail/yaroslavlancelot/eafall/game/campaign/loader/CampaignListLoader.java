@@ -17,14 +17,8 @@ public class CampaignListLoader {
     @Element(name = "background")
     public String background;
 
-    @Element(name = "music")
-    public String music;
-
-    @Element(name = "sound_select")
-    public String sound_select;
-
-    @Element(name = "image_select")
-    public String image_select;
+    @Element(name = "parallax_background", required = false)
+    public Boolean parallax_background;
 
     @ElementList(required = true, inline = true)
     List<CampaignDataLoader> mCampaignDataLoaderList = new ArrayList<CampaignDataLoader>(8);

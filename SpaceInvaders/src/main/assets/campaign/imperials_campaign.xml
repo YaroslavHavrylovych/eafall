@@ -4,8 +4,6 @@
 
     <background>graphics/images/background.png</background>
     <parallax_background>false</parallax_background>
-    <music>background_1.ogg</music>
-    <sound_select>audio/sound/select.ogg</sound_select>
 
     <campaign id="0">
         <name>imperials_campaign</name>
@@ -16,6 +14,15 @@
             <x>960</x>
             <y>540</y>
         </position>
+        <mission id="0">
+            <name>Killer</name>
+            <player_alliance>Mutants</player_alliance>
+            <opponent_alliance>Rebels</opponent_alliance>
+            <definition>
+                <time_limit>300</time_limit>
+                <type>destroy_opponent_planet</type>
+            </definition>
+        </mission>
     </campaign>
     <campaign id="1">
         <name>rebels_campaign</name>
@@ -24,7 +31,17 @@
         <height>128</height>
         <position>
             <x>300</x>
-            <y>280</y>
+            <y>540</y>
         </position>
+        <mission id="1">
+            <name>Helper</name>
+            <player_alliance>Mutants</player_alliance>
+            <opponent_alliance>Rebels</opponent_alliance>
+            <definition>
+                <time_limit>200</time_limit>
+                <type>win_with</type>
+                <value>10</value>
+            </definition>
+        </mission>
     </campaign>
 </campaigns>

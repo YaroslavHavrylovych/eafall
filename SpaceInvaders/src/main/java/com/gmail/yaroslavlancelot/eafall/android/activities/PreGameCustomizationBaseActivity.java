@@ -39,13 +39,13 @@ public abstract class PreGameCustomizationBaseActivity extends BaseNonGameActivi
      * intent and start an activity class of which is passed with the params.
      *
      * @param activityToStartClass activity to start class
-     * @param player1              first player control type
-     * @param player2              second player control type
+     * @param player1ControlType              first player control type
+     * @param player2ControlType              second player control type
      * @return initialized click listener or null if activityToStartClass is null
      */
     protected View.OnClickListener getStartButtonOnClick(final Class activityToStartClass,
-                                                         final IPlayer.ControlType player1,
-                                                         final IPlayer.ControlType player2) {
+                                                         final IPlayer.ControlType player1ControlType,
+                                                         final IPlayer.ControlType player2ControlType) {
         if (activityToStartClass == null) {
             return null;
         }
@@ -55,9 +55,9 @@ public abstract class PreGameCustomizationBaseActivity extends BaseNonGameActivi
                 Intent singleGameIntent = new Intent(PreGameCustomizationBaseActivity.this, activityToStartClass);
 
                 singleGameIntent.
-                        putExtra(StringConstants.FIRST_PLAYER_CONTROL_BEHAVIOUR_TYPE, player1.toString()).
+                        putExtra(StringConstants.FIRST_PLAYER_CONTROL_BEHAVIOUR_TYPE, player1ControlType.toString()).
                         putExtra(StringConstants.FIRST_PLAYER_ALLIANCE, getAllianceName(mAlliance1)).
-                        putExtra(StringConstants.SECOND_PLAYER_CONTROL_BEHAVIOUR_TYPE, player2.toString()).
+                        putExtra(StringConstants.SECOND_PLAYER_CONTROL_BEHAVIOUR_TYPE, player2ControlType.toString()).
                         putExtra(StringConstants.SECOND_PLAYER_ALLIANCE, getAllianceName(mAlliance2));
                 ;
                 startActivity(singleGameIntent);

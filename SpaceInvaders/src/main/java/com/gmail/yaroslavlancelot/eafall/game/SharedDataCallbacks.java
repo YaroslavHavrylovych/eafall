@@ -1,9 +1,12 @@
 package com.gmail.yaroslavlancelot.eafall.game;
 
+import com.gmail.yaroslavlancelot.eafall.general.SelfCleanable;
+
 import java.util.ArrayList;
 import java.util.List;
 
 //TODO maybe use it only for player data (units, oxygen etc) and rename and move it
+
 /**
  * Contains callback (which added and removed manually) which triggered by key from
  * {@link SharedDataCallbacks#valueChanged(String, Object)}. So if you subscribe to
@@ -13,16 +16,21 @@ import java.util.List;
  *
  * @author Yaroslav Havrylovych
  */
-public class SharedDataCallbacks {
-    private static final SharedDataCallbacks sInstance = new SharedDataCallbacks();
+public class SharedDataCallbacks extends SelfCleanable {
+    private static final SharedDataCallbacks SHARED_DATA_CALLBACKS = new SharedDataCallbacks();
     private final List<DataChangedCallback> mCallbacks = new ArrayList<DataChangedCallback>(5);
+
+    public static SharedDataCallbacks getInstance() {
+        return SHARED_DATA_CALLBACKS;
+    }
+
+    @Override
+    public void clear() {
+        removeCallbacks();
+    }
 
     public static boolean addCallback(DataChangedCallback callback) {
         return getInstance().mCallbacks.add(callback);
-    }
-
-    public static SharedDataCallbacks getInstance() {
-        return sInstance;
     }
 
     public synchronized static void valueChanged(String key, Object value) {
@@ -33,6 +41,12 @@ public class SharedDataCallbacks {
                     callback.callback(key, value);
                 }
             }
+        }
+    }
+
+    public synchronized static void removeCallbacks() {
+        synchronized (getInstance().mCallbacks) {
+            getInstance().mCallbacks.clear();
         }
     }
 

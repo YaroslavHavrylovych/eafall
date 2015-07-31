@@ -15,6 +15,7 @@ import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.font.IFont;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
+import org.andengine.opengl.texture.atlas.TextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -42,11 +43,21 @@ public class TextButton extends ButtonSprite {
         attachChild(mText);
     }
 
-    public static void loadResources(Context context, TextureManager textureManager) {
-        BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager, 400, 120, TextureOptions.BILINEAR);
+    public void setText(String text) {
+        if (text.equalsIgnoreCase(mText.getText().toString())) {
+            return;
+        }
+        mText.setText(text);
+        setWidth(mText.getWidth() + padding * 2);
+        mText.setX(getWidth() / 2);
+    }
+
+    public static TextureAtlas loadResources(Context context, TextureManager textureManager) {
+        BitmapTextureAtlas atlas = new BitmapTextureAtlas(textureManager, 400, 120, TextureOptions.BILINEAR);
         TextureRegionHolder.addTiledElementFromAssets(
-                StringConstants.FILE_GAME_BUTTON, smallObjectTexture, context, 0, 0, 2, 1);
-        smallObjectTexture.load();
+                StringConstants.FILE_GAME_BUTTON, atlas, context, 0, 0, 2, 1);
+        atlas.load();
+        return atlas;
     }
 
     public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
@@ -55,14 +66,5 @@ public class TextButton extends ButtonSprite {
                 sFontSize, Color.WHITE);
         font.load();
         FontHolder.getInstance().addElement(sFontSizeKey, font);
-    }
-
-    public void setText(String text) {
-        if (text.equalsIgnoreCase(mText.getText().toString())) {
-            return;
-        }
-        mText.setText(text);
-        setWidth(mText.getWidth() + padding * 2);
-        mText.setX(getWidth() / 2);
     }
 }

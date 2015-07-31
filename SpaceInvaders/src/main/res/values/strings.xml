@@ -175,4 +175,13 @@
     <string name="municipality_description">First created building increase by 20\u0025\n to the income.\nEach next adds \n1\u0025 t existing value.</string>
     <string name="caches_description">First created building increase by 20\u0025\n to the income.\nEach next adds \n1\u0025 t existing value.</string>
     <string name="reptile_city_description">First created building increase by 20\u0025\n to the income.\nEach next adds \n1\u0025 t existing value.</string>
+    <!-- /descriptions -->
+
+    <!-- campaign -->
+    <!-- guide campaign -->
+    <string name="campaign_guide_start">Start</string>
+    <string name="campaign_guide_enter">Enter</string>
+    <!-- /guide campaign -->
+
+    <!-- /campaign -->
 </resources>
