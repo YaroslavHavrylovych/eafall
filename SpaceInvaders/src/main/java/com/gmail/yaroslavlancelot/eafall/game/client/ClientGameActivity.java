@@ -42,6 +42,8 @@ import com.gmail.yaroslavlancelot.eafall.game.eventbus.DetachSpriteEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.building.CreateBuildingEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.unit.CreateMovableUnitEvent;
 import com.gmail.yaroslavlancelot.eafall.game.eventbus.unit.CreateStationaryUnitEvent;
+import com.gmail.yaroslavlancelot.eafall.game.periodic.Periodic;
+import com.gmail.yaroslavlancelot.eafall.game.periodic.time.GameTime;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.Player;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
@@ -58,7 +60,9 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.adt.color.Color;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.greenrobot.event.EventBus;
@@ -80,6 +84,8 @@ public abstract class ClientGameActivity extends EaFallActivity {
     protected PhysicsWorld mPhysicsWorld;
     /** current game config */
     protected MissionConfig mMissionConfig;
+    /** game cycles (e.g. money increase, timer etc) */
+    protected List<Periodic> mGamePeriodic = new ArrayList<Periodic>(2);
 
     @Override
     public EngineOptions onCreateEngineOptions() {
@@ -107,6 +113,10 @@ public abstract class ClientGameActivity extends EaFallActivity {
                     getMusicManager(), ClientGameActivity.this);
             mBackgroundMusic.initBackgroundMusic();
         }
+        //time
+        if (mMissionConfig.isTimerEnabled()) {
+            mGamePeriodic.add(GameTime.getPeriodic(mMissionConfig.getTime()));
+        }
         onResourcesLoaded();
     }
 
@@ -127,7 +137,7 @@ public abstract class ClientGameActivity extends EaFallActivity {
         initFirstPlanet();
         initSecondPlanet();
         //hud
-        mHud.initHudElements(mCamera, getVertexBufferObjectManager(), mMissionConfig.getMovableUnitsLimit());
+        mHud.initHudElements(mCamera, getVertexBufferObjectManager(), mMissionConfig);
         //pools
         BulletPool.init(getVertexBufferObjectManager());
         //sound
@@ -140,6 +150,13 @@ public abstract class ClientGameActivity extends EaFallActivity {
     public void hideSplash() {
         initThickClient();
         super.hideSplash();
+        startPeriodic();
+    }
+
+    protected void startPeriodic() {
+        for (Periodic periodic : mGamePeriodic) {
+            mEngine.registerUpdateHandler(periodic.getUpdateHandler());
+        }
     }
 
     protected abstract void initThickClient();

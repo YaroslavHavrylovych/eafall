@@ -34,6 +34,7 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
     private int mMovableUnitsLimit;
     private int mPlanetHealth;
     private int mMaxOxygenAmount;
+    private int mTime;
     private MissionType mMissionType;
     private int mValue;
 
@@ -51,6 +52,7 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
 
     protected MissionConfig(Parcel in) {
         mMovableUnitsLimit = in.readInt();
+        mTime = in.readInt();
         mPlanetHealth = in.readInt();
         mMaxOxygenAmount = in.readInt();
         mValue = in.readInt();
@@ -69,6 +71,14 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
 
     public int getMaxOxygenAmount() {
         return mMaxOxygenAmount;
+    }
+
+    public boolean isTimerEnabled() {
+        return mTime != NO_VALUE;
+    }
+
+    public int getTime() {
+        return mTime;
     }
 
     private int getValue() {
@@ -95,6 +105,7 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
     @Override
     public void writeToParcel(final Parcel dest, final int flags) {
         dest.writeInt(mMovableUnitsLimit);
+        dest.writeInt(mTime);
         dest.writeInt(mPlanetHealth);
         dest.writeInt(mMaxOxygenAmount);
         dest.writeInt(mValue);
@@ -109,12 +120,15 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
         mMaxOxygenAmount = 2000;
         mMissionType = MissionType.WIN;
         mValue = NO_VALUE;
+        mTime = NO_VALUE;
     }
 
     private void init(MissionDataLoader loadedData) {
         initType(loadedData.definition);
+        if (loadedData.definition.time_limit != null) mTime = loadedData.definition.time_limit;
         if (loadedData.max_oxygen != null) mMaxOxygenAmount = loadedData.max_oxygen;
         if (loadedData.planet_health != null) mPlanetHealth = loadedData.planet_health;
+        if (loadedData.movable_units_limit != null)
             mMovableUnitsLimit = loadedData.movable_units_limit;
     }
 
@@ -122,7 +136,7 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
         String type = definition.type;
         if (type != null) {
             mMissionType = MissionType.valueOf(type.toUpperCase());
-            mValue = definition.time_limit;
+            if (definition.value != null) mValue = definition.value;
         }
     }
 

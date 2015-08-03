@@ -23,7 +23,8 @@
             <movable_units_limit>7</movable_units_limit>
             <definition>
                 <time_limit>300</time_limit>
-                <type>win</type>
+                <type>collect</type>
+                <value>500</value>
             </definition>
         </mission>
     </campaign>
@@ -41,9 +42,7 @@
             <player_alliance>Mutants</player_alliance>
             <opponent_alliance>Rebels</opponent_alliance>
             <definition>
-                <time_limit>200</time_limit>
-                <type>collect</type>
-                <value>400</value>
+                <type>win</type>
             </definition>
         </mission>
     </campaign>

@@ -15,5 +15,5 @@ public class DefinitionLoader {
     public String type;
 
     @Element(name = "value", required = false)
-    public String value;
+    public Integer value;
 }

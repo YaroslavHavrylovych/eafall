@@ -6,10 +6,12 @@ import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.SharedDataCallbacks;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.gmail.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder;
+import com.gmail.yaroslavlancelot.eafall.game.configuration.mission.MissionConfig;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path.PathHelper;
+import com.gmail.yaroslavlancelot.eafall.game.periodic.time.GameTime;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.Player;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
@@ -29,6 +31,7 @@ import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +46,7 @@ public class EaFallHud extends HUD {
     // Constants
     // ===========================================================
     private static final String TAG = EaFallHud.class.getCanonicalName();
+    private static final DecimalFormat TIME_FORMAT = new DecimalFormat("00");
 
     // ===========================================================
     // Fields
@@ -165,7 +169,7 @@ public class EaFallHud extends HUD {
     }
 
     public void initHudElements(Camera camera, VertexBufferObjectManager vertexManager,
-                                int movableUnitsLimit) {
+                                MissionConfig missionConfig) {
         LoggerHelper.methodInvocation(TAG, "initHudElements");
         SpriteGroupHolder.attachSpriteGroups(this, BatchingKeys.BatchTag.GAME_HUD.value());
         //health carcass
@@ -180,9 +184,38 @@ public class EaFallHud extends HUD {
             if (IPlayer.ControlType.isUserControlType(player.getControlType())) {
                 initPopups(player, camera, vertexManager);
                 initOxygen(player, list, xPos, vertexManager);
+                initMovableUnitsLimit(player, list, xPos, vertexManager, missionConfig.getMovableUnitsLimit());
+                initTimer(list, xPos, vertexManager, missionConfig);
+            } else {
+                initMovableUnitsLimit(player, list, xPos, vertexManager, missionConfig.getMovableUnitsLimit());
             }
-            initMovableUnitsLimit(player, list, xPos, vertexManager, movableUnitsLimit);
         }
+    }
+
+    private void initTimer(final List<HudGameValue> list, final float xPos,
+                           final VertexBufferObjectManager vertexManager,
+                           final MissionConfig missionConfig) {
+        if (!missionConfig.isTimerEnabled()) {
+            return;
+        }
+        int id = list.size();
+        final HudGameValue gameValue = new HudGameValue(id, xPos, StringConstants.FILE_CLOCK_HUD,
+                "time", vertexManager);
+        gameValue.setImageOffset(0, 5);
+        gameValue.attachToParent(this);
+        String callbackKey = GameTime.GAME_TIME_KEY;
+        SharedDataCallbacks.addCallback(new SharedDataCallbacks.DataChangedCallback(callbackKey) {
+            @Override
+            public void callback(final String key, final Object value) {
+                gameValue.setText(formatTime((Integer) value));
+            }
+        });
+    }
+
+    private String formatTime(int time) {
+        int min = time / 60;
+        int sec = time % 60;
+        return TIME_FORMAT.format(min) + ":" + TIME_FORMAT.format(sec);
     }
 
     // ===========================================================
