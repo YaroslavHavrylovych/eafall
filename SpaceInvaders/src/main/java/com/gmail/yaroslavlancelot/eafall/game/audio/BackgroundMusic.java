@@ -2,8 +2,8 @@ package com.gmail.yaroslavlancelot.eafall.game.audio;
 
 import android.content.Context;
 
+import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
-import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 
 import org.andengine.audio.music.Music;
 import org.andengine.audio.music.MusicFactory;
@@ -22,7 +22,13 @@ public class BackgroundMusic {
 
     public BackgroundMusic(String path, MusicManager musicManager, Context context) {
         mMusic = getMusic(path, context, musicManager);
-        setMasterVolume(Config.getConfig().getMusicVolumeMax());
+        setMasterVolume(EaFallApplication.getConfig().getMusicVolumeMax());
+    }
+
+    public void setMasterVolume(final float masterVolume) {
+        if (mMusic != null) {
+            mMusic.setVolume(masterVolume);
+        }
     }
 
     private Music getMusic(String path, Context context, MusicManager musicManager) {
@@ -32,12 +38,6 @@ public class BackgroundMusic {
             LoggerHelper.printErrorMessage(TAG, "can't instantiate music");
         }
         return null;
-    }
-
-    public void setMasterVolume(final float masterVolume) {
-        if (mMusic != null) {
-            mMusic.setVolume(masterVolume);
-        }
     }
 
     public void initBackgroundMusic() {

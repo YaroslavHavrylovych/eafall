@@ -2,8 +2,8 @@ package com.gmail.yaroslavlancelot.eafall.game.audio;
 
 import android.content.Context;
 
+import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
-import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 import com.gmail.yaroslavlancelot.eafall.game.touch.ICameraHandler;
 
 import org.andengine.audio.sound.SoundFactory;
@@ -26,7 +26,7 @@ public class SoundOperationsImpl implements SoundOperations {
     SoundOperationsImpl(SoundManager soundManager, Context context) {
         mSoundManager = soundManager;
         mContext = context;
-        setMasterVolume(Config.getConfig().getSoundVolumeMax());
+        setMasterVolume(EaFallApplication.getConfig().getSoundVolumeMax());
     }
 
     @Override

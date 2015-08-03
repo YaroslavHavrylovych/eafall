@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.EaFallActivity;
 import com.gmail.yaroslavlancelot.eafall.game.ai.VeryFirstBot;
@@ -16,7 +17,6 @@ import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.gmail.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder;
 import com.gmail.yaroslavlancelot.eafall.game.campaign.intents.MissionIntent;
-import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.mission.MissionConfig;
 import com.gmail.yaroslavlancelot.eafall.game.constant.CollisionCategories;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
@@ -101,7 +101,7 @@ public abstract class ClientGameActivity extends EaFallActivity {
         mResourcesLoader.loadImages(getTextureManager(), getVertexBufferObjectManager());
         mResourcesLoader.loadFonts(getTextureManager(), getFontManager());
         //music
-        if (Config.getConfig().isMusicEnabled()) {
+        if (EaFallApplication.getConfig().isMusicEnabled()) {
             mBackgroundMusic = new BackgroundMusic(
                     StringConstants.getMusicPath() + "background_1.ogg",
                     getMusicManager(), ClientGameActivity.this);
@@ -131,7 +131,7 @@ public abstract class ClientGameActivity extends EaFallActivity {
         //pools
         BulletPool.init(getVertexBufferObjectManager());
         //sound
-        if (Config.getConfig().isSoundsEnabled()) {
+        if (EaFallApplication.getConfig().isSoundsEnabled()) {
             SoundFactory.getInstance().setCameraHandler(
                     mSceneManager.getWorkingScene().getCameraHandler());
         }

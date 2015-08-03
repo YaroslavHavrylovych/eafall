@@ -5,7 +5,6 @@ import android.content.Context;
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.game.audio.LimitedSoundWrapper;
 import com.gmail.yaroslavlancelot.eafall.game.audio.SoundOperations;
-import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.Armor;
@@ -96,7 +95,7 @@ public abstract class UnitDummy {
         IBitmapTextureAtlasSource source = AssetBitmapTextureAtlasSource.create(EaFallApplication
                 .getContext().getAssets(), mPathToSprite);
         ColorSwapBitmapTextureAtlasSource textureSource = new ColorSwapBitmapTextureAtlasSource
-                (source, Config.getConfig().getPlayerSwapColor(),
+                (source, EaFallApplication.getConfig().getPlayerSwapColor(),
                         PlayersHolder.getPlayer(playerName).getColor());
         return TextureRegionHolder.addElementFromSource(getTextureRegionKey(playerName),
                 textureAtlas, textureSource, x, y);

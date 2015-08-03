@@ -1,10 +1,10 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit;
 
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.audio.LimitedSoundWrapper;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
-import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.Bullet;
 import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.BulletPool;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
@@ -98,7 +98,7 @@ public abstract class Unit extends GameObject implements
 
     @Override
     protected void initHealthBar() {
-        if (Config.getConfig().isUnitsHealthBarEnabled()) {
+        if (EaFallApplication.getConfig().isUnitsHealthBarEnabled()) {
             super.initHealthBar();
         }
     }

@@ -16,7 +16,6 @@ import com.gmail.yaroslavlancelot.eafall.game.campaign.loader.CampaignDataLoader
 import com.gmail.yaroslavlancelot.eafall.game.campaign.loader.CampaignListLoader;
 import com.gmail.yaroslavlancelot.eafall.game.campaign.loader.PositionLoader;
 import com.gmail.yaroslavlancelot.eafall.game.campaign.loader.mission.MissionDataLoader;
-import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
@@ -65,11 +64,11 @@ public class CampaignActivity extends EaFallActivity {
         // we loading sounds and music here and
         // wouldn't reload this sounds when reloading the campaign screen
         //sound
-        if (Config.getConfig().isSoundsEnabled()) {
+        if (EaFallApplication.getConfig().isSoundsEnabled()) {
             mSelectSound = SoundFactory.getInstance().loadSound("audio/sound/select.ogg");
         }
         //music
-        if (Config.getConfig().isMusicEnabled()) {
+        if (EaFallApplication.getConfig().isMusicEnabled()) {
             mBackgroundMusic = new BackgroundMusic(
                     StringConstants.getMusicPath() + "background_1.ogg",
                     getMusicManager(), CampaignActivity.this);

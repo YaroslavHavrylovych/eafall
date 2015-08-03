@@ -3,8 +3,8 @@ package com.gmail.yaroslavlancelot.eafall.game.touch;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 
+import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.game.camera.EaFallCamera;
-import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
@@ -35,7 +35,7 @@ public class GameSceneHandler implements
     // Constants
     // ===========================================================
 
-    public static final float MAX_ZOOM_FACTOR = Config.getConfig().getMaxZoomFactor();
+    public static final float MAX_ZOOM_FACTOR = EaFallApplication.getConfig().getMaxZoomFactor();
     public static final float MIN_ZOOM_FACTOR = 1;
 
     // ===========================================================
@@ -211,7 +211,7 @@ public class GameSceneHandler implements
     // ===========================================================
 
     private static void initPinchZoomMinimumDistance(PinchZoomDetector zoomDetector) {
-        zoomDetector.setTriggerPinchZoomMinimumDistance(Config.getConfig().getDisplayWidth() / 25);
+        zoomDetector.setTriggerPinchZoomMinimumDistance(EaFallApplication.getConfig().getDisplayWidth() / 25);
     }
 
     public boolean smoothZoomInProgress() {

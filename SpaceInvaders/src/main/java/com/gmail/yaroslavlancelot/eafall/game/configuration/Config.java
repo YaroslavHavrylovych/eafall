@@ -7,17 +7,11 @@ import com.gmail.yaroslavlancelot.eafall.game.configuration.game.ApplicationConf
 import org.andengine.util.adt.color.Color;
 
 /** game configuration params */
-//TODO rename to ConfigFacade (maybe move to EaFallApplication)
 public class Config implements IConfig {
-    private static Config sConfig;
     private final ApplicationConfig mApplicationConfig;
 
-    public Config(Context context) {
+    private Config(Context context) {
         mApplicationConfig = new ApplicationConfig(context);
-    }
-
-    public static IConfig getConfig() {
-        return sConfig;
     }
 
     public int getMaxZoomFactor() {
@@ -76,7 +70,7 @@ public class Config implements IConfig {
         return mApplicationConfig.getHudAlpha();
     }
 
-    public static void init(Context context) {
-        sConfig = new Config(context);
+    public static IConfig createConfig(Context context) {
+        return new Config(context);
     }
 }
