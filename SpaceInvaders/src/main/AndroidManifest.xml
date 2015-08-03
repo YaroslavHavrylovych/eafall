@@ -17,27 +17,39 @@
     <application
         android:name=".EaFallApplication"
         android:icon="@drawable/icon"
-        android:label="@string/app_name">
-        <activity android:name="com.gmail.yaroslavlancelot.eafall.android.activities.StartupActivity">
+        android:label="@string/app_name"
+        android:allowBackup="true">
+        <activity
+            android:name="com.gmail.yaroslavlancelot.eafall.android.activities.StartupActivity"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
-            android:name="com.gmail.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity"
+            android:name=".game.client.thick.single.SinglePlayerGameActivity"
             android:screenOrientation="landscape"/>
         <activity
             android:name=".game.client.thin.ThinClientGameActivity"
             android:screenOrientation="landscape"/>
         <activity
-            android:name="com.gmail.yaroslavlancelot.eafall.android.activities.singleplayer.PreGameCustomizationActivity"/>
-        <activity
-            android:name="com.gmail.yaroslavlancelot.eafall.game.client.thick.server.ServerGameActivity"
+            android:name=".android.activities.singleplayer.PreGameCustomizationActivity"
             android:screenOrientation="landscape"/>
-        <activity android:name="com.gmail.yaroslavlancelot.eafall.android.activities.multiplayer.GameServersListActivity"/>
-        <activity android:name="com.gmail.yaroslavlancelot.eafall.android.activities.multiplayer.ServerGameCreationActivity"/>
-        <activity android:name="com.gmail.yaroslavlancelot.eafall.android.activities.multiplayer.ClientWaitForGameActivity"/>
-        <activity android:name="com.gmail.yaroslavlancelot.eafall.game.campaign.CampaignActivity"/>
+        <activity
+            android:name=".game.client.thick.server.ServerGameActivity"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".android.activities.multiplayer.GameServersListActivity"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".android.activities.multiplayer.ServerGameCreationActivity"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".android.activities.multiplayer.ClientWaitForGameActivity"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".game.campaign.CampaignActivity"
+            android:screenOrientation="landscape"/>
     </application>
 </manifest>

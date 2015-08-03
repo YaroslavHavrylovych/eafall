@@ -4,7 +4,6 @@ import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.audio.LimitedSoundWrapper;
 import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
-import com.gmail.yaroslavlancelot.eafall.game.entity.BatchedSprite;
 import com.gmail.yaroslavlancelot.eafall.game.entity.BodiedSprite;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage;
@@ -125,9 +124,13 @@ public abstract class GameObject extends BodiedSprite {
                 }
             }
         } else {
-            if (mHealthBar != null) {
-                mHealthBar.redrawHealthBar(mObjectMaximumHealth, mObjectCurrentHealth);
-            }
+            updateHealthBar();
+        }
+    }
+
+    protected void updateHealthBar() {
+        if (mHealthBar != null) {
+            mHealthBar.redrawHealthBar(mObjectMaximumHealth, mObjectCurrentHealth);
         }
     }
 
@@ -175,6 +178,7 @@ public abstract class GameObject extends BodiedSprite {
         if (mHealthBar != null) {
             initChildren();
             mHealthBar.attachHealthBar(this);
+            updateHealthBar();
         }
     }
 
@@ -182,13 +186,13 @@ public abstract class GameObject extends BodiedSprite {
 
     protected void initChildren() {
         if (mChildren == null) {
-            mChildren = new SmartList<BatchedSprite>(2);
+            mChildren = new SmartList<>(2);
         }
     }
 
     protected void playSound(LimitedSoundWrapper sound) {
         if (sound != null && sound.isLoaded()) {
-            SoundFactory.getInstance().playSound(sound, getX(), getY());
+            SoundFactory.getInstance().playSound(sound, mX, mY);
         }
     }
 
@@ -197,20 +201,21 @@ public abstract class GameObject extends BodiedSprite {
     }
 
     public void damageObject(final Damage damage) {
-        if (mObjectCurrentHealth == sInvincibleObjectKey) return;
-        int objectHealth = mObjectCurrentHealth - mObjectArmor.getDamage(damage);
-
-        setHealth(objectHealth);
+        if (mObjectCurrentHealth != sInvincibleObjectKey) {
+            setHealth(mObjectCurrentHealth - mObjectArmor.getDamage(damage));
+        }
     }
 
     protected void onNegativeHealth() {
         LoggerHelper.methodInvocation(TAG, "onNegativeHealth");
     }
 
-    private void updateHealthBarPosition() {
-        if (mHealthBar != null) {
-            mHealthBar.setPosition(getX() - getWidth() / 2,
-                    getY() + getHeight() / 2 + SizeConstants.UNIT_HEALTH_BAR_HEIGHT);
+    protected void updateHealthBarPosition() {
+        if (mHealthBar != null && mHealthBar.isVisible()) {
+            mHealthBar.setPosition(
+                    mX - mWidth / 2,
+                    mY + mHeight / 2 + SizeConstants.UNIT_HEALTH_BAR_HEIGHT
+            );
         }
     }
 
@@ -228,10 +233,7 @@ public abstract class GameObject extends BodiedSprite {
      */
     public float getDirection(float x, float y) {
         // next till the end will calculate angle
-        float currentX = getX(),
-                currentY = getY();
-
-        return getDirection(currentX, currentY, x, y);
+        return getDirection(mX, mY, x, y);
     }
 
     /** set physic body velocity */
