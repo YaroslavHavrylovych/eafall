@@ -6,7 +6,6 @@ import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.SharedDataCallbacks;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.gmail.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder;
-import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
@@ -137,8 +136,9 @@ public class EaFallHud extends HUD {
     }
 
     private void initMovableUnitsLimit(IPlayer player, List<HudGameValue> list, float x,
-                                       VertexBufferObjectManager objectManager) {
-        final String textSuffix = "/" + Config.getConfig().getMovableUnitsLimit();
+                                       VertexBufferObjectManager objectManager,
+                                       int movableUnitsLimit) {
+        final String textSuffix = "/" + movableUnitsLimit;
         int id = list.size();
         final HudGameValue gameValue = new HudGameValue(id, x, StringConstants.FILE_SHUTTLE_HUD,
                 "0" + textSuffix, objectManager);
@@ -164,7 +164,8 @@ public class EaFallHud extends HUD {
         SpriteGroupHolder.getGroup(BatchingKeys.PLAYER_HEALTH).attachChild(healthBarCarcassSprite);
     }
 
-    public void initHudElements(Camera camera, VertexBufferObjectManager vertexManager) {
+    public void initHudElements(Camera camera, VertexBufferObjectManager vertexManager,
+                                int movableUnitsLimit) {
         LoggerHelper.methodInvocation(TAG, "initHudElements");
         SpriteGroupHolder.attachSpriteGroups(this, BatchingKeys.BatchTag.GAME_HUD.value());
         //health carcass
@@ -179,11 +180,8 @@ public class EaFallHud extends HUD {
             if (IPlayer.ControlType.isUserControlType(player.getControlType())) {
                 initPopups(player, camera, vertexManager);
                 initOxygen(player, list, xPos, vertexManager);
-                initMovableUnitsLimit(player, list, xPos, vertexManager);
-                player.setMoney(5000);
-            } else {
-                initMovableUnitsLimit(player, list, xPos, vertexManager);
             }
+            initMovableUnitsLimit(player, list, xPos, vertexManager, movableUnitsLimit);
         }
     }
 

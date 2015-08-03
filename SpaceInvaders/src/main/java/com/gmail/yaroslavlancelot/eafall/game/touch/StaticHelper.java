@@ -1,6 +1,7 @@
 package com.gmail.yaroslavlancelot.eafall.game.touch;
 
 import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
+import com.gmail.yaroslavlancelot.eafall.game.configuration.IConfig;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.IEntity;
@@ -28,7 +29,7 @@ public final class StaticHelper {
     public static void convertScreenToSurfaceCoordinates(final Camera camera,
                                                          final float[] screenCoordinates,
                                                          final float[] surfaceCoordinates) {
-        Config config = Config.getConfig();
+        IConfig config = Config.getConfig();
         //abscissa
         surfaceCoordinates[Constants.VERTEX_INDEX_X] = camera.getXMin()
                 + screenCoordinates[Constants.VERTEX_INDEX_X] * camera.getWidth()

@@ -8,7 +8,7 @@ import org.simpleframework.xml.Root;
  */
 @Root(name = "definition")
 public class DefinitionLoader {
-    @Element(name = "time_limit")
+    @Element(name = "time_limit", required = false)
     public Integer time_limit;
 
     @Element(name = "type")

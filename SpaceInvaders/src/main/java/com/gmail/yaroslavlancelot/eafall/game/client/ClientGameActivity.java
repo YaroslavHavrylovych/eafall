@@ -15,7 +15,9 @@ import com.gmail.yaroslavlancelot.eafall.game.audio.BackgroundMusic;
 import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.gmail.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder;
+import com.gmail.yaroslavlancelot.eafall.game.campaign.intents.MissionIntent;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
+import com.gmail.yaroslavlancelot.eafall.game.configuration.mission.MissionConfig;
 import com.gmail.yaroslavlancelot.eafall.game.constant.CollisionCategories;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
@@ -43,6 +45,7 @@ import com.gmail.yaroslavlancelot.eafall.game.eventbus.unit.CreateStationaryUnit
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.Player;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
+import com.gmail.yaroslavlancelot.eafall.game.resources.loaders.ClientResourcesLoader;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 
 import org.andengine.engine.options.EngineOptions;
@@ -56,7 +59,6 @@ import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.adt.color.Color;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import de.greenrobot.event.EventBus;
@@ -76,11 +78,13 @@ public abstract class ClientGameActivity extends EaFallActivity {
     protected IPlayer mFirstPlayer;
     /** current game physics world */
     protected PhysicsWorld mPhysicsWorld;
+    /** current game config */
+    protected MissionConfig mMissionConfig;
 
     @Override
     public EngineOptions onCreateEngineOptions() {
         EngineOptions engineOptions = super.onCreateEngineOptions();
-        //physic world
+        mMissionConfig = getIntent().getExtras().getParcelable(MissionIntent.MISSION_CONFIG);
         mPhysicsWorld = new PhysicsWorld(new Vector2(0, 0), false, 2, 2);
         return engineOptions;
     }
@@ -93,6 +97,7 @@ public abstract class ClientGameActivity extends EaFallActivity {
         createAlliances();
         createPlayers();
         //resources
+        ((ClientResourcesLoader) mResourcesLoader).setMovableUnitsLimit(mMissionConfig.getMovableUnitsLimit());
         mResourcesLoader.loadImages(getTextureManager(), getVertexBufferObjectManager());
         mResourcesLoader.loadFonts(getTextureManager(), getFontManager());
         //music
@@ -122,7 +127,7 @@ public abstract class ClientGameActivity extends EaFallActivity {
         initFirstPlanet();
         initSecondPlanet();
         //hud
-        mHud.initHudElements(mCamera, getVertexBufferObjectManager());
+        mHud.initHudElements(mCamera, getVertexBufferObjectManager(), mMissionConfig.getMovableUnitsLimit());
         //pools
         BulletPool.init(getVertexBufferObjectManager());
         //sound
@@ -195,7 +200,7 @@ public abstract class ClientGameActivity extends EaFallActivity {
     protected IPlayer createPlayer(String playerNameInExtra, IAlliance alliance) {
         Intent intent = getIntent();
         IPlayer.ControlType playerType = IPlayer.ControlType.valueOf(intent.getStringExtra(playerNameInExtra));
-        return new Player(playerNameInExtra, alliance, playerType);
+        return new Player(playerNameInExtra, alliance, playerType, mMissionConfig.getMaxOxygenAmount());
     }
 
     /** init second player and planet */
@@ -219,7 +224,7 @@ public abstract class ClientGameActivity extends EaFallActivity {
         PlanetStaticObject planetStaticObject = new PlanetStaticObject(x, y, textureRegion,
                 getVertexBufferObjectManager());
         planetStaticObject.setPlayer(player.getName());
-        planetStaticObject.initHealth(Config.getConfig().getPlanetHealth());
+        planetStaticObject.initHealth(mMissionConfig.getPlanetHealth());
         planetStaticObject.addObjectDestroyedListener(new PlanetDestroyListener(player));
         attachSprite(planetStaticObject);
         if (unitUniqueId.length > 0) {
@@ -325,7 +330,7 @@ public abstract class ClientGameActivity extends EaFallActivity {
     public synchronized void onEvent(final CreateMovableUnitEvent unitEvent) {
         final IPlayer player = PlayersHolder.getInstance().getElement(unitEvent.getPlayerName());
         //check units amount limit
-        if (player.getUnitsAmount() >= Config.getConfig().getMovableUnitsLimit()) {
+        if (player.getUnitsAmount() >= mMissionConfig.getMovableUnitsLimit()) {
             return;
         }
         int unitKey = unitEvent.getKey();

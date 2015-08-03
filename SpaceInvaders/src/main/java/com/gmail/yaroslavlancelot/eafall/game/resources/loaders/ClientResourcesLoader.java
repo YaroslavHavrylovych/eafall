@@ -7,7 +7,6 @@ import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.gmail.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder;
-import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
@@ -38,9 +37,15 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
  * @author Yaroslav Havrylovych
  */
 public class ClientResourcesLoader extends BaseResourceLoader {
+    private int mMovableUnitsLimit = 200;
+
     public ClientResourcesLoader() {
         addImage(StringConstants.FILE_BACKGROUND,
                 SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT);
+    }
+
+    public void setMovableUnitsLimit(int movableUnitsLimit) {
+        mMovableUnitsLimit = movableUnitsLimit;
     }
 
     @Override
@@ -99,9 +104,7 @@ public class ClientResourcesLoader extends BaseResourceLoader {
             SpriteGroupHolder.addGroup(BatchingKeys.getBuildingSpriteGroup(playerName), spriteGroup);
             //unit SpriteGroup
             textureAtlas = alliance.loadUnitsToTexture(playerName, textureManager);
-            spriteGroup = new SpriteGroup(textureAtlas,
-                    Config.getConfig().getMovableUnitsLimit(),
-                    vertexBufferObjectManager);
+            spriteGroup = new SpriteGroup(textureAtlas, mMovableUnitsLimit, vertexBufferObjectManager);
             SpriteGroupHolder.addGroup(BatchingKeys.getUnitSpriteGroup(playerName), spriteGroup);
             //unit pool
             player.createUnitPool(vertexBufferObjectManager);
@@ -139,7 +142,7 @@ public class ClientResourcesLoader extends BaseResourceLoader {
         // health bar + 9 bullets at a time per unit, and 2 player (so * 2 in addition)
         //TODO check the situation when units doesn't have health bar
         SpriteGroup spriteGroup = new SpriteGroup(smallObjectTexture,
-                Config.getConfig().getMovableUnitsLimit() * 10 * 2, vertexBufferObjectManager);
+                mMovableUnitsLimit * 10 * 2, vertexBufferObjectManager);
         SpriteGroupHolder.addGroup(BatchingKeys.BULLET_AND_HEALTH, spriteGroup);
     }
 

@@ -23,6 +23,16 @@ public class MissionDataLoader {
     @Element(name = "opponent_alliance")
     public String opponent_alliance;
 
+    @Element(name = "max_oxygen", required = false)
+    public Integer max_oxygen;
+
+    @Element(name = "planet_health", required = false)
+    public Integer planet_health;
+
+    @Element(name = "movable_units_limit", required = false)
+    public Integer movable_units_limit;
+
+
     @Element(name = "definition")
     public DefinitionLoader definition;
 }

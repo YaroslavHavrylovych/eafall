@@ -57,12 +57,14 @@ public class Player implements IPlayer {
     private final AtomicBoolean mIsFirstIncome = new AtomicBoolean(true);
     /** object related to current player */
     private final List<GameObject> mPlayerObjects;
+    /** current player money amount */
+    private final int mMaxOxygenAmount;
     /** current player main planet */
     private volatile PlanetStaticObject mPlayerPlanet;
     /** player to fight with */
     private IPlayer mEnemyPlayer;
     /** current player money amount */
-    private volatile int mMoneyAmount;
+    private volatile int mOxygenAmount;
     /** player color */
     private Color mPlayerColor = new Color(100, 100, 100);
     /** player control type */
@@ -74,11 +76,12 @@ public class Player implements IPlayer {
     /** units pools */
     private SparseArray<AfterInitializationPool<Unit>> mUnitsPools;
 
-    public Player(final String playerName, IAlliance alliance, ControlType playerType) {
+    public Player(final String playerName, IAlliance alliance, ControlType playerType, int maxOxygen) {
         mPlayerObjects = new ArrayList<GameObject>(200);
         mPlayerName = playerName;
         MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY = "UNIT_CREATED_" + playerName;
         OXYGEN_CHANGED_CALLBACK_KEY = "OXYGEN_CHANGED_" + playerName;
+        mMaxOxygenAmount = maxOxygen;
         mAlliance = alliance;
         initBuildingsTypes(alliance);
         mControlType = playerType;
@@ -122,13 +125,13 @@ public class Player implements IPlayer {
 
     @Override
     public int getMoney() {
-        return mMoneyAmount;
+        return mOxygenAmount;
     }
 
     @Override
     public void setMoney(int money) {
-        mMoneyAmount = money;
-        SharedDataCallbacks.valueChanged(OXYGEN_CHANGED_CALLBACK_KEY, mMoneyAmount);
+        mOxygenAmount = money > mMaxOxygenAmount ? mMaxOxygenAmount : money;
+        SharedDataCallbacks.valueChanged(OXYGEN_CHANGED_CALLBACK_KEY, mOxygenAmount);
     }
 
     @Override
@@ -240,7 +243,7 @@ public class Player implements IPlayer {
 
     @Override
     public void changeMoney(final int delta) {
-        setMoney(mMoneyAmount + delta);
+        setMoney(mOxygenAmount + delta);
     }
 
     @Override
