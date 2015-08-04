@@ -10,7 +10,7 @@ import org.andengine.util.adt.color.Color;
 /** game configuration params */
 public class Config {
 
-    public enum HealthBarBehavior {
+    public enum UnitHealthBarBehavior {
         /**
          * default behavior means that health bar is invisible until unit was hit
          */
@@ -28,7 +28,7 @@ public class Config {
     /*
      * Graphic
      */
-    private final HealthBarBehavior mHealthBarBehavior = HealthBarBehavior.DEFAULT;
+    private final UnitHealthBarBehavior mUnitHealthBarBehavior = UnitHealthBarBehavior.DEFAULT;
     private final int mMaxZoomFactor = 6;
     private final float mHudAlpha = 0.85f;
     /*
@@ -82,8 +82,8 @@ public class Config {
         return mPlanetHealth;
     }
 
-    public HealthBarBehavior getHealthBarBehavior() {
-        return mHealthBarBehavior;
+    public UnitHealthBarBehavior getUnitHealthBarBehavior() {
+        return mUnitHealthBarBehavior;
     }
 
     public boolean isSoundsEnabled() {

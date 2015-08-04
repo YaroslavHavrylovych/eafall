@@ -17,6 +17,9 @@ public class StationaryUnit extends Unit {
     /** create unit from appropriate builder */
     public StationaryUnit(StationaryUnitBuilder unitBuilder) {
         super(unitBuilder);
+        // todo: maybe it's better to use more functional style here, like
+        // updateCycleTime() method which will return specific value, class field depends on lifecycle,
+        // better to be stateless here
         mUpdateCycleTime = .7f;
     }
 

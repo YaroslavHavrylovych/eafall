@@ -42,7 +42,7 @@ public abstract class GameObject extends BodiedSprite {
     /** object armor */
     protected Armor mObjectArmor;
     /** callback to send message about death */
-    protected volatile List<IDestroyListener> mObjectDestroyedListener = new ArrayList<IDestroyListener>(2);
+    protected volatile List<IDestroyListener> mObjectDestroyedListener = new ArrayList<>(2);
     /** id of the string in the string files to represent object */
     private int mObjectStringId;
     /** will trigger if object health changed */
@@ -178,7 +178,6 @@ public abstract class GameObject extends BodiedSprite {
         if (mHealthBar != null) {
             initChildren();
             mHealthBar.attachHealthBar(this);
-            updateHealthBar();
         }
     }
 

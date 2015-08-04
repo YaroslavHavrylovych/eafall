@@ -181,10 +181,13 @@ public class PlayerHealthBar implements IHealthBar {
     }
 
     @Override
-    public void setVisible(boolean visible) {}
+    public void setVisible(boolean visible) {
+        // just a stub to fit interface
+    }
 
     @Override
     public boolean isVisible() {
+        // just a stub to fit interface
         return true;
     }
 }

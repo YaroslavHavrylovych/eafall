@@ -4,7 +4,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.audio.LimitedSoundWrapper;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
-import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.Bullet;
 import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.BulletPool;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
@@ -97,33 +96,8 @@ public abstract class Unit extends GameObject implements
     }
 
     @Override
-    protected void initHealthBar() {
-        if (Config.getConfig().getHealthBarBehavior() != Config.HealthBarBehavior.ALWAYS_HIDDEN) {
-            super.initHealthBar();
-        }
-    }
-
-    @Override
     protected IHealthBar createHealthBar() {
         return new UnitHealthBar(getPlayer(), Math.max(mWidth, mHeight), getVertexBufferObjectManager());
-    }
-
-    @Override
-    protected void updateHealthBar() {
-        if (mHealthBar != null) {
-            boolean updatePosition = false;
-            if (Config.getConfig().getHealthBarBehavior() == Config.HealthBarBehavior.DEFAULT) {
-                boolean newVisible = mObjectCurrentHealth < mObjectMaximumHealth;
-                updatePosition = newVisible != mHealthBar.isVisible();
-                mHealthBar.setVisible(newVisible);
-            }
-            if (mHealthBar.isVisible()) {
-                if (updatePosition) {
-                    updateHealthBarPosition();
-                }
-                mHealthBar.redrawHealthBar(mObjectMaximumHealth, mObjectCurrentHealth);
-            }
-        }
     }
 
     @Override
