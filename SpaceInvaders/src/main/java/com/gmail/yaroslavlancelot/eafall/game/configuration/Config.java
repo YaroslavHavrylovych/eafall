@@ -6,7 +6,10 @@ import com.gmail.yaroslavlancelot.eafall.game.configuration.game.ApplicationConf
 
 import org.andengine.util.adt.color.Color;
 
-/** game configuration params */
+/**
+ * General game configurations. Encapsulates {@link ApplicationConfig}'s
+ * and a few other config values
+ */
 public class Config implements IConfig {
     private final ApplicationConfig mApplicationConfig;
 

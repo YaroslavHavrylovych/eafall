@@ -8,6 +8,8 @@ import android.view.WindowManager;
 import org.andengine.util.adt.color.Color;
 
 /**
+ * General application (e.g. sounds, zoom, display characteristics) configuration
+ *
  * @author Yaroslav Havrylovych
  */
 public class ApplicationConfig {

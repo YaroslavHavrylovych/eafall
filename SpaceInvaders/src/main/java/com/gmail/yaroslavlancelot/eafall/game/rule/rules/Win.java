@@ -3,6 +3,12 @@ package com.gmail.yaroslavlancelot.eafall.game.rule.rules;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.mission.MissionConfig;
 
 /**
+ * You have to destroy your opponent planet until the time is over.
+ * <br/>
+ * If your planet destroyed you'll lose.
+ * <br/>
+ * If time is over you'll lose.
+ *
  * @author Yaroslav Havrylovych
  */
 public class Win extends GeneralRules {

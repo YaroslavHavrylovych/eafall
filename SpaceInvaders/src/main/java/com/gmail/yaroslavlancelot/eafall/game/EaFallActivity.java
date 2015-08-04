@@ -194,5 +194,6 @@ public abstract class EaFallActivity extends BaseGameActivity {
         onShowWorkingScene();
     }
 
+    /** triggers in the main engine thread after the splash had already being hidden */
     protected abstract void onShowWorkingScene();
 }

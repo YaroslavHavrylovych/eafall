@@ -13,6 +13,15 @@ import com.gmail.yaroslavlancelot.eafall.game.rule.IRuler;
 import de.greenrobot.event.EventBus;
 
 /**
+ * General win/loose rules. Can be extended with other rules.
+ * <br/>
+ * If your planet destroyed the you'll lose.
+ * <br/>
+ * If opponent planet destroyed then {@link GeneralRules#onOpponentPlanetDestroyed}
+ * will be triggered.
+ * <br/>
+ * triggers {@link GeneralRules#onTimeOver()} when the game time is over
+ *
  * @author Yaroslav Havrylovych
  */
 public abstract class GeneralRules implements IRuler {
@@ -93,10 +102,13 @@ public abstract class GeneralRules implements IRuler {
         EventBus.getDefault().post(new GameEndedEvent(success));
     }
 
+    /** add rules to track */
     protected abstract void addRules();
 
+    /** triggers after the opponent planet destroyed */
     protected abstract void onOpponentPlanetDestroyed();
 
+    /** triggers when the game time is over (timer can be disabled for the mission/game) */
     protected abstract void onTimeOver();
 
     // ===========================================================

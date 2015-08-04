@@ -3,6 +3,9 @@ package com.gmail.yaroslavlancelot.eafall.game.configuration;
 import org.andengine.util.adt.color.Color;
 
 /**
+ * Config interface you're working with in the app through
+ * {@link com.gmail.yaroslavlancelot.eafall.EaFallApplication}
+ *
  * @author Yaroslav Havrylovych
  */
 public interface IConfig {

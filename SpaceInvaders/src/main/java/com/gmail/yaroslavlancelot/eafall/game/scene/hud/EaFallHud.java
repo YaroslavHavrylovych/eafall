@@ -191,6 +191,7 @@ public class EaFallHud extends HUD {
         }
     }
 
+    /** inits time text on the screen (if timing enabled) */
     private void initTimer(final List<HudGameValue> list, final float xPos,
                            final VertexBufferObjectManager vertexManager,
                            final MissionConfig missionConfig) {
@@ -199,7 +200,7 @@ public class EaFallHud extends HUD {
         }
         int id = list.size();
         final HudGameValue gameValue = new HudGameValue(id, xPos, StringConstants.FILE_CLOCK_HUD,
-                "time", vertexManager);
+                formatTime(missionConfig.getTime()), vertexManager);
         gameValue.setImageOffset(0, 5);
         gameValue.attachToParent(this);
         String callbackKey = GameTime.GAME_TIMER_TICK_KEY;
@@ -211,6 +212,12 @@ public class EaFallHud extends HUD {
         });
     }
 
+    /**
+     * return formatted time from int value
+     * <br/>
+     * format:
+     * mm:ss
+     */
     private String formatTime(int time) {
         int min = time / 60;
         int sec = time % 60;

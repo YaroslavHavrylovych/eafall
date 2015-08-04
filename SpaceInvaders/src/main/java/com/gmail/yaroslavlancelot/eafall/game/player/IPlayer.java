@@ -19,8 +19,18 @@ import java.util.List;
  * @author Yaroslav Havrylovych
  */
 public interface IPlayer {
+    /**
+     * returns string key which used in
+     * {@link com.gmail.yaroslavlancelot.eafall.game.events.SharedEvents}
+     * when oxygen amount changed
+     */
     String getOxygenChangedKey();
 
+    /**
+     * returns string key which used in
+     * {@link com.gmail.yaroslavlancelot.eafall.game.events.SharedEvents}
+     * when movable units amount changed
+     */
     String getMovableUnitsAmountChangedKey();
 
     /** return current player units amount */

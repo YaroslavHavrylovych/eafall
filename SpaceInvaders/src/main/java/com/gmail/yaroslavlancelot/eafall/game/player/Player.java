@@ -57,13 +57,13 @@ public class Player implements IPlayer {
     private final AtomicBoolean mIsFirstIncome = new AtomicBoolean(true);
     /** object related to current player */
     private final List<GameObject> mPlayerObjects;
-    /** current player money amount */
+    /** player maximum oxygen amount (can be varying depending on mission) */
     private final int mMaxOxygenAmount;
     /** current player main planet */
     private volatile PlanetStaticObject mPlayerPlanet;
     /** player to fight with */
     private IPlayer mEnemyPlayer;
-    /** current player money amount */
+    /** current player oxygen amount/value */
     private volatile int mOxygenAmount;
     /** player color */
     private Color mPlayerColor = new Color(100, 100, 100);

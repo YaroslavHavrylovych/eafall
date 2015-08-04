@@ -88,11 +88,11 @@ public abstract class ClientGameActivity extends EaFallActivity {
     protected IPlayer mFirstPlayer;
     /** current game physics world */
     protected PhysicsWorld mPhysicsWorld;
-    /** current game config */
+    /** current mission/game config */
     protected MissionConfig mMissionConfig;
     /** game cycles (e.g. money increase, timer etc) */
     protected List<Periodic> mGamePeriodic = new ArrayList<Periodic>(2);
-    /** */
+    /** defines whether the game is over and who is the winner */
     protected IRuler mRuler;
 
     @Override
@@ -110,8 +110,9 @@ public abstract class ClientGameActivity extends EaFallActivity {
         //alliance and player
         createAlliances();
         createPlayers();
-        //resources
+        //has to be before res loading as it sets units amount which used by res loader
         ((ClientResourcesLoader) mResourcesLoader).setMovableUnitsLimit(mMissionConfig.getMovableUnitsLimit());
+        //resources
         mResourcesLoader.loadImages(getTextureManager(), getVertexBufferObjectManager());
         mResourcesLoader.loadFonts(getTextureManager(), getFontManager());
         //music
@@ -121,7 +122,7 @@ public abstract class ClientGameActivity extends EaFallActivity {
                     getMusicManager(), ClientGameActivity.this);
             mBackgroundMusic.initBackgroundMusic();
         }
-        //time
+        //whether or not the mission is bounded (timing)
         if (mMissionConfig.isTimerEnabled()) {
             mGamePeriodic.add(GameTime.getPeriodic(mMissionConfig.getTime()));
         }
@@ -166,6 +167,7 @@ public abstract class ClientGameActivity extends EaFallActivity {
         startPeriodic();
     }
 
+    /** start tracker which tracks game rules */
     protected void startRuler() {
         mRuler = RulesFactory.createRuler(
                 mMissionConfig.getMissionType(),
@@ -174,6 +176,11 @@ public abstract class ClientGameActivity extends EaFallActivity {
         mRuler.startTracking();
     }
 
+    /**
+     * registers all update handlers from #mGamePeriodic
+     * <br/>
+     * e.g. money update events, game time ticking events
+     */
     protected void startPeriodic() {
         for (Periodic periodic : mGamePeriodic) {
             mEngine.registerUpdateHandler(periodic.getUpdateHandler());

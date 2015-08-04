@@ -6,6 +6,13 @@ import com.gmail.yaroslavlancelot.eafall.game.rule.rules.Survive;
 import com.gmail.yaroslavlancelot.eafall.game.rule.rules.Win;
 
 /**
+ * Instantiate game rules based on mission data.
+ * <br/>
+ * After you {@link IRuler#startTracking()}/start the rul0 it'll communicate with
+ * the activities with
+ * {@link com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.endgame.GameEndedEvent}
+ * to signalize game results
+ *
  * @author Yaroslav Havrylovych
  */
 public class RulesFactory {

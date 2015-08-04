@@ -21,6 +21,8 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /**
+ * Fully transparent and only contains the information about the winner.
+ *
  * @author Yaroslav Havrylovych
  */
 public class GameOverPopup extends PopupHud {

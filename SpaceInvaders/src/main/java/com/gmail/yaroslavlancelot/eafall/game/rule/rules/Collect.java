@@ -6,6 +6,14 @@ import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
 /**
+ * You have to collect particular amount of oxygen to win the game.
+ * If you destroy the opponent planet it's not the victory. You have to collect
+ * this amount still.
+ * <br/>
+ * If your planet destroyed you'll lose.
+ * <br/>
+ * If time is over you'll lose.
+ *
  * @author Yaroslav Havrylovych
  */
 public class Collect extends GeneralRules {
@@ -16,6 +24,7 @@ public class Collect extends GeneralRules {
     // ===========================================================
     // Fields
     // ===========================================================
+    /** amount of oxygen to collect */
     private final int mValue;
 
     // ===========================================================

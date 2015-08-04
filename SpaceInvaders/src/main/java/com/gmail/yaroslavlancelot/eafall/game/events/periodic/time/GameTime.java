@@ -8,6 +8,14 @@ import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 
 /**
+ * Game time tracker.
+ * <br/>
+ * Each second sends an event with the key #GAME_TIMER_TICK_KEY
+ * through {@link SharedEvents}.
+ * <br/>
+ * When the timer is over send game over event with the key #GAME_TIME_OVER_KEY
+ * through {@link SharedEvents}.
+ *
  * @author Yaroslav Havrylovych
  */
 public class GameTime implements Periodic {

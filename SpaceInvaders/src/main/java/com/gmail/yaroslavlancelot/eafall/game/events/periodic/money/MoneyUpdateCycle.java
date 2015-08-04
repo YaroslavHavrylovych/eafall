@@ -8,16 +8,19 @@ import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 
-/** update money amount in the game */
+/**
+ * Signalize income time for each player. When income
+ * triggers {@link IPlayer#incomeTime()} method.
+ */
 public class MoneyUpdateCycle implements Periodic {
     public static final int MONEY_UPDATE_TIME = 10;
     private final TimerHandler mTimerHandler;
 
-    /** money update cycle timer */
     private MoneyUpdateCycle() {
         mTimerHandler = new TimerHandler(MoneyUpdateCycle.MONEY_UPDATE_TIME, true, new Callback());
     }
 
+    /** return instance of the {@link Periodic} event which triggers income for players */
     public static Periodic getPeriodic() {
         return new MoneyUpdateCycle();
     }

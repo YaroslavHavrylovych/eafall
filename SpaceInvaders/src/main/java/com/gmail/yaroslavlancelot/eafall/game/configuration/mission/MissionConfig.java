@@ -8,6 +8,9 @@ import com.gmail.yaroslavlancelot.eafall.game.campaign.loader.mission.MissionDat
 import com.gmail.yaroslavlancelot.eafall.general.SelfCleanable;
 
 /**
+ * Mission config. Used in single game (mission) to evaluate game rules and
+ * constraints (i.e. planet health, max units amount etc).
+ *
  * @author Yaroslav Havrylovych
  */
 public class MissionConfig extends SelfCleanable implements Parcelable {
@@ -116,6 +119,8 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
     // ===========================================================
     // Methods
     // ===========================================================
+
+    /** sets default mission values */
     private void resetToDefault() {
         mMovableUnitsLimit = 200;
         mPlanetHealth = 3000;
@@ -146,6 +151,11 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
     // Inner and Anonymous Classes
     // ===========================================================
     public enum MissionType {
-        WIN, SURVIVE, COLLECT;
+        /** destroy you opponent planet (can use timing) */
+        WIN,
+        /** survive for give period of a time (timing is mandatory) */
+        SURVIVE,
+        /** collect particular amount of oxygen (timing is mandatory) */
+        COLLECT
     }
 }
