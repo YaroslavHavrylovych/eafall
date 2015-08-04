@@ -1,5 +1,7 @@
 package com.gmail.yaroslavlancelot.eafall.game.configuration;
 
+import com.gmail.yaroslavlancelot.eafall.game.configuration.game.ApplicationConfig;
+
 import org.andengine.util.adt.color.Color;
 
 /**
@@ -14,8 +16,6 @@ public interface IConfig {
     int getMaxSimultaneousSoundStreams();
 
     boolean isProfilingEnabled();
-
-    boolean isUnitsHealthBarEnabled();
 
     boolean isSoundsEnabled();
 
@@ -36,4 +36,6 @@ public interface IConfig {
     Color getPlayerSwapColor();
 
     float getHudAlpha();
+
+    ApplicationConfig.UnitHealthBarBehavior getUnitHealthBarBehavior();
 }

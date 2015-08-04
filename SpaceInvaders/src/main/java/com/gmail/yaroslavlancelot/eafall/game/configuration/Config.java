@@ -29,10 +29,6 @@ public class Config implements IConfig {
         return mApplicationConfig.isProfilingEnabled();
     }
 
-    public boolean isUnitsHealthBarEnabled() {
-        return mApplicationConfig.isUnitsHealthBarEnabled();
-    }
-
     public boolean isSoundsEnabled() {
         return mApplicationConfig.isSoundsEnabled();
     }
@@ -71,6 +67,10 @@ public class Config implements IConfig {
 
     public float getHudAlpha() {
         return mApplicationConfig.getHudAlpha();
+    }
+
+    public ApplicationConfig.UnitHealthBarBehavior getUnitHealthBarBehavior() {
+        return mApplicationConfig.getHealthBarBehavior();
     }
 
     public static IConfig createConfig(Context context) {

@@ -1,7 +1,10 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic;
 
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
+import com.gmail.yaroslavlancelot.eafall.game.configuration.game.ApplicationConfig;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IVelocityListener;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.bonus.Bonus;
@@ -16,16 +19,19 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /** Basic class for all dynamic game units */
 public class MovableUnit extends Unit {
     public static final String TAG = MovableUnit.class.getCanonicalName();
     /** how often (in millis) unit bonuses should be updated */
-    private static final int sBonusUpdateTime = 1000;
+    private static final long sBonusUpdateTime = TimeUnit.SECONDS.toMillis(1);
+    /** how long health bar should be visible after unit was hit */
+    private static final long sHealthBarVisibleTime = TimeUnit.SECONDS.toMillis(3);
     /** body type */
     private static final BodyDef.BodyType sBodyType = BodyDef.BodyType.DynamicBody;
     /** current unit bonuses */
-    protected final Map<Bonus, Integer> mBonuses = new HashMap<Bonus, Integer>();
+    protected final Map<Bonus, Long> mBonuses = new HashMap<>();
     /** max velocity for this unit */
     protected float mMaxVelocity;
     /** unit moving path */
@@ -36,6 +42,8 @@ public class MovableUnit extends Unit {
     private int mChanceToAvoidAnAttack;
     /** will trigger if object velocity changed */
     private IVelocityListener mVelocityChangedListener;
+    /** to track health bar visibility, last time unit took damage */
+    private volatile long mLastHitTime;
 
     /** create unit from appropriate builder */
     public MovableUnit(MovableUnitBuilder unitBuilder) {
@@ -45,6 +53,11 @@ public class MovableUnit extends Unit {
 
     public int getChanceToAvoidAnAttack() {
         return mChanceToAvoidAnAttack;
+    }
+
+    private boolean isHealthBarDefaultBehaviour() {
+        return EaFallApplication.getConfig().getUnitHealthBarBehavior() ==
+                ApplicationConfig.UnitHealthBarBehavior.DEFAULT;
     }
 
     public void setVelocityChangedListener(IVelocityListener velocityChangedListener) {
@@ -74,9 +87,43 @@ public class MovableUnit extends Unit {
     }
 
     @Override
+    protected void updateHealthBar() {
+        if (mHealthBar != null) {
+            boolean updatePosition = false;
+            if (isHealthBarDefaultBehaviour()) {
+                boolean newVisible = mObjectCurrentHealth < mObjectMaximumHealth / 2 || mLastHitTime > 0;
+                updatePosition = newVisible != mHealthBar.isVisible();
+                mHealthBar.setVisible(newVisible);
+            }
+            if (mHealthBar.isVisible()) {
+                if (updatePosition) {
+                    updateHealthBarPosition();
+                }
+                mHealthBar.redrawHealthBar(mObjectMaximumHealth, mObjectCurrentHealth);
+            }
+        }
+    }
+
+    @Override
+    protected void initHealthBar() {
+        if (EaFallApplication.getConfig().getUnitHealthBarBehavior()
+                != ApplicationConfig.UnitHealthBarBehavior.ALWAYS_HIDDEN) {
+            super.initHealthBar();
+            updateHealthBar();
+        }
+    }
+
+    @Override
+    public void damageObject(Damage damage) {
+        super.damageObject(damage);
+        if (isHealthBarDefaultBehaviour()) {
+            mLastHitTime = System.currentTimeMillis();
+        }
+    }
+
+    @Override
     public void setUnitLinearVelocity(float x, float y) {
         super.setUnitLinearVelocity(x, y);
-
         if (mVelocityChangedListener != null) {
             mVelocityChangedListener.velocityChanged(MovableUnit.this);
         }
@@ -91,13 +138,10 @@ public class MovableUnit extends Unit {
 
     /**
      * add bonus to the unit
-     *
-     * @param bonus bonus to add
-     * @param ttl   bonus leave time
      */
-    public void addBonus(Bonus bonus, int ttl) {
+    public void addBonus(Bonus bonus, int timeToLive) {
         synchronized (mBonuses) {
-            mBonuses.put(bonus, (int) System.currentTimeMillis() + ttl);
+            mBonuses.put(bonus, System.currentTimeMillis() + timeToLive);
         }
     }
 
@@ -115,9 +159,9 @@ public class MovableUnit extends Unit {
     /** remove bonuses which are supposed to die because of passes time */
     private void updateBonuses() {
         synchronized (mBonuses) {
-            Map.Entry<Bonus, Integer> entry;
-            int currentTime = (int) System.currentTimeMillis();
-            for (Iterator<Map.Entry<Bonus, Integer>> it = mBonuses.entrySet().iterator(); it.hasNext(); ) {
+            Map.Entry<Bonus, Long> entry;
+            long currentTime = System.currentTimeMillis();
+            for (Iterator<Map.Entry<Bonus, Long>> it = mBonuses.entrySet().iterator(); it.hasNext(); ) {
                 entry = it.next();
                 if (entry.getValue() < currentTime) {
                     it.remove();
@@ -146,15 +190,24 @@ public class MovableUnit extends Unit {
     /** used for update current object in game loop */
     protected class SimpleUnitTimerCallback implements ITimerCallback {
         private float[] mTwoDimensionFloatArray = new float[2];
-        private int mLastBonusUpdateTime = (int) System.currentTimeMillis();
+        private long mLastBonusUpdateTime = System.currentTimeMillis();
 
         @Override
         public void onTimePassed(TimerHandler pTimerHandler) {
             //The whole bunch of operations is on the UPDATE THREAD!!!
 
             // update bonuses
-            if (((int) System.currentTimeMillis()) - mLastBonusUpdateTime > sBonusUpdateTime) {
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - mLastBonusUpdateTime > sBonusUpdateTime) {
                 updateBonuses();
+            }
+
+            if (isHealthBarDefaultBehaviour()) {
+                // update health bar visibility
+                if (currentTime - mLastHitTime > sHealthBarVisibleTime) {
+                    mLastHitTime = 0;
+                    updateHealthBar();
+                }
             }
 
             //TODO maybe it's reasonable to save unit id to check if it the same unit before attack?

@@ -24,7 +24,7 @@ public class ApplicationConfig {
     /*
      * Graphic
      */
-    private final boolean mUnitsHealthBarEnabled = true;
+    private final UnitHealthBarBehavior mUnitsHealthBarEnabled = UnitHealthBarBehavior.DEFAULT;
     private final int mMaxZoomFactor = 6;
     private final float mHudAlpha = 0.85f;
     private final Color mPlayerSwapColor = new Color(46.0f / 255.0f, 37.0f / 255.0f, 118.0f / 255.0f);
@@ -82,7 +82,7 @@ public class ApplicationConfig {
         return mProfilingEnabled;
     }
 
-    public boolean isUnitsHealthBarEnabled() {
+    public UnitHealthBarBehavior getHealthBarBehavior() {
         return mUnitsHealthBarEnabled;
     }
 
@@ -121,4 +121,12 @@ public class ApplicationConfig {
     // ===========================================================
     // Inner and Anonymous Classes
     // ===========================================================
+    public enum UnitHealthBarBehavior {
+        /**
+         * default behavior means that health bar is invisible until unit was hit
+         */
+        DEFAULT,
+        ALWAYS_HIDDEN,
+        ALWAYS_VISIBLE
+    }
 }

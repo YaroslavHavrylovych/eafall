@@ -17,6 +17,9 @@ public class StationaryUnit extends Unit {
     /** create unit from appropriate builder */
     public StationaryUnit(StationaryUnitBuilder unitBuilder) {
         super(unitBuilder);
+        // todo: maybe it's better to use more functional style here, like
+        // updateCycleTime() method which will return specific value, class field depends on lifecycle,
+        // better to be stateless here
         mUpdateCycleTime = .7f;
     }
 
@@ -39,10 +42,10 @@ public class StationaryUnit extends Unit {
         public void onTimePassed(TimerHandler pTimerHandler) {
             // check for anything to attack
             if (mObjectToAttack != null && mObjectToAttack.isObjectAlive()
-                    && PathHelper
-                    .getDistanceBetweenPoints(
+                    &&
+                    PathHelper.getDistanceBetweenPoints(
                             getX(), getY(), mObjectToAttack.getX(), mObjectToAttack.getY())
-                    < mAttackRadius) {
+                            < mAttackRadius) {
                 attackTarget(mObjectToAttack);
                 return;
             } else {

@@ -1,7 +1,6 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit;
 
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.audio.LimitedSoundWrapper;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
@@ -97,16 +96,8 @@ public abstract class Unit extends GameObject implements
     }
 
     @Override
-    protected void initHealthBar() {
-        if (EaFallApplication.getConfig().isUnitsHealthBarEnabled()) {
-            super.initHealthBar();
-        }
-    }
-
-    @Override
     protected IHealthBar createHealthBar() {
-        final float width = Math.max(getWidth(), getHeight());
-        return new UnitHealthBar(getPlayer(), width, getVertexBufferObjectManager());
+        return new UnitHealthBar(getPlayer(), Math.max(mWidth, mHeight), getVertexBufferObjectManager());
     }
 
     @Override

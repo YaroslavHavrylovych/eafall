@@ -58,20 +58,19 @@ public class PlayerHealthBar implements IHealthBar {
     /** health bar background sprite half width */
     private static final int HEALTH_BAR_CARCASS_HALF_WIDTH = 262;
     /*
-     * other stuf
+     * other stuff
      */
     /** original image contains this argb component */
     private static final ArgbColorComponentsSwapBitmapTextureAtlas.RgbaPart
             ORIGINAL_COLOR = ArgbColorComponentsSwapBitmapTextureAtlas.RgbaPart.B;
     /** list of health bar planks */
-    private final List<BatchedSprite> mHealthPlanks = new ArrayList<BatchedSprite>(HEALTH_PLANKS_AMOUNT);
+    private final List<BatchedSprite> mHealthPlanks = new ArrayList<>(HEALTH_PLANKS_AMOUNT);
 
     public PlayerHealthBar(String player, VertexBufferObjectManager vertexBufferObjectManager,
                            boolean left) {
         //create health bar sprite
         BatchedSprite batchedSprite;
         for (int i = 0; i < HEALTH_PLANKS_AMOUNT; i++) {
-
             batchedSprite = new BatchedSprite(0, 0, TextureRegionHolder
                     .getRegion(generateHealthItemKey(player, i)), vertexBufferObjectManager);
             batchedSprite.setSpriteGroupName(BatchingKeys.PLAYER_HEALTH);
@@ -179,5 +178,16 @@ public class PlayerHealthBar implements IHealthBar {
                 : SizeConstants.HALF_FIELD_WIDTH + HEALTH_BAR_CARCASS_HALF_WIDTH - plankCenterX;
         plankCenterY = SizeConstants.GAME_FIELD_HEIGHT - plankCenterY;
         healthBarPlank.setPosition(plankCenterX, plankCenterY);
+    }
+
+    @Override
+    public void setVisible(boolean visible) {
+        // just a stub to fit interface
+    }
+
+    @Override
+    public boolean isVisible() {
+        // just a stub to fit interface
+        return true;
     }
 }
