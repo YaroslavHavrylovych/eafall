@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.EaFallActivity;
 import com.gmail.yaroslavlancelot.eafall.game.ai.VeryFirstBot;
@@ -15,7 +16,8 @@ import com.gmail.yaroslavlancelot.eafall.game.audio.BackgroundMusic;
 import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.gmail.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder;
-import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
+import com.gmail.yaroslavlancelot.eafall.game.campaign.intents.MissionIntent;
+import com.gmail.yaroslavlancelot.eafall.game.configuration.mission.MissionConfig;
 import com.gmail.yaroslavlancelot.eafall.game.constant.CollisionCategories;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
@@ -33,16 +35,25 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.Mov
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path.PathHelper;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.filtering.EnemiesFilterFactory;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.stationary.StationaryUnit;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.AbstractSpriteEvent;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.AttachSpriteEvent;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.CreatePhysicBodyEvent;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.DetachSpriteEvent;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.building.CreateBuildingEvent;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.unit.CreateMovableUnitEvent;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.unit.CreateStationaryUnitEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.endgame.GameEndedEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.AbstractSpriteEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.AttachSpriteEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.CreatePhysicBodyEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.DetachSpriteEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.CreateBuildingEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.unit.CreateMovableUnitEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.unit.CreateStationaryUnitEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.periodic.Periodic;
+import com.gmail.yaroslavlancelot.eafall.game.events.periodic.time.GameTime;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.Player;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
+import com.gmail.yaroslavlancelot.eafall.game.popup.IPopup;
+import com.gmail.yaroslavlancelot.eafall.game.popup.PopupManager;
+import com.gmail.yaroslavlancelot.eafall.game.popup.information.GameOverPopup;
+import com.gmail.yaroslavlancelot.eafall.game.resources.loaders.ClientResourcesLoader;
+import com.gmail.yaroslavlancelot.eafall.game.rule.IRuler;
+import com.gmail.yaroslavlancelot.eafall.game.rule.RulesFactory;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 
 import org.andengine.engine.options.EngineOptions;
@@ -55,8 +66,9 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.adt.color.Color;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import de.greenrobot.event.EventBus;
@@ -76,11 +88,17 @@ public abstract class ClientGameActivity extends EaFallActivity {
     protected IPlayer mFirstPlayer;
     /** current game physics world */
     protected PhysicsWorld mPhysicsWorld;
+    /** current mission/game config */
+    protected MissionConfig mMissionConfig;
+    /** game cycles (e.g. money increase, timer etc) */
+    protected List<Periodic> mGamePeriodic = new ArrayList<Periodic>(2);
+    /** defines whether the game is over and who is the winner */
+    protected IRuler mRuler;
 
     @Override
     public EngineOptions onCreateEngineOptions() {
         EngineOptions engineOptions = super.onCreateEngineOptions();
-        //physic world
+        mMissionConfig = getIntent().getExtras().getParcelable(MissionIntent.MISSION_CONFIG);
         mPhysicsWorld = new PhysicsWorld(new Vector2(0, 0), false, 2, 2);
         return engineOptions;
     }
@@ -92,15 +110,21 @@ public abstract class ClientGameActivity extends EaFallActivity {
         //alliance and player
         createAlliances();
         createPlayers();
+        //has to be before res loading as it sets units amount which used by res loader
+        ((ClientResourcesLoader) mResourcesLoader).setMovableUnitsLimit(mMissionConfig.getMovableUnitsLimit());
         //resources
         mResourcesLoader.loadImages(getTextureManager(), getVertexBufferObjectManager());
         mResourcesLoader.loadFonts(getTextureManager(), getFontManager());
         //music
-        if (Config.getConfig().isMusicEnabled()) {
+        if (EaFallApplication.getConfig().isMusicEnabled()) {
             mBackgroundMusic = new BackgroundMusic(
                     StringConstants.getMusicPath() + "background_1.ogg",
                     getMusicManager(), ClientGameActivity.this);
             mBackgroundMusic.initBackgroundMusic();
+        }
+        //whether or not the mission is bounded (timing)
+        if (mMissionConfig.isTimerEnabled()) {
+            mGamePeriodic.add(GameTime.getPeriodic(mMissionConfig.getTime()));
         }
         onResourcesLoaded();
     }
@@ -122,19 +146,45 @@ public abstract class ClientGameActivity extends EaFallActivity {
         initFirstPlanet();
         initSecondPlanet();
         //hud
-        mHud.initHudElements(mCamera, getVertexBufferObjectManager());
+        mHud.initHudElements(mCamera, getVertexBufferObjectManager(), mMissionConfig);
         //pools
         BulletPool.init(getVertexBufferObjectManager());
         //sound
-        if (Config.getConfig().isSoundsEnabled()) {
+        if (EaFallApplication.getConfig().isSoundsEnabled()) {
             SoundFactory.getInstance().setCameraHandler(
                     mSceneManager.getWorkingScene().getCameraHandler());
         }
     }
 
-    public void hideSplash() {
+    protected void hideSplash() {
         initThickClient();
         super.hideSplash();
+    }
+
+    @Override
+    protected void onShowWorkingScene() {
+        startRuler();
+        startPeriodic();
+    }
+
+    /** start tracker which tracks game rules */
+    protected void startRuler() {
+        mRuler = RulesFactory.createRuler(
+                mMissionConfig.getMissionType(),
+                mMissionConfig.getValue(),
+                mMissionConfig.isTimerEnabled());
+        mRuler.startTracking();
+    }
+
+    /**
+     * registers all update handlers from #mGamePeriodic
+     * <br/>
+     * e.g. money update events, game time ticking events
+     */
+    protected void startPeriodic() {
+        for (Periodic periodic : mGamePeriodic) {
+            mEngine.registerUpdateHandler(periodic.getUpdateHandler());
+        }
     }
 
     protected abstract void initThickClient();
@@ -176,8 +226,7 @@ public abstract class ClientGameActivity extends EaFallActivity {
     }
 
     protected void initPlayerFixtureDef(IPlayer player) {
-        IPlayer.ControlType type = player.getControlType();
-        boolean isRemote = IPlayer.ControlType.isClientSide(type);
+        boolean isRemote = player.getControlType().isClientSide();
         if (player.getName().equals(StringConstants.FIRST_PLAYER_CONTROL_BEHAVIOUR_TYPE)) {
             if (isRemote)
                 player.changeFixtureDefFilter(CollisionCategories.CATEGORY_PLAYER1, CollisionCategories.MASKBITS_PLAYER1_THIN);
@@ -195,7 +244,7 @@ public abstract class ClientGameActivity extends EaFallActivity {
     protected IPlayer createPlayer(String playerNameInExtra, IAlliance alliance) {
         Intent intent = getIntent();
         IPlayer.ControlType playerType = IPlayer.ControlType.valueOf(intent.getStringExtra(playerNameInExtra));
-        return new Player(playerNameInExtra, alliance, playerType);
+        return new Player(playerNameInExtra, alliance, playerType, mMissionConfig.getMaxOxygenAmount());
     }
 
     /** init second player and planet */
@@ -219,7 +268,7 @@ public abstract class ClientGameActivity extends EaFallActivity {
         PlanetStaticObject planetStaticObject = new PlanetStaticObject(x, y, textureRegion,
                 getVertexBufferObjectManager());
         planetStaticObject.setPlayer(player.getName());
-        planetStaticObject.initHealth(Config.getConfig().getPlanetHealth());
+        planetStaticObject.initHealth(mMissionConfig.getPlanetHealth());
         planetStaticObject.addObjectDestroyedListener(new PlanetDestroyListener(player));
         attachSprite(planetStaticObject);
         if (unitUniqueId.length > 0) {
@@ -325,7 +374,7 @@ public abstract class ClientGameActivity extends EaFallActivity {
     public synchronized void onEvent(final CreateMovableUnitEvent unitEvent) {
         final IPlayer player = PlayersHolder.getInstance().getElement(unitEvent.getPlayerName());
         //check units amount limit
-        if (player.getUnitsAmount() >= Config.getConfig().getMovableUnitsLimit()) {
+        if (player.getUnitsAmount() >= mMissionConfig.getMovableUnitsLimit()) {
             return;
         }
         int unitKey = unitEvent.getKey();
@@ -384,6 +433,23 @@ public abstract class ClientGameActivity extends EaFallActivity {
     /** attach entity to game scene */
     private void attachSprite(final BatchedSprite batchedSprite) {
         attachSprite(batchedSprite, SpriteGroupHolder.getGroup(batchedSprite.getSpriteGroupName()));
+    }
+
+    @SuppressWarnings("unused")
+    public void onEvent(final GameEndedEvent gameEndedEvent) {
+        IPopup popup = PopupManager.getPopup(GameOverPopup.KEY);
+        ((GameOverPopup) popup).setSuccess(gameEndedEvent.isSuccess());
+        popup.setStateChangingListener(new IPopup.StateChangingListener() {
+            @Override
+            public void onShowed() {
+            }
+
+            @Override
+            public void onHided() {
+                ClientGameActivity.this.finish();
+            }
+        });
+        popup.showPopup();
     }
 
     @SuppressWarnings("unused")

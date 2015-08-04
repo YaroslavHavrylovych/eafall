@@ -60,7 +60,7 @@ public abstract class PopupHud extends HUD implements IPopup {
         unregisterTouchArea(mPopupRectangle);
         mIsPopupShowing = false;
         if (mStateChangingListener != null) {
-            mStateChangingListener.afterHiding();
+            mStateChangingListener.onHided();
         }
     }
 
@@ -74,7 +74,7 @@ public abstract class PopupHud extends HUD implements IPopup {
             return;
         }
         if (mStateChangingListener != null) {
-            mStateChangingListener.beforeShowing();
+            mStateChangingListener.onShowed();
         }
         attachPopup();
         IEntity child;
@@ -111,11 +111,5 @@ public abstract class PopupHud extends HUD implements IPopup {
     /** attach to the screen */
     protected void attachPopup() {
         mScene.setChildScene(this);
-    }
-
-    public interface StateChangingListener {
-        void beforeShowing();
-
-        void afterHiding();
     }
 }

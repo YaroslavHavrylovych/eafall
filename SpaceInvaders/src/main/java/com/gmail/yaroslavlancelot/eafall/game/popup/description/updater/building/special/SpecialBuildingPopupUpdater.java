@@ -1,6 +1,6 @@
 package com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.building.special;
 
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.building.CreateBuildingEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.CreateBuildingEvent;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.building.BaseBuildingPopupUpdater;
 

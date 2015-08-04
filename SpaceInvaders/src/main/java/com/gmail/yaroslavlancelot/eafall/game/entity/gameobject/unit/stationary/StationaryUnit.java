@@ -42,10 +42,10 @@ public class StationaryUnit extends Unit {
         public void onTimePassed(TimerHandler pTimerHandler) {
             // check for anything to attack
             if (mObjectToAttack != null && mObjectToAttack.isObjectAlive()
-                    && PathHelper
-                    .getDistanceBetweenPoints(
+                    &&
+                    PathHelper.getDistanceBetweenPoints(
                             getX(), getY(), mObjectToAttack.getX(), mObjectToAttack.getY())
-                    < mAttackRadius) {
+                            < mAttackRadius) {
                 attackTarget(mObjectToAttack);
                 return;
             } else {

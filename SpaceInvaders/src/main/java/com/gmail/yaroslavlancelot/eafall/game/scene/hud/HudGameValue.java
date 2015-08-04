@@ -3,7 +3,6 @@ package com.gmail.yaroslavlancelot.eafall.game.scene.hud;
 import android.graphics.Color;
 
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
-import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
@@ -32,8 +31,7 @@ public class HudGameValue {
     // ===========================================================
     // Constants
     // ===========================================================
-    private final static String sHudMaxText = Config.getConfig().getMovableUnitsLimit()
-            + "/" + Config.getConfig().getMovableUnitsLimit();
+    private final static String sHudMaxText = "200/200";
     // ===========================================================
     // Fields
     // ===========================================================

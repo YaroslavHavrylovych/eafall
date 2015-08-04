@@ -1,6 +1,6 @@
 package com.gmail.yaroslavlancelot.eafall.network.server;
 
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.building.CreateBuildingEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.CreateBuildingEvent;
 import com.gmail.yaroslavlancelot.eafall.network.client.connector.GameServerConnector;
 import com.gmail.yaroslavlancelot.eafall.network.client.messages.BuildingCreationClientMessage;
 import com.gmail.yaroslavlancelot.eafall.network.client.messages.ConnectionEstablishedClientMessage;

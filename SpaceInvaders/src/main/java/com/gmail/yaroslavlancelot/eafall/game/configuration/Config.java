@@ -1,140 +1,79 @@
 package com.gmail.yaroslavlancelot.eafall.game.configuration;
 
 import android.content.Context;
-import android.util.DisplayMetrics;
-import android.view.Display;
-import android.view.WindowManager;
+
+import com.gmail.yaroslavlancelot.eafall.game.configuration.game.ApplicationConfig;
 
 import org.andengine.util.adt.color.Color;
 
-/** game configuration params */
-public class Config {
+/**
+ * General game configurations. Encapsulates {@link ApplicationConfig}'s
+ * and a few other config values
+ */
+public class Config implements IConfig {
+    private final ApplicationConfig mApplicationConfig;
 
-    public enum UnitHealthBarBehavior {
-        /**
-         * default behavior means that health bar is invisible until unit was hit
-         */
-        DEFAULT,
-        ALWAYS_HIDDEN,
-        ALWAYS_VISIBLE
-    }
-
-    private static Config sConfig;
-    /*
-     * Display
-     */
-    private final int mDisplayWidth;
-    private final int mDisplayHeight;
-    /*
-     * Graphic
-     */
-    private final UnitHealthBarBehavior mUnitHealthBarBehavior = UnitHealthBarBehavior.DEFAULT;
-    private final int mMaxZoomFactor = 6;
-    private final float mHudAlpha = 0.85f;
-    /*
-     * Game
-     */
-    private final int mMovableUnitsLimit = 200;
-    private final int mCreepBuildingsLimit = 7;
-    private final int mWealthBuildingsLimit = 5;
-    private final int mPlanetHealth = 3000;
-    private final int mMaxOxygenAmount = 2000;
-    private final Color mPlayerSwapColor = new Color(46.0f / 255.0f, 37.0f / 255.0f, 118.0f / 255.0f);
-    /*
-     * Sound and music
-     */
-    private final int mMaxSimultaneousSoundStreams = 4;
-    private final boolean mSoundsEnabled = true;
-    private final boolean mMusicEnabled = true;
-    private final float mMusicVolumeMax = 0.4f;
-    private final float mSoundVolumeMax = 0.9f;
-    /*
-     * Additional
-     */
-    private final boolean mProfilingEnabled = true;
-
-    public Config(Context context) {
-        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = windowManager.getDefaultDisplay();
-        DisplayMetrics metrics = new DisplayMetrics();
-        display.getMetrics(metrics);
-        mDisplayWidth = Math.max(metrics.widthPixels, metrics.heightPixels);
-        mDisplayHeight = Math.min(metrics.widthPixels, metrics.heightPixels);
-    }
-
-    public static Config getConfig() {
-        return sConfig;
+    private Config(Context context) {
+        mApplicationConfig = new ApplicationConfig(context);
     }
 
     public int getMaxZoomFactor() {
-        return mMaxZoomFactor;
+        return mApplicationConfig.getMaxZoomFactor();
     }
 
     public int getMaxSimultaneousSoundStreams() {
-        return mMaxSimultaneousSoundStreams;
+        return mApplicationConfig.getMaxSimultaneousSoundStreams();
     }
 
     public boolean isProfilingEnabled() {
-        return mProfilingEnabled;
-    }
-
-    public int getPlanetHealth() {
-        return mPlanetHealth;
-    }
-
-    public UnitHealthBarBehavior getUnitHealthBarBehavior() {
-        return mUnitHealthBarBehavior;
+        return mApplicationConfig.isProfilingEnabled();
     }
 
     public boolean isSoundsEnabled() {
-        return mSoundsEnabled;
+        return mApplicationConfig.isSoundsEnabled();
     }
 
     public float getMusicVolumeMax() {
-        return mMusicVolumeMax;
+        return mApplicationConfig.getMusicVolumeMax();
     }
 
     public float getSoundVolumeMax() {
-        return mSoundVolumeMax;
+        return mApplicationConfig.getSoundVolumeMax();
     }
 
     public boolean isMusicEnabled() {
-        return mMusicEnabled;
-    }
-
-    public int getMovableUnitsLimit() {
-        return mMovableUnitsLimit;
+        return mApplicationConfig.isMusicEnabled();
     }
 
     public int getCreepBuildingsLimit() {
-        return mCreepBuildingsLimit;
+        return 7;
     }
 
     public int getWealthBuildingsLimit() {
-        return mWealthBuildingsLimit;
+        return 5;
     }
 
     public int getDisplayWidth() {
-        return mDisplayWidth;
+        return mApplicationConfig.getDisplayWidth();
     }
 
     public int getDisplayHeight() {
-        return mDisplayHeight;
+        return mApplicationConfig.getDisplayHeight();
     }
 
     public Color getPlayerSwapColor() {
-        return mPlayerSwapColor;
+        return mApplicationConfig.getPlayerSwapColor();
     }
 
     public float getHudAlpha() {
-        return mHudAlpha;
+        return mApplicationConfig.getHudAlpha();
     }
 
-    public int getMaxOxygenAmount() {
-        return mMaxOxygenAmount;
+    public ApplicationConfig.UnitHealthBarBehavior getUnitHealthBarBehavior() {
+        return mApplicationConfig.getHealthBarBehavior();
     }
 
-    public static void init(Context context) {
-        sConfig = new Config(context);
+    public static IConfig createConfig(Context context) {
+        return new Config(context);
     }
 }

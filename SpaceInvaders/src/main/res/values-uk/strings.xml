@@ -165,7 +165,6 @@
     <string name="description_unique">Особливе :</string>
     <string name="description_attack">А</string>
     <string name="description_defence">З</string>
-
     <!-- /description popup -->
 
     <!-- descriptions -->
@@ -177,12 +176,17 @@
     <string name="reptile_city_description">Перший створений будинок додає 20\u0025\nдо прибутку золота.\nКожен наступний будинок додає\n1% до існуючої кількості.</string>
     <!-- /descriptions -->
 
-
     <!-- campaign -->
     <!-- guide campaign -->
     <string name="campaign_guide_start">Почати</string>
     <string name="campaign_guide_enter">Оглянути</string>
     <!-- /guide campaign -->
-
     <!-- /campaign -->
+
+    <!-- mission -->
+    <!-- results -->
+    <string name="win">Ти виграв!</string>
+    <string name="lose">Ти програв!</string>
+    <!-- /results -->
+    <!-- /mission -->
 </resources>

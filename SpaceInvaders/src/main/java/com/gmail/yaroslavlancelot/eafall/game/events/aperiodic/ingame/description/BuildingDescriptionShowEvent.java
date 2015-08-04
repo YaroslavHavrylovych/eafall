@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.eafall.game.eventbus.description;
+package com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description;
 
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 

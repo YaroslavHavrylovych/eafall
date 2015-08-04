@@ -3,7 +3,6 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy;
 import android.content.Context;
 
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
-import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
@@ -58,7 +57,7 @@ public class CreepBuildingDummy extends BuildingDummy {
 
     @Override
     public int getAmountLimit() {
-        return Config.getConfig().getCreepBuildingsLimit();
+        return EaFallApplication.getConfig().getCreepBuildingsLimit();
     }
 
     @Override

@@ -14,8 +14,8 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IFireL
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.filtering.IEnemiesFilter;
 import com.gmail.yaroslavlancelot.eafall.game.entity.health.IHealthBar;
 import com.gmail.yaroslavlancelot.eafall.game.entity.health.UnitHealthBar;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.AttachSpriteEvent;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.CreatePhysicBodyEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.AttachSpriteEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.CreatePhysicBodyEvent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 

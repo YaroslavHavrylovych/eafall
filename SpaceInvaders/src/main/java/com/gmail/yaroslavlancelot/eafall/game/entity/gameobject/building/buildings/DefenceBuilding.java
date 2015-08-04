@@ -4,7 +4,7 @@ import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.Building;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.DefenceBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetStaticObject;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.unit.CreateStationaryUnitEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.unit.CreateStationaryUnitEvent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
@@ -51,7 +51,7 @@ public class DefenceBuilding extends Building {
         }
         boolean buildingBought = super.buyBuilding();
         IPlayer player = PlayersHolder.getPlayer(mPlayerName);
-        boolean isFakePlanet = IPlayer.ControlType.isClientSide(player.getControlType());
+        boolean isFakePlanet = player.getControlType().isClientSide();
         //building was created
         if (isFakePlanet || buildingBought) {
             if (isFakePlanet) {

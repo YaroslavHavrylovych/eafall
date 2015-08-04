@@ -30,12 +30,22 @@
                                         <xs:element name="name" type="xs:string"/>
                                         <xs:element name="player_alliance" type="xs:string"/>
                                         <xs:element name="opponent_alliance" type="xs:string"/>
+                                        <xs:element name="max_oxygen"
+                                                    type="xs:integer"
+                                                    minOccurs="0"/>
+                                        <xs:element name="planet_health"
+                                                    type="xs:integer"
+                                                    minOccurs="0"/>
+                                        <xs:element name="movable_units_limit"
+                                                    type="xs:integer"
+                                                    minOccurs="0"/>
                                         <!-- mission type, time and all addition params -->
                                         <xs:element name="definition">
                                             <xs:complexType>
                                                 <xs:sequence>
                                                     <!-- mission time limit -->
                                                     <xs:element name="time_limit"
+                                                                minOccurs="0"
                                                                 type="xs:nonNegativeInteger"/>
                                                     <!--
                                                     type: collect 500 gold,
@@ -52,7 +62,7 @@
                                                     -->
                                                     <xs:element name="value"
                                                                 minOccurs="0"
-                                                                type="xs:string"/>
+                                                                type="xs:integer"/>
                                                 </xs:sequence>
                                             </xs:complexType>
                                         </xs:element>

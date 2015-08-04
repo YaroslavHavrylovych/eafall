@@ -1,10 +1,10 @@
 package com.gmail.yaroslavlancelot.eafall.game;
 
+import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.audio.BackgroundMusic;
 import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.gmail.yaroslavlancelot.eafall.game.camera.EaFallCamera;
-import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.resources.IResourcesLoader;
@@ -60,14 +60,14 @@ public abstract class EaFallActivity extends BaseGameActivity {
         mCamera = new EaFallCamera(0, 0,
                 SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT,
                 SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT,
-                Config.getConfig().getMaxZoomFactor());
+                EaFallApplication.getConfig().getMaxZoomFactor());
         mCamera.setBounds(0, 0, SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT);
         mCamera.setBoundsEnabled(true);
         //hud
         mHud = new EaFallHud();
         mHud.setTouchAreaBindingOnActionDownEnabled(true);
         mHud.setOnAreaTouchTraversalFrontToBack();
-        mHud.setAlpha(Config.getConfig().getHudAlpha());
+        mHud.setAlpha(EaFallApplication.getConfig().getHudAlpha());
         mCamera.setHUD(mHud);
         //resource manager
         ResourceFactory.TypeResourceLoader typeResourceLoader = (ResourceFactory.TypeResourceLoader)
@@ -86,10 +86,10 @@ public abstract class EaFallActivity extends BaseGameActivity {
         AudioOptions audioOptions = engineOptions.getAudioOptions();
         //sound
         audioOptions.getSoundOptions().setMaxSimultaneousStreams(
-                Config.getConfig().getMaxSimultaneousSoundStreams());
-        audioOptions.setNeedsSound(Config.getConfig().isSoundsEnabled());
+                EaFallApplication.getConfig().getMaxSimultaneousSoundStreams());
+        audioOptions.setNeedsSound(EaFallApplication.getConfig().isSoundsEnabled());
         //music
-        audioOptions.setNeedsMusic(Config.getConfig().isMusicEnabled());
+        audioOptions.setNeedsMusic(EaFallApplication.getConfig().isMusicEnabled());
         return engineOptions;
     }
 
@@ -98,7 +98,7 @@ public abstract class EaFallActivity extends BaseGameActivity {
     public void onCreateResources(OnCreateResourcesCallback onCreateResourcesCallback) {
         LoggerHelper.methodInvocation(TAG, "onCreateResources");
 
-        if (Config.getConfig().isProfilingEnabled()) {
+        if (EaFallApplication.getConfig().isProfilingEnabled()) {
             mResourcesLoader.loadProfilingFonts(getTextureManager(), getFontManager());
         }
         mResourcesLoader.loadSplashImages(getTextureManager(), getVertexBufferObjectManager());
@@ -117,7 +117,7 @@ public abstract class EaFallActivity extends BaseGameActivity {
 
     @Override
     public void onPopulateScene(Scene scene, OnPopulateSceneCallback onPopulateSceneCallback) {
-        if (Config.getConfig().isProfilingEnabled()) {
+        if (EaFallApplication.getConfig().isProfilingEnabled()) {
             profile();
         }
         onPopulateSceneCallback.onPopulateSceneFinished();
@@ -184,12 +184,16 @@ public abstract class EaFallActivity extends BaseGameActivity {
     protected abstract void onPopulateWorkingScene(EaFallScene scene);
 
     /** Hide splash scene and shows working scene */
-    public void hideSplash() {
+    protected void hideSplash() {
         mSceneManager.hideSplash();
         mSceneManager.clearSplashScene();
         mResourcesLoader.unloadSplashImages();
         if (mBackgroundMusic != null) {
             mBackgroundMusic.playBackgroundMusic();
         }
+        onShowWorkingScene();
     }
+
+    /** triggers in the main engine thread after the splash had already being hidden */
+    protected abstract void onShowWorkingScene();
 }

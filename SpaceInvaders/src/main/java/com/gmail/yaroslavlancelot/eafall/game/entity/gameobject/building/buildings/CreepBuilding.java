@@ -4,7 +4,7 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.Buildin
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.CreepBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitCreatorCycle;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.description.BuildingDescriptionShowEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
@@ -32,7 +32,7 @@ public class CreepBuilding extends Building implements ICreepBuilding {
     public synchronized boolean buyBuilding() {
         boolean result = super.buyBuilding();
         IPlayer player = PlayersHolder.getPlayer(mPlayerName);
-        boolean isClientSide = IPlayer.ControlType.isClientSide(player.getControlType());
+        boolean isClientSide = player.getControlType().isClientSide();
         //building was created
         if (isClientSide || result) {
             setIncome(mBuildingsAmount * mBuildingStaticObject.getIncome());
@@ -85,7 +85,7 @@ public class CreepBuilding extends Building implements ICreepBuilding {
         }
 
         IPlayer player = PlayersHolder.getPlayer(mPlayerName);
-        boolean isFakePlanet = IPlayer.ControlType.isClientSide(player.getControlType());
+        boolean isFakePlanet = player.getControlType().isClientSide();
         if (!isFakePlanet) {
             int cost = mCreepBuildingDummy.getCost(nextUpgrade);
             //check money

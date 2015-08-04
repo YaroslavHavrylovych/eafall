@@ -3,16 +3,16 @@ package com.gmail.yaroslavlancelot.eafall.game.scene.hud;
 import android.content.Context;
 
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
-import com.gmail.yaroslavlancelot.eafall.game.SharedDataCallbacks;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.gmail.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder;
-import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
+import com.gmail.yaroslavlancelot.eafall.game.configuration.mission.MissionConfig;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path.PathHelper;
+import com.gmail.yaroslavlancelot.eafall.game.events.SharedEvents;
+import com.gmail.yaroslavlancelot.eafall.game.events.periodic.time.GameTime;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
-import com.gmail.yaroslavlancelot.eafall.game.player.Player;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.popup.PopupManager;
 import com.gmail.yaroslavlancelot.eafall.game.popup.construction.ConstructionsPopupHud;
@@ -30,6 +30,7 @@ import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +45,7 @@ public class EaFallHud extends HUD {
     // Constants
     // ===========================================================
     private static final String TAG = EaFallHud.class.getCanonicalName();
+    private static final DecimalFormat TIME_FORMAT = new DecimalFormat("00");
 
     // ===========================================================
     // Fields
@@ -126,8 +128,8 @@ public class EaFallHud extends HUD {
                 "0", objectManager);
         gameValue.setImageOffset(5, 6);
         gameValue.attachToParent(this);
-        final String key = ((Player) player).OXYGEN_CHANGED_CALLBACK_KEY;
-        SharedDataCallbacks.addCallback(new SharedDataCallbacks.DataChangedCallback(key) {
+        final String key = player.getOxygenChangedKey();
+        SharedEvents.addCallback(new SharedEvents.DataChangedCallback(key) {
             @Override
             public void callback(String callbackKey, Object value) {
                 gameValue.setText(value.toString());
@@ -137,15 +139,16 @@ public class EaFallHud extends HUD {
     }
 
     private void initMovableUnitsLimit(IPlayer player, List<HudGameValue> list, float x,
-                                       VertexBufferObjectManager objectManager) {
-        final String textSuffix = "/" + Config.getConfig().getMovableUnitsLimit();
+                                       VertexBufferObjectManager objectManager,
+                                       int movableUnitsLimit) {
+        final String textSuffix = "/" + movableUnitsLimit;
         int id = list.size();
         final HudGameValue gameValue = new HudGameValue(id, x, StringConstants.FILE_SHUTTLE_HUD,
                 "0" + textSuffix, objectManager);
         gameValue.setImageOffset(0, 5);
         gameValue.attachToParent(this);
-        final String key = ((Player) player).MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY;
-        SharedDataCallbacks.addCallback(new SharedDataCallbacks.DataChangedCallback(key) {
+        final String key = player.getMovableUnitsAmountChangedKey();
+        SharedEvents.addCallback(new SharedEvents.DataChangedCallback(key) {
             @Override
             public void callback(String callbackKey, Object value) {
                 gameValue.setText(value.toString() + textSuffix);
@@ -164,7 +167,8 @@ public class EaFallHud extends HUD {
         SpriteGroupHolder.getGroup(BatchingKeys.PLAYER_HEALTH).attachChild(healthBarCarcassSprite);
     }
 
-    public void initHudElements(Camera camera, VertexBufferObjectManager vertexManager) {
+    public void initHudElements(Camera camera, VertexBufferObjectManager vertexManager,
+                                MissionConfig missionConfig) {
         LoggerHelper.methodInvocation(TAG, "initHudElements");
         SpriteGroupHolder.attachSpriteGroups(this, BatchingKeys.BatchTag.GAME_HUD.value());
         //health carcass
@@ -176,15 +180,48 @@ public class EaFallHud extends HUD {
             boolean left = PathHelper.isLeftSide(player.getPlanet().getSpawnPointX());
             List<HudGameValue> list = left ? mLeftPart : mRightPart;
             float xPos = left ? SizeConstants.HUD_VALUES_X_LEFT : SizeConstants.HUD_VALUES_X_RIGHT;
-            if (IPlayer.ControlType.isUserControlType(player.getControlType())) {
+            if (player.getControlType().isUserControlType()) {
                 initPopups(player, camera, vertexManager);
                 initOxygen(player, list, xPos, vertexManager);
-                initMovableUnitsLimit(player, list, xPos, vertexManager);
-                player.setMoney(5000);
+                initMovableUnitsLimit(player, list, xPos, vertexManager, missionConfig.getMovableUnitsLimit());
+                initTimer(list, xPos, vertexManager, missionConfig);
             } else {
-                initMovableUnitsLimit(player, list, xPos, vertexManager);
+                initMovableUnitsLimit(player, list, xPos, vertexManager, missionConfig.getMovableUnitsLimit());
             }
         }
+    }
+
+    /** inits time text on the screen (if timing enabled) */
+    private void initTimer(final List<HudGameValue> list, final float xPos,
+                           final VertexBufferObjectManager vertexManager,
+                           final MissionConfig missionConfig) {
+        if (!missionConfig.isTimerEnabled()) {
+            return;
+        }
+        int id = list.size();
+        final HudGameValue gameValue = new HudGameValue(id, xPos, StringConstants.FILE_CLOCK_HUD,
+                formatTime(missionConfig.getTime()), vertexManager);
+        gameValue.setImageOffset(0, 5);
+        gameValue.attachToParent(this);
+        String callbackKey = GameTime.GAME_TIMER_TICK_KEY;
+        SharedEvents.addCallback(new SharedEvents.DataChangedCallback(callbackKey) {
+            @Override
+            public void callback(final String key, final Object value) {
+                gameValue.setText(formatTime((Integer) value));
+            }
+        });
+    }
+
+    /**
+     * return formatted time from int value
+     * <br/>
+     * format:
+     * mm:ss
+     */
+    private String formatTime(int time) {
+        int min = time / 60;
+        int sec = time % 60;
+        return TIME_FORMAT.format(min) + ":" + TIME_FORMAT.format(sec);
     }
 
     // ===========================================================

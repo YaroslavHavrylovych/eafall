@@ -1,7 +1,8 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic;
 
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.gmail.yaroslavlancelot.eafall.game.configuration.Config;
+import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
+import com.gmail.yaroslavlancelot.eafall.game.configuration.game.ApplicationConfig;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IVelocityListener;
@@ -54,6 +55,11 @@ public class MovableUnit extends Unit {
         return mChanceToAvoidAnAttack;
     }
 
+    private boolean isHealthBarDefaultBehaviour() {
+        return EaFallApplication.getConfig().getUnitHealthBarBehavior() ==
+                ApplicationConfig.UnitHealthBarBehavior.DEFAULT;
+    }
+
     public void setVelocityChangedListener(IVelocityListener velocityChangedListener) {
         mVelocityChangedListener = velocityChangedListener;
     }
@@ -64,11 +70,20 @@ public class MovableUnit extends Unit {
     }
 
     @Override
-    protected void initHealthBar() {
-        if (Config.getConfig().getUnitHealthBarBehavior() != Config.UnitHealthBarBehavior.ALWAYS_HIDDEN) {
-            super.initHealthBar();
-            updateHealthBar();
-        }
+    protected void onNegativeHealth() {
+        removeBonuses();
+        super.onNegativeHealth();
+    }
+
+    @Override
+    public void registerUpdateHandler() {
+        //TODO no need to create object each time
+        registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new SimpleUnitTimerCallback()));
+    }
+
+    @Override
+    protected void rotationBeforeFire(GameObject attackedObject) {
+        rotate(MathUtils.radToDeg(getDirection(attackedObject.getX(), attackedObject.getY())));
     }
 
     @Override
@@ -89,8 +104,13 @@ public class MovableUnit extends Unit {
         }
     }
 
-    private boolean isHealthBarDefaultBehaviour() {
-        return Config.getConfig().getUnitHealthBarBehavior() == Config.UnitHealthBarBehavior.DEFAULT;
+    @Override
+    protected void initHealthBar() {
+        if (EaFallApplication.getConfig().getUnitHealthBarBehavior()
+                != ApplicationConfig.UnitHealthBarBehavior.ALWAYS_HIDDEN) {
+            super.initHealthBar();
+            updateHealthBar();
+        }
     }
 
     @Override
@@ -99,23 +119,6 @@ public class MovableUnit extends Unit {
         if (isHealthBarDefaultBehaviour()) {
             mLastHitTime = System.currentTimeMillis();
         }
-    }
-
-    @Override
-    protected void onNegativeHealth() {
-        removeBonuses();
-        super.onNegativeHealth();
-    }
-
-    @Override
-    public void registerUpdateHandler() {
-        //TODO no need to create object each time
-        registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new SimpleUnitTimerCallback()));
-    }
-
-    @Override
-    protected void rotationBeforeFire(GameObject attackedObject) {
-        rotate(MathUtils.radToDeg(getDirection(attackedObject.getX(), attackedObject.getY())));
     }
 
     @Override

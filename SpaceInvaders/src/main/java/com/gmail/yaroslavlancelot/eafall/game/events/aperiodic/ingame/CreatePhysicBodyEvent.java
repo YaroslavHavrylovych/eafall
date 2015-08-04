@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.eafall.game.eventbus;
+package com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame;
 
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;

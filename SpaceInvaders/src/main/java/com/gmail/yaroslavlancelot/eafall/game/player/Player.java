@@ -4,7 +4,6 @@ import android.util.SparseArray;
 
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
-import com.gmail.yaroslavlancelot.eafall.game.SharedDataCallbacks;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
 import com.gmail.yaroslavlancelot.eafall.game.entity.AfterInitializationPool;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
@@ -21,7 +20,8 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.Mov
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.pool.MovableUnitsPool;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.pool.StationaryUnitsPool;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.stationary.StationaryUnitBuilder;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.building.UpgradeBuildingEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.SharedEvents;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.UpgradeBuildingEvent;
 
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -42,12 +42,12 @@ import de.greenrobot.event.EventBus;
 public class Player implements IPlayer {
     private static final String TAG = Player.class.getCanonicalName();
     public final int INIT_MONEY_VALUE = 200;
-    /** used for {@link com.gmail.yaroslavlancelot.eafall.game.SharedDataCallbacks} */
-    public final String MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY;
-    /** used for {@link com.gmail.yaroslavlancelot.eafall.game.SharedDataCallbacks} */
-    public final String OXYGEN_CHANGED_CALLBACK_KEY;
     /** fixture def of the player (used for bullet creation) */
     protected final FixtureDef mPlayerFixtureDef;
+    /** used for {@link SharedEvents} */
+    private final String MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY;
+    /** used for {@link SharedEvents} */
+    private final String OXYGEN_CHANGED_CALLBACK_KEY;
     /** keep track about the units amount */
     private final AtomicInteger sUnitsAmount = new AtomicInteger(0);
     /** current player name */
@@ -57,12 +57,14 @@ public class Player implements IPlayer {
     private final AtomicBoolean mIsFirstIncome = new AtomicBoolean(true);
     /** object related to current player */
     private final List<GameObject> mPlayerObjects;
+    /** player maximum oxygen amount (can be varying depending on mission) */
+    private final int mMaxOxygenAmount;
     /** current player main planet */
     private volatile PlanetStaticObject mPlayerPlanet;
     /** player to fight with */
     private IPlayer mEnemyPlayer;
-    /** current player money amount */
-    private volatile int mMoneyAmount;
+    /** current player oxygen amount/value */
+    private volatile int mOxygenAmount;
     /** player color */
     private Color mPlayerColor = new Color(100, 100, 100);
     /** player control type */
@@ -74,16 +76,27 @@ public class Player implements IPlayer {
     /** units pools */
     private SparseArray<AfterInitializationPool<Unit>> mUnitsPools;
 
-    public Player(final String playerName, IAlliance alliance, ControlType playerType) {
+    public Player(final String playerName, IAlliance alliance, ControlType playerType, int maxOxygen) {
         mPlayerObjects = new ArrayList<GameObject>(200);
         mPlayerName = playerName;
         MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY = "UNIT_CREATED_" + playerName;
         OXYGEN_CHANGED_CALLBACK_KEY = "OXYGEN_CHANGED_" + playerName;
+        mMaxOxygenAmount = maxOxygen;
         mAlliance = alliance;
         initBuildingsTypes(alliance);
         mControlType = playerType;
         mPlayerFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f, false);
         EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public String getOxygenChangedKey() {
+        return OXYGEN_CHANGED_CALLBACK_KEY;
+    }
+
+    @Override
+    public String getMovableUnitsAmountChangedKey() {
+        return MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY;
     }
 
     public int getUnitsAmount() {
@@ -122,13 +135,13 @@ public class Player implements IPlayer {
 
     @Override
     public int getMoney() {
-        return mMoneyAmount;
+        return mOxygenAmount;
     }
 
     @Override
     public void setMoney(int money) {
-        mMoneyAmount = money;
-        SharedDataCallbacks.valueChanged(OXYGEN_CHANGED_CALLBACK_KEY, mMoneyAmount);
+        mOxygenAmount = money > mMaxOxygenAmount ? mMaxOxygenAmount : money;
+        SharedEvents.valueChanged(OXYGEN_CHANGED_CALLBACK_KEY, mOxygenAmount);
     }
 
     @Override
@@ -216,7 +229,7 @@ public class Player implements IPlayer {
             for (Bonus bonus : mUnitBonuses) {
                 ((MovableUnit) object).addBonus(bonus, Integer.MAX_VALUE);
             }
-            SharedDataCallbacks.valueChanged(MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY,
+            SharedEvents.valueChanged(MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY,
                     sUnitsAmount.incrementAndGet());
         }
     }
@@ -228,7 +241,7 @@ public class Player implements IPlayer {
             mPlayerObjects.remove(object);
         }
         if (object instanceof MovableUnit) {
-            SharedDataCallbacks.valueChanged(MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY,
+            SharedEvents.valueChanged(MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY,
                     sUnitsAmount.decrementAndGet());
         }
     }
@@ -240,7 +253,7 @@ public class Player implements IPlayer {
 
     @Override
     public void changeMoney(final int delta) {
-        setMoney(mMoneyAmount + delta);
+        setMoney(mOxygenAmount + delta);
     }
 
     @Override

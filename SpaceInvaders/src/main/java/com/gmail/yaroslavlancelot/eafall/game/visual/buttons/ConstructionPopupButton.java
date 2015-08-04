@@ -5,8 +5,8 @@ import android.content.Context;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.path.HideUnitPathChooser;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.path.ShowUnitPathChooser;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.path.HideUnitPathChooser;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.path.ShowUnitPathChooser;
 
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.opengl.texture.TextureManager;

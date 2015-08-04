@@ -3,7 +3,7 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.StaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.health.IHealthBar;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.building.BuildingsAmountChangedEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.BuildingsAmountChangedEvent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
@@ -75,7 +75,7 @@ public abstract class Building implements IBuilding {
             return false;
         }
         IPlayer player = PlayersHolder.getPlayer(mPlayerName);
-        if (!IPlayer.ControlType.isClientSide(player.getControlType())) {
+        if (!player.getControlType().isClientSide()) {
             int cost = mDummy.getCost(mUpgrade);
             if (player.getMoney() < cost) {
                 return false;

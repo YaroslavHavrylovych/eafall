@@ -2,8 +2,8 @@ package com.gmail.yaroslavlancelot.eafall.game.entity;
 
 import android.content.Context;
 
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.AttachSpriteEvent;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.DetachSpriteEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.AttachSpriteEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.DetachSpriteEvent;
 
 import org.andengine.entity.IEntity;
 import org.andengine.entity.sprite.Sprite;
