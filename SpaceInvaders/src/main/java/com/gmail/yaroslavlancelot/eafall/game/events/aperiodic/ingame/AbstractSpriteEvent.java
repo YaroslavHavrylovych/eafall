@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.eafall.game.eventbus;
+package com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame;
 
 import com.gmail.yaroslavlancelot.eafall.game.entity.BatchedSprite;
 

@@ -184,12 +184,15 @@ public abstract class EaFallActivity extends BaseGameActivity {
     protected abstract void onPopulateWorkingScene(EaFallScene scene);
 
     /** Hide splash scene and shows working scene */
-    public void hideSplash() {
+    protected void hideSplash() {
         mSceneManager.hideSplash();
         mSceneManager.clearSplashScene();
         mResourcesLoader.unloadSplashImages();
         if (mBackgroundMusic != null) {
             mBackgroundMusic.playBackgroundMusic();
         }
+        onShowWorkingScene();
     }
+
+    protected abstract void onShowWorkingScene();
 }

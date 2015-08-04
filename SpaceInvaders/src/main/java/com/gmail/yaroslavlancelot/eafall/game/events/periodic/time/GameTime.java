@@ -1,7 +1,7 @@
-package com.gmail.yaroslavlancelot.eafall.game.periodic.time;
+package com.gmail.yaroslavlancelot.eafall.game.events.periodic.time;
 
-import com.gmail.yaroslavlancelot.eafall.game.SharedDataCallbacks;
-import com.gmail.yaroslavlancelot.eafall.game.periodic.Periodic;
+import com.gmail.yaroslavlancelot.eafall.game.events.SharedEvents;
+import com.gmail.yaroslavlancelot.eafall.game.events.periodic.Periodic;
 
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.handler.timer.ITimerCallback;
@@ -14,7 +14,8 @@ public class GameTime implements Periodic {
     // ===========================================================
     // Constants
     // ===========================================================
-    public static final String GAME_TIME_KEY = "game_time";
+    public static final String GAME_TIMER_TICK_KEY = "game_timer_tick";
+    public static final String GAME_TIME_OVER_KEY = "game_time_over";
     private static final int UPDATE_TIME_IN_SECONDS = 1;
 
     // ===========================================================
@@ -63,9 +64,10 @@ public class GameTime implements Periodic {
             if (mCurrentTime <= 0) {
                 mTimerHandler.setTimerCallbackTriggered(true);
                 mTimerHandler.setAutoReset(false);
+                SharedEvents.valueChanged(GAME_TIME_OVER_KEY, true);
                 return;
             }
-            SharedDataCallbacks.valueChanged(GAME_TIME_KEY, --mCurrentTime);
+            SharedEvents.valueChanged(GAME_TIMER_TICK_KEY, --mCurrentTime);
         }
     }
 }

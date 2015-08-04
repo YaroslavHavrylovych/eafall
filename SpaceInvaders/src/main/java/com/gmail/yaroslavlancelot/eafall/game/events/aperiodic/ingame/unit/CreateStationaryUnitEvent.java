@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.eafall.game.eventbus.unit;
+package com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.unit;
 
 /** holds data need for unit creation */
 public class CreateStationaryUnitEvent {

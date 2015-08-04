@@ -15,7 +15,6 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.health.UnitHealthBar;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.popup.PopupManager;
-import com.gmail.yaroslavlancelot.eafall.game.popup.description.DescriptionPopupHud;
 import com.gmail.yaroslavlancelot.eafall.game.scene.hud.EaFallHud;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.MenuPopupButton;
 
@@ -72,7 +71,7 @@ public class ClientResourcesLoader extends BaseResourceLoader {
     @Override
     public void loadFonts(TextureManager textureManager, FontManager fontManager) {
         EaFallHud.loadFonts(fontManager, textureManager);
-        DescriptionPopupHud.loadFonts(fontManager, textureManager);
+        PopupManager.loadFonts(fontManager, textureManager);
     }
 
     @Override

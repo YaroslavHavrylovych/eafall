@@ -35,19 +35,25 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.Mov
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path.PathHelper;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.filtering.EnemiesFilterFactory;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.stationary.StationaryUnit;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.AbstractSpriteEvent;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.AttachSpriteEvent;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.CreatePhysicBodyEvent;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.DetachSpriteEvent;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.building.CreateBuildingEvent;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.unit.CreateMovableUnitEvent;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.unit.CreateStationaryUnitEvent;
-import com.gmail.yaroslavlancelot.eafall.game.periodic.Periodic;
-import com.gmail.yaroslavlancelot.eafall.game.periodic.time.GameTime;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.endgame.GameEndedEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.AbstractSpriteEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.AttachSpriteEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.CreatePhysicBodyEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.DetachSpriteEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.CreateBuildingEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.unit.CreateMovableUnitEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.unit.CreateStationaryUnitEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.periodic.Periodic;
+import com.gmail.yaroslavlancelot.eafall.game.events.periodic.time.GameTime;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.Player;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
+import com.gmail.yaroslavlancelot.eafall.game.popup.IPopup;
+import com.gmail.yaroslavlancelot.eafall.game.popup.PopupManager;
+import com.gmail.yaroslavlancelot.eafall.game.popup.information.GameOverPopup;
 import com.gmail.yaroslavlancelot.eafall.game.resources.loaders.ClientResourcesLoader;
+import com.gmail.yaroslavlancelot.eafall.game.rule.IRuler;
+import com.gmail.yaroslavlancelot.eafall.game.rule.RulesFactory;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 
 import org.andengine.engine.options.EngineOptions;
@@ -86,6 +92,8 @@ public abstract class ClientGameActivity extends EaFallActivity {
     protected MissionConfig mMissionConfig;
     /** game cycles (e.g. money increase, timer etc) */
     protected List<Periodic> mGamePeriodic = new ArrayList<Periodic>(2);
+    /** */
+    protected IRuler mRuler;
 
     @Override
     public EngineOptions onCreateEngineOptions() {
@@ -147,10 +155,23 @@ public abstract class ClientGameActivity extends EaFallActivity {
         }
     }
 
-    public void hideSplash() {
+    protected void hideSplash() {
         initThickClient();
         super.hideSplash();
+    }
+
+    @Override
+    protected void onShowWorkingScene() {
+        startRuler();
         startPeriodic();
+    }
+
+    protected void startRuler() {
+        mRuler = RulesFactory.createRuler(
+                mMissionConfig.getMissionType(),
+                mMissionConfig.getValue(),
+                mMissionConfig.isTimerEnabled());
+        mRuler.startTracking();
     }
 
     protected void startPeriodic() {
@@ -198,8 +219,7 @@ public abstract class ClientGameActivity extends EaFallActivity {
     }
 
     protected void initPlayerFixtureDef(IPlayer player) {
-        IPlayer.ControlType type = player.getControlType();
-        boolean isRemote = IPlayer.ControlType.isClientSide(type);
+        boolean isRemote = player.getControlType().isClientSide();
         if (player.getName().equals(StringConstants.FIRST_PLAYER_CONTROL_BEHAVIOUR_TYPE)) {
             if (isRemote)
                 player.changeFixtureDefFilter(CollisionCategories.CATEGORY_PLAYER1, CollisionCategories.MASKBITS_PLAYER1_THIN);
@@ -406,6 +426,23 @@ public abstract class ClientGameActivity extends EaFallActivity {
     /** attach entity to game scene */
     private void attachSprite(final BatchedSprite batchedSprite) {
         attachSprite(batchedSprite, SpriteGroupHolder.getGroup(batchedSprite.getSpriteGroupName()));
+    }
+
+    @SuppressWarnings("unused")
+    public void onEvent(final GameEndedEvent gameEndedEvent) {
+        IPopup popup = PopupManager.getPopup(GameOverPopup.KEY);
+        ((GameOverPopup) popup).setSuccess(gameEndedEvent.isSuccess());
+        popup.setStateChangingListener(new IPopup.StateChangingListener() {
+            @Override
+            public void onShowed() {
+            }
+
+            @Override
+            public void onHided() {
+                ClientGameActivity.this.finish();
+            }
+        });
+        popup.showPopup();
     }
 
     @SuppressWarnings("unused")

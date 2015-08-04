@@ -1,7 +1,7 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners;
 
 import com.gmail.yaroslavlancelot.eafall.game.entity.BodiedSprite;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.DetachSpriteEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.DetachSpriteEvent;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 

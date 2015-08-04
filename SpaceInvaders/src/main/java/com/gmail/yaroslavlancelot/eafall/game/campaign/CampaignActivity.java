@@ -139,6 +139,10 @@ public class CampaignActivity extends EaFallActivity {
         select(elementsList.get(0));
     }
 
+    @Override
+    protected void onShowWorkingScene() {
+    }
+
     private void initStartButton() {
         mStartButton = new TextButton(getVertexBufferObjectManager(),
                 SizeConstants.CAMPAIGN_START_BUTTON_WIDTH, SizeConstants.CAMPAIGN_START_BUTTON_HEIGHT,

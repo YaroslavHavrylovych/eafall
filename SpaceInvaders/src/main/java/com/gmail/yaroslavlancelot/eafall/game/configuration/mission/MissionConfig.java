@@ -14,6 +14,8 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
     // ===========================================================
     // Constants
     // ===========================================================
+    public static final int NO_VALUE = -1;
+
     public static final Creator<MissionConfig> CREATOR = new Creator<MissionConfig>() {
         @Override
         public MissionConfig createFromParcel(Parcel in) {
@@ -25,8 +27,6 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
             return new MissionConfig[size];
         }
     };
-
-    private static final int NO_VALUE = -1;
 
     // ===========================================================
     // Fields
@@ -56,6 +56,7 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
         mPlanetHealth = in.readInt();
         mMaxOxygenAmount = in.readInt();
         mValue = in.readInt();
+        mMissionType = (MissionType) in.readSerializable();
     }
 
     // ===========================================================
@@ -81,11 +82,11 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
         return mTime;
     }
 
-    private int getValue() {
+    public int getValue() {
         return mValue;
     }
 
-    private MissionType getMissionType() {
+    public MissionType getMissionType() {
         return mMissionType;
     }
 
@@ -109,6 +110,7 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
         dest.writeInt(mPlanetHealth);
         dest.writeInt(mMaxOxygenAmount);
         dest.writeInt(mValue);
+        dest.writeSerializable(mMissionType);
     }
 
     // ===========================================================

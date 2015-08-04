@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.eafall.game.periodic;
+package com.gmail.yaroslavlancelot.eafall.game.events.periodic;
 
 import org.andengine.engine.handler.IUpdateHandler;
 

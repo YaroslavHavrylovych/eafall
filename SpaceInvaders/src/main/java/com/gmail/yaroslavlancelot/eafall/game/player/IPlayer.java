@@ -19,6 +19,10 @@ import java.util.List;
  * @author Yaroslav Havrylovych
  */
 public interface IPlayer {
+    String getOxygenChangedKey();
+
+    String getMovableUnitsAmountChangedKey();
+
     /** return current player units amount */
     int getUnitsAmount();
 
@@ -147,15 +151,17 @@ public interface IPlayer {
         REMOTE_CONTROL_ON_CLIENT_SIDE;
 
         /** returns true if type parameter is player type controlled by user (remote or local) */
-        public static boolean isUserControlType(ControlType type) {
-            return type == ControlType.USER_CONTROL_ON_SERVER_SIDE || type == ControlType.USER_CONTROL_ON_CLIENT_SIDE;
+        public boolean isUserControlType() {
+            return this == ControlType.USER_CONTROL_ON_SERVER_SIDE
+                    || this == ControlType.USER_CONTROL_ON_CLIENT_SIDE;
         }
 
 
         /** return true if type parameter corresponding to client side */
-        public static boolean isClientSide(ControlType type) {
+        public boolean isClientSide() {
             //TODO check this when you will check the multiplayer
-            return type == ControlType.REMOTE_CONTROL_ON_CLIENT_SIDE || type == ControlType.USER_CONTROL_ON_CLIENT_SIDE;
+            return this == ControlType.REMOTE_CONTROL_ON_CLIENT_SIDE
+                    || this == ControlType.USER_CONTROL_ON_CLIENT_SIDE;
         }
     }
 }

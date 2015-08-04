@@ -5,7 +5,7 @@ import com.gmail.yaroslavlancelot.eafall.game.client.ClientGameActivity;
 import com.gmail.yaroslavlancelot.eafall.game.constant.CollisionCategories;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.ContactListener;
-import com.gmail.yaroslavlancelot.eafall.game.periodic.money.MoneyUpdateCycle;
+import com.gmail.yaroslavlancelot.eafall.game.events.periodic.money.MoneyUpdateCycle;
 
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 

@@ -29,6 +29,7 @@ public class MissionIntent extends StartableIntent {
     // ===========================================================
     public MissionIntent(Class activityClass) {
         super(EaFallApplication.getContext(), activityClass);
+        putExtra(ResourceFactory.RESOURCE_LOADER, ResourceFactory.TypeResourceLoader.CLIENT);
     }
 
     /**
@@ -38,7 +39,6 @@ public class MissionIntent extends StartableIntent {
      */
     public MissionIntent(MissionDataLoader missionData) {
         this(SinglePlayerGameActivity.class);
-        putExtra(ResourceFactory.RESOURCE_LOADER, ResourceFactory.TypeResourceLoader.CLIENT);
         putExtra(StringConstants.FIRST_PLAYER_CONTROL_BEHAVIOUR_TYPE,
                 IPlayer.ControlType.USER_CONTROL_ON_SERVER_SIDE.toString());
         putExtra(StringConstants.FIRST_PLAYER_ALLIANCE,

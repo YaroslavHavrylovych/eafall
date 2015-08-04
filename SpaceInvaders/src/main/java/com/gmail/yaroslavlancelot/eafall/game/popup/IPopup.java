@@ -4,6 +4,12 @@ import org.andengine.engine.camera.Camera;
 
 /** simplified popup interface */
 public interface IPopup {
+    boolean isShowing();
+
+    void setCamera(final Camera pCamera);
+
+    void setStateChangingListener(StateChangingListener stateChangingListener);
+
     void hidePopup();
 
     void showPopup();
@@ -11,7 +17,9 @@ public interface IPopup {
     /** change popup state. Change or hide based on current showing status */
     void triggerPopup();
 
-    boolean isShowing();
+    interface StateChangingListener {
+        void onShowed();
 
-    void setCamera(final Camera pCamera);
+        void onHided();
+    }
 }

@@ -1,6 +1,6 @@
-package com.gmail.yaroslavlancelot.eafall.game.periodic.money;
+package com.gmail.yaroslavlancelot.eafall.game.events.periodic.money;
 
-import com.gmail.yaroslavlancelot.eafall.game.periodic.Periodic;
+import com.gmail.yaroslavlancelot.eafall.game.events.periodic.Periodic;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 

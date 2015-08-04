@@ -165,7 +165,6 @@
     <string name="description_unique">Unique :</string>
     <string name="description_attack">A</string>
     <string name="description_defence">D</string>
-
     <!-- /description popup -->
 
     <!-- descriptions -->
@@ -182,6 +181,12 @@
     <string name="campaign_guide_start">Start</string>
     <string name="campaign_guide_enter">Enter</string>
     <!-- /guide campaign -->
-
     <!-- /campaign -->
+
+    <!-- mission -->
+    <!-- results -->
+    <string name="win">You win!</string>
+    <string name="lose">You lose!</string>
+    <!-- /results -->
+    <!-- /mission -->
 </resources>

@@ -2,7 +2,6 @@ package com.gmail.yaroslavlancelot.eafall.game.client.thick.server;
 
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
-import com.gmail.yaroslavlancelot.eafall.game.SharedDataCallbacks;
 import com.gmail.yaroslavlancelot.eafall.game.client.thick.ThickClientGameActivity;
 import com.gmail.yaroslavlancelot.eafall.game.entity.ContactListener;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
@@ -13,8 +12,8 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IVeloc
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.MovableUnit;
+import com.gmail.yaroslavlancelot.eafall.game.events.SharedEvents;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
-import com.gmail.yaroslavlancelot.eafall.game.player.Player;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.network.server.GameSocketServer;
 import com.gmail.yaroslavlancelot.eafall.network.server.callbacks.InGameServer;
@@ -151,8 +150,8 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
 
     private void initMoney() {
         for (final IPlayer player : PlayersHolder.getInstance().getElements()) {
-            final String key = ((Player) player).OXYGEN_CHANGED_CALLBACK_KEY;
-            SharedDataCallbacks.addCallback(new SharedDataCallbacks.DataChangedCallback(key) {
+            final String key = player.getOxygenChangedKey();
+            SharedEvents.addCallback(new SharedEvents.DataChangedCallback(key) {
                 @Override
                 public void callback(String callbackKey, Object value) {
                     mGameSocketServer.sendBroadcastServerMessage(0, new MoneyChangedServerMessage(

@@ -3,7 +3,6 @@ package com.gmail.yaroslavlancelot.eafall.game.scene.hud;
 import android.content.Context;
 
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
-import com.gmail.yaroslavlancelot.eafall.game.SharedDataCallbacks;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.gmail.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.mission.MissionConfig;
@@ -11,9 +10,9 @@ import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path.PathHelper;
-import com.gmail.yaroslavlancelot.eafall.game.periodic.time.GameTime;
+import com.gmail.yaroslavlancelot.eafall.game.events.SharedEvents;
+import com.gmail.yaroslavlancelot.eafall.game.events.periodic.time.GameTime;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
-import com.gmail.yaroslavlancelot.eafall.game.player.Player;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.popup.PopupManager;
 import com.gmail.yaroslavlancelot.eafall.game.popup.construction.ConstructionsPopupHud;
@@ -129,8 +128,8 @@ public class EaFallHud extends HUD {
                 "0", objectManager);
         gameValue.setImageOffset(5, 6);
         gameValue.attachToParent(this);
-        final String key = ((Player) player).OXYGEN_CHANGED_CALLBACK_KEY;
-        SharedDataCallbacks.addCallback(new SharedDataCallbacks.DataChangedCallback(key) {
+        final String key = player.getOxygenChangedKey();
+        SharedEvents.addCallback(new SharedEvents.DataChangedCallback(key) {
             @Override
             public void callback(String callbackKey, Object value) {
                 gameValue.setText(value.toString());
@@ -148,8 +147,8 @@ public class EaFallHud extends HUD {
                 "0" + textSuffix, objectManager);
         gameValue.setImageOffset(0, 5);
         gameValue.attachToParent(this);
-        final String key = ((Player) player).MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY;
-        SharedDataCallbacks.addCallback(new SharedDataCallbacks.DataChangedCallback(key) {
+        final String key = player.getMovableUnitsAmountChangedKey();
+        SharedEvents.addCallback(new SharedEvents.DataChangedCallback(key) {
             @Override
             public void callback(String callbackKey, Object value) {
                 gameValue.setText(value.toString() + textSuffix);
@@ -181,7 +180,7 @@ public class EaFallHud extends HUD {
             boolean left = PathHelper.isLeftSide(player.getPlanet().getSpawnPointX());
             List<HudGameValue> list = left ? mLeftPart : mRightPart;
             float xPos = left ? SizeConstants.HUD_VALUES_X_LEFT : SizeConstants.HUD_VALUES_X_RIGHT;
-            if (IPlayer.ControlType.isUserControlType(player.getControlType())) {
+            if (player.getControlType().isUserControlType()) {
                 initPopups(player, camera, vertexManager);
                 initOxygen(player, list, xPos, vertexManager);
                 initMovableUnitsLimit(player, list, xPos, vertexManager, missionConfig.getMovableUnitsLimit());
@@ -203,8 +202,8 @@ public class EaFallHud extends HUD {
                 "time", vertexManager);
         gameValue.setImageOffset(0, 5);
         gameValue.attachToParent(this);
-        String callbackKey = GameTime.GAME_TIME_KEY;
-        SharedDataCallbacks.addCallback(new SharedDataCallbacks.DataChangedCallback(callbackKey) {
+        String callbackKey = GameTime.GAME_TIMER_TICK_KEY;
+        SharedEvents.addCallback(new SharedEvents.DataChangedCallback(callbackKey) {
             @Override
             public void callback(final String key, final Object value) {
                 gameValue.setText(formatTime((Integer) value));

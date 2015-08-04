@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.eafall.game;
+package com.gmail.yaroslavlancelot.eafall.game.events;
 
 import com.gmail.yaroslavlancelot.eafall.general.SelfCleanable;
 
@@ -9,18 +9,18 @@ import java.util.List;
 
 /**
  * Contains callback (which added and removed manually) which triggered by key from
- * {@link SharedDataCallbacks#valueChanged(String, Object)}. So if you subscribe to
+ * {@link SharedEvents#valueChanged(String, Object)}. So if you subscribe to
  * get notification about some data changes (by given key) then each call of
- * {@link SharedDataCallbacks#valueChanged(String, Object)} method with your key
+ * {@link SharedEvents#valueChanged(String, Object)} method with your key
  * will trigger the callback.
  *
  * @author Yaroslav Havrylovych
  */
-public class SharedDataCallbacks extends SelfCleanable {
-    private static final SharedDataCallbacks SHARED_DATA_CALLBACKS = new SharedDataCallbacks();
+public class SharedEvents extends SelfCleanable {
+    private static final SharedEvents SHARED_DATA_CALLBACKS = new SharedEvents();
     private final List<DataChangedCallback> mCallbacks = new ArrayList<DataChangedCallback>(5);
 
-    public static SharedDataCallbacks getInstance() {
+    public static SharedEvents getInstance() {
         return SHARED_DATA_CALLBACKS;
     }
 
@@ -34,9 +34,9 @@ public class SharedDataCallbacks extends SelfCleanable {
     }
 
     public synchronized static void valueChanged(String key, Object value) {
-        SharedDataCallbacks sharedDataCallbacks = getInstance();
-        synchronized (sharedDataCallbacks.mCallbacks) {
-            for (DataChangedCallback callback : sharedDataCallbacks.mCallbacks) {
+        SharedEvents sharedEvents = getInstance();
+        synchronized (sharedEvents.mCallbacks) {
+            for (DataChangedCallback callback : sharedEvents.mCallbacks) {
                 if (callback.mKey.equals(key)) {
                     callback.callback(key, value);
                 }

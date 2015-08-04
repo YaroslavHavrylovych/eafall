@@ -4,7 +4,7 @@ import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.gmail.yaroslavlancelot.eafall.game.entity.BatchedSprite;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage;
-import com.gmail.yaroslavlancelot.eafall.game.eventbus.AttachSpriteEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.AttachSpriteEvent;
 
 import org.andengine.entity.modifier.MoveModifier;
 import org.andengine.opengl.texture.region.ITextureRegion;
