@@ -3,7 +3,7 @@ package com.gmail.yaroslavlancelot.eafall.general.locale;
 import android.content.Context;
 
 public class LocaleImpl implements Locale {
-    private static volatile Locale sInstance;
+    private static Locale sInstance;
     private final Context mContext;
 
     private LocaleImpl(final Context context) {

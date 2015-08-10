@@ -48,7 +48,7 @@ public class SceneManager {
      *
      * @return instance of EaFallScene, if not created yet - got null;
      */
-    public synchronized EaFallScene getWorkingScene() {
+    public EaFallScene getWorkingScene() {
         return mWorkingScene;
     }
 
@@ -123,7 +123,7 @@ public class SceneManager {
      *
      * @return instance of SplashScene
      */
-    public synchronized EaFallScene initWorkingScene(EaFallCamera camera, boolean parallax) {
+    public EaFallScene initWorkingScene(EaFallCamera camera, boolean parallax) {
         mWorkingScene = new EaFallScene(parallax);
         mWorkingScene.initGameSceneHandler(camera);
         return mWorkingScene;
@@ -133,7 +133,7 @@ public class SceneManager {
      * just invocation of {@link SceneManager#initWorkingScene(EaFallCamera, boolean)}
      * with true as boolean param
      */
-    public synchronized EaFallScene initWorkingScene(EaFallCamera camera) {
+    public EaFallScene initWorkingScene(EaFallCamera camera) {
         return this.initWorkingScene(camera, true);
     }
 

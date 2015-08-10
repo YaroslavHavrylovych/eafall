@@ -29,7 +29,7 @@ public class CreepBuilding extends Building implements ICreepBuilding {
     }
 
     @Override
-    public synchronized boolean buyBuilding() {
+    public boolean buyBuilding() {
         boolean result = super.buyBuilding();
         IPlayer player = PlayersHolder.getPlayer(mPlayerName);
         boolean isClientSide = player.getControlType().isClientSide();
@@ -74,7 +74,7 @@ public class CreepBuilding extends Building implements ICreepBuilding {
     }
 
     @Override
-    public synchronized boolean upgradeBuilding() {
+    public boolean upgradeBuilding() {
         //check upgrade for existence and buildings amount
         int nextUpgrade = mUpgrade + 1;
         if (nextUpgrade >= mCreepBuildingDummy.getUpgrades()) {

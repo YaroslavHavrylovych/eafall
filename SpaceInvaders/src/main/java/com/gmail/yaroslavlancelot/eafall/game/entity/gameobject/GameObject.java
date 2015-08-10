@@ -116,7 +116,7 @@ public abstract class GameObject extends BodiedSprite {
         if (mGameObjectHealthChangedListener != null) {
             mGameObjectHealthChangedListener.gameObjectHealthChanged(mUniqueId, mObjectCurrentHealth);
         }
-        if (mObjectCurrentHealth < 0) {
+        if (mObjectCurrentHealth <= 0) {
             onNegativeHealth();
             if (mObjectDestroyedListener != null) {
                 for (IDestroyListener listener : mObjectDestroyedListener) {
@@ -125,12 +125,6 @@ public abstract class GameObject extends BodiedSprite {
             }
         } else {
             updateHealthBar();
-        }
-    }
-
-    protected void updateHealthBar() {
-        if (mHealthBar != null) {
-            mHealthBar.redrawHealthBar(mObjectMaximumHealth, mObjectCurrentHealth);
         }
     }
 
@@ -161,6 +155,12 @@ public abstract class GameObject extends BodiedSprite {
 
         if (startX > x) return newAngle + 3 * MathConstants.PI / 2;
         return MathConstants.PI / 2 - newAngle;
+    }
+
+    protected void updateHealthBar() {
+        if (mHealthBar != null) {
+            mHealthBar.redrawHealthBar(mObjectMaximumHealth, mObjectCurrentHealth);
+        }
     }
 
     public void initHealth(int objectMaximumHealth) {
@@ -200,7 +200,7 @@ public abstract class GameObject extends BodiedSprite {
     }
 
     public void damageObject(final Damage damage) {
-        if (mObjectCurrentHealth != sInvincibleObjectKey) {
+        if (mObjectCurrentHealth != sInvincibleObjectKey && mObjectCurrentHealth > 0) {
             setHealth(mObjectCurrentHealth - mObjectArmor.getDamage(damage));
         }
     }

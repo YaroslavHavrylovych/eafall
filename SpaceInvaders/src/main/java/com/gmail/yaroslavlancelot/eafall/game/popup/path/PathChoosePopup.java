@@ -81,7 +81,7 @@ public class PathChoosePopup extends PopupHud {
     }
 
     @Override
-    public synchronized void hidePopup() {
+    public void hidePopup() {
         ((ICreepBuilding) PlayersHolder.getPlayer(mPlayerName).getPlanet().getBuilding(mBuildingId))
                 .setPath(mTopCircle.isActive());
         super.hidePopup();
@@ -105,7 +105,7 @@ public class PathChoosePopup extends PopupHud {
         }
 
         /** it's static and synchronized to sync all click between mult buttons */
-        private synchronized static void swapStates(CirclePointButton button1, CirclePointButton button2) {
+        private static void swapStates(CirclePointButton button1, CirclePointButton button2) {
             button1.setActive();
             button2.setDeactivated();
         }

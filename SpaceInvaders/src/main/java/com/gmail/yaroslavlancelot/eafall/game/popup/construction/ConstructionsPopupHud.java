@@ -59,7 +59,7 @@ public class ConstructionsPopupHud extends PopupHud {
     }
 
     @Override
-    public synchronized void showPopup() {
+    public void showPopup() {
         syncBuildingsWithPlayer(mPlayerName);
         super.showPopup();
     }

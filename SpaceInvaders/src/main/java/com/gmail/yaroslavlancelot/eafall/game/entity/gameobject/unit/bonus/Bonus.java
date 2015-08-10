@@ -31,7 +31,7 @@ public class Bonus extends SelfCleanable {
     }
 
     /** create new or reuse existing one bonus */
-    public synchronized static Bonus getBonus(int value, BonusType bonusType, boolean imposed) {
+    public static Bonus getBonus(int value, BonusType bonusType, boolean imposed) {
         if (mBonuses == null) {
             mBonuses = new WeakHashMap<String, Bonus>(20);
         }
@@ -89,7 +89,7 @@ public class Bonus extends SelfCleanable {
     }
 
     @Override
-    public synchronized void clear() {
+    public void clear() {
         mBonuses.clear();
     }
 

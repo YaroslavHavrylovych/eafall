@@ -371,7 +371,7 @@ public abstract class ClientGameActivity extends EaFallActivity {
 
     @SuppressWarnings("unused")
     /** really used by {@link de.greenrobot.event.EventBus} */
-    public synchronized void onEvent(final CreateMovableUnitEvent unitEvent) {
+    public void onEvent(final CreateMovableUnitEvent unitEvent) {
         final IPlayer player = PlayersHolder.getInstance().getElement(unitEvent.getPlayerName());
         //check units amount limit
         if (player.getUnitsAmount() >= mMissionConfig.getMovableUnitsLimit()) {

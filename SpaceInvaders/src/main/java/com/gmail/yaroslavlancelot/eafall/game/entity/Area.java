@@ -19,7 +19,7 @@ public class Area {
     }
 
     /** trying to reuse existing area. If there is no such areas - creates new */
-    public synchronized static Area getArea(float left, float top, float width, float height) {
+    public static Area getArea(float left, float top, float width, float height) {
         String key = "" + left + top + width + height;
         Area value;
         value = sHolder.get(key);

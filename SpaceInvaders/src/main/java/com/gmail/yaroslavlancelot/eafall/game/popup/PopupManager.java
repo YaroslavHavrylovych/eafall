@@ -95,7 +95,7 @@ public class PopupManager {
         }
 
         @Override
-        public synchronized void onShowed() {
+        public void onShowed() {
             mPopupsForShow.clear();
             for (String key : mPopups.keySet()) {
                 if (key.equals(mPopupKey)) {
@@ -110,7 +110,7 @@ public class PopupManager {
         }
 
         @Override
-        public synchronized void onHided() {
+        public void onHided() {
             for (String key : mPopupsForShow) {
                 mPopups.get(key).showPopup();
             }

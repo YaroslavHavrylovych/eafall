@@ -46,7 +46,7 @@ public abstract class PopupHud extends HUD implements IPopup {
      * all touch areas for mPopupRectangle
      */
     @Override
-    public synchronized void hidePopup() {
+    public void hidePopup() {
         if (!mIsPopupShowing) {
             return;
         }
@@ -69,7 +69,7 @@ public abstract class PopupHud extends HUD implements IPopup {
      * all elements for mPopupRectangle
      */
     @Override
-    public synchronized void showPopup() {
+    public void showPopup() {
         if (mIsPopupShowing) {
             return;
         }
@@ -89,7 +89,7 @@ public abstract class PopupHud extends HUD implements IPopup {
 
     /** will showPopup or hidePopup popup depending on current state */
     @Override
-    public synchronized void triggerPopup() {
+    public void triggerPopup() {
         LoggerHelper.printDebugMessage(TAG, "showPopup popup = " + !mIsPopupShowing);
         if (mIsPopupShowing) {
             hidePopup();

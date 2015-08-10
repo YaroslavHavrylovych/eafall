@@ -51,7 +51,7 @@ abstract class BaseResourceLoader implements IResourcesLoader {
     }
 
     @Override
-    public synchronized void loadProfilingFonts(TextureManager textureManager, FontManager fontManager) {
+    public void loadProfilingFonts(TextureManager textureManager, FontManager fontManager) {
         IFont font = FontFactory.create(fontManager, textureManager, 256, 256,
                 Typeface.create(Typeface.DEFAULT, Typeface.BOLD), SizeConstants.MONEY_FONT_SIZE, Color.WHITE.hashCode());
         font.load();
@@ -59,13 +59,13 @@ abstract class BaseResourceLoader implements IResourcesLoader {
     }
 
     @Override
-    public synchronized void loadSplashImages(TextureManager textureManager,
+    public void loadSplashImages(TextureManager textureManager,
                                               VertexBufferObjectManager vertexBufferObjectManager) {
         SplashScene.loadResources(EaFallApplication.getContext(), textureManager);
     }
 
     @Override
-    public synchronized void unloadSplashImages() {
+    public void unloadSplashImages() {
         SplashScene.unloadResources();
     }
 
