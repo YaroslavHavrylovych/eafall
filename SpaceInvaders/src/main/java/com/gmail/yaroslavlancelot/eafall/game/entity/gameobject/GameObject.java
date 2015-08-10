@@ -77,8 +77,7 @@ public abstract class GameObject extends BodiedSprite {
     }
 
     public boolean isObjectAlive() {
-        return (mObjectCurrentHealth > 0 || mObjectCurrentHealth == sInvincibleObjectKey)
-                && mPhysicBody != null;
+        return checkHealth(mObjectCurrentHealth) && mPhysicBody != null;
     }
 
     public Armor getObjectArmor() {
@@ -114,9 +113,9 @@ public abstract class GameObject extends BodiedSprite {
     public void setHealth(int objectHealth) {
         mObjectCurrentHealth = objectHealth;
         if (mGameObjectHealthChangedListener != null) {
-            mGameObjectHealthChangedListener.gameObjectHealthChanged(mUniqueId, mObjectCurrentHealth);
+            mGameObjectHealthChangedListener.gameObjectHealthChanged(mUniqueId, objectHealth);
         }
-        if (mObjectCurrentHealth <= 0) {
+        if (!checkHealth(objectHealth)) {
             onNegativeHealth();
             if (mObjectDestroyedListener != null) {
                 for (IDestroyListener listener : mObjectDestroyedListener) {
@@ -132,6 +131,19 @@ public abstract class GameObject extends BodiedSprite {
     public void setPosition(float pX, float pY) {
         super.setPosition(pX, pY);
         updateHealthBarPosition();
+    }
+
+    /**
+     * Check vitality based on health
+     *
+     * @param health given health value
+     * @return true if health value more or equal zero or if health value is the key of
+     * undestroyable object.
+     * <br/>
+     * returns false if health value negative and health value is not the value of undestroyable object
+     */
+    protected static boolean checkHealth(int health) {
+        return health > 0 || health == sInvincibleObjectKey;
     }
 
     public static void clearCounter() {
@@ -200,7 +212,7 @@ public abstract class GameObject extends BodiedSprite {
     }
 
     public void damageObject(final Damage damage) {
-        if (mObjectCurrentHealth != sInvincibleObjectKey && mObjectCurrentHealth > 0) {
+        if (checkHealth(mObjectCurrentHealth)) {
             setHealth(mObjectCurrentHealth - mObjectArmor.getDamage(damage));
         }
     }
