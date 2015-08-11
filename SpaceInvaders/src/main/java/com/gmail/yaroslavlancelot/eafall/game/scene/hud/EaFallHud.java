@@ -9,7 +9,6 @@ import com.gmail.yaroslavlancelot.eafall.game.configuration.mission.MissionConfi
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path.PathHelper;
 import com.gmail.yaroslavlancelot.eafall.game.events.SharedEvents;
 import com.gmail.yaroslavlancelot.eafall.game.events.periodic.time.GameTime;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
@@ -177,7 +176,7 @@ public class EaFallHud extends HUD {
         initMainMenu(vertexManager);
         //game values (oxygen, movable units limit, time)
         for (final IPlayer player : PlayersHolder.getInstance().getElements()) {
-            boolean left = PathHelper.isLeftSide(player.getPlanet().getSpawnPointX());
+            boolean left = player.getPlanet().isLeft();
             List<HudGameValue> list = left ? mLeftPart : mRightPart;
             float xPos = left ? SizeConstants.HUD_VALUES_X_LEFT : SizeConstants.HUD_VALUES_X_RIGHT;
             if (player.getControlType().isUserControlType()) {
@@ -191,7 +190,7 @@ public class EaFallHud extends HUD {
         }
     }
 
-    /** inits time text on the screen (if timing enabled) */
+    /** time text on the screen (if timing enabled) initialization */
     private void initTimer(final List<HudGameValue> list, final float xPos,
                            final VertexBufferObjectManager vertexManager,
                            final MissionConfig missionConfig) {

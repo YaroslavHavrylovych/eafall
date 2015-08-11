@@ -1,15 +1,15 @@
-package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject;
+package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet;
 
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
-import com.gmail.yaroslavlancelot.eafall.game.entity.BatchedSprite;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.IPlayerObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingType;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.IBuilding;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.CreepBuilding;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.DefenceBuilding;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.ICreepBuilding;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.SpecialBuilding;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.WealthBuilding;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
@@ -18,16 +18,23 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.D
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.SpecialBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.WealthBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.Armor;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.StaticObject;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.shipyards.IShipyard;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.shipyards.ShipyardFactory;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path.PathHelper;
 import com.gmail.yaroslavlancelot.eafall.game.entity.health.IHealthBar;
 import com.gmail.yaroslavlancelot.eafall.game.entity.health.PlayerHealthBar;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.list.SmartList;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -35,12 +42,15 @@ import java.util.Set;
 public class PlanetStaticObject extends StaticObject implements IPlayerObject {
     /** tag, which is used for debugging purpose */
     public static final String TAG = PlanetStaticObject.class.getCanonicalName();
-    // unit spawn point
-    private float mSpawnPointX, mSpawnPointY;
-    // buildings in current planet
-    private Map<Integer, IBuilding> mBuildings = new HashMap<Integer, IBuilding>(10);
+    /** current planet buildings */
+    private final Map<Integer, IBuilding> mBuildings = new HashMap<>(15);
+    /** current planet creep buildings (used for faster access to creep buildings) */
+    private final List<ICreepBuilding> mCreepBuildings = new ArrayList<>(7);
+    /** ships building and creation logic */
+    private IShipyard mPlanetShipyard;
     /** current planet player name */
     private String mPlayerName;
+    private boolean mIsLeft;
 
 
     public PlanetStaticObject(float x, float y, ITextureRegion textureRegion,
@@ -49,17 +59,13 @@ public class PlanetStaticObject extends StaticObject implements IPlayerObject {
                 textureRegion, objectManager);
         mIncomeIncreasingValue = 10;
         mObjectArmor = new Armor(Armor.ArmorType.MIXED.name(), 10);
-        initSpawnPoint();
-        mChildren = new SmartList<BatchedSprite>(12);
+        mIsLeft = x < SizeConstants.HALF_FIELD_WIDTH;
+        mChildren = new SmartList<>(12);
         setSpriteGroupName(BatchingKeys.SUN_PLANET);
     }
 
-    public float getSpawnPointX() {
-        return mSpawnPointX;
-    }
-
-    public float getSpawnPointY() {
-        return mSpawnPointY;
+    public boolean isLeft() {
+        return mIsLeft;
     }
 
     public int getExistingBuildingsTypesAmount() {
@@ -95,7 +101,6 @@ public class PlanetStaticObject extends StaticObject implements IPlayerObject {
     @Override
     public void setPlayer(String playerName) {
         mPlayerName = playerName;
-        initHealthBar();
     }
 
     @Override
@@ -104,21 +109,21 @@ public class PlanetStaticObject extends StaticObject implements IPlayerObject {
                 PathHelper.isLtrPath(getX()));
     }
 
-    private void initSpawnPoint() {
-        float x;
-        if (getX() < SizeConstants.HALF_FIELD_WIDTH) {
-            x = SizeConstants.PLANET_DIAMETER + SizeConstants.ADDITION_MARGIN_FOR_PLANET + SizeConstants.UNIT_SIZE;
-        } else {
-            x = getX() - SizeConstants.PLANET_DIAMETER / 2
-                    - SizeConstants.UNIT_SIZE - SizeConstants.ADDITION_MARGIN_FOR_PLANET;
-        }
-        setSpawnPoint(x, getY());
+    public void init(String playerName, int objectMaximumHealth) {
+        setPlayer(playerName);
+        initHealthBar();
+        initShipyard(playerName);
+        initHealth(objectMaximumHealth);
     }
 
-    /** set unit spawn point */
-    public void setSpawnPoint(float spawnPointX, float spawnPointY) {
-        mSpawnPointX = spawnPointX;
-        mSpawnPointY = spawnPointY;
+    public void initShipyard(String playerName) {
+        mPlanetShipyard = ShipyardFactory.getShipyard((int) getX(), (int) getY(), playerName);
+        registerUpdateHandler(new TimerHandler(1, true, new ITimerCallback() {
+            @Override
+            public void onTimePassed(final TimerHandler pTimerHandler) {
+                mPlanetShipyard.update(mCreepBuildings);
+            }
+        }));
     }
 
     /**
@@ -141,8 +146,11 @@ public class PlanetStaticObject extends StaticObject implements IPlayerObject {
 
             switch (buildingDummy.getBuildingType()) {
                 case CREEP_BUILDING: {
-                    building = new CreepBuilding((CreepBuildingDummy) buildingDummy,
-                            getVertexBufferObjectManager(), mPlayerName);
+                    ICreepBuilding creepBuilding =
+                            new CreepBuilding((CreepBuildingDummy) buildingDummy,
+                                    getVertexBufferObjectManager(), mPlayerName);
+                    mCreepBuildings.add(creepBuilding);
+                    building = creepBuilding;
                     break;
                 }
                 case WEALTH_BUILDING: {
@@ -174,14 +182,13 @@ public class PlanetStaticObject extends StaticObject implements IPlayerObject {
         if (result && building.getAmount() == 1) {
             attachChild(building.getEntity());
         }
-        return building.buyBuilding();
+        return result;
     }
 
     /** get buildings amount for passed building type */
     public int getBuildingsAmount(int buildingId) {
-        IBuilding buildings = mBuildings.get(buildingId);
-        if (buildings == null) return 0;
-        return buildings.getAmount();
+        IBuilding building = mBuildings.get(buildingId);
+        return building == null ? 0 : building.getAmount();
     }
 
     public IBuilding getBuilding(int id) {

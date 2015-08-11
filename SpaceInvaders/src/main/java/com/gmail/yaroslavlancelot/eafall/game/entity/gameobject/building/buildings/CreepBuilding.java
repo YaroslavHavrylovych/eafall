@@ -3,12 +3,10 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildi
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.Building;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.CreepBuildingDummy;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitCreatorCycle;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
-import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.IEntity;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
@@ -16,12 +14,16 @@ import de.greenrobot.event.EventBus;
 
 public class CreepBuilding extends Building implements ICreepBuilding {
     private static final String TAG = CreepBuilding.class.getCanonicalName();
+    /** if production is paused */
+    protected boolean mPaused = false;
     /** building dummy link */
     private CreepBuildingDummy mCreepBuildingDummy;
-    /** create units */
-    private UnitCreatorCycle mUnitCreatorCycle;
     /** building produce units which will go by the top path */
     private boolean mIsTopPath = true;
+    private int mCurrentTime;
+    private int mCreationTime;
+    private int mAvailableUnits;
+    private int mUnitKey;
 
     public CreepBuilding(final CreepBuildingDummy dummy, VertexBufferObjectManager objectManager, String playerName) {
         super(dummy, objectManager, playerName);
@@ -47,15 +49,10 @@ public class CreepBuilding extends Building implements ICreepBuilding {
         }
 
         //first building created
-        if (mUnitCreatorCycle == null) {
-            mUnitCreatorCycle = new UnitCreatorCycle(mPlayerName,
-                    mCreepBuildingDummy.getMovableUnitId(mUpgrade), isTopPath());
-            mBuildingStaticObject.registerUpdateHandler(new TimerHandler(
-                    mCreepBuildingDummy.getUnitCreationTime(mUpgrade), true, mUnitCreatorCycle));
+        if (mBuildingsAmount == 1) {
+            mCreationTime = mCreepBuildingDummy.getUnitCreationTime(mUpgrade);
+            mUnitKey = mCreepBuildingDummy.getMovableUnitId(mUpgrade);
         }
-
-        //successful creation should increase produced creeps
-        mUnitCreatorCycle.increaseUnitsAmount();
 
         return true;
     }
@@ -66,11 +63,33 @@ public class CreepBuilding extends Building implements ICreepBuilding {
     }
 
     @Override
+    public boolean isPaused() {
+        return mPaused;
+    }
+
+    @Override
     public void setPath(boolean isTop) {
         mIsTopPath = isTop;
-        if (mUnitCreatorCycle != null) {
-            mUnitCreatorCycle.setUnitMovementPath(mIsTopPath);
+    }
+
+    @Override
+    public void tickUpdate() {
+        if (mPaused || mCreationTime > ++mCurrentTime) {
+            return;
         }
+        mCurrentTime = 0;
+        mAvailableUnits += mBuildingsAmount;
+    }
+
+    @Override
+    public int getAvailableUnits() {
+        return mAvailableUnits;
+    }
+
+    @Override
+    public int getUnit() {
+        mAvailableUnits--;
+        return mUnitKey;
     }
 
     @Override
@@ -95,16 +114,13 @@ public class CreepBuilding extends Building implements ICreepBuilding {
             //upgrade
             player.changeMoney(-cost);
         }
-        VertexBufferObjectManager objectManager =
-                mBuildingStaticObject.getVertexBufferObjectManager();
-        mBuildingStaticObject
-                = getBuildingByUpgrade(nextUpgrade, mCreepBuildingDummy, objectManager);
+        VertexBufferObjectManager vertexManager = mBuildingStaticObject.getVertexBufferObjectManager();
+        mBuildingStaticObject = getBuildingByUpgrade(nextUpgrade, mCreepBuildingDummy, vertexManager);
         if (!isFakePlanet) {
             mBuildingStaticObject.clearUpdateHandlers();
-            mUnitCreatorCycle = new UnitCreatorCycle(mPlayerName,
-                    mCreepBuildingDummy.getMovableUnitId(nextUpgrade),
-                    mBuildingsAmount, isTopPath());
-            mBuildingStaticObject.registerUpdateHandler(new TimerHandler(20, true, mUnitCreatorCycle));
+            mCurrentTime = 0;
+            mUnitKey = mCreepBuildingDummy.getMovableUnitId(nextUpgrade);
+            mCreationTime = mCreepBuildingDummy.getUnitCreationTime(nextUpgrade);
         }
 
         IEntity oldBuilding = getEntity();

@@ -5,12 +5,13 @@ import android.util.SparseArray;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
+import com.gmail.yaroslavlancelot.eafall.game.configuration.mission.MissionConfig;
 import com.gmail.yaroslavlancelot.eafall.game.entity.AfterInitializationPool;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.IBuilding;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetStaticObject;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitBuilder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitDummy;
@@ -59,6 +60,8 @@ public class Player implements IPlayer {
     private final List<GameObject> mPlayerObjects;
     /** player maximum oxygen amount (can be varying depending on mission) */
     private final int mMaxOxygenAmount;
+    /** player movable units limit */
+    private final int mUnitsLimit;
     /** current player main planet */
     private volatile PlanetStaticObject mPlayerPlanet;
     /** player to fight with */
@@ -72,16 +75,17 @@ public class Player implements IPlayer {
     /** array of buildings which player can build */
     private BuildingId[] mBuildingsTypesIds;
     /** bonus which will be applied to each player unit */
-    private ArrayList<Bonus> mUnitBonuses = new ArrayList<Bonus>(2);
+    private ArrayList<Bonus> mUnitBonuses = new ArrayList<>(2);
     /** units pools */
     private SparseArray<AfterInitializationPool<Unit>> mUnitsPools;
 
-    public Player(final String playerName, IAlliance alliance, ControlType playerType, int maxOxygen) {
-        mPlayerObjects = new ArrayList<GameObject>(200);
+    public Player(final String playerName, IAlliance alliance, ControlType playerType, MissionConfig missionConfig) {
         mPlayerName = playerName;
         MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY = "UNIT_CREATED_" + playerName;
         OXYGEN_CHANGED_CALLBACK_KEY = "OXYGEN_CHANGED_" + playerName;
-        mMaxOxygenAmount = maxOxygen;
+        mMaxOxygenAmount = missionConfig.getMaxOxygenAmount();
+        mUnitsLimit = missionConfig.getMovableUnitsLimit();
+        mPlayerObjects = new ArrayList<>(mUnitsLimit + 10);
         mAlliance = alliance;
         initBuildingsTypes(alliance);
         mControlType = playerType;
@@ -99,8 +103,14 @@ public class Player implements IPlayer {
         return MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY;
     }
 
+    @Override
     public int getUnitsAmount() {
         return sUnitsAmount.get();
+    }
+
+    @Override
+    public int getUnitsLimit() {
+        return mUnitsLimit;
     }
 
     @Override

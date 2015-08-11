@@ -3,7 +3,7 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildi
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.Building;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.DefenceBuildingDummy;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetStaticObject;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.unit.CreateStationaryUnitEvent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;

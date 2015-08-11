@@ -6,10 +6,8 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.Buildin
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.IBuilding;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.CreepBuilding;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetStaticObject;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
-
-import org.andengine.ui.activity.BaseGameActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,19 +32,16 @@ public class VeryFirstBot implements Runnable {
     public static final String TAG = VeryFirstBot.class.getCanonicalName();
     public static final int DELAY_BETWEEN_ITERATIONS = 500;
     private final IPlayer mBotPlayer;
-    //TODO it's tmp. Remove later.
-    private BaseGameActivity mBaseGameActivity;
 
-    public VeryFirstBot(IPlayer botPlayer, BaseGameActivity baseGameActivity) {
+    public VeryFirstBot(IPlayer botPlayer) {
         LoggerHelper.methodInvocation(TAG, "VeryFirstBot");
         mBotPlayer = botPlayer;
-        mBaseGameActivity = baseGameActivity;
     }
 
     @Override
     public void run() {
-        List<BuildingId> buildingsToBuild = new ArrayList<BuildingId>(10);
-        List<BuildingId> buildingsToUpgrade = new ArrayList<BuildingId>(10);
+        List<BuildingId> buildingsToBuild = new ArrayList<>(10);
+        List<BuildingId> buildingsToUpgrade = new ArrayList<>(10);
         IAlliance alliance = mBotPlayer.getAlliance();
         BuildingDummy buildingDummy;
         PlanetStaticObject planet;
