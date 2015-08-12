@@ -72,6 +72,8 @@ public class MovableUnit extends Unit {
     @Override
     protected void onNegativeHealth() {
         removeBonuses();
+        mHealthBar.setVisible(false);
+        mLastHitTime = 0;
         super.onNegativeHealth();
     }
 
@@ -115,10 +117,10 @@ public class MovableUnit extends Unit {
 
     @Override
     public void damageObject(Damage damage) {
-        super.damageObject(damage);
         if (isHealthBarDefaultBehaviour()) {
             mLastHitTime = System.currentTimeMillis();
         }
+        super.damageObject(damage);
     }
 
     @Override
