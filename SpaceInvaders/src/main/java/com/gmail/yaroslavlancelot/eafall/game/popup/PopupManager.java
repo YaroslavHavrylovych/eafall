@@ -5,7 +5,6 @@ import android.content.Context;
 import com.gmail.yaroslavlancelot.eafall.game.popup.construction.ConstructionsPopupHud;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.DescriptionPopupHud;
 import com.gmail.yaroslavlancelot.eafall.game.popup.information.GameOverPopup;
-import com.gmail.yaroslavlancelot.eafall.game.popup.path.PathChoosePopup;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.Scene;
@@ -21,7 +20,7 @@ import java.util.Map;
 /** init and handel all application popups logic */
 public class PopupManager {
     private static PopupManager sPopupManager;
-    private Map<String, PopupHud> mPopups = new HashMap<String, PopupHud>(3);
+    private Map<String, PopupHud> mPopups = new HashMap<>(3);
 
 
     private PopupManager(String playerName, Scene scene, Camera camera, VertexBufferObjectManager vertexManager) {
@@ -33,10 +32,6 @@ public class PopupManager {
         popup = new ConstructionsPopupHud(playerName, scene, vertexManager);
         popup.setCamera(camera);
         mPopups.put(ConstructionsPopupHud.KEY, popup);
-        //path
-        popup = new PathChoosePopup(scene, vertexManager);
-        popup.setCamera(camera);
-        mPopups.put(PathChoosePopup.KEY, popup);
         //game over
         popup = new GameOverPopup(scene, vertexManager);
         popup.setCamera(camera);
@@ -52,7 +47,6 @@ public class PopupManager {
     public static void loadResource(Context context, TextureManager textureManager) {
         ConstructionsPopupHud.loadResource(context, textureManager);
         DescriptionPopupHud.loadResources(context, textureManager);
-        PathChoosePopup.loadResources(context, textureManager);
     }
 
     public static void loadFonts(FontManager fontManager, TextureManager textureManager) {

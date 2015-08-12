@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject;
+package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet;
 
 import com.gmail.yaroslavlancelot.eafall.game.entity.BodiedSprite;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.DestroyListener;

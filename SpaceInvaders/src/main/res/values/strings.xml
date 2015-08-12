@@ -150,7 +150,9 @@
     <string name="description_build_button">Build</string>
     <string name="description_back_button">Back</string>
     <string name="description_upgrade_button">Upgrade</string>
-    <string name="description_path_button">Set path</string>
+    <string name="description_path_button_top">Top</string>
+    <string name="description_path_button_bottom">Bottom</string>
+    <string name="description_path_button_pause">Pause</string>
     <string name="description_cost">Cost :</string>
     <string name="description_produce">Produce :</string>
     <string name="description_description">Description :</string>

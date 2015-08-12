@@ -5,18 +5,24 @@ public class CreateMovableUnitEvent {
     private final int mKey;
     private final String mPlayerName;
     private final boolean mIsTopPath;
+    private final int mX;
+    private final int mY;
 
     /**
      * unit creation event
      *
-     * @param key       unit key in player
-     * @param playerName  player name to create a unit
-     * @param isTopPath is unit will move by top path
+     * @param playerName player name to create a unit
+     * @param key        unit key in player
+     * @param isTopPath  is unit will move by top path
+     * @param x          unit abscissa
+     * @param x          unit ordinate
      */
-    public CreateMovableUnitEvent(int key, final String playerName, boolean isTopPath) {
+    public CreateMovableUnitEvent(final String playerName, int key, boolean isTopPath, int x, int y) {
         mKey = key;
         mPlayerName = playerName;
         mIsTopPath = isTopPath;
+        mX = x;
+        mY = y;
     }
 
     /** is unit will use top path to move */
@@ -32,5 +38,13 @@ public class CreateMovableUnitEvent {
     /** player to create unit */
     public String getPlayerName() {
         return mPlayerName;
+    }
+
+    public int getX() {
+        return mX;
+    }
+
+    public int getY() {
+        return mY;
     }
 }

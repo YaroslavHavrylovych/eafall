@@ -2,7 +2,7 @@ package com.gmail.yaroslavlancelot.eafall.game.client.thick.single;
 
 import com.gmail.yaroslavlancelot.eafall.game.client.thick.ThickClientGameActivity;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetStaticObject;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 
 /**

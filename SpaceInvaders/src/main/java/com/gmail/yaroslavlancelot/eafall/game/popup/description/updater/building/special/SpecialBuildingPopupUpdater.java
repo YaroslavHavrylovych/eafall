@@ -1,7 +1,7 @@
 package com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.building.special;
 
-import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.CreateBuildingEvent;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.CreateBuildingEvent;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.building.BaseBuildingPopupUpdater;
 
 import org.andengine.entity.scene.Scene;
@@ -31,7 +31,7 @@ public class SpecialBuildingPopupUpdater extends BaseBuildingPopupUpdater {
         super.updateDescription(drawArea, objectId, allianceName, playerName);
         final BuildingId buildingId = (BuildingId) objectId;
 
-        mButton.setOnClickListener(new ButtonSprite.OnClickListener() {
+        mFirstButton.setOnClickListener(new ButtonSprite.OnClickListener() {
             @Override
             public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
                 EventBus.getDefault().post(new CreateBuildingEvent(mPlayerName, buildingId));

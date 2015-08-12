@@ -26,6 +26,8 @@ public class TextButton extends ButtonSprite {
     private final static int sFontSize = 45;
     private final static int padding = 30;
     private Text mText;
+    /** don't change button width with setText(String) */
+    private boolean mFixedSize = false;
 
     public TextButton(VertexBufferObjectManager vertexBufferObjectManager, float width, float height) {
         this(vertexBufferObjectManager, width, height, 0, 0);
@@ -43,13 +45,32 @@ public class TextButton extends ButtonSprite {
         attachChild(mText);
     }
 
+    private boolean isFixedSize() {
+        return mFixedSize;
+    }
+
+    /**
+     * true: don't change button width with setText(String)
+     * <p/>
+     * false: redraw (change width) of the button during setText(String)
+     */
+    public void setFixedSize(boolean fixedSize) {
+        mFixedSize = fixedSize;
+    }
+
+    public void setTextColor(org.andengine.util.adt.color.Color color) {
+        mText.setColor(color);
+    }
+
     public void setText(String text) {
         if (text.equalsIgnoreCase(mText.getText().toString())) {
             return;
         }
         mText.setText(text);
-        setWidth(mText.getWidth() + padding * 2);
-        mText.setX(getWidth() / 2);
+        if (!mFixedSize) {
+            setWidth(mText.getWidth() + padding * 2);
+            mText.setX(getWidth() / 2);
+        }
     }
 
     public static TextureAtlas loadResources(Context context, TextureManager textureManager) {

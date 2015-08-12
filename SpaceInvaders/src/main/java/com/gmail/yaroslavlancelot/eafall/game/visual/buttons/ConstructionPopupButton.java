@@ -5,8 +5,6 @@ import android.content.Context;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
-import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.path.HideUnitPathChooser;
-import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.path.ShowUnitPathChooser;
 
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.opengl.texture.TextureManager;
@@ -14,8 +12,6 @@ import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-
-import de.greenrobot.event.EventBus;
 
 /** trigger buildings popup (already initialized) */
 public class ConstructionPopupButton extends ButtonSprite {
@@ -27,8 +23,6 @@ public class ConstructionPopupButton extends ButtonSprite {
                 vertexBufferObjectManager);
         setWidth(SizeConstants.CONSTRUCTIONS_POPUP_INVOCATION_BUTTON_WIDTH);
         setHeight(SizeConstants.CONSTRUCTIONS_POPUP_INVOCATION_BUTTON_HEIGHT);
-        //TODO delete this if PathChooser popup which cover the whole screen doesn't exist
-        EventBus.getDefault().register(this);
     }
 
     public static void loadResources(Context context, TextureManager textureManager) {
@@ -39,17 +33,5 @@ public class ConstructionPopupButton extends ButtonSprite {
         TextureRegionHolder.addTiledElementFromAssets(
                 StringConstants.FILE_BUILDINGS_POPUP_UP_BUTTON, smallObjectTexture, context, 0, 0, 2, 1);
         smallObjectTexture.load();
-    }
-
-    @SuppressWarnings("unused")
-    /** really used by {@link de.greenrobot.event.EventBus} */
-    public void onEvent(final ShowUnitPathChooser showUnitPathChooser) {
-        setVisible(false);
-    }
-
-    @SuppressWarnings("unused")
-    /** really used by {@link de.greenrobot.event.EventBus} */
-    public void onEvent(final HideUnitPathChooser hideUnitPathChooser) {
-        setVisible(true);
     }
 }

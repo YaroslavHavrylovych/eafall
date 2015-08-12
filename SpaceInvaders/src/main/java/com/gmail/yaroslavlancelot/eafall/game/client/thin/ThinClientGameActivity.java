@@ -5,7 +5,7 @@ import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.client.ClientGameActivity;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetStaticObject;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.MovableUnit;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
@@ -31,14 +31,6 @@ public class ThinClientGameActivity extends ClientGameActivity implements InGame
     }
 
     @Override
-    public void onResourcesLoaded() {
-        super.onResourcesLoaded();
-        LoggerHelper.methodInvocation(TAG, "onResourcesLoaded");
-        mGameServerConnector.sendClientMessage(0, new GameLoadedClientMessage());
-        LoggerHelper.printInformationMessage(TAG, "send gameLoaded");
-    }
-
-    @Override
     protected void initThickClient() {
         // it's thin client, so no actions
     }
@@ -49,6 +41,14 @@ public class ThinClientGameActivity extends ClientGameActivity implements InGame
         mGameServerConnector.sendClientMessage(0, new BuildingCreationClientMessage(
                 userPlayer.getName(), buildingId.getId(), buildingId.getUpgrade()));
         LoggerHelper.printInformationMessage(TAG, "send building request player= " + userPlayer.getName() + ", building=" + buildingId + "");
+    }
+
+    @Override
+    public void onResourcesLoaded() {
+        super.onResourcesLoaded();
+        LoggerHelper.methodInvocation(TAG, "onResourcesLoaded");
+        mGameServerConnector.sendClientMessage(0, new GameLoadedClientMessage());
+        LoggerHelper.printInformationMessage(TAG, "send gameLoaded");
     }
 
     @Override

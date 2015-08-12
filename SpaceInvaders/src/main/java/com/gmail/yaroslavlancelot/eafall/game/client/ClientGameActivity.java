@@ -27,9 +27,9 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.BulletPool;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetDestroyListener;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.SunStaticObject;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetDestroyListener;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.MovableUnit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path.PathHelper;
@@ -244,7 +244,7 @@ public abstract class ClientGameActivity extends EaFallActivity {
     protected IPlayer createPlayer(String playerNameInExtra, IAlliance alliance) {
         Intent intent = getIntent();
         IPlayer.ControlType playerType = IPlayer.ControlType.valueOf(intent.getStringExtra(playerNameInExtra));
-        return new Player(playerNameInExtra, alliance, playerType, mMissionConfig.getMaxOxygenAmount());
+        return new Player(playerNameInExtra, alliance, playerType, mMissionConfig);
     }
 
     /** init second player and planet */
@@ -265,18 +265,17 @@ public abstract class ClientGameActivity extends EaFallActivity {
                                               IPlayer player,
                                               long... unitUniqueId) {
         LoggerHelper.methodInvocation(TAG, "createPlanet");
-        PlanetStaticObject planetStaticObject = new PlanetStaticObject(x, y, textureRegion,
+        PlanetStaticObject planet = new PlanetStaticObject(x, y, textureRegion,
                 getVertexBufferObjectManager());
-        planetStaticObject.setPlayer(player.getName());
-        planetStaticObject.initHealth(mMissionConfig.getPlanetHealth());
-        planetStaticObject.addObjectDestroyedListener(new PlanetDestroyListener(player));
-        attachSprite(planetStaticObject);
+        planet.init(player.getName(), mMissionConfig.getPlanetHealth());
+        planet.addObjectDestroyedListener(new PlanetDestroyListener(player));
+        attachSprite(planet);
         if (unitUniqueId.length > 0) {
-            planetStaticObject.setObjectUniqueId(unitUniqueId[0]);
+            planet.setObjectUniqueId(unitUniqueId[0]);
         }
-        mGameObjectsMap.put(planetStaticObject.getObjectUniqueId(), planetStaticObject);
-        onEvent(new CreatePhysicBodyEvent(planetStaticObject));
-        return planetStaticObject;
+        mGameObjectsMap.put(planet.getObjectUniqueId(), planet);
+        onEvent(new CreatePhysicBodyEvent(planet));
+        return planet;
     }
 
     /** init first player and planet */
@@ -301,7 +300,7 @@ public abstract class ClientGameActivity extends EaFallActivity {
 
     protected void initBotControlledPlayer(final IPlayer initializingPlayer) {
         LoggerHelper.methodInvocation(TAG, "initBotControlledPlayer");
-        new Thread(new VeryFirstBot(initializingPlayer, ClientGameActivity.this)).start();
+        new Thread(new VeryFirstBot(initializingPlayer)).start();
     }
 
     @SuppressWarnings("unused")
@@ -378,13 +377,11 @@ public abstract class ClientGameActivity extends EaFallActivity {
             return;
         }
         int unitKey = unitEvent.getKey();
-        createMovableUnit(unitKey, player, unitEvent.isTopPath());
+        createMovableUnit(player, unitKey, unitEvent.getX(), unitEvent.getY(), unitEvent.isTopPath());
     }
 
-    /** create unit with body and update it's enemies and moving path */
-    protected MovableUnit createMovableUnit(int unitKey, final IPlayer unitPlayer, boolean isTopPath) {
-        float x = unitPlayer.getPlanet().getSpawnPointX(),
-                y = unitPlayer.getPlanet().getSpawnPointY();
+    public MovableUnit createMovableUnit(IPlayer unitPlayer,
+                                         int unitKey, int x, int y, boolean isTopPath) {
         MovableUnit movableUnit = (MovableUnit) createUnit(unitKey, unitPlayer, x, y);
         movableUnit.initMovingPath(PathHelper.isLtrPath(x), isTopPath);
         return movableUnit;
@@ -392,9 +389,7 @@ public abstract class ClientGameActivity extends EaFallActivity {
 
     /** create unit */
     protected Unit createUnit(int unitKey, final IPlayer unitPlayer, float x, float y) {
-        Unit unit = createThinUnit(unitKey, unitPlayer,
-                x - SizeConstants.UNIT_SIZE / 2,
-                y - SizeConstants.UNIT_SIZE / 2);
+        Unit unit = createThinUnit(unitKey, unitPlayer, x, y);
         unit.setEnemiesUpdater(EnemiesFilterFactory.getFilter(unitPlayer.getEnemyPlayer()));
         unit.registerUpdateHandler();
         return unit;

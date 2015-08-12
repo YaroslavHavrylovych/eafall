@@ -4,7 +4,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetStaticObject;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.bonus.Bonus;
 
@@ -36,14 +36,14 @@ public interface IPlayer {
     /** return current player units amount */
     int getUnitsAmount();
 
-    /**
-     * get player {@link com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetStaticObject}
-     * which can be oly one
-     */
+    /** return current player units amount */
+    int getUnitsLimit();
+
+    /** get player planet */
     PlanetStaticObject getPlanet();
 
     /**
-     * set player {@link com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.PlanetStaticObject}
+     * set player {@link PlanetStaticObject}
      * which can be only one and if it will be destroyed then player loose
      */
     void setPlanet(PlanetStaticObject planet);
