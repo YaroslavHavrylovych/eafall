@@ -43,7 +43,7 @@ public class WealthBuildingPopupUpdater extends BaseBuildingPopupUpdater {
         } else {
             event = new CreateBuildingEvent(mPlayerName, buildingId);
         }
-        mButton.setOnClickListener(new ButtonSprite.OnClickListener() {
+        mFirstButton.setOnClickListener(new ButtonSprite.OnClickListener() {
             @Override
             public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
                 if (event != null) {

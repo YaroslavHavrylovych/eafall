@@ -68,8 +68,29 @@ public class CreepBuilding extends Building implements ICreepBuilding {
     }
 
     @Override
+    public int getAvailableUnits() {
+        return mAvailableUnits;
+    }
+
+    @Override
+    public int getUnit() {
+        mAvailableUnits--;
+        return mUnitKey;
+    }
+
+    @Override
     public void setPath(boolean isTop) {
         mIsTopPath = isTop;
+    }
+
+    @Override
+    public void pause() {
+        mPaused = true;
+    }
+
+    @Override
+    public void unPause() {
+        mPaused = false;
     }
 
     @Override
@@ -79,17 +100,6 @@ public class CreepBuilding extends Building implements ICreepBuilding {
         }
         mCurrentTime = 0;
         mAvailableUnits += mBuildingsAmount;
-    }
-
-    @Override
-    public int getAvailableUnits() {
-        return mAvailableUnits;
-    }
-
-    @Override
-    public int getUnit() {
-        mAvailableUnits--;
-        return mUnitKey;
     }
 
     @Override

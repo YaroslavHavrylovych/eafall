@@ -53,7 +53,7 @@ public class DefenceBuildingPopupUpdater extends BaseBuildingPopupUpdater {
         super.updateDescription(drawArea, objectId, allianceName, playerName);
         final BuildingId buildingId = (BuildingId) objectId;
         final Object event = new CreateBuildingEvent(mPlayerName, buildingId);
-        mButton.setOnClickListener(new ButtonSprite.OnClickListener() {
+        mFirstButton.setOnClickListener(new ButtonSprite.OnClickListener() {
             @Override
             public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
                 EventBus.getDefault().post(event);

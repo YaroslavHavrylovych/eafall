@@ -5,7 +5,7 @@ import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.IBuilding;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.ICreepBuilding;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.CreepBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.BuildingsAmountChangedEvent;
@@ -13,7 +13,6 @@ import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.C
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.UpgradeBuildingEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.UnitByBuildingDescriptionShowEvent;
-import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.path.ShowUnitPathChooser;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.building.BaseBuildingPopupUpdater;
@@ -26,6 +25,7 @@ import org.andengine.entity.shape.Shape;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.adt.color.Color;
 
 import de.greenrobot.event.EventBus;
 
@@ -35,9 +35,9 @@ import de.greenrobot.event.EventBus;
  */
 public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
     /** press to upgrade building (if such exist) */
-    private TextButton mUpgradeButton;
+    private TextButton mSecondButton;
     /** press to set units path for the current building */
-    private TextButton mPathButton;
+    private TextButton mThirdButton;
 
     public CreepBuildingPopupUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         super(vertexBufferObjectManager, scene);
@@ -67,8 +67,8 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
     @Override
     public void clear() {
         super.clear();
-        mUpgradeButton.detachSelf();
-        mPathButton.detachSelf();
+        mSecondButton.detachSelf();
+        mThirdButton.detachSelf();
     }
 
     @Override
@@ -78,14 +78,16 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
         final BuildingId buildingId = (BuildingId) objectId;
         //button or back build
         IPlayer player = PlayersHolder.getPlayer(playerName);
-        IBuilding building = player.getPlanet().getBuilding(buildingId.getId());
+        ICreepBuilding building = (ICreepBuilding) player.getPlanet().getBuilding(buildingId.getId());
         BuildingDummy buildingDummy = alliance.getBuildingDummy(buildingId);
-        final Object event;
-        if (//user looking on upgraded version of the not created building
+        boolean upgradeShowed =
+                //building not created
                 (building == null && buildingId.getUpgrade() > 0)
-                        //check the building is created and in that case check the user looks on upgrade or on existing building
-                        || (building != null && buildingId.getUpgrade() > building.getUpgrade())) {
-            mButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_back_button));
+                        //user looking the upgrade, this upgraded building not exist
+                        || (building != null && buildingId.getUpgrade() > building.getUpgrade());
+        final Object event;
+        if (upgradeShowed) {
+            mFirstButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_back_button));
             event = new BuildingDescriptionShowEvent(
                     BuildingId.makeId(buildingId.getId(), buildingId.getUpgrade() - 1), playerName);
         } else {
@@ -96,7 +98,7 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
                 event = new CreateBuildingEvent(mPlayerName, buildingId);
             }
         }
-        mButton.setOnClickListener(new ButtonSprite.OnClickListener() {
+        mFirstButton.setOnClickListener(new ButtonSprite.OnClickListener() {
             @Override
             public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
                 if (event != null) {
@@ -105,13 +107,15 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
             }
         });
         //button upgrade
-        mUpgradeButton.setPosition(mButton.getX() + mButton.getWidth() / 2
-                + BUTTON_MARGIN + mUpgradeButton.getWidth() / 2, mButton.getY());
-        boolean isUpgradeAvailable = alliance.isUpgradeAvailable(buildingId);
+        boolean isSecondButtonVisible = building != null
+                && alliance.isUpgradeAvailable(buildingId)
+                && !upgradeShowed;
         //check if upgrades available
-        if (isUpgradeAvailable) {
-            drawArea.attachChild(mUpgradeButton);
-            mUpgradeButton.setOnClickListener(new ButtonSprite.OnClickListener() {
+        if (isSecondButtonVisible) {
+            mSecondButton.setPosition(mFirstButton.getX() + mFirstButton.getWidth() / 2
+                    + BUTTON_MARGIN + mSecondButton.getWidth() / 2, mFirstButton.getY());
+            drawArea.attachChild(mSecondButton);
+            mSecondButton.setOnClickListener(new ButtonSprite.OnClickListener() {
                 @Override
                 public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
                     EventBus.getDefault().post(new UpgradeBuildingEvent(mPlayerName, buildingId));
@@ -119,20 +123,16 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
             });
         }
         //button path
-        ButtonSprite button = isUpgradeAvailable ? mUpgradeButton : mButton;
-        mPathButton.setPosition(button.getX() + button.getWidth() / 2 + BUTTON_MARGIN
-                + mPathButton.getWidth() / 2, button.getY());
-        drawArea.attachChild(mPathButton);
-        mPathButton.setOnClickListener(new ButtonSprite.OnClickListener() {
-            @Override
-            public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                EventBus.getDefault().post(new ShowUnitPathChooser(playerName, buildingId.getId()));
-            }
-        });
-        if (building != null && buildingId.getUpgrade() == building.getUpgrade()) {
-            mPathButton.setVisible(true);
+        if (building == null || upgradeShowed) {
+            mThirdButton.setVisible(false);
         } else {
-            mPathButton.setVisible(false);
+            ButtonSprite button = isSecondButtonVisible ? mSecondButton : mFirstButton;
+            mThirdButton.setPosition(button.getX() + button.getWidth() / 2 + BUTTON_MARGIN
+                    + mThirdButton.getWidth() / 2, button.getY());
+            setPathText(mThirdButton, building);
+            drawArea.attachChild(mThirdButton);
+            mThirdButton.setOnClickListener(new CreepPathClickListener(building));
+            mThirdButton.setVisible(true);
         }
     }
 
@@ -143,20 +143,20 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
             ((com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.building.creep.DescriptionAreaUpdater)
                     mDescriptionAreaUpdater).updateUpgradeCost(buildingsAmountChangedEvent.getBuildingId(), buildingsAmountChangedEvent.getPlayerName());
         }
-        mPathButton.setVisible(true);
+        mThirdButton.setVisible(true);
     }
 
     private void initButtons(VertexBufferObjectManager vertexBufferObjectManager) {
         //upgrade
-        mUpgradeButton = new TextButton(vertexBufferObjectManager, 300,
+        mSecondButton = new TextButton(vertexBufferObjectManager, 300,
                 SizeConstants.DESCRIPTION_POPUP_DES_BUTTON_HEIGHT);
-        mUpgradeButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_upgrade_button));
-        mScene.registerTouchArea(mUpgradeButton);
+        mSecondButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_upgrade_button));
+        mScene.registerTouchArea(mSecondButton);
         //path button
-        mPathButton = new TextButton(vertexBufferObjectManager, 300,
+        mThirdButton = new TextButton(vertexBufferObjectManager, 300,
                 SizeConstants.DESCRIPTION_POPUP_DES_BUTTON_HEIGHT);
-        mPathButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_path_button));
-        mScene.registerTouchArea(mPathButton);
+        mThirdButton.setFixedSize(true);
+        mScene.registerTouchArea(mThirdButton);
     }
 
     protected ITextureRegion getAdditionalInformationImage(Object objectId, String allianceName) {
@@ -165,5 +165,41 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
         CreepBuildingDummy dummy = (CreepBuildingDummy) alliance.getBuildingDummy(buildingId);
         final int unitId = dummy.getMovableUnitId(buildingId.getUpgrade());
         return alliance.getUnitDummy(unitId).getImageTextureRegion();
+    }
+
+    private void setPathText(TextButton button, ICreepBuilding creepBuilding) {
+        String text;
+        if (creepBuilding.isPaused()) {
+            text = LocaleImpl.getInstance().getStringById(R.string.description_path_button_pause);
+            button.setTextColor(Color.RED);
+        } else if (creepBuilding.isTopPath()) {
+            text = LocaleImpl.getInstance().getStringById(R.string.description_path_button_top);
+            button.setTextColor(Color.GREEN);
+        } else {
+            text = LocaleImpl.getInstance().getStringById(R.string.description_path_button_bottom);
+            button.setTextColor(Color.GREEN);
+        }
+        button.setText(text);
+    }
+
+    private class CreepPathClickListener implements ButtonSprite.OnClickListener {
+        private final ICreepBuilding mCreepBuildings;
+
+        CreepPathClickListener(ICreepBuilding creepBuilding) {
+            mCreepBuildings = creepBuilding;
+        }
+
+        @Override
+        public void onClick(final ButtonSprite pButtonSprite, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+            if (mCreepBuildings.isPaused()) {
+                mCreepBuildings.setPath(true);
+                mCreepBuildings.unPause();
+            } else if (mCreepBuildings.isTopPath()) {
+                mCreepBuildings.setPath(false);
+            } else {
+                mCreepBuildings.pause();
+            }
+            setPathText((TextButton) pButtonSprite, mCreepBuildings);
+        }
     }
 }

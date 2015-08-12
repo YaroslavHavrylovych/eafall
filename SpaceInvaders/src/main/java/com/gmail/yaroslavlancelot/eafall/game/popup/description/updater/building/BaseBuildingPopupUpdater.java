@@ -39,7 +39,7 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
      * as the only available button in base building popup.
      * Most probably served as "Build" or "Back" button.
      */
-    protected TextButton mButton;
+    protected TextButton mFirstButton;
     /** image for addition information */
     protected Sprite mAdditionDescriptionImage;
     /** building description object (update description area which u pass to it) */
@@ -49,9 +49,9 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
         super(vertexBufferObjectManager, scene);
         mAmountDrawer = new AmountDrawer(vertexBufferObjectManager);
 
-        mButton = new TextButton(vertexBufferObjectManager, 300,
+        mFirstButton = new TextButton(vertexBufferObjectManager, 300,
                 SizeConstants.DESCRIPTION_POPUP_DES_BUTTON_HEIGHT);
-        mScene.registerTouchArea(mButton);
+        mScene.registerTouchArea(mFirstButton);
 
         EventBus.getDefault().register(this);
     }
@@ -101,7 +101,7 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
     public void clear() {
         super.clear();
         mAmountDrawer.detach();
-        mButton.detachSelf();
+        mFirstButton.detachSelf();
         if (mAdditionDescriptionImage != null) {
             mScene.unregisterTouchArea(mAdditionDescriptionImage);
             mAdditionDescriptionImage.detachSelf();
@@ -124,9 +124,9 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
         //description
         mDescriptionAreaUpdater.updateDescription(drawArea, objectId, allianceName, playerName);
         //build button
-        mButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_build_button));
-        mButton.setPosition(mButton.getWidth() / 2, mButton.getHeight() / 2);
-        drawArea.attachChild(mButton);
+        mFirstButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_build_button));
+        mFirstButton.setPosition(mFirstButton.getWidth() / 2, mFirstButton.getHeight() / 2);
+        drawArea.attachChild(mFirstButton);
     }
 
     /** updates buildings amount */

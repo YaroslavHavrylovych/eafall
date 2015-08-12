@@ -150,7 +150,9 @@
     <string name="description_build_button">Побудувати</string>
     <string name="description_back_button">Повернутись</string>
     <string name="description_upgrade_button">Прокачати</string>
-    <string name="description_path_button">Обрати шлях</string>
+    <string name="description_path_button_top">Верх</string>
+    <string name="description_path_button_bottom">Низ</string>
+    <string name="description_path_button_pause">Стоп</string>
     <string name="description_cost">Ціна :</string>
     <string name="description_produce">Створює :</string>
     <string name="description_description">Опис :</string>

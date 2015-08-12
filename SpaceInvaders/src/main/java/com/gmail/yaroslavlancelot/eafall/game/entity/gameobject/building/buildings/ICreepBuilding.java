@@ -17,5 +17,11 @@ public interface ICreepBuilding extends IBuilding {
     /** set true if this building need to produce units which will go by the top path and false in the other case */
     void setPath(boolean isTop);
 
+    /** stop units production */
+    void pause();
+
+    /** restore units production */
+    void unPause();
+
     void tickUpdate();
 }
