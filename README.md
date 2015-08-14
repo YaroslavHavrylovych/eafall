@@ -1,8 +1,16 @@
-# The project is private so you can't get it without requesting the permission. #
+# EAFall 
 
-First that you should know is that the project was started as just for fun. I don't know the destiny of this project: will it be open-source or I will create private project or will open it partly it is not decided yet.
+The Private game project started at the mid of 2013 as a hobby and still in progress.
+Starting from the April 2015 has at least one the fully dedicated developer.
 
-Additional description you can find [here](https://bitbucket.org/yaroslav_havrylovych/eafall/wiki/Home).
+Project wiki you can find [here](https://bitbucket.org/yaroslav_havrylovych/eafall/wiki/Home).
 
 *Note* :
 The project uses [AndEngine](https://github.com/nicolasgramlich/AndEngine) graphics, physics and network engines.
+
+
+
+
+---------------------------------------
+All rights reserved
+© Yaroslav Havrylovych
