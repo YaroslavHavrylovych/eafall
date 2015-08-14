@@ -118,7 +118,7 @@
     <string name="settings">Settings</string>
 
     <!-- general -->
-    <string name="app_name">SpaceInvaders</string>
+    <string name="app_name">EaFall</string>
     <string name="exit">Exit</string>
     <string name="back">Back</string>
     <string name="connect">Connect</string>
