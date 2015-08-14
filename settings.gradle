@@ -1,1 +1,1 @@
-include ':AndEngine',':AndEnginePhysicsBox2DExtension',':AndEngineMultiplayerExtension', ':SpaceInvaders'
+include ':andengine',':andenginephysicsbox2dextension',':andenginemultiplayerextension', ':SpaceInvaders'
