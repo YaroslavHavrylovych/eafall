@@ -3,11 +3,11 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildi
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.Building;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.CreepBuildingDummy;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.StaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
-import org.andengine.entity.IEntity;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import de.greenrobot.event.EventBus;
@@ -124,19 +124,20 @@ public class CreepBuilding extends Building implements ICreepBuilding {
             //upgrade
             player.changeMoney(-cost);
         }
-        VertexBufferObjectManager vertexManager = mBuildingStaticObject.getVertexBufferObjectManager();
-        mBuildingStaticObject = getBuildingByUpgrade(nextUpgrade, mCreepBuildingDummy, vertexManager);
+
+        StaticObject oldBuilding = mBuildingStaticObject;
+        StaticObject newBuilding = getBuildingByUpgrade(nextUpgrade, mCreepBuildingDummy,
+                oldBuilding.getVertexBufferObjectManager());
+        newBuilding.setSpriteGroupName(oldBuilding.getSpriteGroupName());
+        newBuilding.setPosition(oldBuilding.getX(), oldBuilding.getY());
         if (!isFakePlanet) {
-            mBuildingStaticObject.clearUpdateHandlers();
             mCurrentTime = 0;
             mUnitKey = mCreepBuildingDummy.getMovableUnitId(nextUpgrade);
             mCreationTime = mCreepBuildingDummy.getUnitCreationTime(nextUpgrade);
         }
 
-        IEntity oldBuilding = getEntity();
-        IEntity parent = oldBuilding.getParent();
-        parent.detachChild(oldBuilding);
-        parent.attachChild(mBuildingStaticObject);
+        oldBuilding.detachSelf();
+        newBuilding.attachSelf();
 
         mUpgrade = nextUpgrade;
         //change description popup
