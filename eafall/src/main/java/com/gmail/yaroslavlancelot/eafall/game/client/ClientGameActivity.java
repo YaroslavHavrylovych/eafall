@@ -269,7 +269,7 @@ public abstract class ClientGameActivity extends EaFallActivity {
                 getVertexBufferObjectManager());
         planet.init(player.getName(), mMissionConfig.getPlanetHealth());
         planet.addObjectDestroyedListener(new PlanetDestroyListener(player));
-        attachSprite(planet);
+        planet.attachSelf();
         if (unitUniqueId.length > 0) {
             planet.setObjectUniqueId(unitUniqueId[0]);
         }
@@ -340,6 +340,7 @@ public abstract class ClientGameActivity extends EaFallActivity {
 
     /** attach sprite to entity (sprite group, hud or game scene) */
     private void attachSprite(final Sprite sprite, final Entity parent) {
+        //TODO it seems always to be in update thread, so no need for this runnable
         runOnUpdateThread(new Runnable() {
             @Override
             public void run() {

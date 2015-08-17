@@ -1,18 +1,27 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.health;
 
-import org.andengine.entity.IEntity;
+import com.gmail.yaroslavlancelot.eafall.game.entity.BatchedSprite;
 
 /**
  * @author Yaroslav Havrylovych
  */
 public interface IHealthBar {
+    /**
+     * @return health bar visibility
+     */
+    boolean isVisible();
 
     /**
-     * attaches health bar to parent
-     *
-     * @param parent entity to attach health bar to
+     * sets health bar visibility
      */
-    void attachHealthBar(IEntity parent);
+    void setVisible(boolean visible);
+
+    /**
+     * add health bar as a child
+     *
+     * @param parent entity health bar will be added
+     */
+    void addToParent(BatchedSprite parent);
 
     /**
      * sets health bar position
@@ -29,15 +38,5 @@ public interface IHealthBar {
      * @param actualHealth actual health bar value
      */
     void redrawHealthBar(int healthMax, int actualHealth);
-
-    /**
-     * sets health bar visibility
-     */
-    void setVisible(boolean visible);
-
-    /**
-     * @return health bar visibility
-     */
-    boolean isVisible();
 
 }

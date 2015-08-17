@@ -9,6 +9,7 @@ import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.gmail.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
+import com.gmail.yaroslavlancelot.eafall.game.engine.CleanableSpriteGroup;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.health.PlayerHealthBar;
 import com.gmail.yaroslavlancelot.eafall.game.entity.health.UnitHealthBar;
@@ -37,6 +38,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
  */
 public class ClientResourcesLoader extends BaseResourceLoader {
     private int mMovableUnitsLimit = 200;
+    private int mMovableUnitsBuffer = 30;
 
     public ClientResourcesLoader() {
         addImage(StringConstants.FILE_BACKGROUND,
@@ -103,7 +105,8 @@ public class ClientResourcesLoader extends BaseResourceLoader {
             SpriteGroupHolder.addGroup(BatchingKeys.getBuildingSpriteGroup(playerName), spriteGroup);
             //unit SpriteGroup
             textureAtlas = alliance.loadUnitsToTexture(playerName, textureManager);
-            spriteGroup = new SpriteGroup(textureAtlas, mMovableUnitsLimit, vertexBufferObjectManager);
+            spriteGroup = new CleanableSpriteGroup(textureAtlas,
+                    mMovableUnitsLimit + mMovableUnitsBuffer, vertexBufferObjectManager);
             SpriteGroupHolder.addGroup(BatchingKeys.getUnitSpriteGroup(playerName), spriteGroup);
             //unit pool
             player.createUnitPool(vertexBufferObjectManager);
@@ -138,10 +141,9 @@ public class ClientResourcesLoader extends BaseResourceLoader {
                 smallObjectTexture, EaFallApplication.getContext(), 0, y);
 
         smallObjectTexture.load();
-        // health bar + 9 bullets at a time per unit, and 2 player (so * 2 in addition)
         //TODO check the situation when units doesn't have health bar
         SpriteGroup spriteGroup = new SpriteGroup(smallObjectTexture,
-                mMovableUnitsLimit * 10 * 2, vertexBufferObjectManager);
+                mMovableUnitsLimit * 4, vertexBufferObjectManager);
         SpriteGroupHolder.addGroup(BatchingKeys.BULLET_AND_HEALTH, spriteGroup);
     }
 

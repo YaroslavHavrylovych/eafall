@@ -2,8 +2,7 @@ package com.gmail.yaroslavlancelot.eafall.game.entity;
 
 import android.content.Context;
 
-import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.AttachSpriteEvent;
-import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.DetachSpriteEvent;
+import com.gmail.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder;
 
 import org.andengine.entity.IEntity;
 import org.andengine.entity.sprite.Sprite;
@@ -11,8 +10,6 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.list.SmartList;
-
-import de.greenrobot.event.EventBus;
 
 /**
  * Custom {@link Sprite} aimed to be used in SpriteBatches. Can't have real children
@@ -74,25 +71,57 @@ public class BatchedSprite extends Sprite {
     }
 
     @Override
+    public boolean detachSelf() {
+        detachChildren();
+        boolean result = super.detachSelf();
+        setParent(null);
+        return result;
+    }
+
+    @Override
     public void detachChildren() {
-        for (BatchedSprite sprite : mChildren) {
-            EventBus.getDefault().post(new DetachSpriteEvent(sprite));
+        if (mChildren != null) {
+            for (int i = 0; i < mChildren.size(); i++) {
+                IEntity child = mChildren.get(i);
+                child.detachSelf();
+                child.setParent(null);
+            }
         }
     }
 
     @Override
+    @Deprecated
     public void attachChild(IEntity pEntity) {
-        mChildren.add((BatchedSprite) pEntity);
-        EventBus.getDefault().post(new AttachSpriteEvent((BatchedSprite) pEntity));
+        BatchedSprite child = (BatchedSprite) pEntity;
+        child.attachSelf();
+        mChildren.add(child);
     }
 
     @Override
     public boolean detachChild(IEntity pEntity) {
-        if (mChildren.contains(pEntity)) {
-            EventBus.getDefault().post(new DetachSpriteEvent((BatchedSprite) pEntity));
+        if (mChildren.remove(pEntity)) {
+            pEntity.detachSelf();
+            pEntity.setParent(null);
             return true;
         }
         return false;
+    }
+
+    public void addChild(BatchedSprite child) {
+        mChildren.add(child);
+    }
+
+    public void attachChildren() {
+        if (mChildren != null) {
+            for (int i = 0; i < mChildren.size(); i++) {
+                mChildren.get(i).attachSelf();
+            }
+        }
+    }
+
+    public void attachSelf() {
+        SpriteGroupHolder.getGroup(getSpriteGroupName()).attachChild(this);
+        attachChildren();
     }
 
     protected ITextureRegion loadResource(String pathToImage, BitmapTextureAtlas textureAtlas,

@@ -14,7 +14,6 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IFireL
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.filtering.IEnemiesFilter;
 import com.gmail.yaroslavlancelot.eafall.game.entity.health.IHealthBar;
 import com.gmail.yaroslavlancelot.eafall.game.entity.health.UnitHealthBar;
-import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.AttachSpriteEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.CreatePhysicBodyEvent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
@@ -107,6 +106,8 @@ public abstract class Unit extends GameObject implements
         PlayersHolder.getPlayer(mPlayerName).removeObjectFromPlayer(this);
         getBody().setTransform(-100, -100, 0);
         getBody().setActive(false);
+        //TODO maybe we have to set to ignore update (unit and children) to improve performance?
+        setVisible(false);
         onUnitDestroyed();
     }
 
@@ -145,23 +146,16 @@ public abstract class Unit extends GameObject implements
             EventBus.getDefault().post(new CreatePhysicBodyEvent(this, getBodyType(),
                     player.getFixtureDefUnit(), posX, posY, angle));
         } else {
+            existingUnit = getParent() != null;
+            setPosition(x, y);
             getBody().setActive(true);
             getBody().setTransform(posX, posY, angle);
-            existingUnit = true;
+            setVisible(true);
         }
-
-        if (player.getControlType() == IPlayer.ControlType.REMOTE_CONTROL_ON_CLIENT_SIDE) {
-            removeDamage();
-        }
-
         if (!existingUnit) {
-            EventBus.getDefault().post(new AttachSpriteEvent(this));
+            attachSelf();
         }
         player.addObjectToPlayer(this);
-    }
-
-    public void removeDamage() {
-        mObjectDamage.removeDamage();
     }
 
     /** define unit behaviour/lifecycle */

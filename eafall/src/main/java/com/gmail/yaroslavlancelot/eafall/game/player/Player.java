@@ -194,8 +194,7 @@ public class Player implements IPlayer {
     public void createUnitPool(VertexBufferObjectManager vertexManager) {
         IAlliance alliance = getAlliance();
         Set<Integer> ids = alliance.getUnitsIds();
-        mUnitsPools = new SparseArray<AfterInitializationPool<Unit>>(
-                ids.size());
+        mUnitsPools = new SparseArray<>(ids.size());
         ITextureRegion textureRegion;
         UnitDummy dummy;
         AfterInitializationPool pool;

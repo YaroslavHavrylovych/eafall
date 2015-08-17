@@ -180,7 +180,7 @@ public class PlanetStaticObject extends StaticObject implements IPlayerObject {
         }
         boolean result = building.buyBuilding();
         if (result && building.getAmount() == 1) {
-            attachChild(building.getEntity());
+            building.getEntity().attachSelf();
         }
         return result;
     }

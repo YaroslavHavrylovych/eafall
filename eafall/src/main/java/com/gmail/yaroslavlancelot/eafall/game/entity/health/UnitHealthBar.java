@@ -5,7 +5,6 @@ import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.BatchedSprite;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 
-import org.andengine.entity.IEntity;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
@@ -15,10 +14,6 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
  * @author Yaroslav Havrylovych
  */
 public class UnitHealthBar implements IHealthBar {
-
-    public static String getHealthBarTextureRegionKey(String player) {
-        return "health_bar_" + player;
-    }
 
     private final BatchedSprite mHealthBarRectangle;
     private float mHealthBarWidth = SizeConstants.UNIT_SIZE;
@@ -36,8 +31,18 @@ public class UnitHealthBar implements IHealthBar {
     }
 
     @Override
-    public void attachHealthBar(final IEntity parent) {
-        parent.attachChild(mHealthBarRectangle);
+    public boolean isVisible() {
+        return mHealthBarRectangle.isVisible();
+    }
+
+    @Override
+    public void setVisible(boolean visible) {
+        mHealthBarRectangle.setVisible(visible);
+    }
+
+    @Override
+    public void addToParent(final BatchedSprite parent) {
+        parent.addChild(mHealthBarRectangle);
     }
 
     @Override
@@ -53,13 +58,7 @@ public class UnitHealthBar implements IHealthBar {
         mHealthBarRectangle.setWidth(mHealthBarWidth * actualHealth / healthMax);
     }
 
-    @Override
-    public void setVisible(boolean visible) {
-        mHealthBarRectangle.setVisible(visible);
-    }
-
-    @Override
-    public boolean isVisible() {
-        return mHealthBarRectangle.isVisible();
+    public static String getHealthBarTextureRegionKey(String player) {
+        return "health_bar_" + player;
     }
 }

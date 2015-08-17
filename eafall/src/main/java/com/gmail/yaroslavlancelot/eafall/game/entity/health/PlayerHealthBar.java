@@ -84,9 +84,20 @@ public class PlayerHealthBar implements IHealthBar {
     }
 
     @Override
-    public void attachHealthBar(final IEntity parent) {
-        for (IEntity healthBarPlank : mHealthPlanks) {
-            parent.attachChild(healthBarPlank);
+    public boolean isVisible() {
+        // just a stub to fit interface
+        return true;
+    }
+
+    @Override
+    public void setVisible(boolean visible) {
+        // just a stub to fit interface
+    }
+
+    @Override
+    public void addToParent(final BatchedSprite parent) {
+        for (BatchedSprite healthBarPlank : mHealthPlanks) {
+            parent.addChild(healthBarPlank);
         }
     }
 
@@ -178,16 +189,5 @@ public class PlayerHealthBar implements IHealthBar {
                 : SizeConstants.HALF_FIELD_WIDTH + HEALTH_BAR_CARCASS_HALF_WIDTH - plankCenterX;
         plankCenterY = SizeConstants.GAME_FIELD_HEIGHT - plankCenterY;
         healthBarPlank.setPosition(plankCenterX, plankCenterY);
-    }
-
-    @Override
-    public void setVisible(boolean visible) {
-        // just a stub to fit interface
-    }
-
-    @Override
-    public boolean isVisible() {
-        // just a stub to fit interface
-        return true;
     }
 }

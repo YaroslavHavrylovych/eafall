@@ -185,11 +185,18 @@ public abstract class GameObject extends BodiedSprite {
         mObjectMaximumHealth = objectMaximumHealth;
     }
 
+    /**
+     * creates the new health bar if the game object doesn't have one and attach it
+     * <p/>
+     * P.S. only if {@link #createHealthBar} will return not null
+     */
     protected void initHealthBar() {
-        mHealthBar = createHealthBar();
-        if (mHealthBar != null) {
-            initChildren();
-            mHealthBar.attachHealthBar(this);
+        if (mHealthBar == null) {
+            mHealthBar = createHealthBar();
+            if (mHealthBar != null) {
+                initChildren();
+                mHealthBar.addToParent(this);
+            }
         }
     }
 
