@@ -60,7 +60,7 @@ abstract class BaseResourceLoader implements IResourcesLoader {
 
     @Override
     public void loadSplashImages(TextureManager textureManager,
-                                              VertexBufferObjectManager vertexBufferObjectManager) {
+                                 VertexBufferObjectManager vertexBufferObjectManager) {
         SplashScene.loadResources(EaFallApplication.getContext(), textureManager);
     }
 
@@ -79,9 +79,7 @@ abstract class BaseResourceLoader implements IResourcesLoader {
      */
     protected IBitmapTextureAtlasSource createColoredTextureAtlasSource(Color color,
                                                                         int width, int height) {
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_4444);
-        bitmap.eraseColor(color.getARGBPackedInt());
-        return new BitmapTextureAtlasSource(bitmap);
+        return new BitmapTextureAtlasSource(color, width, height);
     }
 
     /** loads background image using path #mBackgroundImagePath */
@@ -120,16 +118,18 @@ abstract class BaseResourceLoader implements IResourcesLoader {
 
     /** create texture atlas source out of bitmap */
     private class BitmapTextureAtlasSource extends EmptyBitmapTextureAtlasSource {
-        private Bitmap mBitmap;
+        private Color mColor;
 
-        public BitmapTextureAtlasSource(Bitmap bitmap) {
-            super(bitmap.getWidth(), bitmap.getHeight());
-            mBitmap = bitmap;
+        public BitmapTextureAtlasSource(Color color, int width, int height) {
+            super(width, height);
+            mColor = color;
         }
 
         @Override
         public Bitmap onLoadBitmap(Bitmap.Config pBitmapConfig, boolean pMutable) {
-            return mBitmap;
+            Bitmap bitmap = Bitmap.createBitmap(mTextureWidth, mTextureHeight, Bitmap.Config.ARGB_4444);
+            bitmap.eraseColor(mColor.getARGBPackedInt());
+            return bitmap;
         }
     }
 }
