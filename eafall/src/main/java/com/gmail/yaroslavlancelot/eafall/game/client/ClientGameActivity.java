@@ -54,6 +54,7 @@ import com.gmail.yaroslavlancelot.eafall.game.resources.loaders.ClientResourcesL
 import com.gmail.yaroslavlancelot.eafall.game.rule.IRuler;
 import com.gmail.yaroslavlancelot.eafall.game.rule.RulesFactory;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
+import com.gmail.yaroslavlancelot.eafall.general.EbSubscribersHolder;
 
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.entity.Entity;
@@ -69,8 +70,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import de.greenrobot.event.EventBus;
 
 /**
  * Main game Activity. Extends {@link BaseGameActivity} class and contains main game elements.
@@ -105,7 +104,7 @@ public abstract class ClientGameActivity extends EaFallActivity {
     @Override
     protected void loadResources() {
         //game resources
-        EventBus.getDefault().register(ClientGameActivity.this);
+        EbSubscribersHolder.register(ClientGameActivity.this);
         //alliance and player
         createAlliances();
         createPlayers();
@@ -335,7 +334,7 @@ public abstract class ClientGameActivity extends EaFallActivity {
             public void run() {
                 parent.attachChild(sprite);
             }
-        });
+        }, true);
     }
 
     /**
@@ -362,10 +361,6 @@ public abstract class ClientGameActivity extends EaFallActivity {
     /** really used by {@link de.greenrobot.event.EventBus} */
     public void onEvent(final CreateMovableUnitEvent unitEvent) {
         final IPlayer player = PlayersHolder.getInstance().getElement(unitEvent.getPlayerName());
-        //check units amount limit
-        if (player.getUnitsAmount() >= mMissionConfig.getMovableUnitsLimit()) {
-            return;
-        }
         int unitKey = unitEvent.getKey();
         createMovableUnit(player, unitKey, unitEvent.getX(), unitEvent.getY(), unitEvent.isTopPath());
     }

@@ -7,6 +7,8 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.Buildin
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.UnitByBuildingDescriptionShowEvent;
+import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
+import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.popup.PopupHud;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.IPopupUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.building.BaseBuildingPopupUpdater;
@@ -15,12 +17,11 @@ import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.building
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.building.special.SpecialBuildingPopupUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.building.wealth.WealthBuildingPopupUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.unit.UnitPopupUpdater;
-import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
-import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.touch.StaticHelper;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.ConstructionPopupButton;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.DescriptionText;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.Link;
+import com.gmail.yaroslavlancelot.eafall.general.EbSubscribersHolder;
 
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.Scene;
@@ -28,8 +29,6 @@ import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
-
-import de.greenrobot.event.EventBus;
 
 /**
  * Handle logic of redrawing and showing/hiding description popup.
@@ -69,29 +68,15 @@ public class DescriptionPopupHud extends PopupHud {
         mSpecialBuildingPopupUpdater = new SpecialBuildingPopupUpdater(vertexBufferObjectManager, this);
         mUnitsDescriptionUpdater = new UnitPopupUpdater(vertexBufferObjectManager, this);
         mDefenceBuildingPopupUpdater = new DefenceBuildingPopupUpdater(vertexBufferObjectManager, this);
-
         mPopupRectangle.setTouchCallback(StaticHelper.EmptyTouch.getInstance());
         initBackgroundSprite(vertexBufferObjectManager);
-        EventBus.getDefault().register(this);
+        EbSubscribersHolder.register(this);
     }
 
     private void initBackgroundSprite(VertexBufferObjectManager vertexBufferObjectManager) {
         mDescriptionPopupBackground = new DescriptionPopupBackground(
                 mPopupRectangle.getWidth(), mPopupRectangle.getHeight(), vertexBufferObjectManager);
         mPopupRectangle.attachChild(mDescriptionPopupBackground);
-    }
-
-    public static void loadResources(Context context, TextureManager textureManager) {
-        ConstructionPopupButton.loadResources(context, textureManager);
-        DescriptionPopupBackground.loadResources(context, textureManager);
-        BaseBuildingPopupUpdater.loadResources(context, textureManager);
-    }
-
-    public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
-        DescriptionPopupBackground.loadFonts(fontManager, textureManager);
-        BaseBuildingPopupUpdater.loadFonts(fontManager, textureManager);
-        DescriptionText.loadFonts(fontManager, textureManager);
-        Link.loadFonts(fontManager, textureManager);
     }
 
     @SuppressWarnings("unused")
@@ -149,5 +134,18 @@ public class DescriptionPopupHud extends PopupHud {
         mDescriptionPopupBackground.updateDescription(mUnitsDescriptionUpdater, objectId,
                 player.getAlliance().getAllianceName(), player.getName());
         showPopup();
+    }
+
+    public static void loadResources(Context context, TextureManager textureManager) {
+        ConstructionPopupButton.loadResources(context, textureManager);
+        DescriptionPopupBackground.loadResources(context, textureManager);
+        BaseBuildingPopupUpdater.loadResources(context, textureManager);
+    }
+
+    public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
+        DescriptionPopupBackground.loadFonts(fontManager, textureManager);
+        BaseBuildingPopupUpdater.loadFonts(fontManager, textureManager);
+        DescriptionText.loadFonts(fontManager, textureManager);
+        Link.loadFonts(fontManager, textureManager);
     }
 }

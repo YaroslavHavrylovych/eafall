@@ -23,6 +23,7 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.pool.Statio
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.stationary.StationaryUnitBuilder;
 import com.gmail.yaroslavlancelot.eafall.game.events.SharedEvents;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.UpgradeBuildingEvent;
+import com.gmail.yaroslavlancelot.eafall.general.EbSubscribersHolder;
 
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -36,8 +37,6 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import de.greenrobot.event.EventBus;
 
 /** Player player implementation */
 public class Player implements IPlayer {
@@ -90,7 +89,7 @@ public class Player implements IPlayer {
         initBuildingsTypes(alliance);
         mControlType = playerType;
         mPlayerFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f, false);
-        EventBus.getDefault().register(this);
+        EbSubscribersHolder.register(this);
     }
 
     @Override

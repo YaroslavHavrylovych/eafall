@@ -8,10 +8,11 @@ import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.BuildingsAmountChangedEvent;
-import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.BasePopupUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
+import com.gmail.yaroslavlancelot.eafall.game.popup.description.updater.BasePopupUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.TextButton;
+import com.gmail.yaroslavlancelot.eafall.general.EbSubscribersHolder;
 import com.gmail.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 
 import org.andengine.entity.IEntity;
@@ -22,8 +23,6 @@ import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-
-import de.greenrobot.event.EventBus;
 
 /**
  * Base building description functionality
@@ -48,31 +47,10 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
     public BaseBuildingPopupUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         super(vertexBufferObjectManager, scene);
         mAmountDrawer = new AmountDrawer(vertexBufferObjectManager);
-
         mFirstButton = new TextButton(vertexBufferObjectManager, 300,
                 SizeConstants.DESCRIPTION_POPUP_DES_BUTTON_HEIGHT);
         mScene.registerTouchArea(mFirstButton);
-
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void updateAdditionInfo(final Shape drawArea, final Object objectId, final String allianceName, final String playerName) {
-        if (mAdditionDescriptionImage != null) {
-            mScene.unregisterTouchArea(mAdditionDescriptionImage);
-            mAdditionDescriptionImage.detachSelf();
-        }
-    }
-
-    public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
-        //amount font
-        AmountDrawer.loadFonts(fontManager, textureManager);
-        TextButton.loadFonts(fontManager, textureManager);
-    }
-
-    public static void loadResources(Context context, TextureManager textureManager) {
-        TextButton.loadResources(context, textureManager);
-        AmountDrawer.loadResources(context, textureManager);
+        EbSubscribersHolder.register(this);
     }
 
     @Override
@@ -83,18 +61,6 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
                 player.getPlanet().getBuildingsAmount(mBuildingId.getId()));
         mPlayerName = playerName;
         super.updateImage(drawArea, objectId, allianceName, playerName);
-    }
-
-    private void updateBuildingsAmount(IEntity entity, int buildingsAmount) {
-        mAmountDrawer.setText(buildingsAmount);
-        mAmountDrawer.draw(entity);
-    }
-
-    @Override
-    protected String getDescribedObjectName(Object objectId, String allianceName) {
-        return LocaleImpl.getInstance().getStringById
-                (AllianceHolder.getInstance().getElement(allianceName)
-                        .getBuildingDummy((BuildingId) objectId).getStringId());
     }
 
     @Override
@@ -110,6 +76,13 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
         mBuildingId = sNoValue;
         mPlayerName = "";
         mDescriptionAreaUpdater.clearDescription();
+    }
+
+    @Override
+    protected String getDescribedObjectName(Object objectId, String allianceName) {
+        return LocaleImpl.getInstance().getStringById
+                (AllianceHolder.getInstance().getElement(allianceName)
+                        .getBuildingDummy((BuildingId) objectId).getStringId());
     }
 
     @Override
@@ -129,6 +102,19 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
         drawArea.attachChild(mFirstButton);
     }
 
+    @Override
+    public void updateAdditionInfo(final Shape drawArea, final Object objectId, final String allianceName, final String playerName) {
+        if (mAdditionDescriptionImage != null) {
+            mScene.unregisterTouchArea(mAdditionDescriptionImage);
+            mAdditionDescriptionImage.detachSelf();
+        }
+    }
+
+    private void updateBuildingsAmount(IEntity entity, int buildingsAmount) {
+        mAmountDrawer.setText(buildingsAmount);
+        mAmountDrawer.draw(entity);
+    }
+
     /** updates buildings amount */
     public void onEvent(final BuildingsAmountChangedEvent buildingsAmountChangedEvent) {
         if (!mPlayerName.equals(buildingsAmountChangedEvent.getPlayerName())
@@ -136,5 +122,16 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
             return;
         }
         mAmountDrawer.setText(buildingsAmountChangedEvent.getNewBuildingsAmount());
+    }
+
+    public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
+        //amount font
+        AmountDrawer.loadFonts(fontManager, textureManager);
+        TextButton.loadFonts(fontManager, textureManager);
+    }
+
+    public static void loadResources(Context context, TextureManager textureManager) {
+        TextButton.loadResources(context, textureManager);
+        AmountDrawer.loadResources(context, textureManager);
     }
 }
