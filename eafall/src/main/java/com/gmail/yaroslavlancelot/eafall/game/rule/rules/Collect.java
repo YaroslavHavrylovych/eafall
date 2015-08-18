@@ -45,7 +45,7 @@ public class Collect extends GeneralRules {
     @Override
     protected void addRules() {
         for (IPlayer player : PlayersHolder.getInstance().getElements()) {
-            if (player.getControlType().isUserControlType()) {
+            if (player.getControlType().user()) {
                 String key = player.getOxygenChangedKey();
                 SharedEvents.addCallback(new SharedEvents.DataChangedCallback(key) {
                     @Override

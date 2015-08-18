@@ -51,7 +51,7 @@ public class DefenceBuilding extends Building {
         }
         boolean buildingBought = super.buyBuilding();
         IPlayer player = PlayersHolder.getPlayer(mPlayerName);
-        boolean isFakePlanet = player.getControlType().isClientSide();
+        boolean isFakePlanet = player.getControlType().clientSide();
         //building was created
         if (isFakePlanet || buildingBought) {
             if (isFakePlanet) {

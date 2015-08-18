@@ -9,7 +9,6 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.EaFallActivity;
-import com.gmail.yaroslavlancelot.eafall.game.ai.VeryFirstBot;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
 import com.gmail.yaroslavlancelot.eafall.game.audio.BackgroundMusic;
@@ -214,19 +213,14 @@ public abstract class ClientGameActivity extends EaFallActivity {
      *
      * @param player player to init
      */
-    private void initPlayer(IPlayer player) {
+    protected void initPlayer(IPlayer player) {
         IPlayer.ControlType playerType = player.getControlType();
         initPlayerFixtureDef(player);
-
-        if (playerType == IPlayer.ControlType.BOT_CONTROL_ON_SERVER_SIDE) {
-            initBotControlledPlayer(player);
-        }
-
         PlayersHolder.getInstance().addElement(player.getName(), player);
     }
 
     protected void initPlayerFixtureDef(IPlayer player) {
-        boolean isRemote = player.getControlType().isClientSide();
+        boolean isRemote = player.getControlType().clientSide();
         if (player.getName().equals(StringConstants.FIRST_PLAYER_CONTROL_BEHAVIOUR_TYPE)) {
             if (isRemote)
                 player.changeFixtureDefFilter(CollisionCategories.CATEGORY_PLAYER1, CollisionCategories.MASKBITS_PLAYER1_THIN);
@@ -296,11 +290,6 @@ public abstract class ClientGameActivity extends EaFallActivity {
         mGameObjectsMap.put(sunStaticObject.getObjectUniqueId(), sunStaticObject);
         onEvent(new CreatePhysicBodyEvent(sunStaticObject));
         return sunStaticObject;
-    }
-
-    protected void initBotControlledPlayer(final IPlayer initializingPlayer) {
-        LoggerHelper.methodInvocation(TAG, "initBotControlledPlayer");
-        new Thread(new VeryFirstBot(initializingPlayer)).start();
     }
 
     @SuppressWarnings("unused")

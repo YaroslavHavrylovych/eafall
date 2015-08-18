@@ -75,7 +75,7 @@ public abstract class Building implements IBuilding {
             return false;
         }
         IPlayer player = PlayersHolder.getPlayer(mPlayerName);
-        if (!player.getControlType().isClientSide()) {
+        if (!player.getControlType().clientSide()) {
             int cost = mDummy.getCost(mUpgrade);
             if (player.getMoney() < cost) {
                 return false;

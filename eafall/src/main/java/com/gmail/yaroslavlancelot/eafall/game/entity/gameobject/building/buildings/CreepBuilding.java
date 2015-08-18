@@ -34,7 +34,7 @@ public class CreepBuilding extends Building implements ICreepBuilding {
     public boolean buyBuilding() {
         boolean result = super.buyBuilding();
         IPlayer player = PlayersHolder.getPlayer(mPlayerName);
-        boolean isClientSide = player.getControlType().isClientSide();
+        boolean isClientSide = player.getControlType().clientSide();
         //building was created
         if (isClientSide || result) {
             setIncome(mBuildingsAmount * mBuildingStaticObject.getIncome());
@@ -114,7 +114,7 @@ public class CreepBuilding extends Building implements ICreepBuilding {
         }
 
         IPlayer player = PlayersHolder.getPlayer(mPlayerName);
-        boolean isFakePlanet = player.getControlType().isClientSide();
+        boolean isFakePlanet = player.getControlType().clientSide();
         if (!isFakePlanet) {
             int cost = mCreepBuildingDummy.getCost(nextUpgrade);
             //check money

@@ -72,7 +72,7 @@ public abstract class GeneralRules implements IRuler {
                 @Override
                 public void objectDestroyed(final BodiedSprite gameObject) {
                     if (!mDone) {
-                        if (player.getControlType().isUserControlType()) {
+                        if (player.getControlType().user()) {
                             ruleCompleted(false);
                         } else {
                             onOpponentPlanetDestroyed();

@@ -161,14 +161,19 @@ public interface IPlayer {
         REMOTE_CONTROL_ON_CLIENT_SIDE;
 
         /** returns true if type parameter is player type controlled by user (remote or local) */
-        public boolean isUserControlType() {
+        public boolean user() {
             return this == ControlType.USER_CONTROL_ON_SERVER_SIDE
                     || this == ControlType.USER_CONTROL_ON_CLIENT_SIDE;
         }
 
+        /** returns true if type parameter is player type controlled by user (remote or local) */
+        public boolean bot() {
+            return this == ControlType.BOT_CONTROL_ON_SERVER_SIDE;
+        }
+
 
         /** return true if type parameter corresponding to client side */
-        public boolean isClientSide() {
+        public boolean clientSide() {
             //TODO check this when you will check the multiplayer
             return this == ControlType.REMOTE_CONTROL_ON_CLIENT_SIDE
                     || this == ControlType.USER_CONTROL_ON_CLIENT_SIDE;

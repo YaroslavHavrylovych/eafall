@@ -179,7 +179,7 @@ public class EaFallHud extends HUD {
             boolean left = player.getPlanet().isLeft();
             List<HudGameValue> list = left ? mLeftPart : mRightPart;
             float xPos = left ? SizeConstants.HUD_VALUES_X_LEFT : SizeConstants.HUD_VALUES_X_RIGHT;
-            if (player.getControlType().isUserControlType()) {
+            if (player.getControlType().user()) {
                 initPopups(player, camera, vertexManager);
                 initOxygen(player, list, xPos, vertexManager);
                 initMovableUnitsLimit(player, list, xPos, vertexManager, missionConfig.getMovableUnitsLimit());
