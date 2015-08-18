@@ -12,9 +12,7 @@ import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /** init and handel all application popups logic */
@@ -36,8 +34,6 @@ public class PopupManager {
         popup = new GameOverPopup(scene, vertexManager);
         popup.setCamera(camera);
         mPopups.put(GameOverPopup.KEY, popup);
-
-        initStateChangingListeners();
     }
 
     public static PopupManager getInstance() {
@@ -72,43 +68,5 @@ public class PopupManager {
     public static IPopup getPopup(String key) {
         PopupManager popupManager = getInstance();
         return getInstance() == null ? null : popupManager.mPopups.get(key);
-    }
-
-    private void initStateChangingListeners() {
-        for (String key : mPopups.keySet()) {
-            mPopups.get(key).setStateChangingListener(new StateChangingImpl(key));
-        }
-    }
-
-    private class StateChangingImpl implements PopupHud.StateChangingListener {
-        private String mPopupKey;
-        private List<String> mPopupsForShow = new ArrayList<String>(2);
-
-        public StateChangingImpl(String popupKey) {
-            mPopupKey = popupKey;
-        }
-
-        @Override
-        public void onShowed() {
-            mPopupsForShow.clear();
-            for (String key : mPopups.keySet()) {
-                if (key.equals(mPopupKey)) {
-                    continue;
-                }
-                PopupHud popup = mPopups.get(key);
-                if (popup.isShowing()) {
-                    popup.hidePopup();
-                    mPopupsForShow.add(key);
-                }
-            }
-        }
-
-        @Override
-        public void onHided() {
-            for (String key : mPopupsForShow) {
-                mPopups.get(key).showPopup();
-            }
-            mPopupsForShow.clear();
-        }
     }
 }
