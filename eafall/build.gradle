@@ -1,4 +1,17 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+
+buildscript {
+    ext.kotlin_version = '0.12.1230'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
 
 repositories {
     mavenCentral()
@@ -8,15 +21,22 @@ dependencies {
     compile project(':andenginemultiplayerextension')
     compile 'de.greenrobot:eventbus:2.4.0'
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 
 android {
     compileSdkVersion 19
     buildToolsVersion "19.1.0"
 
+    sourceSets {
+        androidTest.java.srcDirs += 'src/androidTest/kotlin'
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
     defaultConfig {
-        testInstrumentationRunner "com.gmail.yaroslavlancelot.eafall.DefaultInstrumentationTestRunner"
-        testApplicationId "com.gmail.yaroslavlancelot.eafall"
+        testInstrumentationRunner "com.gmail.yaroslavlancelot.eafall.test.DefaultInstrumentationTestRunner"
+        testApplicationId "com.gmail.yaroslavlancelot.eafall.test"
+        applicationId "com.gmail.yaroslavlancelot.eafall"
     }
 
     compileOptions {
