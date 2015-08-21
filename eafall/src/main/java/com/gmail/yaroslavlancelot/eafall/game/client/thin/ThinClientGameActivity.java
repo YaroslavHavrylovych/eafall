@@ -93,7 +93,7 @@ public class ThinClientGameActivity extends ClientGameActivity implements InGame
                 if (!gameObject.isObjectAlive()) return;
                 Body body = unit.getBody();
                 body.setTransform(x, y, 0);
-                unit.rotate(rotation);
+                unit.setRotation(rotation);
                 unit.setUnitLinearVelocity(velocityX, velocityY);
             }
         });
@@ -131,6 +131,7 @@ public class ThinClientGameActivity extends ClientGameActivity implements InGame
             public void run() {
                 Unit unit = (Unit) gameObject;
                 if (unit.isObjectAlive()) {
+                    //TODO this probably wouldn't work (rotation logic were changed)
                     unit.fire(objectToAttack);
                 }
             }
