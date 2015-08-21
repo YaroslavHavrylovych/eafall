@@ -34,8 +34,8 @@ public class ApplicationConfig {
     private final int mMaxSimultaneousSoundStreams = 4;
     private final boolean mSoundsEnabled = true;
     private final boolean mMusicEnabled = true;
-    private final float mMusicVolumeMax = 0.4f;
-    private final float mSoundVolumeMax = 0.9f;
+    private final float mMusicVolumeMax = 0.8f;
+    private final float mSoundVolumeMax = 0.4f;
     /*
      * Additional
      */

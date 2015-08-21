@@ -34,7 +34,7 @@ public class SunStaticObject extends StaticObject {
         BatchedSprite sunHaze = new BatchedSprite(x, y, getWidth(), getHeight(),
                 TextureRegionHolder.getRegion(StringConstants.KEY_SUN_HAZE), vertexBufferObjectManager);
         sunHaze.setSpriteGroupName(BatchingKeys.SUN_PLANET);
-        attachChild(sunHaze);
+        sunHaze.attachSelf();
         IEntityModifier topSunRotation = new InstantRotationModifier(200);
         sunHaze.registerEntityModifier(topSunRotation);
     }

@@ -1,7 +1,6 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.stationary;
 
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path.PathHelper;
 
@@ -28,12 +27,23 @@ public class StationaryUnit extends Unit {
         return sBodyType;
     }
 
-    public void registerUpdateHandler() {
+    public void startLifecycle() {
         registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new StationaryUnitTimerCallback()));
     }
 
     @Override
-    protected void rotationBeforeFire(GameObject attackedObject) {
+    protected boolean needRotation(int angle) {
+        return false;
+    }
+
+    @Override
+    protected int getAngle(float x, float y) {
+        return 0;
+    }
+
+    @Override
+    protected void rotateWithAngle(int angle) {
+        throw new UnsupportedOperationException("can't rotate stationary unit");
     }
 
     /** stationary unit behaviour */

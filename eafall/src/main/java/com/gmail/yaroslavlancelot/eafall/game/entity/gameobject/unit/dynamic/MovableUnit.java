@@ -13,7 +13,6 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.pat
 
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
-import org.andengine.util.math.MathUtils;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -78,14 +77,9 @@ public class MovableUnit extends Unit {
     }
 
     @Override
-    public void registerUpdateHandler() {
+    public void startLifecycle() {
         //TODO no need to create object each time
         registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new SimpleUnitTimerCallback()));
-    }
-
-    @Override
-    protected void rotationBeforeFire(GameObject attackedObject) {
-        rotate(MathUtils.radToDeg(getDirection(attackedObject.getX(), attackedObject.getY())));
     }
 
     @Override
@@ -155,7 +149,11 @@ public class MovableUnit extends Unit {
     }
 
     public void initMovingPath(boolean ltr, boolean top) {
-        mUnitPath = PathHelper.createUnitPath(ltr, top);
+        IUnitPath unitPath = PathHelper.createUnitPath(ltr, top);
+        float[] res = new float[2];
+        unitPath.getNextPathPoint(new float[]{getX(), getX()}, res);
+        setRotation(getRotation() + getAngle(res[0], res[1]));
+        mUnitPath = unitPath;
     }
 
     /** remove bonuses which are supposed to die because of passes time */
@@ -212,13 +210,12 @@ public class MovableUnit extends Unit {
                 }
             }
 
-            //TODO maybe it's reasonable to save unit id to check if it the same unit before attack?
-            //TODO and the save unit id for stationary unit as well
             if (mObjectToAttack == null) {
                 mObjectToAttack = mEnemiesUpdater
                         .getFirstEnemyInRange(MovableUnit.this, mAttackRadius);
                 //attack founded enemy
                 if (mObjectToAttack != null) {
+                    setUnitLinearVelocity(0, 0);
                     attackTarget(mObjectToAttack);
                     return;
                 } else {
@@ -272,6 +269,7 @@ public class MovableUnit extends Unit {
                     //instead of distance between centers
                     - enemy.getWidth() / 2 - getWidth() / 2;
             if (distanceToTarget < mAttackRadius) {
+                setUnitLinearVelocity(0, 0);
                 attackTarget(enemy);
             } else if (distanceToTarget < getViewRadius()) {
                 // pursuit attacked unit
@@ -283,7 +281,10 @@ public class MovableUnit extends Unit {
         }
 
         private void moveToPoint(float x, float y) {
-            rotate(MathUtils.radToDeg(getDirection(x, y)));
+            int angle = getAngle(x, y);
+            if (needRotation(angle)) {
+                rotateWithAngle(angle);
+            }
 
             float distanceX = x - getX(),
                     distanceY = y - getY();

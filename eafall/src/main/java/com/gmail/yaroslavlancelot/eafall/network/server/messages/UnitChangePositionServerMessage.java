@@ -1,9 +1,8 @@
 package com.gmail.yaroslavlancelot.eafall.network.server.messages;
 
 import com.badlogic.gdx.math.Vector2;
-
-import com.gmail.yaroslavlancelot.eafall.network.server.messages.constants.ServerMessagesConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.MovableUnit;
+import com.gmail.yaroslavlancelot.eafall.network.server.messages.constants.ServerMessagesConstants;
 
 import org.andengine.extension.multiplayer.adt.message.server.ServerMessage;
 
@@ -29,7 +28,31 @@ public class UnitChangePositionServerMessage extends ServerMessage implements Se
         Vector2 velocityVector = unit.getBody().getLinearVelocity();
         mVelocityX = velocityVector.x;
         mVelocityY = velocityVector.y;
-        mRotationAngle = unit.getRotationAngle();
+        mRotationAngle = unit.getRotation();
+    }
+
+    public float getY() {
+        return mY;
+    }
+
+    public float getX() {
+        return mX;
+    }
+
+    public float getRotationAngle() {
+        return mRotationAngle;
+    }
+
+    public long getUnitUniqueId() {
+        return mUnitUniqueId;
+    }
+
+    public float getVelocityX() {
+        return mVelocityX;
+    }
+
+    public float getVelocityY() {
+        return mVelocityY;
     }
 
     @Override
@@ -55,27 +78,5 @@ public class UnitChangePositionServerMessage extends ServerMessage implements Se
     @Override
     public short getFlag() {
         return UNIT_MOVED;
-    }
-
-    public float getY() {
-        return mY;
-    }
-
-    public float getX() {
-        return mX;
-    }
-
-    public float getRotationAngle() { return mRotationAngle; }
-
-    public long getUnitUniqueId() {
-        return mUnitUniqueId;
-    }
-
-    public float getVelocityX() {
-        return mVelocityX;
-    }
-
-    public float getVelocityY() {
-        return mVelocityY;
     }
 }

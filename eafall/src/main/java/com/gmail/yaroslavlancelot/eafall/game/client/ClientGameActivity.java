@@ -205,6 +205,7 @@ public abstract class ClientGameActivity extends EaFallActivity {
         //other
         initPlayer(mFirstPlayer);
         initPlayer(mSecondPlayer);
+        mFirstPlayer.setMoney(2000);
     }
 
     /**
@@ -376,7 +377,7 @@ public abstract class ClientGameActivity extends EaFallActivity {
     protected Unit createUnit(int unitKey, final IPlayer unitPlayer, float x, float y) {
         Unit unit = createThinUnit(unitKey, unitPlayer, x, y);
         unit.setEnemiesUpdater(EnemiesFilterFactory.getFilter(unitPlayer.getEnemyPlayer()));
-        unit.registerUpdateHandler();
+        unit.startLifecycle();
         return unit;
     }
 

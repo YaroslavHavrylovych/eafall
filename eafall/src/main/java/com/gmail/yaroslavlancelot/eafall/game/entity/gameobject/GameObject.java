@@ -96,10 +96,6 @@ public abstract class GameObject extends BodiedSprite {
         return mObjectMaximumHealth;
     }
 
-    public float getRotationAngle() {
-        return getRotation();
-    }
-
     public void setGameObjectHealthChangedListener(IHealthListener gameObjectHealthChangedListener) {
         mGameObjectHealthChangedListener = gameObjectHealthChangedListener;
     }
@@ -131,42 +127,6 @@ public abstract class GameObject extends BodiedSprite {
     public void setPosition(float pX, float pY) {
         super.setPosition(pX, pY);
         updateHealthBarPosition();
-    }
-
-    /**
-     * Check vitality based on health
-     *
-     * @param health given health value
-     * @return true if health value more or equal zero or if health value is the key of
-     * undestroyable object.
-     * <br/>
-     * returns false if health value negative and health value is not the value of undestroyable object
-     */
-    protected static boolean checkHealth(int health) {
-        return health > 0 || health == sInvincibleObjectKey;
-    }
-
-    public static void clearCounter() {
-        sGameObjectsTracker.set(0);
-    }
-
-    /**
-     * return angle in radiance which is angle between abscissa and line from
-     * (startX, startY, x, y)
-     */
-    public static float getDirection(float startX, float startY, float x, float y) {
-        float a = Math.abs(startX - x),
-                b = Math.abs(startY - y);
-
-        float newAngle = (float) Math.atan(b / a);
-
-        if (startY > y) {
-            if (startX > x) return 3 * MathConstants.PI / 2 - newAngle;
-            else return newAngle + MathConstants.PI / 2;
-        }
-
-        if (startX > x) return newAngle + 3 * MathConstants.PI / 2;
-        return MathConstants.PI / 2 - newAngle;
     }
 
     protected void updateHealthBar() {
@@ -237,25 +197,44 @@ public abstract class GameObject extends BodiedSprite {
         }
     }
 
-    /** rotate all objects which hold current game object (and children) exclude health bar */
-    public void rotate(float angleInDeg) {
-        setRotation(angleInDeg);
-    }
-
-    /**
-     * physic body will change rotation (in radiance) to point it's head to the target.
-     *
-     * @param x target abscissa coordinate
-     * @param y target ordinate coordinate
-     * @return angle value if current angle needs to be changed and null if physic body already in position
-     */
-    public float getDirection(float x, float y) {
-        // next till the end will calculate angle
-        return getDirection(mX, mY, x, y);
-    }
-
     /** set physic body velocity */
     public void setUnitLinearVelocity(float x, float y) {
         mPhysicBody.setLinearVelocity(x, y);
+    }
+
+    /**
+     * Check vitality based on health
+     *
+     * @param health given health value
+     * @return true if health value more or equal zero or if health value is the key of
+     * undestroyable object.
+     * <br/>
+     * returns false if health value negative and health value is not the value of undestroyable object
+     */
+    protected static boolean checkHealth(int health) {
+        return health > 0 || health == sInvincibleObjectKey;
+    }
+
+    public static void clearCounter() {
+        sGameObjectsTracker.set(0);
+    }
+
+    /**
+     * return angle in radiance which is angle between ordinate and line from
+     * (startX, startY, x, y)
+     */
+    public static float getDirection(float startX, float startY, float x, float y) {
+        float a = Math.abs(startX - x),
+                b = Math.abs(startY - y);
+
+        float newAngle = (float) Math.atan(b / a);
+
+        if (startY > y) {
+            if (startX > x) return 3 * MathConstants.PI / 2 - newAngle;
+            else return newAngle + MathConstants.PI / 2;
+        }
+
+        if (startX > x) return newAngle + 3 * MathConstants.PI / 2;
+        return MathConstants.PI / 2 - newAngle;
     }
 }

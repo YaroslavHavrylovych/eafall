@@ -18,7 +18,9 @@ import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.CreatePhys
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
+import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
+import org.andengine.util.math.MathUtils;
 
 import de.greenrobot.event.EventBus;
 
@@ -31,6 +33,8 @@ public abstract class Unit extends GameObject implements
         IPlayerObject {
     /** tag for logger */
     public static final String TAG = Unit.class.getCanonicalName();
+    /** tag for logger */
+    public static final float ROTATION_SPEED = .0044f;
     /** update time for current object */
     protected float mUpdateCycleTime = .5f;
     /** delay time between attacks */
@@ -49,8 +53,10 @@ public abstract class Unit extends GameObject implements
     protected IFireListener mUnitFireCallback;
     /** unit shout sound */
     protected LimitedSoundWrapper mFireSound;
+    /** take care about unit rotation */
+    protected RotationModifier mUnitRotationModifier = new RotationModifier(0, 0, 0);
     /** unit player name */
-    private volatile String mPlayerName;
+    private String mPlayerName;
 
     /** create unit from appropriate builder */
     public Unit(UnitBuilder unitBuilder) {
@@ -103,6 +109,7 @@ public abstract class Unit extends GameObject implements
     protected void onNegativeHealth() {
         super.onNegativeHealth();
         clearUpdateHandlers();
+        clearEntityModifiers();
         PlayersHolder.getPlayer(mPlayerName).removeObjectFromPlayer(this);
         getBody().setTransform(-100, -100, 0);
         getBody().setActive(false);
@@ -136,7 +143,7 @@ public abstract class Unit extends GameObject implements
         IPlayer player = PlayersHolder.getPlayer(mPlayerName);
         setHealth(mObjectMaximumHealth);
         initHealthBar();
-
+        setPosition(x, y);
         boolean existingUnit;
         float posX = x / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
                 posY = y / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
@@ -147,7 +154,6 @@ public abstract class Unit extends GameObject implements
                     player.getFixtureDefUnit(), posX, posY, angle));
         } else {
             existingUnit = getParent() != null;
-            setPosition(x, y);
             getBody().setActive(true);
             getBody().setTransform(posX, posY, angle);
             setVisible(true);
@@ -159,25 +165,23 @@ public abstract class Unit extends GameObject implements
     }
 
     /** define unit behaviour/lifecycle */
-    public abstract void registerUpdateHandler();
+    public abstract void startLifecycle();
 
     public void fire(GameObject objectToAttack) {
         attackTarget(objectToAttack);
     }
 
     protected void attackTarget(GameObject attackedObject) {
-        setUnitLinearVelocity(0, 0);
-
-        rotationBeforeFire(attackedObject);
-
-        if (!isReloadFinished()) {
+        int angle = getAngle(attackedObject.getX(), attackedObject.getY());
+        if (needRotation(angle)) {
+            rotateWithAngle(angle);
+        }
+        if (!isReloadFinished() || !mUnitRotationModifier.isFinished()) {
             return;
         }
-
         if (mUnitFireCallback != null) {
             mUnitFireCallback.fire(getObjectUniqueId(), attackedObject.getObjectUniqueId());
         }
-
         playSound(mFireSound);
         Bullet bullet = BulletPool.getInstance().obtainPoolItem();
 
@@ -185,10 +189,54 @@ public abstract class Unit extends GameObject implements
     }
 
     /**
-     * To rotate unit to the target before fire. Abstract because movable units does need it and
-     * immovable doesn't.
+     * Only angles with absolute value > 4 need rotation
+     *
+     * @param angle given angle for rotation
+     * @return true if absolute angle value > 4 and false in other case
      */
-    protected abstract void rotationBeforeFire(GameObject attackedObject);
+    protected boolean needRotation(int angle) {
+        return (angle < -4) || (angle > 4);
+    }
+
+    /**
+     * Calculates the angle unit has to rotate.
+     * <p/>
+     * return the smallest angle unit has to rotate to get on direction from his current
+     * position to given coordinates.
+     * <br/>
+     * E.g. unit are on position 10, 10 and his angle is 90. His next point is 10,20.
+     * So unit will rotate to -90 degrees to point to the 10,20.
+     *
+     * @param x target abscissa
+     * @param y target ordinate
+     * @return angle unit has to rotate from current angle (-180 <= angle <= 180)
+     */
+    protected int getAngle(float x, float y) {
+        int a = ((int) mRotation) % 360;
+        int b = (int) MathUtils.radToDeg(getDirection(mX, mY, x, y));
+        boolean plus = b > a;
+        int alpha = plus ? b - a : a - b;
+        int res;
+        if (alpha <= 180) {
+            res = plus ? alpha : -alpha;
+        } else {
+            res = plus ? alpha - 360 : 360 - alpha;
+        }
+        return res;
+    }
+
+    /**
+     * rotate the unit from current_rotation to (current_rotation + angle)
+     *
+     * @param angle the angle unit has to pass
+     */
+    protected void rotateWithAngle(int angle) {
+        unregisterEntityModifier(mUnitRotationModifier);
+        int fromAngle = (int) getRotation();
+        int toAngle = fromAngle + angle;
+        mUnitRotationModifier.reset(ROTATION_SPEED * angle, fromAngle, toAngle);
+        registerEntityModifier(mUnitRotationModifier);
+    }
 
     /**
      * where the bullet will appear during the fire operation
