@@ -69,11 +69,13 @@ public class MovableUnit extends Unit {
     }
 
     @Override
-    protected void onNegativeHealth() {
+    protected void destroy() {
         removeBonuses();
-        mHealthBar.setVisible(false);
-        mLastHitTime = 0;
-        super.onNegativeHealth();
+        if(mHealthBar != null) {
+            mHealthBar.setVisible(false);
+            mLastHitTime = 0;
+        }
+        super.destroy();
     }
 
     @Override
@@ -149,11 +151,7 @@ public class MovableUnit extends Unit {
     }
 
     public void initMovingPath(boolean ltr, boolean top) {
-        IUnitPath unitPath = PathHelper.createUnitPath(ltr, top);
-        float[] res = new float[2];
-        unitPath.getNextPathPoint(new float[]{getX(), getX()}, res);
-        setRotation(getRotation() + getAngle(res[0], res[1]));
-        mUnitPath = unitPath;
+        mUnitPath = PathHelper.createUnitPath(ltr, top);
     }
 
     /** remove bonuses which are supposed to die because of passes time */

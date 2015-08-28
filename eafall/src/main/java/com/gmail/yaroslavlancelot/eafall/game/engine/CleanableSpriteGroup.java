@@ -10,6 +10,9 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import java.util.Iterator;
 
 /**
+ * If {@link CleanableSpriteGroup} reach the capacity than it detaches all
+ * entities which ignore updates.
+ *
  * @author Yaroslav Havrylovych
  */
 public class CleanableSpriteGroup extends SpriteGroup {
@@ -44,7 +47,7 @@ public class CleanableSpriteGroup extends SpriteGroup {
             LoggerHelper.printWarnMessage(this.getClass().getSimpleName(), "cleanable limit reached");
             for (Iterator<IEntity> iterator = mChildren.iterator(); iterator.hasNext(); ) {
                 IEntity child = iterator.next();
-                if (!child.isVisible()) {
+                if (child.isIgnoreUpdate()) {
                     iterator.remove();
                     child.detachChildren();
                     child.setParent(null);

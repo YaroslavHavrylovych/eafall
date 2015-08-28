@@ -8,8 +8,6 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.Mov
 import com.gmail.yaroslavlancelot.eafall.test.game.entity.gameobject.unit.UnitTest
 import org.andengine.engine.handler.IUpdateHandler
 import org.andengine.entity.modifier.RotationModifier
-import org.andengine.opengl.texture.EmptyTexture
-import org.andengine.opengl.texture.TextureManager
 import org.andengine.opengl.texture.region.TextureRegion
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -20,7 +18,7 @@ import kotlin.test.assertTrue
 public class MovableUnitTest : UnitTest() {
     override fun createUnit(): TestableMovableUnit {
         val movableUnitBuilder = MovableUnitBuilder(
-                TextureRegion(EmptyTexture(TextureManager(), 20, 20), 0f, 0f, 20f, 20f), null)
+                TextureRegion(mUnitTexture, 0f, 0f, 20f, 20f), null)
         movableUnitBuilder
                 .setSpeed(20f)
                 .setArmor(Armor(Armor.ArmorType.CHERENKOV, 5))
@@ -54,6 +52,10 @@ public class MovableUnitTest : UnitTest() {
     }
 
     public class TestableMovableUnit(unitBuilder: MovableUnitBuilder?) : MovableUnit(unitBuilder), UnitTest.TestableUnit {
+        override fun invokeDestroy() {
+            destroy()
+        }
+
         override public fun getAngle(x: Float, y: Float): Int {
             return super<MovableUnit>.getAngle(x, y)
         }
@@ -73,6 +75,5 @@ public class MovableUnitTest : UnitTest() {
         override fun getUpdateHandler(): IUpdateHandler {
             throw UnsupportedOperationException("not now")
         }
-
     }
 }

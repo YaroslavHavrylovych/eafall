@@ -1,5 +1,7 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.shipyards;
 
+import com.gmail.yaroslavlancelot.eafall.game.client.IUnitCreator;
+
 /**
  * As few different types of shipyards possible (depending on how much
  * ways exist) the factory will encapsulate creation process.
@@ -35,10 +37,11 @@ public class ShipyardFactory {
      * @param x          planet abscissa
      * @param y          planet ordinate
      * @param playerName player name (used to check limits)
+     * @param creator    used to spawn units
      * @return shipyard instance
      */
-    public static IShipyard getShipyard(int x, int y, String playerName) {
-        final IShipyard shipyard = new TwoWaysShipyard(x, y, playerName);
+    public static IShipyard getShipyard(int x, int y, String playerName, IUnitCreator creator) {
+        final IShipyard shipyard = new TwoWaysShipyard(x, y, playerName, creator);
         return shipyard;
     }
 

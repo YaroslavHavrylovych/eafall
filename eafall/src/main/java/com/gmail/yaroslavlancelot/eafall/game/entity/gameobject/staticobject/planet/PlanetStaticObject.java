@@ -2,6 +2,7 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.pl
 
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
+import com.gmail.yaroslavlancelot.eafall.game.client.IUnitCreator;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.IPlayerObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
@@ -109,15 +110,15 @@ public class PlanetStaticObject extends StaticObject implements IPlayerObject {
                 PathHelper.isLtrPath(getX()));
     }
 
-    public void init(String playerName, int objectMaximumHealth) {
+    public void init(String playerName, IUnitCreator creator, int objectMaximumHealth) {
         setPlayer(playerName);
         initHealthBar();
-        initShipyard(playerName);
+        initShipyard(playerName, creator);
         initHealth(objectMaximumHealth);
     }
 
-    public void initShipyard(String playerName) {
-        mPlanetShipyard = ShipyardFactory.getShipyard((int) getX(), (int) getY(), playerName);
+    public void initShipyard(String playerName, IUnitCreator creator) {
+        mPlanetShipyard = ShipyardFactory.getShipyard((int) getX(), (int) getY(), playerName, creator);
         registerUpdateHandler(new TimerHandler(1, true, new ITimerCallback() {
             @Override
             public void onTimePassed(final TimerHandler pTimerHandler) {

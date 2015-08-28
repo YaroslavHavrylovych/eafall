@@ -13,7 +13,8 @@ import org.andengine.util.adt.color.Color;
 public class Config implements IConfig {
     private final ApplicationConfig mApplicationConfig;
 
-    private Config(Context context) {
+    //protected (not private) because of use in testing. Later has to be changed as config has to be in config-files
+    protected Config(Context context) {
         mApplicationConfig = new ApplicationConfig(context);
     }
 
