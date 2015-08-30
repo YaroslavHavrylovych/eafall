@@ -112,7 +112,7 @@ public abstract class GameObject extends BodiedSprite {
             mGameObjectHealthChangedListener.gameObjectHealthChanged(mUniqueId, objectHealth);
         }
         if (!checkHealth(objectHealth)) {
-            onNegativeHealth();
+            destroy();
             if (mObjectDestroyedListener != null) {
                 for (IDestroyListener listener : mObjectDestroyedListener) {
                     listener.objectDestroyed(this);
@@ -184,8 +184,8 @@ public abstract class GameObject extends BodiedSprite {
         }
     }
 
-    protected void onNegativeHealth() {
-        LoggerHelper.methodInvocation(TAG, "onNegativeHealth");
+    protected void destroy() {
+        LoggerHelper.methodInvocation(TAG, "destroy");
     }
 
     protected void updateHealthBarPosition() {

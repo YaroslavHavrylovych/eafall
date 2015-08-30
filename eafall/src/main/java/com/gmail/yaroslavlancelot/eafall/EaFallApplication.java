@@ -21,6 +21,11 @@ public class EaFallApplication extends Application {
         return sConfig;
     }
 
+    //used for testing and probably will be deleted later
+    public static void setConfig(IConfig config) {
+        sConfig = config;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();

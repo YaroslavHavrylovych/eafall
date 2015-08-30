@@ -23,8 +23,8 @@ public class MovableUnitsPool extends AfterInitializationPool<MovableUnit> {
         LoggerHelper.printVerboseMessage(TAG, "New movable unit allocated. Available items count=" + getAvailableItems());
         MovableUnit movableUnit = new MovableUnit(mMovableUnitBuilder) {
             @Override
-            protected void onUnitDestroyed() {
-                super.onUnitDestroyed();
+            protected void onDestroyed() {
+                super.onDestroyed();
                 LoggerHelper.printVerboseMessage(TAG, "Movable unit recycled. Available items count=" + getAvailableItems());
                 recycle(this);
             }

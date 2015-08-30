@@ -1,5 +1,6 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.shipyards;
 
+import com.gmail.yaroslavlancelot.eafall.game.client.IUnitCreator;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.ICreepBuilding;
 
 import java.util.List;
@@ -25,8 +26,8 @@ public class TwoWaysShipyard extends BaseShipyard {
     // ===========================================================
     // Constructors
     // ===========================================================
-    public TwoWaysShipyard(int x, int y, String playerName) {
-        super(x, y, playerName);
+    public TwoWaysShipyard(int x, int y, String playerName, IUnitCreator creator) {
+        super(x, y, playerName, creator);
     }
 
     // ===========================================================

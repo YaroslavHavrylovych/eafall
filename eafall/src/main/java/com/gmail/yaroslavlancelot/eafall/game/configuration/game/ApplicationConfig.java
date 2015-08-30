@@ -24,7 +24,7 @@ public class ApplicationConfig {
     /*
      * Graphic
      */
-    private final UnitHealthBarBehavior mUnitsHealthBarEnabled = UnitHealthBarBehavior.DEFAULT;
+    private UnitHealthBarBehavior mUnitsHealthBarEnabled = UnitHealthBarBehavior.DEFAULT;
     private final int mMaxZoomFactor = 6;
     private final float mHudAlpha = 0.85f;
     private final Color mPlayerSwapColor = new Color(46.0f / 255.0f, 37.0f / 255.0f, 118.0f / 255.0f);

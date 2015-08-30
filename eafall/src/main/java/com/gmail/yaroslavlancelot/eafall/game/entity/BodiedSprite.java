@@ -4,11 +4,14 @@ import com.badlogic.gdx.physics.box2d.Body;
 
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
+import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /** extends rectangle to have physic body */
 public abstract class BodiedSprite extends BatchedSprite {
+    /** default position for phys body when it moves out of camera view */
+    public static final float BODY_OUT_OF_CAMERA = -100 * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT;
     /** physics body associated with current object {@link org.andengine.entity.sprite.Sprite} */
     protected volatile Body mPhysicBody;
 
