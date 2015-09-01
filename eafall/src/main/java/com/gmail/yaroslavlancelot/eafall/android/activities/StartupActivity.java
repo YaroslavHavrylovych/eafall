@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.android.activities.multiplayer.GameServersListActivity;
+import com.gmail.yaroslavlancelot.eafall.android.activities.settings.SettingsActivity;
 import com.gmail.yaroslavlancelot.eafall.android.activities.singleplayer.PreGameCustomizationActivity;
 import com.gmail.yaroslavlancelot.eafall.game.campaign.intents.CampaignIntent;
 import com.gmail.yaroslavlancelot.eafall.game.campaign.intents.StartableIntent;
@@ -21,6 +22,7 @@ public class StartupActivity extends BaseNonGameActivity {
         initCampaignButton(findViewById(R.id.campaign));
         initSingleGameButton(findViewById(R.id.single_game));
         initMultiplayerGameButton(findViewById(R.id.multiplayer_game));
+        initSettingsButton(findViewById(R.id.settings));
         initExitButton(findViewById(R.id.exit));
     }
 
@@ -58,6 +60,17 @@ public class StartupActivity extends BaseNonGameActivity {
             public void onClick(final View v) {
                 Intent singleGameIntent = new Intent(StartupActivity.this, GameServersListActivity.class);
                 startActivity(singleGameIntent);
+            }
+        });
+    }
+
+    private void initSettingsButton(View settingsButton) {
+        if (settingsButton == null) return;
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent settingsActivityIntent = new Intent(StartupActivity.this, SettingsActivity.class);
+                startActivity(settingsActivityIntent);
             }
         });
     }

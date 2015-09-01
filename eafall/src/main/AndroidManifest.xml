@@ -51,5 +51,9 @@
         <activity
             android:name=".game.campaign.CampaignActivity"
             android:screenOrientation="landscape"/>
+        <activity
+            android:name=".android.activities.settings.SettingsActivity"
+            android:label="@string/settings"
+            android:screenOrientation="landscape"/>
     </application>
 </manifest>

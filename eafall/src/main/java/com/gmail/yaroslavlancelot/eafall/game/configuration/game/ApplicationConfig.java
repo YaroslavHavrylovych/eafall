@@ -1,9 +1,13 @@
 package com.gmail.yaroslavlancelot.eafall.game.configuration.game;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
+
+import com.gmail.yaroslavlancelot.eafall.android.activities.settings.SettingsActivity;
 
 import org.andengine.util.adt.color.Color;
 
@@ -41,6 +45,8 @@ public class ApplicationConfig {
      */
     private final boolean mProfilingEnabled = true;
 
+    private final SharedPreferences preferences;
+
     // ===========================================================
     // Fields
     // ===========================================================
@@ -56,6 +62,7 @@ public class ApplicationConfig {
         display.getMetrics(metrics);
         mDisplayWidth = Math.max(metrics.widthPixels, metrics.heightPixels);
         mDisplayHeight = Math.min(metrics.widthPixels, metrics.heightPixels);
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
 
@@ -79,15 +86,17 @@ public class ApplicationConfig {
     }
 
     public boolean isProfilingEnabled() {
-        return mProfilingEnabled;
+        return preferences.getBoolean(SettingsActivity.KEY_PREF_DEVELOPERS_MODE, mProfilingEnabled);
     }
 
     public UnitHealthBarBehavior getHealthBarBehavior() {
-        return mUnitsHealthBarEnabled;
+        String unitHealthBarBehaviour = preferences.getString(SettingsActivity.KEY_PREF_UNIT_HEALTH_BAR_BEHAVIOR, "");
+        if (unitHealthBarBehaviour.isEmpty()) return mUnitsHealthBarEnabled;
+        return UnitHealthBarBehavior.valueOf(unitHealthBarBehaviour);
     }
 
     public boolean isSoundsEnabled() {
-        return mSoundsEnabled;
+        return preferences.getBoolean(SettingsActivity.KEY_PREF_SOUNDS, mSoundsEnabled);
     }
 
     public float getMusicVolumeMax() {
@@ -99,7 +108,7 @@ public class ApplicationConfig {
     }
 
     public boolean isMusicEnabled() {
-        return mMusicEnabled;
+        return preferences.getBoolean(SettingsActivity.KEY_PREF_MUSIC, mMusicEnabled);
     }
 
     public int getDisplayWidth() {

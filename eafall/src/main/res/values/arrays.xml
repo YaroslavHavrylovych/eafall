@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="unit_health_bar_behavior">
+        <item>@string/hidden_until_unit_was_hit</item>
+        <item>@string/always_hidden</item>
+        <item>@string/always_visible</item>
+    </string-array>
+
+    <string-array name="unit_health_bar_behavior_value">
+        <item>DEFAULT</item>
+        <item>ALWAYS_HIDDEN</item>
+        <item>ALWAYS_VISIBLE</item>
+    </string-array>
+</resources>
