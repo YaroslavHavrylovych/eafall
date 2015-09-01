@@ -1,9 +1,9 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.shipyards;
 
+import com.gmail.yaroslavlancelot.eafall.game.client.IUnitCreator;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.ICreepBuilding;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path.PathHelper;
-import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.unit.CreateMovableUnitEvent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
@@ -11,8 +11,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import de.greenrobot.event.EventBus;
 
 /**
  * Base shipyard functionality as:
@@ -49,14 +47,17 @@ public abstract class BaseShipyard implements IShipyard {
     protected Position[] mPortsPositions = new Position[PORTS];
     /** player which this shipyard belongs to */
     protected IPlayer mPlayer;
+    /** used to spawn movable units */
+    private IUnitCreator mCreator;
 
     // ===========================================================
     // Constructors
     // ===========================================================
-    public BaseShipyard(int x, int y, String playerName) {
+    public BaseShipyard(int x, int y, String playerName, IUnitCreator creator) {
         IPlayer player = PlayersHolder.getPlayer(playerName);
         mLimit = player.getUnitsLimit();
         mPlayer = player;
+        mCreator = creator;
         initPortsPositions(x, y);
     }
 
@@ -181,8 +182,7 @@ public abstract class BaseShipyard implements IShipyard {
     protected void spawn(int port, ICreepBuilding creepBuilding) {
         int unitKey = creepBuilding.getUnit();
         Position position = mPortsPositions[port];
-        EventBus.getDefault().post(new CreateMovableUnitEvent(mPlayer.getName(),
-                unitKey, creepBuilding.isTopPath(), position.mX, position.mY));
+        mCreator.createMovableUnit(mPlayer, unitKey, position.mX, position.mY, creepBuilding.isTopPath());
         mAvailablePorts.remove(port);
         mCooldownPorts[port] = COOLDOWN;
     }

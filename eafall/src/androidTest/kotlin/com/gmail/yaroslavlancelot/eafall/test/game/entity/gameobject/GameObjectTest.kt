@@ -11,7 +11,7 @@ import kotlin.test.assertTrue
 class GameObjectTest : AndroidTestCase() {
     public fun testDirection() {
         val getAngle: (Float, Float, Float, Float) -> Float =
-                { x1, y1, x2, y2 -> GameObject.getDirection(x1, y1, x2, y2) };
+                { x1, y1, x2, y2 -> GameObject.getDirection(x1, y1, x2, y2) }
         var angle = getAngle(0f, 0f, 5f, 10f);
         assertTrue(0 < angle && angle < MathConstants.PI / 4f, "0 < a < pi/4");
         angle = getAngle(10f, 10f, 15f, 20f);

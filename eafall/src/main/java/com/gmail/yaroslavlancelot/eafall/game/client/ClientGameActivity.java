@@ -37,10 +37,8 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.stationary.
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.endgame.GameEndedEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.AbstractSpriteEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.AttachSpriteEvent;
-import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.CreatePhysicBodyEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.DetachSpriteEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.CreateBuildingEvent;
-import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.unit.CreateMovableUnitEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.unit.CreateStationaryUnitEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.periodic.Periodic;
 import com.gmail.yaroslavlancelot.eafall.game.events.periodic.time.GameTime;
@@ -75,11 +73,11 @@ import java.util.Map;
  * Main game Activity. Extends {@link BaseGameActivity} class and contains main game elements.
  * Loads resources, initialize scene, engine and etc.
  */
-public abstract class ClientGameActivity extends EaFallActivity {
+public abstract class ClientGameActivity extends EaFallActivity implements IUnitCreator {
     /** tag, which is used for debugging purpose */
     public static final String TAG = ClientGameActivity.class.getCanonicalName();
     /** contains whole game units/warriors */
-    private final Map<Long, GameObject> mGameObjectsMap = new HashMap<Long, GameObject>();
+    private final Map<Long, GameObject> mGameObjectsMap = new HashMap<>();
     /** first player */
     protected IPlayer mSecondPlayer;
     /** second player */
@@ -89,7 +87,7 @@ public abstract class ClientGameActivity extends EaFallActivity {
     /** current mission/game config */
     protected MissionConfig mMissionConfig;
     /** game cycles (e.g. money increase, timer etc) */
-    protected List<Periodic> mGamePeriodic = new ArrayList<Periodic>(2);
+    protected List<Periodic> mGamePeriodic = new ArrayList<>(2);
     /** defines whether the game is over and who is the winner */
     protected IRuler mRuler;
 
@@ -165,6 +163,23 @@ public abstract class ClientGameActivity extends EaFallActivity {
         startPeriodic();
     }
 
+    @Override
+    public MovableUnit createMovableUnit(IPlayer unitPlayer,
+                                         int unitKey, int x, int y, boolean isTopPath) {
+        MovableUnit movableUnit = (MovableUnit) createUnit(unitKey, unitPlayer, x, y);
+        movableUnit.initMovingPath(PathHelper.isLtrPath(x), isTopPath);
+        return movableUnit;
+    }
+
+    @Override
+    public Body createPhysicBody(BodiedSprite bodiedSprite, BodyDef.BodyType bodyType,
+                                 FixtureDef fixtureDef) {
+        Body body = PhysicsFactory.createCircleBody(mPhysicsWorld, bodiedSprite, bodyType, fixtureDef);
+        mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(bodiedSprite, body, true, false));
+        bodiedSprite.setBody(body);
+        return body;
+    }
+
     /** start tracker which tracks game rules */
     protected void startRuler() {
         mRuler = RulesFactory.createRuler(
@@ -214,7 +229,6 @@ public abstract class ClientGameActivity extends EaFallActivity {
      * @param player player to init
      */
     protected void initPlayer(IPlayer player) {
-        IPlayer.ControlType playerType = player.getControlType();
         initPlayerFixtureDef(player);
         PlayersHolder.getInstance().addElement(player.getName(), player);
     }
@@ -261,14 +275,14 @@ public abstract class ClientGameActivity extends EaFallActivity {
         LoggerHelper.methodInvocation(TAG, "createPlanet");
         PlanetStaticObject planet = new PlanetStaticObject(x, y, textureRegion,
                 getVertexBufferObjectManager());
-        planet.init(player.getName(), mMissionConfig.getPlanetHealth());
+        planet.init(player.getName(), this, mMissionConfig.getPlanetHealth());
         planet.addObjectDestroyedListener(new PlanetDestroyListener(player));
         planet.attachSelf();
         if (unitUniqueId.length > 0) {
             planet.setObjectUniqueId(unitUniqueId[0]);
         }
         mGameObjectsMap.put(planet.getObjectUniqueId(), planet);
-        onEvent(new CreatePhysicBodyEvent(planet));
+        createPhysicBody(planet, BodyDef.BodyType.StaticBody, CollisionCategories.STATIC_BODY_FIXTURE_DEF);
         return planet;
     }
 
@@ -288,7 +302,7 @@ public abstract class ClientGameActivity extends EaFallActivity {
                 mEngine.getVertexBufferObjectManager());
         attachSprite(sunStaticObject);
         mGameObjectsMap.put(sunStaticObject.getObjectUniqueId(), sunStaticObject);
-        onEvent(new CreatePhysicBodyEvent(sunStaticObject));
+        createPhysicBody(sunStaticObject, BodyDef.BodyType.StaticBody, CollisionCategories.STATIC_BODY_FIXTURE_DEF);
         return sunStaticObject;
     }
 
@@ -358,21 +372,6 @@ public abstract class ClientGameActivity extends EaFallActivity {
 
     protected abstract void userWantCreateBuilding(IPlayer userPlayer, BuildingId buildingId);
 
-    @SuppressWarnings("unused")
-    /** really used by {@link de.greenrobot.event.EventBus} */
-    public void onEvent(final CreateMovableUnitEvent unitEvent) {
-        final IPlayer player = PlayersHolder.getInstance().getElement(unitEvent.getPlayerName());
-        int unitKey = unitEvent.getKey();
-        createMovableUnit(player, unitKey, unitEvent.getX(), unitEvent.getY(), unitEvent.isTopPath());
-    }
-
-    public MovableUnit createMovableUnit(IPlayer unitPlayer,
-                                         int unitKey, int x, int y, boolean isTopPath) {
-        MovableUnit movableUnit = (MovableUnit) createUnit(unitKey, unitPlayer, x, y);
-        movableUnit.initMovingPath(PathHelper.isLtrPath(x), isTopPath);
-        return movableUnit;
-    }
-
     /** create unit */
     protected Unit createUnit(int unitKey, final IPlayer unitPlayer, float x, float y) {
         Unit unit = createThinUnit(unitKey, unitPlayer, x, y);
@@ -391,24 +390,9 @@ public abstract class ClientGameActivity extends EaFallActivity {
         if (unitUniqueId.length > 0) {
             unit.setObjectUniqueId(unitUniqueId[0]);
         }
-        unit.init(x, y);
+        unit.init(x, y, this);
         mGameObjectsMap.put(unit.getObjectUniqueId(), unit);
         return unit;
-    }
-
-    @SuppressWarnings("unused")
-    /** really used by {@link de.greenrobot.event.EventBus} */
-    public void onEvent(final CreatePhysicBodyEvent createPhysicBodyEvent) {
-        BodiedSprite gameObject = createPhysicBodyEvent.getGameObject();
-        BodyDef.BodyType bodyType = createPhysicBodyEvent.getBodyType();
-        FixtureDef fixtureDef = createPhysicBodyEvent.getFixtureDef();
-        Body body = PhysicsFactory.createCircleBody(mPhysicsWorld, gameObject, bodyType, fixtureDef);
-        if (createPhysicBodyEvent.isCustomBodyTransform()) {
-            body.setTransform(createPhysicBodyEvent.getX(),
-                    createPhysicBodyEvent.getY(), createPhysicBodyEvent.getAngle());
-        }
-        mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(gameObject, body, true, false));
-        gameObject.setBody(body);
     }
 
     /** attach entity to game scene */

@@ -4,6 +4,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.audio.LimitedSoundWrapper;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
+import com.gmail.yaroslavlancelot.eafall.game.client.IPhysicCreator;
 import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.Bullet;
 import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.BulletPool;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
@@ -11,18 +12,16 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.IPlayerObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IFireListener;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path.PathHelper;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.filtering.IEnemiesFilter;
 import com.gmail.yaroslavlancelot.eafall.game.entity.health.IHealthBar;
 import com.gmail.yaroslavlancelot.eafall.game.entity.health.UnitHealthBar;
-import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.CreatePhysicBodyEvent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
 import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 import org.andengine.util.math.MathUtils;
-
-import de.greenrobot.event.EventBus;
 
 /**
  * base class for dynamic and static/unmovable objects which can attack other objects
@@ -106,16 +105,16 @@ public abstract class Unit extends GameObject implements
     }
 
     @Override
-    protected void onNegativeHealth() {
-        super.onNegativeHealth();
+    protected void destroy() {
+        super.destroy();
         clearUpdateHandlers();
         clearEntityModifiers();
         PlayersHolder.getPlayer(mPlayerName).removeObjectFromPlayer(this);
-        getBody().setTransform(-100, -100, 0);
-        getBody().setActive(false);
-        //TODO maybe we have to set to ignore update (unit and children) to improve performance?
-        setVisible(false);
-        onUnitDestroyed();
+        mPhysicBody.setTransform(BODY_OUT_OF_CAMERA, BODY_OUT_OF_CAMERA, 0);
+        mPhysicBody.setActive(false);
+        setIgnoreUpdate(true);
+        setVisible(true);
+        onDestroyed();
     }
 
     @Override
@@ -129,7 +128,7 @@ public abstract class Unit extends GameObject implements
         setSpriteGroupName(BatchingKeys.getUnitSpriteGroup(playerName));
     }
 
-    protected void onUnitDestroyed() {
+    protected void onDestroyed() {
     }
 
     /**
@@ -138,26 +137,25 @@ public abstract class Unit extends GameObject implements
      * <br/>
      * WARNING: unit player name have to be assigned before init() triggers
      */
-    public void init(float x, float y) {
-        LoggerHelper.methodInvocation(TAG, "init(float, float, String)");
+    public void init(float x, float y, IPhysicCreator physicCreator) {
+        LoggerHelper.methodInvocation(TAG, "init(float, float, IPhysicCreator)");
         IPlayer player = PlayersHolder.getPlayer(mPlayerName);
         setHealth(mObjectMaximumHealth);
         initHealthBar();
-        setPosition(x, y);
         boolean existingUnit;
         float posX = x / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
-                posY = y / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
-                angle = 0f;
+                posY = y / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT;
         if (getBody() == null) {
             existingUnit = false;
-            EventBus.getDefault().post(new CreatePhysicBodyEvent(this, getBodyType(),
-                    player.getFixtureDefUnit(), posX, posY, angle));
+            physicCreator.createPhysicBody(this, getBodyType(), player.getFixtureDefUnit());
         } else {
             existingUnit = getParent() != null;
-            getBody().setActive(true);
-            getBody().setTransform(posX, posY, angle);
-            setVisible(true);
         }
+        setRotation(PathHelper.isLeftSide(x) ? 90 : -90);
+        setIgnoreUpdate(false);
+        mPhysicBody.setActive(true);
+        mPhysicBody.setTransform(posX, posY, 0);
+        setVisible(true);
         if (!existingUnit) {
             attachSelf();
         }

@@ -23,8 +23,8 @@ public class StationaryUnitsPool extends AfterInitializationPool<StationaryUnit>
         LoggerHelper.printVerboseMessage(TAG, "New stat. unit allocated. Available items count=" + getAvailableItems());
         StationaryUnit stationaryUnit = new StationaryUnit(mStationaryUnitBuilder) {
             @Override
-            protected void onUnitDestroyed() {
-                super.onUnitDestroyed();
+            protected void onDestroyed() {
+                super.onDestroyed();
                 LoggerHelper.printVerboseMessage(TAG, "Stationary unit recycled. Available items count=" + getAvailableItems());
                 recycle(this);
             }
