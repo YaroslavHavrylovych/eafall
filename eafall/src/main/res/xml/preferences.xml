@@ -18,10 +18,22 @@
         android:summaryOn="@string/game_sounds_on"
         android:summaryOff="@string/game_sounds_off"
         android:defaultValue="false" />
+    <com.gmail.yaroslavlancelot.eafall.android.activities.settings.SeekBarPreference
+        android:dependency="pref_key_game_sounds"
+        android:key="pref_key_game_sounds_volume"
+        android:title="@string/game_sounds_volume"
+        android:max="100"
+        android:defaultValue="30" />
     <CheckBoxPreference
         android:key="pref_key_music"
         android:title="@string/music"
         android:summaryOn="@string/music_on"
         android:summaryOff="@string/music_off"
         android:defaultValue="false" />
+    <com.gmail.yaroslavlancelot.eafall.android.activities.settings.SeekBarPreference
+        android:dependency="pref_key_music"
+        android:key="pref_key_music_volume"
+        android:title="@string/music_volume"
+        android:max="100"
+        android:defaultValue="30" />
 </PreferenceScreen>

@@ -103,8 +103,9 @@ public abstract class EaFallActivity extends BaseGameActivity {
         }
         mResourcesLoader.loadSplashImages(getTextureManager(), getVertexBufferObjectManager());
         //init sounds
-        SoundFactory.init(getSoundManager(), EaFallActivity.this);
-
+        if (EaFallApplication.getConfig().isSoundsEnabled()) {
+            SoundFactory.init(getSoundManager(), EaFallActivity.this);
+        }
         onCreateResourcesCallback.onCreateResourcesFinished();
     }
 
