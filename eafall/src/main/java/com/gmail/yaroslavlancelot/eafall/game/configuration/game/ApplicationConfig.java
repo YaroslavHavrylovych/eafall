@@ -100,11 +100,13 @@ public class ApplicationConfig {
     }
 
     public float getMusicVolumeMax() {
-        return mMusicVolumeMax;
+        float volumeInPercents = preferences.getFloat(SettingsActivity.KEY_PREF_MUSIC_VOLUME, mMusicVolumeMax * 100);
+        return volumeInPercents / 100f;
     }
 
     public float getSoundVolumeMax() {
-        return mSoundVolumeMax;
+        float volumeInPercents = preferences.getFloat(SettingsActivity.KEY_PREF_SOUNDS_VOLUME, mSoundVolumeMax * 100);
+        return volumeInPercents / 100f;
     }
 
     public boolean isMusicEnabled() {
