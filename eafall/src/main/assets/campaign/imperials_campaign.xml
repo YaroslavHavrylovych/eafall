@@ -10,6 +10,7 @@
         <picture>graphics/sprites/planet_1.png</picture>
         <width>128</width>
         <height>128</height>
+        <rotation>20</rotation>
         <position>
             <x>960</x>
             <y>540</y>
@@ -33,6 +34,7 @@
         <picture>graphics/sprites/planet_2.png</picture>
         <width>128</width>
         <height>128</height>
+        <rotation>100</rotation>
         <position>
             <x>300</x>
             <y>540</y>

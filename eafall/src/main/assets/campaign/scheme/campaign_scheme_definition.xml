@@ -15,6 +15,8 @@
                             <xs:element name="picture" type="xs:string"/>
                             <xs:element name="width" type="xs:integer"/>
                             <xs:element name="height" type="xs:integer"/>
+                            <xs:element name="rotation" type="xs:nonNegativeInteger"
+                                        minOccurs="0" maxOccurs="1"/>
                             <xs:element name="position">
                                 <xs:complexType>
                                     <xs:sequence maxOccurs="1" minOccurs="1">

@@ -26,6 +26,7 @@ import com.gmail.yaroslavlancelot.eafall.general.SelfCleanable;
 
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
@@ -118,10 +119,16 @@ public class CampaignActivity extends EaFallActivity {
         //sprites
         List<Sprite> elementsList = new ArrayList<Sprite>(mCampaignListLoader.getList().size());
         for (CampaignDataLoader dataLoader : mCampaignListLoader.getList()) {
+            LoggerHelper.printVerboseMessage(TAG, "campaign loading element=" + dataLoader.name);
             PositionLoader position = dataLoader.position;
             Sprite sprite = new Sprite(position.x, position.y,
                     TextureRegionHolder.getRegion(dataLoader.picture), objectManager);
             sprite.setTag(dataLoader.id);
+            if (dataLoader.rotation != null) {
+                LoggerHelper.printVerboseMessage(TAG, "campaign element=" + dataLoader.name
+                        + ", rotation = " + dataLoader.rotation);
+                sprite.registerEntityModifier(new RotationModifier(dataLoader.rotation, 0, 360));
+            }
             elementsList.add(sprite);
             scene.attachChild(sprite);
             sprite.setTouchCallback(new ElementTouchCallback(sprite));
