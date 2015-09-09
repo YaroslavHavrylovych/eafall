@@ -13,11 +13,14 @@ import com.gmail.yaroslavlancelot.eafall.game.campaign.intents.CampaignIntent;
 import com.gmail.yaroslavlancelot.eafall.game.campaign.intents.MissionIntent;
 import com.gmail.yaroslavlancelot.eafall.game.campaign.intents.StartableIntent;
 import com.gmail.yaroslavlancelot.eafall.game.campaign.loader.CampaignDataLoader;
-import com.gmail.yaroslavlancelot.eafall.game.campaign.loader.CampaignListLoader;
+import com.gmail.yaroslavlancelot.eafall.game.campaign.loader.CampaignFileLoader;
+import com.gmail.yaroslavlancelot.eafall.game.campaign.loader.ObjectDataLoader;
 import com.gmail.yaroslavlancelot.eafall.game.campaign.loader.PositionLoader;
 import com.gmail.yaroslavlancelot.eafall.game.campaign.loader.mission.MissionDataLoader;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
+import com.gmail.yaroslavlancelot.eafall.game.engine.InstantRotationModifier;
+import com.gmail.yaroslavlancelot.eafall.game.engine.MoveByCircleModifier;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 import com.gmail.yaroslavlancelot.eafall.game.touch.StaticHelper;
@@ -26,7 +29,6 @@ import com.gmail.yaroslavlancelot.eafall.general.SelfCleanable;
 
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.entity.IEntity;
-import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
@@ -47,7 +49,7 @@ public class CampaignActivity extends EaFallActivity {
     private final static String SELECTED_IMAGE = "graphics/icons/selected.png";
     private final static int NOT_SELECTED = -1;
     private String mCampaignFileName;
-    private CampaignListLoader mCampaignListLoader;
+    private CampaignFileLoader mCampaignFileLoader;
     private LimitedSoundWrapper mSelectSound;
     private Sprite mSelectImage;
     private TextButton mStartButton;
@@ -84,15 +86,18 @@ public class CampaignActivity extends EaFallActivity {
 
     @Override
     protected void loadResources() {
-        mCampaignListLoader = loadObjects(mCampaignFileName, CampaignListLoader.class);
+        mCampaignFileLoader = loadObjects(mCampaignFileName, CampaignFileLoader.class);
         //adding resources
-        mResourcesLoader.addImage(mCampaignListLoader.background,
+        mResourcesLoader.addImage(mCampaignFileLoader.background,
                 SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT);
-        for (CampaignDataLoader dataLoader : mCampaignListLoader.getList()) {
+        for (CampaignDataLoader dataLoader : mCampaignFileLoader.getCampaignsList()) {
             mResourcesLoader.addImage(dataLoader.picture, dataLoader.width, dataLoader.height);
         }
         mResourcesLoader.addImage(SELECTED_IMAGE,
                 SizeConstants.SELECTOR_IMAGE_SIZE, SizeConstants.SELECTOR_IMAGE_SIZE);
+        for (ObjectDataLoader dataLoader : mCampaignFileLoader.getObjectsList()) {
+            mResourcesLoader.addImage(dataLoader.picture, dataLoader.width, dataLoader.height);
+        }
         //loading resources
         mResourcesLoader.loadImages(getTextureManager(), getVertexBufferObjectManager());
         mResourcesLoader.loadFonts(getTextureManager(), getFontManager());
@@ -107,47 +112,73 @@ public class CampaignActivity extends EaFallActivity {
 
     @Override
     protected void initWorkingScene() {
-        mSceneManager.initWorkingScene(mCamera, mCampaignListLoader.parallax_background);
+        mSceneManager.initWorkingScene(mCamera, mCampaignFileLoader.parallax_background);
         onPopulateWorkingScene(mSceneManager.getWorkingScene());
     }
 
     @Override
     protected void onPopulateWorkingScene(final EaFallScene scene) {
-        VertexBufferObjectManager objectManager = getVertexBufferObjectManager();
+        VertexBufferObjectManager vertexManager = getVertexBufferObjectManager();
         //background
-        scene.setBackground(mCampaignListLoader.background, objectManager);
-        //sprites
-        List<Sprite> elementsList = new ArrayList<Sprite>(mCampaignListLoader.getList().size());
-        for (CampaignDataLoader dataLoader : mCampaignListLoader.getList()) {
+        scene.setBackground(mCampaignFileLoader.background, vertexManager);
+        //populate
+        List<Sprite> campaigns = populateCampaigns(scene, vertexManager);
+        populateObjects(scene, vertexManager);
+        //selected
+        mSelectImage = new Sprite(0, 0, TextureRegionHolder.getRegion(SELECTED_IMAGE), vertexManager);
+        scene.attachChild(mSelectImage);
+        /* HUD */
+        //start button
+        initStartButton();
+        //select
+        select(campaigns.get(0));
+    }
+
+    @Override
+    protected void onShowWorkingScene() {
+    }
+
+    private List<Sprite> populateObjects(EaFallScene scene, VertexBufferObjectManager vertexManager) {
+        int size = mCampaignFileLoader.getObjectsList().size();
+        List<Sprite> elementsList = new ArrayList<>(size);
+        LoggerHelper.printVerboseMessage(TAG, "campaign loading objects amount = " + size);
+        for (ObjectDataLoader dataLoader : mCampaignFileLoader.getObjectsList()) {
+            PositionLoader position = dataLoader.position;
+            Sprite sprite = new Sprite(position.x, position.y,
+                    TextureRegionHolder.getRegion(dataLoader.picture), vertexManager);
+            if (dataLoader.rotation != null) {
+                sprite.registerEntityModifier(new InstantRotationModifier(dataLoader.rotation));
+            }
+            if (dataLoader.radius != null) {
+                sprite.registerEntityModifier(
+                        new MoveByCircleModifier(dataLoader.duration, dataLoader.radius,
+                                position.x.intValue(), position.y.intValue()));
+            }
+            elementsList.add(sprite);
+            scene.attachChild(sprite);
+        }
+        return elementsList;
+    }
+
+    private List<Sprite> populateCampaigns(EaFallScene scene, VertexBufferObjectManager vertexManager) {
+        List<Sprite> elementsList = new ArrayList<>(mCampaignFileLoader.getCampaignsList().size());
+        for (CampaignDataLoader dataLoader : mCampaignFileLoader.getCampaignsList()) {
             LoggerHelper.printVerboseMessage(TAG, "campaign loading element=" + dataLoader.name);
             PositionLoader position = dataLoader.position;
             Sprite sprite = new Sprite(position.x, position.y,
-                    TextureRegionHolder.getRegion(dataLoader.picture), objectManager);
+                    TextureRegionHolder.getRegion(dataLoader.picture), vertexManager);
             sprite.setTag(dataLoader.id);
             if (dataLoader.rotation != null) {
                 LoggerHelper.printVerboseMessage(TAG, "campaign element=" + dataLoader.name
                         + ", rotation = " + dataLoader.rotation);
-                sprite.registerEntityModifier(new RotationModifier(dataLoader.rotation, 0, 360));
+                sprite.registerEntityModifier(new InstantRotationModifier(dataLoader.rotation));
             }
             elementsList.add(sprite);
             scene.attachChild(sprite);
             sprite.setTouchCallback(new ElementTouchCallback(sprite));
             scene.registerTouchArea(sprite);
         }
-        //selected
-        mSelectImage = new Sprite(0, 0,
-                TextureRegionHolder.getRegion(SELECTED_IMAGE), objectManager);
-        mSelectImage.setVisible(false);
-        scene.attachChild(mSelectImage);
-        /* HUD */
-        //start button
-        initStartButton();
-        //select
-        select(elementsList.get(0));
-    }
-
-    @Override
-    protected void onShowWorkingScene() {
+        return elementsList;
     }
 
     private void initStartButton() {
@@ -202,7 +233,7 @@ public class CampaignActivity extends EaFallActivity {
      */
     private CampaignDataLoader getCampaign(int id) {
         CampaignDataLoader campaignDataLoader = null;
-        for (CampaignDataLoader data : mCampaignListLoader.getList()) {
+        for (CampaignDataLoader data : mCampaignFileLoader.getCampaignsList()) {
             if (data.id == id) {
                 campaignDataLoader = data;
                 break;

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
     <xs:element name="campaigns">
         <xs:complexType>
             <xs:sequence>
@@ -78,7 +79,32 @@
                     </xs:complexType>
                 </xs:element>
 
+                <xs:element name="object" maxOccurs="unbounded" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="picture" type="xs:string"/>
+                            <xs:element name="width" type="xs:integer"/>
+                            <xs:element name="height" type="xs:integer"/>
+                            <xs:element name="rotation" type="xs:nonNegativeInteger"
+                                        minOccurs="0" maxOccurs="1"/>
+                            <xs:element name="radius" type="xs:nonNegativeInteger"
+                                        minOccurs="0" maxOccurs="1"/>
+                            <xs:element name="duration" type="xs:nonNegativeInteger"
+                                        minOccurs="0" maxOccurs="1"/>
+                            <xs:element name="position">
+                                <xs:complexType>
+                                    <xs:sequence maxOccurs="1" minOccurs="1">
+                                        <xs:element name="x" type="xs:float"/>
+                                        <xs:element name="y" type="xs:float"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
             </xs:sequence>
         </xs:complexType>
     </xs:element>
+
 </xs:schema>
