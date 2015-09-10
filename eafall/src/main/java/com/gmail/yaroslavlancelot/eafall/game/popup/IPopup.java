@@ -1,21 +1,18 @@
 package com.gmail.yaroslavlancelot.eafall.game.popup;
 
-import org.andengine.engine.camera.Camera;
-
-/** simplified popup interface */
+/**
+ * Basic popup functionality
+ *
+ * @author Yaroslav Havrylovych
+ */
 public interface IPopup {
     boolean isShowing();
 
-    void setCamera(final Camera pCamera);
-
     void setStateChangingListener(StateChangingListener stateChangingListener);
-
-    void hidePopup();
 
     void showPopup();
 
-    /** change popup state. Change or hide based on current showing status */
-    void triggerPopup();
+    void hidePopup();
 
     interface StateChangingListener {
         void onShowed();

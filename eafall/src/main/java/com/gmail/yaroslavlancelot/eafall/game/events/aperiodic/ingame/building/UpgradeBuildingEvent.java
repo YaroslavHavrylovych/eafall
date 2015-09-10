@@ -3,6 +3,7 @@ package com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 
 /** holds data needed to upgrade the building */
+//TODO remove this event
 public class UpgradeBuildingEvent {
     private final BuildingId mBuildingId;
     private final String mPlayerName;

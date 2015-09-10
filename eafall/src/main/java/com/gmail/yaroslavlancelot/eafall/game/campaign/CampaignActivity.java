@@ -23,7 +23,7 @@ import com.gmail.yaroslavlancelot.eafall.game.engine.InstantRotationModifier;
 import com.gmail.yaroslavlancelot.eafall.game.engine.MoveByCircleModifier;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
-import com.gmail.yaroslavlancelot.eafall.game.touch.StaticHelper;
+import com.gmail.yaroslavlancelot.eafall.game.touch.TouchHelper;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.TextButton;
 import com.gmail.yaroslavlancelot.eafall.general.SelfCleanable;
 
@@ -283,7 +283,7 @@ public class CampaignActivity extends EaFallActivity {
         mHud.unregisterTouchArea(mStartButton);
     }
 
-    private class ElementTouchCallback extends StaticHelper.CustomTouchListener {
+    private class ElementTouchCallback extends TouchHelper.EntityCustomTouch {
         public ElementTouchCallback(IEntity object) {
             super(object);
         }

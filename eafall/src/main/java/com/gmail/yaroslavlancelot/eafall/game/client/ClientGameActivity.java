@@ -46,8 +46,8 @@ import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.Player;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.popup.IPopup;
-import com.gmail.yaroslavlancelot.eafall.game.popup.PopupManager;
-import com.gmail.yaroslavlancelot.eafall.game.popup.information.GameOverPopup;
+import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.IRollingPopup;
+import com.gmail.yaroslavlancelot.eafall.game.popup.GameOverPopup;
 import com.gmail.yaroslavlancelot.eafall.game.resources.loaders.ClientResourcesLoader;
 import com.gmail.yaroslavlancelot.eafall.game.rule.IRuler;
 import com.gmail.yaroslavlancelot.eafall.game.rule.RulesFactory;
@@ -402,9 +402,10 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
 
     @SuppressWarnings("unused")
     public void onEvent(final GameEndedEvent gameEndedEvent) {
-        IPopup popup = PopupManager.getPopup(GameOverPopup.KEY);
+        IPopup popup = new GameOverPopup(
+                mSceneManager.getWorkingScene(), mCamera, getVertexBufferObjectManager());
         ((GameOverPopup) popup).setSuccess(gameEndedEvent.isSuccess());
-        popup.setStateChangingListener(new IPopup.StateChangingListener() {
+        popup.setStateChangingListener(new IRollingPopup.StateChangingListener() {
             @Override
             public void onShowed() {
             }

@@ -49,17 +49,17 @@ public class EnemiesFilter implements IEnemiesFilter {
 
     @Override
     public List<GameObject> getVisibleEnemiesForUnit(final Unit unit) {
-        return StaticHelper.getVisibleEnemiesForUnit(unit, mEnemyPlayer);
+        return FilterHelper.getVisibleEnemiesForUnit(unit, mEnemyPlayer);
     }
 
     @Override
     public List<GameObject> getEnemiesInRangeForUnit(Unit unit, int range) {
-        return StaticHelper.getEnemiesInRangeForUnit(unit, range, mEnemyPlayer);
+        return FilterHelper.getEnemiesInRangeForUnit(unit, range, mEnemyPlayer);
     }
 
     @Override
     public GameObject getFirstEnemyInRange(final Unit unit, final int range) {
-        return StaticHelper.getEnemy(unit, range, mEnemyPlayer);
+        return FilterHelper.getEnemy(unit, range, mEnemyPlayer);
     }
 
     // ===========================================================
