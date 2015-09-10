@@ -3,13 +3,12 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
+import com.gmail.yaroslavlancelot.eafall.game.engine.InstantRotationModifier;
 import com.gmail.yaroslavlancelot.eafall.game.entity.BatchedSprite;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.health.IHealthBar;
 
-import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.IEntityModifier;
-import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import java.util.Random;
@@ -44,21 +43,4 @@ public class SunStaticObject extends StaticObject {
         return null;
     }
 
-    /**
-     * Custom RotationModifier implementation which {@link RotationModifier#reset()} the
-     * animation as soon as it completed.
-     * <br/>
-     * Always rotate from 0 till 360
-     */
-    private class InstantRotationModifier extends RotationModifier {
-        public InstantRotationModifier(float pDuration) {
-            super(pDuration, 0, 360);
-        }
-
-        @Override
-        protected void onModifierFinished(IEntity pItem) {
-            super.onModifierFinished(pItem);
-            reset();
-        }
-    }
 }

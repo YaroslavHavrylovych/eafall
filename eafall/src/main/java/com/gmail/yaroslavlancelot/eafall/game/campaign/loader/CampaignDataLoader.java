@@ -28,6 +28,9 @@ public class CampaignDataLoader {
     @Element(name = "height")
     public int height;
 
+    @Element(name = "rotation", required = false)
+    public Integer rotation;
+
     @Element(name = "position")
     public PositionLoader position;
 

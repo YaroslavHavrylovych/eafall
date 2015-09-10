@@ -67,7 +67,6 @@ abstract class UnitTest : AndroidTestCase() {
     }
 
     public fun testUpdatersRegistration() {
-        val unit = createUnit()
     }
 
 

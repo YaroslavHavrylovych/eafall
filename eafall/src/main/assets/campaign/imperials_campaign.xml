@@ -10,6 +10,7 @@
         <picture>graphics/sprites/planet_1.png</picture>
         <width>128</width>
         <height>128</height>
+        <rotation>20</rotation>
         <position>
             <x>960</x>
             <y>540</y>
@@ -33,6 +34,7 @@
         <picture>graphics/sprites/planet_2.png</picture>
         <width>128</width>
         <height>128</height>
+        <rotation>100</rotation>
         <position>
             <x>300</x>
             <y>540</y>
@@ -47,4 +49,27 @@
             </definition>
         </mission>
     </campaign>
+    <object>
+        <picture>graphics/sprites/object/meteor.png</picture>
+        <width>40</width>
+        <height>51</height>
+        <radius>200</radius>
+        <duration>4</duration>
+        <position>
+            <x>960</x>
+            <y>540</y>
+        </position>
+    </object>
+    <object>
+        <picture>graphics/sprites/object/meteor.png</picture>
+        <width>40</width>
+        <height>51</height>
+        <rotation>5</rotation>
+        <radius>200</radius>
+        <duration>10</duration>
+        <position>
+            <x>300</x>
+            <y>540</y>
+        </position>
+    </object>
 </campaigns>

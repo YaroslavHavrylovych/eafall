@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Campaign list loader
+ * Particular campaign file loader
  *
  * @author Yaroslav Havrylovych
  */
 @Root(strict = false)
-public class CampaignListLoader {
+public class CampaignFileLoader {
     @Element(name = "background")
     public String background;
 
@@ -21,9 +21,16 @@ public class CampaignListLoader {
     public Boolean parallax_background;
 
     @ElementList(required = true, inline = true)
-    List<CampaignDataLoader> mCampaignDataLoaderList = new ArrayList<CampaignDataLoader>(8);
+    List<CampaignDataLoader> mCampaignDataLoaderList = new ArrayList<>(8);
 
-    public List<CampaignDataLoader> getList() {
+    @ElementList(required = false, inline = true)
+    List<ObjectDataLoader> mCampaignObjectLoaderList = new ArrayList<>(2);
+
+    public List<CampaignDataLoader> getCampaignsList() {
         return mCampaignDataLoaderList;
+    }
+
+    public List<ObjectDataLoader> getObjectsList() {
+        return mCampaignObjectLoaderList;
     }
 }
