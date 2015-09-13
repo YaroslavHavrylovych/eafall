@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- game types -->
-    <string name="campaign">Кампанія</string>
-    <string name="single_game">Одиночна гра</string>
-    <string name="multiplayer_game">Мультиплеєрна гра</string>
+    <string name="campaign">КАМПАНІЯ</string>
+    <string name="single_game">ОДИНОЧНА ГРА</string>
+    <string name="multiplayer_game">МУЛЬТИПЛЕЄРНА ГРА</string>
 
     <!-- pre game customizations -->
     <string name="choose_alliance">Союзи</string>
