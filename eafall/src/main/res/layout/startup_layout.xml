@@ -4,7 +4,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-    android:background="@drawable/startup_background">
+                android:background="@drawable/startup_background">
 
     <LinearLayout
         android:orientation="vertical"
@@ -23,7 +23,7 @@
             android:textSize="@dimen/startup_screen_button_text_size"
             android:background="@drawable/startup_button"
             android:textStyle="bold"
-            android:textColor="@color/startup_screen_button_text" />
+            android:textColor="@color/startup_screen_button_text"/>
 
         <Button
             android:id="@+id/single_game"
@@ -35,7 +35,7 @@
             android:textSize="@dimen/startup_screen_button_text_size"
             android:background="@drawable/startup_button"
             android:textStyle="bold"
-            android:textColor="@color/startup_screen_button_text" />
+            android:textColor="@color/startup_screen_button_text"/>
 
         <Button
             android:id="@+id/multiplayer_game"
@@ -47,7 +47,7 @@
             android:textSize="@dimen/startup_screen_button_text_size"
             android:background="@drawable/startup_button"
             android:textStyle="bold"
-            android:textColor="@color/startup_screen_button_text" />
+            android:textColor="@color/startup_screen_button_text"/>
     </LinearLayout>
 
     <Button
@@ -60,7 +60,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:contentDescription="@string/settings" />
+        android:contentDescription="@string/settings"/>
 
     <Button
         android:id="@+id/exit"
@@ -72,5 +72,5 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:contentDescription="@string/exit" />
+        android:contentDescription="@string/exit"/>
 </RelativeLayout>
