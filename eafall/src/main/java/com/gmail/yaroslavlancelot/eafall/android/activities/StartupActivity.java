@@ -1,8 +1,11 @@
 package com.gmail.yaroslavlancelot.eafall.android.activities;
 
 import android.content.Intent;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
 import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.android.activities.multiplayer.GameServersListActivity;
@@ -33,6 +36,10 @@ public class StartupActivity extends BaseNonGameActivity {
 
     private void initCampaignButton(View campaignButton) {
         if (campaignButton == null) return;
+        if (campaignButton instanceof Button) {
+            Button button = (Button) campaignButton;
+            button.getPaint().setShader(getTextGradient(button.getLineHeight()));
+        }
         campaignButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -44,6 +51,10 @@ public class StartupActivity extends BaseNonGameActivity {
 
     private void initSingleGameButton(View singleGameButton) {
         if (singleGameButton == null) return;
+        if (singleGameButton instanceof Button) {
+            Button button = (Button) singleGameButton;
+            button.getPaint().setShader(getTextGradient(button.getLineHeight()));
+        }
         singleGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -55,6 +66,10 @@ public class StartupActivity extends BaseNonGameActivity {
 
     private void initMultiplayerGameButton(View singleGameButton) {
         if (singleGameButton == null) return;
+        if (singleGameButton instanceof Button) {
+            Button button = (Button) singleGameButton;
+            button.getPaint().setShader(getTextGradient(button.getLineHeight()));
+        }
         singleGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -83,5 +98,16 @@ public class StartupActivity extends BaseNonGameActivity {
                 StartupActivity.this.finish();
             }
         });
+    }
+
+    private LinearGradient getTextGradient(final int textHeight) {
+        LinearGradient textGradient = new LinearGradient(
+                0, 0, 0, textHeight,
+                new int[]{getResources().getColor(R.color.startup_screen_button_text_top),
+                        getResources().getColor(R.color.startup_screen_button_text_medium),
+                        getResources().getColor(R.color.startup_screen_button_text_bottom)},
+                new float[]{0, 0.5f, 1},
+                Shader.TileMode.CLAMP);
+        return textGradient;
     }
 }
