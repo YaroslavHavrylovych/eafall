@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- game types -->
-    <string name="campaign">Campaign</string>
-    <string name="single_game">Single game</string>
-    <string name="multiplayer_game">Multiplayer game</string>
+    <string name="campaign">CAMPAIGN</string>
+    <string name="single_game">SINGLE GAME</string>
+    <string name="multiplayer_game">MULTIPLAYER GAME</string>
 
     <!-- pre game customizations -->
     <string name="choose_alliance">Alliance</string>
@@ -131,6 +131,9 @@
     <string name="music_on">Music enabled</string>
     <string name="music_off">Music disabled</string>
     <string name="music_volume">Music Volume</string>
+    <string name="category_sounds">Sounds</string>
+    <string name="category_game">Game</string>
+    <string name="category_other">Other</string>
 
     <!-- general -->
     <string name="app_name">EaFall</string>
