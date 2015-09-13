@@ -6,12 +6,20 @@
                 android:orientation="vertical"
                 android:background="@drawable/startup_background">
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:id="@+id/logo"
+        android:src="@drawable/startup_logo"
+        android:scaleType="fitCenter" />
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="@dimen/startup_screen_button_width"
-        android:layout_height="@dimen/startup_screen_button_layout_height"
+        android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/logo">
 
         <Button
             android:id="@+id/campaign"
@@ -23,7 +31,7 @@
             android:textSize="@dimen/startup_screen_button_text_size"
             android:background="@drawable/startup_button"
             android:textStyle="bold"
-            android:textColor="@color/startup_screen_button_text"/>
+            android:textColor="@color/startup_screen_button_text_bottom" />
 
         <Button
             android:id="@+id/single_game"
@@ -35,7 +43,7 @@
             android:textSize="@dimen/startup_screen_button_text_size"
             android:background="@drawable/startup_button"
             android:textStyle="bold"
-            android:textColor="@color/startup_screen_button_text"/>
+            android:textColor="@color/startup_screen_button_text_bottom" />
 
         <Button
             android:id="@+id/multiplayer_game"
@@ -47,7 +55,7 @@
             android:textSize="@dimen/startup_screen_button_text_size"
             android:background="@drawable/startup_button"
             android:textStyle="bold"
-            android:textColor="@color/startup_screen_button_text"/>
+            android:textColor="@color/startup_screen_button_text_bottom" />
     </LinearLayout>
 
     <Button
@@ -60,7 +68,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:contentDescription="@string/settings"/>
+        android:contentDescription="@string/settings" />
 
     <Button
         android:id="@+id/exit"
@@ -72,5 +80,5 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:contentDescription="@string/exit"/>
+        android:contentDescription="@string/exit" />
 </RelativeLayout>
