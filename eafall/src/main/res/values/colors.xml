@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="startup_screen_button_text">#9f9f9f</color>
+    <color name="startup_screen_button_text_top">#2f1403</color>
+    <color name="startup_screen_button_text_medium">#c3daef</color>
+    <color name="startup_screen_button_text_bottom">#9f9f9f</color>
 </resources>
