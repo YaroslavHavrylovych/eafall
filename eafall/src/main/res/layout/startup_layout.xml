@@ -8,10 +8,12 @@
 
     <ImageView
         android:layout_width="wrap_content"
-        android:layout_height="100dp"
+        android:layout_height="@dimen/startup_screen_logo_height"
+        android:layout_marginTop="@dimen/startup_screen_logo_margin_top"
+        android:layout_marginBottom="@dimen/startup_screen_logo_margin_bottom"
         android:id="@+id/logo"
         android:src="@drawable/startup_logo"
-        android:scaleType="fitCenter" />
+        android:scaleType="fitCenter"/>
 
     <LinearLayout
         android:orientation="vertical"
@@ -25,60 +27,54 @@
             android:id="@+id/campaign"
             android:layout_width="match_parent"
             android:layout_height="@dimen/startup_screen_button_height"
-            android:width="@dimen/startup_screen_button_width"
-            android:height="@dimen/default_button_height"
+            android:layout_marginBottom="@dimen/startup_screen_button_margin_bottom"
             android:text="@string/campaign"
             android:textSize="@dimen/startup_screen_button_text_size"
             android:background="@drawable/startup_button"
             android:textStyle="bold"
-            android:textColor="@color/startup_screen_button_text_bottom" />
+            android:textColor="@color/startup_screen_button_text_bottom"/>
 
         <Button
             android:id="@+id/single_game"
             android:layout_width="match_parent"
             android:layout_height="@dimen/startup_screen_button_height"
-            android:width="@dimen/startup_screen_button_width"
-            android:height="@dimen/default_button_height"
+            android:layout_marginBottom="@dimen/startup_screen_button_margin_bottom"
             android:text="@string/single_game"
             android:textSize="@dimen/startup_screen_button_text_size"
             android:background="@drawable/startup_button"
             android:textStyle="bold"
-            android:textColor="@color/startup_screen_button_text_bottom" />
+            android:textColor="@color/startup_screen_button_text_bottom"/>
 
         <Button
             android:id="@+id/multiplayer_game"
             android:layout_width="match_parent"
             android:layout_height="@dimen/startup_screen_button_height"
-            android:width="@dimen/startup_screen_button_width"
-            android:height="@dimen/default_button_height"
             android:text="@string/multiplayer_game"
             android:textSize="@dimen/startup_screen_button_text_size"
             android:background="@drawable/startup_button"
             android:textStyle="bold"
-            android:textColor="@color/startup_screen_button_text_bottom" />
+            android:textColor="@color/startup_screen_button_text_bottom"/>
     </LinearLayout>
 
     <Button
         android:id="@+id/settings"
-        android:layout_width="@dimen/startup_screen_image_button_width"
-        android:layout_height="@dimen/startup_screen_image_button_height"
-        android:width="@dimen/startup_screen_button_width"
-        android:height="@dimen/default_button_height"
+        android:layout_width="@dimen/startup_screen_round_button_size"
+        android:layout_height="@dimen/startup_screen_round_button_size"
+        android:layout_margin="@dimen/startup_screen_round_button_margin"
         android:background="@drawable/startup_button_settings"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:contentDescription="@string/settings" />
+        android:contentDescription="@string/settings"/>
 
     <Button
         android:id="@+id/exit"
-        android:layout_width="@dimen/startup_screen_image_button_width"
-        android:layout_height="@dimen/startup_screen_image_button_height"
-        android:width="@dimen/startup_screen_button_width"
-        android:height="@dimen/default_button_height"
+        android:layout_width="@dimen/startup_screen_round_button_size"
+        android:layout_height="@dimen/startup_screen_round_button_size"
+        android:layout_margin="@dimen/startup_screen_round_button_margin"
         android:background="@drawable/startup_button_exit"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:contentDescription="@string/exit" />
+        android:contentDescription="@string/exit"/>
 </RelativeLayout>
