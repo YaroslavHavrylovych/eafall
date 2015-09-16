@@ -116,6 +116,24 @@
 
     <!-- settings -->
     <string name="settings">Налаштування</string>
+    <string name="always_hidden">Прихований</string>
+    <string name="always_visible">Видимий</string>
+    <string name="category_game">Гра</string>
+    <string name="category_other">Інше</string>
+    <string name="category_sounds">Звук</string>
+    <string name="developers_mode">Режим розробника</string>
+    <string name="developers_mode_off">Вимкнений</string>
+    <string name="developers_mode_on">Увімкнений</string>
+    <string name="game_sounds">Звуки гри</string>
+    <string name="game_sounds_off">Вимкнені</string>
+    <string name="game_sounds_on">Увімкнені</string>
+    <string name="game_sounds_volume">Гучність</string>
+    <string name="hidden_until_unit_was_hit">Прихований доки юніт не атакований</string>
+    <string name="music">Музика</string>
+    <string name="music_off">Вимкена</string>
+    <string name="music_on">Увімкнена</string>
+    <string name="music_volume">Гучність</string>
+    <string name="pick_unit_health_bar_behavior">Видимість показника здоровя юніта</string>
 
     <!-- general -->
     <string name="app_name">Космічні Загарбники</string>
