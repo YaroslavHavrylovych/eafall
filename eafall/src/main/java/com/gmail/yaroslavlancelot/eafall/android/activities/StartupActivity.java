@@ -2,6 +2,7 @@ package com.gmail.yaroslavlancelot.eafall.android.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 
 import com.gmail.yaroslavlancelot.eafall.R;
@@ -24,6 +25,8 @@ public class StartupActivity extends BaseNonGameActivity {
         initMultiplayerGameButton(findViewById(R.id.multiplayer_game));
         initSettingsButton(findViewById(R.id.settings));
         initExitButton(findViewById(R.id.exit));
+
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
     }
 
     @Override
