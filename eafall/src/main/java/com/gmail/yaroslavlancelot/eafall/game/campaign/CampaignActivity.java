@@ -67,9 +67,7 @@ public class CampaignActivity extends EaFallActivity {
         // we loading sounds and music here and
         // wouldn't reload this sounds when reloading the campaign screen
         //sound
-        if (EaFallApplication.getConfig().isSoundsEnabled()) {
-            mSelectSound = SoundFactory.getInstance().loadSound("audio/sound/select.ogg");
-        }
+        mSelectSound = SoundFactory.getInstance().loadSound("audio/sound/select.ogg");
         //music
         if (EaFallApplication.getConfig().isMusicEnabled()) {
             mBackgroundMusic = new BackgroundMusic(
