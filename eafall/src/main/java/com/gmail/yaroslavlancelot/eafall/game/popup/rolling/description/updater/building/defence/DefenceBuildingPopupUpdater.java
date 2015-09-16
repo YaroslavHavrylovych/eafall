@@ -30,6 +30,19 @@ public class DefenceBuildingPopupUpdater extends BaseBuildingPopupUpdater {
     }
 
     @Override
+    public void updateDescription(Shape drawArea, Object objectId, String allianceName, final String playerName) {
+        super.updateDescription(drawArea, objectId, allianceName, playerName);
+        final BuildingId buildingId = (BuildingId) objectId;
+        final Object event = new CreateBuildingEvent(mPlayerName, buildingId);
+        mFirstButton.setOnClickListener(new ButtonSprite.OnClickListener() {
+            @Override
+            public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                EventBus.getDefault().post(event);
+            }
+        });
+    }
+
+    @Override
     public void updateAdditionInfo(Shape drawArea, Object objectId, String allianceName, final String playerName) {
         super.updateAdditionInfo(drawArea, objectId, allianceName, playerName);
 
@@ -45,20 +58,6 @@ public class DefenceBuildingPopupUpdater extends BaseBuildingPopupUpdater {
                         EventBus.getDefault().post(new UnitByBuildingDescriptionShowEvent(buildingId, playerName));
                     }
                 });
-        mScene.registerTouchArea(mAdditionDescriptionImage);
-    }
-
-    @Override
-    public void updateDescription(Shape drawArea, Object objectId, String allianceName, final String playerName) {
-        super.updateDescription(drawArea, objectId, allianceName, playerName);
-        final BuildingId buildingId = (BuildingId) objectId;
-        final Object event = new CreateBuildingEvent(mPlayerName, buildingId);
-        mFirstButton.setOnClickListener(new ButtonSprite.OnClickListener() {
-            @Override
-            public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                EventBus.getDefault().post(event);
-            }
-        });
     }
 
     protected ITextureRegion getAdditionalInformationImage(Object objectId, String allianceName) {

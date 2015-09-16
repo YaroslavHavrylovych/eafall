@@ -8,7 +8,9 @@ package com.gmail.yaroslavlancelot.eafall.game.popup;
 public interface IPopup {
     boolean isShowing();
 
-    void setStateChangingListener(StateChangingListener stateChangingListener);
+    void setStateChangeListener(StateChangingListener stateChangingListener);
+
+    void removeStateChangeListener();
 
     void showPopup();
 

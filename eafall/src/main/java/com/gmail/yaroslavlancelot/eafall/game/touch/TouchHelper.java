@@ -10,6 +10,7 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.ITouchCallback;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.Constants;
+import org.andengine.util.math.MathUtils;
 
 /** Helping functions to work with touch events */
 public final class TouchHelper {
@@ -181,7 +182,7 @@ public final class TouchHelper {
     public static class EntityTouchToChildren implements ITouchCallback {
         /** TouchCallback object */
         private IEntity mObject;
-        /** */
+        /** contains child who started to handle touch event */
         private IEntity mTouchedChild;
 
         public EntityTouchToChildren(IEntity entity) {
@@ -192,13 +193,23 @@ public final class TouchHelper {
         public boolean onAreaTouched(TouchEvent sceneTouchEvent, float touchAreaLocalX, float touchAreaLocalY) {
             if (mTouchedChild == null) {
                 if (sceneTouchEvent.isActionDown()) {
-                    float[] sceneCoordinates = mObject.convertLocalCoordinatesToSceneCoordinates(
-                            touchAreaLocalX, touchAreaLocalY);
+                    float[] localCoordinates;
+                    float halfWidth, halfHeight, x, y;
                     for (int i = 0; i < mObject.getChildCount(); i++) {
                         IEntity child = mObject.getChildByIndex(i);
-                        if (child.contains(sceneCoordinates[0], sceneCoordinates[1])) {
+                        localCoordinates = child.convertParentCoordinatesToLocalCoordinates(
+                                touchAreaLocalX, touchAreaLocalY);
+                        halfWidth = child.getWidth() / 2;
+                        halfHeight = child.getHeight() / 2;
+                        x = child.getX();
+                        y = child.getY();
+                        if (MathUtils.isInBounds(x - halfWidth, x + halfWidth, touchAreaLocalX)
+                                && MathUtils
+                                .isInBounds(y - halfHeight, y + halfHeight, touchAreaLocalY)) {
                             mTouchedChild = child;
-                            child.onAreaTouched(sceneTouchEvent, touchAreaLocalX, touchAreaLocalY);
+                            child.onAreaTouched(
+                                    sceneTouchEvent, localCoordinates[0], localCoordinates[1]);
+                            break;
                         }
                     }
                 }

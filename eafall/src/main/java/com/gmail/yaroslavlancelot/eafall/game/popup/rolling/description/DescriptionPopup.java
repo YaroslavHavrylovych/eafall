@@ -63,19 +63,19 @@ public class DescriptionPopup extends RollingPopup {
         int width = SizeConstants.GAME_FIELD_WIDTH;
         int height = SizeConstants.DESCRIPTION_POPUP_HEIGHT;
         mDescriptionPopupBackground = new DescriptionPopupBackground(
-                SizeConstants.HALF_FIELD_WIDTH, height / 2,
+                SizeConstants.HALF_FIELD_WIDTH, -height / 2,
                 width, height, vertexBufferObjectManager);
         mDescriptionPopupBackground
                 .setTouchCallback(new TouchHelper.EntityTouchToChildren(mDescriptionPopupBackground));
         mBackgroundSprite = mDescriptionPopupBackground;
         attachChild(mBackgroundSprite);
-        registerTouchArea(mBackgroundSprite);
 
         mCreepBuildingPopupUpdater = new CreepBuildingPopupUpdater(vertexBufferObjectManager, this);
         mWealthBuildingPopupUpdater = new WealthBuildingPopupUpdater(vertexBufferObjectManager, this);
         mSpecialBuildingPopupUpdater = new SpecialBuildingPopupUpdater(vertexBufferObjectManager, this);
         mUnitsDescriptionUpdater = new UnitPopupUpdater(vertexBufferObjectManager, this);
         mDefenceBuildingPopupUpdater = new DefenceBuildingPopupUpdater(vertexBufferObjectManager, this);
+        init();
         EbSubscribersHolder.register(this);
     }
 

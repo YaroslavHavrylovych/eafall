@@ -9,8 +9,8 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.C
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitDummy;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.UnitByBuildingDescriptionShowEvent;
-import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.BaseDescriptionAreaUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
+import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.BaseDescriptionAreaUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.touch.TouchHelper;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.DescriptionText;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.Link;
@@ -50,15 +50,11 @@ public class DescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
         // upgrade
         text = mUpgradeText = createDescriptionText(3, R.string.description_upgrade, vertexBufferObjectManager);
         mUpgradeLink = createLink(text.getWidth(), text.getY(), vertexBufferObjectManager);
-
-        // touch
-        scene.registerTouchArea(mUpgradeLink);
-        scene.registerTouchArea(mProducedUnitLink);
     }
 
     @Override
     protected void iniDescriptionTextList() {
-        mDescriptionTextList = new ArrayList<Text>(8);
+        mDescriptionTextList = new ArrayList<>(8);
         mDescriptionTextLinesAmount = 4;
     }
 

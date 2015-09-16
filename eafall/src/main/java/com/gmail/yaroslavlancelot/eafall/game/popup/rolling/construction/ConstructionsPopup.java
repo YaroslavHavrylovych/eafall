@@ -34,7 +34,8 @@ public class ConstructionsPopup extends RollingPopup {
     public static final String KEY = TAG;
     /** building of this player popup is showing */
     private final String mPlayerName;
-
+    /** used to invoke building description after constructions popup was hided */
+    private final CustomStateListener mStateChangingListener = new CustomStateListener();
     /** The key is the serial number of the building in the list of the buildings */
     private SparseArray<ConstructionsPopupItemFactory.BuildingPopupItem> mItems;
 
@@ -45,16 +46,15 @@ public class ConstructionsPopup extends RollingPopup {
 
         int width = SizeConstants.CONSTRUCTIONS_POPUP_WIDTH;
         int height = SizeConstants.CONSTRUCTIONS_POPUP_HEIGHT;
-        mBackgroundSprite = new Sprite(SizeConstants.HALF_FIELD_WIDTH, height / 2,
+        mBackgroundSprite = new Sprite(SizeConstants.HALF_FIELD_WIDTH, -height / 2,
                 width, height,
                 TextureRegionHolder.getRegion(StringConstants.FILE_CONSTRUCTIONS_POPUP),
                 vertexBufferObjectManager);
         mBackgroundSprite.setTouchCallback(new TouchHelper.EntityTouchToChildren(mBackgroundSprite));
         attachChild(mBackgroundSprite);
-        registerTouchArea(mBackgroundSprite);
-
         mPlayerName = player.getName();
         initBuildingPopupForPlayer(mPlayerName);
+        init();
     }
 
     @Override
@@ -110,8 +110,9 @@ public class ConstructionsPopup extends RollingPopup {
             @Override
             public void onClick() {
                 LoggerHelper.printDebugMessage(TAG, "showPopup building description");
+                mStateChangingListener.setBuildingId(buildingId);
+                setStateChangeListener(mStateChangingListener);
                 hidePopup();
-                EventBus.getDefault().post(new BuildingDescriptionShowEvent(buildingId, mPlayerName));
             }
         });
         mItems.put(id, item);
@@ -132,5 +133,30 @@ public class ConstructionsPopup extends RollingPopup {
                 0, SizeConstants.CONSTRUCTIONS_POPUP_HEIGHT + SizeConstants.BETWEEN_TEXTURES_PADDING,
                 1, 2);
         textureAtlas.load();
+    }
+
+    /**
+     * This custom state change listener invokes building description popup after tracked popup
+     * was hidden.
+     * <br/>
+     * Before using you have to set building it manually invoking
+     * {@link ConstructionsPopup.CustomStateListener#setBuildingId(BuildingId)}
+     */
+    private class CustomStateListener implements StateChangingListener {
+        private BuildingId mBuildingId;
+
+        private void setBuildingId(BuildingId buildingId) {
+            mBuildingId = buildingId;
+        }
+
+        @Override
+        public void onShowed() {
+        }
+
+        @Override
+        public void onHided() {
+            removeStateChangeListener();
+            EventBus.getDefault().post(new BuildingDescriptionShowEvent(mBuildingId, mPlayerName));
+        }
     }
 }

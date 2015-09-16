@@ -49,7 +49,6 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
         mAmountDrawer = new AmountDrawer(vertexBufferObjectManager);
         mFirstButton = new TextButton(vertexBufferObjectManager, 300,
                 SizeConstants.DESCRIPTION_POPUP_DES_BUTTON_HEIGHT);
-        mScene.registerTouchArea(mFirstButton);
         EbSubscribersHolder.register(this);
     }
 
@@ -69,7 +68,6 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
         mAmountDrawer.detach();
         mFirstButton.detachSelf();
         if (mAdditionDescriptionImage != null) {
-            mScene.unregisterTouchArea(mAdditionDescriptionImage);
             mAdditionDescriptionImage.detachSelf();
             mAdditionDescriptionImage = null;
         }
@@ -105,7 +103,6 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
     @Override
     public void updateAdditionInfo(final Shape drawArea, final Object objectId, final String allianceName, final String playerName) {
         if (mAdditionDescriptionImage != null) {
-            mScene.unregisterTouchArea(mAdditionDescriptionImage);
             mAdditionDescriptionImage.detachSelf();
         }
     }

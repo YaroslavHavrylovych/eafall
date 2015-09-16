@@ -405,7 +405,7 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
         IPopup popup = new GameOverPopup(
                 mSceneManager.getWorkingScene(), mCamera, getVertexBufferObjectManager());
         ((GameOverPopup) popup).setSuccess(gameEndedEvent.isSuccess());
-        popup.setStateChangingListener(new IRollingPopup.StateChangingListener() {
+        popup.setStateChangeListener(new IRollingPopup.StateChangingListener() {
             @Override
             public void onShowed() {
             }

@@ -55,13 +55,18 @@ public class PopupScene extends CameraScene implements IPopup {
     }
 
     @Override
-    public void setStateChangingListener(StateChangingListener stateChangingListener) {
+    public void setStateChangeListener(StateChangingListener stateChangingListener) {
         mStateChangingListener = stateChangingListener;
     }
 
     @Override
+    public void removeStateChangeListener() {
+        mStateChangingListener = null;
+    }
+
+    @Override
     public void showPopup() {
-        if (mIsPopupShowing) {
+        if (isShowing()) {
             return;
         }
         attachPopupScene();
@@ -73,7 +78,7 @@ public class PopupScene extends CameraScene implements IPopup {
 
     @Override
     public void hidePopup() {
-        if (!mIsPopupShowing) {
+        if (!isShowing()) {
             return;
         }
         detachPopupScene();

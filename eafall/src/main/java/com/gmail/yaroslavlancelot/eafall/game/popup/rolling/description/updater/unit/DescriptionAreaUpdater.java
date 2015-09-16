@@ -4,18 +4,18 @@ import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
-import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.CreepBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.DefenceBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.MovableUnitDummy;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.BuildingDescriptionShowEvent;
+import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.BaseDescriptionAreaUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.touch.TouchHelper;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.DescriptionText;
-import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.BaseDescriptionAreaUpdater;
-import com.gmail.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.Link;
+import com.gmail.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.Shape;
@@ -52,14 +52,11 @@ public class DescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
         // unique
         text = createDescriptionText(4, R.string.description_unique, vertexBufferObjectManager);
         mUnique = createDescriptionText(text.getWidth() + mSpace, text.getY(), vertexBufferObjectManager);
-
-        // touch
-        scene.registerTouchArea(mUnitBuildingNameLink);
     }
 
     @Override
     protected void iniDescriptionTextList() {
-        mDescriptionTextList = new ArrayList<Text>(10);
+        mDescriptionTextList = new ArrayList<>(10);
     }
 
     @Override

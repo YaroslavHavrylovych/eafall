@@ -7,6 +7,7 @@ import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.IPopupUpdater;
+import com.gmail.yaroslavlancelot.eafall.game.touch.TouchHelper;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 
 import org.andengine.entity.primitive.Rectangle;
@@ -33,14 +34,12 @@ import org.andengine.util.adt.color.Color;
  * to redraw it and display correctly.
  */
 public class DescriptionPopupBackground extends Sprite {
-    private static final String TAG = DescriptionPopupBackground.class.getCanonicalName();
     /** font key */
     private static final String sDescriptionFontKey = "key_objects_description_object_name_text_font";
     /** described object name */
     protected Text mObjectNameText;
 
     // next three guys/field are just split popup on display areas
-    //TODO change shape with entity
     /** descript object image */
     private Shape mImageShape;
     /** descript object description area */
@@ -75,6 +74,7 @@ public class DescriptionPopupBackground extends Sprite {
                 SizeConstants.DESCRIPTION_POPUP_IMAGE_WIDTH,
                 SizeConstants.DESCRIPTION_POPUP_IMAGE_HEIGHT, getVertexBufferObjectManager());
         mImageShape.setColor(Color.TRANSPARENT);
+        mImageShape.setTouchCallback(new TouchHelper.EntityTouchToChildren(mImageShape));
         attachChild(mImageShape);
         //addition information (right)
         mAdditionalInformationShape = new Rectangle(
@@ -84,6 +84,8 @@ public class DescriptionPopupBackground extends Sprite {
                 SizeConstants.DESCRIPTION_POPUP_ADDITIONAL_AREA_HEIGHT,
                 getVertexBufferObjectManager());
         mAdditionalInformationShape.setColor(Color.TRANSPARENT);
+        mAdditionalInformationShape.setTouchCallback(
+                new TouchHelper.EntityTouchToChildren(mAdditionalInformationShape));
         attachChild(mAdditionalInformationShape);
         // init described object name text
         initObjectNameText();
@@ -93,6 +95,8 @@ public class DescriptionPopupBackground extends Sprite {
                 SizeConstants.DESCRIPTION_POPUP_DES_AREA_WIDTH,
                 SizeConstants.DESCRIPTION_POPUP_DES_AREA_HEIGHT, getVertexBufferObjectManager());
         mDescriptionShape.setColor(Color.TRANSPARENT);
+        mDescriptionShape.setTouchCallback(
+                new TouchHelper.EntityTouchToChildren(mDescriptionShape));
         attachChild(mDescriptionShape);
     }
 

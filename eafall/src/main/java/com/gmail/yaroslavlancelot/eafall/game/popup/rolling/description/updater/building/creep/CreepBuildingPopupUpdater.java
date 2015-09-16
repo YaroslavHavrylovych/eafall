@@ -30,7 +30,8 @@ import org.andengine.util.adt.color.Color;
 import de.greenrobot.event.EventBus;
 
 /**
- * For CREEP building : <br/>
+ * For CREEP building :
+ * <br/>
  * updates buildings description popup
  */
 public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
@@ -43,25 +44,6 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
         super(vertexBufferObjectManager, scene);
         mDescriptionAreaUpdater = new DescriptionAreaUpdater(vertexBufferObjectManager, scene);
         initButtons(vertexBufferObjectManager);
-    }
-
-    @Override
-    public void updateAdditionInfo(Shape drawArea, Object objectId, String allianceName, final String playerName) {
-        super.updateAdditionInfo(drawArea, objectId, allianceName, playerName);
-
-        ITextureRegion textureRegion = getAdditionalInformationImage(objectId, allianceName);
-        mAdditionDescriptionImage = drawInArea(drawArea, textureRegion);
-
-        final BuildingId buildingId = (BuildingId) objectId;
-        mAdditionDescriptionImage.setTouchCallback(
-                new TouchHelper.EntityCustomTouch(mAdditionDescriptionImage) {
-                    @Override
-                    public void click() {
-                        super.click();
-                        EventBus.getDefault().post(new UnitByBuildingDescriptionShowEvent(buildingId, playerName));
-                    }
-                });
-        mScene.registerTouchArea(mAdditionDescriptionImage);
     }
 
     @Override
@@ -137,6 +119,24 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
     }
 
     @Override
+    public void updateAdditionInfo(Shape drawArea, Object objectId, String allianceName, final String playerName) {
+        super.updateAdditionInfo(drawArea, objectId, allianceName, playerName);
+
+        ITextureRegion textureRegion = getAdditionalInformationImage(objectId, allianceName);
+        mAdditionDescriptionImage = drawInArea(drawArea, textureRegion);
+
+        final BuildingId buildingId = (BuildingId) objectId;
+        mAdditionDescriptionImage.setTouchCallback(
+                new TouchHelper.EntityCustomTouch(mAdditionDescriptionImage) {
+                    @Override
+                    public void click() {
+                        super.click();
+                        EventBus.getDefault().post(new UnitByBuildingDescriptionShowEvent(buildingId, playerName));
+                    }
+                });
+    }
+
+    @Override
     public void onEvent(final BuildingsAmountChangedEvent buildingsAmountChangedEvent) {
         super.onEvent(buildingsAmountChangedEvent);
         if (mDescriptionAreaUpdater instanceof com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.building.creep.DescriptionAreaUpdater) {
@@ -151,12 +151,10 @@ public class CreepBuildingPopupUpdater extends BaseBuildingPopupUpdater {
         mSecondButton = new TextButton(vertexBufferObjectManager, 300,
                 SizeConstants.DESCRIPTION_POPUP_DES_BUTTON_HEIGHT);
         mSecondButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_upgrade_button));
-        mScene.registerTouchArea(mSecondButton);
         //path button
         mThirdButton = new TextButton(vertexBufferObjectManager, 300,
                 SizeConstants.DESCRIPTION_POPUP_DES_BUTTON_HEIGHT);
         mThirdButton.setFixedSize(true);
-        mScene.registerTouchArea(mThirdButton);
     }
 
     protected ITextureRegion getAdditionalInformationImage(Object objectId, String allianceName) {
