@@ -52,6 +52,7 @@ import com.gmail.yaroslavlancelot.eafall.game.resources.loaders.ClientResourcesL
 import com.gmail.yaroslavlancelot.eafall.game.rule.IRuler;
 import com.gmail.yaroslavlancelot.eafall.game.rule.RulesFactory;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
+import com.gmail.yaroslavlancelot.eafall.game.touch.ICameraHandler;
 import com.gmail.yaroslavlancelot.eafall.general.EbSubscribersHolder;
 
 import org.andengine.engine.options.EngineOptions;
@@ -146,10 +147,8 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
         //pools
         BulletPool.init(getVertexBufferObjectManager());
         //sound
-        if (EaFallApplication.getConfig().isSoundsEnabled()) {
-            SoundFactory.getInstance().setCameraHandler(
-                    mSceneManager.getWorkingScene().getCameraHandler());
-        }
+        ICameraHandler cameraHandler = mSceneManager.getWorkingScene().getCameraHandler();
+        SoundFactory.getInstance().setCameraHandler(cameraHandler);
     }
 
     protected void hideSplash() {

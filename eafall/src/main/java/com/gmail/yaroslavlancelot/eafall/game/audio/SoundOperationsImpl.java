@@ -23,9 +23,9 @@ public class SoundOperationsImpl implements SoundOperations {
     private Context mContext;
     private ICameraHandler mCameraHandler;
 
-    SoundOperationsImpl(SoundManager soundManager, Context context) {
+    SoundOperationsImpl(SoundManager soundManager) {
         mSoundManager = soundManager;
-        mContext = context;
+        mContext = EaFallApplication.getContext();
         setMasterVolume(EaFallApplication.getConfig().getSoundVolumeMax());
     }
 
