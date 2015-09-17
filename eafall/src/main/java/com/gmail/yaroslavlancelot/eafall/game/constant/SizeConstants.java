@@ -74,7 +74,7 @@ public final class SizeConstants {
 
     /* description popup */
     // general
-    public static final int DESCRIPTION_POPUP_HEIGHT = 666;
+    public static final int DESCRIPTION_POPUP_HEIGHT = 620;
     public static final int DESCRIPTION_POPUP_WIDTH = SizeConstants.GAME_FIELD_WIDTH;
     public static final int DESCRIPTION_POPUP_TEXT_SIZE = 45;
     public static final int DESCRIPTION_POPUP_TEXT_VERTICAL_PADDING = 3; //between rows in description (text only)
