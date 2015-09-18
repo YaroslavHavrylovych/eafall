@@ -2,8 +2,8 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.pl
 
 import com.gmail.yaroslavlancelot.eafall.game.client.IUnitCreator;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.ICreepBuilding;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path.PathHelper;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.IUnitBuilding;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.PathHelper;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
@@ -20,7 +20,7 @@ import java.util.Set;
  * <il>check available units in buildings</il>
  * <il>check available ports (which are on the cooldown)</il>
  * <il>check units limit</il>
- * <il>spawn movable unit</il>
+ * <il>spawn offence unit</il>
  * </ul>
  *
  * @author Yaroslav Havrylovych
@@ -47,7 +47,7 @@ public abstract class BaseShipyard implements IShipyard {
     protected Position[] mPortsPositions = new Position[PORTS];
     /** player which this shipyard belongs to */
     protected IPlayer mPlayer;
-    /** used to spawn movable units */
+    /** used to spawn offence units */
     private IUnitCreator mCreator;
 
     // ===========================================================
@@ -69,13 +69,13 @@ public abstract class BaseShipyard implements IShipyard {
     // Methods for/from SuperClass/Interfaces
     // ===========================================================
     @Override
-    public void update(List<ICreepBuilding> creepBuildings) {
-        for (int i = 0; i < creepBuildings.size(); i++) {
-            creepBuildings.get(i).tickUpdate();
+    public void update(List<IUnitBuilding> unitBuildings) {
+        for (int i = 0; i < unitBuildings.size(); i++) {
+            unitBuildings.get(i).tickUpdate();
         }
         updateCooldown();
-        if (checkLimit() && checkAvailableUnits(creepBuildings) && checkPorts()) {
-            checkedUpdate(creepBuildings);
+        if (checkLimit() && checkAvailableUnits(unitBuildings) && checkPorts()) {
+            checkedUpdate(unitBuildings);
         }
     }
 
@@ -88,17 +88,17 @@ public abstract class BaseShipyard implements IShipyard {
      * once per second but only if units limit isn't reached and
      * at least one port available and at least one building has units
      */
-    protected abstract void checkedUpdate(List<ICreepBuilding> creepBuildings);
+    protected abstract void checkedUpdate(List<IUnitBuilding> unitBuildings);
 
     /**
      * check available units in given buildings
      *
-     * @param creepBuildings creep buildings to check
+     * @param unitBuildings unit buildings to check
      * @return true if at least one building has units
      */
-    protected boolean checkAvailableUnits(List<ICreepBuilding> creepBuildings) {
-        for (int i = 0; i < creepBuildings.size(); i++) {
-            if (creepBuildings.get(i).getAvailableUnits() > 0) {
+    protected boolean checkAvailableUnits(List<IUnitBuilding> unitBuildings) {
+        for (int i = 0; i < unitBuildings.size(); i++) {
+            if (unitBuildings.get(i).getAvailableUnits() > 0) {
                 return true;
             }
         }
@@ -174,15 +174,15 @@ public abstract class BaseShipyard implements IShipyard {
     }
 
     /**
-     * spawn unit from creepBuilding at particular port
+     * spawn unit from unitBuilding at particular port
      *
      * @param port          where the unit will be spawned
-     * @param creepBuilding used to get unit key
+     * @param unitBuilding used to get unit key
      */
-    protected void spawn(int port, ICreepBuilding creepBuilding) {
-        int unitKey = creepBuilding.getUnit();
+    protected void spawn(int port, IUnitBuilding unitBuilding) {
+        int unitKey = unitBuilding.getUnit();
         Position position = mPortsPositions[port];
-        mCreator.createMovableUnit(mPlayer, unitKey, position.mX, position.mY, creepBuilding.isTopPath());
+        mCreator.createMovableUnit(mPlayer, unitKey, position.mX, position.mY, unitBuilding.isTopPath());
         mAvailablePorts.remove(port);
         mCooldownPorts[port] = COOLDOWN;
     }

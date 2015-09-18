@@ -29,7 +29,7 @@ public interface IPlayer {
     /**
      * returns string key which used in
      * {@link com.gmail.yaroslavlancelot.eafall.game.events.SharedEvents}
-     * when movable units amount changed
+     * when offence units amount changed
      */
     String getMovableUnitsAmountChangedKey();
 

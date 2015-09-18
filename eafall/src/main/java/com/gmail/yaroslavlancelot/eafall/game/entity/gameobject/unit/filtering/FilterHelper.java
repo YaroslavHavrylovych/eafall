@@ -2,7 +2,7 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.filtering;
 
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path.PathHelper;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.PathHelper;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 
 import java.util.ArrayList;

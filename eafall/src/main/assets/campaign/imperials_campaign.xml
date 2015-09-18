@@ -21,7 +21,7 @@
             <opponent_alliance>Rebels</opponent_alliance>
             <max_oxygen>215</max_oxygen>
             <planet_health>3000</planet_health>
-            <movable_units_limit>7</movable_units_limit>
+            <offensive_units_limit>7</offensive_units_limit>
             <definition>
                 <time_limit>500</time_limit>
                 <type>collect</type>

@@ -1,7 +1,7 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.shipyards;
 
 import com.gmail.yaroslavlancelot.eafall.game.client.IUnitCreator;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.ICreepBuilding;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.IUnitBuilding;
 
 import java.util.List;
 
@@ -41,28 +41,28 @@ public class TwoWaysShipyard extends BaseShipyard {
     // ===========================================================
     // Methods
     // ===========================================================
-    public void checkedUpdate(List<ICreepBuilding> creepBuildings) {
-        updateTopPorts(creepBuildings);
-        updateBottomPorts(creepBuildings);
-        updateAllPorts(creepBuildings);
+    public void checkedUpdate(List<IUnitBuilding> unitBuildings) {
+        updateTopPorts(unitBuildings);
+        updateBottomPorts(unitBuildings);
+        updateAllPorts(unitBuildings);
     }
 
     /**
      * update ports 0, 1 and 2. If units exist which has top path,
      * they will be assigned to any out of this ports (starting form 0)
      */
-    private void updateTopPorts(List<ICreepBuilding> creepBuildings) {
+    private void updateTopPorts(List<IUnitBuilding> unitBuildings) {
         if (mCooldownPorts[0] > 0 && mCooldownPorts[1] > 0 && mCooldownPorts[2] > 0) {
             return;
         }
-        for (int i = 0; i < creepBuildings.size(); i++) {
-            ICreepBuilding creepBuilding = creepBuildings.get(i);
-            if (creepBuilding.isPaused() || !creepBuilding.isTopPath()) {
+        for (int i = 0; i < unitBuildings.size(); i++) {
+            IUnitBuilding unitBuilding = unitBuildings.get(i);
+            if (unitBuilding.isPaused() || !unitBuilding.isTopPath()) {
                 continue;
             }
-            tryWithPortPort(0, creepBuilding);
-            tryWithPortPort(1, creepBuilding);
-            tryWithPortPort(2, creepBuilding);
+            tryWithPortPort(0, unitBuilding);
+            tryWithPortPort(1, unitBuilding);
+            tryWithPortPort(2, unitBuilding);
             if (mCooldownPorts[0] > 0 && mCooldownPorts[1] > 0 && mCooldownPorts[2] > 0) {
                 return;
             }
@@ -73,17 +73,17 @@ public class TwoWaysShipyard extends BaseShipyard {
      * update ports 3 and 4. If units exist which has bottom path,
      * they will be assigned to any out of this ports (starting form 3)
      */
-    private void updateBottomPorts(List<ICreepBuilding> creepBuildings) {
+    private void updateBottomPorts(List<IUnitBuilding> unitBuildings) {
         if (mCooldownPorts[3] > 0 && mCooldownPorts[4] > 0) {
             return;
         }
-        for (int i = 0; i < creepBuildings.size(); i++) {
-            ICreepBuilding creepBuilding = creepBuildings.get(i);
-            if (creepBuilding.isPaused() || creepBuilding.isTopPath()) {
+        for (int i = 0; i < unitBuildings.size(); i++) {
+            IUnitBuilding unitBuilding = unitBuildings.get(i);
+            if (unitBuilding.isPaused() || unitBuilding.isTopPath()) {
                 continue;
             }
-            tryWithPortPort(3, creepBuilding);
-            tryWithPortPort(4, creepBuilding);
+            tryWithPortPort(3, unitBuilding);
+            tryWithPortPort(4, unitBuilding);
             if (mCooldownPorts[3] > 0 && mCooldownPorts[4] > 0) {
                 return;
             }
@@ -91,21 +91,21 @@ public class TwoWaysShipyard extends BaseShipyard {
     }
 
     /** updates all ports and assign any unit to any of them (just availability) */
-    private void updateAllPorts(List<ICreepBuilding> creepBuildings) {
+    private void updateAllPorts(List<IUnitBuilding> unitBuildings) {
         if (mCooldownPorts[0] > 0 && mCooldownPorts[1] > 0 && mCooldownPorts[2] > 0 &&
                 mCooldownPorts[3] > 0 && mCooldownPorts[4] > 0) {
             return;
         }
-        for (int i = 0; i < creepBuildings.size(); i++) {
-            ICreepBuilding creepBuilding = creepBuildings.get(i);
-            if (creepBuilding.isPaused()) {
+        for (int i = 0; i < unitBuildings.size(); i++) {
+            IUnitBuilding unitBuilding = unitBuildings.get(i);
+            if (unitBuilding.isPaused()) {
                 continue;
             }
-            tryWithPortPort(0, creepBuilding);
-            tryWithPortPort(1, creepBuilding);
-            tryWithPortPort(2, creepBuilding);
-            tryWithPortPort(3, creepBuilding);
-            tryWithPortPort(4, creepBuilding);
+            tryWithPortPort(0, unitBuilding);
+            tryWithPortPort(1, unitBuilding);
+            tryWithPortPort(2, unitBuilding);
+            tryWithPortPort(3, unitBuilding);
+            tryWithPortPort(4, unitBuilding);
 
             if (mCooldownPorts[0] > 0 && mCooldownPorts[1] > 0 && mCooldownPorts[2] > 0 &&
                     mCooldownPorts[3] > 0 && mCooldownPorts[4] > 0) {
@@ -115,16 +115,16 @@ public class TwoWaysShipyard extends BaseShipyard {
     }
 
     /**
-     * if particular port available and creep buildings contains units and if limit is not
+     * if particular port available and unit buildings contains units and if limit is not
      * reached then new unit will be spawned at the port
      *
      * @param port          to spawn unit
-     * @param creepBuilding creep building to spawn unit
+     * @param unitBuilding unit building to spawn unit
      */
-    private void tryWithPortPort(int port, ICreepBuilding creepBuilding) {
-        if (mAvailablePorts.contains(port) && creepBuilding.getAvailableUnits() > 0
+    private void tryWithPortPort(int port, IUnitBuilding unitBuilding) {
+        if (mAvailablePorts.contains(port) && unitBuilding.getAvailableUnits() > 0
                 && checkLimit()) {
-            spawn(port, creepBuilding);
+            spawn(port, unitBuilding);
         }
     }
 

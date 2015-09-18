@@ -29,8 +29,8 @@ public class MissionDataLoader {
     @Element(name = "planet_health", required = false)
     public Integer planet_health;
 
-    @Element(name = "movable_units_limit", required = false)
-    public Integer movable_units_limit;
+    @Element(name = "offensive_units_limit", required = false)
+    public Integer offensive_units_limit;
 
 
     @Element(name = "definition")

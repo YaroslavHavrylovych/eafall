@@ -2,7 +2,7 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildi
 
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.Building;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.CreepBuildingDummy;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.OffenceBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.StaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
@@ -12,12 +12,12 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import de.greenrobot.event.EventBus;
 
-public class CreepBuilding extends Building implements ICreepBuilding {
-    private static final String TAG = CreepBuilding.class.getCanonicalName();
+public class UnitBuilding extends Building implements IUnitBuilding {
+    private static final String TAG = UnitBuilding.class.getCanonicalName();
     /** if production is paused */
     protected boolean mPaused = false;
     /** building dummy link */
-    private CreepBuildingDummy mCreepBuildingDummy;
+    private OffenceBuildingDummy mOffenceBuildingDummy;
     /** building produce units which will go by the top path */
     private boolean mIsTopPath = true;
     private int mCurrentTime;
@@ -25,9 +25,9 @@ public class CreepBuilding extends Building implements ICreepBuilding {
     private int mAvailableUnits;
     private int mUnitKey;
 
-    public CreepBuilding(final CreepBuildingDummy dummy, VertexBufferObjectManager objectManager, String playerName) {
+    public UnitBuilding(final OffenceBuildingDummy dummy, VertexBufferObjectManager objectManager, String playerName) {
         super(dummy, objectManager, playerName);
-        mCreepBuildingDummy = dummy;
+        mOffenceBuildingDummy = dummy;
     }
 
     @Override
@@ -50,8 +50,8 @@ public class CreepBuilding extends Building implements ICreepBuilding {
 
         //first building created
         if (mBuildingsAmount == 1) {
-            mCreationTime = mCreepBuildingDummy.getUnitCreationTime(mUpgrade);
-            mUnitKey = mCreepBuildingDummy.getMovableUnitId(mUpgrade);
+            mCreationTime = mOffenceBuildingDummy.getUnitCreationTime(mUpgrade);
+            mUnitKey = mOffenceBuildingDummy.getUnitId(mUpgrade);
         }
 
         return true;
@@ -106,7 +106,7 @@ public class CreepBuilding extends Building implements ICreepBuilding {
     public boolean upgradeBuilding() {
         //check upgrade for existence and buildings amount
         int nextUpgrade = mUpgrade + 1;
-        if (nextUpgrade >= mCreepBuildingDummy.getUpgrades()) {
+        if (nextUpgrade >= mOffenceBuildingDummy.getUpgrades()) {
             throw new UnsupportedOperationException("Building upgrade exceed possible building upgrades");
         }
         if (mBuildingsAmount <= 0) {
@@ -116,7 +116,7 @@ public class CreepBuilding extends Building implements ICreepBuilding {
         IPlayer player = PlayersHolder.getPlayer(mPlayerName);
         boolean isFakePlanet = player.getControlType().clientSide();
         if (!isFakePlanet) {
-            int cost = mCreepBuildingDummy.getCost(nextUpgrade);
+            int cost = mOffenceBuildingDummy.getCost(nextUpgrade);
             //check money
             if (player.getMoney() < cost) {
                 return false;
@@ -126,14 +126,14 @@ public class CreepBuilding extends Building implements ICreepBuilding {
         }
 
         StaticObject oldBuilding = mBuildingStaticObject;
-        StaticObject newBuilding = getBuildingByUpgrade(nextUpgrade, mCreepBuildingDummy,
+        StaticObject newBuilding = getBuildingByUpgrade(nextUpgrade, mOffenceBuildingDummy,
                 oldBuilding.getVertexBufferObjectManager());
         newBuilding.setSpriteGroupName(oldBuilding.getSpriteGroupName());
         newBuilding.setPosition(oldBuilding.getX(), oldBuilding.getY());
         if (!isFakePlanet) {
             mCurrentTime = 0;
-            mUnitKey = mCreepBuildingDummy.getMovableUnitId(nextUpgrade);
-            mCreationTime = mCreepBuildingDummy.getUnitCreationTime(nextUpgrade);
+            mUnitKey = mOffenceBuildingDummy.getUnitId(nextUpgrade);
+            mCreationTime = mOffenceBuildingDummy.getUnitCreationTime(nextUpgrade);
         }
 
         oldBuilding.detachSelf();
@@ -142,7 +142,7 @@ public class CreepBuilding extends Building implements ICreepBuilding {
         mUpgrade = nextUpgrade;
         //change description popup
         EventBus.getDefault().post(new BuildingDescriptionShowEvent(
-                BuildingId.makeId(mCreepBuildingDummy.getBuildingId(), nextUpgrade), mPlayerName));
+                BuildingId.makeId(mOffenceBuildingDummy.getBuildingId(), nextUpgrade), mPlayerName));
         return true;
     }
 }

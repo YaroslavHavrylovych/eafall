@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path;
+package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path;
 
 /** Unit path interface. To not be assigned to concrete path implementation. */
 public interface IUnitPath {

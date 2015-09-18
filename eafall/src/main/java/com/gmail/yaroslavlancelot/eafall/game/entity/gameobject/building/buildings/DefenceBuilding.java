@@ -4,7 +4,7 @@ import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.Building;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.DefenceBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetStaticObject;
-import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.unit.CreateStationaryUnitEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.unit.CreateDefenceUnitEvent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
@@ -70,7 +70,7 @@ public class DefenceBuilding extends Building {
             x = sOrbitalStationsPositions[i][0];
             x = planetX + ((planetX < sGameFieldCenterX) ? x : -x);
             y = planetY + sOrbitalStationsPositions[i][1];
-            EventBus.getDefault().post(new CreateStationaryUnitEvent(mDefenceBuildingDummy.getBuildingId(),
+            EventBus.getDefault().post(new CreateDefenceUnitEvent(mDefenceBuildingDummy.getBuildingId(),
                     mPlayerName, x, y));
         }
         return true;

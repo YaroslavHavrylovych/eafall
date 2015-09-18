@@ -1,24 +1,21 @@
-package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.stationary;
+package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.defence;
 
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path.PathHelper;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.PathHelper;
 
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 
 /** Basic class for all stationary/unmovable game units ( */
-public class StationaryUnit extends Unit {
-    public static final String TAG = StationaryUnit.class.getCanonicalName();
+public class DefenceUnit extends Unit {
+    public static final String TAG = DefenceUnit.class.getCanonicalName();
     /** body type */
     private static final BodyDef.BodyType sBodyType = BodyDef.BodyType.StaticBody;
 
     /** create unit from appropriate builder */
-    public StationaryUnit(StationaryUnitBuilder unitBuilder) {
+    public DefenceUnit(DefenceUnitBuilder unitBuilder) {
         super(unitBuilder);
-        // todo: maybe it's better to use more functional style here, like
-        // updateCycleTime() method which will return specific value, class field depends on lifecycle,
-        // better to be stateless here
         mUpdateCycleTime = .7f;
     }
 
@@ -28,7 +25,7 @@ public class StationaryUnit extends Unit {
     }
 
     public void startLifecycle() {
-        registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new StationaryUnitTimerCallback()));
+        registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new DefenceUnitTimerCallback()));
     }
 
     @Override
@@ -47,7 +44,7 @@ public class StationaryUnit extends Unit {
     }
 
     /** stationary unit behaviour */
-    protected class StationaryUnitTimerCallback implements ITimerCallback {
+    protected class DefenceUnitTimerCallback implements ITimerCallback {
         @Override
         public void onTimePassed(TimerHandler pTimerHandler) {
             // check for anything to attack
@@ -65,7 +62,7 @@ public class StationaryUnit extends Unit {
 
             // search for new unit to attack
             mObjectToAttack = mEnemiesUpdater
-                    .getFirstEnemyInRange(StationaryUnit.this, mAttackRadius);
+                    .getFirstEnemyInRange(DefenceUnit.this, mAttackRadius);
         }
     }
 }

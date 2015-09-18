@@ -1,11 +1,11 @@
-package com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.building.creep;
+package com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.building.unit;
 
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.CreepBuildingDummy;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.UnitBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitDummy;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.UnitByBuildingDescriptionShowEvent;
@@ -29,7 +29,7 @@ import de.greenrobot.event.EventBus;
  * writes building description on given area (p.s. only description popup). Knows about other
  * buttons (e.g. build button) on the description popup so place text with knowing of this.
  */
-public class DescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
+public class UnitDescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
     /* values changed with each #updateDescription call */
     private DescriptionText mCostValue;
     private DescriptionText mUnitCreationTimeValue;
@@ -37,7 +37,7 @@ public class DescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
     private Link mProducedUnitLink;
     private Link mUpgradeLink;
 
-    public DescriptionAreaUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
+    public UnitDescriptionAreaUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         // cost
         Text text = createDescriptionText(0, R.string.description_cost, vertexBufferObjectManager);
         mCostValue = createDescriptionText(text.getWidth() + mSpace, text.getY(), vertexBufferObjectManager);
@@ -64,11 +64,11 @@ public class DescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
         super.updateDescription(drawArea, objectId, allianceName, playerName);
         final BuildingId buildingId = (BuildingId) objectId;
         IAlliance alliance = AllianceHolder.getInstance().getElement(allianceName);
-        CreepBuildingDummy dummy = (CreepBuildingDummy) alliance.getBuildingDummy(buildingId);
+        UnitBuildingDummy dummy = (UnitBuildingDummy) alliance.getBuildingDummy(buildingId);
         //cost
         mCostValue.setText(Integer.toString(dummy.getCost(buildingId.getUpgrade())));
         //produced unit
-        final int unitId = dummy.getMovableUnitId(buildingId.getUpgrade());
+        final int unitId = dummy.getUnitId(buildingId.getUpgrade());
         UnitDummy unitDummy = alliance.getUnitDummy(unitId);
         mProducedUnitLink.setText(EaFallApplication.getContext().getResources().getString(
                 unitDummy.getUnitStringId()));

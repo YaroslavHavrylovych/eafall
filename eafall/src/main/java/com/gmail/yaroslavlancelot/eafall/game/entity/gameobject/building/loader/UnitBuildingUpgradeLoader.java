@@ -6,7 +6,7 @@ import org.simpleframework.xml.Root;
 
 /** update of particular building */
 @Root(name = "upgrade")
-public class CreepBuildingUpgradeLoader {
+public class UnitBuildingUpgradeLoader {
     @Attribute(name = "id", required = true)
     public Integer id;
 

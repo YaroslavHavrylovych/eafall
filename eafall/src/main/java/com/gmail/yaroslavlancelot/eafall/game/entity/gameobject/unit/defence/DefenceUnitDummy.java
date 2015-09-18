@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.stationary;
+package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.defence;
 
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitBuilder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitDummy;
@@ -8,14 +8,14 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /** unmovable/stationary unit */
-public class StationaryUnitDummy extends UnitDummy {
-    public StationaryUnitDummy(UnitLoader unitLoader, String allianceName) {
+public class DefenceUnitDummy extends UnitDummy {
+    public DefenceUnitDummy(UnitLoader unitLoader, String allianceName) {
         super(unitLoader, allianceName);
     }
 
     @Override
     protected UnitBuilder createUnitBuilder(ITextureRegion textureRegion,
                                             VertexBufferObjectManager objectManager) {
-        return new StationaryUnitBuilder(textureRegion, objectManager);
+        return new DefenceUnitBuilder(textureRegion, objectManager);
     }
 }

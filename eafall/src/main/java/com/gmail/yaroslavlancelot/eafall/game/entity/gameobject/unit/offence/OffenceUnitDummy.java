@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic;
+package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence;
 
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitBuilder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitDummy;
@@ -10,11 +10,11 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 /**
  * extends unit with speed for moving
  */
-public class MovableUnitDummy extends UnitDummy {
+public class OffenceUnitDummy extends UnitDummy {
     /** speed of the unit */
     private final float mUnitSpeed;
 
-    public MovableUnitDummy(UnitLoader unitLoader, String allianceName) {
+    public OffenceUnitDummy(UnitLoader unitLoader, String allianceName) {
         super(unitLoader, allianceName);
         mUnitSpeed = ((float) mUnitLoader.speed) / 100;
     }
@@ -23,16 +23,16 @@ public class MovableUnitDummy extends UnitDummy {
         return mUnitSpeed;
     }
 
-    /** create and return movable unit builder */
+    /** create and return offence unit builder */
     public UnitBuilder createBuilder(final ITextureRegion spriteTextureRegion,
                                      VertexBufferObjectManager objectManager) {
-        return ((MovableUnitBuilder) super.createBuilder(spriteTextureRegion, objectManager))
+        return ((OffenceUnitBuilder) super.createBuilder(spriteTextureRegion, objectManager))
                 .setSpeed(getSpeed());
     }
 
     @Override
     protected UnitBuilder createUnitBuilder(ITextureRegion textureRegion,
                                             VertexBufferObjectManager objectManager) {
-        return new MovableUnitBuilder(textureRegion, objectManager);
+        return new OffenceUnitBuilder(textureRegion, objectManager);
     }
 }

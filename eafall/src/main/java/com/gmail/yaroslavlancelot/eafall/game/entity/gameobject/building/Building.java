@@ -32,7 +32,7 @@ public abstract class Building implements IBuilding {
         mBuildingType = dummy.getBuildingType();
         mPlayerName = playerName;
         mDummy = dummy;
-        // init first creep building
+        // init first unit building
         mBuildingStaticObject = getBuildingByUpgrade(mUpgrade, dummy, objectManager);
     }
 

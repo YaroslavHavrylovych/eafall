@@ -1,15 +1,15 @@
-package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic;
+package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence;
 
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitBuilder;
 
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-/** movable unit builder */
-public class MovableUnitBuilder extends UnitBuilder {
+/** offence unit builder */
+public class OffenceUnitBuilder extends UnitBuilder {
     private float mSpeed;
 
-    public MovableUnitBuilder(ITextureRegion textureRegion, VertexBufferObjectManager objectManager) {
+    public OffenceUnitBuilder(ITextureRegion textureRegion, VertexBufferObjectManager objectManager) {
         super(textureRegion, objectManager);
     }
 
@@ -17,7 +17,7 @@ public class MovableUnitBuilder extends UnitBuilder {
         return mSpeed;
     }
 
-    public MovableUnitBuilder setSpeed(float speed) {
+    public OffenceUnitBuilder setSpeed(float speed) {
         mSpeed = speed;
         return this;
     }

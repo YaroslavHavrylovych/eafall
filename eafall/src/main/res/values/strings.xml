@@ -170,7 +170,7 @@
     <string name="description_produce">Produce :</string>
     <string name="description_description">Description :</string>
     <string name="description_unit_producing_time">Unit producing time :</string>
-    <string name="description_upgrade">Upgrade cost :</string>
+    <string name="description_upgrade">Upgrade :</string>
 
     <!-- units -->
     <string name="description_building">Building :</string>

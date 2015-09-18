@@ -3,11 +3,11 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildi
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.IBuilding;
 
 /** general building interface for use by planet */
-public interface ICreepBuilding extends IBuilding {
+public interface IUnitBuilding extends IBuilding {
     /** return true if buildings creates units which use top path to go and false in other case */
     boolean isTopPath();
 
-    /** returns true if the building does0'nt produce creeps at present (building process paused) */
+    /** returns true if the building does0'nt produce units at present (building process paused) */
     boolean isPaused();
 
     int getAvailableUnits();

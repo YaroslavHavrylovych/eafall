@@ -38,7 +38,7 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
      * as the only available button in base building popup.
      * Most probably served as "Build" or "Back" button.
      */
-    protected TextButton mFirstButton;
+    protected TextButton mBaseButton;
     /** image for addition information */
     protected Sprite mAdditionDescriptionImage;
     /** building description object (update description area which u pass to it) */
@@ -47,7 +47,7 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
     public BaseBuildingPopupUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         super(vertexBufferObjectManager, scene);
         mAmountDrawer = new AmountDrawer(vertexBufferObjectManager);
-        mFirstButton = new TextButton(vertexBufferObjectManager, 300,
+        mBaseButton = new TextButton(vertexBufferObjectManager, 300,
                 SizeConstants.DESCRIPTION_POPUP_DES_BUTTON_HEIGHT);
         EbSubscribersHolder.register(this);
     }
@@ -66,7 +66,7 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
     public void clear() {
         super.clear();
         mAmountDrawer.detach();
-        mFirstButton.detachSelf();
+        mBaseButton.detachSelf();
         if (mAdditionDescriptionImage != null) {
             mAdditionDescriptionImage.detachSelf();
             mAdditionDescriptionImage = null;
@@ -95,9 +95,9 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
         //description
         mDescriptionAreaUpdater.updateDescription(drawArea, objectId, allianceName, playerName);
         //build button
-        mFirstButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_build_button));
-        mFirstButton.setPosition(mFirstButton.getWidth() / 2, mFirstButton.getHeight() / 2);
-        drawArea.attachChild(mFirstButton);
+        mBaseButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_build_button));
+        mBaseButton.setPosition(mBaseButton.getWidth() / 2, mBaseButton.getHeight() / 2);
+        drawArea.attachChild(mBaseButton);
     }
 
     @Override

@@ -6,10 +6,9 @@ import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.CreepBuildingDummy;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.DefenceBuildingDummy;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.UnitBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitDummy;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.MovableUnitDummy;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.OffenceUnitDummy;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.BaseDescriptionAreaUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.touch.TouchHelper;
@@ -64,18 +63,9 @@ public class DescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
         final BuildingId buildingId = (BuildingId) objectId;
         IAlliance alliance = AllianceHolder.getInstance().getElement(allianceName);
         BuildingDummy buildingDummy = alliance.getBuildingDummy(buildingId);
-        int unitId;
-        if (buildingDummy instanceof CreepBuildingDummy) {
-            unitId = ((CreepBuildingDummy) buildingDummy).getMovableUnitId(buildingId.getUpgrade());
-        } else if (buildingDummy instanceof DefenceBuildingDummy) {
-            unitId = ((DefenceBuildingDummy) buildingDummy).getOrbitalStationUnitId();
-        } else {
-            return;
-        }
-
+        int unitId = ((UnitBuildingDummy) buildingDummy).getUnitId(buildingId.getUpgrade());
         attach(drawArea);
         UnitDummy unitDummy = alliance.getUnitDummy(unitId);
-
         // building name
         mUnitBuildingNameLink.setText(LocaleImpl.getInstance().getStringById(buildingDummy.getStringId()));
         mUnitBuildingNameLink.setOnClickListener(new TouchHelper.OnClickListener() {
@@ -87,8 +77,8 @@ public class DescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
         // static text
         mUnitHealth.setText("" + unitDummy.getHealth());
         String unitSpeed;
-        if (unitDummy instanceof MovableUnitDummy) {
-            unitSpeed = "" + ((MovableUnitDummy) unitDummy).getSpeed();
+        if (unitDummy instanceof OffenceUnitDummy) {
+            unitSpeed = "" + ((OffenceUnitDummy) unitDummy).getSpeed();
         } else {
             unitSpeed = EaFallApplication.getContext().getString(R.string.unmovable);
         }

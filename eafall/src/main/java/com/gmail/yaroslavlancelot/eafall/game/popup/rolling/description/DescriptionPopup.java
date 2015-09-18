@@ -12,8 +12,8 @@ import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.RollingPopup;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.IPopupUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.building.BaseBuildingPopupUpdater;
-import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.building.creep.CreepBuildingPopupUpdater;
-import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.building.defence.DefenceBuildingPopupUpdater;
+import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.building.unit.offence.OffenceBuildingPopupUpdater;
+import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.building.unit.defence.DefenceBuildingPopupUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.building.special.SpecialBuildingPopupUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.building.wealth.WealthBuildingPopupUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.unit.UnitPopupUpdater;
@@ -39,8 +39,8 @@ public class DescriptionPopup extends RollingPopup {
     public static final String KEY = TAG;
     /** general elements of the popup (background sprite, close button, description image) */
     private DescriptionPopupBackground mDescriptionPopupBackground;
-    /** creep building updater */
-    private CreepBuildingPopupUpdater mCreepBuildingPopupUpdater;
+    /** unit building updater */
+    private OffenceBuildingPopupUpdater mOffenceBuildingPopupUpdater;
     /** special buildings updater */
     private SpecialBuildingPopupUpdater mSpecialBuildingPopupUpdater;
     /** wealth building updater */
@@ -70,7 +70,7 @@ public class DescriptionPopup extends RollingPopup {
         mBackgroundSprite = mDescriptionPopupBackground;
         attachChild(mBackgroundSprite);
 
-        mCreepBuildingPopupUpdater = new CreepBuildingPopupUpdater(vertexBufferObjectManager, this);
+        mOffenceBuildingPopupUpdater = new OffenceBuildingPopupUpdater(vertexBufferObjectManager, this);
         mWealthBuildingPopupUpdater = new WealthBuildingPopupUpdater(vertexBufferObjectManager, this);
         mSpecialBuildingPopupUpdater = new SpecialBuildingPopupUpdater(vertexBufferObjectManager, this);
         mUnitsDescriptionUpdater = new UnitPopupUpdater(vertexBufferObjectManager, this);
@@ -89,7 +89,7 @@ public class DescriptionPopup extends RollingPopup {
         IPopupUpdater popupUpdater;
         switch (buildingDummy.getBuildingType()) {
             case CREEP_BUILDING: {
-                popupUpdater = mCreepBuildingPopupUpdater;
+                popupUpdater = mOffenceBuildingPopupUpdater;
                 break;
             }
             case WEALTH_BUILDING: {
@@ -118,7 +118,7 @@ public class DescriptionPopup extends RollingPopup {
     }
 
     private void clear() {
-        mCreepBuildingPopupUpdater.clear();
+        mOffenceBuildingPopupUpdater.clear();
         mUnitsDescriptionUpdater.clear();
         mWealthBuildingPopupUpdater.clear();
         mSpecialBuildingPopupUpdater.clear();

@@ -10,7 +10,7 @@ import java.util.List;
 
 /** read building data from unit-store xml file */
 @Root(name = "units_building")
-public class CreepBuildingLoader {
+public class UnitBuildingLoader {
     @Attribute(name = "name", required = true)
     public String name;
 
@@ -24,9 +24,9 @@ public class CreepBuildingLoader {
     public Integer position_y;
 
     @ElementList(name = "upgrades")
-    List<CreepBuildingUpgradeLoader> mBuildingLoaderList = new ArrayList<CreepBuildingUpgradeLoader>(3);
+    List<UnitBuildingUpgradeLoader> mBuildingLoaderList = new ArrayList<UnitBuildingUpgradeLoader>(3);
 
-    public List<CreepBuildingUpgradeLoader> getUpdates() {
+    public List<UnitBuildingUpgradeLoader> getUpdates() {
         return mBuildingLoaderList;
     }
 }

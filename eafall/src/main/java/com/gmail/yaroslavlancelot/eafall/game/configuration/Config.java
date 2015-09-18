@@ -46,7 +46,7 @@ public class Config implements IConfig {
         return mApplicationConfig.isMusicEnabled();
     }
 
-    public int getCreepBuildingsLimit() {
+    public int getUnitBuildingsLimit() {
         return 7;
     }
 

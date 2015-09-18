@@ -152,7 +152,7 @@ public class EaFallHud extends HUD {
         initHealthCarcass(vertexManager);
         //menu
         initMainMenu(vertexManager);
-        //game values (oxygen, movable units limit, time)
+        //game values (oxygen, offence units limit, time)
         for (final IPlayer player : PlayersHolder.getInstance().getElements()) {
             boolean left = player.getPlanet().isLeft();
             List<HudGameValue> list = left ? mLeftPart : mRightPart;

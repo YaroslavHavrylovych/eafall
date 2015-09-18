@@ -1,7 +1,7 @@
 package com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.unit;
 
 /** holds data need for unit creation */
-public class CreateStationaryUnitEvent {
+public class CreateDefenceUnitEvent {
     private final int mKey;
     private final String mPlayerName;
     private final float mX;
@@ -15,7 +15,7 @@ public class CreateStationaryUnitEvent {
      * @param x        abscissa
      * @param y        ordinate
      */
-    public CreateStationaryUnitEvent(int key, final String playerName, float x, float y) {
+    public CreateDefenceUnitEvent(int key, final String playerName, float x, float y) {
         mKey = key;
         mPlayerName = playerName;
         mX = x;

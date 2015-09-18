@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path;
+package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path;
 
 /** Used for tracking unit check point passing */
 public class UnitPath implements IUnitPath {

@@ -1,6 +1,6 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.shipyards;
 
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.ICreepBuilding;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.IUnitBuilding;
 
 import java.util.List;
 
@@ -12,5 +12,5 @@ import java.util.List;
  */
 public interface IShipyard {
     /** invoked each second and update shipyard data (spawns units and etc) */
-    void update(List<ICreepBuilding> creepBuildings);
+    void update(List<IUnitBuilding> unitBuildings);
 }

@@ -3,8 +3,8 @@ package com.gmail.yaroslavlancelot.eafall.test.game.entity.gameobject.unit.dynam
 import com.gmail.yaroslavlancelot.eafall.game.audio.LimitedSoundWrapper
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.Armor
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.MovableUnit
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.MovableUnitBuilder
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.OffenceUnit
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.OffenceUnitBuilder
 import com.gmail.yaroslavlancelot.eafall.test.game.entity.gameobject.unit.UnitTest
 import org.andengine.engine.handler.IUpdateHandler
 import org.andengine.entity.modifier.RotationModifier
@@ -15,9 +15,9 @@ import kotlin.test.assertTrue
 /**
  * @author Yaroslav Havrylovych
  */
-public class MovableUnitTest : UnitTest() {
-    override fun createUnit(): TestableMovableUnit {
-        val movableUnitBuilder = MovableUnitBuilder(
+public class OffenceUnitTest : UnitTest() {
+    override fun createUnit(): TestableOffenceUnit {
+        val movableUnitBuilder = OffenceUnitBuilder(
                 TextureRegion(mUnitTexture, 0f, 0f, 20f, 20f), null)
         movableUnitBuilder
                 .setSpeed(20f)
@@ -28,7 +28,7 @@ public class MovableUnitTest : UnitTest() {
                 .setHealth(200)
                 .setFireSound(LimitedSoundWrapper(null))
                 .setReloadTime(1.5)
-        return TestableMovableUnit(movableUnitBuilder)
+        return TestableOffenceUnit(movableUnitBuilder)
     }
 
     override fun testRotation() {
@@ -51,21 +51,21 @@ public class MovableUnitTest : UnitTest() {
         assertTrue(unit.getAngle(10f, 20f) == -90, "getAngle for -90 check")
     }
 
-    public class TestableMovableUnit(unitBuilder: MovableUnitBuilder?) : MovableUnit(unitBuilder), UnitTest.TestableUnit {
+    public class TestableOffenceUnit(unitBuilder: OffenceUnitBuilder?) : OffenceUnit(unitBuilder), UnitTest.TestableUnit {
         override fun invokeDestroy() {
             destroy()
         }
 
         override public fun getAngle(x: Float, y: Float): Int {
-            return super<MovableUnit>.getAngle(x, y)
+            return super<OffenceUnit>.getAngle(x, y)
         }
 
         override public fun needRotation(angle: Int): Boolean {
-            return super<MovableUnit>.needRotation(angle)
+            return super<OffenceUnit>.needRotation(angle)
         }
 
         override public fun rotateWithAngle(angle: Int) {
-            super<MovableUnit>.rotateWithAngle(angle)
+            super<OffenceUnit>.rotateWithAngle(angle)
         }
 
         override fun getRotationModifier(): RotationModifier {

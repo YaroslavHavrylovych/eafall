@@ -3,7 +3,7 @@ package com.gmail.yaroslavlancelot.eafall.test
 import android.test.InstrumentationTestRunner
 import android.test.InstrumentationTestSuite
 import com.gmail.yaroslavlancelot.eafall.test.game.entity.gameobject.GameObjectTest
-import com.gmail.yaroslavlancelot.eafall.test.game.entity.gameobject.unit.dynamic.MovableUnitTest
+import com.gmail.yaroslavlancelot.eafall.test.game.entity.gameobject.unit.dynamic.OffenceUnitTest
 import junit.framework.TestSuite
 
 /** run all tests  */
@@ -13,7 +13,7 @@ public class DefaultInstrumentationTestRunner : InstrumentationTestRunner() {
 
         //game objects
         suite.addTestSuite(javaClass<GameObjectTest>())
-        suite.addTestSuite(javaClass<MovableUnitTest>())
+        suite.addTestSuite(javaClass<OffenceUnitTest>())
         //popup
         //        suite.addTestSuite(javaClass<BuildingDescriptionAreaUpdaterTest>())
 

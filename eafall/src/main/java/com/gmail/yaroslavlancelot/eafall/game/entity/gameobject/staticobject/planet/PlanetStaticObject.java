@@ -8,13 +8,13 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.IPlayerObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingType;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.IBuilding;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.CreepBuilding;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.UnitBuilding;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.DefenceBuilding;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.ICreepBuilding;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.IUnitBuilding;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.SpecialBuilding;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.WealthBuilding;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.CreepBuildingDummy;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.OffenceBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.DefenceBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.SpecialBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.WealthBuildingDummy;
@@ -22,7 +22,7 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.StaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.shipyards.IShipyard;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.shipyards.ShipyardFactory;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path.PathHelper;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.PathHelper;
 import com.gmail.yaroslavlancelot.eafall.game.entity.health.IHealthBar;
 import com.gmail.yaroslavlancelot.eafall.game.entity.health.PlayerHealthBar;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
@@ -45,8 +45,8 @@ public class PlanetStaticObject extends StaticObject implements IPlayerObject {
     public static final String TAG = PlanetStaticObject.class.getCanonicalName();
     /** current planet buildings */
     private final Map<Integer, IBuilding> mBuildings = new HashMap<>(15);
-    /** current planet creep buildings (used for faster access to creep buildings) */
-    private final List<ICreepBuilding> mCreepBuildings = new ArrayList<>(7);
+    /** current planet unit buildings (used for faster access to unit buildings) */
+    private final List<IUnitBuilding> mUnitBuildings = new ArrayList<>(7);
     /** ships building and creation logic */
     private IShipyard mPlanetShipyard;
     /** current planet player name */
@@ -122,7 +122,7 @@ public class PlanetStaticObject extends StaticObject implements IPlayerObject {
         registerUpdateHandler(new TimerHandler(1, true, new ITimerCallback() {
             @Override
             public void onTimePassed(final TimerHandler pTimerHandler) {
-                mPlanetShipyard.update(mCreepBuildings);
+                mPlanetShipyard.update(mUnitBuildings);
             }
         }));
     }
@@ -147,11 +147,11 @@ public class PlanetStaticObject extends StaticObject implements IPlayerObject {
 
             switch (buildingDummy.getBuildingType()) {
                 case CREEP_BUILDING: {
-                    ICreepBuilding creepBuilding =
-                            new CreepBuilding((CreepBuildingDummy) buildingDummy,
+                    IUnitBuilding unitBuilding =
+                            new UnitBuilding((OffenceBuildingDummy) buildingDummy,
                                     getVertexBufferObjectManager(), mPlayerName);
-                    mCreepBuildings.add(creepBuilding);
-                    building = creepBuilding;
+                    mUnitBuildings.add(unitBuilding);
+                    building = unitBuilding;
                     break;
                 }
                 case WEALTH_BUILDING: {

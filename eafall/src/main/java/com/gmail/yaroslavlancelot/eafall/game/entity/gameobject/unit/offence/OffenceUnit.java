@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic;
+package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence;
 
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
@@ -8,8 +8,8 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IVelocityListener;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.bonus.Bonus;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path.IUnitPath;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path.PathHelper;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.IUnitPath;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.PathHelper;
 
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -21,8 +21,8 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /** Basic class for all dynamic game units */
-public class MovableUnit extends Unit {
-    public static final String TAG = MovableUnit.class.getCanonicalName();
+public class OffenceUnit extends Unit {
+    public static final String TAG = OffenceUnit.class.getCanonicalName();
     /** how often (in millis) unit bonuses should be updated */
     private static final long sBonusUpdateTime = TimeUnit.SECONDS.toMillis(1);
     /** how long health bar should be visible after unit was hit */
@@ -45,7 +45,7 @@ public class MovableUnit extends Unit {
     private volatile long mLastHitTime;
 
     /** create unit from appropriate builder */
-    public MovableUnit(MovableUnitBuilder unitBuilder) {
+    public OffenceUnit(OffenceUnitBuilder unitBuilder) {
         super(unitBuilder);
         mMaxVelocity = unitBuilder.getSpeed();
     }
@@ -123,7 +123,7 @@ public class MovableUnit extends Unit {
     public void setUnitLinearVelocity(float x, float y) {
         super.setUnitLinearVelocity(x, y);
         if (mVelocityChangedListener != null) {
-            mVelocityChangedListener.velocityChanged(MovableUnit.this);
+            mVelocityChangedListener.velocityChanged(OffenceUnit.this);
         }
     }
 
@@ -210,7 +210,7 @@ public class MovableUnit extends Unit {
 
             if (mObjectToAttack == null) {
                 mObjectToAttack = mEnemiesUpdater
-                        .getFirstEnemyInRange(MovableUnit.this, mAttackRadius);
+                        .getFirstEnemyInRange(OffenceUnit.this, mAttackRadius);
                 //attack founded enemy
                 if (mObjectToAttack != null) {
                     setUnitLinearVelocity(0, 0);
@@ -218,7 +218,7 @@ public class MovableUnit extends Unit {
                     return;
                 } else {
                     mObjectToAttack = mEnemiesUpdater
-                            .getFirstEnemyInRange(MovableUnit.this, getViewRadius());
+                            .getFirstEnemyInRange(OffenceUnit.this, getViewRadius());
                     //chase founded object
                     if (mObjectToAttack != null) {
                         // pursuit attacked unit

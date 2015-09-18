@@ -1,7 +1,7 @@
 package com.gmail.yaroslavlancelot.eafall.network.server.messages;
 
 import com.badlogic.gdx.math.Vector2;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.MovableUnit;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.OffenceUnit;
 import com.gmail.yaroslavlancelot.eafall.network.server.messages.constants.ServerMessagesConstants;
 
 import org.andengine.extension.multiplayer.adt.message.server.ServerMessage;
@@ -20,7 +20,7 @@ public class UnitChangePositionServerMessage extends ServerMessage implements Se
     public UnitChangePositionServerMessage() {
     }
 
-    public UnitChangePositionServerMessage(MovableUnit unit) {
+    public UnitChangePositionServerMessage(OffenceUnit unit) {
         Vector2 positionVector = unit.getBody().getPosition();
         mX = positionVector.x;
         mY = positionVector.y;

@@ -7,8 +7,8 @@ import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingType;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.loader.CreepBuildingLoader;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.loader.CreepBuildingUpgradeLoader;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.loader.UnitBuildingLoader;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.loader.UnitBuildingUpgradeLoader;
 
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 
@@ -16,33 +16,33 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
  * Contains data needed to create building (wrap creation logic).
  * Additionally contains data which can be used without building creation (cost, image etc)`
  */
-public class CreepBuildingDummy extends BuildingDummy {
+public class OffenceBuildingDummy extends UnitBuildingDummy {
     /** data loaded from xml which store buildings data (in string format) */
-    private CreepBuildingLoader mCreepBuildingLoader;
+    private UnitBuildingLoader mUnitBuildingLoader;
 
-    public CreepBuildingDummy(CreepBuildingLoader buildingLoader) {
+    public OffenceBuildingDummy(UnitBuildingLoader buildingLoader) {
         super(SizeConstants.BUILDING_SIZE, SizeConstants.BUILDING_SIZE,
                 buildingLoader.getUpdates().size());
-        mCreepBuildingLoader = buildingLoader;
+        mUnitBuildingLoader = buildingLoader;
 
         Context context = EaFallApplication.getContext();
         mBuildingStringId = context.getResources().getIdentifier(
-                mCreepBuildingLoader.name, "string", context.getApplicationInfo().packageName);
+                mUnitBuildingLoader.name, "string", context.getApplicationInfo().packageName);
     }
 
     @Override
     public int getX() {
-        return mCreepBuildingLoader.position_x;
+        return mUnitBuildingLoader.position_x;
     }
 
     @Override
     public int getY() {
-        return mCreepBuildingLoader.position_y;
+        return mUnitBuildingLoader.position_y;
     }
 
     @Override
     public int getBuildingId() {
-        return mCreepBuildingLoader.id;
+        return mUnitBuildingLoader.id;
     }
 
     @Override
@@ -57,19 +57,19 @@ public class CreepBuildingDummy extends BuildingDummy {
 
     @Override
     public int getAmountLimit() {
-        return EaFallApplication.getConfig().getCreepBuildingsLimit();
+        return EaFallApplication.getConfig().getUnitBuildingsLimit();
     }
 
     @Override
     public int getCost(int upgrade) {
-        return mCreepBuildingLoader.getUpdates().get(upgrade).cost;
+        return mUnitBuildingLoader.getUpdates().get(upgrade).cost;
     }
 
     @Override
     public void loadSpriteResources(Context context, BitmapTextureAtlas textureAtlas,
                                     int x, int y, String allianceName) {
-        for (int i = 0; i < mCreepBuildingLoader.getUpdates().size(); i++) {
-            CreepBuildingUpgradeLoader upgradeLoader = mCreepBuildingLoader.getUpdates().get(i);
+        for (int i = 0; i < mUnitBuildingLoader.getUpdates().size(); i++) {
+            UnitBuildingUpgradeLoader upgradeLoader = mUnitBuildingLoader.getUpdates().get(i);
             String pathToSprite = StringConstants.getPathToBuildings(allianceName) + upgradeLoader.image_name;
             mSpriteTextureRegionArray[i] = TextureRegionHolder
                     .addElementFromAssets(pathToSprite, textureAtlas, context,
@@ -80,18 +80,20 @@ public class CreepBuildingDummy extends BuildingDummy {
     @Override
     public void loadImageResources(Context context, BitmapTextureAtlas textureAtlas,
                                    int x, int y, int upgrade, String allianceName) {
-        CreepBuildingUpgradeLoader creepUpdate = mCreepBuildingLoader.getUpdates().get(upgrade);
+        UnitBuildingUpgradeLoader unitUpdate = mUnitBuildingLoader.getUpdates().get(upgrade);
         String pathToImage = StringConstants.getPathToBuildings_Image(allianceName)
-                + creepUpdate.image_name;
+                + unitUpdate.image_name;
         mImageTextureRegionArray[upgrade] =
                 TextureRegionHolder.addElementFromAssets(pathToImage, textureAtlas, context, x, y);
     }
 
+    @Override
     public int getUnitCreationTime(int upgrade) {
-        return mCreepBuildingLoader.getUpdates().get(upgrade).building_time;
+        return mUnitBuildingLoader.getUpdates().get(upgrade).building_time;
     }
 
-    public int getMovableUnitId(int upgrade) {
-        return mCreepBuildingLoader.getUpdates().get(upgrade).unit_id;
+    @Override
+    public int getUnitId(int upgrade) {
+        return mUnitBuildingLoader.getUpdates().get(upgrade).unit_id;
     }
 }

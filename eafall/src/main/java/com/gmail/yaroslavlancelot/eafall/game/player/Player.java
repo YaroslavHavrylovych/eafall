@@ -16,11 +16,11 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitBuilder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.bonus.Bonus;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.MovableUnit;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.MovableUnitBuilder;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.pool.MovableUnitsPool;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.pool.StationaryUnitsPool;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.stationary.StationaryUnitBuilder;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.OffenceUnit;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.OffenceUnitBuilder;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.pool.OffenceUnitsPool;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.pool.DefenceUnitsPool;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.defence.DefenceUnitBuilder;
 import com.gmail.yaroslavlancelot.eafall.game.events.SharedEvents;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.UpgradeBuildingEvent;
 import com.gmail.yaroslavlancelot.eafall.general.EbSubscribersHolder;
@@ -59,7 +59,7 @@ public class Player implements IPlayer {
     private final List<GameObject> mPlayerObjects;
     /** player maximum oxygen amount (can be varying depending on mission) */
     private final int mMaxOxygenAmount;
-    /** player movable units limit */
+    /** player offence units limit */
     private final int mUnitsLimit;
     /** current player main planet */
     private volatile PlanetStaticObject mPlayerPlanet;
@@ -202,10 +202,10 @@ public class Player implements IPlayer {
             dummy = alliance.getUnitDummy(id);
             textureRegion = TextureRegionHolder.getRegion(dummy.getTextureRegionKey(getName()));
             unitBuilder = dummy.createBuilder(textureRegion, vertexManager);
-            if (unitBuilder instanceof MovableUnitBuilder) {
-                pool = new MovableUnitsPool((MovableUnitBuilder) unitBuilder, getName());
-            } else if (unitBuilder instanceof StationaryUnitBuilder) {
-                pool = new StationaryUnitsPool((StationaryUnitBuilder) unitBuilder, getName());
+            if (unitBuilder instanceof OffenceUnitBuilder) {
+                pool = new OffenceUnitsPool((OffenceUnitBuilder) unitBuilder, getName());
+            } else if (unitBuilder instanceof DefenceUnitBuilder) {
+                pool = new DefenceUnitsPool((DefenceUnitBuilder) unitBuilder, getName());
             } else {
                 throw new IllegalStateException("unknown unit builder type " + unitBuilder);
             }
@@ -218,10 +218,10 @@ public class Player implements IPlayer {
         synchronized (mPlayerObjects) {
             mUnitBonuses.add(playerBonus);
             for (GameObject gameObject : mPlayerObjects) {
-                if (!(gameObject instanceof MovableUnit)) {
+                if (!(gameObject instanceof OffenceUnit)) {
                     continue;
                 }
-                MovableUnit unit = (MovableUnit) gameObject;
+                OffenceUnit unit = (OffenceUnit) gameObject;
                 unit.addBonus(playerBonus, Integer.MAX_VALUE);
             }
         }
@@ -233,9 +233,9 @@ public class Player implements IPlayer {
         synchronized (mPlayerObjects) {
             mPlayerObjects.add(object);
         }
-        if (object instanceof MovableUnit) {
+        if (object instanceof OffenceUnit) {
             for (Bonus bonus : mUnitBonuses) {
-                ((MovableUnit) object).addBonus(bonus, Integer.MAX_VALUE);
+                ((OffenceUnit) object).addBonus(bonus, Integer.MAX_VALUE);
             }
             SharedEvents.valueChanged(MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY,
                     sUnitsAmount.incrementAndGet());
@@ -248,7 +248,7 @@ public class Player implements IPlayer {
         synchronized (mPlayerObjects) {
             mPlayerObjects.remove(object);
         }
-        if (object instanceof MovableUnit) {
+        if (object instanceof OffenceUnit) {
             SharedEvents.valueChanged(MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY,
                     sUnitsAmount.decrementAndGet());
         }

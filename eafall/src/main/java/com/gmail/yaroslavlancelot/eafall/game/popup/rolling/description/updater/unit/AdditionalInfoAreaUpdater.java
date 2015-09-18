@@ -3,12 +3,11 @@ package com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater
 import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.Armor;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.CreepBuildingDummy;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.DefenceBuildingDummy;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.UnitBuildingDummy;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.Armor;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitDummy;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.BaseDescriptionAreaUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.visual.text.Link;
@@ -36,7 +35,7 @@ public class AdditionalInfoAreaUpdater extends BaseDescriptionAreaUpdater {
 
     @Override
     protected void iniDescriptionTextList() {
-        mDescriptionTextList = new ArrayList<Text>(4);
+        mDescriptionTextList = new ArrayList<>(4);
     }
 
     @Override
@@ -44,17 +43,8 @@ public class AdditionalInfoAreaUpdater extends BaseDescriptionAreaUpdater {
         final BuildingId buildingId = (BuildingId) objectId;
         IAlliance alliance = AllianceHolder.getInstance().getElement(allianceName);
         BuildingDummy buildingDummy = alliance.getBuildingDummy(buildingId);
-        int unitId;
-        if (buildingDummy instanceof CreepBuildingDummy) {
-            unitId = ((CreepBuildingDummy) buildingDummy).getMovableUnitId(buildingId.getUpgrade());
-        } else if (buildingDummy instanceof DefenceBuildingDummy) {
-            unitId = ((DefenceBuildingDummy) buildingDummy).getOrbitalStationUnitId();
-        } else {
-            return;
-        }
-
+        int unitId = ((UnitBuildingDummy) buildingDummy).getUnitId(buildingId.getUpgrade());
         attach(drawArea);
-
         UnitDummy dummy = alliance.getUnitDummy(unitId);
         Damage damage = dummy.getDamage();
         mAttack.setText(damage.getDamageValue() + " " + damage.getDamageType());

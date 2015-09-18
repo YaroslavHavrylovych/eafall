@@ -4,7 +4,7 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building;
  * Define existing building types
  */
 public enum BuildingType {
-    /** building which produces creeps */
+    /** building which produces units */
     CREEP_BUILDING,
     /** buildings which produce money amount */
     WEALTH_BUILDING,
