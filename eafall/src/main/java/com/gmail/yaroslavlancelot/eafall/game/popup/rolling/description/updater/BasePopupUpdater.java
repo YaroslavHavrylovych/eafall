@@ -1,5 +1,8 @@
 package com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater;
 
+import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
+import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.TextButton;
+
 import org.andengine.entity.IEntity;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.Shape;
@@ -21,12 +24,18 @@ public abstract class BasePopupUpdater implements IPopupUpdater {
     protected Sprite mObjectImage;
     /** used by children classes */
     protected Scene mScene;
+    /** it's role depends on implementation (main: back or build button) */
+    protected TextButton mBaseButton;
+    /** image for addition information */
+    protected Sprite mAdditionDescriptionImage;
     /** used for different size operations */
     protected float[] tmpSizes = new float[2];
 
     public BasePopupUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         mVertexBufferObjectManager = vertexBufferObjectManager;
         mScene = scene;
+        mBaseButton = new TextButton(vertexBufferObjectManager, 300,
+                SizeConstants.DESCRIPTION_POPUP_DES_BUTTON_HEIGHT);
     }
 
     @Override
@@ -55,6 +64,13 @@ public abstract class BasePopupUpdater implements IPopupUpdater {
         if (mObjectImage != null) {
             mObjectImage.detachSelf();
             mObjectImage = null;
+        }
+        if (mBaseButton != null) {
+            mBaseButton.detachSelf();
+        }
+        if (mAdditionDescriptionImage != null) {
+            mAdditionDescriptionImage.detachSelf();
+            mAdditionDescriptionImage = null;
         }
     }
 

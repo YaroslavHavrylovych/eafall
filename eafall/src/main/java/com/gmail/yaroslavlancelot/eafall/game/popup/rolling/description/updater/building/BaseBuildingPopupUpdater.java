@@ -5,7 +5,6 @@ import android.content.Context;
 import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
-import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.BuildingsAmountChangedEvent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
@@ -18,7 +17,6 @@ import com.gmail.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.Shape;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -34,21 +32,12 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
     protected volatile String mPlayerName = "";
     /** basically used for display buildings amount on building image */
     protected AmountDrawer mAmountDrawer;
-    /**
-     * as the only available button in base building popup.
-     * Most probably served as "Build" or "Back" button.
-     */
-    protected TextButton mBaseButton;
-    /** image for addition information */
-    protected Sprite mAdditionDescriptionImage;
     /** building description object (update description area which u pass to it) */
     protected IDescriptionAreaUpdater mDescriptionAreaUpdater;
 
     public BaseBuildingPopupUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         super(vertexBufferObjectManager, scene);
         mAmountDrawer = new AmountDrawer(vertexBufferObjectManager);
-        mBaseButton = new TextButton(vertexBufferObjectManager, 300,
-                SizeConstants.DESCRIPTION_POPUP_DES_BUTTON_HEIGHT);
         EbSubscribersHolder.register(this);
     }
 
@@ -66,11 +55,6 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
     public void clear() {
         super.clear();
         mAmountDrawer.detach();
-        mBaseButton.detachSelf();
-        if (mAdditionDescriptionImage != null) {
-            mAdditionDescriptionImage.detachSelf();
-            mAdditionDescriptionImage = null;
-        }
         mBuildingId = sNoValue;
         mPlayerName = "";
         mDescriptionAreaUpdater.clearDescription();
