@@ -162,6 +162,31 @@
     <!-- client connected to server -->
     <string name="you_are_connected_to_server">Ви під’єднані до сервера з адресою : </string>
 
+    <!-- armor -->
+    <string name="armor_unarmored">роззброєний</string>
+    <string name="armor_physical">фізичний</string>
+    <string name="armor_electromagnetic">електромагнітний</string>
+    <string name="armor_cherenkov">черенков</string>
+    <string name="armor_higgs">хігс</string>
+    <string name="armor_mixed">змішаний</string>
+    <!-- /armor -->
+
+    <!-- damage -->
+    <string name="damage_railgun">рельса</string>
+    <string name="damage_laser">лазер</string>
+    <string name="damage_neutrino">нейтрино</string>
+    <string name="damage_higgson">хігсон</string>
+    <string name="damage_annihilator">анігілятор</string>
+    <string name="damage_quaker">руйнівник</string>
+    <!-- /damage -->
+
+    <!-- fire rate -->
+    <string name="fire_rate_very_slow">дуже низька</string>
+    <string name="fire_rate_slow">низька</string>
+    <string name="fire_rate_normal">нормальна</string>
+    <string name="fire_rate_high">висока</string>
+    <!-- /fire rate -->
+
     <!-- description popup -->
 
     <!-- buildings -->
@@ -181,10 +206,10 @@
     <string name="description_building">Будинок :</string>
     <string name="description_speed">Швидкість :</string>
     <string name="description_health">Здоров’я :</string>
-    <string name="description_reload_time">Час перезарядки :</string>
+    <string name="description_reload_time">Швидкострільність :</string>
     <string name="description_unique">Особливе :</string>
-    <string name="description_attack">А</string>
-    <string name="description_defence">З</string>
+    <string name="description_damage">Пошкодшення :</string>
+    <string name="description_armor">Броня :</string>
     <!-- /description popup -->
 
     <!-- descriptions -->

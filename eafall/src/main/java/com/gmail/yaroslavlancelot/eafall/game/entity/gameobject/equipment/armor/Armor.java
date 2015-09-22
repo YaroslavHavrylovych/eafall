@@ -1,6 +1,9 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor;
 
+import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage;
+import com.gmail.yaroslavlancelot.eafall.general.locale.Locale;
+import com.gmail.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 
 /**
  * Represent unit armor. Used for calculate damage to unit depends on {@link com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.Armor.ArmorType}
@@ -28,6 +31,40 @@ public class Armor {
         mArmorType = armorType;
     }
 
+    public int getArmorValue() {
+        return mArmorValue;
+    }
+
+    public ArmorType getArmorType() {
+        return mArmorType;
+    }
+
+    public String getString() {
+        Locale locale = LocaleImpl.getInstance();
+        int val;
+        switch (mArmorType) {
+            case UNARMORED:
+                val = R.string.armor_unarmored;
+                break;
+            case PHYSICAL:
+                val = R.string.armor_physical;
+                break;
+            case ELECTROMAGNETIC:
+                val = R.string.armor_electromagnetic;
+                break;
+            case CHERENKOV:
+                val = R.string.armor_cherenkov;
+                break;
+            case HIGGS_SHIELD:
+                val = R.string.armor_higgs;
+                break;
+            case MIXED:
+            default:
+                val = R.string.armor_mixed;
+        }
+        return locale.getStringById(val);
+    }
+
     public void setAdditionalArmor(int additionalArmor) {
         mAdditionalArmor = additionalArmor;
     }
@@ -42,15 +79,7 @@ public class Armor {
                 sArmorSafetyTable[damage.getDamageType().ordinal()][mArmorType.ordinal()]);
     }
 
-    public int getArmorValue() {
-        return mArmorValue;
-    }
-
-    public ArmorType getArmorType() {
-        return mArmorType;
-    }
-
-    public static enum ArmorType {
-        UNARMORED, PHYSICAL, ELECTROMAGNETIC, CHERENKOV, HIGGS_SHIELD, MIXED;
+    public enum ArmorType {
+        UNARMORED, PHYSICAL, ELECTROMAGNETIC, CHERENKOV, HIGGS_SHIELD, MIXED
     }
 }

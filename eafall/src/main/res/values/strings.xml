@@ -162,6 +162,31 @@
     <!-- client connected to server -->
     <string name="you_are_connected_to_server">You are connected to server with ip : </string>
 
+    <!-- armor -->
+    <string name="armor_unarmored">unarmored</string>
+    <string name="armor_physical">physical</string>
+    <string name="armor_electromagnetic">electromagnetic</string>
+    <string name="armor_cherenkov">cherenkov</string>
+    <string name="armor_higgs">higgs</string>
+    <string name="armor_mixed">mixed</string>
+    <!-- /armor -->
+
+    <!-- damage -->
+    <string name="damage_railgun">railgun</string>
+    <string name="damage_laser">laser</string>
+    <string name="damage_neutrino">neutrino</string>
+    <string name="damage_higgson">higgson</string>
+    <string name="damage_annihilator">annihilator</string>
+    <string name="damage_quaker">quaker</string>
+    <!-- /damage -->
+
+    <!-- fire rate -->
+    <string name="fire_rate_very_slow">very slow</string>
+    <string name="fire_rate_slow">slow</string>
+    <string name="fire_rate_normal">normal</string>
+    <string name="fire_rate_high">high</string>
+    <!-- /fire rate -->
+
     <!-- description popup -->
 
     <!-- buildings -->
@@ -181,10 +206,10 @@
     <string name="description_building">Building :</string>
     <string name="description_speed">Speed :</string>
     <string name="description_health">Health :</string>
-    <string name="description_reload_time">Reload time :</string>
+    <string name="description_reload_time">Fire-rate :</string>
     <string name="description_unique">Unique :</string>
-    <string name="description_attack">A</string>
-    <string name="description_defence">D</string>
+    <string name="description_damage">Damage :</string>
+    <string name="description_armor">Armor :</string>
     <!-- /description popup -->
 
     <!-- descriptions -->

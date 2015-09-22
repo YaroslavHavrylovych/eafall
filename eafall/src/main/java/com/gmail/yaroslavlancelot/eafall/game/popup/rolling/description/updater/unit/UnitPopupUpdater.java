@@ -17,20 +17,16 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 public class UnitPopupUpdater extends BasePopupUpdater {
     /** unit description object (update description area which u pass to it) */
     private IDescriptionAreaUpdater mDescriptionAreaUpdater;
-    /** updates unit addition information area */
-    private IDescriptionAreaUpdater mAdditionInformationAreaUpdater;
 
     public UnitPopupUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         super(vertexBufferObjectManager, scene);
         mDescriptionAreaUpdater = new com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.unit.DescriptionAreaUpdater(vertexBufferObjectManager, scene);
-        mAdditionInformationAreaUpdater = new AdditionalInfoAreaUpdater(vertexBufferObjectManager, scene);
     }
 
     @Override
     public void clear() {
         super.clear();
         mDescriptionAreaUpdater.clearDescription();
-        mAdditionInformationAreaUpdater.clearDescription();
     }
 
     @Override
@@ -60,6 +56,5 @@ public class UnitPopupUpdater extends BasePopupUpdater {
 
     @Override
     public void updateAdditionInfo(Shape drawArea, Object objectId, String allianceName, String playerName) {
-        mAdditionInformationAreaUpdater.updateDescription(drawArea, objectId, allianceName, playerName);
     }
 }
