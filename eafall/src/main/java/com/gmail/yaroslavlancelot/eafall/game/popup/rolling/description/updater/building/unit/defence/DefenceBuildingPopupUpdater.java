@@ -13,6 +13,6 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 public class DefenceBuildingPopupUpdater extends UnitBuildingPopupUpdater {
     public DefenceBuildingPopupUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         super(vertexBufferObjectManager, scene);
-        mDescriptionAreaUpdater = new DescriptionAreaUpdater(vertexBufferObjectManager, scene);
+        mDescriptionAreaUpdater = new DefenceBuildingDescriptionAreaUpdater(vertexBufferObjectManager, scene);
     }
 }

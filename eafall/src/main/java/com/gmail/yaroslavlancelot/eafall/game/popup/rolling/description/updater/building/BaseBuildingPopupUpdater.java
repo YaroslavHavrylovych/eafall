@@ -81,7 +81,9 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
         //build button
         mBaseButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_build_button));
         mBaseButton.setPosition(mBaseButton.getWidth() / 2, mBaseButton.getHeight() / 2);
-        drawArea.attachChild(mBaseButton);
+        if (!mBaseButton.hasParent()) {
+            drawArea.attachChild(mBaseButton);
+        }
     }
 
     @Override
@@ -96,13 +98,21 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
         mAmountDrawer.draw(entity);
     }
 
+    /**
+     * check passed player name equality to last player name used in
+     * {@link BaseBuildingPopupUpdater#updateDescription}
+     */
+    protected boolean checkPlayer(String playerName) {
+        return mPlayerName.equals(playerName);
+    }
+
     /** updates buildings amount */
     public void onEvent(final BuildingsAmountChangedEvent buildingsAmountChangedEvent) {
-        if (!mPlayerName.equals(buildingsAmountChangedEvent.getPlayerName())
-                || !mBuildingId.equals(buildingsAmountChangedEvent.getBuildingId())) {
-            return;
+        if (visible() && checkPlayer(buildingsAmountChangedEvent.getPlayerName())) {
+            if (mBuildingId.equals(buildingsAmountChangedEvent.getBuildingId())) {
+                mAmountDrawer.setText(buildingsAmountChangedEvent.getNewBuildingsAmount());
+            }
         }
-        mAmountDrawer.setText(buildingsAmountChangedEvent.getNewBuildingsAmount());
     }
 
     public static void loadFonts(FontManager fontManager, TextureManager textureManager) {

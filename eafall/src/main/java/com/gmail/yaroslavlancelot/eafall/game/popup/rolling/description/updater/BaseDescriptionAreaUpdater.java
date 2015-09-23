@@ -30,22 +30,11 @@ public abstract class BaseDescriptionAreaUpdater implements IPopupUpdater.IDescr
         iniDescriptionTextList();
     }
 
-    /** updates mDescriptionTextList */
-    protected abstract void iniDescriptionTextList();
-
     /** update description values (e.g. new building appear) */
     @Override
     public void updateDescription(Shape drawArea, Object objectId,
                                   final String allianceName, final String playerName) {
         attach(drawArea);
-    }
-
-    /** attaches all of the mDescriptionTextList to given area */
-    protected void attach(Shape drawArea) {
-        if (mDescriptionTextList == null) return;
-        for (Text text : mDescriptionTextList) {
-            drawArea.attachChild(text);
-        }
     }
 
     /** detaches all of the mDescriptionTextList (using detach self) */
@@ -54,6 +43,19 @@ public abstract class BaseDescriptionAreaUpdater implements IPopupUpdater.IDescr
         if (mDescriptionTextList == null) return;
         for (Text text : mDescriptionTextList) {
             text.detachSelf();
+        }
+    }
+
+    /** updates mDescriptionTextList */
+    protected abstract void iniDescriptionTextList();
+
+    /** attaches all of the mDescriptionTextList to given area */
+    protected void attach(Shape drawArea) {
+        if (mDescriptionTextList == null) return;
+        for (Text text : mDescriptionTextList) {
+            if (!text.hasParent()) {
+                drawArea.attachChild(text);
+            }
         }
     }
 

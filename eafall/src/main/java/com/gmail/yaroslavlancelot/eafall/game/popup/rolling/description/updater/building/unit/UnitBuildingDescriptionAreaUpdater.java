@@ -5,10 +5,12 @@ import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.IBuilding;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.UnitBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitDummy;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.UnitByBuildingDescriptionShowEvent;
+import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.BaseDescriptionAreaUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.touch.TouchHelper;
@@ -29,7 +31,7 @@ import de.greenrobot.event.EventBus;
  * writes building description on given area (p.s. only description popup). Knows about other
  * buttons (e.g. build button) on the description popup so place text with knowing of this.
  */
-public class UnitDescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
+public class UnitBuildingDescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
     /* values changed with each #updateDescription call */
     private DescriptionText mCostValue;
     private DescriptionText mUnitCreationTimeValue;
@@ -37,7 +39,7 @@ public class UnitDescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
     private Link mProducedUnitLink;
     private Link mUpgradeLink;
 
-    public UnitDescriptionAreaUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
+    public UnitBuildingDescriptionAreaUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         // cost
         Text text = createDescriptionText(0, R.string.description_cost, vertexBufferObjectManager);
         mCostValue = createDescriptionText(text.getWidth() + mSpace, text.getY(), vertexBufferObjectManager);
@@ -80,8 +82,11 @@ public class UnitDescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
         });
         //building time
         mUnitCreationTimeValue.setText(Integer.toString(dummy.getUnitCreationTime(buildingId.getUpgrade())));
+        IPlayer player = PlayersHolder.getPlayer(playerName);
+        IBuilding building = player.getPlanet().getBuilding(buildingId.getId());
+        boolean existingBuilding = building != null && building.getUpgrade() == buildingId.getUpgrade();
         //upgrade
-        if (alliance.isUpgradeAvailable(buildingId)) {
+        if (existingBuilding && alliance.isUpgradeAvailable(buildingId)) {
             updateUpgradeCost(buildingId, playerName);
             mUpgradeLink.setOnClickListener(new TouchHelper.OnClickListener() {
                 @Override
@@ -90,8 +95,8 @@ public class UnitDescriptionAreaUpdater extends BaseDescriptionAreaUpdater {
                 }
             });
         } else {
-            drawArea.detachChild(mUpgradeText);
-            drawArea.detachChild(mUpgradeLink);
+            mUpgradeLink.detachSelf();
+            mUpgradeText.detachSelf();
         }
     }
 

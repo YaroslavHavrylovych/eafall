@@ -94,6 +94,15 @@ public abstract class BasePopupUpdater implements IPopupUpdater {
         return sprite;
     }
 
+    /**
+     * return true if popup was updated by this updater
+     * (based on {@link BasePopupUpdater#mObjectImage} parent.
+     * If parent exist then updater is in use now
+     */
+    protected boolean visible() {
+        return mObjectImage != null && mObjectImage.hasParent();
+    }
+
     /** return description object name {@link java.lang.String} */
     protected abstract String getDescribedObjectName(Object objectId, String allianceName);
 

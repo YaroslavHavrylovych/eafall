@@ -91,7 +91,9 @@ public class UnitBuildingPopupUpdater extends BaseBuildingPopupUpdater {
         if (isSecondButtonVisible) {
             mUpgradeButton.setPosition(mBaseButton.getX() + mBaseButton.getWidth() / 2
                     + BUTTON_MARGIN + mUpgradeButton.getWidth() / 2, mBaseButton.getY());
-            drawArea.attachChild(mUpgradeButton);
+            if (!mUpgradeButton.hasParent()) {
+                drawArea.attachChild(mUpgradeButton);
+            }
             mUpgradeButton.setOnClickListener(new ButtonSprite.OnClickListener() {
                 @Override
                 public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
@@ -121,11 +123,12 @@ public class UnitBuildingPopupUpdater extends BaseBuildingPopupUpdater {
 
     @Override
     public void onEvent(final BuildingsAmountChangedEvent buildingsAmountChangedEvent) {
-        super.onEvent(buildingsAmountChangedEvent);
-        if (mDescriptionAreaUpdater instanceof UnitDescriptionAreaUpdater) {
-            ((UnitDescriptionAreaUpdater)
-                    mDescriptionAreaUpdater).updateUpgradeCost(
-                    buildingsAmountChangedEvent.getBuildingId(), buildingsAmountChangedEvent.getPlayerName());
+        if (visible() && checkPlayer(buildingsAmountChangedEvent.getPlayerName())) {
+            super.onEvent(buildingsAmountChangedEvent);
+            String playerName = buildingsAmountChangedEvent.getPlayerName();
+            String allianceName = PlayersHolder.getPlayer(playerName).getAlliance().getAllianceName();
+            BuildingId buildingId = buildingsAmountChangedEvent.getBuildingId();
+            updateDescription((Shape) mBaseButton.getParent(), buildingId, allianceName, playerName);
         }
     }
 

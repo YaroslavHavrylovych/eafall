@@ -4,7 +4,6 @@ import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.IUnitBuilding;
-import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.BuildingsAmountChangedEvent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.building.unit.UnitBuildingPopupUpdater;
@@ -31,7 +30,7 @@ public class OffenceBuildingPopupUpdater extends UnitBuildingPopupUpdater {
         mPathButton = new TextButton(vertexBufferObjectManager, 300,
                 SizeConstants.DESCRIPTION_POPUP_DES_BUTTON_HEIGHT);
         mPathButton.setFixedSize(true);
-        mDescriptionAreaUpdater = new DescriptionAreaUpdater(vertexBufferObjectManager, scene);
+        mDescriptionAreaUpdater = new OffenceBuildingDescriptionAreaUpdater(vertexBufferObjectManager, scene);
     }
 
     @Override
@@ -58,20 +57,12 @@ public class OffenceBuildingPopupUpdater extends UnitBuildingPopupUpdater {
             mPathButton.setPosition(button.getX() + button.getWidth() / 2 + BUTTON_MARGIN
                     + mPathButton.getWidth() / 2, button.getY());
             setPathText(mPathButton, building);
-            drawArea.attachChild(mPathButton);
+            if (!mPathButton.hasParent()) {
+                drawArea.attachChild(mPathButton);
+            }
             mPathButton.setOnClickListener(new UnitPathClickListener(building));
             mPathButton.setVisible(true);
         }
-    }
-
-    @Override
-    public void onEvent(final BuildingsAmountChangedEvent buildingsAmountChangedEvent) {
-        super.onEvent(buildingsAmountChangedEvent);
-        if (mDescriptionAreaUpdater instanceof DescriptionAreaUpdater) {
-            ((DescriptionAreaUpdater)
-                    mDescriptionAreaUpdater).updateUpgradeCost(buildingsAmountChangedEvent.getBuildingId(), buildingsAmountChangedEvent.getPlayerName());
-        }
-        mPathButton.setVisible(true);
     }
 
     private void setPathText(TextButton button, IUnitBuilding unitBuilding) {

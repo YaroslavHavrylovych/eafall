@@ -1,6 +1,6 @@
 package com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.building.unit.offence;
 
-import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.building.unit.UnitDescriptionAreaUpdater;
+import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.building.unit.UnitBuildingDescriptionAreaUpdater;
 
 import org.andengine.entity.scene.Scene;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -10,8 +10,8 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
  * writes building description on given area (p.s. only description popup). Knows about other
  * buttons (e.g. build button) on the description popup so place text with knowing of this.
  */
-public class DescriptionAreaUpdater extends UnitDescriptionAreaUpdater {
-    public DescriptionAreaUpdater(VertexBufferObjectManager vboManager, Scene scene) {
+public class OffenceBuildingDescriptionAreaUpdater extends UnitBuildingDescriptionAreaUpdater {
+    public OffenceBuildingDescriptionAreaUpdater(VertexBufferObjectManager vboManager, Scene scene) {
         super(vboManager, scene);
     }
 }
