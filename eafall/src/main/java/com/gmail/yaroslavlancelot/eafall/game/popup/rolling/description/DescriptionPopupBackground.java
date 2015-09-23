@@ -39,22 +39,29 @@ public class DescriptionPopupBackground extends Sprite {
     /** described object name */
     protected Text mObjectNameText;
 
-    // next three guys/field are just split popup on display areas
+    // next three fields are just split popup on display areas
     /** descript object image */
     private Shape mImageShape;
     /** descript object description area */
     private Shape mDescriptionShape;
     /** descript object addition information field */
     private Shape mAdditionalInformationShape;
+    /** additional information image */
+    private Sprite mLeftBlockImage;
 
-    //
     DescriptionPopupBackground(float x, float y, float width, float height,
-                               VertexBufferObjectManager vertexManager) {
-        super(x, y, width, height, TextureRegionHolder.getInstance()
+                               VertexBufferObjectManager vboManager) {
+        super(x, y, width, height,
+                TextureRegionHolder.getInstance()
                         .getElement(StringConstants.FILE_DESCRIPTION_POPUP_BACKGROUND),
-                vertexManager);
-
+                vboManager);
         initAreas();
+        initObjectNameText();
+        initLeftBlock();
+    }
+
+    public void setLeftBlockVisibility(boolean visibility) {
+        mLeftBlockImage.setVisible(visibility);
     }
 
     @Override
@@ -87,8 +94,6 @@ public class DescriptionPopupBackground extends Sprite {
         mAdditionalInformationShape.setTouchCallback(
                 new TouchHelper.EntityTouchToChildren(mAdditionalInformationShape));
         attachChild(mAdditionalInformationShape);
-        // init described object name text
-        initObjectNameText();
         // object description area
         mDescriptionShape = new Rectangle(SizeConstants.DESCRIPTION_POPUP_DES_AREA_X,
                 SizeConstants.DESCRIPTION_POPUP_DES_AREA_Y,
@@ -98,6 +103,17 @@ public class DescriptionPopupBackground extends Sprite {
         mDescriptionShape.setTouchCallback(
                 new TouchHelper.EntityTouchToChildren(mDescriptionShape));
         attachChild(mDescriptionShape);
+    }
+
+    private void initLeftBlock() {
+        mLeftBlockImage = new Sprite(
+                mAdditionalInformationShape.getWidth() / 2,
+                mAdditionalInformationShape.getHeight() / 2,
+                TextureRegionHolder.getRegion(StringConstants.FILE_DESCRIPTION_LEFT_BLOCK),
+                getVertexBufferObjectManager());
+        mLeftBlockImage.setWidth(SizeConstants.DESCRIPTION_POPUP_ADDITIONAL_BACKGROUND_WIDTH);
+        mLeftBlockImage.setHeight(SizeConstants.DESCRIPTION_POPUP_ADDITIONAL_BACKGROUND_HEIGHT);
+        mAdditionalInformationShape.attachChild(mLeftBlockImage);
     }
 
     private void initObjectNameText() {
@@ -123,10 +139,16 @@ public class DescriptionPopupBackground extends Sprite {
     public static void loadResources(Context context, TextureManager textureManager) {
         //background
         BitmapTextureAtlas textureAtlas = new BitmapTextureAtlas(textureManager,
-                SizeConstants.DESCRIPTION_POPUP_WIDTH, SizeConstants.DESCRIPTION_POPUP_HEIGHT,
+                SizeConstants.DESCRIPTION_POPUP_WIDTH,
+                SizeConstants.DESCRIPTION_POPUP_HEIGHT
+                        + SizeConstants.BETWEEN_TEXTURES_PADDING
+                        + SizeConstants.DESCRIPTION_POPUP_ADDITIONAL_AREA_FILE_HEIGHT,
                 TextureOptions.BILINEAR);
         TextureRegionHolder.addElementFromAssets(
                 StringConstants.FILE_DESCRIPTION_POPUP_BACKGROUND, textureAtlas, context, 0, 0);
+        TextureRegionHolder.addElementFromAssets(
+                StringConstants.FILE_DESCRIPTION_LEFT_BLOCK, textureAtlas, context,
+                0, SizeConstants.DESCRIPTION_POPUP_HEIGHT + SizeConstants.BETWEEN_TEXTURES_PADDING);
         textureAtlas.load();
     }
 

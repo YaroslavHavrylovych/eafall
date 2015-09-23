@@ -120,7 +120,7 @@ public class ClientResourcesLoader extends BaseResourceLoader {
         //player health bar
         PlayerHealthBar.loadResources(textureManager, vertexBufferObjectManager);
         //unit health bar
-        BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager,
+        BitmapTextureAtlas textureAtlas = new BitmapTextureAtlas(textureManager,
                 Math.max(SizeConstants.BULLET_SIZE, SizeConstants.UNIT_HEALTH_BAR_FILE_SIZE),
                 SizeConstants.BULLET_SIZE
                         + 2 * SizeConstants.UNIT_HEALTH_BAR_FILE_SIZE
@@ -133,16 +133,16 @@ public class ClientResourcesLoader extends BaseResourceLoader {
                     colorSize, colorSize);
             TextureRegionHolder.addElementFromSource(
                     UnitHealthBar.getHealthBarTextureRegionKey(player.getName()),
-                    smallObjectTexture, atlasSource, 0, y);
+                    textureAtlas, atlasSource, 0, y);
             y += colorSize + SizeConstants.BETWEEN_TEXTURES_PADDING;
         }
         //bullets
         TextureRegionHolder.addElementFromAssets(StringConstants.FILE_BULLET,
-                smallObjectTexture, EaFallApplication.getContext(), 0, y);
+                textureAtlas, EaFallApplication.getContext(), 0, y);
 
-        smallObjectTexture.load();
+        textureAtlas.load();
         //TODO check the situation when units doesn't have health bar
-        SpriteGroup spriteGroup = new SpriteGroup(smallObjectTexture,
+        SpriteGroup spriteGroup = new SpriteGroup(textureAtlas,
                 mMovableUnitsLimit * 4, vertexBufferObjectManager);
         SpriteGroupHolder.addGroup(BatchingKeys.BULLET_AND_HEALTH, spriteGroup);
     }

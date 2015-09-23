@@ -206,10 +206,11 @@ public final class TouchHelper {
                         if (MathUtils.isInBounds(x - halfWidth, x + halfWidth, touchAreaLocalX)
                                 && MathUtils
                                 .isInBounds(y - halfHeight, y + halfHeight, touchAreaLocalY)) {
-                            mTouchedChild = child;
-                            child.onAreaTouched(
-                                    sceneTouchEvent, localCoordinates[0], localCoordinates[1]);
-                            break;
+                            if (child.onAreaTouched(
+                                    sceneTouchEvent, localCoordinates[0], localCoordinates[1])) {
+                                mTouchedChild = child;
+                                break;
+                            }
                         }
                     }
                 }

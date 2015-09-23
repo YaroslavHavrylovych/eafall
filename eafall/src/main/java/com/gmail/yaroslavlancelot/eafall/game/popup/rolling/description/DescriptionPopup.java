@@ -12,9 +12,9 @@ import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.RollingPopup;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.IPopupUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.building.BaseBuildingPopupUpdater;
-import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.building.unit.offence.OffenceBuildingPopupUpdater;
-import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.building.unit.defence.DefenceBuildingPopupUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.building.special.SpecialBuildingPopupUpdater;
+import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.building.unit.defence.DefenceBuildingPopupUpdater;
+import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.building.unit.offence.OffenceBuildingPopupUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.building.wealth.WealthBuildingPopupUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.unit.UnitPopupUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.touch.TouchHelper;
@@ -87,16 +87,19 @@ public class DescriptionPopup extends RollingPopup {
         IPlayer player = PlayersHolder.getInstance().getElement(buildingDescriptionShowEvent.getPlayerName());
         BuildingDummy buildingDummy = player.getAlliance().getBuildingDummy(buildingId);
         IPopupUpdater popupUpdater;
+        boolean leftBlockVisibility = true;
         switch (buildingDummy.getBuildingType()) {
             case CREEP_BUILDING: {
                 popupUpdater = mOffenceBuildingPopupUpdater;
                 break;
             }
             case WEALTH_BUILDING: {
+                leftBlockVisibility = false;
                 popupUpdater = mWealthBuildingPopupUpdater;
                 break;
             }
             case SPECIAL_BUILDING: {
+                leftBlockVisibility = false;
                 popupUpdater = mSpecialBuildingPopupUpdater;
                 break;
             }
@@ -108,6 +111,7 @@ public class DescriptionPopup extends RollingPopup {
                 throw new IllegalArgumentException("unknown building type for popup updater");
             }
         }
+        mDescriptionPopupBackground.setLeftBlockVisibility(leftBlockVisibility);
         mDescriptionPopupBackground.updateDescription(popupUpdater, buildingId,
                 player.getAlliance().getAllianceName(), player.getName());
         showPopup();
@@ -131,6 +135,7 @@ public class DescriptionPopup extends RollingPopup {
         onEvent();
         Object objectId = unitByBuildingDescriptionShowEvent.getBuildingId();
         IPlayer player = PlayersHolder.getInstance().getElement(unitByBuildingDescriptionShowEvent.getPlayerName());
+        mDescriptionPopupBackground.setLeftBlockVisibility(true);
         mDescriptionPopupBackground.updateDescription(mUnitsDescriptionUpdater, objectId,
                 player.getAlliance().getAllianceName(), player.getName());
         showPopup();

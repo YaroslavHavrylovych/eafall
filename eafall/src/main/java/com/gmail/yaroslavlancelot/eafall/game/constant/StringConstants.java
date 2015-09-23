@@ -30,6 +30,8 @@ public final class StringConstants {
     public static final String FILE_CONSTRUCTIONS_POPUP = "graphics/images/constructions_popup.png";
     /** description popup background */
     public static final String FILE_DESCRIPTION_POPUP_BACKGROUND = "graphics/images/description_popup_background.png";
+    /** description popup background */
+    public static final String FILE_DESCRIPTION_LEFT_BLOCK = "graphics/images/description_popup_left_block.png";
     /** health bar for display player health */
     public static final String FILE_HEALTH_BAR_PLAYER = "graphics/sprites/health/health";
     /** file name for blue planet */

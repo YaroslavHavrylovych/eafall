@@ -98,8 +98,12 @@ public final class SizeConstants {
     public static final int DESCRIPTION_POPUP_AMOUNT_TEXT_PADDING_HORIZONTAL = 15;
     public static final int DESCRIPTION_POPUP_AMOUNT_BACKGROUND_X_PADDING = 4;
     // addition area
-    public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_HEIGHT = 245; //285 background size
-    public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_WIDTH = 270; //310 background size
+    public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_HEIGHT = 245;
+    public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_WIDTH = 270;
+    public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_FILE_WIDTH = 379;
+    public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_FILE_HEIGHT = 357;
+    public static final int DESCRIPTION_POPUP_ADDITIONAL_BACKGROUND_WIDTH = 386;
+    public static final int DESCRIPTION_POPUP_ADDITIONAL_BACKGROUND_HEIGHT = 365;
     public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_X = 1585;
     public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_Y = 240;
 
