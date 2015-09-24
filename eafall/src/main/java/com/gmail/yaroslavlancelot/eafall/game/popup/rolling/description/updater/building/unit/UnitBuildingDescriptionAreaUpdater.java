@@ -5,12 +5,10 @@ import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.IBuilding;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.UnitBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitDummy;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.UnitByBuildingDescriptionShowEvent;
-import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.BaseDescriptionAreaUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.touch.TouchHelper;
@@ -55,12 +53,6 @@ public class UnitBuildingDescriptionAreaUpdater extends BaseDescriptionAreaUpdat
     }
 
     @Override
-    protected void iniDescriptionTextList() {
-        mDescriptionTextList = new ArrayList<>(8);
-        mDescriptionTextLinesAmount = 4;
-    }
-
-    @Override
     public void updateDescription(Shape drawArea, Object objectId,
                                   final String allianceName, final String playerName) {
         super.updateDescription(drawArea, objectId, allianceName, playerName);
@@ -82,11 +74,8 @@ public class UnitBuildingDescriptionAreaUpdater extends BaseDescriptionAreaUpdat
         });
         //building time
         mUnitCreationTimeValue.setText(Integer.toString(dummy.getUnitCreationTime(buildingId.getUpgrade())));
-        IPlayer player = PlayersHolder.getPlayer(playerName);
-        IBuilding building = player.getPlanet().getBuilding(buildingId.getId());
-        boolean existingBuilding = building != null && building.getUpgrade() == buildingId.getUpgrade();
         //upgrade
-        if (existingBuilding && alliance.isUpgradeAvailable(buildingId)) {
+        if (alliance.isUpgradeAvailable(buildingId)) {
             updateUpgradeCost(buildingId, playerName);
             mUpgradeLink.setOnClickListener(new TouchHelper.OnClickListener() {
                 @Override
@@ -100,10 +89,19 @@ public class UnitBuildingDescriptionAreaUpdater extends BaseDescriptionAreaUpdat
         }
     }
 
+    @Override
+    protected void iniDescriptionTextList() {
+        mDescriptionTextList = new ArrayList<>(8);
+        mDescriptionTextLinesAmount = 4;
+    }
+
     public void updateUpgradeCost(BuildingId buildingId, String playerName) {
         IAlliance alliance = PlayersHolder.getPlayer(playerName).getAlliance();
         int amount = PlayersHolder.getPlayer(playerName).getPlanet().getBuildingsAmount(buildingId.getId());
-        amount = amount == 0 ? 1 : amount;
+        if (amount == 0) {
+            mUpgradeLink.setText("-");
+            return;
+        }
         int upgradeCost = amount * alliance.getUpgradeCost(buildingId);
         mUpgradeLink.setText(Integer.valueOf(upgradeCost).toString());
     }

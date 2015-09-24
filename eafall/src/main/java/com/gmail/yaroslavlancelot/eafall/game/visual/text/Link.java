@@ -30,6 +30,14 @@ public class Link extends RecenterText {
         setTouchCallback(new LinkTouchListener());
     }
 
+    public void setOnClickListener(TouchHelper.OnClickListener onClickListener) {
+        mOnClickListener = onClickListener;
+    }
+
+    public void removeOnClickListener() {
+        mOnClickListener = null;
+    }
+
     public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
         final ITexture fontTexture = new BitmapTextureAtlas(textureManager, 512, 256);
         IFont font = FontFactory.createFromAsset(fontManager, fontTexture,
@@ -37,14 +45,6 @@ public class Link extends RecenterText {
                 sFontSize, true, sColorUnpressed);
         font.load();
         FontHolder.getInstance().addElement(sFontSizeKey, font);
-    }
-
-    public void setOnClickListener(TouchHelper.OnClickListener onClickListener) {
-        mOnClickListener = onClickListener;
-    }
-
-    public void removeOnClickListener() {
-        mOnClickListener = null;
     }
 
     private class LinkTouchListener extends TouchHelper.EntityCustomTouch {
