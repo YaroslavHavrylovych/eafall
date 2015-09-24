@@ -1,6 +1,7 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.defence;
 
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.gmail.yaroslavlancelot.eafall.game.engine.ManualFinishRotationModifier;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.PathHelper;
 
@@ -17,6 +18,7 @@ public class DefenceUnit extends Unit {
     public DefenceUnit(DefenceUnitBuilder unitBuilder) {
         super(unitBuilder);
         mUpdateCycleTime = .7f;
+        ((ManualFinishRotationModifier) mUnitRotationModifier).setFinished(true);
     }
 
     @Override
