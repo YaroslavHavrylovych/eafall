@@ -213,12 +213,12 @@
     <!-- /description popup -->
 
     <!-- descriptions -->
-    <string name="earth_artifact_description">На 10% підвищує здоров’я кожному юніту</string>
-    <string name="space_material_description">Надає 10% шанс кожному юніту команди \nзапобігти отриманню пошкоджень</string>
-    <string name="king_of_snakes_description">На 10% збільшує атаку кожного \nюніту команди</string>
-    <string name="municipality_description">Перший створений будинок додає 20\u0025\nдо прибутку золота.\nКожен наступний будинок додає\n1% до існуючої кількості.</string>
-    <string name="caches_description">Перший створений будинок додає 20\u0025\nдо прибутку золота.\nКожен наступний будинок додає\n1% до існуючої кількості.</string>
-    <string name="reptile_city_description">Перший створений будинок додає 20\u0025\nдо прибутку золота.\nКожен наступний будинок додає\n1% до існуючої кількості.</string>
+    <string name="earth_artifact_description">Священий артефакт Мутантів знайдений в надрах Землі.\nДодає 10\u0025 до здоров’я юніта.</string>
+    <string name="space_material_description">Могутній артефакт Імперців, винайдений їх вченими.\nДає 10\u0025 шанс уникнути пошкоджень.</string>
+    <string name="king_of_snakes_description">Цінний артефакт Повстанців, був знайдений у відкритому космосі.\n10\u0025 збільшення пошкодження від юніта.</string>
+    <string name="municipality_description">На 20\u0025 збільшення доходу від першого будинку.\nКожен наступний будинок додає 1\u0025 до доходу.</string>
+    <string name="caches_description">На 20\u0025 збільшення доходу від першого будинку.\nКожен наступний будинок додає 1\u0025 до доходу.</string>
+    <string name="reptile_city_description">На 20\u0025 збільшення доходу від першого будинку.\nКожен наступний будинок додає 1\u0025 до доходу.</string>
     <!-- /descriptions -->
 
     <!-- campaign -->
