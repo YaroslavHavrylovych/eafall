@@ -10,7 +10,6 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.B
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.UnitBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.BuildingsAmountChangedEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.CreateBuildingEvent;
-import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.UpgradeBuildingEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.UnitByBuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
@@ -54,7 +53,7 @@ public class UnitBuildingPopupUpdater extends BaseBuildingPopupUpdater {
         IAlliance alliance = AllianceHolder.getAlliance(allianceName);
         final BuildingId buildingId = (BuildingId) objectId;
         //init base button (it can hold build or back operation)
-        IPlayer player = PlayersHolder.getPlayer(playerName);
+        final IPlayer player = PlayersHolder.getPlayer(playerName);
         IBuilding building = player.getPlanet().getBuilding(buildingId.getId());
         BuildingDummy buildingDummy = alliance.getBuildingDummy(buildingId);
         boolean upgradeShowed =
@@ -97,7 +96,7 @@ public class UnitBuildingPopupUpdater extends BaseBuildingPopupUpdater {
             mUpgradeButton.setOnClickListener(new ButtonSprite.OnClickListener() {
                 @Override
                 public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                    EventBus.getDefault().post(new UpgradeBuildingEvent(mPlayerName, buildingId));
+                    player.getPlanet().getBuilding(buildingId.getId()).upgradeBuilding();
                 }
             });
         }

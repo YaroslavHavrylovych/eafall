@@ -22,7 +22,6 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.pool.Offenc
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.pool.DefenceUnitsPool;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.defence.DefenceUnitBuilder;
 import com.gmail.yaroslavlancelot.eafall.game.events.SharedEvents;
-import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.UpgradeBuildingEvent;
 import com.gmail.yaroslavlancelot.eafall.general.EbSubscribersHolder;
 
 import org.andengine.extension.physics.box2d.PhysicsFactory;
@@ -89,7 +88,6 @@ public class Player implements IPlayer {
         initBuildingsTypes(alliance);
         mControlType = playerType;
         mPlayerFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f, false);
-        EbSubscribersHolder.register(this);
     }
 
     @Override
@@ -319,21 +317,5 @@ public class Player implements IPlayer {
             }
             mBuildingsTypesIds[position] = BuildingId.makeId(id, building.getUpgrade());
         }
-    }
-
-    @SuppressWarnings("unused")
-    /** really used by {@link de.greenrobot.event.EventBus} */
-    public void onEvent(final UpgradeBuildingEvent upgradeBuildingEvent) {
-        IPlayer player = PlayersHolder.getPlayer(upgradeBuildingEvent.getPlayerName());
-        //check if its current player upgrade
-        if (!player.getName().equals(getName())) {
-            return;
-        }
-        BuildingId buildingId = upgradeBuildingEvent.getBuildingId();
-        IBuilding building = getPlanet().getBuilding(buildingId.getId());
-        if (building == null) {
-            return;
-        }
-        building.upgradeBuilding();
     }
 }
