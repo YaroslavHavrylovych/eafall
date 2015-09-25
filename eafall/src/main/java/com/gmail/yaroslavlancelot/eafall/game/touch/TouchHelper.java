@@ -191,6 +191,9 @@ public final class TouchHelper {
 
         @Override
         public boolean onAreaTouched(TouchEvent sceneTouchEvent, float touchAreaLocalX, float touchAreaLocalY) {
+            if (!mObject.isVisible()) {
+                return false;
+            }
             if (mTouchedChild == null) {
                 if (sceneTouchEvent.isActionDown()) {
                     float[] localCoordinates;

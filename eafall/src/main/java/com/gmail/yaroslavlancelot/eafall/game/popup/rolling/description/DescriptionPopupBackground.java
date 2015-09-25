@@ -12,6 +12,7 @@ import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.shape.Shape;
+import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
@@ -22,6 +23,8 @@ import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
+import org.andengine.opengl.texture.region.ITiledTextureRegion;
+import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.align.HorizontalAlign;
 import org.andengine.util.adt.color.Color;
@@ -48,6 +51,10 @@ public class DescriptionPopupBackground extends Sprite {
     private Shape mAdditionalInformationShape;
     /** additional information image */
     private Sprite mLeftBlockImage;
+    /** left popup arrow (near header) */
+    private ButtonSprite mLeftArrow;
+    /** right popup arrow (near header) */
+    private ButtonSprite mRightArrow;
 
     DescriptionPopupBackground(float x, float y, float width, float height,
                                VertexBufferObjectManager vboManager) {
@@ -58,6 +65,7 @@ public class DescriptionPopupBackground extends Sprite {
         initAreas();
         initObjectNameText();
         initLeftBlock();
+        initArrows();
     }
 
     public void setLeftBlockVisibility(boolean visibility) {
@@ -67,6 +75,23 @@ public class DescriptionPopupBackground extends Sprite {
     @Override
     public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float touchAreaLocalX, float touchAreaLocalY) {
         return isVisible() && super.onAreaTouched(pSceneTouchEvent, touchAreaLocalX, touchAreaLocalY);
+    }
+
+    /** instantiate and init positions for buttons */
+    private void initArrows() {
+        ITiledTextureRegion textureRegion =
+                (TiledTextureRegion) TextureRegionHolder.getRegion(StringConstants.FILE_DESCRIPTION_ARROWS);
+        int y = SizeConstants.DESCRIPTION_POPUP_ARROW_Y;
+        mLeftArrow = new ButtonSprite(
+                SizeConstants.DESCRIPTION_POPUP_LEFT_ARROW_X, y,
+                textureRegion, getVertexBufferObjectManager());
+        mRightArrow = new ButtonSprite(
+                SizeConstants.DESCRIPTION_POPUP_RIGHT_ARROW_X, y,
+                textureRegion, getVertexBufferObjectManager());
+        mRightArrow.setFlippedVertical(true);
+        mRightArrow.setRotation(180);
+        attachChild(mLeftArrow);
+        attachChild(mRightArrow);
     }
 
     /**
@@ -129,6 +154,7 @@ public class DescriptionPopupBackground extends Sprite {
         updater.updateImage(mImageShape, objectId, allianceName, playerName);
         updater.updateDescription(mDescriptionShape, objectId, allianceName, playerName);
         updater.updateAdditionInfo(mAdditionalInformationShape, objectId, allianceName, playerName);
+        updater.updateHeaderButtons(mLeftArrow, mRightArrow, objectId, playerName);
         updateObjectNameText(updater, objectId, allianceName);
     }
 
@@ -137,18 +163,23 @@ public class DescriptionPopupBackground extends Sprite {
     }
 
     public static void loadResources(Context context, TextureManager textureManager) {
+        int padding = SizeConstants.BETWEEN_TEXTURES_PADDING;
         //background
         BitmapTextureAtlas textureAtlas = new BitmapTextureAtlas(textureManager,
                 SizeConstants.DESCRIPTION_POPUP_WIDTH,
                 SizeConstants.DESCRIPTION_POPUP_HEIGHT
-                        + SizeConstants.BETWEEN_TEXTURES_PADDING
+                        + padding
                         + SizeConstants.DESCRIPTION_POPUP_ADDITIONAL_AREA_FILE_HEIGHT,
                 TextureOptions.BILINEAR);
         TextureRegionHolder.addElementFromAssets(
                 StringConstants.FILE_DESCRIPTION_POPUP_BACKGROUND, textureAtlas, context, 0, 0);
         TextureRegionHolder.addElementFromAssets(
                 StringConstants.FILE_DESCRIPTION_LEFT_BLOCK, textureAtlas, context,
-                0, SizeConstants.DESCRIPTION_POPUP_HEIGHT + SizeConstants.BETWEEN_TEXTURES_PADDING);
+                0, SizeConstants.DESCRIPTION_POPUP_HEIGHT + padding);
+        TextureRegionHolder.addTiledElementFromAssets(
+                StringConstants.FILE_DESCRIPTION_ARROWS, textureAtlas, context,
+                SizeConstants.DESCRIPTION_POPUP_ADDITIONAL_AREA_FILE_WIDTH + padding,
+                SizeConstants.DESCRIPTION_POPUP_HEIGHT + padding, 2, 1);
         textureAtlas.load();
     }
 

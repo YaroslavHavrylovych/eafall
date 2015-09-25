@@ -81,6 +81,11 @@ public final class SizeConstants {
     public static final int DESCRIPTION_POPUP_HEADER_SINGLE_ROW_Y = 530;
     public static final int DESCRIPTION_POPUP_HEADER_FONT_SIZE = 45;
     public static final int DESCRIPTION_POPUP_HEADER_TEXT_X = DESCRIPTION_POPUP_WIDTH / 2;
+    public static final int DESCRIPTION_POPUP_ARROW_WIDTH = 55;
+    public static final int DESCRIPTION_POPUP_ARROW_HEIGHT = 55;
+    public static final int DESCRIPTION_POPUP_LEFT_ARROW_X = 747;
+    public static final int DESCRIPTION_POPUP_RIGHT_ARROW_X = 1190;
+    public static final int DESCRIPTION_POPUP_ARROW_Y = 546;
     //image
     public static final int DESCRIPTION_POPUP_IMAGE_HEIGHT = 400;
     public static final int DESCRIPTION_POPUP_IMAGE_WIDTH = 400;

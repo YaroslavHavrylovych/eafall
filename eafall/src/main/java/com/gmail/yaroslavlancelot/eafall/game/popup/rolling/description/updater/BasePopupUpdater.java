@@ -6,6 +6,7 @@ import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.TextButton;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.Shape;
+import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -57,6 +58,12 @@ public abstract class BasePopupUpdater implements IPopupUpdater {
             value = new StringBuilder(value).replace(ind, ind + 1, "\n").toString();
         }
         text.setText(value);
+    }
+
+    @Override
+    public void updateHeaderButtons(final ButtonSprite leftArrow, final ButtonSprite rightArrow, final Object objectId, final String playerName) {
+        leftArrow.setVisible(false);
+        rightArrow.setVisible(false);
     }
 
     @Override

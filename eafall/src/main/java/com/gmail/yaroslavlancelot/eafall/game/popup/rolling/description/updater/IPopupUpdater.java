@@ -1,6 +1,7 @@
 package com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater;
 
 import org.andengine.entity.shape.Shape;
+import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.text.Text;
 
 /** used for update object description popup */
@@ -17,11 +18,14 @@ public interface IPopupUpdater {
     /** update described object name */
     void updateObjectNameText(Text text, Object objectId, String allianceName);
 
+    /** updates (change visibility) of header buttons */
+    void updateHeaderButtons(ButtonSprite leftArrow, ButtonSprite rightArrow, Object objectId, String playerName);
+
     /** clear description popup */
     void clear();
 
     /** updates only description area of the description popup */
-    public static interface IDescriptionAreaUpdater {
+    interface IDescriptionAreaUpdater {
         /** update description area (and attach all items) */
         void updateDescription(Shape drawArea, final Object objectId,
                                final String allianceName, final String playerName);

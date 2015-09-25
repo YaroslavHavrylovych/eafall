@@ -6,7 +6,9 @@ import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.IBuilding;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.BuildingsAmountChangedEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.BasePopupUpdater;
@@ -17,10 +19,13 @@ import com.gmail.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.Shape;
+import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * Base building description functionality
@@ -49,6 +54,33 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
                 player.getPlanet().getBuildingsAmount(mBuildingId.getId()));
         mPlayerName = playerName;
         super.updateImage(drawArea, objectId, allianceName, playerName);
+    }
+
+    @Override
+    public void updateHeaderButtons(ButtonSprite leftArrow, ButtonSprite rightArrow, Object objectId, final String playerName) {
+        BuildingId buildingId = (BuildingId) objectId;
+        final IPlayer player = PlayersHolder.getPlayer(playerName);
+        final int id = buildingId.getId();
+        int before = -1;
+        int after = Integer.MAX_VALUE;
+        for (Integer ind : player.getAlliance().getBuildingsIds()) {
+            if (id > ind && before < ind) {
+                before = ind;
+            }
+            if (id < ind && after > ind) {
+                after = ind;
+            }
+        }
+        if (before != -1) {
+            initArrowButton(before, player, leftArrow);
+        } else {
+            leftArrow.setVisible(false);
+        }
+        if (after != Integer.MAX_VALUE) {
+            initArrowButton(after, player, rightArrow);
+        } else {
+            rightArrow.setVisible(false);
+        }
     }
 
     @Override
@@ -91,6 +123,35 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
         if (mAdditionDescriptionImage != null) {
             mAdditionDescriptionImage.detachSelf();
         }
+    }
+
+    /** set visibility and click listener to arrow button */
+    private void initArrowButton(final int before, final IPlayer player, ButtonSprite arrowButton) {
+        arrowButton.setVisible(true);
+        arrowButton.setOnClickListener(new ButtonSprite.OnClickListener() {
+            @Override
+            public void onClick(final ButtonSprite pButtonSprite, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+                EventBus.getDefault().post(new BuildingDescriptionShowEvent(createBuildingId(player, before), player.getName()));
+            }
+        });
+    }
+
+    /**
+     * creates {@link BuildingId} by the give id. If building exist on the planet
+     * then upgrade value of the result BuildingId will be equal to the upgrade of
+     * the building on the planet. If the building doesn't exist then upgrade will
+     * be equal to 0.
+     *
+     * @param player player which building is this
+     * @param id     id of the building
+     * @return {@link BuildingId} instance
+     */
+    private BuildingId createBuildingId(IPlayer player, int id) {
+        IBuilding building = player.getPlanet().getBuilding(id);
+        if (building == null) {
+            return BuildingId.makeId(id, 0);
+        }
+        return BuildingId.makeId(id, building.getUpgrade());
     }
 
     private void updateBuildingsAmount(IEntity entity, int buildingsAmount) {
