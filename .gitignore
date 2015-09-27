@@ -8,6 +8,7 @@ wiki
 Thumbs.db
 .DS_Store
 *.swp
+*.hprof
 *~
 Desktop.ini
 

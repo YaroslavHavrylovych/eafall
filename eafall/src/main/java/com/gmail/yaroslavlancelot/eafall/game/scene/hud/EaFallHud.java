@@ -13,8 +13,8 @@ import com.gmail.yaroslavlancelot.eafall.game.events.SharedEvents;
 import com.gmail.yaroslavlancelot.eafall.game.events.periodic.time.GameTime;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
-import com.gmail.yaroslavlancelot.eafall.game.popup.PopupManager;
-import com.gmail.yaroslavlancelot.eafall.game.popup.construction.ConstructionsPopupHud;
+import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.RollingPopupManager;
+import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.construction.ConstructionsPopup;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.ConstructionPopupButton;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.MenuPopupButton;
 import com.gmail.yaroslavlancelot.eafall.game.visual.other.HealthBarCarcassSprite;
@@ -84,36 +84,14 @@ public class EaFallHud extends HUD {
     // Methods
     // ===========================================================
 
-    public static void loadResource(Context context, TextureManager textureManager) {
-        int padding = SizeConstants.BETWEEN_TEXTURES_PADDING;
-        int biggestSide = 112;
-        BitmapTextureAtlas textureAtlas = new BitmapTextureAtlas(
-                textureManager,
-                biggestSide + padding, biggestSide + padding, TextureOptions.BILINEAR);
-        TextureRegionHolder.addElementFromAssets(StringConstants.FILE_OXYGEN,
-                textureAtlas, context, 0, 0);
-        TextureRegionHolder.addElementFromAssets(StringConstants.FILE_OXYGEN_HUD,
-                textureAtlas, context, SizeConstants.ICON_OXYGEN + padding, 0);
-        TextureRegionHolder.addElementFromAssets(StringConstants.FILE_CLOCK_HUD,
-                textureAtlas, context, 0, SizeConstants.ICON_OXYGEN + padding);
-        TextureRegionHolder.addElementFromAssets(StringConstants.FILE_SHUTTLE_HUD,
-                textureAtlas, context,
-                SizeConstants.ICON_OXYGEN + padding, SizeConstants.ICON_OXYGEN + padding);
-        textureAtlas.load();
-    }
-
-    public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
-        HudGameValue.loadFonts(fontManager, textureManager);
-    }
-
     private void initPopups(IPlayer player, Camera camera, VertexBufferObjectManager objectManager) {
-        PopupManager.init(player.getName(), this, camera, objectManager);
+        RollingPopupManager.init(player.getName(), this, camera, objectManager);
         //constructions button
         ConstructionPopupButton button = new ConstructionPopupButton(objectManager);
         button.setOnClickListener(new ButtonSprite.OnClickListener() {
             @Override
             public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                PopupManager.getPopup(ConstructionsPopupHud.KEY).triggerPopup();
+                RollingPopupManager.getPopup(ConstructionsPopup.KEY).triggerPopup();
             }
         });
         attachChild(button);
@@ -174,7 +152,7 @@ public class EaFallHud extends HUD {
         initHealthCarcass(vertexManager);
         //menu
         initMainMenu(vertexManager);
-        //game values (oxygen, movable units limit, time)
+        //game values (oxygen, offence units limit, time)
         for (final IPlayer player : PlayersHolder.getInstance().getElements()) {
             boolean left = player.getPlanet().isLeft();
             List<HudGameValue> list = left ? mLeftPart : mRightPart;
@@ -221,6 +199,28 @@ public class EaFallHud extends HUD {
         int min = time / 60;
         int sec = time % 60;
         return TIME_FORMAT.format(min) + ":" + TIME_FORMAT.format(sec);
+    }
+
+    public static void loadResource(Context context, TextureManager textureManager) {
+        int padding = SizeConstants.BETWEEN_TEXTURES_PADDING;
+        int biggestSide = 112;
+        BitmapTextureAtlas textureAtlas = new BitmapTextureAtlas(
+                textureManager,
+                biggestSide + padding, biggestSide + padding, TextureOptions.BILINEAR);
+        TextureRegionHolder.addElementFromAssets(StringConstants.FILE_OXYGEN,
+                textureAtlas, context, 0, 0);
+        TextureRegionHolder.addElementFromAssets(StringConstants.FILE_OXYGEN_HUD,
+                textureAtlas, context, SizeConstants.ICON_OXYGEN + padding, 0);
+        TextureRegionHolder.addElementFromAssets(StringConstants.FILE_CLOCK_HUD,
+                textureAtlas, context, 0, SizeConstants.ICON_OXYGEN + padding);
+        TextureRegionHolder.addElementFromAssets(StringConstants.FILE_SHUTTLE_HUD,
+                textureAtlas, context,
+                SizeConstants.ICON_OXYGEN + padding, SizeConstants.ICON_OXYGEN + padding);
+        textureAtlas.load();
+    }
+
+    public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
+        HudGameValue.loadFonts(fontManager, textureManager);
     }
 
     // ===========================================================

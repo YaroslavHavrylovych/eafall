@@ -38,7 +38,7 @@
                                         <xs:element name="planet_health"
                                                     type="xs:integer"
                                                     minOccurs="0"/>
-                                        <xs:element name="movable_units_limit"
+                                        <xs:element name="offensive_units_limit"
                                                     type="xs:integer"
                                                     minOccurs="0"/>
                                         <!-- mission type, time and all addition params -->

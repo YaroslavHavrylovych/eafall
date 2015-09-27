@@ -4,7 +4,7 @@ import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.IBuilding;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.CreepBuilding;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.UnitBuilding;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
@@ -97,14 +97,14 @@ public class VeryFirstBot implements Runnable {
                         LoggerHelper.printVerboseMessage(TAG, "Upgrade instead of build");
                         building = planet.getBuilding(buildingId.getId());
                         building.upgradeBuilding();
-                        randomizeCreepPath(building);
+                        randomizeUnitPath(building);
                         continue;
                     }
                     LoggerHelper.printVerboseMessage(TAG, "Build");
                     final PlanetStaticObject finalPlanet = planet;
                     finalPlanet.createBuilding(buildingId);
                     building = planet.getBuilding(buildingId.getId());
-                    randomizeCreepPath(building);
+                    randomizeUnitPath(building);
                 } else if (!buildingsToUpgrade.isEmpty()) {
                     BuildingId buildingId = buildingsToUpgrade.get(
                             new Random().nextInt(buildingsToUpgrade.size()));
@@ -112,11 +112,11 @@ public class VeryFirstBot implements Runnable {
                     LoggerHelper.printVerboseMessage(TAG, "Upgrade");
                     final IBuilding building = planet.getBuilding(buildingId.getId());
                     building.upgradeBuilding();
-                    randomizeCreepPath(building);
+                    randomizeUnitPath(building);
                 }
             }
         } catch (Exception ex) {
-            //TODO this has to be marked somwhere to find why does this happen
+            //TODO this has to be marked somewhere to find why does this happen
             LoggerHelper.printErrorMessage(TAG, ex.getMessage());
         }
     }
@@ -129,12 +129,12 @@ public class VeryFirstBot implements Runnable {
         }
     }
 
-    private void randomizeCreepPath(IBuilding building) {
+    private void randomizeUnitPath(IBuilding building) {
         if (building == null) {
             return;
         }
-        if (building instanceof CreepBuilding) {
-            ((CreepBuilding) building).setPath(new Random().nextBoolean());
+        if (building instanceof UnitBuilding) {
+            ((UnitBuilding) building).setPath(new Random().nextBoolean());
         }
     }
 }

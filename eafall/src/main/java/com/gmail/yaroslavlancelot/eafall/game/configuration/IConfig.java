@@ -25,7 +25,7 @@ public interface IConfig {
 
     boolean isMusicEnabled();
 
-    int getCreepBuildingsLimit();
+    int getUnitBuildingsLimit();
 
     int getWealthBuildingsLimit();
 

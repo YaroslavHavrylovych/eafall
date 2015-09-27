@@ -74,13 +74,18 @@ public final class SizeConstants {
 
     /* description popup */
     // general
-    public static final int DESCRIPTION_POPUP_HEIGHT = 666;
+    public static final int DESCRIPTION_POPUP_HEIGHT = 620;
     public static final int DESCRIPTION_POPUP_WIDTH = SizeConstants.GAME_FIELD_WIDTH;
     public static final int DESCRIPTION_POPUP_TEXT_SIZE = 45;
     public static final int DESCRIPTION_POPUP_TEXT_VERTICAL_PADDING = 3; //between rows in description (text only)
     public static final int DESCRIPTION_POPUP_HEADER_SINGLE_ROW_Y = 530;
     public static final int DESCRIPTION_POPUP_HEADER_FONT_SIZE = 45;
     public static final int DESCRIPTION_POPUP_HEADER_TEXT_X = DESCRIPTION_POPUP_WIDTH / 2;
+    public static final int DESCRIPTION_POPUP_ARROW_WIDTH = 55;
+    public static final int DESCRIPTION_POPUP_ARROW_HEIGHT = 55;
+    public static final int DESCRIPTION_POPUP_LEFT_ARROW_X = 747;
+    public static final int DESCRIPTION_POPUP_RIGHT_ARROW_X = 1190;
+    public static final int DESCRIPTION_POPUP_ARROW_Y = 546;
     //image
     public static final int DESCRIPTION_POPUP_IMAGE_HEIGHT = 400;
     public static final int DESCRIPTION_POPUP_IMAGE_WIDTH = 400;
@@ -98,8 +103,12 @@ public final class SizeConstants {
     public static final int DESCRIPTION_POPUP_AMOUNT_TEXT_PADDING_HORIZONTAL = 15;
     public static final int DESCRIPTION_POPUP_AMOUNT_BACKGROUND_X_PADDING = 4;
     // addition area
-    public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_HEIGHT = 245; //285 background size
-    public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_WIDTH = 270; //310 background size
+    public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_HEIGHT = 245;
+    public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_WIDTH = 270;
+    public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_FILE_WIDTH = 379;
+    public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_FILE_HEIGHT = 357;
+    public static final int DESCRIPTION_POPUP_ADDITIONAL_BACKGROUND_WIDTH = 386;
+    public static final int DESCRIPTION_POPUP_ADDITIONAL_BACKGROUND_HEIGHT = 365;
     public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_X = 1585;
     public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_Y = 240;
 

@@ -15,7 +15,7 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.health.PlayerHealthBar;
 import com.gmail.yaroslavlancelot.eafall.game.entity.health.UnitHealthBar;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
-import com.gmail.yaroslavlancelot.eafall.game.popup.PopupManager;
+import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.RollingPopupManager;
 import com.gmail.yaroslavlancelot.eafall.game.scene.hud.EaFallHud;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.MenuPopupButton;
 
@@ -66,14 +66,14 @@ public class ClientResourcesLoader extends BaseResourceLoader {
         EaFallHud.loadResource(EaFallApplication.getContext(), textureManager);
         //other
         Context context = EaFallApplication.getContext();
-        PopupManager.loadResource(context, textureManager);
+        RollingPopupManager.loadResource(context, textureManager);
         MenuPopupButton.loadResources(context, textureManager);
     }
 
     @Override
     public void loadFonts(TextureManager textureManager, FontManager fontManager) {
         EaFallHud.loadFonts(fontManager, textureManager);
-        PopupManager.loadFonts(fontManager, textureManager);
+        RollingPopupManager.loadFonts(fontManager, textureManager);
     }
 
     @Override
@@ -120,7 +120,7 @@ public class ClientResourcesLoader extends BaseResourceLoader {
         //player health bar
         PlayerHealthBar.loadResources(textureManager, vertexBufferObjectManager);
         //unit health bar
-        BitmapTextureAtlas smallObjectTexture = new BitmapTextureAtlas(textureManager,
+        BitmapTextureAtlas textureAtlas = new BitmapTextureAtlas(textureManager,
                 Math.max(SizeConstants.BULLET_SIZE, SizeConstants.UNIT_HEALTH_BAR_FILE_SIZE),
                 SizeConstants.BULLET_SIZE
                         + 2 * SizeConstants.UNIT_HEALTH_BAR_FILE_SIZE
@@ -133,16 +133,16 @@ public class ClientResourcesLoader extends BaseResourceLoader {
                     colorSize, colorSize);
             TextureRegionHolder.addElementFromSource(
                     UnitHealthBar.getHealthBarTextureRegionKey(player.getName()),
-                    smallObjectTexture, atlasSource, 0, y);
+                    textureAtlas, atlasSource, 0, y);
             y += colorSize + SizeConstants.BETWEEN_TEXTURES_PADDING;
         }
         //bullets
         TextureRegionHolder.addElementFromAssets(StringConstants.FILE_BULLET,
-                smallObjectTexture, EaFallApplication.getContext(), 0, y);
+                textureAtlas, EaFallApplication.getContext(), 0, y);
 
-        smallObjectTexture.load();
+        textureAtlas.load();
         //TODO check the situation when units doesn't have health bar
-        SpriteGroup spriteGroup = new SpriteGroup(smallObjectTexture,
+        SpriteGroup spriteGroup = new SpriteGroup(textureAtlas,
                 mMovableUnitsLimit * 4, vertexBufferObjectManager);
         SpriteGroupHolder.addGroup(BatchingKeys.BULLET_AND_HEALTH, spriteGroup);
     }

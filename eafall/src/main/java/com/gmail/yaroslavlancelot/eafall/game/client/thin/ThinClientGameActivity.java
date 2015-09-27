@@ -7,7 +7,7 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.MovableUnit;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.OffenceUnit;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.network.client.callbacks.InGameClient;
@@ -85,11 +85,11 @@ public class ThinClientGameActivity extends ClientGameActivity implements InGame
         runOnUpdateThread(new Runnable() {
             @Override
             public void run() {
-                if (gameObject == null || !(gameObject instanceof MovableUnit)) {
+                if (gameObject == null || !(gameObject instanceof OffenceUnit)) {
                     LoggerHelper.printInformationMessage(TAG, "try yo move uncreated unit or it's not a unit");
                     return;
                 }
-                MovableUnit unit = (MovableUnit) gameObject;
+                OffenceUnit unit = (OffenceUnit) gameObject;
                 if (!gameObject.isObjectAlive()) return;
                 Body body = unit.getBody();
                 body.setTransform(x, y, 0);

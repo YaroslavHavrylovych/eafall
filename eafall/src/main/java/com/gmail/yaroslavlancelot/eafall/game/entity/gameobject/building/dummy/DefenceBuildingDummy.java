@@ -12,7 +12,7 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.loader.
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 
 /** for creation orbital stations (defence buildings) */
-public class DefenceBuildingDummy extends BuildingDummy {
+public class DefenceBuildingDummy extends UnitBuildingDummy {
     /** building id */
     private static final int BUILDING_ID = 250;
     /** data loaded from xml which store buildings data (in string format) */
@@ -27,11 +27,13 @@ public class DefenceBuildingDummy extends BuildingDummy {
                 buildingLoader.name, "string", context.getApplicationInfo().packageName);
     }
 
-    public int getOrbitalStationCreationTime() {
+    @Override
+    public int getUnitCreationTime(int upgrade) {
         return mDefenceBuildingLoader.building_time;
     }
 
-    public int getOrbitalStationUnitId() {
+    @Override
+    public int getUnitId(int upgrade) {
         return mDefenceBuildingLoader.unit_id;
     }
 

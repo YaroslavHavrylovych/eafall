@@ -11,7 +11,7 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IHealt
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IVelocityListener;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.MovableUnit;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.OffenceUnit;
 import com.gmail.yaroslavlancelot.eafall.game.events.SharedEvents;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
@@ -71,8 +71,8 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
     }
 
     @Override
-    public MovableUnit createMovableUnit(IPlayer unitPlayer, int unitKey, int x, int y, boolean isTopPath) {
-        MovableUnit unit = super.createMovableUnit(unitPlayer, unitKey, x, y, isTopPath);
+    public OffenceUnit createMovableUnit(IPlayer unitPlayer, int unitKey, int x, int y, boolean isTopPath) {
+        OffenceUnit unit = super.createMovableUnit(unitPlayer, unitKey, x, y, isTopPath);
         unit.setVelocityChangedListener(this);
         return unit;
     }
@@ -99,8 +99,8 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
 
     @Override
     public void velocityChanged(final GameObject unit) {
-        if (unit instanceof MovableUnit)
-            mGameSocketServer.sendBroadcastServerMessage(0, new UnitChangePositionServerMessage((MovableUnit) unit));
+        if (unit instanceof OffenceUnit)
+            mGameSocketServer.sendBroadcastServerMessage(0, new UnitChangePositionServerMessage((OffenceUnit) unit));
     }
 
     @Override
@@ -138,13 +138,13 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
     private void resolveContactData(final Contact contact) {
         Object userData = contact.getFixtureA().getBody().getUserData();
         if (userData != null) {
-            if (userData instanceof MovableUnit)
-                velocityChanged((MovableUnit) userData);
+            if (userData instanceof OffenceUnit)
+                velocityChanged((OffenceUnit) userData);
         }
         userData = contact.getFixtureB().getBody().getUserData();
         if (userData != null) {
-            if (userData instanceof MovableUnit)
-                velocityChanged((MovableUnit) userData);
+            if (userData instanceof OffenceUnit)
+                velocityChanged((OffenceUnit) userData);
         }
     }
 

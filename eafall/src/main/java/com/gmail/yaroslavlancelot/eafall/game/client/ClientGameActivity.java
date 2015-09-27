@@ -30,24 +30,24 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.Sun
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetDestroyListener;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.MovableUnit;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.path.PathHelper;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.OffenceUnit;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.PathHelper;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.filtering.EnemiesFilterFactory;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.stationary.StationaryUnit;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.defence.DefenceUnit;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.endgame.GameEndedEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.AbstractSpriteEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.AttachSpriteEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.DetachSpriteEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.CreateBuildingEvent;
-import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.unit.CreateStationaryUnitEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.unit.CreateDefenceUnitEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.periodic.Periodic;
 import com.gmail.yaroslavlancelot.eafall.game.events.periodic.time.GameTime;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.Player;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.popup.IPopup;
-import com.gmail.yaroslavlancelot.eafall.game.popup.PopupManager;
-import com.gmail.yaroslavlancelot.eafall.game.popup.information.GameOverPopup;
+import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.IRollingPopup;
+import com.gmail.yaroslavlancelot.eafall.game.popup.GameOverPopup;
 import com.gmail.yaroslavlancelot.eafall.game.resources.loaders.ClientResourcesLoader;
 import com.gmail.yaroslavlancelot.eafall.game.rule.IRuler;
 import com.gmail.yaroslavlancelot.eafall.game.rule.RulesFactory;
@@ -163,11 +163,11 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
     }
 
     @Override
-    public MovableUnit createMovableUnit(IPlayer unitPlayer,
+    public OffenceUnit createMovableUnit(IPlayer unitPlayer,
                                          int unitKey, int x, int y, boolean isTopPath) {
-        MovableUnit movableUnit = (MovableUnit) createUnit(unitKey, unitPlayer, x, y);
-        movableUnit.initMovingPath(PathHelper.isLtrPath(x), isTopPath);
-        return movableUnit;
+        OffenceUnit offenceUnit = (OffenceUnit) createUnit(unitKey, unitPlayer, x, y);
+        offenceUnit.initMovingPath(PathHelper.isLtrPath(x), isTopPath);
+        return offenceUnit;
     }
 
     @Override
@@ -401,9 +401,10 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
 
     @SuppressWarnings("unused")
     public void onEvent(final GameEndedEvent gameEndedEvent) {
-        IPopup popup = PopupManager.getPopup(GameOverPopup.KEY);
+        IPopup popup = new GameOverPopup(
+                mSceneManager.getWorkingScene(), mCamera, getVertexBufferObjectManager());
         ((GameOverPopup) popup).setSuccess(gameEndedEvent.isSuccess());
-        popup.setStateChangingListener(new IPopup.StateChangingListener() {
+        popup.setStateChangeListener(new IRollingPopup.StateChangingListener() {
             @Override
             public void onShowed() {
             }
@@ -418,10 +419,10 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
 
     @SuppressWarnings("unused")
     /** really used by {@link de.greenrobot.event.EventBus} */
-    public void onEvent(final CreateStationaryUnitEvent unitEvent) {
+    public void onEvent(final CreateDefenceUnitEvent unitEvent) {
         int unitKey = unitEvent.getKey();
         final IPlayer player = PlayersHolder.getInstance().getElement(unitEvent.getPlayerName());
-        StationaryUnit unit = (StationaryUnit) createUnit(unitKey, player,
+        DefenceUnit unit = (DefenceUnit) createUnit(unitKey, player,
                 unitEvent.getX(), unitEvent.getY());
     }
 

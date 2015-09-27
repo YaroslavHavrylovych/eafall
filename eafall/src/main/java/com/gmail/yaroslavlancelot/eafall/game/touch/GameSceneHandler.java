@@ -151,7 +151,7 @@ public class GameSceneHandler implements
         mSurface_ZoomCenterPosition[Constants.VERTEX_INDEX_Y]
                 = (motionEvent.getY(0) + motionEvent.getY(1)) / 2;
         //coordinates conversion
-        StaticHelper.convertScreenToSurfaceCoordinates(mCamera,
+        TouchHelper.convertScreenToSurfaceCoordinates(mCamera,
                 mSurface_ZoomCenterPosition, mSurface_ZoomCenterPosition);
     }
 
@@ -234,14 +234,14 @@ public class GameSceneHandler implements
      */
     private void repositionCameraWithZoom(float zoomChange) {
         //camera zoom center
-        StaticHelper.convertSurfaceToCameraCoordinates(mCamera,
+        TouchHelper.convertSurfaceToCameraCoordinates(mCamera,
                 mSurface_ZoomCenterPosition, mCamera_ZoomCenterPosition);
         //camera center
         mSurface_CameraCenterPosition[Constants.VERTEX_INDEX_X] =
                 mCamera.getCenterX();
         mSurface_CameraCenterPosition[Constants.VERTEX_INDEX_Y] =
                 mCamera.getCenterY();
-        StaticHelper.convertSurfaceToCameraCoordinates(mCamera,
+        TouchHelper.convertSurfaceToCameraCoordinates(mCamera,
                 mSurface_CameraCenterPosition, mCamera_CameraCenterPosition);
         //camera calculate next camera center
         mSurface_CameraCenterPosition[Constants.VERTEX_INDEX_X] =

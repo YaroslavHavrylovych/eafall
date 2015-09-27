@@ -2,7 +2,7 @@ package com.gmail.yaroslavlancelot.eafall.game.visual.text;
 
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
-import com.gmail.yaroslavlancelot.eafall.game.touch.StaticHelper;
+import com.gmail.yaroslavlancelot.eafall.game.touch.TouchHelper;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 
 import org.andengine.opengl.font.FontFactory;
@@ -19,7 +19,7 @@ public class Link extends RecenterText {
     private final static int sFontSize = SizeConstants.DESCRIPTION_POPUP_TEXT_SIZE;
     private static int sColorUnpressed = android.graphics.Color.argb(255, 0, 18, 57);
     private static int sColorPressed = org.andengine.util.adt.color.Color.BLUE.getABGRPackedInt();
-    private volatile StaticHelper.OnClickListener mOnClickListener;
+    private volatile TouchHelper.OnClickListener mOnClickListener;
 
     public Link(float x, float y, VertexBufferObjectManager vertexBufferObjectManager) {
         this(x, y, "*", vertexBufferObjectManager);
@@ -28,6 +28,14 @@ public class Link extends RecenterText {
     public Link(float x, float y, CharSequence text, VertexBufferObjectManager vertexBufferObjectManager) {
         super(x, y, FontHolder.getInstance().getElement(sFontSizeKey), text, 20, vertexBufferObjectManager);
         setTouchCallback(new LinkTouchListener());
+    }
+
+    public void setOnClickListener(TouchHelper.OnClickListener onClickListener) {
+        mOnClickListener = onClickListener;
+    }
+
+    public void removeOnClickListener() {
+        mOnClickListener = null;
     }
 
     public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
@@ -39,15 +47,7 @@ public class Link extends RecenterText {
         FontHolder.getInstance().addElement(sFontSizeKey, font);
     }
 
-    public void setOnClickListener(StaticHelper.OnClickListener onClickListener) {
-        mOnClickListener = onClickListener;
-    }
-
-    public void removeOnClickListener() {
-        mOnClickListener = null;
-    }
-
-    private class LinkTouchListener extends StaticHelper.CustomTouchListener {
+    private class LinkTouchListener extends TouchHelper.EntityCustomTouch {
         public LinkTouchListener() {
             super(Link.this);
         }

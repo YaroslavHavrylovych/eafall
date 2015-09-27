@@ -162,6 +162,31 @@
     <!-- client connected to server -->
     <string name="you_are_connected_to_server">Ви під’єднані до сервера з адресою : </string>
 
+    <!-- armor -->
+    <string name="armor_unarmored">роззброєний</string>
+    <string name="armor_physical">фізичний</string>
+    <string name="armor_electromagnetic">електромагнітний</string>
+    <string name="armor_cherenkov">черенков</string>
+    <string name="armor_higgs">хігс</string>
+    <string name="armor_mixed">змішаний</string>
+    <!-- /armor -->
+
+    <!-- damage -->
+    <string name="damage_railgun">рельса</string>
+    <string name="damage_laser">лазер</string>
+    <string name="damage_neutrino">нейтрино</string>
+    <string name="damage_higgson">хігсон</string>
+    <string name="damage_annihilator">анігілятор</string>
+    <string name="damage_quaker">руйнівник</string>
+    <!-- /damage -->
+
+    <!-- fire rate -->
+    <string name="fire_rate_very_slow">дуже низька</string>
+    <string name="fire_rate_slow">низька</string>
+    <string name="fire_rate_normal">нормальна</string>
+    <string name="fire_rate_high">висока</string>
+    <!-- /fire rate -->
+
     <!-- description popup -->
 
     <!-- buildings -->
@@ -175,25 +200,25 @@
     <string name="description_produce">Створює :</string>
     <string name="description_description">Опис :</string>
     <string name="description_unit_producing_time">Час створення юніта :</string>
-    <string name="description_upgrade">Ціна прокачки :</string>
+    <string name="description_upgrade">Прокачка :</string>
 
     <!-- units -->
     <string name="description_building">Будинок :</string>
     <string name="description_speed">Швидкість :</string>
     <string name="description_health">Здоров’я :</string>
-    <string name="description_reload_time">Час перезарядки :</string>
+    <string name="description_reload_time">Швидкострільність :</string>
     <string name="description_unique">Особливе :</string>
-    <string name="description_attack">А</string>
-    <string name="description_defence">З</string>
+    <string name="description_damage">Пошкодшення :</string>
+    <string name="description_armor">Броня :</string>
     <!-- /description popup -->
 
     <!-- descriptions -->
-    <string name="earth_artifact_description">На 10% підвищує здоров’я кожному юніту</string>
-    <string name="space_material_description">Надає 10% шанс кожному юніту команди \nзапобігти отриманню пошкоджень</string>
-    <string name="king_of_snakes_description">На 10% збільшує атаку кожного \nюніту команди</string>
-    <string name="municipality_description">Перший створений будинок додає 20\u0025\nдо прибутку золота.\nКожен наступний будинок додає\n1% до існуючої кількості.</string>
-    <string name="caches_description">Перший створений будинок додає 20\u0025\nдо прибутку золота.\nКожен наступний будинок додає\n1% до існуючої кількості.</string>
-    <string name="reptile_city_description">Перший створений будинок додає 20\u0025\nдо прибутку золота.\nКожен наступний будинок додає\n1% до існуючої кількості.</string>
+    <string name="earth_artifact_description">Священий артефакт Мутантів знайдений в надрах Землі.\nДодає 10\u0025 до здоров’я юніта.</string>
+    <string name="space_material_description">Могутній артефакт Імперців, винайдений їх вченими.\nДає 10\u0025 шанс уникнути пошкоджень.</string>
+    <string name="king_of_snakes_description">Цінний артефакт Повстанців, був знайдений у відкритому космосі.\n10\u0025 збільшення пошкодження від юніта.</string>
+    <string name="municipality_description">На 20\u0025 збільшення доходу від першого будинку.\nКожен наступний будинок додає 1\u0025 до доходу.</string>
+    <string name="caches_description">На 20\u0025 збільшення доходу від першого будинку.\nКожен наступний будинок додає 1\u0025 до доходу.</string>
+    <string name="reptile_city_description">На 20\u0025 збільшення доходу від першого будинку.\nКожен наступний будинок додає 1\u0025 до доходу.</string>
     <!-- /descriptions -->
 
     <!-- campaign -->

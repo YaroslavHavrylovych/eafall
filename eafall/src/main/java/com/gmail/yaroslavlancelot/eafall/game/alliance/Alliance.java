@@ -9,16 +9,16 @@ import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.CreepBuildingDummy;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.OffenceBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.DefenceBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.SpecialBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.WealthBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.loader.BuildingListLoader;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitDummy;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.dynamic.MovableUnitDummy;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.OffenceUnitDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.loader.UnitListLoader;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.loader.UnitLoader;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.stationary.StationaryUnitDummy;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.defence.DefenceUnitDummy;
 
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
@@ -137,9 +137,9 @@ public abstract class Alliance implements IAlliance {
         for (int i = 0; i < unitsAmount; i++) {
             UnitLoader unitLoader = unitListLoader.getList().get(i);
             if (unitLoader.speed > 1f) {
-                unitDummy = new MovableUnitDummy(unitLoader, getAllianceName());
+                unitDummy = new OffenceUnitDummy(unitLoader, getAllianceName());
             } else {
-                unitDummy = new StationaryUnitDummy(unitLoader, getAllianceName());
+                unitDummy = new DefenceUnitDummy(unitLoader, getAllianceName());
             }
             mUnitDummies.put(unitDummy.getId(), unitDummy);
         }
@@ -157,7 +157,7 @@ public abstract class Alliance implements IAlliance {
         //units
         BuildingDummy buildingDummy;
         for (int i = 0; i < unitBuildingsAmount; i++) {
-            buildingDummy = new CreepBuildingDummy(buildingListLoader.getList().get(i));
+            buildingDummy = new OffenceBuildingDummy(buildingListLoader.getList().get(i));
             mBuildingDummies.put(buildingDummy.getBuildingId(), buildingDummy);
         }
         //defence

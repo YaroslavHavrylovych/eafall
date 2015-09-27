@@ -135,8 +135,8 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
         if (loadedData.definition.time_limit != null) mTime = loadedData.definition.time_limit;
         if (loadedData.max_oxygen != null) mMaxOxygenAmount = loadedData.max_oxygen;
         if (loadedData.planet_health != null) mPlanetHealth = loadedData.planet_health;
-        if (loadedData.movable_units_limit != null)
-            mMovableUnitsLimit = loadedData.movable_units_limit;
+        if (loadedData.offensive_units_limit != null)
+            mMovableUnitsLimit = loadedData.offensive_units_limit;
     }
 
     private void initType(DefinitionLoader definition) {

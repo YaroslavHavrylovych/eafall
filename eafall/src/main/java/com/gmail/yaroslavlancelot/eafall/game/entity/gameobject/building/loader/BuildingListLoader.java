@@ -11,7 +11,7 @@ import java.util.List;
 @Root(strict = false)
 public class BuildingListLoader {
     @ElementList(inline = true)
-    List<CreepBuildingLoader> creepBuildingLoaderList = new ArrayList<CreepBuildingLoader>(8);
+    List<UnitBuildingLoader> mUnitBuildingLoaderList = new ArrayList<UnitBuildingLoader>(8);
 
     @Element(name = "defence_building")
     public DefenceBuildingLoader defenceBuildingLoader;
@@ -22,7 +22,7 @@ public class BuildingListLoader {
     @Element(name = "special_building")
     public SpecialBuildingLoader specialBuildingLoader;
 
-    public List<CreepBuildingLoader> getList() {
-        return creepBuildingLoaderList;
+    public List<UnitBuildingLoader> getList() {
+        return mUnitBuildingLoaderList;
     }
 }
