@@ -4,6 +4,7 @@ import android.test.InstrumentationTestRunner
 import android.test.InstrumentationTestSuite
 import com.gmail.yaroslavlancelot.eafall.test.game.entity.gameobject.GameObjectTest
 import com.gmail.yaroslavlancelot.eafall.test.game.entity.gameobject.unit.dynamic.OffenceUnitTest
+import com.gmail.yaroslavlancelot.eafall.test.game.popup.PopupSceneTest
 import junit.framework.TestSuite
 
 /** run all tests  */
@@ -12,10 +13,10 @@ public class DefaultInstrumentationTestRunner : InstrumentationTestRunner() {
         val suite = InstrumentationTestSuite(this)
 
         //game objects
-        suite.addTestSuite(javaClass<GameObjectTest>())
-        suite.addTestSuite(javaClass<OffenceUnitTest>())
+        suite.addTestSuite(GameObjectTest::class.java)
+        suite.addTestSuite(OffenceUnitTest::class.java)
         //popup
-        //        suite.addTestSuite(javaClass<BuildingDescriptionAreaUpdaterTest>())
+        suite.addTestSuite(PopupSceneTest::class.java)
 
         return suite
     }

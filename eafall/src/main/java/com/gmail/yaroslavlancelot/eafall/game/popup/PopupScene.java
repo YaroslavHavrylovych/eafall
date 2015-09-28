@@ -21,7 +21,7 @@ public class PopupScene extends CameraScene implements IPopup {
     // ===========================================================
     // Constants
     // ===========================================================
-    protected PopupScene(Scene scene, Camera camera) {
+    public PopupScene(Scene scene, Camera camera) {
         super(camera);
         mScene = scene;
         setBackgroundEnabled(false);
