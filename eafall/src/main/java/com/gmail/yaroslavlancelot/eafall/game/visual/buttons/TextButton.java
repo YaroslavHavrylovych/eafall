@@ -29,20 +29,23 @@ public class TextButton extends ButtonSprite {
     /** don't change button width with setText(String) */
     private boolean mFixedSize = false;
 
-    public TextButton(VertexBufferObjectManager vertexBufferObjectManager, float width, float height) {
-        this(vertexBufferObjectManager, width, height, 0, 0);
+    public TextButton(VertexBufferObjectManager vboManager, float width, float height) {
+        this(vboManager, width, height, 0, 0);
     }
 
-    public TextButton(VertexBufferObjectManager vertexBufferObjectManager, float width, float height, float x, float y) {
-        super(x, y,
-                (ITiledTextureRegion) TextureRegionHolder.getInstance().getElement(StringConstants.FILE_GAME_BUTTON),
-                vertexBufferObjectManager);
+    public TextButton(VertexBufferObjectManager vboManager, ITiledTextureRegion textureRegion, float width, float height, float x, float y) {
+        super(x, y, textureRegion, vboManager);
         setWidth(width);
         setHeight(height);
-
         mText = new Text(getWidth() / 2, getHeight() / 2,
-                FontHolder.getInstance().getElement(sFontSizeKey), "", 20, vertexBufferObjectManager);
+                FontHolder.getInstance().getElement(sFontSizeKey), "", 20, vboManager);
         attachChild(mText);
+    }
+
+    public TextButton(VertexBufferObjectManager vboManager, float width, float height, float x, float y) {
+        this(vboManager,
+                (ITiledTextureRegion) TextureRegionHolder.getInstance().getElement(StringConstants.FILE_GAME_BUTTON),
+                width, height, x, y);
     }
 
     private boolean isFixedSize() {

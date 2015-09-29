@@ -2,9 +2,10 @@ package com.gmail.yaroslavlancelot.eafall.game.popup.rolling;
 
 import android.content.Context;
 
+import com.gmail.yaroslavlancelot.eafall.game.popup.GameOverPopup;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.construction.ConstructionsPopup;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.DescriptionPopup;
-import com.gmail.yaroslavlancelot.eafall.game.popup.GameOverPopup;
+import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.menu.MenuPopup;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.Scene;
@@ -27,15 +28,29 @@ public class RollingPopupManager {
         // buildings
         popup = new ConstructionsPopup(playerName, scene, camera, vertexManager);
         mPopups.put(ConstructionsPopup.KEY, popup);
+        // menu
+        popup = new MenuPopup(scene, camera, vertexManager);
+        mPopups.put(MenuPopup.KEY, popup);
     }
 
     public static RollingPopupManager getInstance() {
         return sRollingPopupManager;
     }
 
+    /** return visible/open popup or null if such doesn't exist now */
+    public static IRollingPopup getOpen() {
+        for (IRollingPopup popup : getInstance().mPopups.values()) {
+            if (popup.isShowing()) {
+                return popup;
+            }
+        }
+        return null;
+    }
+
     public static void loadResource(Context context, TextureManager textureManager) {
         ConstructionsPopup.loadResource(context, textureManager);
         DescriptionPopup.loadResources(context, textureManager);
+        MenuPopup.loadResource(context, textureManager);
     }
 
     public static void loadFonts(FontManager fontManager, TextureManager textureManager) {

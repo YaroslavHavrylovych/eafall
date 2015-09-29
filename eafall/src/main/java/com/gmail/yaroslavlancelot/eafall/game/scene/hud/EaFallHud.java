@@ -15,6 +15,7 @@ import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.RollingPopupManager;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.construction.ConstructionsPopup;
+import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.menu.MenuPopup;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.ConstructionPopupButton;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.MenuPopupButton;
 import com.gmail.yaroslavlancelot.eafall.game.visual.other.HealthBarCarcassSprite;
@@ -134,9 +135,17 @@ public class EaFallHud extends HUD {
         list.add(gameValue);
     }
 
+    /** attaches main menu buttons to the scene and init`s click listener */
     private void initMainMenu(VertexBufferObjectManager objectManager) {
         MenuPopupButton menuButton = new MenuPopupButton(objectManager);
         attachChild(menuButton);
+        menuButton.setOnClickListener(new ButtonSprite.OnClickListener() {
+            @Override
+            public void onClick(final ButtonSprite pButtonSprite, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+                RollingPopupManager.getPopup(MenuPopup.KEY).showPopup();
+            }
+        });
+        registerTouchArea(menuButton);
     }
 
     private void initHealthCarcass(VertexBufferObjectManager vertexManager) {
