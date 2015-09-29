@@ -30,14 +30,15 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.Sun
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetDestroyListener;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.defence.DefenceUnit;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.filtering.EnemiesFilterFactory;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.OffenceUnit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.PathHelper;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.filtering.EnemiesFilterFactory;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.defence.DefenceUnit;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.endgame.GameEndedEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.AbstractSpriteEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.AttachSpriteEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.DetachSpriteEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.PauseGameEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.CreateBuildingEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.unit.CreateDefenceUnitEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.periodic.Periodic;
@@ -45,9 +46,9 @@ import com.gmail.yaroslavlancelot.eafall.game.events.periodic.time.GameTime;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.Player;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
+import com.gmail.yaroslavlancelot.eafall.game.popup.GameOverPopup;
 import com.gmail.yaroslavlancelot.eafall.game.popup.IPopup;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.IRollingPopup;
-import com.gmail.yaroslavlancelot.eafall.game.popup.GameOverPopup;
 import com.gmail.yaroslavlancelot.eafall.game.resources.loaders.ClientResourcesLoader;
 import com.gmail.yaroslavlancelot.eafall.game.rule.IRuler;
 import com.gmail.yaroslavlancelot.eafall.game.rule.RulesFactory;
@@ -97,6 +98,7 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
         EngineOptions engineOptions = super.onCreateEngineOptions();
         mMissionConfig = getIntent().getExtras().getParcelable(MissionIntent.MISSION_CONFIG);
         mPhysicsWorld = new PhysicsWorld(new Vector2(0, 0), false, 2, 2);
+        PauseGameEvent.getInstance().setPause(false);
         return engineOptions;
     }
 
@@ -195,7 +197,7 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
      */
     protected void startPeriodic() {
         for (Periodic periodic : mGamePeriodic) {
-            mEngine.registerUpdateHandler(periodic.getUpdateHandler());
+            mSceneManager.getWorkingScene().registerUpdateHandler(periodic.getUpdateHandler());
         }
     }
 
@@ -338,6 +340,13 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
                 }
             }
         });
+    }
+
+    @SuppressWarnings("unused")
+    /** stop the game engine */
+    public void onEvent(PauseGameEvent pauseGameEvent) {
+        boolean pause = pauseGameEvent.isPause();
+        mSceneManager.getWorkingScene().setIgnoreUpdate(pause);
     }
 
     /** attach sprite to entity (sprite group, hud or game scene) */

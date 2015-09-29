@@ -10,6 +10,7 @@ import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.events.SharedEvents;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.PauseGameEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.periodic.time.GameTime;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
@@ -92,7 +93,9 @@ public class EaFallHud extends HUD {
         button.setOnClickListener(new ButtonSprite.OnClickListener() {
             @Override
             public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                RollingPopupManager.getPopup(ConstructionsPopup.KEY).triggerPopup();
+                if(!PauseGameEvent.getInstance().isPause()) {
+                    RollingPopupManager.getPopup(ConstructionsPopup.KEY).triggerPopup();
+                }
             }
         });
         attachChild(button);

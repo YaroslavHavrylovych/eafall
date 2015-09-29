@@ -7,6 +7,7 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.IBuildi
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.UnitBuilding;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetStaticObject;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.PauseGameEvent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 
 import java.util.ArrayList;
@@ -55,6 +56,10 @@ public class VeryFirstBot implements Runnable {
         try {
             //start the bot logic
             while (mBotPlayer.getPlanet() != null) {
+                if (PauseGameEvent.getInstance().isPause()) {
+                    delay();
+                    continue;
+                }
                 delay();
                 planet = mBotPlayer.getPlanet();
                 // win

@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
+import com.gmail.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.text.Text;
@@ -66,6 +67,18 @@ public class TextButton extends ButtonSprite {
     }
 
     public void setText(String text) {
+        if (text.equalsIgnoreCase(mText.getText().toString())) {
+            return;
+        }
+        mText.setText(text);
+        if (!mFixedSize) {
+            setWidth(mText.getWidth() + padding * 2);
+            mText.setX(getWidth() / 2);
+        }
+    }
+
+    public void setText(int textId) {
+        String text = LocaleImpl.getInstance().getStringById(textId);
         if (text.equalsIgnoreCase(mText.getText().toString())) {
             return;
         }

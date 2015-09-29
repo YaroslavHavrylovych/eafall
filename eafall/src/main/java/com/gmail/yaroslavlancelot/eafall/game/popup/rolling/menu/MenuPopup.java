@@ -2,14 +2,15 @@ package com.gmail.yaroslavlancelot.eafall.game.popup.rolling.menu;
 
 import android.content.Context;
 
-import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.PauseGameEvent;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.RollingPopup;
 import com.gmail.yaroslavlancelot.eafall.game.touch.TouchHelper;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.TextButton;
+import com.gmail.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.Scene;
@@ -20,6 +21,8 @@ import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * @author Yaroslav Havrylovych
@@ -84,11 +87,18 @@ public class MenuPopup extends RollingPopup {
         initExitButton(mExitButton);
     }
 
-    private void initPauseButton(TextButton button) {
+    private void initPauseButton(final TextButton button) {
         button.setOnClickListener(new ButtonSprite.OnClickListener() {
             @Override
             public void onClick(final ButtonSprite pTextButton, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-                //TODO pause
+                PauseGameEvent event = PauseGameEvent.getInstance();
+                if (event.isPause()) {
+                    button.setText(R.string.menu_pause);
+                } else {
+                    button.setText(R.string.menu_resume);
+                }
+                event.setPause(!event.isPause());
+                EventBus.getDefault().post(event);
             }
         });
         mBackgroundSprite.attachChild(button);
@@ -135,7 +145,7 @@ public class MenuPopup extends RollingPopup {
                 popup_height - SizeConstants.MENU_POPUP_FIRST_BUTTON_Y
                         - height / 2 - position * height);
         button.setFixedSize(true);
-        button.setText(EaFallApplication.getContext().getResources().getString(stringId));
+        button.setText(LocaleImpl.getInstance().getStringById(stringId));
         return button;
     }
 
