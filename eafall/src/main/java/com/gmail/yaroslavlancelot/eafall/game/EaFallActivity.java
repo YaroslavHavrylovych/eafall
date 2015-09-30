@@ -1,6 +1,9 @@
 package com.gmail.yaroslavlancelot.eafall.game;
 
+import android.widget.Toast;
+
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
+import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.audio.BackgroundMusic;
 import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
@@ -13,7 +16,10 @@ import com.gmail.yaroslavlancelot.eafall.game.scene.SceneManager;
 import com.gmail.yaroslavlancelot.eafall.game.scene.hud.EaFallHud;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
+import com.gmail.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.AudioOptions;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
@@ -50,10 +56,13 @@ public abstract class EaFallActivity extends BaseGameActivity {
     protected volatile SceneManager mSceneManager;
     /** resource loader */
     protected IResourcesLoader mResourcesLoader;
+    /** exit with double click */
+    private long mBackButtonLastClick = 0;
 
     @Override
     public EngineOptions onCreateEngineOptions() {
         LoggerHelper.methodInvocation(TAG, "onCreateEngineOptions");
+        GameState.resetState();
         //pre-in-game
         GameObject.clearCounter();
         // init camera
@@ -92,7 +101,6 @@ public abstract class EaFallActivity extends BaseGameActivity {
         audioOptions.setNeedsMusic(EaFallApplication.getConfig().isMusicEnabled());
         return engineOptions;
     }
-
 
     @Override
     public void onCreateResources(OnCreateResourcesCallback onCreateResourcesCallback) {
@@ -141,11 +149,91 @@ public abstract class EaFallActivity extends BaseGameActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        boolean resourcesLoaded = GameState.isResourcesLoaded();
+        LoggerHelper.printVerboseMessage(TAG,
+                "back button click. Resources loaded=" + resourcesLoaded);
+        if (resourcesLoaded) {
+            long time = System.currentTimeMillis();
+            long delta = time - mBackButtonLastClick;
+            LoggerHelper.printVerboseMessage(TAG, "back button double click delta=" + delta);
+            mEngine.registerUpdateHandler(new TimerHandler(1,
+                    new ITimerCallback() {
+                        @Override
+                        public void onTimePassed(final TimerHandler pTimerHandler) {
+                            mEngine.unregisterUpdateHandler(pTimerHandler);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(EaFallActivity.this,
+                                            LocaleImpl.getInstance().getStringById(R.string.exit_click),
+                                            Toast.LENGTH_SHORT)
+                                            .show();
+                                }
+                            });
+                        }
+                    }));
+            mBackButtonLastClick = time;
+            if (delta < 600 && delta > 0) {
+                finish();
+            }
+        } else {
+            Toast.makeText(this,
+                    LocaleImpl.getInstance().getStringById(R.string.exit_click),
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /** sets current game state using {@link GameState#setState(GameState.State)} */
+    protected boolean setState(GameState.State state) {
+        GameState.State currentState = GameState.getState();
+        if (state == currentState) {
+            return false;
+        }
+        switch (state) {
+            case PAUSED: {
+                if (currentState != GameState.State.RESUMED) {
+                    return false;
+                }
+                mSceneManager.getWorkingScene().setIgnoreUpdate(true);
+                break;
+            }
+            case RESUMED: {
+                if (currentState == GameState.State.RESOURCE_LOADING) {
+                    break;
+                } else if (currentState != GameState.State.PAUSED) {
+                    return false;
+                }
+                mSceneManager.getWorkingScene().setIgnoreUpdate(false);
+                break;
+            }
+        }
+        GameState.setState(state);
+        return true;
+    }
+
+    /** triggers {@link #startAsyncResourceLoading(Runnable)} with null argument */
     protected void startAsyncResourceLoading() {
+        startAsyncResourceLoading(null);
+    }
+
+    /**
+     * invokes {@link #loadResources()} in other thread.
+     *
+     * @param runnable if not null then {@link Runnable#run()} method will be excecuted as
+     *                 the first method of the newly created {@link Thread}
+     */
+    protected void startAsyncResourceLoading(final Runnable runnable) {
+        GameState.resourceLoading();
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
+                if (runnable != null) {
+                    runnable.run();
+                }
                 loadResources();
+                onResourcesLoaded();
             }
         });
         thread.setDaemon(true);
@@ -192,6 +280,7 @@ public abstract class EaFallActivity extends BaseGameActivity {
             mBackgroundMusic.playBackgroundMusic();
         }
         onShowWorkingScene();
+        GameState.setState(GameState.State.RESUMED);
     }
 
     /** triggers in the main engine thread after the splash had already being hidden */

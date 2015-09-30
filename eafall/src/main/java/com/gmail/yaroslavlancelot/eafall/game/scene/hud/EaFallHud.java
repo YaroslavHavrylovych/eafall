@@ -3,6 +3,7 @@ package com.gmail.yaroslavlancelot.eafall.game.scene.hud;
 import android.content.Context;
 
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
+import com.gmail.yaroslavlancelot.eafall.game.GameState;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.gmail.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.mission.MissionConfig;
@@ -10,7 +11,6 @@ import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.events.SharedEvents;
-import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.PauseGameEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.periodic.time.GameTime;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
@@ -93,7 +93,7 @@ public class EaFallHud extends HUD {
         button.setOnClickListener(new ButtonSprite.OnClickListener() {
             @Override
             public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                if(!PauseGameEvent.getInstance().isPause()) {
+                if (GameState.isResumed()) {
                     RollingPopupManager.getPopup(ConstructionsPopup.KEY).triggerPopup();
                 }
             }

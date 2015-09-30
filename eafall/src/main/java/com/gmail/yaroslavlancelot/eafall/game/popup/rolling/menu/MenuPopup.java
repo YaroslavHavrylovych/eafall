@@ -3,6 +3,7 @@ package com.gmail.yaroslavlancelot.eafall.game.popup.rolling.menu;
 import android.content.Context;
 
 import com.gmail.yaroslavlancelot.eafall.R;
+import com.gmail.yaroslavlancelot.eafall.game.GameState;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
@@ -91,14 +92,15 @@ public class MenuPopup extends RollingPopup {
         button.setOnClickListener(new ButtonSprite.OnClickListener() {
             @Override
             public void onClick(final ButtonSprite pTextButton, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-                PauseGameEvent event = PauseGameEvent.getInstance();
-                if (event.isPause()) {
+                boolean newState;
+                if (GameState.isPaused()) {
                     button.setText(R.string.menu_pause);
+                    newState = false;
                 } else {
                     button.setText(R.string.menu_resume);
+                    newState = true;
                 }
-                event.setPause(!event.isPause());
-                EventBus.getDefault().post(event);
+                EventBus.getDefault().post(new PauseGameEvent(newState));
             }
         });
         mBackgroundSprite.attachChild(button);
@@ -128,7 +130,17 @@ public class MenuPopup extends RollingPopup {
         button.setOnClickListener(new ButtonSprite.OnClickListener() {
             @Override
             public void onClick(final ButtonSprite pTextButton, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-                //TODO exit
+                setStateChangeListener(new StateChangingListener() {
+                    @Override
+                    public void onShowed() {
+                    }
+
+                    @Override
+                    public void onHided() {
+                        //TODO show confirmation
+                    }
+                });
+                hidePopup();
             }
         });
         mBackgroundSprite.attachChild(button);

@@ -7,7 +7,6 @@ public class PauseGameEvent {
     // ===========================================================
     // Constants
     // ===========================================================
-    private static final PauseGameEvent PAUSE_GAME_EVENT = new PauseGameEvent();
 
     // ===========================================================
     // Fields
@@ -17,7 +16,8 @@ public class PauseGameEvent {
     // ===========================================================
     // Constructors
     // ===========================================================
-    private PauseGameEvent() {
+    public PauseGameEvent(boolean pause) {
+        mPause = pause;
     }
 
     // ===========================================================
@@ -27,11 +27,6 @@ public class PauseGameEvent {
         return mPause;
     }
 
-    public void setPause(final boolean pause) {
-        mPause = pause;
-    }
-
-
     // ===========================================================
     // Methods for/from SuperClass/Interfaces
     // ===========================================================
@@ -39,9 +34,6 @@ public class PauseGameEvent {
     // ===========================================================
     // Methods
     // ===========================================================
-    public static PauseGameEvent getInstance() {
-        return PAUSE_GAME_EVENT;
-    }
 
     // ===========================================================
     // Inner and Anonymous Classes

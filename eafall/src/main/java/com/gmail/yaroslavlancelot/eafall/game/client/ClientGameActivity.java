@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.EaFallActivity;
+import com.gmail.yaroslavlancelot.eafall.game.GameState;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
 import com.gmail.yaroslavlancelot.eafall.game.audio.BackgroundMusic;
@@ -47,7 +48,6 @@ import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.Player;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.popup.GameOverPopup;
-import com.gmail.yaroslavlancelot.eafall.game.popup.IPopup;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.IRollingPopup;
 import com.gmail.yaroslavlancelot.eafall.game.resources.loaders.ClientResourcesLoader;
 import com.gmail.yaroslavlancelot.eafall.game.rule.IRuler;
@@ -98,7 +98,6 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
         EngineOptions engineOptions = super.onCreateEngineOptions();
         mMissionConfig = getIntent().getExtras().getParcelable(MissionIntent.MISSION_CONFIG);
         mPhysicsWorld = new PhysicsWorld(new Vector2(0, 0), false, 2, 2);
-        PauseGameEvent.getInstance().setPause(false);
         return engineOptions;
     }
 
@@ -125,7 +124,6 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
         if (mMissionConfig.isTimerEnabled()) {
             mGamePeriodic.add(GameTime.getPeriodic(mMissionConfig.getTime()));
         }
-        onResourcesLoaded();
     }
 
     @Override
@@ -179,6 +177,16 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
         mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(bodiedSprite, body, true, false));
         bodiedSprite.setBody(body);
         return body;
+    }
+
+    /**
+     * set game to pause if pause parameter equals to true and resume the game if false.
+     * <p/>
+     * Uses {@link #setState(GameState.State)} and one out of two possible params
+     * (GameState.State.RESUMED or GameState.State.PAUSED)
+     */
+    protected void pause(boolean pause) {
+        setState(pause ? GameState.State.PAUSED : GameState.State.RESUMED);
     }
 
     /** start tracker which tracks game rules */
@@ -345,8 +353,7 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
     @SuppressWarnings("unused")
     /** stop the game engine */
     public void onEvent(PauseGameEvent pauseGameEvent) {
-        boolean pause = pauseGameEvent.isPause();
-        mSceneManager.getWorkingScene().setIgnoreUpdate(pause);
+        pause(pauseGameEvent.isPause());
     }
 
     /** attach sprite to entity (sprite group, hud or game scene) */
@@ -410,9 +417,9 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
 
     @SuppressWarnings("unused")
     public void onEvent(final GameEndedEvent gameEndedEvent) {
-        IPopup popup = new GameOverPopup(
-                mSceneManager.getWorkingScene(), mCamera, getVertexBufferObjectManager());
-        ((GameOverPopup) popup).setSuccess(gameEndedEvent.isSuccess());
+        GameOverPopup popup = new GameOverPopup(mHud, mCamera, getVertexBufferObjectManager());
+        pause(true);
+        popup.setSuccess(gameEndedEvent.isSuccess());
         popup.setStateChangeListener(new IRollingPopup.StateChangingListener() {
             @Override
             public void onShowed() {

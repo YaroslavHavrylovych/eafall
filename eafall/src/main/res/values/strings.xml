@@ -139,6 +139,8 @@
     <string name="app_name">EaFall</string>
     <string name="exit">Exit</string>
     <string name="back">Back</string>
+    <string name="exit_click">Double click to exit</string>
+    <string name="exit_loading">You can\'t quite during loading</string>
     <string name="connect">Connect</string>
     <string name="orbital_station">Orbital station</string>
     <string name="unmovable">Unmovable</string>
