@@ -1,5 +1,6 @@
 package com.gmail.yaroslavlancelot.eafall.game;
 
+import android.app.Dialog;
 import android.widget.Toast;
 
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
@@ -10,12 +11,16 @@ import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.gmail.yaroslavlancelot.eafall.game.camera.EaFallCamera;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.endgame.GameCloseEvent;
 import com.gmail.yaroslavlancelot.eafall.game.resources.IResourcesLoader;
 import com.gmail.yaroslavlancelot.eafall.game.resources.ResourceFactory;
 import com.gmail.yaroslavlancelot.eafall.game.scene.SceneManager;
 import com.gmail.yaroslavlancelot.eafall.game.scene.hud.EaFallHud;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
+import com.gmail.yaroslavlancelot.eafall.game.visual.dialogs.ExitConfirmationDialog;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
+import com.gmail.yaroslavlancelot.eafall.general.EbSubscribersHolder;
+import com.gmail.yaroslavlancelot.eafall.general.SelfCleanable;
 import com.gmail.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 
 import org.andengine.engine.handler.timer.ITimerCallback;
@@ -58,6 +63,8 @@ public abstract class EaFallActivity extends BaseGameActivity {
     protected IResourcesLoader mResourcesLoader;
     /** exit with double click */
     private long mBackButtonLastClick = 0;
+    /**  */
+    private TimerHandler mExitHintHandler;
 
     @Override
     public EngineOptions onCreateEngineOptions() {
@@ -99,6 +106,8 @@ public abstract class EaFallActivity extends BaseGameActivity {
         audioOptions.setNeedsSound(EaFallApplication.getConfig().isSoundsEnabled());
         //music
         audioOptions.setNeedsMusic(EaFallApplication.getConfig().isMusicEnabled());
+        //game resources
+        EbSubscribersHolder.register(this);
         return engineOptions;
     }
 
@@ -130,6 +139,7 @@ public abstract class EaFallActivity extends BaseGameActivity {
         }
         onPopulateSceneCallback.onPopulateSceneFinished();
 
+        initExitHint();
         startAsyncResourceLoading();
     }
 
@@ -151,37 +161,77 @@ public abstract class EaFallActivity extends BaseGameActivity {
 
     @Override
     public void onBackPressed() {
+        long time = System.currentTimeMillis();
+        long delta = time - mBackButtonLastClick;
+
+        if (delta < 600) {
+            mEngine.unregisterUpdateHandler(mExitHintHandler);
+            checkedGameClose();
+            return;
+        } else if (delta > 1500) {
+            LoggerHelper.printVerboseMessage(TAG, "back button double click delta=" + delta);
+            mEngine.unregisterUpdateHandler(mExitHintHandler);
+            mExitHintHandler.reset();
+            mEngine.registerUpdateHandler(mExitHintHandler);
+        } else {
+            mEngine.unregisterUpdateHandler(mExitHintHandler);
+        }
+        mBackButtonLastClick = time;
+    }
+
+    @Override
+    public void finish() {
+        SelfCleanable.clearMemory();
+        super.finish();
+    }
+
+    private void initExitHint() {
+        mExitHintHandler = new TimerHandler(1,
+                new ITimerCallback() {
+                    @Override
+                    public void onTimePassed(final TimerHandler pTimerHandler) {
+                        mEngine.unregisterUpdateHandler(pTimerHandler);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(EaFallActivity.this,
+                                        LocaleImpl.getInstance().getStringById(R.string.exit_click),
+                                        Toast.LENGTH_SHORT)
+                                        .show();
+                            }
+                        });
+                    }
+                });
+    }
+
+    @SuppressWarnings("unused")
+    public void onEvent(GameCloseEvent gameCloseEvent) {
+        checkedGameClose();
+    }
+
+    /**
+     * Check the current game state before close the game.
+     * Can show alert (to confirm game closing)
+     * or prevent closing if resource loading in progress (as it can cause crashes).
+     */
+    protected void checkedGameClose() {
         boolean resourcesLoaded = GameState.isResourcesLoaded();
         LoggerHelper.printVerboseMessage(TAG,
                 "back button click. Resources loaded=" + resourcesLoaded);
-        if (resourcesLoaded) {
-            long time = System.currentTimeMillis();
-            long delta = time - mBackButtonLastClick;
-            LoggerHelper.printVerboseMessage(TAG, "back button double click delta=" + delta);
-            mEngine.registerUpdateHandler(new TimerHandler(1,
-                    new ITimerCallback() {
-                        @Override
-                        public void onTimePassed(final TimerHandler pTimerHandler) {
-                            mEngine.unregisterUpdateHandler(pTimerHandler);
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(EaFallActivity.this,
-                                            LocaleImpl.getInstance().getStringById(R.string.exit_click),
-                                            Toast.LENGTH_SHORT)
-                                            .show();
-                                }
-                            });
-                        }
-                    }));
-            mBackButtonLastClick = time;
-            if (delta < 600 && delta > 0) {
-                finish();
-            }
-        } else {
+        if (GameState.isGameEnded()) {
+            finish();
+        } else if (!resourcesLoaded) {
             Toast.makeText(this,
-                    LocaleImpl.getInstance().getStringById(R.string.exit_click),
+                    LocaleImpl.getInstance().getStringById(R.string.exit_loading),
                     Toast.LENGTH_LONG).show();
+        } else {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Dialog dialog = new ExitConfirmationDialog(EaFallActivity.this);
+                    dialog.show();
+                }
+            });
         }
     }
 

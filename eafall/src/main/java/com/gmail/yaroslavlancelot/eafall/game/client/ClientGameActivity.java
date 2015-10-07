@@ -35,7 +35,7 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.defence.Def
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.filtering.EnemiesFilterFactory;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.OffenceUnit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.PathHelper;
-import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.endgame.GameEndedEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.endgame.GameOverEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.AbstractSpriteEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.AttachSpriteEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.DetachSpriteEvent;
@@ -54,7 +54,6 @@ import com.gmail.yaroslavlancelot.eafall.game.rule.IRuler;
 import com.gmail.yaroslavlancelot.eafall.game.rule.RulesFactory;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 import com.gmail.yaroslavlancelot.eafall.game.touch.ICameraHandler;
-import com.gmail.yaroslavlancelot.eafall.general.EbSubscribersHolder;
 
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.entity.Entity;
@@ -103,8 +102,6 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
 
     @Override
     protected void loadResources() {
-        //game resources
-        EbSubscribersHolder.register(ClientGameActivity.this);
         //alliance and player
         createAlliances();
         createPlayers();
@@ -416,10 +413,10 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
     }
 
     @SuppressWarnings("unused")
-    public void onEvent(final GameEndedEvent gameEndedEvent) {
+    public void onEvent(final GameOverEvent gameOverEvent) {
         GameOverPopup popup = new GameOverPopup(mHud, mCamera, getVertexBufferObjectManager());
         pause(true);
-        popup.setSuccess(gameEndedEvent.isSuccess());
+        popup.setSuccess(mRuler.isSuccess());
         popup.setStateChangeListener(new IRollingPopup.StateChangingListener() {
             @Override
             public void onShowed() {

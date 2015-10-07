@@ -139,11 +139,15 @@
     <string name="app_name">Космічні Загарбники</string>
     <string name="exit">Вихід</string>
     <string name="back">Назад</string>
+    <string name="yes">Так</string>
+    <string name="no">Ні</string>
     <string name="exit_click">Подвійний клік, щоб вийти</string>
     <string name="exit_loading">Не можна вийти під час завантаження</string>
     <string name="connect">З’єднати</string>
     <string name="orbital_station">Орбітальна станція</string>
     <string name="unmovable">Нерухомий</string>
+    <string name="exit_confirmation">Ви дійсно хочете вийти?</string>
+    <string name="exit_dialog_title">Вихід</string>
 
     <!-- network game -->
     <string name="create_game">Створити гру</string>

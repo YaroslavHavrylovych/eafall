@@ -7,7 +7,8 @@ package com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.endgame;
  *
  * @author Yaroslav Havrylovych
  */
-public class GameEndedEvent {
+//TODO we can avoid using this class (close game event has to be enough)
+public class GameOverEvent {
     // ===========================================================
     // Constants
     // ===========================================================
@@ -15,27 +16,16 @@ public class GameEndedEvent {
     // ===========================================================
     // Fields
     // ===========================================================
-    /** if true does means that current game/mission is over and rules are succeed (i.e. you win) */
-    private boolean mSuccess;
 
     // ===========================================================
     // Constructors
     // ===========================================================
-    public GameEndedEvent(boolean success) {
-        mSuccess = success;
+    public GameOverEvent() {
     }
 
     // ===========================================================
     // Getter & Setter
     // ===========================================================
-
-    /**
-     * if true than user does win this game and false in other case
-     */
-    public boolean isSuccess() {
-        return mSuccess;
-    }
-
 
     // ===========================================================
     // Methods for/from SuperClass/Interfaces
