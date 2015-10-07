@@ -192,9 +192,10 @@ public class CampaignActivity extends EaFallActivity {
     }
 
     private void initStartButton() {
-        mStartButton = new TextButton(getVertexBufferObjectManager(),
+        mStartButton = new TextButton(
+                SizeConstants.CAMPAIGN_START_BUTTON_X, SizeConstants.CAMPAIGN_START_BUTTON_Y,
                 SizeConstants.CAMPAIGN_START_BUTTON_WIDTH, SizeConstants.CAMPAIGN_START_BUTTON_HEIGHT,
-                SizeConstants.CAMPAIGN_START_BUTTON_X, SizeConstants.CAMPAIGN_START_BUTTON_Y);
+                getVertexBufferObjectManager());
         mStartButton.setVisible(false);
         mHud.attachChild(mStartButton);
         mStartButton.setOnClickListener(new ButtonSprite.OnClickListener() {

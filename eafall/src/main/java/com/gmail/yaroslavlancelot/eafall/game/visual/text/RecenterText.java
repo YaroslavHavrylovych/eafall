@@ -1,5 +1,7 @@
 package com.gmail.yaroslavlancelot.eafall.game.visual.text;
 
+import com.gmail.yaroslavlancelot.eafall.general.locale.LocaleImpl;
+
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.entity.text.exception.OutOfCharactersException;
@@ -89,6 +91,10 @@ public class RecenterText extends Text {
 
     public RecenterText(float pX, float pY, IFont pFont, CharSequence pText, int pCharactersMaximum, TextOptions pTextOptions, ITextVertexBufferObject pTextVertexBufferObject, ShaderProgram pShaderProgram) {
         super(pX, pY, pFont, pText, pCharactersMaximum, pTextOptions, pTextVertexBufferObject, pShaderProgram);
+    }
+
+    public void setText(int id) throws OutOfCharactersException {
+        setText(LocaleImpl.getInstance().getStringById(id));
     }
 
     @Override

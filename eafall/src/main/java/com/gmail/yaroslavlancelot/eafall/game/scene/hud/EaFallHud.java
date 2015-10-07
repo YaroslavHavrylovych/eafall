@@ -51,8 +51,8 @@ public class EaFallHud extends HUD {
     // ===========================================================
     // Fields
     // ===========================================================
-    private ArrayList<HudGameValue> mLeftPart = new ArrayList<HudGameValue>(3);
-    private ArrayList<HudGameValue> mRightPart = new ArrayList<HudGameValue>(3);
+    private ArrayList<HudGameValue> mLeftPart = new ArrayList<>(3);
+    private ArrayList<HudGameValue> mRightPart = new ArrayList<>(3);
 
     // ===========================================================
     // Constructors
@@ -86,10 +86,10 @@ public class EaFallHud extends HUD {
     // Methods
     // ===========================================================
 
-    private void initPopups(IPlayer player, Camera camera, VertexBufferObjectManager objectManager) {
-        RollingPopupManager.init(player.getName(), this, camera, objectManager);
+    private void initPopups(IPlayer player, Camera camera, VertexBufferObjectManager vboManager) {
+        RollingPopupManager.init(player.getName(), this, camera, vboManager);
         //constructions button
-        ConstructionPopupButton button = new ConstructionPopupButton(objectManager);
+        ConstructionPopupButton button = new ConstructionPopupButton(vboManager);
         button.setOnClickListener(new ButtonSprite.OnClickListener() {
             @Override
             public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {

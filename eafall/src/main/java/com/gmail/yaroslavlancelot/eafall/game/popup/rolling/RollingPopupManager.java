@@ -2,10 +2,10 @@ package com.gmail.yaroslavlancelot.eafall.game.popup.rolling;
 
 import android.content.Context;
 
-import com.gmail.yaroslavlancelot.eafall.game.popup.GameOverPopup;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.construction.ConstructionsPopup;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.DescriptionPopup;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.menu.MenuPopup;
+import com.gmail.yaroslavlancelot.eafall.general.SelfCleanable;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.Scene;
@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /** init and handel all application popups logic */
-public class RollingPopupManager {
+public class RollingPopupManager extends SelfCleanable {
     private static RollingPopupManager sRollingPopupManager;
     private Map<String, IRollingPopup> mPopups = new HashMap<>(3);
 
@@ -47,6 +47,12 @@ public class RollingPopupManager {
         return null;
     }
 
+    @Override
+    public void clear() {
+        mPopups.clear();
+        sRollingPopupManager = null;
+    }
+
     public static void loadResource(Context context, TextureManager textureManager) {
         ConstructionsPopup.loadResource(context, textureManager);
         DescriptionPopup.loadResources(context, textureManager);
@@ -55,7 +61,6 @@ public class RollingPopupManager {
 
     public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
         DescriptionPopup.loadFonts(fontManager, textureManager);
-        GameOverPopup.loadFonts(fontManager, textureManager);
     }
 
     /**

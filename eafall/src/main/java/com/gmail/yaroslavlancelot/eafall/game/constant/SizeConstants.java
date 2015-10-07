@@ -78,7 +78,6 @@ public final class SizeConstants {
     public static final int MENU_POPUP_BUTTON_HEIGHT = 250;
     public static final int MENU_POPUP_FIRST_BUTTON_Y = 30;
 
-
     /* description popup */
     // general
     public static final int DESCRIPTION_POPUP_HEIGHT = 620;

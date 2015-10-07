@@ -151,11 +151,10 @@ public class MenuPopup extends RollingPopup {
         float width = SizeConstants.MENU_POPUP_BUTTON_WIDTH;
         float popup_height = SizeConstants.MENU_POPUP_HEIGHT;
         float popup_width = SizeConstants.MENU_POPUP_WIDTH;
-        TextButton button = new TextButton(vboManager,
-                (ITiledTextureRegion) TextureRegionHolder.getRegion(StringConstants.FILE_MENU_POPUP_BUTTON),
-                width, height, popup_width / 2,
-                popup_height - SizeConstants.MENU_POPUP_FIRST_BUTTON_Y
-                        - height / 2 - position * height);
+        TextButton button = new TextButton(popup_width / 2,
+                popup_height - SizeConstants.MENU_POPUP_FIRST_BUTTON_Y - height / 2 - position * height,
+                width, height, (ITiledTextureRegion) TextureRegionHolder
+                .getRegion(StringConstants.FILE_MENU_POPUP_BUTTON), vboManager);
         button.setFixedSize(true);
         button.setText(LocaleImpl.getInstance().getStringById(stringId));
         return button;

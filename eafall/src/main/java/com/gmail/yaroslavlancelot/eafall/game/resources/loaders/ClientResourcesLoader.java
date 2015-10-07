@@ -15,6 +15,7 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.health.PlayerHealthBar;
 import com.gmail.yaroslavlancelot.eafall.game.entity.health.UnitHealthBar;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
+import com.gmail.yaroslavlancelot.eafall.game.popup.GameOverPopup;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.RollingPopupManager;
 import com.gmail.yaroslavlancelot.eafall.game.scene.hud.EaFallHud;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.MenuPopupButton;
@@ -74,6 +75,7 @@ public class ClientResourcesLoader extends BaseResourceLoader {
     public void loadFonts(TextureManager textureManager, FontManager fontManager) {
         EaFallHud.loadFonts(fontManager, textureManager);
         RollingPopupManager.loadFonts(fontManager, textureManager);
+        GameOverPopup.loadFonts(fontManager, textureManager);
     }
 
     @Override
@@ -141,7 +143,6 @@ public class ClientResourcesLoader extends BaseResourceLoader {
                 textureAtlas, EaFallApplication.getContext(), 0, y);
 
         textureAtlas.load();
-        //TODO check the situation when units doesn't have health bar
         SpriteGroup spriteGroup = new SpriteGroup(textureAtlas,
                 mMovableUnitsLimit * 4, vertexBufferObjectManager);
         SpriteGroupHolder.addGroup(BatchingKeys.BULLET_AND_HEALTH, spriteGroup);

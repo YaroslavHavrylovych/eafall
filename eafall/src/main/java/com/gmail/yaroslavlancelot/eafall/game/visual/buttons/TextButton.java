@@ -31,10 +31,11 @@ public class TextButton extends ButtonSprite {
     private boolean mFixedSize = false;
 
     public TextButton(VertexBufferObjectManager vboManager, float width, float height) {
-        this(vboManager, width, height, 0, 0);
+        this(0, 0, width, height, vboManager);
     }
 
-    public TextButton(VertexBufferObjectManager vboManager, ITiledTextureRegion textureRegion, float width, float height, float x, float y) {
+    public TextButton(float x, float y, float width, float height,
+                      ITiledTextureRegion textureRegion, VertexBufferObjectManager vboManager) {
         super(x, y, textureRegion, vboManager);
         setWidth(width);
         setHeight(height);
@@ -43,10 +44,9 @@ public class TextButton extends ButtonSprite {
         attachChild(mText);
     }
 
-    public TextButton(VertexBufferObjectManager vboManager, float width, float height, float x, float y) {
-        this(vboManager,
-                (ITiledTextureRegion) TextureRegionHolder.getInstance().getElement(StringConstants.FILE_GAME_BUTTON),
-                width, height, x, y);
+    public TextButton(float x, float y, float width, float height, VertexBufferObjectManager vboManager) {
+        this(x, y, width, height, (ITiledTextureRegion)
+                TextureRegionHolder.getRegion(StringConstants.FILE_GAME_BUTTON), vboManager);
     }
 
     private boolean isFixedSize() {
@@ -78,15 +78,7 @@ public class TextButton extends ButtonSprite {
     }
 
     public void setText(int textId) {
-        String text = LocaleImpl.getInstance().getStringById(textId);
-        if (text.equalsIgnoreCase(mText.getText().toString())) {
-            return;
-        }
-        mText.setText(text);
-        if (!mFixedSize) {
-            setWidth(mText.getWidth() + padding * 2);
-            mText.setX(getWidth() / 2);
-        }
+        setText(LocaleImpl.getInstance().getStringById(textId));
     }
 
     public static TextureAtlas loadResources(Context context, TextureManager textureManager) {
