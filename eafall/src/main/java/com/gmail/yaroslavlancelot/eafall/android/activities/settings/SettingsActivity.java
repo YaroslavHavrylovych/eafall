@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.android.activities.BaseNonGameActivity;
+import com.gmail.yaroslavlancelot.eafall.general.settings.SettingsFragment;
 
 /**
  * Settings Activity
@@ -33,7 +34,6 @@ public class SettingsActivity extends BaseNonGameActivity {
     }
 
     private void initBackButton(View backButton) {
-        if (backButton == null) return;
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

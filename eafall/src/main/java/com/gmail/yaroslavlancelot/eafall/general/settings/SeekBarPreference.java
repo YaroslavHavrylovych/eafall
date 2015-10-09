@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.eafall.android.activities.settings;
+package com.gmail.yaroslavlancelot.eafall.general.settings;
 
 import android.content.Context;
 import android.content.SharedPreferences;

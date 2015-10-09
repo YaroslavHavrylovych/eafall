@@ -40,6 +40,7 @@ import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.AbstractSp
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.AttachSpriteEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.DetachSpriteEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.PauseGameEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.ShowSettingsEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.CreateBuildingEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.unit.CreateDefenceUnitEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.periodic.Periodic;
@@ -54,6 +55,7 @@ import com.gmail.yaroslavlancelot.eafall.game.rule.IRuler;
 import com.gmail.yaroslavlancelot.eafall.game.rule.RulesFactory;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 import com.gmail.yaroslavlancelot.eafall.game.touch.ICameraHandler;
+import com.gmail.yaroslavlancelot.eafall.game.visual.dialogs.SettingsDialog;
 
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.entity.Entity;
@@ -410,6 +412,12 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
     /** attach entity to game scene */
     private void attachSprite(final BatchedSprite batchedSprite) {
         attachSprite(batchedSprite, SpriteGroupHolder.getGroup(batchedSprite.getSpriteGroupName()));
+    }
+
+    @SuppressWarnings("unused")
+    public void onEvent(ShowSettingsEvent event) {
+        SettingsDialog settingsDialog = new SettingsDialog();
+        settingsDialog.show(getFragmentManager(), SettingsDialog.KEY);
     }
 
     @SuppressWarnings("unused")
