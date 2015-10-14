@@ -3,8 +3,10 @@ package com.gmail.yaroslavlancelot.eafall.game.player;
 import android.util.SparseArray;
 
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
+import com.gmail.yaroslavlancelot.eafall.game.configuration.game.ApplicationSettings;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.mission.MissionConfig;
 import com.gmail.yaroslavlancelot.eafall.game.entity.AfterInitializationPool;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
@@ -16,13 +18,12 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitBuilder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.bonus.Bonus;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.defence.DefenceUnitBuilder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.OffenceUnit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.OffenceUnitBuilder;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.pool.OffenceUnitsPool;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.pool.DefenceUnitsPool;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.defence.DefenceUnitBuilder;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.pool.OffenceUnitsPool;
 import com.gmail.yaroslavlancelot.eafall.game.events.SharedEvents;
-import com.gmail.yaroslavlancelot.eafall.general.EbSubscribersHolder;
 
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -55,7 +56,7 @@ public class Player implements IPlayer {
     private final IAlliance mAlliance;
     private final AtomicBoolean mIsFirstIncome = new AtomicBoolean(true);
     /** object related to current player */
-    private final List<GameObject> mPlayerObjects;
+    private final List<Unit> mPlayerObjects;
     /** player maximum oxygen amount (can be varying depending on mission) */
     private final int mMaxOxygenAmount;
     /** player offence units limit */
@@ -88,6 +89,7 @@ public class Player implements IPlayer {
         initBuildingsTypes(alliance);
         mControlType = playerType;
         mPlayerFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f, false);
+        initSettingsCallbacks();
     }
 
     @Override
@@ -131,7 +133,7 @@ public class Player implements IPlayer {
     }
 
     @Override
-    public List<GameObject> getPlayerObjects() {
+    public List<Unit> getPlayerUnits() {
         return mPlayerObjects;
     }
 
@@ -226,7 +228,7 @@ public class Player implements IPlayer {
     }
 
     @Override
-    public void addObjectToPlayer(final GameObject object) {
+    public void addObjectToPlayer(final Unit object) {
         LoggerHelper.printVerboseMessage(TAG, String.format("Player(%s) object added", getName()));
         synchronized (mPlayerObjects) {
             mPlayerObjects.add(object);
@@ -276,6 +278,21 @@ public class Player implements IPlayer {
     public void changeFixtureDefFilter(short category, short maskBits) {
         mPlayerFixtureDef.filter.categoryBits = category;
         mPlayerFixtureDef.filter.maskBits = maskBits;
+    }
+
+    private void initSettingsCallbacks() {
+        final ApplicationSettings settings
+                = EaFallApplication.getConfig().getSettings();
+        settings.setOnConfigChangedListener(
+                settings.KEY_PREF_UNIT_HEALTH_BAR_BEHAVIOR,
+                new ApplicationSettings.ISettingsChangedListener() {
+                    @Override
+                    public void configChanged(final Object value) {
+                        for (Unit unit : mPlayerObjects) {
+                            unit.syncHealthBarBehaviour();
+                        }
+                    }
+                });
     }
 
     private void initBuildingsTypes(IAlliance alliance) {

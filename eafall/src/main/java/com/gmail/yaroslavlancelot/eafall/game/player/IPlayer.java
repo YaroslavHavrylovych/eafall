@@ -55,7 +55,7 @@ public interface IPlayer {
     void setEnemyPlayer(IPlayer enemyPlayer);
 
     /** get list of all {@link com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject} for the current player */
-    List<GameObject> getPlayerObjects();
+    List<Unit> getPlayerUnits();
 
     /** get current player name */
     String getName();
@@ -114,8 +114,10 @@ public interface IPlayer {
     /**
      * Add new {@link com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject}
      * to a player. If this is the unit, then bonuses will be added during this method.
+     *
+     * @param object
      */
-    void addObjectToPlayer(GameObject object);
+    void addObjectToPlayer(Unit object);
 
     /**
      * Remove {@link com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject}

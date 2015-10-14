@@ -9,6 +9,7 @@ import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.audio.BackgroundMusic;
 import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.gmail.yaroslavlancelot.eafall.game.camera.EaFallCamera;
+import com.gmail.yaroslavlancelot.eafall.game.configuration.game.ApplicationSettings;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.endgame.GameCloseEvent;
@@ -103,9 +104,9 @@ public abstract class EaFallActivity extends BaseGameActivity {
         //sound
         audioOptions.getSoundOptions().setMaxSimultaneousStreams(
                 EaFallApplication.getConfig().getMaxSimultaneousSoundStreams());
-        audioOptions.setNeedsSound(EaFallApplication.getConfig().isSoundsEnabled());
+        audioOptions.setNeedsSound(true);
         //music
-        audioOptions.setNeedsMusic(EaFallApplication.getConfig().isMusicEnabled());
+        audioOptions.setNeedsMusic(true);
         //game resources
         EbSubscribersHolder.register(this);
         return engineOptions;
@@ -115,13 +116,11 @@ public abstract class EaFallActivity extends BaseGameActivity {
     public void onCreateResources(OnCreateResourcesCallback onCreateResourcesCallback) {
         LoggerHelper.methodInvocation(TAG, "onCreateResources");
 
-        if (EaFallApplication.getConfig().isProfilingEnabled()) {
-            mResourcesLoader.loadProfilingFonts(getTextureManager(), getFontManager());
-        }
+        mResourcesLoader.loadProfilingFonts(getTextureManager(), getFontManager());
         mResourcesLoader.loadSplashImages(getTextureManager(), getVertexBufferObjectManager());
-        //init sounds
-        boolean sound = EaFallApplication.getConfig().isSoundsEnabled();
-        SoundFactory.init(sound ? getSoundManager() : null);
+        //sound && music
+        SoundFactory.init(getSoundManager());
+        mBackgroundMusic = new BackgroundMusic(createMusicPath(), getMusicManager(), this);
         onCreateResourcesCallback.onCreateResourcesFinished();
     }
 
@@ -134,9 +133,7 @@ public abstract class EaFallActivity extends BaseGameActivity {
 
     @Override
     public void onPopulateScene(Scene scene, OnPopulateSceneCallback onPopulateSceneCallback) {
-        if (EaFallApplication.getConfig().isProfilingEnabled()) {
-            profile();
-        }
+        profile();
         onPopulateSceneCallback.onPopulateSceneFinished();
 
         initExitHint();
@@ -146,17 +143,13 @@ public abstract class EaFallActivity extends BaseGameActivity {
     @Override
     public void onResumeGame() {
         super.onResumeGame();
-        if (mBackgroundMusic != null) {
-            mBackgroundMusic.playBackgroundMusic();
-        }
+        mBackgroundMusic.playBackgroundMusic();
     }
 
     @Override
     public void onPauseGame() {
         super.onPauseGame();
-        if (mBackgroundMusic != null) {
-            mBackgroundMusic.pauseBackgroundMusic();
-        }
+        mBackgroundMusic.pauseBackgroundMusic();
     }
 
     @Override
@@ -184,6 +177,8 @@ public abstract class EaFallActivity extends BaseGameActivity {
         SelfCleanable.clearMemory();
         super.finish();
     }
+
+    protected abstract String createMusicPath();
 
     private void initExitHint() {
         mExitHintHandler = new TimerHandler(1,
@@ -298,12 +293,32 @@ public abstract class EaFallActivity extends BaseGameActivity {
                 "fps: 60.00", 20, getVertexBufferObjectManager());
         fpsText.setColor(Color.GREEN);
         mHud.attachChild(fpsText);
-        mEngine.registerUpdateHandler(new FPSLogger(1) {
+        final FPSLogger fpsLogger = new FPSLogger(1) {
             @Override
             protected void onLogFPS() {
                 fpsText.setText(String.format("fps: %.2f", this.mFrames / this.mSecondsElapsed));
             }
-        });
+        };
+        ApplicationSettings settings = EaFallApplication.getConfig().getSettings();
+        settings.setOnConfigChangedListener(settings.KEY_PREF_DEVELOPERS_MODE,
+                new ApplicationSettings.ISettingsChangedListener() {
+                    @Override
+                    public void configChanged(final Object value) {
+                        boolean bValue = (Boolean) value;
+                        fpsText.setVisible(bValue);
+                        if (bValue) {
+                            mEngine.registerUpdateHandler(fpsLogger);
+                        } else {
+                            mEngine.unregisterUpdateHandler(fpsLogger);
+                        }
+                    }
+                }
+        );
+        boolean enabled = settings.isProfilingEnabled();
+        fpsText.setVisible(enabled);
+        if (enabled) {
+            mEngine.registerUpdateHandler(fpsLogger);
+        }
     }
 
     /** triggers when all initialized, splash showed and you can load resources */

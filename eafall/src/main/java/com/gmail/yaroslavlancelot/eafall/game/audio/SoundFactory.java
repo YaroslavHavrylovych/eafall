@@ -1,7 +1,5 @@
 package com.gmail.yaroslavlancelot.eafall.game.audio;
 
-import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
-
 import org.andengine.audio.sound.SoundManager;
 
 /**
@@ -17,9 +15,6 @@ public class SoundFactory {
     }
 
     public static SoundOperations init(SoundManager soundManager) {
-        if (EaFallApplication.getConfig().isSoundsEnabled()) {
-            return sSoundOperations = new SoundOperationsImpl(soundManager);
-        }
-        return sSoundOperations = new SoundDisabledOperationsImpl();
+        return sSoundOperations = new SoundOperationsImpl(soundManager);
     }
 }

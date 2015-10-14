@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
+import com.gmail.yaroslavlancelot.eafall.game.configuration.game.ApplicationSettings;
 import com.gmail.yaroslavlancelot.eafall.game.touch.ICameraHandler;
 
 import org.andengine.audio.sound.SoundFactory;
@@ -22,11 +23,13 @@ public class SoundOperationsImpl implements SoundOperations {
     private SoundManager mSoundManager;
     private Context mContext;
     private ICameraHandler mCameraHandler;
+    //TODO we can load/unload sounds at runtime
+    private boolean mSoundDisabled;
 
     SoundOperationsImpl(SoundManager soundManager) {
         mSoundManager = soundManager;
         mContext = EaFallApplication.getContext();
-        setMasterVolume(EaFallApplication.getConfig().getSoundVolumeMax());
+        initSettingsCallbacks();
     }
 
     @Override
@@ -46,6 +49,10 @@ public class SoundOperationsImpl implements SoundOperations {
 
     @Override
     public void playSound(final LimitedSoundWrapper sound, final float x, final float y) {
+        if (mSoundDisabled) {
+            return;
+        }
+
         if (!(MathUtils.isInBounds(mCameraHandler.getMinX(), mCameraHandler.getMaxX(), x)
                 && MathUtils.isInBounds(mCameraHandler.getMinY(), mCameraHandler.getMaxY(), y))) {
             return;
@@ -56,7 +63,32 @@ public class SoundOperationsImpl implements SoundOperations {
 
     @Override
     public void playSound(LimitedSoundWrapper sound) {
+        if (mSoundDisabled) {
+            return;
+        }
         sound.checkedPlay();
+    }
+
+    private void initSettingsCallbacks() {
+        final ApplicationSettings settings
+                = EaFallApplication.getConfig().getSettings();
+        boolean enable = settings.isSoundsEnabled();
+        mSoundDisabled = !enable;
+        settings.setOnConfigChangedListener(EaFallApplication.getConfig().getSettings().KEY_PREF_SOUNDS,
+                new ApplicationSettings.ISettingsChangedListener() {
+                    @Override
+                    public void configChanged(final Object value) {
+                        mSoundDisabled = !((Boolean) value);
+                    }
+                });
+        settings.setOnConfigChangedListener(EaFallApplication.getConfig().getSettings().KEY_PREF_SOUNDS_VOLUME,
+                new ApplicationSettings.ISettingsChangedListener() {
+                    @Override
+                    public void configChanged(final Object value) {
+                        setMasterVolume((Float) value);
+                    }
+                });
+        setMasterVolume(settings.getSoundVolumeMax());
     }
 
     public static LimitedSoundWrapper getSound(String path, Context context, SoundManager soundManager) {

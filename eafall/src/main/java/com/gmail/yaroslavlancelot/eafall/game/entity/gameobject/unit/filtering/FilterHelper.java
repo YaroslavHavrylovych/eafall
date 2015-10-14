@@ -32,10 +32,10 @@ public class FilterHelper {
      * @return list of all unit enemies in the given area
      */
     static List<GameObject> getEnemiesInRangeForUnit(final Unit unit, int range, IPlayer enemyPlayer) {
-        List<GameObject> enemies = enemyPlayer.getPlayerObjects();
+        List<Unit> enemies = enemyPlayer.getPlayerUnits();
         //TODO prevent new array creation. Use (or pass) existing as if using this method in
         //update cycle can cause arrays overhead
-        List<GameObject> enemiesInView = new ArrayList<GameObject>(5);
+        List<GameObject> enemiesInView = new ArrayList<>(5);
         for (GameObject enemy : enemies) {
             if (PathHelper.getDistanceBetweenPoints(enemy.getX(), enemy.getY(),
                     unit.getX(), unit.getY()) < range)
@@ -52,7 +52,7 @@ public class FilterHelper {
      * @return enemy unit in range or null if there is no such unit
      */
     static GameObject getEnemy(final Unit unit, int range, IPlayer enemyPlayer) {
-        for (GameObject enemy : enemyPlayer.getPlayerObjects()) {
+        for (GameObject enemy : enemyPlayer.getPlayerUnits()) {
             if (checkRange(range, enemy.getX(), enemy.getY(),
                     unit.getX(), unit.getY())) {
                 return enemy;
@@ -71,7 +71,7 @@ public class FilterHelper {
     static GameObject getClosestEnemy(final Unit unit, int range, IPlayer enemyPlayer) {
         GameObject closestEnemy = null;
         float smallestDistance = 0f;
-        for (GameObject enemy : enemyPlayer.getPlayerObjects()) {
+        for (GameObject enemy : enemyPlayer.getPlayerUnits()) {
             float distance =
                     PathHelper.getDistanceBetweenPoints(
                             enemy.getX(), enemy.getY(), unit.getX(), unit.getY());

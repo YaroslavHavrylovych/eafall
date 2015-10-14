@@ -6,7 +6,6 @@ import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.EaFallActivity;
-import com.gmail.yaroslavlancelot.eafall.game.audio.BackgroundMusic;
 import com.gmail.yaroslavlancelot.eafall.game.audio.LimitedSoundWrapper;
 import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.gmail.yaroslavlancelot.eafall.game.campaign.intents.CampaignIntent;
@@ -54,7 +53,6 @@ public class CampaignActivity extends EaFallActivity {
     private Sprite mSelectImage;
     private TextButton mStartButton;
 
-
     @Override
     public EngineOptions onCreateEngineOptions() {
         LoggerHelper.methodInvocation(this.toString(), "onCreateEngineOptions");
@@ -70,19 +68,17 @@ public class CampaignActivity extends EaFallActivity {
         // wouldn't reload this sounds when reloading the campaign screen
         //sound
         mSelectSound = SoundFactory.getInstance().loadSound("audio/sound/select.ogg");
-        //music
-        if (EaFallApplication.getConfig().isMusicEnabled()) {
-            mBackgroundMusic = new BackgroundMusic(
-                    StringConstants.getMusicPath() + "background_1.ogg",
-                    getMusicManager(), CampaignActivity.this);
-            mBackgroundMusic.initBackgroundMusic();
-        }
     }
 
     @Override
     public void onPopulateScene(Scene scene, OnPopulateSceneCallback onPopulateSceneCallback) {
         LoggerHelper.methodInvocation(this.toString(), "onPopulateScene");
         super.onPopulateScene(scene, onPopulateSceneCallback);
+    }
+
+    @Override
+    protected String createMusicPath() {
+        return StringConstants.getMusicPath() + "background_1.ogg";
     }
 
     @Override

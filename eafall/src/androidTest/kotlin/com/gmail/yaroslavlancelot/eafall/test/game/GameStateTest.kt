@@ -3,6 +3,7 @@ package com.gmail.yaroslavlancelot.eafall.test.game
 import android.test.AndroidTestCase
 import com.gmail.yaroslavlancelot.eafall.game.EaFallActivity
 import com.gmail.yaroslavlancelot.eafall.game.GameState
+import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants
 import com.gmail.yaroslavlancelot.eafall.game.scene.SceneManager
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene
 import kotlin.test.assertFalse
@@ -16,12 +17,14 @@ import kotlin.test.assertTrue
 class GameStateTest : AndroidTestCase() {
     val testGameActivity = TestActivity();
 
+    //#1
     fun testReset() {
-        resetState()
+        checkInitializationState()
     }
 
+    //#2
     fun testStates() {
-        resetState()
+        checkInitializationState()
 
         testGameActivity.startAsyncResourceLoading()
         assertTrue(GameState.getState() == GameState.State.RESOURCE_LOADING,
@@ -43,20 +46,27 @@ class GameStateTest : AndroidTestCase() {
                 "GameState.isResourcesLoaded() doesn't work as it should")
         assertTrue(GameState.isGameEnded(),
                 "GameState.isGameEnded() doesn't work as it should")
-        testGameActivity.setState(GameState.State.INITIALIZATION)
-        assertFalse(GameState.isResourcesLoaded(),
-                "GameState.isResourcesLoaded() doesn't work as it should")
     }
 
-    fun resetState() {
-        testGameActivity.setState(GameState.State.INITIALIZATION)
+    /** will work only if current game state is {@link GameState.State.INITIALIZATION} */
+    fun checkInitializationState() {
         assertTrue(GameState.getState() == GameState.State.INITIALIZATION,
                 "game state has to be INITIALIZED after reset")
         assertFalse(GameState.isResourcesLoaded(),
                 "GameState.isResourcesLoaded() doesn't work as it should")
+        assertFalse(GameState.isGameEnded(),
+                "GameState.isResourcesLoaded() doesn't work as it should")
+        assertFalse(GameState.isPaused(),
+                "GameState.isResourcesLoaded() doesn't work as it should")
+        assertFalse(GameState.isResumed(),
+                "GameState.isResourcesLoaded() doesn't work as it should")
     }
 
     protected class TestActivity : EaFallActivity {
+        override fun createMusicPath(): String? {
+            return StringConstants.getMusicPath() + "background_1.ogg";
+        }
+
         constructor() {
             mSceneManager = DummySceneManager(this)
         }

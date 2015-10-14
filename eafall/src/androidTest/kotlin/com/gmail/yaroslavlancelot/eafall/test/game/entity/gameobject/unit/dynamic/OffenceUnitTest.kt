@@ -5,10 +5,13 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.OffenceUnit
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.OffenceUnitBuilder
+import com.gmail.yaroslavlancelot.eafall.game.entity.health.IHealthBar
+import com.gmail.yaroslavlancelot.eafall.game.entity.health.UnitHealthBar
 import com.gmail.yaroslavlancelot.eafall.test.game.entity.gameobject.unit.UnitTest
 import org.andengine.engine.handler.IUpdateHandler
 import org.andengine.entity.modifier.RotationModifier
 import org.andengine.opengl.texture.region.TextureRegion
+import org.andengine.opengl.vbo.VertexBufferObjectManager
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -57,19 +60,24 @@ public class OffenceUnitTest : UnitTest() {
         }
 
         override public fun getAngle(x: Float, y: Float): Int {
-            return super<OffenceUnit>.getAngle(x, y)
+            return super.getAngle(x, y)
         }
 
         override public fun needRotation(angle: Int): Boolean {
-            return super<OffenceUnit>.needRotation(angle)
+            return super.needRotation(angle)
         }
 
         override public fun rotateWithAngle(angle: Int) {
-            super<OffenceUnit>.rotateWithAngle(angle)
+            super.rotateWithAngle(angle)
         }
 
         override fun getRotationModifier(): RotationModifier {
             return mUnitRotationModifier;
+        }
+
+        override fun createHealthBar(): IHealthBar? {
+            val health = UnitHealthBar(16f, mTextureRegion, VertexBufferObjectManager())
+            return health
         }
 
         override fun getUpdateHandler(): IUpdateHandler {

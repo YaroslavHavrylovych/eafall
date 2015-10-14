@@ -1,6 +1,6 @@
 package com.gmail.yaroslavlancelot.eafall.game.configuration;
 
-import com.gmail.yaroslavlancelot.eafall.game.configuration.game.ApplicationConfig;
+import com.gmail.yaroslavlancelot.eafall.game.configuration.game.ApplicationSettings;
 
 import org.andengine.util.adt.color.Color;
 
@@ -15,16 +15,6 @@ public interface IConfig {
 
     int getMaxSimultaneousSoundStreams();
 
-    boolean isProfilingEnabled();
-
-    boolean isSoundsEnabled();
-
-    float getMusicVolumeMax();
-
-    float getSoundVolumeMax();
-
-    boolean isMusicEnabled();
-
     int getUnitBuildingsLimit();
 
     int getWealthBuildingsLimit();
@@ -37,5 +27,5 @@ public interface IConfig {
 
     float getHudAlpha();
 
-    ApplicationConfig.UnitHealthBarBehavior getUnitHealthBarBehavior();
+    ApplicationSettings getSettings();
 }

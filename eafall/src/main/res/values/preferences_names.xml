@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pref_sounds_enabled">pref_key_game_sounds</string>
+    <string name="pref_sounds_volume">pref_key_game_sounds_volume</string>
+    <string name="pref_music_enabled">pref_key_music</string>
+    <string name="pref_music_volume">pref_key_music_volume</string>
+    <string name="pref_health_bar_behaviour">pref_key_unit_health_bar_behavior</string>
+    <string name="pref_dev_mode">pref_key_dev_mode</string>
+</resources>

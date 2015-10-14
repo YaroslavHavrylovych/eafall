@@ -6,13 +6,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.EaFallActivity;
 import com.gmail.yaroslavlancelot.eafall.game.GameState;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
-import com.gmail.yaroslavlancelot.eafall.game.audio.BackgroundMusic;
 import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.gmail.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder;
@@ -103,6 +101,11 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
     }
 
     @Override
+    protected String createMusicPath() {
+        return StringConstants.getMusicPath() + "background_1.ogg";
+    }
+
+    @Override
     protected void loadResources() {
         //alliance and player
         createAlliances();
@@ -112,13 +115,6 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
         //resources
         mResourcesLoader.loadImages(getTextureManager(), getVertexBufferObjectManager());
         mResourcesLoader.loadFonts(getTextureManager(), getFontManager());
-        //music
-        if (EaFallApplication.getConfig().isMusicEnabled()) {
-            mBackgroundMusic = new BackgroundMusic(
-                    StringConstants.getMusicPath() + "background_1.ogg",
-                    getMusicManager(), ClientGameActivity.this);
-            mBackgroundMusic.initBackgroundMusic();
-        }
         //whether or not the mission is bounded (timing)
         if (mMissionConfig.isTimerEnabled()) {
             mGamePeriodic.add(GameTime.getPeriodic(mMissionConfig.getTime()));

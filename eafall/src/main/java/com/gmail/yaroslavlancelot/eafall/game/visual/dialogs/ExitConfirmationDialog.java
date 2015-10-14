@@ -51,6 +51,7 @@ public class ExitConfirmationDialog extends Dialog {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
+                dismiss();
                 mEaFallActivity.finish();
             }
         });
@@ -60,7 +61,7 @@ public class ExitConfirmationDialog extends Dialog {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                ExitConfirmationDialog.this.dismiss();
+                dismiss();
             }
         });
     }
