@@ -29,16 +29,21 @@ public class MenuPopupButton extends ButtonSprite {
     // ===========================================================
     // Constructors
     // ===========================================================
-    public MenuPopupButton(final VertexBufferObjectManager vertexBufferObjectManager) {
-        super(SizeConstants.GAME_FIELD_WIDTH / 2,
+    public MenuPopupButton(final VertexBufferObjectManager vboManager) {
+        this(SizeConstants.GAME_FIELD_WIDTH / 2,
                 SizeConstants.GAME_FIELD_HEIGHT - SizeConstants.MENU_BUTTON_HEIGHT / 2,
-                (ITiledTextureRegion) TextureRegionHolder.getInstance()
-                        .getElement(StringConstants.FILE_MENU_BUTTON),
-                vertexBufferObjectManager);
-        setWidth(SizeConstants.MENU_BUTTON_WIDTH);
-        setHeight(SizeConstants.MENU_BUTTON_HEIGHT);
+                SizeConstants.MENU_BUTTON_WIDTH, SizeConstants.MENU_BUTTON_HEIGHT,
+                vboManager);
     }
 
+    public MenuPopupButton(int x, int y, int width, int height,
+                           VertexBufferObjectManager vboManager) {
+        super(x, y, (ITiledTextureRegion) TextureRegionHolder.getInstance()
+                        .getElement(StringConstants.FILE_MENU_BUTTON),
+                vboManager);
+        setWidth(width);
+        setHeight(height);
+    }
 
     // ===========================================================
     // Getter & Setter

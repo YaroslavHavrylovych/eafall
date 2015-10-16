@@ -6,7 +6,6 @@ import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.EaFallActivity;
-import com.gmail.yaroslavlancelot.eafall.game.audio.BackgroundMusic;
 import com.gmail.yaroslavlancelot.eafall.game.audio.LimitedSoundWrapper;
 import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.gmail.yaroslavlancelot.eafall.game.campaign.intents.CampaignIntent;
@@ -54,36 +53,37 @@ public class CampaignActivity extends EaFallActivity {
     private Sprite mSelectImage;
     private TextButton mStartButton;
 
-
     @Override
     public EngineOptions onCreateEngineOptions() {
+        LoggerHelper.methodInvocation(this.toString(), "onCreateEngineOptions");
         mCampaignFileName = getIntent().getExtras().getString(CampaignIntent.CAMPAIGN_FILE_NAME);
         return super.onCreateEngineOptions();
     }
 
     @Override
     public void onCreateResources(final OnCreateResourcesCallback onCreateResourcesCallback) {
+        LoggerHelper.methodInvocation(this.toString(), "onCreateResources");
         super.onCreateResources(onCreateResourcesCallback);
         // we loading sounds and music here and
         // wouldn't reload this sounds when reloading the campaign screen
         //sound
         mSelectSound = SoundFactory.getInstance().loadSound("audio/sound/select.ogg");
-        //music
-        if (EaFallApplication.getConfig().isMusicEnabled()) {
-            mBackgroundMusic = new BackgroundMusic(
-                    StringConstants.getMusicPath() + "background_1.ogg",
-                    getMusicManager(), CampaignActivity.this);
-            mBackgroundMusic.initBackgroundMusic();
-        }
     }
 
     @Override
     public void onPopulateScene(Scene scene, OnPopulateSceneCallback onPopulateSceneCallback) {
+        LoggerHelper.methodInvocation(this.toString(), "onPopulateScene");
         super.onPopulateScene(scene, onPopulateSceneCallback);
     }
 
     @Override
+    protected String createMusicPath() {
+        return StringConstants.getMusicPath() + "background_1.ogg";
+    }
+
+    @Override
     protected void loadResources() {
+        LoggerHelper.methodInvocation(this.toString(), "loadResources");
         mCampaignFileLoader = loadObjects(mCampaignFileName, CampaignFileLoader.class);
         //adding resources
         mResourcesLoader.addImage(mCampaignFileLoader.background,
@@ -99,23 +99,25 @@ public class CampaignActivity extends EaFallActivity {
         //loading resources
         mResourcesLoader.loadImages(getTextureManager(), getVertexBufferObjectManager());
         mResourcesLoader.loadFonts(getTextureManager(), getFontManager());
-        onResourcesLoaded();
     }
 
     @Override
     public void onResourcesLoaded() {
+        LoggerHelper.methodInvocation(this.toString(), "onResourcesLoaded");
         super.onResourcesLoaded();
         hideSplash();
     }
 
     @Override
     protected void initWorkingScene() {
+        LoggerHelper.methodInvocation(this.toString(), "initWorkingScene");
         mSceneManager.initWorkingScene(mCamera, mCampaignFileLoader.parallax_background);
         onPopulateWorkingScene(mSceneManager.getWorkingScene());
     }
 
     @Override
     protected void onPopulateWorkingScene(final EaFallScene scene) {
+        LoggerHelper.methodInvocation(this.toString(), "onPopulateWorkingScene");
         VertexBufferObjectManager vertexManager = getVertexBufferObjectManager();
         //background
         scene.setBackground(mCampaignFileLoader.background, vertexManager);
@@ -134,6 +136,12 @@ public class CampaignActivity extends EaFallActivity {
 
     @Override
     protected void onShowWorkingScene() {
+        LoggerHelper.methodInvocation(this.toString(), "onShowWorkingScene");
+    }
+
+    @Override
+    public String toString() {
+        return "campaign activity";
     }
 
     private List<Sprite> populateObjects(EaFallScene scene, VertexBufferObjectManager vertexManager) {
@@ -180,9 +188,10 @@ public class CampaignActivity extends EaFallActivity {
     }
 
     private void initStartButton() {
-        mStartButton = new TextButton(getVertexBufferObjectManager(),
+        mStartButton = new TextButton(
+                SizeConstants.CAMPAIGN_START_BUTTON_X, SizeConstants.CAMPAIGN_START_BUTTON_Y,
                 SizeConstants.CAMPAIGN_START_BUTTON_WIDTH, SizeConstants.CAMPAIGN_START_BUTTON_HEIGHT,
-                SizeConstants.CAMPAIGN_START_BUTTON_X, SizeConstants.CAMPAIGN_START_BUTTON_Y);
+                getVertexBufferObjectManager());
         mStartButton.setVisible(false);
         mHud.attachChild(mStartButton);
         mStartButton.setOnClickListener(new ButtonSprite.OnClickListener() {
@@ -207,20 +216,19 @@ public class CampaignActivity extends EaFallActivity {
     }
 
     private void updateCampaignActivity(final CampaignDataLoader campaignDataLoader) {
-        Thread thread = new Thread(new Runnable() {
+        LoggerHelper.methodInvocation(this.toString(), "updateCampaignActivity");
+        startAsyncResourceLoading(new Runnable() {
             @Override
             public void run() {
+                LoggerHelper.methodInvocation(this.toString(), "update campaign new thread started");
                 mResourcesLoader.loadSplashImages(getTextureManager(), getVertexBufferObjectManager());
                 mSceneManager.initSplashScene();
                 mSceneManager.showSplash();
                 mCampaignFileName = CampaignIntent.getPathToCampaign(campaignDataLoader.name);
                 mResourcesLoader.unloadImages(getTextureManager());
                 TextureRegionHolder.getInstance().clear();
-                loadResources();
             }
         });
-        thread.setDaemon(true);
-        thread.start();
     }
 
     /**

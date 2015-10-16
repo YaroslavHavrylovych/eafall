@@ -1,21 +1,15 @@
-package com.gmail.yaroslavlancelot.eafall.game.rule;
-
-import com.gmail.yaroslavlancelot.eafall.game.configuration.mission.MissionConfig;
-import com.gmail.yaroslavlancelot.eafall.game.rule.rules.Collect;
-import com.gmail.yaroslavlancelot.eafall.game.rule.rules.Survive;
-import com.gmail.yaroslavlancelot.eafall.game.rule.rules.Win;
+package com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame;
 
 /**
- * Instantiate game rules based on mission data.
- * <br/>
- * Check {@link IRuler} for more information about rules
+ * Used to trigger settings from the game menu.
  *
  * @author Yaroslav Havrylovych
  */
-public class RulesFactory {
+public class ShowSettingsEvent {
     // ===========================================================
     // Constants
     // ===========================================================
+    private static final ShowSettingsEvent SHOW_SETTINGS = new ShowSettingsEvent();
 
     // ===========================================================
     // Fields
@@ -24,10 +18,15 @@ public class RulesFactory {
     // ===========================================================
     // Constructors
     // ===========================================================
+    private ShowSettingsEvent() {
+    }
 
     // ===========================================================
     // Getter & Setter
     // ===========================================================
+    public static ShowSettingsEvent getInstance() {
+        return SHOW_SETTINGS;
+    }
 
     // ===========================================================
     // Methods for/from SuperClass/Interfaces
@@ -36,20 +35,6 @@ public class RulesFactory {
     // ===========================================================
     // Methods
     // ===========================================================
-    public static IRuler createRuler(MissionConfig.MissionType type, int value, boolean timer) {
-        switch (type) {
-            case WIN: {
-                return new Win(type, timer);
-            }
-            case SURVIVE: {
-                return new Survive(type);
-            }
-            case COLLECT: {
-                return new Collect(type, value, timer);
-            }
-        }
-        throw new IllegalArgumentException("unknown rule " + type);
-    }
 
     // ===========================================================
     // Inner and Anonymous Classes

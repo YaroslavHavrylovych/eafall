@@ -4,7 +4,7 @@ import com.gmail.yaroslavlancelot.eafall.game.configuration.mission.MissionConfi
 import com.gmail.yaroslavlancelot.eafall.game.entity.BodiedSprite;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IDestroyListener;
 import com.gmail.yaroslavlancelot.eafall.game.events.SharedEvents;
-import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.endgame.GameEndedEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.endgame.GameOverEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.periodic.time.GameTime;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
@@ -35,6 +35,7 @@ public abstract class GeneralRules implements IRuler {
     // ===========================================================
     protected boolean mDone = false;
     protected boolean mTimer = false;
+    protected boolean mSuccess;
 
     // ===========================================================
     // Constructors
@@ -51,6 +52,11 @@ public abstract class GeneralRules implements IRuler {
     // ===========================================================
     // Methods for/from SuperClass/Interfaces
     // ===========================================================
+    @Override
+    public boolean isSuccess() {
+        return mSuccess;
+    }
+
     @Override
     public boolean isDone() {
         return mDone;
@@ -99,7 +105,8 @@ public abstract class GeneralRules implements IRuler {
 
     protected void ruleCompleted(boolean success) {
         mDone = true;
-        EventBus.getDefault().post(new GameEndedEvent(success));
+        mSuccess = success;
+        EventBus.getDefault().post(new GameOverEvent());
     }
 
     /** add rules to track */

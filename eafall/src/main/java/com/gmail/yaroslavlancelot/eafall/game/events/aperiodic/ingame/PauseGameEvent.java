@@ -1,13 +1,9 @@
-package com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.endgame;
+package com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame;
 
 /**
- * Event which signalize that the current game is over.
- * <br/>
- * contains result data
- *
  * @author Yaroslav Havrylovych
  */
-public class GameEndedEvent {
+public class PauseGameEvent {
     // ===========================================================
     // Constants
     // ===========================================================
@@ -15,27 +11,21 @@ public class GameEndedEvent {
     // ===========================================================
     // Fields
     // ===========================================================
-    /** if true does means that current game/mission is over and rules are succeed (i.e. you win) */
-    private boolean mSuccess;
+    private boolean mPause = false;
 
     // ===========================================================
     // Constructors
     // ===========================================================
-    public GameEndedEvent(boolean success) {
-        mSuccess = success;
+    public PauseGameEvent(boolean pause) {
+        mPause = pause;
     }
 
     // ===========================================================
     // Getter & Setter
     // ===========================================================
-
-    /**
-     * if true than user does win this game and false in other case
-     */
-    public boolean isSuccess() {
-        return mSuccess;
+    public boolean isPause() {
+        return mPause;
     }
-
 
     // ===========================================================
     // Methods for/from SuperClass/Interfaces

@@ -101,6 +101,24 @@ public abstract class Unit extends GameObject implements
     }
 
     @Override
+    public String getPlayer() {
+        return mPlayerName;
+    }
+
+    @Override
+    public void setPlayer(String playerName) {
+        mPlayerName = playerName;
+        setSpriteGroupName(BatchingKeys.getUnitSpriteGroup(playerName));
+    }
+
+    @Override
+    protected void initHealthBar() {
+        super.initHealthBar();
+        syncHealthBarBehaviour();
+        updateHealthBar();
+    }
+
+    @Override
     protected IHealthBar createHealthBar() {
         return new UnitHealthBar(getPlayer(), Math.max(mWidth, mHeight), getVertexBufferObjectManager());
     }
@@ -118,17 +136,6 @@ public abstract class Unit extends GameObject implements
         onDestroyed();
     }
 
-    @Override
-    public String getPlayer() {
-        return mPlayerName;
-    }
-
-    @Override
-    public void setPlayer(String playerName) {
-        mPlayerName = playerName;
-        setSpriteGroupName(BatchingKeys.getUnitSpriteGroup(playerName));
-    }
-
     protected void onDestroyed() {
     }
 
@@ -141,7 +148,7 @@ public abstract class Unit extends GameObject implements
     public void init(float x, float y, IPhysicCreator physicCreator) {
         LoggerHelper.methodInvocation(TAG, "init(float, float, IPhysicCreator)");
         IPlayer player = PlayersHolder.getPlayer(mPlayerName);
-        setHealth(mObjectMaximumHealth);
+        mObjectCurrentHealth = mObjectMaximumHealth;
         initHealthBar();
         boolean existingUnit;
         float posX = x / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
@@ -195,6 +202,10 @@ public abstract class Unit extends GameObject implements
      */
     protected boolean needRotation(int angle) {
         return (angle < -4) || (angle > 4);
+    }
+
+    /** used to sync settings health bar with one which used */
+    public void syncHealthBarBehaviour() {
     }
 
     /**

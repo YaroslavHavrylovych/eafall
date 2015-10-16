@@ -1,6 +1,7 @@
 package com.gmail.yaroslavlancelot.eafall.game.ai;
 
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
+import com.gmail.yaroslavlancelot.eafall.game.GameState;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.IBuilding;
@@ -55,6 +56,10 @@ public class VeryFirstBot implements Runnable {
         try {
             //start the bot logic
             while (mBotPlayer.getPlanet() != null) {
+                if (GameState.isPaused()) {
+                    delay();
+                    continue;
+                }
                 delay();
                 planet = mBotPlayer.getPlanet();
                 // win
@@ -86,8 +91,6 @@ public class VeryFirstBot implements Runnable {
 
                 //3. Pick the cost most building you can (to build).
                 //If you can upgrade it this or next move that do that in other case - build
-                LoggerHelper.printVerboseMessage(TAG, "buildingsToBuild.size()=" + buildingsToBuild.size());
-                LoggerHelper.printVerboseMessage(TAG, "buildingsToUpgrade.size()=" + buildingsToUpgrade.size());
                 if (!buildingsToBuild.isEmpty()) {
                     final BuildingId buildingId = buildingsToBuild.get(
                             new Random().nextInt(buildingsToBuild.size()));

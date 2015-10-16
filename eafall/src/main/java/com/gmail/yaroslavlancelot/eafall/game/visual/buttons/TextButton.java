@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
+import com.gmail.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.text.Text;
@@ -29,20 +30,23 @@ public class TextButton extends ButtonSprite {
     /** don't change button width with setText(String) */
     private boolean mFixedSize = false;
 
-    public TextButton(VertexBufferObjectManager vertexBufferObjectManager, float width, float height) {
-        this(vertexBufferObjectManager, width, height, 0, 0);
+    public TextButton(VertexBufferObjectManager vboManager, float width, float height) {
+        this(0, 0, width, height, vboManager);
     }
 
-    public TextButton(VertexBufferObjectManager vertexBufferObjectManager, float width, float height, float x, float y) {
-        super(x, y,
-                (ITiledTextureRegion) TextureRegionHolder.getInstance().getElement(StringConstants.FILE_GAME_BUTTON),
-                vertexBufferObjectManager);
+    public TextButton(float x, float y, float width, float height,
+                      ITiledTextureRegion textureRegion, VertexBufferObjectManager vboManager) {
+        super(x, y, textureRegion, vboManager);
         setWidth(width);
         setHeight(height);
-
         mText = new Text(getWidth() / 2, getHeight() / 2,
-                FontHolder.getInstance().getElement(sFontSizeKey), "", 20, vertexBufferObjectManager);
+                FontHolder.getInstance().getElement(sFontSizeKey), "", 20, vboManager);
         attachChild(mText);
+    }
+
+    public TextButton(float x, float y, float width, float height, VertexBufferObjectManager vboManager) {
+        this(x, y, width, height, (ITiledTextureRegion)
+                TextureRegionHolder.getRegion(StringConstants.FILE_GAME_BUTTON), vboManager);
     }
 
     private boolean isFixedSize() {
@@ -71,6 +75,10 @@ public class TextButton extends ButtonSprite {
             setWidth(mText.getWidth() + padding * 2);
             mText.setX(getWidth() / 2);
         }
+    }
+
+    public void setText(int textId) {
+        setText(LocaleImpl.getInstance().getStringById(textId));
     }
 
     public static TextureAtlas loadResources(Context context, TextureManager textureManager) {

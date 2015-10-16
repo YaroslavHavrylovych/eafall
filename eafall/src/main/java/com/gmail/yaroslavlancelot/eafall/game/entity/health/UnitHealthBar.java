@@ -18,15 +18,18 @@ public class UnitHealthBar implements IHealthBar {
     private final BatchedSprite mHealthBarRectangle;
     private float mHealthBarWidth = SizeConstants.UNIT_SIZE;
 
-    public UnitHealthBar(String player, float healthBarWidth, VertexBufferObjectManager
-            vertexBufferObjectManager) {
+    public UnitHealthBar(String player, float healthBarWidth, VertexBufferObjectManager vboManager) {
+        this(healthBarWidth, TextureRegionHolder.getInstance().getElement(
+                getHealthBarTextureRegionKey(player)), vboManager);
+    }
+
+    public UnitHealthBar(float healthBarWidth, ITextureRegion textureRegion,
+                         VertexBufferObjectManager vboManager) {
         mHealthBarWidth = healthBarWidth;
-        ITextureRegion textureRegion = TextureRegionHolder.getInstance().getElement(
-                getHealthBarTextureRegionKey(player));
         // create health bar sprite
         mHealthBarRectangle = new BatchedSprite(0, 0,
                 mHealthBarWidth, SizeConstants.UNIT_HEALTH_BAR_HEIGHT, textureRegion,
-                vertexBufferObjectManager);
+                vboManager);
         mHealthBarRectangle.setSpriteGroupName(BatchingKeys.BULLET_AND_HEALTH);
     }
 

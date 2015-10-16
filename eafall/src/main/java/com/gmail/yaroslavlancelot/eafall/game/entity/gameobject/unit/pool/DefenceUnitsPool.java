@@ -6,7 +6,6 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.defence.Def
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.defence.DefenceUnitBuilder;
 
 /** used to create concrete object pool */
-//TODO create UnitPool later (common func for unit and orbital station have to be there)
 public class DefenceUnitsPool extends AfterInitializationPool<DefenceUnit> {
     public static final String TAG = DefenceUnitsPool.class.getCanonicalName();
     private final DefenceUnitBuilder mDefenceUnitBuilder;

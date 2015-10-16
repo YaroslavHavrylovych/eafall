@@ -139,9 +139,15 @@
     <string name="app_name">Космічні Загарбники</string>
     <string name="exit">Вихід</string>
     <string name="back">Назад</string>
+    <string name="yes">Так</string>
+    <string name="no">Ні</string>
+    <string name="exit_click">Подвійний клік, щоб вийти</string>
+    <string name="exit_loading">Не можна вийти під час завантаження</string>
     <string name="connect">З’єднати</string>
     <string name="orbital_station">Орбітальна станція</string>
     <string name="unmovable">Нерухомий</string>
+    <string name="exit_confirmation">Ви дійсно хочете вийти?</string>
+    <string name="exit_dialog_title">Вихід</string>
 
     <!-- network game -->
     <string name="create_game">Створити гру</string>
@@ -210,7 +216,6 @@
     <string name="description_unique">Особливе :</string>
     <string name="description_damage">Пошкодшення :</string>
     <string name="description_armor">Броня :</string>
-    <!-- /description popup -->
 
     <!-- descriptions -->
     <string name="earth_artifact_description">Священий артефакт Мутантів знайдений в надрах Землі.\nДодає 10\u0025 до здоров’я юніта.</string>
@@ -220,6 +225,15 @@
     <string name="caches_description">На 20\u0025 збільшення доходу від першого будинку.\nКожен наступний будинок додає 1\u0025 до доходу.</string>
     <string name="reptile_city_description">На 20\u0025 збільшення доходу від першого будинку.\nКожен наступний будинок додає 1\u0025 до доходу.</string>
     <!-- /descriptions -->
+    <!-- /description popup -->
+
+    <!-- menu popup -->
+    <string name="menu_pause">Pause</string>
+    <string name="menu_resume">Resume</string>
+    <string name="menu_mission">Mission</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_exit">Exit</string>
+    <!-- /menu popup -->
 
     <!-- campaign -->
     <!-- guide campaign -->

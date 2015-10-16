@@ -3,6 +3,7 @@ package com.gmail.yaroslavlancelot.eafall.game.scene.hud;
 import android.content.Context;
 
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
+import com.gmail.yaroslavlancelot.eafall.game.GameState;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.gmail.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.mission.MissionConfig;
@@ -15,6 +16,7 @@ import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.RollingPopupManager;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.construction.ConstructionsPopup;
+import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.menu.MenuPopup;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.ConstructionPopupButton;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.MenuPopupButton;
 import com.gmail.yaroslavlancelot.eafall.game.visual.other.HealthBarCarcassSprite;
@@ -49,8 +51,8 @@ public class EaFallHud extends HUD {
     // ===========================================================
     // Fields
     // ===========================================================
-    private ArrayList<HudGameValue> mLeftPart = new ArrayList<HudGameValue>(3);
-    private ArrayList<HudGameValue> mRightPart = new ArrayList<HudGameValue>(3);
+    private ArrayList<HudGameValue> mLeftPart = new ArrayList<>(3);
+    private ArrayList<HudGameValue> mRightPart = new ArrayList<>(3);
 
     // ===========================================================
     // Constructors
@@ -84,14 +86,16 @@ public class EaFallHud extends HUD {
     // Methods
     // ===========================================================
 
-    private void initPopups(IPlayer player, Camera camera, VertexBufferObjectManager objectManager) {
-        RollingPopupManager.init(player.getName(), this, camera, objectManager);
+    private void initPopups(IPlayer player, Camera camera, VertexBufferObjectManager vboManager) {
+        RollingPopupManager.init(player.getName(), this, camera, vboManager);
         //constructions button
-        ConstructionPopupButton button = new ConstructionPopupButton(objectManager);
+        ConstructionPopupButton button = new ConstructionPopupButton(vboManager);
         button.setOnClickListener(new ButtonSprite.OnClickListener() {
             @Override
             public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                RollingPopupManager.getPopup(ConstructionsPopup.KEY).triggerPopup();
+                if (GameState.isResumed()) {
+                    RollingPopupManager.getPopup(ConstructionsPopup.KEY).triggerPopup();
+                }
             }
         });
         attachChild(button);
@@ -134,9 +138,17 @@ public class EaFallHud extends HUD {
         list.add(gameValue);
     }
 
+    /** attaches main menu buttons to the scene and init`s click listener */
     private void initMainMenu(VertexBufferObjectManager objectManager) {
         MenuPopupButton menuButton = new MenuPopupButton(objectManager);
         attachChild(menuButton);
+        menuButton.setOnClickListener(new ButtonSprite.OnClickListener() {
+            @Override
+            public void onClick(final ButtonSprite pButtonSprite, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+                RollingPopupManager.getPopup(MenuPopup.KEY).showPopup();
+            }
+        });
+        registerTouchArea(menuButton);
     }
 
     private void initHealthCarcass(VertexBufferObjectManager vertexManager) {

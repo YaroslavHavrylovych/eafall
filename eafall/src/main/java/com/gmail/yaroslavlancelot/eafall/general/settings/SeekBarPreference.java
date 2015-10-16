@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.eafall.android.activities.settings;
+package com.gmail.yaroslavlancelot.eafall.general.settings;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.gmail.yaroslavlancelot.eafall.R;
 
-public class SeekBarPreference extends Preference implements SeekBar.OnSeekBarChangeListener{
+public class SeekBarPreference extends Preference implements SeekBar.OnSeekBarChangeListener {
 
     private static final String ANDROIDNS = "http://schemas.android.com/apk/res/android";
 
@@ -27,7 +27,8 @@ public class SeekBarPreference extends Preference implements SeekBar.OnSeekBarCh
         mMax = attrs.getAttributeIntValue(ANDROIDNS, "max", 99);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        mCurrentValue = preferences.getInt(getKey(), attrs.getAttributeIntValue(ANDROIDNS, "defaultValue", 0));
+        mCurrentValue = (int) (preferences.getFloat(getKey(),
+                attrs.getAttributeFloatValue(ANDROIDNS, "defaultValue", .5f)) * 100);
     }
 
     @Override
@@ -45,14 +46,14 @@ public class SeekBarPreference extends Preference implements SeekBar.OnSeekBarCh
         bar.setOnSeekBarChangeListener(this);
 
         mValue = (TextView) layout.findViewById(R.id.value);
-        mValue.setText(mCurrentValue+"");
+        mValue.setText(mCurrentValue + "");
 
         return layout;
     }
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        mValue.setText(progress+"");
+        mValue.setText(progress + "");
         mValue.invalidate();
     }
 
@@ -70,7 +71,7 @@ public class SeekBarPreference extends Preference implements SeekBar.OnSeekBarCh
 
     private void updatePreference(int newValue) {
         SharedPreferences.Editor editor = getEditor();
-        editor.putInt(getKey(), newValue);
+        editor.putFloat(getKey(), newValue * 1f / 100f);
         editor.commit();
     }
 }

@@ -6,12 +6,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.EaFallActivity;
+import com.gmail.yaroslavlancelot.eafall.game.GameState;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
-import com.gmail.yaroslavlancelot.eafall.game.audio.BackgroundMusic;
 import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.gmail.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder;
@@ -30,14 +29,16 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.Sun
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetDestroyListener;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.defence.DefenceUnit;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.filtering.EnemiesFilterFactory;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.OffenceUnit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.PathHelper;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.filtering.EnemiesFilterFactory;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.defence.DefenceUnit;
-import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.endgame.GameEndedEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.endgame.GameOverEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.AbstractSpriteEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.AttachSpriteEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.DetachSpriteEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.PauseGameEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.ShowSettingsEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.CreateBuildingEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.unit.CreateDefenceUnitEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.periodic.Periodic;
@@ -45,15 +46,14 @@ import com.gmail.yaroslavlancelot.eafall.game.events.periodic.time.GameTime;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.Player;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
-import com.gmail.yaroslavlancelot.eafall.game.popup.IPopup;
-import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.IRollingPopup;
 import com.gmail.yaroslavlancelot.eafall.game.popup.GameOverPopup;
+import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.IRollingPopup;
 import com.gmail.yaroslavlancelot.eafall.game.resources.loaders.ClientResourcesLoader;
 import com.gmail.yaroslavlancelot.eafall.game.rule.IRuler;
 import com.gmail.yaroslavlancelot.eafall.game.rule.RulesFactory;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 import com.gmail.yaroslavlancelot.eafall.game.touch.ICameraHandler;
-import com.gmail.yaroslavlancelot.eafall.general.EbSubscribersHolder;
+import com.gmail.yaroslavlancelot.eafall.game.visual.dialogs.SettingsDialog;
 
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.entity.Entity;
@@ -101,9 +101,12 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
     }
 
     @Override
+    protected String createMusicPath() {
+        return StringConstants.getMusicPath() + "background_1.ogg";
+    }
+
+    @Override
     protected void loadResources() {
-        //game resources
-        EbSubscribersHolder.register(ClientGameActivity.this);
         //alliance and player
         createAlliances();
         createPlayers();
@@ -112,18 +115,10 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
         //resources
         mResourcesLoader.loadImages(getTextureManager(), getVertexBufferObjectManager());
         mResourcesLoader.loadFonts(getTextureManager(), getFontManager());
-        //music
-        if (EaFallApplication.getConfig().isMusicEnabled()) {
-            mBackgroundMusic = new BackgroundMusic(
-                    StringConstants.getMusicPath() + "background_1.ogg",
-                    getMusicManager(), ClientGameActivity.this);
-            mBackgroundMusic.initBackgroundMusic();
-        }
         //whether or not the mission is bounded (timing)
         if (mMissionConfig.isTimerEnabled()) {
             mGamePeriodic.add(GameTime.getPeriodic(mMissionConfig.getTime()));
         }
-        onResourcesLoaded();
     }
 
     @Override
@@ -179,6 +174,16 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
         return body;
     }
 
+    /**
+     * set game to pause if pause parameter equals to true and resume the game if false.
+     * <p/>
+     * Uses {@link #setState(GameState.State)} and one out of two possible params
+     * (GameState.State.RESUMED or GameState.State.PAUSED)
+     */
+    protected void pause(boolean pause) {
+        setState(pause ? GameState.State.PAUSED : GameState.State.RESUMED);
+    }
+
     /** start tracker which tracks game rules */
     protected void startRuler() {
         mRuler = RulesFactory.createRuler(
@@ -195,7 +200,7 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
      */
     protected void startPeriodic() {
         for (Periodic periodic : mGamePeriodic) {
-            mEngine.registerUpdateHandler(periodic.getUpdateHandler());
+            mSceneManager.getWorkingScene().registerUpdateHandler(periodic.getUpdateHandler());
         }
     }
 
@@ -340,6 +345,12 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
         });
     }
 
+    @SuppressWarnings("unused")
+    /** stop the game engine */
+    public void onEvent(PauseGameEvent pauseGameEvent) {
+        pause(pauseGameEvent.isPause());
+    }
+
     /** attach sprite to entity (sprite group, hud or game scene) */
     private void attachSprite(final Sprite sprite, final Entity parent) {
         //TODO it seems always to be in update thread, so no need for this runnable
@@ -400,10 +411,16 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
     }
 
     @SuppressWarnings("unused")
-    public void onEvent(final GameEndedEvent gameEndedEvent) {
-        IPopup popup = new GameOverPopup(
-                mSceneManager.getWorkingScene(), mCamera, getVertexBufferObjectManager());
-        ((GameOverPopup) popup).setSuccess(gameEndedEvent.isSuccess());
+    public void onEvent(ShowSettingsEvent event) {
+        SettingsDialog settingsDialog = new SettingsDialog();
+        settingsDialog.show(getFragmentManager(), SettingsDialog.KEY);
+    }
+
+    @SuppressWarnings("unused")
+    public void onEvent(final GameOverEvent gameOverEvent) {
+        GameOverPopup popup = new GameOverPopup(mHud, mCamera, getVertexBufferObjectManager());
+        pause(true);
+        popup.setSuccess(mRuler.isSuccess());
         popup.setStateChangeListener(new IRollingPopup.StateChangingListener() {
             @Override
             public void onShowed() {

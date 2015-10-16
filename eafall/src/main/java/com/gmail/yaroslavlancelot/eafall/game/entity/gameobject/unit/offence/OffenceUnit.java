@@ -2,7 +2,7 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence;
 
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
-import com.gmail.yaroslavlancelot.eafall.game.configuration.game.ApplicationConfig;
+import com.gmail.yaroslavlancelot.eafall.game.configuration.game.ApplicationSettings;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IVelocityListener;
@@ -55,8 +55,8 @@ public class OffenceUnit extends Unit {
     }
 
     private boolean isHealthBarDefaultBehaviour() {
-        return EaFallApplication.getConfig().getUnitHealthBarBehavior() ==
-                ApplicationConfig.UnitHealthBarBehavior.DEFAULT;
+        return EaFallApplication.getConfig().getSettings().getHealthBarBehavior() ==
+                ApplicationSettings.UnitHealthBarBehavior.DEFAULT;
     }
 
     public void setVelocityChangedListener(IVelocityListener velocityChangedListener) {
@@ -71,7 +71,7 @@ public class OffenceUnit extends Unit {
     @Override
     protected void destroy() {
         removeBonuses();
-        if(mHealthBar != null) {
+        if (mHealthBar != null) {
             mHealthBar.setVisible(false);
             mLastHitTime = 0;
         }
@@ -85,29 +85,28 @@ public class OffenceUnit extends Unit {
     }
 
     @Override
-    protected void updateHealthBar() {
-        if (mHealthBar != null) {
-            boolean updatePosition = false;
-            if (isHealthBarDefaultBehaviour()) {
-                boolean newVisible = mObjectCurrentHealth < mObjectMaximumHealth / 2 || mLastHitTime > 0;
-                updatePosition = newVisible != mHealthBar.isVisible();
-                mHealthBar.setVisible(newVisible);
-            }
-            if (mHealthBar.isVisible()) {
-                if (updatePosition) {
-                    updateHealthBarPosition();
-                }
-                mHealthBar.redrawHealthBar(mObjectMaximumHealth, mObjectCurrentHealth);
-            }
+    public void syncHealthBarBehaviour() {
+        if (EaFallApplication.getConfig().getSettings().getHealthBarBehavior()
+                == ApplicationSettings.UnitHealthBarBehavior.ALWAYS_VISIBLE) {
+            mHealthBar.setVisible(true);
+        } else {
+            mHealthBar.setVisible(false);
         }
     }
 
     @Override
-    protected void initHealthBar() {
-        if (EaFallApplication.getConfig().getUnitHealthBarBehavior()
-                != ApplicationConfig.UnitHealthBarBehavior.ALWAYS_HIDDEN) {
-            super.initHealthBar();
-            updateHealthBar();
+    protected void updateHealthBar() {
+        boolean updatePosition = false;
+        if (isHealthBarDefaultBehaviour()) {
+            boolean newVisible = mObjectCurrentHealth < mObjectMaximumHealth / 2 || mLastHitTime > 0;
+            updatePosition = newVisible != mHealthBar.isVisible();
+            mHealthBar.setVisible(newVisible);
+        }
+        if (mHealthBar.isVisible()) {
+            if (updatePosition) {
+                updateHealthBarPosition();
+            }
+            mHealthBar.redrawHealthBar(mObjectMaximumHealth, mObjectCurrentHealth);
         }
     }
 

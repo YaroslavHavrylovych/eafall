@@ -1,18 +1,14 @@
-package com.gmail.yaroslavlancelot.eafall.game.rule;
-
-import com.gmail.yaroslavlancelot.eafall.game.configuration.mission.MissionConfig;
-import com.gmail.yaroslavlancelot.eafall.game.rule.rules.Collect;
-import com.gmail.yaroslavlancelot.eafall.game.rule.rules.Survive;
-import com.gmail.yaroslavlancelot.eafall.game.rule.rules.Win;
+package com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.endgame;
 
 /**
- * Instantiate game rules based on mission data.
+ * Event which signalize that the current game is over.
  * <br/>
- * Check {@link IRuler} for more information about rules
+ * contains result data
  *
  * @author Yaroslav Havrylovych
  */
-public class RulesFactory {
+//TODO we can avoid using this class (close game event has to be enough)
+public class GameOverEvent {
     // ===========================================================
     // Constants
     // ===========================================================
@@ -24,6 +20,8 @@ public class RulesFactory {
     // ===========================================================
     // Constructors
     // ===========================================================
+    public GameOverEvent() {
+    }
 
     // ===========================================================
     // Getter & Setter
@@ -36,20 +34,6 @@ public class RulesFactory {
     // ===========================================================
     // Methods
     // ===========================================================
-    public static IRuler createRuler(MissionConfig.MissionType type, int value, boolean timer) {
-        switch (type) {
-            case WIN: {
-                return new Win(type, timer);
-            }
-            case SURVIVE: {
-                return new Survive(type);
-            }
-            case COLLECT: {
-                return new Collect(type, value, timer);
-            }
-        }
-        throw new IllegalArgumentException("unknown rule " + type);
-    }
 
     // ===========================================================
     // Inner and Anonymous Classes

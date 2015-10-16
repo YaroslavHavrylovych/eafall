@@ -39,7 +39,7 @@ public class EnemiesFilter implements IEnemiesFilter {
 
     @Override
     public List<GameObject> getEnemiesObjects() {
-        return new ArrayList<GameObject>(mEnemyPlayer.getPlayerObjects());
+        return new ArrayList<GameObject>(mEnemyPlayer.getPlayerUnits());
     }
 
     @Override
