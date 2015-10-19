@@ -1,0 +1,68 @@
+# To enable ProGuard in your project, edit project.properties
+# to define the proguard.config property as described in that file.
+#
+# Add project specific ProGuard rules here.
+# By default, the flags in this file are appended to flags specified
+# in ${sdk.dir}/tools/proguard/proguard-android.txt
+# You can edit the include path and order by changing the ProGuard
+# include property in project.properties.
+#
+# For more details, see
+#   http://developer.android.com/guide/developing/tools/proguard.html
+
+# Add any project specific keep options here:
+
+# If your project uses WebView with JS, uncomment the following
+# and specify the fully qualified class name to the JavaScript interface
+# class:
+#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
+#   public *;
+#}
+
+###############
+### EvenBus ###
+###############
+-keepclassmembers class ** {
+    public void onEvent*(**);
+}
+-keepclassmembers class * extends de.greenrobot.event.util.ThrowableFailureEvent {
+    <init>(java.lang.Throwable);
+}
+
+#######################
+## physic extension ###
+#######################
+-keep public class com.badlogic.gdx.physics.box2d.World {
+  *;
+}
+
+################
+## simplexml ###
+################
+-keepattributes *Annotation*
+-keepattributes Signature
+-keep public class org.simpleframework.**{ *; }
+-keep class org.simpleframework.xml.**{ *; }
+-keep class org.simpleframework.xml.core.**{ *; }
+-keep class org.simpleframework.xml.util.**{ *; }
+
+##############
+## loaders ###
+##############
+-keep public class com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.loader.** {
+    public private <fields>;
+}
+-keep public class com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.loader.** {
+    public private <fields>;
+}
+-keep public class com.gmail.yaroslavlancelot.eafall.game.campaign.loader.** {
+    public private <fields>;
+}
+
+
+########################
+### ignored warnings ###
+########################
+-dontwarn org.simpleframework.xml.stream.**
+-dontwarn kotlin.dom.**
+-dontwarn de.greenrobot.event.util.**
