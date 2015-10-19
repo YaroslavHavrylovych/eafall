@@ -29,9 +29,9 @@
     <init>(java.lang.Throwable);
 }
 
-#######################
-## physic extension ###
-#######################
+########################
+### physic extension ###
+########################
 -keep public class com.badlogic.gdx.physics.box2d.World {
   *;
 }
@@ -66,3 +66,5 @@
 -dontwarn org.simpleframework.xml.stream.**
 -dontwarn kotlin.dom.**
 -dontwarn de.greenrobot.event.util.**
+-dontwarn org.andengine.util.levelstats.**
+-dontwarn org.andengine.util.net.**
