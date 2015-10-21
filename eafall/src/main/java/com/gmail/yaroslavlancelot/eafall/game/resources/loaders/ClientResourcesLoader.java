@@ -3,6 +3,7 @@ package com.gmail.yaroslavlancelot.eafall.game.resources.loaders;
 import android.content.Context;
 
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
+import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
@@ -27,7 +28,10 @@ import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.TextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.source.IBitmapTextureAtlasSource;
+import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtlasBuilder;
+import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /**
@@ -119,31 +123,48 @@ public class ClientResourcesLoader extends BaseResourceLoader {
     private void loadBulletAndUnitHealthBar(
             TextureManager textureManager,
             VertexBufferObjectManager vertexBufferObjectManager) {
+        BuildableBitmapTextureAtlas buildableTextureAtlas = new BuildableBitmapTextureAtlas(textureManager, 128, 128);
         //player health bar
         PlayerHealthBar.loadResources(textureManager, vertexBufferObjectManager);
-        //unit health bar
-        BitmapTextureAtlas textureAtlas = new BitmapTextureAtlas(textureManager,
-                Math.max(SizeConstants.BULLET_SIZE, SizeConstants.UNIT_HEALTH_BAR_FILE_SIZE),
-                SizeConstants.BULLET_SIZE
-                        + 2 * SizeConstants.UNIT_HEALTH_BAR_FILE_SIZE
-                        + 2 * SizeConstants.BETWEEN_TEXTURES_PADDING, TextureOptions.BILINEAR);
-        int y = 0;
+        //units health bar
         IBitmapTextureAtlasSource atlasSource;
         int colorSize = SizeConstants.UNIT_HEALTH_BAR_FILE_SIZE;
         for (IPlayer player : PlayersHolder.getInstance().getElements()) {
-            atlasSource = createColoredTextureAtlasSource(player.getColor(),
-                    colorSize, colorSize);
-            TextureRegionHolder.addElementFromSource(
+            atlasSource = createColoredTextureAtlasSource(player.getColor(), colorSize, 5);
+            TextureRegionHolder.getInstance().addElement(
                     UnitHealthBar.getHealthBarTextureRegionKey(player.getName()),
-                    textureAtlas, atlasSource, 0, y);
-            y += colorSize + SizeConstants.BETWEEN_TEXTURES_PADDING;
+                    BitmapTextureAtlasTextureRegionFactory.createFromSource(
+                            buildableTextureAtlas, atlasSource, false));
         }
         //bullets
-        TextureRegionHolder.addElementFromAssets(StringConstants.FILE_BULLET,
-                textureAtlas, EaFallApplication.getContext(), 0, y);
-
-        textureAtlas.load();
-        SpriteGroup spriteGroup = new SpriteGroup(textureAtlas,
+        TextureRegionHolder.addElementFromAssets(StringConstants.FILE_ANNIHILATOR_BULLET,
+                buildableTextureAtlas, EaFallApplication.getContext());
+        TextureRegionHolder.addElementFromAssets(StringConstants.FILE_HIGGSON_BULLET,
+                buildableTextureAtlas, EaFallApplication.getContext());
+        TextureRegionHolder.addElementFromAssets(StringConstants.FILE_LASER_BULLET,
+                buildableTextureAtlas, EaFallApplication.getContext());
+        TextureRegionHolder.addElementFromAssets(StringConstants.FILE_NEUTRINO_BULLET,
+                buildableTextureAtlas, EaFallApplication.getContext());
+        TextureRegionHolder.addElementFromAssets(StringConstants.FILE_QUAKER_BULLET,
+                buildableTextureAtlas, EaFallApplication.getContext());
+        TextureRegionHolder.addElementFromAssets(StringConstants.FILE_RAILGUN_BULLET,
+                buildableTextureAtlas, EaFallApplication.getContext());
+        //build
+        boolean build = false;
+        do {
+            try {
+                buildableTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource,
+                        BitmapTextureAtlas>(1, 1, 1));
+                build = true;
+            } catch (ITextureAtlasBuilder.TextureAtlasBuilderException e) {
+                //TODO is it possible?
+                LoggerHelper.printErrorMessage(ClientResourcesLoader.this.toString(),
+                        "failed to build texture atlas for player health");
+            }
+        } while (!build);
+        buildableTextureAtlas.load();
+        //sprite group
+        SpriteGroup spriteGroup = new CleanableSpriteGroup(buildableTextureAtlas,
                 mMovableUnitsLimit * 4, vertexBufferObjectManager);
         SpriteGroupHolder.addGroup(BatchingKeys.BULLET_AND_HEALTH, spriteGroup);
     }

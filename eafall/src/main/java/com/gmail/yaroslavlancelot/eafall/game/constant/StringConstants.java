@@ -22,8 +22,18 @@ public final class StringConstants {
     public static final String FILE_SUN_HAZE = "graphics/sprites/sun/sun_haze.png";
     /** splash screen file name */
     public static final String FILE_SPLASH_SCREEN = "graphics/images/splash_screen.png";
-    /** bullet image */
-    public static final String FILE_BULLET = "graphics/sprites/bullet/bullet.png";
+    /** annihilator bullet image */
+    public static final String FILE_ANNIHILATOR_BULLET = "graphics/sprites/bullet/annihilator.png";
+    /** higgson bullet image */
+    public static final String FILE_HIGGSON_BULLET = "graphics/sprites/bullet/higgson.png";
+    /** laser bullet image */
+    public static final String FILE_LASER_BULLET = "graphics/sprites/bullet/laser.png";
+    /** neutrino bullet image */
+    public static final String FILE_NEUTRINO_BULLET = "graphics/sprites/bullet/neutrino.png";
+    /** quaker bullet image */
+    public static final String FILE_QUAKER_BULLET = "graphics/sprites/bullet/quaker.png";
+    /** railgun bullet image */
+    public static final String FILE_RAILGUN_BULLET = "graphics/sprites/bullet/railgun.png";
     /** buildings popup item background */
     public static final String FILE_CONSTRUCTIONS_POPUP_ITEM = "graphics/images/constructions_popup_item.png";
     /** construction popup */
