@@ -16,28 +16,21 @@ import de.greenrobot.event.EventBus;
 /**
  * Bullet
  */
-public class Bullet extends BatchedSprite implements IModifier.IModifierListener {
-    /** bullet size in points */
-    public static final int BULLET_SIZE = 3;
-    private static final float sDuration = 0.5f;
+public abstract class AbstractBullet extends BatchedSprite implements IModifier.IModifierListener {
     /** bullet damage value */
-    private Damage mDamage;
+    protected Damage mDamage;
+    protected GameObject mTarget;
+    protected long mTargetId;
     /** bullet lifecycle handler */
-    private MoveModifier moveModifier;
-    private GameObject mTarget;
-    private long mTargetId;
+    private MoveModifier mMoveModifier;
     private boolean mIsAttached;
 
-    public Bullet(ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
-        this(BULLET_SIZE, BULLET_SIZE, textureRegion, vertexBufferObjectManager);
-        /* the maximum distance bullet can damage (it's usual 2 times distance than it's enemy) */
-        moveModifier = new MoveModifier(sDuration, 0, 0, 0, 0);
-        moveModifier.setAutoUnregisterWhenFinished(false);
-    }
-
-    public Bullet(int width, int height, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
+    public AbstractBullet(int width, int height, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
         super(-100, -100, width, height, textureRegion, vertexBufferObjectManager);
         setSpriteGroupName(BatchingKeys.BULLET_AND_HEALTH);
+        /* the maximum distance bullet can damage (it's usual 2 times distance than it's enemy) */
+        mMoveModifier = new MoveModifier(0, 0, 0, 0, 0);
+        mMoveModifier.setAutoUnregisterWhenFinished(false);
     }
 
     public Damage getDamage() {
@@ -48,25 +41,19 @@ public class Bullet extends BatchedSprite implements IModifier.IModifierListener
     public void onModifierStarted(final IModifier pModifier, final Object pItem) {
     }
 
-    @Override
-    public void onModifierFinished(final IModifier pModifier, final Object pItem) {
-        if (mTarget.getObjectUniqueId() == mTargetId && mTarget.isObjectAlive()) {
-            mTarget.damageObject(mDamage);
-        }
-        setPosition(-100, -100);
-        onBulletDestroyed();
-    }
+    protected abstract float duration(float distance);
 
     public void fire(Damage damage, float x, float y, GameObject gameObject) {
         mDamage = damage;
         mTarget = gameObject;
         mTargetId = gameObject.getObjectUniqueId();
-        moveModifier.reset(sDuration, x, y, gameObject.getX(), gameObject.getY());
+        float distance = Math.max(Math.abs(x - gameObject.getX()), Math.abs(y - gameObject.getY()));
+        mMoveModifier.reset(duration(distance), x, y, gameObject.getX(), gameObject.getY());
         if (!mIsAttached) {
-            moveModifier.addModifierListener(Bullet.this);
+            mMoveModifier.addModifierListener(AbstractBullet.this);
             EventBus.getDefault().post(new AttachSpriteEvent(this));
             mIsAttached = true;
-            registerEntityModifier(moveModifier);
+            registerEntityModifier(mMoveModifier);
         }
     }
 

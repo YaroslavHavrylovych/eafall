@@ -22,7 +22,7 @@ import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.BatchedSprite;
 import com.gmail.yaroslavlancelot.eafall.game.entity.BodiedSprite;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
-import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.BulletPool;
+import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.BulletsPool;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.SunStaticObject;
@@ -140,7 +140,7 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
         //hud
         mHud.initHudElements(mCamera, getVertexBufferObjectManager(), mMissionConfig);
         //pools
-        BulletPool.init(getVertexBufferObjectManager());
+        BulletsPool.init(getVertexBufferObjectManager());
         //sound
         ICameraHandler cameraHandler = mSceneManager.getWorkingScene().getCameraHandler();
         SoundFactory.getInstance().setCameraHandler(cameraHandler);

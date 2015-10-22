@@ -6,8 +6,8 @@ import com.gmail.yaroslavlancelot.eafall.game.audio.LimitedSoundWrapper;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.gmail.yaroslavlancelot.eafall.game.client.IPhysicCreator;
 import com.gmail.yaroslavlancelot.eafall.game.engine.ManualFinishRotationModifier;
-import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.Bullet;
-import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.BulletPool;
+import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.AbstractBullet;
+import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.BulletsPool;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.IPlayerObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.Armor;
@@ -189,7 +189,8 @@ public abstract class Unit extends GameObject implements
             mUnitFireCallback.fire(getObjectUniqueId(), attackedObject.getObjectUniqueId());
         }
         playSound(mFireSound);
-        Bullet bullet = BulletPool.getInstance().obtainPoolItem();
+        AbstractBullet bullet = BulletsPool.getInstance(mObjectDamage.getDamageType()).obtainPoolItem();
+        bullet.setRotation(mRotation);
 
         bulletFire(attackedObject, bullet);
     }
@@ -251,7 +252,7 @@ public abstract class Unit extends GameObject implements
     /**
      * where the bullet will appear during the fire operation
      */
-    protected void bulletFire(GameObject attackedObject, Bullet bullet) {
+    protected void bulletFire(GameObject attackedObject, AbstractBullet bullet) {
         bullet.fire(mObjectDamage, getX(), getY(), attackedObject);
     }
 }
