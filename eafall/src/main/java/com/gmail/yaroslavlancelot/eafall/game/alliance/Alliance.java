@@ -9,16 +9,16 @@ import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.OffenceBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.DefenceBuildingDummy;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.OffenceBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.SpecialBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.WealthBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.loader.BuildingListLoader;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitDummy;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.OffenceUnitDummy;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.defence.DefenceUnitDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.loader.UnitListLoader;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.loader.UnitLoader;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.defence.DefenceUnitDummy;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.OffenceUnitDummy;
 
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
@@ -115,8 +115,9 @@ public abstract class Alliance implements IAlliance {
         if (buildingId.getUpgrade() + 1 >= dummy.getUpgrades()) {
             return -1;
         }
-        int cost = dummy.getCost(buildingId.getUpgrade() + 1);
-        return (int) Math.round(cost * 0.5 + 1);
+        int price1 = dummy.getCost(buildingId.getUpgrade());
+        int price2 = dummy.getCost(buildingId.getUpgrade() + 1);
+        return (int) Math.round(Math.abs(price2 - price1) * 1.25);
     }
 
     @Override
@@ -132,7 +133,7 @@ public abstract class Alliance implements IAlliance {
 
     private void initUnitDummies(UnitListLoader unitListLoader) {
         int unitsAmount = unitListLoader.getList().size();
-        mUnitDummies = new SparseArray<UnitDummy>(unitsAmount);
+        mUnitDummies = new SparseArray<>(unitsAmount);
         UnitDummy unitDummy;
         for (int i = 0; i < unitsAmount; i++) {
             UnitLoader unitLoader = unitListLoader.getList().get(i);
