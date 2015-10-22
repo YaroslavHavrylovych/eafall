@@ -11,12 +11,12 @@ import com.gmail.yaroslavlancelot.eafall.general.locale.LocaleImpl;
  */
 public class Armor {
     private static final float[][] sArmorSafetyTable = new float[][]{
-            new float[]{1.5f, .85f, 1f, 1.2f, .45f, .45f},
-            new float[]{1.2f, .9f, 1.2f, .7f, 1f, .7f},
-            new float[]{1f, 1.05f, 1.4f, .6f, .95f, .6f},
-            new float[]{1f, 1f, 1f, 1f, 1f, 1f},
-            new float[]{1f, 1.1f, .75f, .95f, 1.2f, .75f},
-            new float[]{.3f, .5f, .45f, .6f, .5f, 1.75f}
+            new float[]{1.5f, .85f, 1f, 1.5f, .45f, .45f},
+            new float[]{.95f, 1.1f, .95f, .7f, 1f, .7f},
+            new float[]{1f, 1.05f, 1.4f, .6f, 1.1f, .6f},
+            new float[]{.8f, 1f, 1f, 1f, 1f, 1f},
+            new float[]{1f, 1.3f, .75f, .95f, 1.2f, .6f},
+            new float[]{.8f, .6f, .45f, .8f, .7f, 2.2f}
     };
     private int mArmorValue;
     private volatile int mAdditionalArmor;
@@ -70,13 +70,10 @@ public class Armor {
     }
 
     public int getDamage(Damage damage) {
-        int realDamage = getDamageAfterConsumption(damage);
-        return realDamage * realDamage / (realDamage + mArmorValue + mAdditionalArmor) + 1;
-    }
-
-    protected int getDamageAfterConsumption(Damage damage) {
-        return (int) ((damage.getDamageValue() + damage.getAdditionalDamage()) *
-                sArmorSafetyTable[damage.getDamageType().ordinal()][mArmorType.ordinal()]);
+        return (int) (
+                (damage.getDamageValue() + damage.getAdditionalDamage())
+                        * sArmorSafetyTable[damage.getDamageType().ordinal()][mArmorType.ordinal()]
+                        * ((float) (100 - mAdditionalArmor - mArmorValue) / 100));
     }
 
     public enum ArmorType {
