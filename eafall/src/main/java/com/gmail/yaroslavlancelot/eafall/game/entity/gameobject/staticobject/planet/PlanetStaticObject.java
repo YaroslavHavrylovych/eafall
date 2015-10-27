@@ -95,7 +95,7 @@ public class PlanetStaticObject extends StaticObject implements IPlayerObject {
     }
 
     @Override
-    public String getPlayer() {
+    public String getPlayerName() {
         return mPlayerName;
     }
 

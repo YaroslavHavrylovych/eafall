@@ -9,6 +9,6 @@ import org.andengine.engine.handler.IUpdateHandler;
  *
  * @author Yaroslav Havrylovych
  */
-public interface Periodic {
+public interface IPeriodic {
     IUpdateHandler getUpdateHandler();
 }

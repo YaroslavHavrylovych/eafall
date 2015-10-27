@@ -3,10 +3,8 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.defence;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.gmail.yaroslavlancelot.eafall.game.engine.ManualFinishRotationModifier;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.filtering.IUnitMap;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.PathHelper;
-
-import org.andengine.engine.handler.timer.ITimerCallback;
-import org.andengine.engine.handler.timer.TimerHandler;
 
 /** Basic class for all stationary/unmovable game units ( */
 public class DefenceUnit extends Unit {
@@ -26,8 +24,23 @@ public class DefenceUnit extends Unit {
         return sBodyType;
     }
 
-    public void startLifecycle() {
-        registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new DefenceUnitTimerCallback()));
+    @Override
+    public void lifecycleTick(IUnitMap enemiesMap) {
+        // check for anything to attack
+        if (mObjectToAttack != null && mObjectToAttack.isObjectAlive()
+                &&
+                PathHelper.getDistanceBetweenPoints(
+                        getX(), getY(), mObjectToAttack.getX(), mObjectToAttack.getY())
+                        < mAttackRadius) {
+            attackTarget(mObjectToAttack);
+            return;
+        } else {
+            // we can't reach previously attacked unit
+            mObjectToAttack = null;
+        }
+
+        // search for new unit to attack
+        mObjectToAttack = enemiesMap.getClosestUnit(mX, mY, mAttackRadius);
     }
 
     @Override
@@ -43,28 +56,5 @@ public class DefenceUnit extends Unit {
     @Override
     protected void rotateWithAngle(int angle) {
         throw new UnsupportedOperationException("can't rotate stationary unit");
-    }
-
-    /** stationary unit behaviour */
-    protected class DefenceUnitTimerCallback implements ITimerCallback {
-        @Override
-        public void onTimePassed(TimerHandler pTimerHandler) {
-            // check for anything to attack
-            if (mObjectToAttack != null && mObjectToAttack.isObjectAlive()
-                    &&
-                    PathHelper.getDistanceBetweenPoints(
-                            getX(), getY(), mObjectToAttack.getX(), mObjectToAttack.getY())
-                            < mAttackRadius) {
-                attackTarget(mObjectToAttack);
-                return;
-            } else {
-                // we can't reach previously attacked unit
-                mObjectToAttack = null;
-            }
-
-            // search for new unit to attack
-            mObjectToAttack = mEnemiesUpdater
-                    .getFirstEnemyInRange(DefenceUnit.this, mAttackRadius);
-        }
     }
 }

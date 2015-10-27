@@ -30,7 +30,6 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.pla
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.defence.DefenceUnit;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.filtering.EnemiesFilterFactory;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.OffenceUnit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.PathHelper;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.endgame.GameOverEvent;
@@ -41,8 +40,9 @@ import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.PauseGameE
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.ShowSettingsEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.CreateBuildingEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.unit.CreateDefenceUnitEvent;
-import com.gmail.yaroslavlancelot.eafall.game.events.periodic.Periodic;
+import com.gmail.yaroslavlancelot.eafall.game.events.periodic.IPeriodic;
 import com.gmail.yaroslavlancelot.eafall.game.events.periodic.time.GameTime;
+import com.gmail.yaroslavlancelot.eafall.game.events.periodic.unit.UnitPositionUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.Player;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
@@ -88,7 +88,7 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
     /** current mission/game config */
     protected MissionConfig mMissionConfig;
     /** game cycles (e.g. money increase, timer etc) */
-    protected List<Periodic> mGamePeriodic = new ArrayList<>(2);
+    protected List<IPeriodic> mGamePeriodic = new ArrayList<>(2);
     /** defines whether the game is over and who is the winner */
     protected IRuler mRuler;
 
@@ -199,7 +199,7 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
      * e.g. money update events, game time ticking events
      */
     protected void startPeriodic() {
-        for (Periodic periodic : mGamePeriodic) {
+        for (IPeriodic periodic : mGamePeriodic) {
             mSceneManager.getWorkingScene().registerUpdateHandler(periodic.getUpdateHandler());
         }
     }
@@ -256,7 +256,9 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
     protected IPlayer createPlayer(String playerNameInExtra, IAlliance alliance) {
         Intent intent = getIntent();
         IPlayer.ControlType playerType = IPlayer.ControlType.valueOf(intent.getStringExtra(playerNameInExtra));
-        return new Player(playerNameInExtra, alliance, playerType, mMissionConfig);
+        IPlayer player = new Player(playerNameInExtra, alliance, playerType, mMissionConfig);
+        mGamePeriodic.add(new UnitPositionUpdater(player));
+        return player;
     }
 
     /** init second player and planet */
@@ -384,10 +386,7 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
 
     /** create unit */
     protected Unit createUnit(int unitKey, final IPlayer unitPlayer, float x, float y) {
-        Unit unit = createThinUnit(unitKey, unitPlayer, x, y);
-        unit.setEnemiesUpdater(EnemiesFilterFactory.getFilter(unitPlayer.getEnemyPlayer()));
-        unit.startLifecycle();
-        return unit;
+        return createThinUnit(unitKey, unitPlayer, x, y);
     }
 
     /**

@@ -8,11 +8,10 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IVelocityListener;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.bonus.Bonus;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.filtering.IUnitMap;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.IUnitPath;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.PathHelper;
-
-import org.andengine.engine.handler.timer.ITimerCallback;
-import org.andengine.engine.handler.timer.TimerHandler;
+import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -43,6 +42,8 @@ public class OffenceUnit extends Unit {
     private IVelocityListener mVelocityChangedListener;
     /** to track health bar visibility, last time unit took damage */
     private volatile long mLastHitTime;
+    private float[] mTwoDimensionFloatArray = new float[2];
+    private long mLastBonusUpdateTime = System.currentTimeMillis();
 
     /** create unit from appropriate builder */
     public OffenceUnit(OffenceUnitBuilder unitBuilder) {
@@ -79,9 +80,63 @@ public class OffenceUnit extends Unit {
     }
 
     @Override
-    public void startLifecycle() {
-        //TODO no need to create object each time
-        registerUpdateHandler(new TimerHandler(mUpdateCycleTime, true, new SimpleUnitTimerCallback()));
+    public void lifecycleTick(IUnitMap enemiesMap) {
+        //The whole bunch of operations is on the UPDATE THREAD!!!
+
+        // update bonuses
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - mLastBonusUpdateTime > sBonusUpdateTime) {
+            updateBonuses();
+        }
+
+        if (isHealthBarDefaultBehaviour()) {
+            // update health bar visibility
+            if (currentTime - mLastHitTime > sHealthBarVisibleTime) {
+                mLastHitTime = 0;
+                updateHealthBar();
+            }
+        }
+
+        if (mObjectToAttack == null) {
+            mObjectToAttack = enemiesMap.getClosestUnit(mX, mY, mAttackRadius);
+            //attack founded enemy
+            if (mObjectToAttack != null) {
+                setUnitLinearVelocity(0, 0);
+                attackTarget(mObjectToAttack);
+                return;
+            } else {
+                mObjectToAttack = enemiesMap.getClosestUnit(mX, mY, mViewRadius);
+                //chase founded object
+                if (mObjectToAttack != null) {
+                    // pursuit attacked unit
+                    moveToPoint(mObjectToAttack.getX(), mObjectToAttack.getY());
+                    return;
+                }
+            }
+        }
+
+        if (mObjectToAttack != null) {
+            if (!mObjectToAttack.isObjectAlive() || !attackOrMoveIfInRange(mObjectToAttack)) {
+                //object not in the view
+                mObjectToAttack = null;
+            }
+            return;
+        } else {
+            GameObject mainTarget = PlayersHolder.getPlayer(mPlayerName)
+                    .getEnemyPlayer().getPlanet();
+            if (mainTarget != null && mainTarget.isObjectAlive()) {
+                //if main target in view or in attack range
+                if (attackOrMoveIfInRange(mainTarget)) {
+                    return;
+                }
+            }
+        }
+        // move by path (no units in visible range)
+        mTwoDimensionFloatArray[0] = getX();
+        mTwoDimensionFloatArray[1] = getY();
+        mUnitPath.getNextPathPoint(mTwoDimensionFloatArray, mTwoDimensionFloatArray);
+
+        moveToPoint(mTwoDimensionFloatArray[0], mTwoDimensionFloatArray[1]);
     }
 
     @Override
@@ -184,114 +239,47 @@ public class OffenceUnit extends Unit {
         }
     }
 
-    /** used for update current object in game loop */
-    protected class SimpleUnitTimerCallback implements ITimerCallback {
-        private float[] mTwoDimensionFloatArray = new float[2];
-        private long mLastBonusUpdateTime = System.currentTimeMillis();
+    /**
+     * Attacks or moves closer to target unit if in range
+     *
+     * @param enemy enemy game object (e.g. unit) to attack or chase)
+     * @return true - if the enemy unit was attacked or chased by this unit
+     * <br/>
+     * false - if the enemy unit not in the range.
+     */
+    private boolean attackOrMoveIfInRange(GameObject enemy) {
+        // check if we already can attack
+        float distanceToTarget = PathHelper.getDistanceBetweenPoints(getX(), getY(),
+                enemy.getX(), enemy.getY())
+                //minus both objects radius to have distance between objects corners
+                //instead of distance between centers
+                - enemy.getWidth() / 2 - getWidth() / 2;
+        if (distanceToTarget < mAttackRadius) {
+            setUnitLinearVelocity(0, 0);
+            attackTarget(enemy);
+        } else if (distanceToTarget < getViewRadius()) {
+            // pursuit attacked unit
+            moveToPoint(enemy.getX(), enemy.getY());
+        } else {
+            return false;
+        }
+        return true;
+    }
 
-        @Override
-        public void onTimePassed(TimerHandler pTimerHandler) {
-            //The whole bunch of operations is on the UPDATE THREAD!!!
-
-            // update bonuses
-            long currentTime = System.currentTimeMillis();
-            if (currentTime - mLastBonusUpdateTime > sBonusUpdateTime) {
-                updateBonuses();
-            }
-
-            if (isHealthBarDefaultBehaviour()) {
-                // update health bar visibility
-                if (currentTime - mLastHitTime > sHealthBarVisibleTime) {
-                    mLastHitTime = 0;
-                    updateHealthBar();
-                }
-            }
-
-            if (mObjectToAttack == null) {
-                mObjectToAttack = mEnemiesUpdater
-                        .getFirstEnemyInRange(OffenceUnit.this, mAttackRadius);
-                //attack founded enemy
-                if (mObjectToAttack != null) {
-                    setUnitLinearVelocity(0, 0);
-                    attackTarget(mObjectToAttack);
-                    return;
-                } else {
-                    mObjectToAttack = mEnemiesUpdater
-                            .getFirstEnemyInRange(OffenceUnit.this, getViewRadius());
-                    //chase founded object
-                    if (mObjectToAttack != null) {
-                        // pursuit attacked unit
-                        moveToPoint(mObjectToAttack.getX(), mObjectToAttack.getY());
-                        return;
-                    }
-                }
-            }
-
-            if (mObjectToAttack != null) {
-                if (!mObjectToAttack.isObjectAlive() || !attackOrMove(mObjectToAttack)) {
-                    //object not in the view
-                    mObjectToAttack = null;
-                }
-                return;
-            } else {
-                GameObject mainTarget = mEnemiesUpdater.getMainTarget();
-                if (mainTarget != null && mainTarget.isObjectAlive()) {
-                    //if main target in view or in attack range
-                    if (attackOrMove(mainTarget)) {
-                        return;
-                    }
-                }
-            }
-            // move by path (no units in visible range)
-            mTwoDimensionFloatArray[0] = getX();
-            mTwoDimensionFloatArray[1] = getY();
-            mUnitPath.getNextPathPoint(mTwoDimensionFloatArray, mTwoDimensionFloatArray);
-
-            moveToPoint(mTwoDimensionFloatArray[0], mTwoDimensionFloatArray[1]);
+    private void moveToPoint(float x, float y) {
+        int angle = getAngle(x, y);
+        if (needRotation(angle)) {
+            rotateWithAngle(angle);
         }
 
-        /**
-         * Attacks or moves closer to target unit if in range
-         *
-         * @param enemy enemy game object (e.g. unit) to attack or chase)
-         * @return true - if the enemy unit was attacked or chased by this unit
-         * <br/>
-         * false - if the enemy unit not in the range.
-         */
-        private boolean attackOrMove(GameObject enemy) {
-            // check if we already can attack
-            float distanceToTarget = PathHelper.getDistanceBetweenPoints(getX(), getY(),
-                    enemy.getX(), enemy.getY())
-                    //minus both objects radius to have distance between objects corners
-                    //instead of distance between centers
-                    - enemy.getWidth() / 2 - getWidth() / 2;
-            if (distanceToTarget < mAttackRadius) {
-                setUnitLinearVelocity(0, 0);
-                attackTarget(enemy);
-            } else if (distanceToTarget < getViewRadius()) {
-                // pursuit attacked unit
-                moveToPoint(enemy.getX(), enemy.getY());
-            } else {
-                return false;
-            }
-            return true;
-        }
+        float distanceX = x - getX(),
+                distanceY = y - getY();
+        float absDistanceX = Math.abs(distanceX),
+                absDistanceY = Math.abs(distanceY),
+                maxAbsDistance = absDistanceX > absDistanceY ? absDistanceX : absDistanceY;
+        float ordinateSpeed = mMaxVelocity * distanceX / maxAbsDistance,
+                abscissaSpeed = mMaxVelocity * distanceY / maxAbsDistance;
 
-        private void moveToPoint(float x, float y) {
-            int angle = getAngle(x, y);
-            if (needRotation(angle)) {
-                rotateWithAngle(angle);
-            }
-
-            float distanceX = x - getX(),
-                    distanceY = y - getY();
-            float absDistanceX = Math.abs(distanceX),
-                    absDistanceY = Math.abs(distanceY),
-                    maxAbsDistance = absDistanceX > absDistanceY ? absDistanceX : absDistanceY;
-            float ordinateSpeed = mMaxVelocity * distanceX / maxAbsDistance,
-                    abscissaSpeed = mMaxVelocity * distanceY / maxAbsDistance;
-
-            setUnitLinearVelocity(ordinateSpeed, abscissaSpeed);
-        }
+        setUnitLinearVelocity(ordinateSpeed, abscissaSpeed);
     }
 }
