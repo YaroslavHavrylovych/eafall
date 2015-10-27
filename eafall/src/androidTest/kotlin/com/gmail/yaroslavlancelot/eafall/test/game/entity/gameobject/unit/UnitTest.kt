@@ -153,5 +153,9 @@ abstract class UnitTest : AndroidTestCase() {
         fun getUpdateHandler(): IUpdateHandler
 
         fun invokeDestroy()
+
+        fun setStr(str: String)
+
+        fun getStr(): String
     }
 }

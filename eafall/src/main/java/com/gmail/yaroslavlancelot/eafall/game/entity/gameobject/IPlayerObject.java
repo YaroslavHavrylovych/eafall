@@ -6,7 +6,7 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject;
  */
 public interface IPlayerObject {
     /** return the name of the player to which this object is assigned to */
-    String getPlayer();
+    String getPlayerName();
 
     /** set player name which enough to retrieve player out of the holder */
     void setPlayer(String playerName);

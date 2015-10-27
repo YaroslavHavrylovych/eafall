@@ -19,6 +19,8 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitBuilder
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.bonus.Bonus;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.defence.DefenceUnitBuilder;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.filtering.IUnitMap;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.filtering.SquareUnitMap;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.OffenceUnit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.OffenceUnitBuilder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.pool.DefenceUnitsPool;
@@ -56,7 +58,7 @@ public class Player implements IPlayer {
     private final IAlliance mAlliance;
     private final AtomicBoolean mIsFirstIncome = new AtomicBoolean(true);
     /** object related to current player */
-    private final List<Unit> mPlayerObjects;
+    private final List<Unit> mPlayerUnits;
     /** player maximum oxygen amount (can be varying depending on mission) */
     private final int mMaxOxygenAmount;
     /** player offence units limit */
@@ -77,6 +79,8 @@ public class Player implements IPlayer {
     private ArrayList<Bonus> mUnitBonuses = new ArrayList<>(2);
     /** units pools */
     private SparseArray<AfterInitializationPool<Unit>> mUnitsPools;
+    /** units map to improve positioning operations performance */
+    private SquareUnitMap mUnitMap;
 
     public Player(final String playerName, IAlliance alliance, ControlType playerType, MissionConfig missionConfig) {
         mPlayerName = playerName;
@@ -84,7 +88,7 @@ public class Player implements IPlayer {
         OXYGEN_CHANGED_CALLBACK_KEY = "OXYGEN_CHANGED_" + playerName;
         mMaxOxygenAmount = missionConfig.getMaxOxygenAmount();
         mUnitsLimit = missionConfig.getMovableUnitsLimit();
-        mPlayerObjects = new ArrayList<>(mUnitsLimit + 10);
+        mPlayerUnits = new ArrayList<>(mUnitsLimit + 10);
         mAlliance = alliance;
         initBuildingsTypes(alliance);
         mControlType = playerType;
@@ -120,6 +124,7 @@ public class Player implements IPlayer {
     @Override
     public void setPlanet(final PlanetStaticObject planet) {
         mPlayerPlanet = planet;
+        mUnitMap = new SquareUnitMap(planet.isLeft());
     }
 
     @Override
@@ -133,8 +138,13 @@ public class Player implements IPlayer {
     }
 
     @Override
+    public IUnitMap getUnitMap() {
+        return mUnitMap;
+    }
+
+    @Override
     public List<Unit> getPlayerUnits() {
-        return mPlayerObjects;
+        return mPlayerUnits;
     }
 
     @Override
@@ -215,9 +225,9 @@ public class Player implements IPlayer {
 
     @Override
     public void addBonus(Bonus playerBonus) {
-        synchronized (mPlayerObjects) {
+        synchronized (mPlayerUnits) {
             mUnitBonuses.add(playerBonus);
-            for (GameObject gameObject : mPlayerObjects) {
+            for (GameObject gameObject : mPlayerUnits) {
                 if (!(gameObject instanceof OffenceUnit)) {
                     continue;
                 }
@@ -230,8 +240,8 @@ public class Player implements IPlayer {
     @Override
     public void addObjectToPlayer(final Unit object) {
         LoggerHelper.printVerboseMessage(TAG, String.format("Player(%s) object added", getName()));
-        synchronized (mPlayerObjects) {
-            mPlayerObjects.add(object);
+        synchronized (mPlayerUnits) {
+            mPlayerUnits.add(object);
         }
         if (object instanceof OffenceUnit) {
             for (Bonus bonus : mUnitBonuses) {
@@ -245,8 +255,8 @@ public class Player implements IPlayer {
     @Override
     public void removeObjectFromPlayer(final GameObject object) {
         LoggerHelper.printVerboseMessage(TAG, String.format("Player(%s) object removed", getName()));
-        synchronized (mPlayerObjects) {
-            mPlayerObjects.remove(object);
+        synchronized (mPlayerUnits) {
+            mPlayerUnits.remove(object);
         }
         if (object instanceof OffenceUnit) {
             SharedEvents.valueChanged(MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY,
@@ -280,6 +290,15 @@ public class Player implements IPlayer {
         mPlayerFixtureDef.filter.maskBits = maskBits;
     }
 
+    @Override
+    public void updateUnitsPositions() {
+        mUnitMap.updatePositions(mPlayerUnits);
+        IUnitMap enemiesUnitsMap = mEnemyPlayer.getUnitMap();
+        for (int i = 0; i < mPlayerUnits.size(); i++) {
+            mPlayerUnits.get(i).lifecycleTick(enemiesUnitsMap);
+        }
+    }
+
     private void initSettingsCallbacks() {
         final ApplicationSettings settings
                 = EaFallApplication.getConfig().getSettings();
@@ -288,7 +307,7 @@ public class Player implements IPlayer {
                 new ApplicationSettings.ISettingsChangedListener() {
                     @Override
                     public void configChanged(final Object value) {
-                        for (Unit unit : mPlayerObjects) {
+                        for (Unit unit : mPlayerUnits) {
                             unit.syncHealthBarBehaviour();
                         }
                     }

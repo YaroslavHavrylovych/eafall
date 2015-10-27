@@ -13,7 +13,7 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.IPlayerObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IFireListener;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.filtering.IEnemiesFilter;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.filtering.IUnitMap;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.PathHelper;
 import com.gmail.yaroslavlancelot.eafall.game.entity.health.IHealthBar;
 import com.gmail.yaroslavlancelot.eafall.game.entity.health.UnitHealthBar;
@@ -45,8 +45,6 @@ public abstract class Unit extends GameObject implements
     protected int mViewRadius;
     /** currently attacked object */
     protected GameObject mObjectToAttack;
-    /** callback for using to update unit visible enemies */
-    protected IEnemiesFilter mEnemiesUpdater;
     /** last unit attack time */
     protected long mLastAttackTime;
     /** if fire method called it will be triggered */
@@ -56,7 +54,7 @@ public abstract class Unit extends GameObject implements
     /** take care about unit rotation */
     protected RotationModifier mUnitRotationModifier = new ManualFinishRotationModifier(0, 0, 0);
     /** unit player name */
-    private String mPlayerName;
+    protected String mPlayerName;
 
     /** create unit from appropriate builder */
     public Unit(UnitBuilder unitBuilder) {
@@ -96,12 +94,8 @@ public abstract class Unit extends GameObject implements
         mUnitFireCallback = unitFireCallback;
     }
 
-    public void setEnemiesUpdater(final IEnemiesFilter enemiesUpdater) {
-        mEnemiesUpdater = enemiesUpdater;
-    }
-
     @Override
-    public String getPlayer() {
+    public String getPlayerName() {
         return mPlayerName;
     }
 
@@ -120,7 +114,7 @@ public abstract class Unit extends GameObject implements
 
     @Override
     protected IHealthBar createHealthBar() {
-        return new UnitHealthBar(getPlayer(), Math.max(mWidth, mHeight), getVertexBufferObjectManager());
+        return new UnitHealthBar(getPlayerName(), Math.max(mWidth, mHeight), getVertexBufferObjectManager());
     }
 
     @Override
@@ -170,8 +164,8 @@ public abstract class Unit extends GameObject implements
         player.addObjectToPlayer(this);
     }
 
-    /** define unit behaviour/lifecycle */
-    public abstract void startLifecycle();
+    /** trigger new unit lifecycle step */
+    public abstract void lifecycleTick(IUnitMap enemiesMap);
 
     public void fire(GameObject objectToAttack) {
         attackTarget(objectToAttack);

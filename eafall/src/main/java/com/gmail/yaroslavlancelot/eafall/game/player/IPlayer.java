@@ -7,6 +7,7 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.Buildin
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.bonus.Bonus;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.filtering.IUnitMap;
 
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
@@ -53,6 +54,9 @@ public interface IPlayer {
 
     /** set enemy player */
     void setEnemyPlayer(IPlayer enemyPlayer);
+
+    /** returns current player unit map */
+    IUnitMap getUnitMap();
 
     /** get list of all {@link com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject} for the current player */
     List<Unit> getPlayerUnits();
@@ -140,6 +144,13 @@ public interface IPlayer {
 
     /** set category and maskBit for current player units */
     void changeFixtureDefFilter(short category, short maskBits);
+
+    /**
+     * triggers
+     * {@link com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.filtering.IUnitMap}
+     * positions update.
+     */
+    void updateUnitsPositions();
 
     /** Constant to define what player control type will be used */
     enum ControlType {
