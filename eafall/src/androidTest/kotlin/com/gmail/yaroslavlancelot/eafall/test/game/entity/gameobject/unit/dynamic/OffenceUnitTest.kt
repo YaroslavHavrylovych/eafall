@@ -40,7 +40,7 @@ public class OffenceUnitTest : UnitTest() {
         assertTrue(unit.needRotation(-10), "needRotation for -10 check")
         assertFalse(unit.needRotation(-4), "needRotation for -4 check")
         assertFalse(unit.needRotation(0), "needRotation for 0 check")
-        unit.setRotation(0f)
+        unit.rotation = 0f
         unit.setPosition(10f, 10f)
         assertTrue(unit.getAngle(20f, 0f) == 135, "getAngle for 45 check")
         assertTrue(unit.getAngle(20f, 20f) == 45, "getAngle for 45 check")
@@ -48,13 +48,23 @@ public class OffenceUnitTest : UnitTest() {
         assertTrue(unit.getAngle(0f, 20f) == -46, "getAngle for -46 check")
         assertFalse(unit.getAngle(0f, 20f) == 45, "getAngle for 45 (has to be wrong) check")
         assertTrue(unit.getAngle(0f, 0f) == -136, "getAngle for -136 check")
-        unit.setRotation(90f)
+        unit.rotation = 90f
         assertTrue(unit.getAngle(20f, 10f) == 0, "getAngle for 0 check")
         assertTrue(unit.getAngle(10f, 0f) == 90, "getAngle for 90 check")
         assertTrue(unit.getAngle(10f, 20f) == -90, "getAngle for -90 check")
     }
 
     public class TestableOffenceUnit(unitBuilder: OffenceUnitBuilder?) : OffenceUnit(unitBuilder), UnitTest.TestableUnit {
+        var mStr: String = ""
+
+        override fun getStr(): String {
+            return mStr
+        }
+
+        override fun setStr(str: String) {
+            mStr = str
+        }
+
         override fun invokeDestroy() {
             destroy()
         }

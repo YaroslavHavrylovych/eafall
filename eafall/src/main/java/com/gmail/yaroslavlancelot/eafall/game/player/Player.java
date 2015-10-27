@@ -80,7 +80,7 @@ public class Player implements IPlayer {
     /** units pools */
     private SparseArray<AfterInitializationPool<Unit>> mUnitsPools;
     /** units map to improve positioning operations performance */
-    private SquareUnitMap mUnitMap = new SquareUnitMap();
+    private SquareUnitMap mUnitMap;
 
     public Player(final String playerName, IAlliance alliance, ControlType playerType, MissionConfig missionConfig) {
         mPlayerName = playerName;
@@ -124,6 +124,7 @@ public class Player implements IPlayer {
     @Override
     public void setPlanet(final PlanetStaticObject planet) {
         mPlayerPlanet = planet;
+        mUnitMap = new SquareUnitMap(planet.isLeft());
     }
 
     @Override
