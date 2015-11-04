@@ -3,4 +3,10 @@
     <color name="startup_screen_button_text_top">#2f1403</color>
     <color name="startup_screen_button_text_medium">#c3daef</color>
     <color name="startup_screen_button_text_bottom">#9f9f9f</color>
+    <color name="settings_checkbox_title">#cfced3</color>
+    <color name="settings_checkbox_title_shadow">#222222</color>
+    <color name="settings_checkbox_description">#111111</color>
+    <color name="settings_checkbox_description_shadow">#cccccc</color>
+    <color name="settings_health_bar_text">#cfced3</color>
+    <color name="settings_health_bar_text_shadow">#111111</color>
 </resources>

@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 
+import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.android.activities.multiplayer.GameServersListActivity;
 import com.gmail.yaroslavlancelot.eafall.android.activities.settings.SettingsActivity;
@@ -29,7 +30,7 @@ public class StartupActivity extends BaseNonGameActivity {
         initSettingsButton(findViewById(R.id.settings));
         initExitButton(findViewById(R.id.exit));
 
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        PreferenceManager.setDefaultValues(EaFallApplication.getContext(), R.xml.preferences, false);
     }
 
     @Override
@@ -103,12 +104,12 @@ public class StartupActivity extends BaseNonGameActivity {
         });
     }
 
-    private LinearGradient getTextGradient(final int textHeight) {
+    public static LinearGradient getTextGradient(final int textHeight) {
         LinearGradient textGradient = new LinearGradient(
                 0, 0, 0, textHeight,
-                new int[]{getResources().getColor(R.color.startup_screen_button_text_top),
-                        getResources().getColor(R.color.startup_screen_button_text_medium),
-                        getResources().getColor(R.color.startup_screen_button_text_bottom)},
+                new int[]{EaFallApplication.getContext().getResources().getColor(R.color.startup_screen_button_text_top),
+                        EaFallApplication.getContext().getResources().getColor(R.color.startup_screen_button_text_medium),
+                        EaFallApplication.getContext().getResources().getColor(R.color.startup_screen_button_text_bottom)},
                 new float[]{0, 0.5f, 1},
                 Shader.TileMode.CLAMP);
         return textGradient;

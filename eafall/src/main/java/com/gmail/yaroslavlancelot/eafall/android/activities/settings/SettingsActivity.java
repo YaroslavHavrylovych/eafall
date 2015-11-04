@@ -14,23 +14,20 @@ public class SettingsActivity extends BaseNonGameActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.settings_layout);
+        setContentView(R.layout.holder_settings_layout);
         initSettingsFragment();
-        initBackButton(findViewById(R.id.back));
     }
 
     private void initSettingsFragment() {
-        getFragmentManager().beginTransaction()
-                .replace(R.id.content, new SettingsFragment())
-                .commit();
-    }
-
-    private void initBackButton(View backButton) {
-        backButton.setOnClickListener(new View.OnClickListener() {
+        SettingsFragment fragment = new SettingsFragment();
+        fragment.addBackButtonOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 SettingsActivity.this.finish();
             }
         });
+        getFragmentManager().beginTransaction()
+                .replace(R.id.content, fragment)
+                .commit();
     }
 }

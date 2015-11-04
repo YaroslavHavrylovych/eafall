@@ -46,32 +46,29 @@ public class SettingsDialog extends DialogFragment {
     // ===========================================================
     @Override
     public Dialog onCreateDialog(final Bundle savedInstanceState) {
-        Dialog dialog = super.onCreateDialog(savedInstanceState);
+        Dialog dialog = new Dialog(getActivity(), R.style.Theme_NoTitleBar_Fullscreen_NoBackground);
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         return dialog;
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.settings_layout, container, true);
+        View view = inflater.inflate(R.layout.holder_settings_layout, container, true);
         initSettingsFragment();
-        initBackButton(view.findViewById(R.id.back));
         return view;
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private void initSettingsFragment() {
-        getChildFragmentManager().beginTransaction()
-                .replace(R.id.content, new SettingsFragment())
-                .commit();
-    }
-
-    private void initBackButton(View backButton) {
-        backButton.setOnClickListener(new View.OnClickListener() {
+        SettingsFragment fragment = new SettingsFragment();
+        fragment.addBackButtonOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 SettingsDialog.this.dismiss();
             }
         });
+        getChildFragmentManager().beginTransaction()
+                .replace(R.id.content, fragment)
+                .commit();
     }
 
     // ===========================================================

@@ -10,12 +10,11 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 
-    <!-- TODO set no background to those activities, which are full screen -->
     <application
         android:name=".EaFallApplication"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
-        android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen"
+        android:theme="@style/Theme.NoTitleBar.Fullscreen.NoBackground"
         android:allowBackup="false">
         <activity
             android:name="com.gmail.yaroslavlancelot.eafall.android.activities.StartupActivity"

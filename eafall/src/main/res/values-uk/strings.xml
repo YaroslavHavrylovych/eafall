@@ -116,6 +116,7 @@
 
     <!-- settings -->
     <string name="settings">Налаштування</string>
+    <string name="settings_health_bar_behaviour">Полоса здоров’я</string>
     <string name="always_hidden">Прихований</string>
     <string name="always_visible">Видимий</string>
     <string name="category_game">Гра</string>

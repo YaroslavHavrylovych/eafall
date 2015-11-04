@@ -43,7 +43,7 @@ public class ApplicationSettings extends SelfCleanable
     /*
      * Graphic
      */
-    private UnitHealthBarBehavior mUnitsHealthBarEnabled = UnitHealthBarBehavior.DEFAULT;
+    private UnitHealthBarBehavior mUnitsHealthBarBehaviour = UnitHealthBarBehavior.DEFAULT;
 
     // ===========================================================
     // Fields
@@ -72,7 +72,7 @@ public class ApplicationSettings extends SelfCleanable
         KEY_PREF_UNIT_HEALTH_BAR_BEHAVIOR = context.getString(R.string.pref_health_bar_behaviour);
         String val = preferences.getString(KEY_PREF_UNIT_HEALTH_BAR_BEHAVIOR,
                 UnitHealthBarBehavior.DEFAULT.name());
-        mUnitsHealthBarEnabled = UnitHealthBarBehavior.valueOf(val);
+        mUnitsHealthBarBehaviour = UnitHealthBarBehavior.valueOf(val);
     }
 
     // ===========================================================
@@ -83,7 +83,7 @@ public class ApplicationSettings extends SelfCleanable
     }
 
     public UnitHealthBarBehavior getHealthBarBehavior() {
-        return mUnitsHealthBarEnabled;
+        return mUnitsHealthBarBehaviour;
     }
 
     public boolean isSoundsEnabled() {
@@ -122,7 +122,7 @@ public class ApplicationSettings extends SelfCleanable
             String val = sharedPreferences.getString(KEY_PREF_UNIT_HEALTH_BAR_BEHAVIOR,
                     UnitHealthBarBehavior.DEFAULT.name());
             objVal = val;
-            mUnitsHealthBarEnabled = UnitHealthBarBehavior.valueOf(val);
+            mUnitsHealthBarBehaviour = UnitHealthBarBehavior.valueOf(val);
         }
         ISettingsChangedListener listener = mSettingsChangedListeners.get(key);
         if (listener != null && objVal != null) {
