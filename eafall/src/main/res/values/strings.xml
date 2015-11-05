@@ -120,10 +120,10 @@
     <string name="developers_mode">Developers mode</string>
     <string name="developers_mode_on">Developers mode enabled</string>
     <string name="developers_mode_off">Developers mode disabled</string>
-    <string name="pick_unit_health_bar_behavior">Pick unit health bar behavior</string>
-    <string name="hidden_until_unit_was_hit">Hidden until unit was hit</string>
-    <string name="always_hidden">Always hidden</string>
-    <string name="always_visible">Always visible</string>
+    <string name="pick_unit_health_bar_behavior">HEALTH BAR BEHAVIOUR</string>
+    <string name="health_bar_default">Hidden until unit was hit</string>
+    <string name="health_bar_always_hidden">Always hidden</string>
+    <string name="health_bar_always_visible">Always visible</string>
     <string name="game_sounds">Game Sounds</string>
     <string name="game_sounds_on">Game sounds enabled</string>
     <string name="game_sounds_off">Game sounds disabled</string>
@@ -142,6 +142,7 @@
     <string name="back">Back</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="done">Done</string>
     <string name="exit_click">Double click to exit</string>
     <string name="exit_loading">You can\'t quite during loading</string>
     <string name="connect">Connect</string>

@@ -117,8 +117,8 @@
     <!-- settings -->
     <string name="settings">Налаштування</string>
     <string name="settings_health_bar_behaviour">Полоса здоров’я</string>
-    <string name="always_hidden">Прихований</string>
-    <string name="always_visible">Видимий</string>
+    <string name="health_bar_always_hidden">Прихований</string>
+    <string name="health_bar_always_visible">Видимий</string>
     <string name="category_game">Гра</string>
     <string name="category_other">Інше</string>
     <string name="category_sounds">Звук</string>
@@ -129,12 +129,12 @@
     <string name="game_sounds_off">Вимкнені</string>
     <string name="game_sounds_on">Увімкнені</string>
     <string name="game_sounds_volume">Гучність</string>
-    <string name="hidden_until_unit_was_hit">Прихований доки юніт не атакований</string>
+    <string name="health_bar_default">Прихований доки юніт не атакований</string>
     <string name="music">Музика</string>
     <string name="music_off">Вимкена</string>
     <string name="music_on">Увімкнена</string>
     <string name="music_volume">Гучність</string>
-    <string name="pick_unit_health_bar_behavior">Видимість показника здоровя юніта</string>
+    <string name="pick_unit_health_bar_behavior">ПОКАЗНИК ЗДОРОВ’Я ЮНІТА</string>
 
     <!-- general -->
     <string name="app_name">Космічні Загарбники</string>
@@ -142,6 +142,7 @@
     <string name="back">Назад</string>
     <string name="yes">Так</string>
     <string name="no">Ні</string>
+    <string name="done">Готово</string>
     <string name="exit_click">Подвійний клік, щоб вийти</string>
     <string name="exit_loading">Не можна вийти під час завантаження</string>
     <string name="connect">З’єднати</string>

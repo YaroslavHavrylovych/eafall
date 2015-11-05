@@ -18,7 +18,7 @@ import com.gmail.yaroslavlancelot.eafall.game.resources.ResourceFactory;
 import com.gmail.yaroslavlancelot.eafall.game.scene.SceneManager;
 import com.gmail.yaroslavlancelot.eafall.game.scene.hud.EaFallHud;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
-import com.gmail.yaroslavlancelot.eafall.game.visual.dialogs.ExitConfirmationDialog;
+import com.gmail.yaroslavlancelot.eafall.android.dialog.ExitConfirmationDialog;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 import com.gmail.yaroslavlancelot.eafall.general.EbSubscribersHolder;
 import com.gmail.yaroslavlancelot.eafall.general.SelfCleanable;

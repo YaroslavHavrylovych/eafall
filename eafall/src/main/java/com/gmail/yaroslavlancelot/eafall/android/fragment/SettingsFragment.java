@@ -1,9 +1,9 @@
-package com.gmail.yaroslavlancelot.eafall.general.settings;
+package com.gmail.yaroslavlancelot.eafall.android.fragment;
 
-import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.android.activities.StartupActivity;
+import com.gmail.yaroslavlancelot.eafall.android.dialog.HealthBarDialog;
 import com.gmail.yaroslavlancelot.eafall.android.view.SettingsVolume;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.game.ApplicationSettings;
 
@@ -97,12 +98,25 @@ public class SettingsFragment extends Fragment {
     }
 
     /** initialize health bar button */
-    private void initHealthBar(Button button) {
-        String val = mSharedPreferences.getString(KEY_HEALTH_BAR,
-                ApplicationSettings.UnitHealthBarBehavior.DEFAULT.name());
-        String[] names = getResources().getStringArray(R.array.unit_health_bar_behavior_value);
-        int id = ApplicationSettings.UnitHealthBarBehavior.valueOf(val).ordinal();
-        button.setText(names[id]);
+    private void initHealthBar(final Button button) {
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                String val = mSharedPreferences.getString(KEY_HEALTH_BAR,
+                        ApplicationSettings.UnitHealthBarBehavior.DEFAULT.name());
+                ApplicationSettings.UnitHealthBarBehavior behavior =
+                        ApplicationSettings.UnitHealthBarBehavior.valueOf(val);
+                HealthBarDialog dialogFragment = new HealthBarDialog();
+                dialogFragment.init(new HealthBarDialog.HealthBarTypeSet() {
+                    @Override
+                    public void onTypeSet(final ApplicationSettings.UnitHealthBarBehavior healthBarBehavior) {
+                        mSharedPreferences.edit().putString(KEY_HEALTH_BAR,
+                                healthBarBehavior.name()).apply();
+                    }
+                }, behavior);
+                dialogFragment.show(getFragmentManager(), HealthBarDialog.KEY);
+            }
+        });
     }
 
     /** developers mode check box initialization */

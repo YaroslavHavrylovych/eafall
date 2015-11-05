@@ -47,4 +47,23 @@
         <item name="android:shadowDy">0</item>
         <item name="android:shadowRadius">5</item>
     </style>
+
+    <style name="DialogRadioButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">5dip</item>
+        <item name="android:paddingLeft">10dip</item>
+        <item name="android:textSize">15dip</item>
+        <item name="android:textColor">@color/health_bar_dialog_text</item>
+        <item name="android:shadowColor">@color/health_bar_dialog_text_shadow</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">0</item>
+        <item name="android:shadowRadius">1</item>
+        <item name="android:button">@drawable/settings_checkbox_selector</item>
+    </style>
+
+    <style name="DialogTitleText">
+        <item name="android:textSize">18dip</item>
+        <item name="android:textColor">@color/health_bar_dialog_text</item>
+    </style>
 </resources>

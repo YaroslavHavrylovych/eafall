@@ -1,11 +1,11 @@
 package com.gmail.yaroslavlancelot.eafall.android.activities;
 
-import android.app.Activity;
+import android.support.v4.app.FragmentActivity;
 
 import com.gmail.yaroslavlancelot.eafall.general.Holder;
 
 /** base/parent (general actions) for all non in-game activities */
-public abstract class BaseNonGameActivity extends Activity {
+public abstract class BaseNonGameActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();

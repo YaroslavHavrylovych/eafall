@@ -7,9 +7,6 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignEnd="@+id/footer"
-        android:layout_alignRight="@+id/footer"
-        android:layout_above="@+id/footer"
         android:id="@+id/content">
     </LinearLayout>
 </FrameLayout>

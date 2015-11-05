@@ -1,20 +1,19 @@
-package com.gmail.yaroslavlancelot.eafall.game.visual.dialogs;
+package com.gmail.yaroslavlancelot.eafall.android.dialog;
 
-import android.annotation.TargetApi;
 import android.app.Dialog;
-import android.app.DialogFragment;
-import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
 import com.gmail.yaroslavlancelot.eafall.R;
-import com.gmail.yaroslavlancelot.eafall.general.settings.SettingsFragment;
+import com.gmail.yaroslavlancelot.eafall.android.fragment.SettingsFragment;
 
 /**
- * Fragment which contains settings fragment. Used to be shown as a dialog
+ * Dialog which contains settings fragment. Used to be shown as a dialog
  * in the game.
  *
  * @author Yaroslav Havrylovych
@@ -23,6 +22,7 @@ public class SettingsDialog extends DialogFragment {
     // ===========================================================
     // Constants
     // ===========================================================
+    /** Dialog key */
     public static final String KEY = "settings_dialog";
 
     // ===========================================================
@@ -45,6 +45,7 @@ public class SettingsDialog extends DialogFragment {
     // Methods
     // ===========================================================
     @Override
+    @NonNull
     public Dialog onCreateDialog(final Bundle savedInstanceState) {
         Dialog dialog = new Dialog(getActivity(), R.style.Theme_NoTitleBar_Fullscreen_NoBackground);
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -52,12 +53,15 @@ public class SettingsDialog extends DialogFragment {
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.holder_settings_layout, container, true);
+        View view = inflater.inflate(R.layout.holder_layout, container, true);
         initSettingsFragment();
         return view;
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    /**
+     * Used in {@link SettingsDialog#onCreateView(LayoutInflater, ViewGroup, Bundle)}
+     * to initialize the content.
+     */
     private void initSettingsFragment() {
         SettingsFragment fragment = new SettingsFragment();
         fragment.addBackButtonOnClickListener(new View.OnClickListener() {

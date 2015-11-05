@@ -5,7 +5,7 @@ import android.view.View;
 
 import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.android.activities.BaseNonGameActivity;
-import com.gmail.yaroslavlancelot.eafall.general.settings.SettingsFragment;
+import com.gmail.yaroslavlancelot.eafall.android.fragment.SettingsFragment;
 
 /**
  * Settings Activity
@@ -14,7 +14,7 @@ public class SettingsActivity extends BaseNonGameActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.holder_settings_layout);
+        setContentView(R.layout.holder_layout);
         initSettingsFragment();
     }
 
@@ -26,7 +26,7 @@ public class SettingsActivity extends BaseNonGameActivity {
                 SettingsActivity.this.finish();
             }
         });
-        getFragmentManager().beginTransaction()
+        getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content, fragment)
                 .commit();
     }
