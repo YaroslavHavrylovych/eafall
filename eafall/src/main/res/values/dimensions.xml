@@ -28,4 +28,11 @@
     <!-- default values -->
     <dimen name="default_button_height">25dp</dimen>
     <dimen name="default_button_text_size">15dp</dimen>
+
+    <!-- settings -->
+    <dimen name="settings_title_text_size">15dp</dimen>
+    <dimen name="settings_health_bar_behaviour_text_size">15dp</dimen>
+    <dimen name="settings_volume_title">17dp</dimen>
+    <dimen name="settings_volume_description">11dp</dimen>
+    <dimen name="settings_health_bar_text">16dp</dimen>
 </resources>

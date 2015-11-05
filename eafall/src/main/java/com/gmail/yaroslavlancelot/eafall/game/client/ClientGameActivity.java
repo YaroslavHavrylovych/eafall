@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
+import com.gmail.yaroslavlancelot.eafall.android.dialog.SettingsDialog;
 import com.gmail.yaroslavlancelot.eafall.game.EaFallActivity;
 import com.gmail.yaroslavlancelot.eafall.game.GameState;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
@@ -53,7 +54,6 @@ import com.gmail.yaroslavlancelot.eafall.game.rule.IRuler;
 import com.gmail.yaroslavlancelot.eafall.game.rule.RulesFactory;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 import com.gmail.yaroslavlancelot.eafall.game.touch.ICameraHandler;
-import com.gmail.yaroslavlancelot.eafall.game.visual.dialogs.SettingsDialog;
 
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.entity.Entity;
@@ -412,7 +412,7 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
     @SuppressWarnings("unused")
     public void onEvent(ShowSettingsEvent event) {
         SettingsDialog settingsDialog = new SettingsDialog();
-        settingsDialog.show(getFragmentManager(), SettingsDialog.KEY);
+        settingsDialog.show(getSupportFragmentManager(), SettingsDialog.KEY);
     }
 
     @SuppressWarnings("unused")

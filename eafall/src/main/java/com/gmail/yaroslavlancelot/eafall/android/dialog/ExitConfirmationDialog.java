@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.eafall.game.visual.dialogs;
+package com.gmail.yaroslavlancelot.eafall.android.dialog;
 
 import android.app.Dialog;
 import android.view.View;

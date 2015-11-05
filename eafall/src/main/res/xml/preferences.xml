@@ -6,24 +6,24 @@
             android:title="@string/game_sounds"
             android:summaryOn="@string/game_sounds_on"
             android:summaryOff="@string/game_sounds_off"
-            android:defaultValue="false"/>
+            android:defaultValue="true"/>
         <com.gmail.yaroslavlancelot.eafall.general.settings.SeekBarPreference
             android:dependency="@string/pref_sounds_enabled"
             android:key="@string/pref_sounds_volume"
             android:title="@string/game_sounds_volume"
-            android:max="100"
+            android:max="99"
             android:defaultValue="0.5"/>
         <CheckBoxPreference
             android:key="@string/pref_music_enabled"
             android:title="@string/music"
             android:summaryOn="@string/music_on"
             android:summaryOff="@string/music_off"
-            android:defaultValue="false"/>
+            android:defaultValue="true"/>
         <com.gmail.yaroslavlancelot.eafall.general.settings.SeekBarPreference
             android:dependency="@string/pref_music_enabled"
             android:key="@string/pref_music_volume"
             android:title="@string/music_volume"
-            android:max="100"
+            android:max="99"
             android:defaultValue="0.9"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/category_game">

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:weightSum="1920"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <android.support.v4.widget.Space
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:layout_weight="160"/>
+
+    <LinearLayout
+        android:layout_width="0dip"
+        android:layout_weight="1717"
+        android:layout_height="match_parent"
+        android:weightSum="1717">
+
+        <CheckBox
+            android:id="@+id/volume_checkbox"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="153"
+            android:button="@null"
+            android:background="@drawable/settings_checkbox_selector"/>
+
+        <LinearLayout
+            android:id="@+id/text"
+            android:paddingLeft="5dip"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:layout_width="0dip"
+            android:layout_weight="510"
+            android:layout_height="match_parent">
+
+            <com.gmail.yaroslavlancelot.eafall.android.view.MagicTextView
+                android:id="@+id/volume_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/SettingsCheckboxTitle"
+                android:text="@string/game_sounds"/>
+
+            <TextView
+                android:id="@+id/volume_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/SettingsCheckboxDescription"
+                android:text="@string/developers_mode_off"/>
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="0dip"
+            android:layout_weight="1049"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:weightSum="1049"
+                android:layout_height="match_parent">
+
+                <Button
+                    android:id="@+id/decrease"
+                    android:layout_width="0dip"
+                    android:layout_weight="111"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/volume_decrease_selector"/>
+
+                <View
+                    android:id="@+id/middle"
+                    android:background="@drawable/volume_middle_part"
+                    android:layout_width="0dip"
+                    android:layout_weight="780"
+                    android:layout_height="match_parent"/>
+
+                <Button
+                    android:id="@+id/increase"
+                    android:layout_width="0dip"
+                    android:layout_weight="158"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/volume_increase_selector"/>
+            </LinearLayout>
+
+            <com.gmail.yaroslavlancelot.eafall.android.view.PercentLight
+                android:id="@+id/light"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </FrameLayout>
+    </LinearLayout>
+
+</LinearLayout>
