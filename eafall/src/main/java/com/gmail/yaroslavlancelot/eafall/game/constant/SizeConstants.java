@@ -29,6 +29,8 @@ public final class SizeConstants {
     public static final int HEALTH_BAR_CARCASS_HEIGHT = 49;
     public static final int UNIT_HEALTH_BAR_HEIGHT = 3;
     public static final int UNIT_HEALTH_BAR_FILE_SIZE = 3;
+    public static final int FIELD_PARTITION_SIZE = 120;
+    public static final int BULLET_MASS_DAMAGE_RADIUS = FIELD_PARTITION_SIZE / 2;
 
     /* HUD */
     //positions

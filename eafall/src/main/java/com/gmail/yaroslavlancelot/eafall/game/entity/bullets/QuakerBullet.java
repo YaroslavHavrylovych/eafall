@@ -1,10 +1,19 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.bullets;
 
+import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.engine.InstantRotationModifier;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetStaticObject;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
+import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
+import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.modifier.IModifier;
+
+import java.util.List;
 
 /**
  * @author Yaroslav Havrylovych
@@ -17,6 +26,10 @@ public class QuakerBullet extends AbstractBullet {
     // ===========================================================
     // Fields
     // ===========================================================
+    /** used to hit all enemies in the given range */
+    private String mEnemyPlayer;
+    /** contains true if bullet was shot on the planet */
+    private boolean mIsPlanet;
 
     // ===========================================================
     // Constructors
@@ -30,6 +43,13 @@ public class QuakerBullet extends AbstractBullet {
 
     // ===========================================================
     // Getter & Setter
+    // ===========================================================
+    public void setPlayerName(String playerName) {
+        mEnemyPlayer = playerName;
+    }
+
+    // ===========================================================
+    // Methods
     // ===========================================================
 
     // ===========================================================
@@ -54,17 +74,31 @@ public class QuakerBullet extends AbstractBullet {
     }
 
     @Override
+    public void fire(final Damage damage, final float x, final float y, final GameObject gameObject) {
+        super.fire(damage, x, y, gameObject);
+        mIsPlanet = gameObject instanceof PlanetStaticObject;
+    }
+
+    @Override
     public void onModifierFinished(final IModifier pModifier, final Object pItem) {
-        if (mTarget.getObjectUniqueId() == mTargetId && mTarget.isObjectAlive()) {
-            mTarget.damageObject(mDamage);
+        if (mIsPlanet) {
+            if (mTarget.isObjectAlive()) {
+                mTarget.damageObject(mDamage);
+            }
+        } else {
+            IPlayer player = PlayersHolder.getPlayer(mEnemyPlayer);
+            List<Unit> list = player.getUnitMap().getInRange(mTarget.getX(), mTarget.getY(),
+                    SizeConstants.BULLET_MASS_DAMAGE_RADIUS);
+            for (int i = 0; i < list.size(); i++) {
+                Unit unit = list.get(i);
+                if (unit.isObjectAlive()) {
+                    unit.damageObject(mDamage);
+                }
+            }
         }
         setPosition(-100, -100);
         onBulletDestroyed();
     }
-
-    // ===========================================================
-    // Methods
-    // ===========================================================
 
     // ===========================================================
     // Inner and Anonymous Classes

@@ -6,9 +6,8 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.filtering.IUnitMap
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.filtering.SquareUnitMap
 import com.gmail.yaroslavlancelot.eafall.test.game.entity.gameobject.unit.dynamic.OffenceUnitTest
+import kotlin.test.assertTrue
 import java.util.*
-import kotlin.test.assertEquals
-import kotlin.test.assertNull
 
 /**
  * @author Yaroslav Havrylovych
@@ -54,6 +53,19 @@ class SquareUnitMapTest constructor() : AndroidTestCase() {
         RTL_UNIT_MAP.updatePositions(units)
     }
 
+    public fun testRange() {
+        var list = LTR_UNIT_MAP.getInRange(getX(4).toFloat(), getY(3).toFloat(), 120f)
+        assertTrue(1 == list.size(), "one unit has to be in range")
+        list = RTL_UNIT_MAP.getInRange(getX(4).toFloat(), getY(3).toFloat(), 122f)
+        assertTrue(2 == list.size(), "two units has to be in range")
+        list = RTL_UNIT_MAP.getInRange(getX(4).toFloat(), getY(3).toFloat(), 60f)
+        assertTrue(0 == list.size(), "unit found, but in shouldn't in the given range")
+        list = RTL_UNIT_MAP.getInRange(getX(4).toFloat(), getY(3).toFloat(), 80f)
+        assertTrue(0 == list.size(), "unit found, but in shouldn't in the given range")
+        list = LTR_UNIT_MAP.getInRange(getX(N - 3).toFloat(), getY(M - 1).toFloat(), 60f)
+        assertTrue(2 == list.size(), "unit found, but in shouldn't in the given range")
+    }
+
     public fun testLtrMap() {
         //top
         check(LTR_UNIT_MAP, 2, 0, 2, ONE_RANGE)
@@ -73,11 +85,11 @@ class SquareUnitMapTest constructor() : AndroidTestCase() {
     private fun check(unitMap: IUnitMap, i: Int, n: Int, m: Int, range: Int) {
         var actualUnit = unitMap.getClosestUnit(getX(n).toFloat(), getY(m).toFloat(), range.toFloat())
         if (i == -1) {
-            assertNull(actualUnit, "expected null")
+            assertTrue(actualUnit == null, "expected null")
             return
         }
         var expectedUnit = UNITS.get(i)
-        assertEquals(expectedUnit, actualUnit, "" + expectedUnit.tag + " expected but found " + actualUnit.tag)
+        assertTrue(expectedUnit == actualUnit, "" + expectedUnit.tag + " expected but found " + actualUnit.tag)
     }
 
     public fun testRtlMap() {

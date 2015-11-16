@@ -2,6 +2,7 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.filtering;
 
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.PathHelper;
 
 import org.andengine.util.math.MathUtils;
 
@@ -28,13 +29,16 @@ public class SquareUnitMap implements IUnitMap, IUnitMapUpdater {
     public final int M = 9;
     public final int N_1 = N - 1;
     public final int M_1 = M - 1;
-    public final int PARTITION_SIZE = 120;
+    public final int PARTITION_SIZE = SizeConstants.FIELD_PARTITION_SIZE;
+    public final int HALF_PARTITION_SIZE = PARTITION_SIZE / 2;
     private final boolean mLtr;
 
     // ===========================================================
     // Fields
     // ===========================================================
     private List<List<List<Unit>>> mPartitions;
+    /** used as temporary list to store units */
+    private List<Unit> mTmpUnitList = new ArrayList<>(40);
 
     // ===========================================================
     // Constructors
@@ -86,6 +90,40 @@ public class SquareUnitMap implements IUnitMap, IUnitMapUpdater {
     }
 
     @Override
+    public List<Unit> getInRange(final float x, final float y, final float range) {
+        mTmpUnitList.clear();
+        int ix = (int) x, iy = (int) y, iRange = (int) range;
+        int n = ix / PARTITION_SIZE;
+        int m = (SizeConstants.GAME_FIELD_HEIGHT - iy) / PARTITION_SIZE;
+        addFromPartition(ix, iy, iRange, n, m);
+        //check neighbour partitions
+        int restN = ix - n * PARTITION_SIZE;
+        int restM = iy - (N - m) * PARTITION_SIZE;
+        if (restN < range) {
+            addFromPartition(ix, iy, iRange, n - 1, m);
+            if (restM < range) {
+                addFromPartition(ix, iy, iRange, n - 1, m - 1);
+            } else if (restM > range) {
+                addFromPartition(ix, iy, iRange, n - 1, m + 1);
+            }
+        } else if (restN > range) {
+            addFromPartition(ix, iy, iRange, n + 1, m);
+            if (restM < range) {
+                addFromPartition(ix, iy, iRange, n + 1, m - 1);
+            } else if (restM > range) {
+                addFromPartition(ix, iy, iRange, n + 1, m + 1);
+            }
+        } else {
+            if (restM < range) {
+                addFromPartition(ix, iy, iRange, n, m - 1);
+            } else if (restM > range) {
+                addFromPartition(ix, iy, iRange, n, m + 1);
+            }
+        }
+        return mTmpUnitList;
+    }
+
+    @Override
     public void updatePositions(List<Unit> units) {
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
@@ -105,6 +143,23 @@ public class SquareUnitMap implements IUnitMap, IUnitMapUpdater {
     // ===========================================================
     // Methods
     // ===========================================================
+
+    /**
+     * add all units from the given partition to the {@link SquareUnitMap#mTmpUnitList}
+     * if they're in the given range
+     */
+    private void addFromPartition(int x, int y, int range, int n, int m) {
+        if (n < 0 || n > N_1 || m < 0 || m > N_1) {
+            return;
+        }
+        List<Unit> partition = mPartitions.get(n).get(m);
+        for (int i = 0; i < partition.size(); i++) {
+            Unit unit = partition.get(i);
+            if (PathHelper.getDistanceBetweenPoints(unit.getX(), unit.getY(), x, y) < range) {
+                mTmpUnitList.add(unit);
+            }
+        }
+    }
 
     /**
      * used to search an enemy for the unit from the top side of the screen

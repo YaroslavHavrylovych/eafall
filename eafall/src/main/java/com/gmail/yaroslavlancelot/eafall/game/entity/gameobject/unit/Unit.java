@@ -183,7 +183,8 @@ public abstract class Unit extends GameObject implements
             mUnitFireCallback.fire(getObjectUniqueId(), attackedObject.getObjectUniqueId());
         }
         playSound(mFireSound);
-        AbstractBullet bullet = BulletsPool.getInstance(mObjectDamage.getDamageType()).obtainPoolItem();
+        AbstractBullet bullet = BulletsPool.getBullet(mObjectDamage.getDamageType(),
+                PlayersHolder.getPlayer(mPlayerName).getEnemyPlayer().getName());
         bullet.setRotation(mRotation);
 
         bulletFire(attackedObject, bullet);

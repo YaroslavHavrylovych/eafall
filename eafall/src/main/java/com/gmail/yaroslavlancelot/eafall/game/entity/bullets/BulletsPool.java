@@ -25,8 +25,20 @@ public class BulletsPool {
         }
     }
 
-    public static AfterInitializationPool<AbstractBullet> getInstance(Damage.DamageType damageType) {
-        return BULLETS_POOL.mPools.get(damageType);
+    /**
+     * create (or use existing one) bullet
+     *
+     * @param damageType bullet damage type
+     * @param playerName player which want to throw the bullet name
+     * @return bullet which you can use
+     */
+    public static AbstractBullet getBullet(Damage.DamageType damageType, String playerName) {
+        Pool pool = BULLETS_POOL.mPools.get(damageType);
+        AbstractBullet bullet = pool.allocatePoolItem();
+        if (damageType.equals(Damage.DamageType.QUAKER)) {
+            ((QuakerBullet) bullet).setPlayerName(playerName);
+        }
+        return bullet;
     }
 
     public static void init(VertexBufferObjectManager objectManager) {
