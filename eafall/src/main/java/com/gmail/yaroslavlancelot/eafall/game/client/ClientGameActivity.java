@@ -224,7 +224,6 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
         //other
         initPlayer(mFirstPlayer);
         initPlayer(mSecondPlayer);
-        mFirstPlayer.setMoney(2000);
     }
 
     /**

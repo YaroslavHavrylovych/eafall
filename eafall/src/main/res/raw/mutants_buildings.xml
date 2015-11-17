@@ -9,21 +9,21 @@
         <upgrades>
             <upgrade id="0">
                 <image_name>water_cave.png</image_name>
-                <cost>150</cost>
+                <cost>270</cost>
                 <unit_id>10</unit_id>
-                <building_time>6</building_time>
+                <building_time>13</building_time>
             </upgrade>
             <upgrade id="1">
                 <image_name>water_cave.png</image_name>
-                <cost>200</cost>
+                <cost>514</cost>
                 <unit_id>11</unit_id>
-                <building_time>10</building_time>
+                <building_time>14</building_time>
             </upgrade>
             <upgrade id="2">
                 <image_name>water_cave.png</image_name>
-                <cost>350</cost>
+                <cost>600</cost>
                 <unit_id>12</unit_id>
-                <building_time>10</building_time>
+                <building_time>15</building_time>
             </upgrade>
         </upgrades>
     </units_building>
@@ -35,15 +35,15 @@
         <upgrades>
             <upgrade id="0">
                 <image_name>invisible_plain.png</image_name>
-                <cost>150</cost>
+                <cost>315</cost>
                 <unit_id>20</unit_id>
-                <building_time>12</building_time>
+                <building_time>8</building_time>
             </upgrade>
             <upgrade id="1">
                 <image_name>invisible_plain.png</image_name>
-                <cost>250</cost>
+                <cost>491</cost>
                 <unit_id>21</unit_id>
-                <building_time>14</building_time>
+                <building_time>10</building_time>
             </upgrade>
         </upgrades>
     </units_building>
@@ -55,15 +55,15 @@
         <upgrades>
             <upgrade id="0">
                 <image_name>hydra_pond.png</image_name>
-                <cost>220</cost>
+                <cost>445</cost>
                 <unit_id>30</unit_id>
-                <building_time>12</building_time>
+                <building_time>10</building_time>
             </upgrade>
             <upgrade id="1">
                 <image_name>hydra_pond.png</image_name>
-                <cost>450</cost>
+                <cost>559</cost>
                 <unit_id>31</unit_id>
-                <building_time>12</building_time>
+                <building_time>10</building_time>
             </upgrade>
         </upgrades>
     </units_building>
@@ -75,15 +75,15 @@
         <upgrades>
             <upgrade id="0">
                 <image_name>poison_cave.png</image_name>
-                <cost>200</cost>
+                <cost>355</cost>
                 <unit_id>40</unit_id>
                 <building_time>12</building_time>
             </upgrade>
             <upgrade id="0">
                 <image_name>poison_cave.png</image_name>
-                <cost>310</cost>
+                <cost>435</cost>
                 <unit_id>41</unit_id>
-                <building_time>14</building_time>
+                <building_time>11</building_time>
             </upgrade>
         </upgrades>
     </units_building>
@@ -95,15 +95,15 @@
         <upgrades>
             <upgrade id="0">
                 <image_name>web.png</image_name>
-                <cost>240</cost>
+                <cost>495</cost>
                 <unit_id>50</unit_id>
-                <building_time>14</building_time>
+                <building_time>10</building_time>
             </upgrade>
             <upgrade id="1">
                 <image_name>web.png</image_name>
-                <cost>200</cost>
+                <cost>505</cost>
                 <unit_id>51</unit_id>
-                <building_time>16</building_time>
+                <building_time>9</building_time>
             </upgrade>
         </upgrades>
     </units_building>
@@ -115,13 +115,13 @@
         <upgrades>
             <upgrade id="0">
                 <image_name>mountain_cave.png</image_name>
-                <cost>320</cost>
+                <cost>585</cost>
                 <unit_id>60</unit_id>
-                <building_time>14</building_time>
+                <building_time>11</building_time>
             </upgrade>
             <upgrade id="1">
                 <image_name>mountain_cave.png</image_name>
-                <cost>300</cost>
+                <cost>675</cost>
                 <unit_id>61</unit_id>
                 <building_time>12</building_time>
             </upgrade>
@@ -135,15 +135,15 @@
         <upgrades>
             <upgrade id="0">
                 <image_name>hell.png</image_name>
-                <cost>400</cost>
+                <cost>665</cost>
                 <unit_id>70</unit_id>
-                <building_time>16</building_time>
+                <building_time>14</building_time>
             </upgrade>
             <upgrade id="1">
                 <image_name>hell.png</image_name>
-                <cost>500</cost>
+                <cost>745</cost>
                 <unit_id>71</unit_id>
-                <building_time>15</building_time>
+                <building_time>13</building_time>
             </upgrade>
         </upgrades>
     </units_building>
@@ -151,14 +151,14 @@
         <position_x>-9</position_x>
         <position_y>105</position_y>
         <image_name>bastion.png</image_name>
-        <cost>600</cost>
+        <cost>1200</cost>
         <unit_id>250</unit_id>
-        <building_time>25</building_time>
+        <building_time>20</building_time>
     </defence_building>
     <wealth_building name="reptile_city">
         <first_build_income>20</first_build_income>
         <next_buildings_income>2</next_buildings_income>
-        <cost>350</cost>
+        <cost>500</cost>
         <position_x>-9</position_x>
         <position_y>105</position_y>
         <image_name>bastion.png</image_name>
@@ -167,7 +167,7 @@
         <characteristic>attack</characteristic>
         <value>10</value>
         <percentage>true</percentage>
-        <cost>350</cost>
+        <cost>500</cost>
         <position_x>-9</position_x>
         <position_y>105</position_y>
         <image_name>bastion.png</image_name>

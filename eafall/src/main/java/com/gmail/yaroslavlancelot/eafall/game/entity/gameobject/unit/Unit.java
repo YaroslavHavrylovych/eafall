@@ -120,6 +120,8 @@ public abstract class Unit extends GameObject implements
     @Override
     protected void destroy() {
         super.destroy();
+        PlayersHolder.getPlayer(mPlayerName).getEnemyPlayer()
+                .changeMoney(mObjectMaximumHealth / 100);
         clearUpdateHandlers();
         clearEntityModifiers();
         PlayersHolder.getPlayer(mPlayerName).removeObjectFromPlayer(this);

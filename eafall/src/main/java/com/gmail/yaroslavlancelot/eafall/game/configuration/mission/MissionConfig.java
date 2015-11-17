@@ -123,7 +123,7 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
     /** sets default mission values */
     private void resetToDefault() {
         mMovableUnitsLimit = 200;
-        mPlanetHealth = 3000;
+        mPlanetHealth = 5000;
         mMaxOxygenAmount = 2000;
         mMissionType = MissionType.WIN;
         mValue = NO_VALUE;

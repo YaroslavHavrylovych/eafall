@@ -6,39 +6,39 @@
         <id>10</id>
         <health>200</health>
         <armor>physical</armor>
-        <armor_value>1</armor_value>
+        <armor_value>5</armor_value>
         <damage>quaker</damage>
-        <damage_value>15</damage_value>
-        <attack_radius>140</attack_radius>
-        <view_radius>200</view_radius>
-        <speed>90</speed>
-        <reload_time>1.2</reload_time>
+        <damage_value>90</damage_value>
+        <attack_radius>100</attack_radius>
+        <view_radius>110</view_radius>
+        <speed>75</speed>
+        <reload_time>2.8</reload_time>
         <sound>electrical_1s.ogg</sound>
     </unit>
     <unit name="tortoise">
         <id>11</id>
         <health>400</health>
         <armor>physical</armor>
-        <armor_value>4</armor_value>
+        <armor_value>7</armor_value>
         <damage>quaker</damage>
-        <damage_value>40</damage_value>
-        <attack_radius>150</attack_radius>
-        <view_radius>200</view_radius>
+        <damage_value>100</damage_value>
+        <attack_radius>110</attack_radius>
+        <view_radius>120</view_radius>
         <speed>80</speed>
-        <reload_time>1.9</reload_time>
+        <reload_time>2.5</reload_time>
         <sound>electrical_1s.ogg</sound>
     </unit>
     <unit name="dragon">
         <id>12</id>
-        <health>800</health>
+        <health>450</health>
         <armor>physical</armor>
         <armor_value>10</armor_value>
         <damage>quaker</damage>
-        <damage_value>90</damage_value>
+        <damage_value>130</damage_value>
         <attack_radius>200</attack_radius>
-        <view_radius>250</view_radius>
-        <speed>70</speed>
-        <reload_time>2.1</reload_time>
+        <view_radius>220</view_radius>
+        <speed>85</speed>
+        <reload_time>2.5</reload_time>
         <sound>electrical_1s.ogg</sound>
     </unit>
     <!-- invisible plain -->
@@ -46,53 +46,53 @@
         <id>20</id>
         <health>200</health>
         <armor>unarmored</armor>
-        <armor_value>2</armor_value>
+        <armor_value>5</armor_value>
         <damage>higgson</damage>
-        <damage_value>25</damage_value>
-        <attack_radius>20</attack_radius>
-        <view_radius>500</view_radius>
-        <speed>210</speed>
-        <reload_time>1.5</reload_time>
+        <damage_value>80</damage_value>
+        <attack_radius>10</attack_radius>
+        <view_radius>100</view_radius>
+        <speed>175</speed>
+        <reload_time>1</reload_time>
         <sound>annihilation_1s.ogg</sound>
     </unit>
     <unit name="king_scorpion">
         <id>21</id>
         <health>350</health>
         <armor>unarmored</armor>
-        <armor_value>5</armor_value>
+        <armor_value>8</armor_value>
         <damage>higgson</damage>
-        <damage_value>40</damage_value>
-        <attack_radius>20</attack_radius>
-        <view_radius>500</view_radius>
-        <speed>210</speed>
-        <reload_time>1.2</reload_time>
+        <damage_value>100</damage_value>
+        <attack_radius>10</attack_radius>
+        <view_radius>100</view_radius>
+        <speed>180</speed>
+        <reload_time>1</reload_time>
         <sound>annihilation_1s.ogg</sound>
     </unit>
     <!-- hydra pond -->
     <unit name="young_hydra">
         <id>30</id>
-        <health>350</health>
+        <health>320</health>
         <armor>electromagnetic</armor>
         <armor_value>5</armor_value>
         <damage>laser</damage>
-        <damage_value>40</damage_value>
-        <attack_radius>60</attack_radius>
-        <view_radius>200</view_radius>
-        <speed>80</speed>
-        <reload_time>2.3</reload_time>
+        <damage_value>90</damage_value>
+        <attack_radius>90</attack_radius>
+        <view_radius>100</view_radius>
+        <speed>140</speed>
+        <reload_time>1.5</reload_time>
         <sound>electrical_1s.ogg</sound>
     </unit>
     <unit name="hydra">
         <id>31</id>
-        <health>550</health>
+        <health>400</health>
         <armor>electromagnetic</armor>
-        <armor_value>10</armor_value>
+        <armor_value>12</armor_value>
         <damage>laser</damage>
-        <damage_value>60</damage_value>
-        <attack_radius>80</attack_radius>
-        <view_radius>200</view_radius>
-        <speed>60</speed>
-        <reload_time>2.2</reload_time>
+        <damage_value>110</damage_value>
+        <attack_radius>100</attack_radius>
+        <view_radius>110</view_radius>
+        <speed>140</speed>
+        <reload_time>1.4</reload_time>
         <sound>electrical_1s.ogg</sound>
     </unit>
     <!-- poison cave -->
@@ -100,26 +100,26 @@
         <id>40</id>
         <health>200</health>
         <armor>cherenkov</armor>
-        <armor_value>3</armor_value>
+        <armor_value>5</armor_value>
         <damage>neutrino</damage>
-        <damage_value>40</damage_value>
-        <attack_radius>160</attack_radius>
-        <view_radius>200</view_radius>
-        <speed>70</speed>
-        <reload_time>1.8</reload_time>
+        <damage_value>120</damage_value>
+        <attack_radius>130</attack_radius>
+        <view_radius>140</view_radius>
+        <speed>110</speed>
+        <reload_time>1.7</reload_time>
         <sound>magnetic_1s.ogg</sound>
     </unit>
     <unit name="cobra">
         <id>41</id>
-        <health>220</health>
+        <health>250</health>
         <armor>cherenkov</armor>
         <armor_value>5</armor_value>
         <damage>neutrino</damage>
-        <damage_value>65</damage_value>
-        <attack_radius>165</attack_radius>
-        <view_radius>200</view_radius>
-        <speed>80</speed>
-        <reload_time>1.9</reload_time>
+        <damage_value>150</damage_value>
+        <attack_radius>150</attack_radius>
+        <view_radius>160</view_radius>
+        <speed>130</speed>
+        <reload_time>1.8</reload_time>
         <sound>magnetic_1s.ogg</sound>
     </unit>
     <!-- web -->
@@ -127,80 +127,80 @@
         <id>50</id>
         <health>350</health>
         <armor>electromagnetic</armor>
-        <armor_value>5</armor_value>
-        <damage>annihilator</damage>
-        <damage_value>20</damage_value>
-        <attack_radius>70</attack_radius>
-        <view_radius>200</view_radius>
+        <armor_value>10</armor_value>
+        <damage>railgun</damage>
+        <damage_value>100</damage_value>
+        <attack_radius>100</attack_radius>
+        <view_radius>110</view_radius>
         <speed>160</speed>
-        <reload_time>2.5</reload_time>
+        <reload_time>1.5</reload_time>
         <sound>higgs_3s.ogg</sound>
     </unit>
     <unit name="spider2">
         <id>51</id>
         <health>350</health>
         <armor>electromagnetic</armor>
-        <armor_value>5</armor_value>
-        <damage>annihilator</damage>
-        <damage_value>40</damage_value>
-        <attack_radius>90</attack_radius>
-        <view_radius>200</view_radius>
-        <speed>160</speed>
-        <reload_time>2.2</reload_time>
+        <armor_value>10</armor_value>
+        <damage>railgun</damage>
+        <damage_value>110</damage_value>
+        <attack_radius>120</attack_radius>
+        <view_radius>130</view_radius>
+        <speed>140</speed>
+        <reload_time>1.4</reload_time>
         <sound>higgs_3s.ogg</sound>
     </unit>
-    <!-- 60 -->
+    <!-- mountain cave -->
     <unit name="bat">
         <id>60</id>
         <health>400</health>
-        <armor>mixed</armor>
-        <armor_value>5</armor_value>
-        <damage>quaker</damage>
-        <damage_value>30</damage_value>
+        <armor>unarmored</armor>
+        <armor_value>15</armor_value>
+        <damage>laser</damage>
+        <damage_value>120</damage_value>
         <attack_radius>20</attack_radius>
-        <view_radius>200</view_radius>
-        <speed>90</speed>
+        <view_radius>100</view_radius>
+        <speed>140</speed>
         <reload_time>1.5</reload_time>
         <sound>annihilation_1s.ogg</sound>
     </unit>
     <unit name="vampire">
         <id>61</id>
-        <health>405</health>
-        <armor>mixed</armor>
-        <armor_value>10</armor_value>
-        <damage>quaker</damage>
-        <damage_value>40</damage_value>
+        <health>450</health>
+        <armor>unarmored</armor>
+        <armor_value>20</armor_value>
+        <damage>laser</damage>
+        <damage_value>150</damage_value>
         <attack_radius>20</attack_radius>
-        <view_radius>200</view_radius>
-        <speed>100</speed>
-        <reload_time>1.4</reload_time>
+        <view_radius>100</view_radius>
+        <speed>155</speed>
+        <reload_time>1.6</reload_time>
         <sound>annihilation_1s.ogg</sound>
     </unit>
-    <!-- 70 -->
+    <!-- hell -->
     <unit name="agat">
         <id>70</id>
         <health>500</health>
         <armor>cherenkov</armor>
-        <armor_value>5</armor_value>
+        <armor_value>10</armor_value>
         <damage>annihilator</damage>
-        <damage_value>40</damage_value>
-        <attack_radius>150</attack_radius>
-        <view_radius>200</view_radius>
+        <damage_value>120</damage_value>
+        <attack_radius>130</attack_radius>
+        <view_radius>140</view_radius>
         <speed>150</speed>
         <reload_time>1.7</reload_time>
         <sound>annihilation_1s.ogg</sound>
     </unit>
     <unit name="kak">
         <id>71</id>
-        <health>600</health>
+        <health>550</health>
         <armor>cherenkov</armor>
-        <armor_value>5</armor_value>
+        <armor_value>10</armor_value>
         <damage>annihilator</damage>
-        <damage_value>60</damage_value>
-        <attack_radius>160</attack_radius>
-        <view_radius>200</view_radius>
-        <speed>160</speed>
-        <reload_time>2.0</reload_time>
+        <damage_value>150</damage_value>
+        <attack_radius>140</attack_radius>
+        <view_radius>150</view_radius>
+        <speed>170</speed>
+        <reload_time>1.8</reload_time>
         <sound>annihilation_1s.ogg</sound>
     </unit>
     <!-- orbital station -->
@@ -208,13 +208,13 @@
         <id>250</id>
         <health>1000</health>
         <armor>mixed</armor>
-        <armor_value>10</armor_value>
+        <armor_value>40</armor_value>
         <damage>higgson</damage>
-        <damage_value>50</damage_value>
-        <attack_radius>180</attack_radius>
-        <view_radius>300</view_radius>
+        <damage_value>150</damage_value>
+        <attack_radius>170</attack_radius>
+        <view_radius>170</view_radius>
         <speed>1</speed>
-        <reload_time>2</reload_time>
+        <reload_time>2.5</reload_time>
         <sound>annihilation_1s.ogg</sound>
     </unit>
 </units>
