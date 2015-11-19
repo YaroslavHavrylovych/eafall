@@ -9,10 +9,14 @@
     <string name="choose_alliance">Alliance</string>
 
     <string-array name="alliances">
-        <item>Imperials</item>
-        <item>Rebels</item>
-        <item>Mutants</item>
+        <item>@string/imperials</item>
+        <item>@string/rebels</item>
+        <item>@string/mutants</item>
     </string-array>
+
+    <string name="imperials">Imperials</string>
+    <string name="rebels">Rebels</string>
+    <string name="mutants">Mutants</string>
 
     <string name="planet1">Planet 1</string>
     <string name="planet2">Planet 2</string>
@@ -172,8 +176,15 @@
 
     <!-- planet system -->
     <string name="planet_system_star">The star belongs to constellation: %1$s\nThe star code name: %2$s</string>
-    <string name="sun">Helios</string>
     <string name="no_constellation">None</string>
+    <string name="player_planet_text">Your base: %1$s\nAlliance name: %2$s</string>
+    <string name="opponent_planet_text">Your enemy base: %1$s\nAlliance name: %2$s</string>
+    <!-- stars -->
+    <string name="sun">Helios</string>
+    <!-- /stars -->
+    <!-- planets -->
+    <string name="earth">Earth</string>
+    <!-- /planets -->
     <!-- /planet system -->
 
     <!-- armor -->

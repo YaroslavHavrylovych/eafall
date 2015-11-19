@@ -9,10 +9,14 @@
     <string name="choose_alliance">Союзи</string>
 
     <string-array name="alliances">
-        <item>Імперці</item>
-        <item>Повстанці</item>
-        <item>Мутанти</item>
+        <item>@string/imperials</item>
+        <item>@string/rebels</item>
+        <item>@string/mutants</item>
     </string-array>
+
+    <string name="imperials">Імперія</string>
+    <string name="rebels">Повстанці</string>
+    <string name="mutants">Мутанти</string>
 
     <string name="planet1">Планета 1</string>
     <string name="planet2">Планета 2</string>
@@ -171,9 +175,16 @@
     <string name="you_are_connected_to_server">Ви під’єднані до сервера з адресою : </string>
 
     <!-- planet system -->
-    <string name="planet_system_star">Зірка належить сузір’ю: %1$s\nКодова назва зірки: %2$s</string>
-    <string name="sun">Геліос</string>
+    <string name="planet_system_star">Зірка належить сузір’ю: %1$s\nКодове назва зірки: %2$s</string>
     <string name="no_constellation">Не належить</string>
+    <string name="player_planet_text">Ваша база: %1$s\nНазва союзу: %2$s</string>
+    <string name="opponent_planet_text">База Вашого ворога: %1$s\nНазва союзу: %2$s</string>
+    <!-- stars -->
+    <string name="sun">Геліос</string>
+    <!-- /stars -->
+    <!-- planets -->
+    <string name="earth">Земля</string>
+    <!-- /planets -->
     <!-- /planet system -->
 
     <!-- armor -->

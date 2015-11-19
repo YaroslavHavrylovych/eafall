@@ -18,7 +18,9 @@
         <mission id="0">
             <name>Killer</name>
             <player_alliance>Mutants</player_alliance>
+            <player_planet>earth</player_planet>
             <opponent_alliance>Rebels</opponent_alliance>
+            <opponent_planet>earth</opponent_planet>
             <max_oxygen>215</max_oxygen>
             <planet_health>5000</planet_health>
             <offensive_units_limit>7</offensive_units_limit>
@@ -44,7 +46,9 @@
         <mission id="1">
             <name>Helper</name>
             <player_alliance>Mutants</player_alliance>
+            <player_planet>earth</player_planet>
             <opponent_alliance>Rebels</opponent_alliance>
+            <opponent_planet>earth</opponent_planet>
             <definition>
                 <time_limit>10</time_limit>
                 <type>win</type>

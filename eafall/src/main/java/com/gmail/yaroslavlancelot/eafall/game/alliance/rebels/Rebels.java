@@ -23,6 +23,11 @@ public class Rebels extends Alliance {
     }
 
     @Override
+    public int getAllianceStringRes() {
+        return R.string.rebels;
+    }
+
+    @Override
     public void loadAllianceResources(final TextureManager textureManager) {
         loadBuildings(textureManager);
         loadUnits(textureManager);

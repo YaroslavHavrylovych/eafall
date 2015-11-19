@@ -31,7 +31,9 @@
                                     <xs:sequence>
                                         <xs:element name="name" type="xs:string"/>
                                         <xs:element name="player_alliance" type="xs:string"/>
+                                        <xs:element name="player_planet" type="xs:string"/>
                                         <xs:element name="opponent_alliance" type="xs:string"/>
+                                        <xs:element name="opponent_planet" type="xs:string"/>
                                         <xs:element name="max_oxygen"
                                                     type="xs:integer"
                                                     minOccurs="0"/>

@@ -23,6 +23,11 @@ public class Mutants extends Alliance {
     }
 
     @Override
+    public int getAllianceStringRes() {
+        return R.string.mutants;
+    }
+
+    @Override
     public void loadAllianceResources(final TextureManager textureManager) {
         loadBuildings(textureManager);
         loadUnits(textureManager);

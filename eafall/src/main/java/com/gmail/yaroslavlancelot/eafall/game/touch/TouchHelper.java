@@ -15,6 +15,13 @@ import org.andengine.util.math.MathUtils;
 
 /** Helping functions to work with touch events */
 public final class TouchHelper {
+    /** Amount of time when clicks are treated as separated instead of a single series. In milliseconds. */
+    public static volatile int mMultipleClickDividerTime = 1500; //ms
+    /** Amount of time when clicks are treated as a single series. In milliseconds */
+    public static volatile int mMultipleClickTime = 600; //ms
+    /** Time to show hint after the first click in a multiple click series. In seconds */
+    public static volatile int mMultipleClickHintTime = 1; //s
+
     private TouchHelper() {
     }
 

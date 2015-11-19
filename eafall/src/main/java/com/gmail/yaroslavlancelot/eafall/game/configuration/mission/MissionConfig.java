@@ -44,6 +44,8 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
     private int mValue;
     private int mStarConstellation;
     private int mStarCodeName;
+    private int mPlayerPlanet;
+    private int mOpponentPlanet;
 
     // ===========================================================
     // Constructors
@@ -65,6 +67,8 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
         mValue = in.readInt();
         mStarCodeName = in.readInt();
         mStarConstellation = in.readInt();
+        mPlayerPlanet = in.readInt();
+        mOpponentPlanet = in.readInt();
         mMissionType = (MissionType) in.readSerializable();
     }
 
@@ -107,6 +111,14 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
         return mStarCodeName;
     }
 
+    public int getPlayerPlanet() {
+        return mPlayerPlanet;
+    }
+
+    public int getOpponentPlanet() {
+        return mOpponentPlanet;
+    }
+
     // ===========================================================
     // Methods for/from SuperClass/Interfaces
     // ===========================================================
@@ -129,6 +141,8 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
         dest.writeInt(mValue);
         dest.writeInt(mStarCodeName);
         dest.writeInt(mStarConstellation);
+        dest.writeInt(mPlayerPlanet);
+        dest.writeInt(mOpponentPlanet);
         dest.writeSerializable(mMissionType);
     }
 
@@ -146,6 +160,8 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
         mTime = NO_VALUE;
         mStarCodeName = R.string.sun;
         mStarConstellation = R.string.no_constellation;
+        mPlayerPlanet = R.string.earth;
+        mOpponentPlanet = R.string.earth;
     }
 
     private void init(MissionDataLoader loadedData) {
@@ -153,6 +169,10 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
         if (loadedData.definition.time_limit != null) mTime = loadedData.definition.time_limit;
         if (loadedData.max_oxygen != null) mMaxOxygenAmount = loadedData.max_oxygen;
         if (loadedData.planet_health != null) mPlanetHealth = loadedData.planet_health;
+        if (loadedData.player_planet != null)
+            mPlayerPlanet = getStringResourceByName(loadedData.player_planet);
+        if (loadedData.opponent_planet != null)
+            mOpponentPlanet = getStringResourceByName(loadedData.opponent_planet);
         if (loadedData.star_code_name != null)
             mStarCodeName = getStringResourceByName(loadedData.star_code_name);
         if (loadedData.star_constellation != null)

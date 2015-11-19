@@ -18,6 +18,8 @@ import java.util.SortedSet;
 public interface IAlliance {
     String getAllianceName();
 
+    int getAllianceStringRes();
+
     int getBuildingsAmount();
 
     /** returns buildings texture atlas */

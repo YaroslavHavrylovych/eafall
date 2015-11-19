@@ -21,6 +21,7 @@ import com.gmail.yaroslavlancelot.eafall.game.resources.ResourceFactory;
 import com.gmail.yaroslavlancelot.eafall.game.scene.SceneManager;
 import com.gmail.yaroslavlancelot.eafall.game.scene.hud.EaFallHud;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
+import com.gmail.yaroslavlancelot.eafall.game.touch.TouchHelper;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 import com.gmail.yaroslavlancelot.eafall.general.EbSubscribersHolder;
 import com.gmail.yaroslavlancelot.eafall.general.SelfCleanable;
@@ -159,17 +160,14 @@ public abstract class EaFallActivity extends BaseGameActivity {
         long time = System.currentTimeMillis();
         long delta = time - mBackButtonLastClick;
 
-        if (delta < 600) {
+        if (delta < TouchHelper.mMultipleClickTime) {
             mEngine.unregisterUpdateHandler(mExitHintHandler);
             checkedGameClose();
             return;
-        } else if (delta > 1500) {
-            LoggerHelper.printVerboseMessage(TAG, "back button double click delta=" + delta);
+        } else if (delta > TouchHelper.mMultipleClickDividerTime) {
             mEngine.unregisterUpdateHandler(mExitHintHandler);
             mExitHintHandler.reset();
             mEngine.registerUpdateHandler(mExitHintHandler);
-        } else {
-            mEngine.unregisterUpdateHandler(mExitHintHandler);
         }
         mBackButtonLastClick = time;
     }
@@ -183,7 +181,7 @@ public abstract class EaFallActivity extends BaseGameActivity {
     protected abstract String createMusicPath();
 
     private void initExitHint() {
-        mExitHintHandler = new TimerHandler(1,
+        mExitHintHandler = new TimerHandler(TouchHelper.mMultipleClickHintTime,
                 new ITimerCallback() {
                     @Override
                     public void onTimePassed(final TimerHandler pTimerHandler) {

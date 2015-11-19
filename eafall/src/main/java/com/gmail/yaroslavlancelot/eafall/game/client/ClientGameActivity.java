@@ -280,7 +280,10 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
         LoggerHelper.methodInvocation(TAG, "createPlanet");
         PlanetStaticObject planet = new PlanetStaticObject(x, y, textureRegion,
                 getVertexBufferObjectManager());
-        planet.init(player.getName(), this, mMissionConfig.getPlanetHealth());
+        int planetNameRes = player.getControlType().user()
+                ? mMissionConfig.getPlayerPlanet() : mMissionConfig.getOpponentPlanet();
+        planet.init(player.getName(), planetNameRes, this, mMissionConfig.getPlanetHealth());
+        mSceneManager.getWorkingScene().registerTouchArea(planet);
         planet.addObjectDestroyedListener(new PlanetDestroyListener(player));
         planet.attachSelf();
         if (unitUniqueId.length > 0) {
