@@ -3,6 +3,8 @@ package com.gmail.yaroslavlancelot.eafall.game.configuration.mission;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
+import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.game.campaign.loader.mission.DefinitionLoader;
 import com.gmail.yaroslavlancelot.eafall.game.campaign.loader.mission.MissionDataLoader;
 import com.gmail.yaroslavlancelot.eafall.general.SelfCleanable;
@@ -40,6 +42,8 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
     private int mTime;
     private MissionType mMissionType;
     private int mValue;
+    private int mStarConstellation;
+    private int mStarCodeName;
 
     // ===========================================================
     // Constructors
@@ -59,6 +63,8 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
         mPlanetHealth = in.readInt();
         mMaxOxygenAmount = in.readInt();
         mValue = in.readInt();
+        mStarCodeName = in.readInt();
+        mStarConstellation = in.readInt();
         mMissionType = (MissionType) in.readSerializable();
     }
 
@@ -93,6 +99,14 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
         return mMissionType;
     }
 
+    public int getStarConstellation() {
+        return mStarConstellation;
+    }
+
+    public int getStarCodeName() {
+        return mStarCodeName;
+    }
+
     // ===========================================================
     // Methods for/from SuperClass/Interfaces
     // ===========================================================
@@ -113,6 +127,8 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
         dest.writeInt(mPlanetHealth);
         dest.writeInt(mMaxOxygenAmount);
         dest.writeInt(mValue);
+        dest.writeInt(mStarCodeName);
+        dest.writeInt(mStarConstellation);
         dest.writeSerializable(mMissionType);
     }
 
@@ -128,6 +144,8 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
         mMissionType = MissionType.WIN;
         mValue = NO_VALUE;
         mTime = NO_VALUE;
+        mStarCodeName = R.string.sun;
+        mStarConstellation = R.string.no_constellation;
     }
 
     private void init(MissionDataLoader loadedData) {
@@ -135,8 +153,17 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
         if (loadedData.definition.time_limit != null) mTime = loadedData.definition.time_limit;
         if (loadedData.max_oxygen != null) mMaxOxygenAmount = loadedData.max_oxygen;
         if (loadedData.planet_health != null) mPlanetHealth = loadedData.planet_health;
+        if (loadedData.star_code_name != null)
+            mStarCodeName = getStringResourceByName(loadedData.star_code_name);
+        if (loadedData.star_constellation != null)
+            mStarConstellation = getStringResourceByName(loadedData.star_constellation);
         if (loadedData.offensive_units_limit != null)
             mMovableUnitsLimit = loadedData.offensive_units_limit;
+    }
+
+    private int getStringResourceByName(String aString) {
+        String packageName = EaFallApplication.getContext().getPackageName();
+        return EaFallApplication.getContext().getResources().getIdentifier(aString, "string", packageName);
     }
 
     private void initType(DefinitionLoader definition) {

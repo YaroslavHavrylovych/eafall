@@ -170,6 +170,12 @@
     <!-- client connected to server -->
     <string name="you_are_connected_to_server">You are connected to server with ip : </string>
 
+    <!-- planet system -->
+    <string name="planet_system_star">The star belongs to constellation: %1$s\nThe star code name: %2$s</string>
+    <string name="sun">Helios</string>
+    <string name="no_constellation">None</string>
+    <!-- /planet system -->
+
     <!-- armor -->
     <string name="armor_unarmored">unarmored</string>
     <string name="armor_physical">physical</string>

@@ -1,5 +1,6 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject;
 
+import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
@@ -7,11 +8,16 @@ import com.gmail.yaroslavlancelot.eafall.game.engine.InstantRotationModifier;
 import com.gmail.yaroslavlancelot.eafall.game.entity.BatchedSprite;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.health.IHealthBar;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.ShowToastEvent;
+import com.gmail.yaroslavlancelot.eafall.game.touch.TouchHelper;
 
 import org.andengine.entity.modifier.IEntityModifier;
+import org.andengine.input.touch.detector.ClickDetector;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import java.util.Random;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * Sun represents the sun entity on the game field.
@@ -41,6 +47,16 @@ public class SunStaticObject extends StaticObject {
     @Override
     protected IHealthBar createHealthBar() {
         return null;
+    }
+
+    public void initDescription(final int starName, final int constellationName) {
+        setTouchCallback(new TouchHelper.UnboundedClickListener(new ClickDetector.IClickDetectorListener() {
+            @Override
+            public void onClick(final ClickDetector pClickDetector, final int pPointerID, final float pSceneX, final float pSceneY) {
+                EventBus.getDefault().post(new ShowToastEvent(true,
+                        R.string.planet_system_star, constellationName, starName));
+            }
+        }));
     }
 
 }

@@ -9,6 +9,7 @@ import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.ITouchCallback;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.input.touch.detector.ClickDetector;
 import org.andengine.util.Constants;
 import org.andengine.util.math.MathUtils;
 
@@ -166,6 +167,28 @@ public final class TouchHelper {
         /** callback after click on element happens. User touch down and up finger on element without cancelling or move outside */
         public void click() {
             unPress();
+        }
+    }
+
+    /** Gives click callback without bounding an event. */
+    public static class UnboundedClickListener implements ITouchCallback {
+        private ClickDetector.IClickDetectorListener mClickListener;
+        private ClickDetector mClickDetector;
+
+        /**
+         * Unbounded click listener constructor
+         *
+         * @param clickListener click listener to trigger
+         */
+        public UnboundedClickListener(ClickDetector.IClickDetectorListener clickListener) {
+            mClickListener = clickListener;
+            mClickDetector = new ClickDetector(mClickListener);
+        }
+
+        @Override
+        public boolean onAreaTouched(final TouchEvent event, float touchAreaLocalX, float touchAreaLocalY) {
+            mClickDetector.onManagedTouchEvent(event);
+            return false;
         }
     }
 

@@ -306,8 +306,10 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
                 SizeConstants.HALF_FIELD_WIDTH, SizeConstants.HALF_FIELD_HEIGHT,
                 mEngine.getVertexBufferObjectManager());
         attachSprite(sunStaticObject);
+        mSceneManager.getWorkingScene().registerTouchArea(sunStaticObject);
         mGameObjectsMap.put(sunStaticObject.getObjectUniqueId(), sunStaticObject);
         createPhysicBody(sunStaticObject, BodyDef.BodyType.StaticBody, CollisionCategories.STATIC_BODY_FIXTURE_DEF);
+        sunStaticObject.initDescription(mMissionConfig.getStarCodeName(), mMissionConfig.getStarConstellation());
         return sunStaticObject;
     }
 

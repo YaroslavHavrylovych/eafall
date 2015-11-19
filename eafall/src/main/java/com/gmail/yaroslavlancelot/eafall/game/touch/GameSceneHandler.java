@@ -8,15 +8,11 @@ import com.gmail.yaroslavlancelot.eafall.game.camera.EaFallCamera;
 
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.shape.ITouchCallback;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.input.touch.detector.PinchZoomDetector;
 import org.andengine.input.touch.detector.ScrollDetector;
 import org.andengine.util.Constants;
 import org.andengine.util.math.MathUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Keep the track about touch functionality and can delegate action to
@@ -59,9 +55,6 @@ public class GameSceneHandler implements
      */
     private ScrollDetector mScrollDetector;
     private VelocityTracker mVelocityTracker;
-
-    /** triggers before current handler and can be triggered instead */
-    private List<ITouchCallback> mSceneClickListeners = new ArrayList<ITouchCallback>(2);
 
     // ===========================================================
     // Constructors
@@ -122,13 +115,6 @@ public class GameSceneHandler implements
 
     @Override
     public boolean onSceneTouchEvent(final Scene pScene, final TouchEvent pSceneTouchEvent) {
-        // check if it's click not on empty screen but on some hud element
-        for (ITouchCallback touchListener : mSceneClickListeners) {
-            if (touchListener.onAreaTouched(pSceneTouchEvent, 0, 0)) {
-                return true;
-            }
-        }
-
         mZoomDetector.onSceneTouchEvent(pScene, pSceneTouchEvent);
         if (mZoomDetector.isZooming()) {
             mScrollDetector.setEnabled(false);
@@ -210,20 +196,8 @@ public class GameSceneHandler implements
     // Methods
     // ===========================================================
 
-    private static void initPinchZoomMinimumDistance(PinchZoomDetector zoomDetector) {
-        zoomDetector.setTriggerPinchZoomMinimumDistance(EaFallApplication.getConfig().getDisplayWidth() / 25);
-    }
-
     public boolean smoothZoomInProgress() {
         return mCamera.isSmoothZoomInProgress();
-    }
-
-    public void registerTouchListener(ITouchCallback touchListener) {
-        mSceneClickListeners.add(touchListener);
-    }
-
-    public void clearTouchList() {
-        mSceneClickListeners.clear();
     }
 
     /**
@@ -255,6 +229,10 @@ public class GameSceneHandler implements
         //surface camera center position
         mCamera.setCenter(mSurface_CameraCenterPosition[Constants.VERTEX_INDEX_X],
                 mSurface_CameraCenterPosition[Constants.VERTEX_INDEX_Y]);
+    }
+
+    private static void initPinchZoomMinimumDistance(PinchZoomDetector zoomDetector) {
+        zoomDetector.setTriggerPinchZoomMinimumDistance(EaFallApplication.getConfig().getDisplayWidth() / 25);
     }
 
     // ===========================================================

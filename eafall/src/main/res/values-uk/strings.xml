@@ -170,6 +170,12 @@
     <!-- client connected to server -->
     <string name="you_are_connected_to_server">Ви під’єднані до сервера з адресою : </string>
 
+    <!-- planet system -->
+    <string name="planet_system_star">Зірка належить сузір’ю: %1$s\nКодова назва зірки: %2$s</string>
+    <string name="sun">Геліос</string>
+    <string name="no_constellation">Не належить</string>
+    <!-- /planet system -->
+
     <!-- armor -->
     <string name="armor_unarmored">роззброєний</string>
     <string name="armor_physical">фізичний</string>

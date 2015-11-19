@@ -1,11 +1,13 @@
 package com.gmail.yaroslavlancelot.eafall.game;
 
 import android.app.Dialog;
+import android.os.Build;
 import android.widget.Toast;
 
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
+import com.gmail.yaroslavlancelot.eafall.android.dialog.ExitConfirmationDialog;
 import com.gmail.yaroslavlancelot.eafall.game.audio.BackgroundMusic;
 import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.gmail.yaroslavlancelot.eafall.game.camera.EaFallCamera;
@@ -13,12 +15,12 @@ import com.gmail.yaroslavlancelot.eafall.game.configuration.game.ApplicationSett
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.endgame.GameCloseEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.ShowToastEvent;
 import com.gmail.yaroslavlancelot.eafall.game.resources.IResourcesLoader;
 import com.gmail.yaroslavlancelot.eafall.game.resources.ResourceFactory;
 import com.gmail.yaroslavlancelot.eafall.game.scene.SceneManager;
 import com.gmail.yaroslavlancelot.eafall.game.scene.hud.EaFallHud;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
-import com.gmail.yaroslavlancelot.eafall.android.dialog.ExitConfirmationDialog;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 import com.gmail.yaroslavlancelot.eafall.general.EbSubscribersHolder;
 import com.gmail.yaroslavlancelot.eafall.general.SelfCleanable;
@@ -64,7 +66,7 @@ public abstract class EaFallActivity extends BaseGameActivity {
     protected IResourcesLoader mResourcesLoader;
     /** exit with double click */
     private long mBackButtonLastClick = 0;
-    /**  */
+    /** back button single click hint */
     private TimerHandler mExitHintHandler;
 
     @Override
@@ -197,6 +199,38 @@ public abstract class EaFallActivity extends BaseGameActivity {
                         });
                     }
                 });
+    }
+
+    @SuppressWarnings("unused")
+    public void onEvent(final ShowToastEvent showToastEvent) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                int[] ids = showToastEvent.getTextId();
+                String format = LocaleImpl.getInstance().getStringById(ids[0]);
+                String result;
+                if (ids.length > 1) {
+                    Object[] args = new Object[ids.length - 1];
+                    for (int i = 1; i < ids.length; i++) {
+                        args[i - 1] = LocaleImpl.getInstance().getStringById(ids[i]);
+                    }
+                    result = String.format(format, args);
+                } else {
+                    result = format;
+                }
+                Toast toast =
+                        Toast.makeText(EaFallActivity.this, result, showToastEvent.isLongShowedToast()
+                                ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    toast.getView().setBackgroundColor(getResources()
+                            .getColor(android.R.color.transparent, getTheme()));
+                } else {
+                    toast.getView().setBackgroundColor(getResources()
+                            .getColor(android.R.color.transparent));
+                }
+                toast.show();
+            }
+        });
     }
 
     @SuppressWarnings("unused")

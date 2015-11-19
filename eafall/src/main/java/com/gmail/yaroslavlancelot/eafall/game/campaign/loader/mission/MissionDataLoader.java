@@ -32,6 +32,12 @@ public class MissionDataLoader {
     @Element(name = "offensive_units_limit", required = false)
     public Integer offensive_units_limit;
 
+    @Element(name = "star_code_name", required = false)
+    public String star_code_name;
+
+    @Element(name = "star_constellation", required = false)
+    public String star_constellation;
+
 
     @Element(name = "definition")
     public DefinitionLoader definition;
