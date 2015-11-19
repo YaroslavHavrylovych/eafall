@@ -16,4 +16,7 @@ public interface IUnitMap {
 
     /** get all units in given range */
     List<Unit> getInRange(float x, float y, float range);
+
+    /** return all units on the given side of then game field (left or right) */
+    List<Unit> getUnitOnSide(boolean left);
 }

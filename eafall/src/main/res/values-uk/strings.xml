@@ -154,6 +154,8 @@
     <string name="unmovable">Нерухомий</string>
     <string name="exit_confirmation">Ви дійсно хочете вийти?</string>
     <string name="exit_dialog_title">Вихід</string>
+    <string name="used">Використано</string>
+    <string name="unused">Не використано</string>
 
     <!-- network game -->
     <string name="create_game">Створити гру</string>
@@ -177,8 +179,10 @@
     <!-- planet system -->
     <string name="planet_system_star">Зірка належить сузір’ю: %1$s\nКодове назва зірки: %2$s</string>
     <string name="no_constellation">Не належить</string>
-    <string name="player_planet_text">Ваша база: %1$s\nНазва союзу: %2$s</string>
-    <string name="opponent_planet_text">База Вашого ворога: %1$s\nНазва союзу: %2$s</string>
+    <string name="player_planet_text">Ваша база: %1$s\nНазва союзу: %2$s\nЗаглушувач: %3$s</string>
+    <string name="opponent_planet_text">База Вашого ворога: %1$s\nНазва союзу: %2$s\nЗаглушувач: %3$s</string>
+    <string name="suppressor_being_used">Заглушувач було використано</string>
+    <string name="wrong_planet_suppressor">Лише на власній базі можна використати Заглушувач</string>
     <!-- stars -->
     <string name="sun">Геліос</string>
     <!-- /stars -->

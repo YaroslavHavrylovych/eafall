@@ -154,6 +154,8 @@
     <string name="unmovable">Unmovable</string>
     <string name="exit_confirmation">Do you really want to exit?</string>
     <string name="exit_dialog_title">Exit</string>
+    <string name="used">Used</string>
+    <string name="unused">Unused</string>
 
     <!-- network game -->
     <string name="create_game">Create game</string>
@@ -177,8 +179,10 @@
     <!-- planet system -->
     <string name="planet_system_star">The star belongs to constellation: %1$s\nThe star code name: %2$s</string>
     <string name="no_constellation">None</string>
-    <string name="player_planet_text">Your base: %1$s\nAlliance name: %2$s</string>
-    <string name="opponent_planet_text">Your enemy base: %1$s\nAlliance name: %2$s</string>
+    <string name="player_planet_text">Your base: %1$s\nAlliance name: %2$s\nSuppressor: %3$s</string>
+    <string name="opponent_planet_text">Your enemy base: %1$s\nAlliance name: %2$s\nSuppressor: %3$s</string>
+    <string name="suppressor_being_used">Suppressor being used</string>
+    <string name="wrong_planet_suppressor">You can use the Suppressor only on your base</string>
     <!-- stars -->
     <string name="sun">Helios</string>
     <!-- /stars -->

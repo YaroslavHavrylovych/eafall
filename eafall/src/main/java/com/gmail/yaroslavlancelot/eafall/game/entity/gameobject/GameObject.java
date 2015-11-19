@@ -129,6 +129,13 @@ public abstract class GameObject extends BodiedSprite {
         updateHealthBarPosition();
     }
 
+    /** if object isn't invincible it will be momentarelly killed by setting it's health to 0 */
+    public void kill() {
+        if (mObjectCurrentHealth != sInvincibleObjectKey) {
+            setHealth(0);
+        }
+    }
+
     protected void updateHealthBar() {
         if (mHealthBar != null) {
             mHealthBar.redrawHealthBar(mObjectMaximumHealth, mObjectCurrentHealth);
