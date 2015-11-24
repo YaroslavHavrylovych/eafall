@@ -54,6 +54,10 @@ public final class StringConstants {
     public static final String FILE_FIRST_PLANET = "graphics/sprites/planet_1.png";
     /** file name for red planet */
     public static final String FILE_SECOND_PLANET = "graphics/sprites/planet_2.png";
+    /** unit explosion animation */
+    public static final String KEY_UNIT_EXPLOSION = "graphics/sprites/explosion/explosion_unit.png";
+    /** planet explosion animation */
+    public static final String KEY_PLANET_EXPLOSION = "graphics/sprites/explosion/explosion_planet.png";
     /** used like key for sun static object */
     public static final String KEY_SUN_HAZE = "sun_key_top";
     /** used like key for sun static object */
@@ -80,8 +84,6 @@ public final class StringConstants {
     public static final String FILE_AMOUNT_VALUE_BACKGROUND = "graphics/icons/amount_value_background.png";
     /** game button */
     public static final String FILE_GAME_BUTTON = "graphics/icons/game_button.png";
-    /** circle point */
-    public static final String FILE_CIRCLE_POINT = "graphics/icons/circle_point.png";
     /** hud energy icon */
     public static final String FILE_SHUTTLE_HUD = "graphics/icons/shuttle_hud.png";
     /** oxygen icon for popup */

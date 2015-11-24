@@ -3,8 +3,11 @@ package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.pl
 import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
+import com.gmail.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder;
 import com.gmail.yaroslavlancelot.eafall.game.client.IUnitCreator;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
+import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
+import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.IPlayerObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingType;
@@ -34,8 +37,10 @@ import com.gmail.yaroslavlancelot.eafall.game.touch.TouchHelper;
 
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
+import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.input.touch.detector.ClickDetector;
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.list.SmartList;
 
@@ -67,7 +72,6 @@ public class PlanetStaticObject extends StaticObject implements IPlayerObject {
     private TimerHandler mOnPlanetClickHintHandler;
     /** contains true if suppressor was used */
     private boolean mIsSuppressorUsed = false;
-
 
     public PlanetStaticObject(float x, float y, ITextureRegion textureRegion,
                               VertexBufferObjectManager objectManager) {
@@ -112,6 +116,46 @@ public class PlanetStaticObject extends StaticObject implements IPlayerObject {
             value += building.getIncome();
         }
         return value + (int) (value * (((float) percentIncrease) / 100));
+    }
+
+    @Override
+    protected void onNegativeHealth() {
+        for (IBuilding building : mBuildings.values()) {
+            building.setIgnoreUpdates(true);
+        }
+        mPhysicBody.setActive(false);
+        final AnimatedSprite animatedSprite = new AnimatedSprite(mX, mY,
+                (ITiledTextureRegion) TextureRegionHolder.getRegion(StringConstants.KEY_PLANET_EXPLOSION),
+                getVertexBufferObjectManager());
+        animatedSprite.animate(50, false, new AnimatedSprite.IAnimationListener() {
+            @Override
+            public void onAnimationStarted(final AnimatedSprite pAnimatedSprite, final int pInitialLoopCount) {
+                destroy();
+            }
+
+            @Override
+            public void onAnimationFrameChanged(final AnimatedSprite pAnimatedSprite, final int pOldFrameIndex, final int pNewFrameIndex) {
+            }
+
+            @Override
+            public void onAnimationLoopFinished(final AnimatedSprite pAnimatedSprite, final int pRemainingLoopCount, final int pInitialLoopCount) {
+            }
+
+            @Override
+            public void onAnimationFinished(final AnimatedSprite pAnimatedSprite) {
+                animatedSprite.detachSelf();
+            }
+        });
+        SpriteGroupHolder.getGroup(BatchingKeys.EXPLOSIONS).attachChild(animatedSprite);
+    }
+
+    @Override
+    public void destroy() {
+        for (IBuilding building : mBuildings.values()) {
+            building.destroy();
+        }
+        PlayersHolder.getPlayer(mPlayerName).removePlanet();
+        super.destroy();
     }
 
     @Override

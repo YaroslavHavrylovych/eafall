@@ -30,7 +30,6 @@ public abstract class GameObject extends BodiedSprite {
     protected static final int sInvincibleObjectKey = Integer.MIN_VALUE;
     /** used for generation new id's */
     private static final AtomicLong sGameObjectsTracker = new AtomicLong(0);
-    private static final String TAG = GameObject.class.getCanonicalName();
     /** maximum object health */
     protected int mObjectMaximumHealth = sInvincibleObjectKey;
     /** game object current health (it can't be destroyed) */
@@ -112,7 +111,7 @@ public abstract class GameObject extends BodiedSprite {
             mGameObjectHealthChangedListener.gameObjectHealthChanged(mUniqueId, objectHealth);
         }
         if (!checkHealth(objectHealth)) {
-            destroy();
+            onNegativeHealth();
             if (mObjectDestroyedListener != null) {
                 for (IDestroyListener listener : mObjectDestroyedListener) {
                     listener.objectDestroyed(this);
@@ -129,7 +128,9 @@ public abstract class GameObject extends BodiedSprite {
         updateHealthBarPosition();
     }
 
-    /** if object isn't invincible it will be momentarelly killed by setting it's health to 0 */
+    protected abstract void onNegativeHealth();
+
+    /** if object isn't invincible it will be killed in a moment by setting it's health to 0 */
     public void kill() {
         if (mObjectCurrentHealth != sInvincibleObjectKey) {
             setHealth(0);
@@ -191,9 +192,7 @@ public abstract class GameObject extends BodiedSprite {
         }
     }
 
-    protected void destroy() {
-        LoggerHelper.methodInvocation(TAG, "destroy");
-    }
+    public abstract void destroy();
 
     protected void updateHealthBarPosition() {
         if (mHealthBar != null && mHealthBar.isVisible()) {

@@ -70,6 +70,16 @@ public abstract class Building implements IBuilding {
     }
 
     @Override
+    public float getX() {
+        return mDummy.getX();
+    }
+
+    @Override
+    public float getY() {
+        return mDummy.getY();
+    }
+
+    @Override
     public boolean buyBuilding() {
         if (getAmount() >= getAmountLimit()) {
             return false;
@@ -93,13 +103,15 @@ public abstract class Building implements IBuilding {
     }
 
     @Override
-    public float getX() {
-        return mDummy.getX();
+    public void destroy() {
+        mBuildingsAmount = 0;
+        mUpgrade = 0;
+        mBuildingStaticObject.detachSelf();
     }
 
     @Override
-    public float getY() {
-        return mDummy.getY();
+    public void setIgnoreUpdates(final boolean ignoreUpdates) {
+        mBuildingStaticObject.setIgnoreUpdate(ignoreUpdates);
     }
 
     protected void setIncome(int income) {

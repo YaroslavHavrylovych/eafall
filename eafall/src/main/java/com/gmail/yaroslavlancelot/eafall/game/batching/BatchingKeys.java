@@ -16,6 +16,7 @@ public class BatchingKeys {
     public final static String PREFIX_BUILDING = "03_building_";
     public final static String PREFIX_UNIT = "04_unit_";
     public final static String PLAYER_HEALTH = "05_player_health";
+    public final static String EXPLOSIONS = "05_explosion";
 
     public static String getUnitSpriteGroup(String playerName) {
         return PREFIX_UNIT + playerName;
