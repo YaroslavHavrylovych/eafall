@@ -43,7 +43,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /** Player player implementation */
 public class Player implements IPlayer {
     private static final String TAG = Player.class.getCanonicalName();
-    public final int INIT_MONEY_VALUE = 350;
+    public final int INIT_MONEY_VALUE = 600;
     /** fixture def of the player (used for bullet creation) */
     protected final FixtureDef mPlayerFixtureDef;
     /** used for {@link SharedEvents} */
@@ -276,7 +276,6 @@ public class Player implements IPlayer {
 
     @Override
     public void incomeTime() {
-        if (mPlayerPlanet == null) return;
         if (mIsFirstIncome.getAndSet(false)) {
             changeMoney(INIT_MONEY_VALUE);
             return;

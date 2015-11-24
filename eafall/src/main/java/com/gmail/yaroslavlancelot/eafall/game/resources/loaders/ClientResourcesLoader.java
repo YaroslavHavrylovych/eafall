@@ -69,6 +69,8 @@ public class ClientResourcesLoader extends BaseResourceLoader {
         loadSunAndPlanets(textureManager, vertexBufferObjectManager);
         //oxygen, energy and time
         EaFallHud.loadResource(EaFallApplication.getContext(), textureManager);
+        //explosions
+        loadExplosions(textureManager, vertexBufferObjectManager);
         //other
         Context context = EaFallApplication.getContext();
         RollingPopupManager.loadResource(context, textureManager);
@@ -206,5 +208,25 @@ public class ClientResourcesLoader extends BaseResourceLoader {
         //sun + planets SpriteGroup
         SpriteGroup spriteGroup = new SpriteGroup(atlas, 4, vertexBufferObjectManager);
         SpriteGroupHolder.addGroup(BatchingKeys.SUN_PLANET, spriteGroup);
+    }
+
+    /** load units and planets explosions */
+    private void loadExplosions(TextureManager textureManager,
+                                VertexBufferObjectManager vertexBufferObjectManager) {
+        BitmapTextureAtlas textureAtlas = new BitmapTextureAtlas(textureManager, 1536, 1536);
+        TextureRegionHolder.addTiledElementFromAssets(
+                StringConstants.KEY_PLANET_EXPLOSION,
+                textureAtlas, EaFallApplication.getContext(),
+                0, 0, 4, 4);
+        TextureRegionHolder.addTiledElementFromAssets(
+                StringConstants.KEY_UNIT_EXPLOSION,
+                textureAtlas, EaFallApplication.getContext(),
+                SizeConstants.BETWEEN_TEXTURES_PADDING + SizeConstants.FILE_PLANET_DIAMETER * 4, 0,
+                4, 4);
+        textureAtlas.load();
+        //sun + planets SpriteGroup
+        SpriteGroup spriteGroup = new SpriteGroup(textureAtlas,
+                mMovableUnitsLimit * 2, vertexBufferObjectManager);
+        SpriteGroupHolder.addGroup(BatchingKeys.EXPLOSIONS, spriteGroup);
     }
 }

@@ -12,6 +12,8 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.IPlayerObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.Armor;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.explosion.UnitExplosionAnimation;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.explosion.UnitExplosionPool;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IFireListener;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.filtering.IUnitMap;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.PathHelper;
@@ -106,6 +108,14 @@ public abstract class Unit extends GameObject implements
     }
 
     @Override
+    protected void onNegativeHealth() {
+        mPhysicBody.setActive(false);
+        final UnitExplosionAnimation unitExplosionAnimation = UnitExplosionPool.getExplosion();
+        unitExplosionAnimation.setPosition(mX, mY);
+        unitExplosionAnimation.init(this);
+    }
+
+    @Override
     protected void initHealthBar() {
         super.initHealthBar();
         syncHealthBarBehaviour();
@@ -118,8 +128,7 @@ public abstract class Unit extends GameObject implements
     }
 
     @Override
-    protected void destroy() {
-        super.destroy();
+    public void destroy() {
         PlayersHolder.getPlayer(mPlayerName).getEnemyPlayer()
                 .changeMoney(mObjectMaximumHealth / 100);
         clearUpdateHandlers();
@@ -128,7 +137,7 @@ public abstract class Unit extends GameObject implements
         mPhysicBody.setTransform(BODY_OUT_OF_CAMERA, BODY_OUT_OF_CAMERA, 0);
         mPhysicBody.setActive(false);
         setIgnoreUpdate(true);
-        setVisible(true);
+        setVisible(false);
         onDestroyed();
     }
 

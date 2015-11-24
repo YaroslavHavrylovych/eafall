@@ -26,8 +26,8 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.BulletsPool;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.explosion.UnitExplosionPool;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.SunStaticObject;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetDestroyListener;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetStaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.defence.DefenceUnit;
@@ -141,6 +141,7 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
         mHud.initHudElements(mCamera, getVertexBufferObjectManager(), mMissionConfig);
         //pools
         BulletsPool.init(getVertexBufferObjectManager());
+        UnitExplosionPool.init(getVertexBufferObjectManager());
         //sound
         ICameraHandler cameraHandler = mSceneManager.getWorkingScene().getCameraHandler();
         SoundFactory.getInstance().setCameraHandler(cameraHandler);
@@ -284,7 +285,6 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
                 ? mMissionConfig.getPlayerPlanet() : mMissionConfig.getOpponentPlanet();
         planet.init(player.getName(), planetNameRes, this, mMissionConfig.getPlanetHealth());
         mSceneManager.getWorkingScene().registerTouchArea(planet);
-        planet.addObjectDestroyedListener(new PlanetDestroyListener(player));
         planet.attachSelf();
         if (unitUniqueId.length > 0) {
             planet.setObjectUniqueId(unitUniqueId[0]);
@@ -422,7 +422,6 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
     @SuppressWarnings("unused")
     public void onEvent(final GameOverEvent gameOverEvent) {
         GameOverPopup popup = new GameOverPopup(mHud, mCamera, getVertexBufferObjectManager());
-        pause(true);
         popup.setSuccess(mRuler.isSuccess());
         popup.setStateChangeListener(new IRollingPopup.StateChangingListener() {
             @Override

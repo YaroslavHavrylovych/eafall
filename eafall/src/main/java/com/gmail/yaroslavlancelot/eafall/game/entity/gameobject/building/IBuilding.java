@@ -22,15 +22,21 @@ public interface IBuilding {
     /** return building upgrade */
     int getUpgrade();
 
+    /** get building abscissa on the planet (starting from the planet bottom left) */
+    float getX();
+
+    /** get building ordinate on the planet (starting from the planet bottom left) */
+    float getY();
+
+    /** set building {@link org.andengine.entity.Entity} to ignore or receive updates */
+    void setIgnoreUpdates(boolean stop);
+
     /** byu new building */
     boolean buyBuilding();
 
     /** upgrade all buildings of the current type */
     boolean upgradeBuilding();
 
-    /** get building abscissa on the planet (starting from the planet bottom left) */
-    float getX();
-
-    /** get building ordinate on the planet (starting from the planet bottom left) */
-    float getY();
+    /** destroys building and detaches it */
+    void destroy();
 }

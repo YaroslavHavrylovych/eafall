@@ -34,7 +34,7 @@ public class BulletsPool {
      */
     public static AbstractBullet getBullet(Damage.DamageType damageType, String playerName) {
         Pool pool = BULLETS_POOL.mPools.get(damageType);
-        AbstractBullet bullet = pool.allocatePoolItem();
+        AbstractBullet bullet = pool.obtainPoolItem();
         if (damageType.equals(Damage.DamageType.QUAKER)) {
             ((QuakerBullet) bullet).setPlayerName(playerName);
         }

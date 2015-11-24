@@ -70,7 +70,7 @@ public class OffenceUnit extends Unit {
     }
 
     @Override
-    protected void destroy() {
+    public void destroy() {
         removeBonuses();
         if (mHealthBar != null) {
             mHealthBar.setVisible(false);

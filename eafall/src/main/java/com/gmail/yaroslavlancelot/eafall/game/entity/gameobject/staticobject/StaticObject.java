@@ -15,8 +15,8 @@ public abstract class StaticObject extends GameObject {
     public StaticObject(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
         super(x, y, textureRegion, vertexBufferObjectManager);
     }
-    
-    public StaticObject(float x, float y, float width ,float height, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
+
+    public StaticObject(float x, float y, float width, float height, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
         super(x, y, width, height, textureRegion, vertexBufferObjectManager);
     }
 
@@ -28,6 +28,11 @@ public abstract class StaticObject extends GameObject {
         mIncomeIncreasingValue = incomeIncreasingValue;
     }
 
+    @Override
+    protected void onNegativeHealth() {
+        destroy();
+    }
+
     @SuppressWarnings("unused")
     public int getCost() {
         return mCost;
@@ -35,5 +40,10 @@ public abstract class StaticObject extends GameObject {
 
     protected void setCost(int cost) {
         mCost = cost;
+    }
+
+    @Override
+    public void destroy() {
+        detachSelf();
     }
 }
