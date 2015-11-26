@@ -43,7 +43,7 @@ public interface IAlliance {
      * .TextureRegionHolder} with the key assigned by unit dummy (for now it's
      * value which you can get by {@link UnitDummy#getTextureRegionKey(String)})
      *
-     * @param playerName       player name to get unit color for create unit texture
+     * @param playerName     player name to get unit color for create unit texture
      * @param textureManager texture manager to create texture atlas (which returns)
      * @return loaded texture atlas (with units for particular player in it)
      */
@@ -66,6 +66,15 @@ public interface IAlliance {
      * @return the upgrade cost value
      */
     int getUpgradeCost(BuildingId buildingId);
+
+    /**
+     * calculate buildings upgrade cost
+     *
+     * @param buildingId id of the building which we want upgrade
+     * @param amount     buildings amount
+     * @return the upgrade cost value
+     */
+    int getUpgradeCost(BuildingId buildingId, int amount);
 
     /**
      * check upgrade possibility of the building with given buildingId

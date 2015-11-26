@@ -83,11 +83,11 @@ public class UnitBuildingPopupUpdater extends BaseBuildingPopupUpdater {
             }
         });
         //button upgrade
-        boolean isSecondButtonVisible = building != null
+        boolean isUpgradeButtonVisible = building != null
                 && alliance.isUpgradeAvailable(buildingId)
                 && !upgradeShowed;
         //check if upgrades available
-        if (isSecondButtonVisible) {
+        if (isUpgradeButtonVisible) {
             mUpgradeButton.setPosition(mBaseButton.getX() + mBaseButton.getWidth() / 2
                     + BUTTON_MARGIN + mUpgradeButton.getWidth() / 2, mBaseButton.getY());
             if (!mUpgradeButton.hasParent()) {

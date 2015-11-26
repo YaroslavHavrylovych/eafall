@@ -1,5 +1,6 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings;
 
+import com.gmail.yaroslavlancelot.eafall.game.alliance.Alliance;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.Building;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.OffenceBuildingDummy;
@@ -13,7 +14,6 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import de.greenrobot.event.EventBus;
 
 public class UnitBuilding extends Building implements IUnitBuilding {
-    private static final String TAG = UnitBuilding.class.getCanonicalName();
     /** if production is paused */
     protected boolean mPaused = false;
     /** building dummy link */
@@ -116,13 +116,14 @@ public class UnitBuilding extends Building implements IUnitBuilding {
         IPlayer player = PlayersHolder.getPlayer(mPlayerName);
         boolean isFakePlanet = player.getControlType().clientSide();
         if (!isFakePlanet) {
-            int cost = mOffenceBuildingDummy.getCost(nextUpgrade);
+            int upgradeCost = Alliance.calculateBuildingUpgradeCost(mDummy.getCost(mUpgrade),
+                    mDummy.getCost(nextUpgrade), mBuildingsAmount);
             //check money
-            if (player.getMoney() < cost) {
+            if (player.getMoney() < upgradeCost) {
                 return false;
             }
             //upgrade
-            player.changeMoney(-cost);
+            player.changeMoney(-upgradeCost);
         }
 
         StaticObject oldBuilding = mBuildingStaticObject;

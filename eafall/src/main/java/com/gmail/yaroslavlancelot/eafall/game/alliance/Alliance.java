@@ -115,9 +115,14 @@ public abstract class Alliance implements IAlliance {
         if (buildingId.getUpgrade() + 1 >= dummy.getUpgrades()) {
             return -1;
         }
-        int price1 = dummy.getCost(buildingId.getUpgrade());
-        int price2 = dummy.getCost(buildingId.getUpgrade() + 1);
-        return (int) Math.round(Math.abs(price2 - price1) * 1.25);
+        int costBefore = dummy.getCost(buildingId.getUpgrade());
+        int costAfter = dummy.getCost(buildingId.getUpgrade() + 1);
+        return calculateBuildingUpgradeCost(costBefore, costAfter);
+    }
+
+    @Override
+    public int getUpgradeCost(final BuildingId buildingId, final int amount) {
+        return getUpgradeCost(buildingId) * amount;
     }
 
     @Override
@@ -145,7 +150,7 @@ public abstract class Alliance implements IAlliance {
             mUnitDummies.put(unitDummy.getId(), unitDummy);
         }
 
-        mUnitsIds = new TreeSet<Integer>();
+        mUnitsIds = new TreeSet<>();
         for (int i = 0; i < mUnitDummies.size(); i++) {
             mUnitsIds.add(mUnitDummies.keyAt(i));
         }
@@ -154,7 +159,7 @@ public abstract class Alliance implements IAlliance {
     private void initBuildingDummies(BuildingListLoader buildingListLoader) {
         int unitBuildingsAmount = buildingListLoader.getList().size();
         //+3 it's addition buildings (i.e. +defence, +wealth, + special buildings)
-        mBuildingDummies = new SparseArray<BuildingDummy>(unitBuildingsAmount + 3);
+        mBuildingDummies = new SparseArray<>(unitBuildingsAmount + 3);
         //units
         BuildingDummy buildingDummy;
         for (int i = 0; i < unitBuildingsAmount; i++) {
@@ -171,7 +176,7 @@ public abstract class Alliance implements IAlliance {
         buildingDummy = new SpecialBuildingDummy(buildingListLoader.specialBuildingLoader);
         mBuildingDummies.put(buildingDummy.getBuildingId(), buildingDummy);
 
-        mBuildingsIds = new TreeSet<Integer>();
+        mBuildingsIds = new TreeSet<>();
         for (int i = 0; i < mBuildingDummies.size(); i++) {
             mBuildingsIds.add(mBuildingDummies.keyAt(i));
         }
@@ -281,5 +286,28 @@ public abstract class Alliance implements IAlliance {
             }
             textureAtlas.load();
         }
+    }
+
+    /**
+     * calculates building upgrade cost
+     *
+     * @param costBefore building cost before upgrade
+     * @param costAfter  upgraded building cost
+     * @return upgrade cost of the single building
+     */
+    public static int calculateBuildingUpgradeCost(int costBefore, int costAfter) {
+        return (int) Math.round(Math.abs(costBefore - costAfter) * 1.5);
+    }
+
+    /**
+     * calculates multiple buildings upgrade cost
+     *
+     * @param costBefore building cost before upgrade
+     * @param costAfter  upgraded building cost
+     * @param amount     amount of buildings
+     * @return upgrade cost of multiple buildings
+     */
+    public static int calculateBuildingUpgradeCost(int costBefore, int costAfter, int amount) {
+        return calculateBuildingUpgradeCost(costBefore, costAfter) * amount;
     }
 }

@@ -102,7 +102,7 @@ public class UnitBuildingDescriptionAreaUpdater extends BaseDescriptionAreaUpdat
             mUpgradeLink.setText("-");
             return;
         }
-        int upgradeCost = amount * alliance.getUpgradeCost(buildingId);
+        int upgradeCost = alliance.getUpgradeCost(buildingId, amount);
         mUpgradeLink.setText(Integer.valueOf(upgradeCost).toString());
     }
 }
