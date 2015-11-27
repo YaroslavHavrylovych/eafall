@@ -15,11 +15,24 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /** used in description popup */
 public class Link extends RecenterText {
+    public final static int FONT_SIZE = SizeConstants.DESCRIPTION_POPUP_TEXT_SIZE;
     private final static String sFontSizeKey = "link_font_size_key";
-    private final static int sFontSize = SizeConstants.DESCRIPTION_POPUP_TEXT_SIZE;
     private static int sColorUnpressed = android.graphics.Color.argb(255, 0, 18, 57);
     private static int sColorPressed = org.andengine.util.adt.color.Color.BLUE.getABGRPackedInt();
     private volatile TouchHelper.OnClickListener mOnClickListener;
+    /**
+     * If set then will extend each bound with contained value
+     * <br/>
+     * Must have 4 numbers:
+     * <ol>
+     * <il>top</il>
+     * <il>bottom</il>
+     * <il>right</il>
+     * <il>left</il>
+     * </ol>
+     * <br/>
+     */
+    private float[] mTouchBoundariesExtender;
 
     public Link(float x, float y, VertexBufferObjectManager vertexBufferObjectManager) {
         this(x, y, "*", vertexBufferObjectManager);
@@ -34,6 +47,28 @@ public class Link extends RecenterText {
         mOnClickListener = onClickListener;
     }
 
+    @Override
+    public boolean contains(final float pX, final float pY) {
+        float[] sceneCoords = convertLocalCoordinatesToSceneCoordinates(mWidth / 2, mHeight / 2);
+        float hWidth = mWidth / 2;
+        float hHeight = mHeight / 2;
+        return mTouchBoundariesExtender == null ? super.contains(pX, pY) :
+                pY < sceneCoords[1] + hHeight + mTouchBoundariesExtender[0] &&
+                        pY > sceneCoords[1] - hHeight + mTouchBoundariesExtender[1] &&
+                        pX < sceneCoords[0] + hWidth + mTouchBoundariesExtender[2] &&
+                        pX > sceneCoords[0] - hWidth + mTouchBoundariesExtender[3];
+    }
+
+    /** Extends boundaries to detect touch event (to use in contains method) */
+    public void setTouchExtender(float top, float bottom, float right, float left) {
+        mTouchBoundariesExtender = new float[]{top, bottom, right, left};
+    }
+
+    /** clear custom extended touch event boundaries */
+    public void removeTouchCustomBoundaries() {
+        mTouchBoundariesExtender = null;
+    }
+
     public void removeOnClickListener() {
         mOnClickListener = null;
     }
@@ -42,7 +77,7 @@ public class Link extends RecenterText {
         final ITexture fontTexture = new BitmapTextureAtlas(textureManager, 512, 256);
         IFont font = FontFactory.createFromAsset(fontManager, fontTexture,
                 EaFallApplication.getContext().getAssets(), "fonts/MyriadPro-Regular.ttf",
-                sFontSize, true, sColorUnpressed);
+                FONT_SIZE, true, sColorUnpressed);
         font.load();
         FontHolder.getInstance().addElement(sFontSizeKey, font);
     }

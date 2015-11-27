@@ -4,6 +4,7 @@ import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
+import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.UnitBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.UnitDummy;
@@ -33,6 +34,7 @@ public class UnitBuildingDescriptionAreaUpdater extends BaseDescriptionAreaUpdat
     /* values changed with each #updateDescription call */
     private DescriptionText mCostValue;
     private DescriptionText mUnitCreationTimeValue;
+    private DescriptionText mProduceText;
     private DescriptionText mUpgradeText;
     private Link mProducedUnitLink;
     private Link mUpgradeLink;
@@ -42,7 +44,7 @@ public class UnitBuildingDescriptionAreaUpdater extends BaseDescriptionAreaUpdat
         Text text = createDescriptionText(0, R.string.description_cost, vertexBufferObjectManager);
         mCostValue = createDescriptionText(text.getWidth() + mSpace, text.getY(), vertexBufferObjectManager);
         // produce
-        text = createDescriptionText(1, R.string.description_produce, vertexBufferObjectManager);
+        text = mProduceText = createDescriptionText(1, R.string.description_produce, vertexBufferObjectManager);
         mProducedUnitLink = createLink(text.getWidth(), text.getY(), vertexBufferObjectManager);
         // unit creation time
         text = createDescriptionText(2, R.string.description_unit_producing_time, vertexBufferObjectManager);
@@ -66,6 +68,8 @@ public class UnitBuildingDescriptionAreaUpdater extends BaseDescriptionAreaUpdat
         UnitDummy unitDummy = alliance.getUnitDummy(unitId);
         mProducedUnitLink.setText(EaFallApplication.getContext().getResources().getString(
                 unitDummy.getUnitStringId()));
+        mProducedUnitLink.setTouchExtender(Link.FONT_SIZE, -Link.FONT_SIZE / 2,
+                mProducedUnitLink.getWidth() / 2, -mProduceText.getWidth());
         mProducedUnitLink.setOnClickListener(new TouchHelper.OnClickListener() {
             @Override
             public void onClick() {
@@ -77,6 +81,8 @@ public class UnitBuildingDescriptionAreaUpdater extends BaseDescriptionAreaUpdat
         //upgrade
         if (alliance.isUpgradeAvailable(buildingId)) {
             updateUpgradeCost(buildingId, playerName);
+            float width = Math.min(SizeConstants.DESCRIPTION_POPUP_MIN_LINK_WIDTH, mProducedUnitLink.getWidth());
+            mUpgradeLink.setTouchExtender(Link.FONT_SIZE / 2, -Link.FONT_SIZE / 2, width, -mUpgradeText.getWidth());
             mUpgradeLink.setOnClickListener(new TouchHelper.OnClickListener() {
                 @Override
                 public void onClick() {

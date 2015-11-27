@@ -11,7 +11,6 @@ import org.andengine.entity.shape.ITouchCallback;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.input.touch.detector.ClickDetector;
 import org.andengine.util.Constants;
-import org.andengine.util.math.MathUtils;
 
 /** Helping functions to work with touch events */
 public final class TouchHelper {
@@ -142,7 +141,7 @@ public final class TouchHelper {
         public boolean onAreaTouched(final TouchEvent event, float touchAreaLocalX, float touchAreaLocalY) {
             if (event.isActionDown()) {
                 press();
-            } else if (event.isActionCancel() || !contains(touchAreaLocalX, touchAreaLocalY)) {
+            } else if (event.isActionCancel() || !mObject.contains(event.getX(), event.getY())) {
                 unPress();
             } else if (event.isActionUp() && mIsItClickEvent) {
                 click();
@@ -153,17 +152,6 @@ public final class TouchHelper {
         /** element was pressed callback */
         public void press() {
             mIsItClickEvent = true;
-        }
-
-        /**
-         * check that {@link EntityCustomTouch#mObject}
-         * contains x and y coordinates
-         *
-         * @return true if object x and y both more then zero less then object
-         * width and height
-         */
-        private boolean contains(float x, float y) {
-            return x > 0 && y > 0 && x < mObject.getWidth() && y < mObject.getHeight();
         }
 
         /** callback after user press element but then cancel press with moving outside of the element borders */
@@ -224,23 +212,15 @@ public final class TouchHelper {
             if (!mObject.isVisible()) {
                 return false;
             }
+            float sceneX = sceneTouchEvent.getX();
+            float sceneY = sceneTouchEvent.getY();
             if (mTouchedChild == null) {
                 if (sceneTouchEvent.isActionDown()) {
-                    float[] localCoordinates;
-                    float halfWidth, halfHeight, x, y;
                     for (int i = 0; i < mObject.getChildCount(); i++) {
                         IEntity child = mObject.getChildByIndex(i);
-                        localCoordinates = child.convertParentCoordinatesToLocalCoordinates(
-                                touchAreaLocalX, touchAreaLocalY);
-                        halfWidth = child.getWidth() / 2;
-                        halfHeight = child.getHeight() / 2;
-                        x = child.getX();
-                        y = child.getY();
-                        if (MathUtils.isInBounds(x - halfWidth, x + halfWidth, touchAreaLocalX)
-                                && MathUtils
-                                .isInBounds(y - halfHeight, y + halfHeight, touchAreaLocalY)) {
+                        if (child.contains(sceneX, sceneY)) {
                             if (child.onAreaTouched(
-                                    sceneTouchEvent, localCoordinates[0], localCoordinates[1])) {
+                                    sceneTouchEvent, touchAreaLocalX, touchAreaLocalY)) {
                                 mTouchedChild = child;
                                 break;
                             }
@@ -248,11 +228,8 @@ public final class TouchHelper {
                     }
                 }
             } else {
-                float[] coordinatesInChild =
-                        mTouchedChild.convertParentCoordinatesToLocalCoordinates
-                                (touchAreaLocalX, touchAreaLocalY);
                 boolean result =
-                        mTouchedChild.onAreaTouched(sceneTouchEvent, coordinatesInChild[0], coordinatesInChild[1]);
+                        mTouchedChild.onAreaTouched(sceneTouchEvent, touchAreaLocalX, touchAreaLocalY);
                 if (sceneTouchEvent.isActionUp() || sceneTouchEvent.isActionCancel()) {
                     mTouchedChild = null;
                 }

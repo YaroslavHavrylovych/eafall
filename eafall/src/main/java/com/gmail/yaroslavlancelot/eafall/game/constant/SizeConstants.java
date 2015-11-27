@@ -105,6 +105,7 @@ public final class SizeConstants {
     public static final int DESCRIPTION_POPUP_DES_AREA_X = 1015;
     public static final int DESCRIPTION_POPUP_DES_AREA_Y = 258;
     public static final int DESCRIPTION_POPUP_DES_BUTTON_HEIGHT = 120;
+    public static final int DESCRIPTION_POPUP_MIN_LINK_WIDTH = 100;
     // amount text
     public static final int DESCRIPTION_POPUP_AMOUNT_FONT_SIZE = 75;
     public static final int DESCRIPTION_POPUP_AMOUNT_TEXT_PADDING_HORIZONTAL = 15;
