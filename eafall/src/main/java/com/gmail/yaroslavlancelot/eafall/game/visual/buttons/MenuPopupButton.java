@@ -52,6 +52,11 @@ public class MenuPopupButton extends ButtonSprite {
     // ===========================================================
     // Methods for/from SuperClass/Interfaces
     // ===========================================================
+    @Override
+    public boolean contains(final float pX, final float pY) {
+        //pX and pY parent coordinates. Extended click area
+        return pX > mX - mWidth && pX < mX + mWidth && pY > mY - mHeight && pY < mY + mHeight;
+    }
 
     // ===========================================================
     // Methods

@@ -8,6 +8,7 @@ import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.IPopupUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.touch.TouchHelper;
+import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.ArrowButtonSprite;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 
 import org.andengine.entity.primitive.Rectangle;
@@ -82,10 +83,10 @@ public class DescriptionPopupBackground extends Sprite {
         ITiledTextureRegion textureRegion =
                 (TiledTextureRegion) TextureRegionHolder.getRegion(StringConstants.FILE_DESCRIPTION_ARROWS);
         int y = SizeConstants.DESCRIPTION_POPUP_ARROW_Y;
-        mLeftArrow = new ButtonSprite(
+        mLeftArrow = new ArrowButtonSprite(
                 SizeConstants.DESCRIPTION_POPUP_LEFT_ARROW_X, y,
                 textureRegion, getVertexBufferObjectManager());
-        mRightArrow = new ButtonSprite(
+        mRightArrow = new ArrowButtonSprite(
                 SizeConstants.DESCRIPTION_POPUP_RIGHT_ARROW_X, y,
                 textureRegion, getVertexBufferObjectManager());
         mRightArrow.setFlippedVertical(true);
