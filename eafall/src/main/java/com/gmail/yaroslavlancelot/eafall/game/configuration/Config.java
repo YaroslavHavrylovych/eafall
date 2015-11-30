@@ -19,7 +19,7 @@ public class Config implements IConfig {
     public final int mMaxZoomFactor = 6;
     public final float mHudAlpha = 0.85f;
     public final int mMaxSimultaneousSoundStreams = 4;
-    private final Color mPlayerSwapColor = new Color(46.0f / 255.0f, 37.0f / 255.0f, 118.0f / 255.0f);
+    private final Color mPlayerSwapColor = Color.BLUE;
     /** Access to application settings */
     private final ApplicationSettings mSettings;
 
