@@ -10,6 +10,7 @@ import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.gmail.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
+import com.gmail.yaroslavlancelot.eafall.game.engine.ArgbColorComponentsSwapBitmapTextureAtlas;
 import com.gmail.yaroslavlancelot.eafall.game.engine.CleanableSpriteGroup;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.health.PlayerHealthBar;
@@ -29,6 +30,7 @@ import org.andengine.opengl.texture.atlas.TextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
+import org.andengine.opengl.texture.atlas.bitmap.source.AssetBitmapTextureAtlasSource;
 import org.andengine.opengl.texture.atlas.bitmap.source.IBitmapTextureAtlasSource;
 import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtlasBuilder;
 import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder;
@@ -42,6 +44,9 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
  * @author Yaroslav Havrylovych
  */
 public class ClientResourcesLoader extends BaseResourceLoader {
+    /** original image contains this argb component */
+    private static final ArgbColorComponentsSwapBitmapTextureAtlas.RgbaPart
+            ORIGINAL_COLOR = ArgbColorComponentsSwapBitmapTextureAtlas.RgbaPart.B;
     private int mMovableUnitsLimit = 200;
     private int mMovableUnitsBuffer = 30;
 
@@ -128,15 +133,20 @@ public class ClientResourcesLoader extends BaseResourceLoader {
         BuildableBitmapTextureAtlas buildableTextureAtlas = new BuildableBitmapTextureAtlas(textureManager, 128, 128);
         //player health bar
         PlayerHealthBar.loadResources(textureManager, vertexBufferObjectManager);
+        IBitmapTextureAtlasSource atlasSource = AssetBitmapTextureAtlasSource.create(EaFallApplication
+                .getContext().getAssets(), StringConstants.FILE_HEALTH_BAR_UNIT);
         //units health bar
-        IBitmapTextureAtlasSource atlasSource;
-        int colorSize = SizeConstants.UNIT_HEALTH_BAR_FILE_SIZE;
         for (IPlayer player : PlayersHolder.getInstance().getElements()) {
-            atlasSource = createColoredTextureAtlasSource(player.getColor(), colorSize, 5);
+            ArgbColorComponentsSwapBitmapTextureAtlas textureSource =
+                    new ArgbColorComponentsSwapBitmapTextureAtlas
+                            (atlasSource,
+                                    ORIGINAL_COLOR,
+                                    ArgbColorComponentsSwapBitmapTextureAtlas.RgbaPart.createFromColor(
+                                            player.getColor()));
             TextureRegionHolder.getInstance().addElement(
                     UnitHealthBar.getHealthBarTextureRegionKey(player.getName()),
                     BitmapTextureAtlasTextureRegionFactory.createFromSource(
-                            buildableTextureAtlas, atlasSource, false));
+                            buildableTextureAtlas, textureSource, false));
         }
         //bullets
         TextureRegionHolder.addElementFromAssets(StringConstants.FILE_ANNIHILATOR_BULLET,

@@ -50,6 +50,8 @@ public final class StringConstants {
     public static final String FILE_MENU_POPUP_BUTTON = "graphics/images/menu_popup_button.png";
     /** health bar for display player health */
     public static final String FILE_HEALTH_BAR_PLAYER = "graphics/sprites/health/health";
+    /** unit health bar */
+    public static final String FILE_HEALTH_BAR_UNIT = "graphics/sprites/health/unit_health_bar.png";
     /** file name for blue planet */
     public static final String FILE_FIRST_PLANET = "graphics/sprites/planet_1.png";
     /** file name for red planet */
