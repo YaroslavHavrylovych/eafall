@@ -421,6 +421,13 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
 
     @SuppressWarnings("unused")
     public void onEvent(final GameOverEvent gameOverEvent) {
+        //stop stoppable periodic(s)
+        for (IPeriodic periodic : mGamePeriodic) {
+            if (periodic.stoppableWhenGameOver()) {
+                mSceneManager.getWorkingScene().unregisterUpdateHandler(periodic.getUpdateHandler());
+            }
+        }
+        //show popup
         GameOverPopup popup = new GameOverPopup(mHud, mCamera, getVertexBufferObjectManager());
         popup.setSuccess(mRuler.isSuccess());
         popup.setStateChangeListener(new IRollingPopup.StateChangingListener() {

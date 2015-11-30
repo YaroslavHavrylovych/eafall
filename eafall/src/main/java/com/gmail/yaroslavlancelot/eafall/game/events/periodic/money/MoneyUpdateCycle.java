@@ -26,6 +26,11 @@ public class MoneyUpdateCycle implements IPeriodic {
     }
 
     @Override
+    public boolean stoppableWhenGameOver() {
+        return true;
+    }
+
+    @Override
     public IUpdateHandler getUpdateHandler() {
         return mTimerHandler;
     }

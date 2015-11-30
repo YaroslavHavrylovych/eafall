@@ -30,6 +30,7 @@ import java.util.Random;
  * @author Yaroslav Havrylovych
  */
 //TODO FYI : bot works in another thread and it has to do some actions in the update thread
+//TODO stop bot when game finished
 public class VeryFirstBot implements Runnable {
     public static final String TAG = VeryFirstBot.class.getCanonicalName();
     public static final int DELAY_BETWEEN_ITERATIONS = 500;

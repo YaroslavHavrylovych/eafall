@@ -10,5 +10,9 @@ import org.andengine.engine.handler.IUpdateHandler;
  * @author Yaroslav Havrylovych
  */
 public interface IPeriodic {
+    /** @return true if update handlers have to be stopped when game over and false if not */
+    boolean stoppableWhenGameOver();
+
+    /** get periodic's update handler */
     IUpdateHandler getUpdateHandler();
 }

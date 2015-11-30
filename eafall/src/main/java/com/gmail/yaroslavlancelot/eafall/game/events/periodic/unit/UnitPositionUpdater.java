@@ -36,6 +36,10 @@ public class UnitPositionUpdater implements IPeriodic {
     // ===========================================================
     // Getter & Setter
     // ===========================================================
+    @Override
+    public boolean stoppableWhenGameOver() {
+        return false;
+    }
 
     // ===========================================================
     // Methods for/from SuperClass/Interfaces

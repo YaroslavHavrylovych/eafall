@@ -47,6 +47,10 @@ public class GameTime implements IPeriodic {
     // ===========================================================
     // Getter & Setter
     // ===========================================================
+    @Override
+    public boolean stoppableWhenGameOver() {
+        return true;
+    }
 
     // ===========================================================
     // Methods for/from SuperClass/Interfaces
