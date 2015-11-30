@@ -115,17 +115,26 @@ public class PlayerHealthBar implements IHealthBar {
             int missHealth = healthMax - actualHealth;
             float plankValue = onePlankHealth * healthPlank;
             float plankHealthDiff = plankValue - missHealth;
-            boolean visible = plankHealthDiff > 0;
-            healthPlankEntity.setVisible(visible);
-            if (visible) {
-                if (plankHealthDiff < onePlankHealth) {
-                    //as more currentWithPlankHealthDifference as biggest alpha(0,0..1,0) has to be set
-                    healthPlankEntity.setAlpha(plankHealthDiff / onePlankHealth);
-                } else {
-                    healthPlankEntity.setAlpha(1f);
-                }
+            if (plankHealthDiff < onePlankHealth) {
+                //as more currentWithPlankHealthDifference as biggest alpha(0,0..1,0) has to be set
+                healthPlankEntity.setAlpha(plankHealthDiff < 0 ? 0f : plankHealthDiff / onePlankHealth);
+            } else {
+                healthPlankEntity.setAlpha(1f);
             }
         }
+    }
+
+    protected void setPlankPosition(IEntity healthBarPlank, int id,
+                                    boolean leftPlanet) {
+        int plankCenterX = FIRST_PLANK_BOTTOM_LEFT_ABSCISSA + (id * BETWEEN_PLANK_DISTANCE)
+                + (int) healthBarPlank.getWidth() / 2;
+        int plankCenterY = PLANK_BOTTOM_LEFT_ORDINATE + (int) healthBarPlank.getHeight() / 2;
+
+        plankCenterX = leftPlanet
+                ? SizeConstants.HALF_FIELD_WIDTH - HEALTH_BAR_CARCASS_HALF_WIDTH + plankCenterX
+                : SizeConstants.HALF_FIELD_WIDTH + HEALTH_BAR_CARCASS_HALF_WIDTH - plankCenterX;
+        plankCenterY = SizeConstants.GAME_FIELD_HEIGHT - plankCenterY;
+        healthBarPlank.setPosition(plankCenterX, plankCenterY);
     }
 
     public static void loadResources(final TextureManager textureManager,
@@ -176,18 +185,5 @@ public class PlayerHealthBar implements IHealthBar {
 
     private static String pathToHealthItem(int id) {
         return StringConstants.FILE_HEALTH_BAR_PLAYER + id + ".png";
-    }
-
-    protected void setPlankPosition(IEntity healthBarPlank, int id,
-                                    boolean leftPlanet) {
-        int plankCenterX = FIRST_PLANK_BOTTOM_LEFT_ABSCISSA + (id * BETWEEN_PLANK_DISTANCE)
-                + (int) healthBarPlank.getWidth() / 2;
-        int plankCenterY = PLANK_BOTTOM_LEFT_ORDINATE + (int) healthBarPlank.getHeight() / 2;
-
-        plankCenterX = leftPlanet
-                ? SizeConstants.HALF_FIELD_WIDTH - HEALTH_BAR_CARCASS_HALF_WIDTH + plankCenterX
-                : SizeConstants.HALF_FIELD_WIDTH + HEALTH_BAR_CARCASS_HALF_WIDTH - plankCenterX;
-        plankCenterY = SizeConstants.GAME_FIELD_HEIGHT - plankCenterY;
-        healthBarPlank.setPosition(plankCenterX, plankCenterY);
     }
 }
