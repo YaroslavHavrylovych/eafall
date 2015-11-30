@@ -136,8 +136,7 @@ public abstract class Unit extends GameObject implements
         PlayersHolder.getPlayer(mPlayerName).removeObjectFromPlayer(this);
         mPhysicBody.setTransform(BODY_OUT_OF_CAMERA, BODY_OUT_OF_CAMERA, 0);
         mPhysicBody.setActive(false);
-        setIgnoreUpdate(true);
-        setVisible(false);
+        setPosition(-100, -100);
         onDestroyed();
     }
 
@@ -165,10 +164,8 @@ public abstract class Unit extends GameObject implements
             existingUnit = getParent() != null;
         }
         setRotation(PathHelper.isLeftSide(x) ? 90 : -90);
-        setIgnoreUpdate(false);
         mPhysicBody.setActive(true);
         mPhysicBody.setTransform(posX, posY, 0);
-        setVisible(true);
         if (!existingUnit) {
             attachSelf();
         }
