@@ -38,6 +38,7 @@ import kotlin.test.*
  */
 abstract class UnitTest : AndroidTestCase() {
     public val mPlayerName: String = "test_player"
+    public val mEnemyPlayerName: String = "test_enemy_player"
     public val mUnitsSpriteGroupName: String = BatchingKeys.getUnitSpriteGroup(mPlayerName)
     protected val mWorld: PhysicsWorld = PhysicsWorld(Vector2(0f, 0f), false, 2, 2)
     protected val mUnitTexture: EmptyTexture = EmptyTexture(TextureManager(), 20, 20)
@@ -59,8 +60,11 @@ abstract class UnitTest : AndroidTestCase() {
         super.setUp()
         val vBom = VertexBufferObjectManager()
         val imperials = Imperials(vBom)
-        val player = Player(mPlayerName, imperials, IPlayer.ControlType.USER_CONTROL_ON_SERVER_SIDE, MissionConfig())
+        var player = Player(mPlayerName, imperials, IPlayer.ControlType.USER_CONTROL_ON_SERVER_SIDE, MissionConfig())
         PlayersHolder.getInstance().addElement(mPlayerName, player)
+        player = Player(mEnemyPlayerName, imperials, IPlayer.ControlType.BOT_CONTROL_ON_SERVER_SIDE, MissionConfig())
+        PlayersHolder.getInstance().addElement(mEnemyPlayerName, player)
+        PlayersHolder.getPlayer(mPlayerName).enemyPlayer = player;
         //used for bullets, health and units
         val spriteGroup = SpriteGroup(mUnitTexture, 10, vBom)
         SpriteGroupHolder.addGroup(mUnitsSpriteGroupName, spriteGroup)
@@ -111,7 +115,6 @@ abstract class UnitTest : AndroidTestCase() {
         }
         val pos = BodiedSprite.BODY_OUT_OF_CAMERA
         assertTrue(unit.isVisible(), "unit visible")
-        assertTrue(unit.isIgnoreUpdate(), "unit active")
         assertFalse(unit.getBody().isActive(), "unit body active")
         val position = unit.getBody().getPosition()
         assertTrue(position.x == pos && position.y == pos, "unit body positions doesn't set")

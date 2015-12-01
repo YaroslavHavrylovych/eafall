@@ -5,6 +5,7 @@ import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.audio.LimitedSoundWrapper;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.gmail.yaroslavlancelot.eafall.game.client.IPhysicCreator;
+import com.gmail.yaroslavlancelot.eafall.game.engine.CleanableSpriteGroup;
 import com.gmail.yaroslavlancelot.eafall.game.engine.ManualFinishRotationModifier;
 import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.AbstractBullet;
 import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.BulletsPool;
@@ -137,6 +138,7 @@ public abstract class Unit extends GameObject implements
         mPhysicBody.setTransform(BODY_OUT_OF_CAMERA, BODY_OUT_OF_CAMERA, 0);
         mPhysicBody.setActive(false);
         setPosition(-100, -100);
+        setTag(CleanableSpriteGroup.RECYCLE);
         onDestroyed();
     }
 
@@ -151,6 +153,7 @@ public abstract class Unit extends GameObject implements
      */
     public void init(float x, float y, IPhysicCreator physicCreator) {
         LoggerHelper.methodInvocation(TAG, "init(float, float, IPhysicCreator)");
+        setTag(0);
         IPlayer player = PlayersHolder.getPlayer(mPlayerName);
         mObjectCurrentHealth = mObjectMaximumHealth;
         initHealthBar();

@@ -149,8 +149,13 @@ public class SquareUnitMap implements IUnitMap, IUnitMapUpdater {
         Unit unit;
         for (int i = 0; i < units.size(); i++) {
             unit = units.get(i);
-            n = (int) unit.getX() / PARTITION_SIZE;
-            m = (int) (SizeConstants.GAME_FIELD_HEIGHT - unit.getY()) / PARTITION_SIZE;
+            int x = (int) unit.getX() - 1; //exclude max value
+            int y = (int) unit.getY() - 1; //exclude max value
+            if (x < 0 || y < 0) {
+                continue;
+            }
+            n = x / PARTITION_SIZE;
+            m = (SizeConstants.GAME_FIELD_HEIGHT - y) / PARTITION_SIZE;
             mPartitions.get(n).get(m).add(unit);
         }
     }

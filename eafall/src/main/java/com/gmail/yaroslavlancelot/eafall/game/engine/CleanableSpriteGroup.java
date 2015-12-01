@@ -19,6 +19,11 @@ public class CleanableSpriteGroup extends SpriteGroup {
     // ===========================================================
     // Constants
     // ===========================================================
+    /**
+     * set this string as an {@link IEntity#setTag(int)} to mark object for recycling if
+     * group capacity reached
+     */
+    public static final int RECYCLE = 4532;
 
     // ===========================================================
     // Fields
@@ -47,7 +52,7 @@ public class CleanableSpriteGroup extends SpriteGroup {
             LoggerHelper.printWarnMessage(this.getClass().getSimpleName(), "cleanable limit reached");
             for (Iterator<IEntity> iterator = mChildren.iterator(); iterator.hasNext(); ) {
                 IEntity child = iterator.next();
-                if (child.isIgnoreUpdate()) {
+                if (child.getTag() == RECYCLE) {
                     iterator.remove();
                     child.detachChildren();
                     child.setParent(null);

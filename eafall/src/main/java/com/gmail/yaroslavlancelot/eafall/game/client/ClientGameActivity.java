@@ -383,7 +383,7 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
     @SuppressWarnings("unused")
     /** really used by {@link de.greenrobot.event.EventBus} */
     public void onEvent(final CreateBuildingEvent createBuildingEvent) {
-        userWantCreateBuilding(PlayersHolder.getInstance().getElement(createBuildingEvent.getPlayerName()), createBuildingEvent.getBuildingId());
+        userWantCreateBuilding(PlayersHolder.getPlayer(createBuildingEvent.getPlayerName()), createBuildingEvent.getBuildingId());
     }
 
     protected abstract void userWantCreateBuilding(IPlayer userPlayer, BuildingId buildingId);
@@ -447,7 +447,7 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
     /** really used by {@link de.greenrobot.event.EventBus} */
     public void onEvent(final CreateDefenceUnitEvent unitEvent) {
         int unitKey = unitEvent.getKey();
-        final IPlayer player = PlayersHolder.getInstance().getElement(unitEvent.getPlayerName());
+        final IPlayer player = PlayersHolder.getPlayer(unitEvent.getPlayerName());
         DefenceUnit unit = (DefenceUnit) createUnit(unitKey, player,
                 unitEvent.getX(), unitEvent.getY());
     }

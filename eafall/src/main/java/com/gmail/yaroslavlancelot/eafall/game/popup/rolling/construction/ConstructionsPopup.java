@@ -42,7 +42,7 @@ public class ConstructionsPopup extends RollingPopup {
     public ConstructionsPopup(String playerName, Scene scene, Camera camera,
                               VertexBufferObjectManager vertexBufferObjectManager) {
         super(scene, camera);
-        IPlayer player = PlayersHolder.getInstance().getElement(playerName);
+        IPlayer player = PlayersHolder.getPlayer(playerName);
 
         int width = SizeConstants.CONSTRUCTIONS_POPUP_WIDTH;
         int height = SizeConstants.CONSTRUCTIONS_POPUP_HEIGHT;
@@ -64,7 +64,7 @@ public class ConstructionsPopup extends RollingPopup {
     }
 
     private void initBuildingPopupForPlayer(String playerName) {
-        IPlayer player = PlayersHolder.getInstance().getElement(playerName);
+        IPlayer player = PlayersHolder.getPlayer(playerName);
         mItems = new SparseArray<>(player.getAlliance().getBuildingsAmount());
 
         syncBuildingsWithPlayer(playerName);

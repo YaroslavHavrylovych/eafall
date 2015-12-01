@@ -55,7 +55,7 @@ public class ThinClientGameActivity extends ClientGameActivity implements InGame
     public void buildingCreated(BuildingId buildingId, final String playerName) {
         LoggerHelper.methodInvocation(TAG, "buildingCreated");
         LoggerHelper.printDebugMessage(TAG, "buildingId=" + buildingId + ", playerName=" + playerName);
-        PlanetStaticObject planetStaticObject = PlayersHolder.getInstance().getElement(playerName).getPlanet();
+        PlanetStaticObject planetStaticObject = PlayersHolder.getPlayer(playerName).getPlanet();
         planetStaticObject.createBuilding(buildingId);
     }
 
@@ -65,7 +65,7 @@ public class ThinClientGameActivity extends ClientGameActivity implements InGame
         runOnUpdateThread(new Runnable() {
             @Override
             public void run() {
-                createThinUnit(unitId, PlayersHolder.getInstance().getElement(playerName), x, y, unitUniqueId);
+                createThinUnit(unitId, PlayersHolder.getPlayer(playerName), x, y, unitUniqueId);
             }
         });
     }
@@ -140,7 +140,7 @@ public class ThinClientGameActivity extends ClientGameActivity implements InGame
 
     @Override
     public void moneyChanged(String playerName, int money) {
-        IPlayer player = PlayersHolder.getInstance().getElement(playerName);
+        IPlayer player = PlayersHolder.getPlayer(playerName);
         if (player == null) return;
         player.setMoney(money);
     }

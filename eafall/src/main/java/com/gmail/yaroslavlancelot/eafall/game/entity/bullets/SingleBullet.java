@@ -55,8 +55,7 @@ public class SingleBullet extends AbstractBullet {
         if (mTarget.getObjectUniqueId() == mTargetId && mTarget.isObjectAlive()) {
             mTarget.damageObject(mDamage);
         }
-        setPosition(-100, -100);
-        onBulletDestroyed();
+        destroy();
     }
 
     // ===========================================================

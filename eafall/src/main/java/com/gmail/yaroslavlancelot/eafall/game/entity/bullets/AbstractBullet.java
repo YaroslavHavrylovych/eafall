@@ -1,6 +1,7 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.bullets;
 
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
+import com.gmail.yaroslavlancelot.eafall.game.engine.CleanableSpriteGroup;
 import com.gmail.yaroslavlancelot.eafall.game.entity.BatchedSprite;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage;
@@ -44,6 +45,7 @@ public abstract class AbstractBullet extends BatchedSprite implements IModifier.
     protected abstract float duration(float distance);
 
     public void fire(Damage damage, float x, float y, GameObject gameObject) {
+        setTag(0);
         mDamage = damage;
         mTarget = gameObject;
         mTargetId = gameObject.getObjectUniqueId();
@@ -55,6 +57,12 @@ public abstract class AbstractBullet extends BatchedSprite implements IModifier.
             mIsAttached = true;
             registerEntityModifier(mMoveModifier);
         }
+    }
+
+    protected void destroy() {
+        setPosition(-100, -100);
+        setTag(CleanableSpriteGroup.RECYCLE);
+        onBulletDestroyed();
     }
 
     protected void onBulletDestroyed() {

@@ -84,7 +84,7 @@ public class DescriptionPopup extends RollingPopup {
     public void onEvent(final BuildingDescriptionShowEvent buildingDescriptionShowEvent) {
         onEvent();
         BuildingId buildingId = buildingDescriptionShowEvent.getObjectId();
-        IPlayer player = PlayersHolder.getInstance().getElement(buildingDescriptionShowEvent.getPlayerName());
+        IPlayer player = PlayersHolder.getPlayer(buildingDescriptionShowEvent.getPlayerName());
         BuildingDummy buildingDummy = player.getAlliance().getBuildingDummy(buildingId);
         IPopupUpdater popupUpdater;
         boolean leftBlockVisibility = true;
@@ -134,7 +134,7 @@ public class DescriptionPopup extends RollingPopup {
     public void onEvent(final UnitByBuildingDescriptionShowEvent unitByBuildingDescriptionShowEvent) {
         onEvent();
         Object objectId = unitByBuildingDescriptionShowEvent.getBuildingId();
-        IPlayer player = PlayersHolder.getInstance().getElement(unitByBuildingDescriptionShowEvent.getPlayerName());
+        IPlayer player = PlayersHolder.getPlayer(unitByBuildingDescriptionShowEvent.getPlayerName());
         mDescriptionPopupBackground.setLeftBlockVisibility(true);
         mDescriptionPopupBackground.updateDescription(mUnitsDescriptionUpdater, objectId,
                 player.getAlliance().getAllianceName(), player.getName());

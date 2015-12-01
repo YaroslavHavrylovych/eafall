@@ -96,8 +96,7 @@ public class QuakerBullet extends AbstractBullet {
                 }
             }
         }
-        setPosition(-100, -100);
-        onBulletDestroyed();
+        destroy();
     }
 
     // ===========================================================

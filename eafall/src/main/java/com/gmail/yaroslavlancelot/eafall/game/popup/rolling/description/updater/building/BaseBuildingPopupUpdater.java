@@ -48,7 +48,7 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
 
     @Override
     public void updateImage(Shape drawArea, Object objectId, String allianceName, String playerName) {
-        IPlayer player = PlayersHolder.getInstance().getElement(playerName);
+        IPlayer player = PlayersHolder.getPlayer(playerName);
         mBuildingId = (BuildingId) objectId;
         updateBuildingsAmount(drawArea,
                 player.getPlanet().getBuildingsAmount(mBuildingId.getId()));
