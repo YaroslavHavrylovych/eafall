@@ -10,7 +10,9 @@ import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.modifier.MoveYModifier;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.opengl.util.GLState;
 import org.andengine.util.modifier.IModifier;
+import org.andengine.util.modifier.ease.EaseStrongOut;
 
 /** Base popups class. Touch on HUD except any hud element will cause popup closing */
 public abstract class RollingPopup extends PopupScene implements IRollingPopup {
@@ -78,7 +80,7 @@ public abstract class RollingPopup extends PopupScene implements IRollingPopup {
 
     /** collapse the popup */
     private void initCollapseModifier(float fromY, float toY) {
-        mCollapseModifier = new MoveYModifier(mAnimationTime, toY, fromY);
+        mCollapseModifier = new MoveYModifier(mAnimationTime, toY, fromY, EaseStrongOut.getInstance());
         mCollapseModifier.addModifierListener(new IEntityModifier.IEntityModifierListener() {
             @Override
             public void onModifierStarted(final IModifier<IEntity> modifier, final IEntity item) {
@@ -98,7 +100,7 @@ public abstract class RollingPopup extends PopupScene implements IRollingPopup {
 
     /** expand the popup */
     private void initExpandModifier(float fromY, float toY) {
-        mExpandModifier = new MoveYModifier(mAnimationTime, fromY, toY);
+        mExpandModifier = new MoveYModifier(mAnimationTime, fromY, toY, EaseStrongOut.getInstance());
         mExpandModifier.addModifierListener(new IEntityModifier.IEntityModifierListener() {
             @Override
             public void onModifierStarted(final IModifier<IEntity> modifier, final IEntity item) {
