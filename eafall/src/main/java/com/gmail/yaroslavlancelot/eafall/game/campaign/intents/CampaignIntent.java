@@ -2,6 +2,7 @@ package com.gmail.yaroslavlancelot.eafall.game.campaign.intents;
 
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.game.campaign.CampaignActivity;
+import com.gmail.yaroslavlancelot.eafall.android.StartableIntent;
 import com.gmail.yaroslavlancelot.eafall.game.resources.ResourceFactory;
 
 /**

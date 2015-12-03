@@ -10,9 +10,9 @@ import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.imperials.Imperials;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.mutants.Mutants;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.rebels.Rebels;
-import com.gmail.yaroslavlancelot.eafall.game.campaign.intents.MissionIntent;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.mission.MissionConfig;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
+import com.gmail.yaroslavlancelot.eafall.game.mission.MissionIntent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 
 /**
@@ -48,22 +48,12 @@ public abstract class PreGameCustomizationBaseActivity extends BaseNonGameActivi
     protected View.OnClickListener getStartButtonOnClick(final Class activityToStartClass,
                                                          final IPlayer.ControlType player1ControlType,
                                                          final IPlayer.ControlType player2ControlType) {
-        if (activityToStartClass == null) {
-            return null;
-        }
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent singleGameIntent = new MissionIntent(activityToStartClass);
-
-                singleGameIntent.putExtra(MissionIntent.MISSION_CONFIG, new MissionConfig());
-                singleGameIntent.
-                        putExtra(StringConstants.FIRST_PLAYER_CONTROL_BEHAVIOUR_TYPE,
-                                player1ControlType.toString()).
-                        putExtra(StringConstants.FIRST_PLAYER_ALLIANCE, getAllianceName(mAlliance1)).
-                        putExtra(StringConstants.SECOND_PLAYER_CONTROL_BEHAVIOUR_TYPE,
-                                player2ControlType.toString()).
-                        putExtra(StringConstants.SECOND_PLAYER_ALLIANCE, getAllianceName(mAlliance2));
+                Intent singleGameIntent = getSinglePlayerIntent(activityToStartClass,
+                        getAllianceName(mAlliance1), getAllianceName(mAlliance2),
+                        player1ControlType, player2ControlType);
                 startActivity(singleGameIntent);
             }
         };
@@ -87,5 +77,21 @@ public abstract class PreGameCustomizationBaseActivity extends BaseNonGameActivi
             case 2:
                 return Mutants.ALLIANCE_NAME;
         }
+    }
+
+    /** @return intent initialized as a game to start */
+    public static Intent getSinglePlayerIntent(Class activityToStartClass,
+                                               String alliance1, String alliance2,
+                                               IPlayer.ControlType player1ControlType,
+                                               IPlayer.ControlType player2ControlType) {
+        Intent intent = new MissionIntent(activityToStartClass);
+        intent.putExtra(MissionIntent.MISSION_CONFIG, new MissionConfig());
+        intent.putExtra(StringConstants.FIRST_PLAYER_CONTROL_BEHAVIOUR_TYPE,
+                player1ControlType.toString()).
+                putExtra(StringConstants.FIRST_PLAYER_ALLIANCE, alliance1).
+                putExtra(StringConstants.SECOND_PLAYER_CONTROL_BEHAVIOUR_TYPE,
+                        player2ControlType.toString()).
+                putExtra(StringConstants.SECOND_PLAYER_ALLIANCE, alliance2);
+        return intent;
     }
 }

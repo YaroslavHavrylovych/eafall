@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- versions -->
+    <string name="not_int_demo">Не включено в демо версію</string>
+    <!-- /versions -->
+
     <!-- game types -->
     <string name="campaign">КАМПАНІЯ</string>
     <string name="single_game">ОДИНОЧНА ГРА</string>

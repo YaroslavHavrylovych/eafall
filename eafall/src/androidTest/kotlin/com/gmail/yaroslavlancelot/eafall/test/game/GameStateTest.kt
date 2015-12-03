@@ -15,7 +15,7 @@ import kotlin.test.assertTrue
  * @author Yaroslav Havrylovych
  */
 class GameStateTest : AndroidTestCase() {
-    val testGameActivity = TestActivity();
+    protected val testGameActivity = TestActivity();
 
     //#1
     fun testReset() {

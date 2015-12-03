@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.eafall.game.campaign.loader.mission;
+package com.gmail.yaroslavlancelot.eafall.game.mission;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;

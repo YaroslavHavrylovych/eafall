@@ -5,8 +5,8 @@ import android.os.Parcelable;
 
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.R;
-import com.gmail.yaroslavlancelot.eafall.game.campaign.loader.mission.DefinitionLoader;
-import com.gmail.yaroslavlancelot.eafall.game.campaign.loader.mission.MissionDataLoader;
+import com.gmail.yaroslavlancelot.eafall.game.mission.DefinitionLoader;
+import com.gmail.yaroslavlancelot.eafall.game.mission.MissionDataLoader;
 import com.gmail.yaroslavlancelot.eafall.general.SelfCleanable;
 
 /**

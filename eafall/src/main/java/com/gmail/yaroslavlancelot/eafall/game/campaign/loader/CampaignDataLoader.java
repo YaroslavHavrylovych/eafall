@@ -1,6 +1,6 @@
 package com.gmail.yaroslavlancelot.eafall.game.campaign.loader;
 
-import com.gmail.yaroslavlancelot.eafall.game.campaign.loader.mission.MissionDataLoader;
+import com.gmail.yaroslavlancelot.eafall.game.mission.MissionDataLoader;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;

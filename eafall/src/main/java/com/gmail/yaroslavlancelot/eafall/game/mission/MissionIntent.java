@@ -1,7 +1,7 @@
-package com.gmail.yaroslavlancelot.eafall.game.campaign.intents;
+package com.gmail.yaroslavlancelot.eafall.game.mission;
 
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
-import com.gmail.yaroslavlancelot.eafall.game.campaign.loader.mission.MissionDataLoader;
+import com.gmail.yaroslavlancelot.eafall.android.StartableIntent;
 import com.gmail.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.mission.MissionConfig;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;

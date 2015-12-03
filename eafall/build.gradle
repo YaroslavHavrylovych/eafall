@@ -2,15 +2,21 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 buildscript {
-    ext.kotlin_version = '0.14.449'
-    ext.android_support_lib = 'v7:23.0.1'
+    ext {
+        mint_sdk_v = 11
+        kotlin_v = '1.0.0-beta-3593'
+        target_v = 23
+        build_tools_v = "23.0.1"
+        android_support_lib_v = 'v7:$build_tools_v'
+        exclude_java = []
+    }
 
     repositories {
         mavenCentral()
     }
 
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_v"
     }
 }
 
@@ -22,13 +28,52 @@ dependencies {
     compile project(':andenginemultiplayerextension')
     compile 'de.greenrobot:eventbus:2.4.0'
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile "com.android.support:appcompat-$android_support_lib"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_v"
+    compile "com.android.support:appcompat-$android_support_lib_v"
 }
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    compileSdkVersion target_v
+    buildToolsVersion build_tools_v
+
+    defaultConfig {
+        minSdkVersion mint_sdk_v
+        targetSdkVersion target_v
+
+        testInstrumentationRunner "com.gmail.yaroslavlancelot.eafall.test.DefaultInstrumentationTestRunner"
+        testApplicationId "com.gmail.yaroslavlancelot.eafall.test"
+        applicationId "com.gmail.yaroslavlancelot.eafall"
+    }
+
+    productFlavors {
+        demo {
+            exclude_java.clear()
+            buildConfigField("Boolean", "DEMO_VERSION", "true")
+            //network
+            exclude_java << "com/gmail/yaroslavlancelot/eafall/network/**"
+            exclude_java << "com/gmail/yaroslavlancelot/eafall/android/activities/multiplayer/**"
+            exclude_java << "com/gmail/yaroslavlancelot/eafall/game/client/thick/server/**"
+            exclude_java << "com/gmail/yaroslavlancelot/eafall/game/client/thin/**"
+            //campaign
+            exclude_java << "com/gmail/yaroslavlancelot/eafall/game/campaign/**"
+        }
+        dev {
+            exclude_java.clear()
+            buildConfigField("Boolean", "DEMO_VERSION", "false")
+        }
+    }
+
+    sourceSets {
+        main {
+            java {
+                for (files in exclude_java) {
+                    exclude files
+                }
+            }
+        }
+        androidTest.java.srcDirs += 'src/androidTest/kotlin'
+        main.java.srcDirs += "src/main/kotlin"
+    }
 
     buildTypes {
         release {
@@ -37,22 +82,23 @@ android {
         }
     }
 
-    sourceSets {
-        androidTest.java.srcDirs += 'src/androidTest/kotlin'
-        main.java.srcDirs += 'src/main/kotlin'
-    }
-
-    defaultConfig {
-        minSdkVersion 11
-        targetSdkVersion 23
-
-        testInstrumentationRunner "com.gmail.yaroslavlancelot.eafall.test.DefaultInstrumentationTestRunner"
-        testApplicationId "com.gmail.yaroslavlancelot.eafall.test"
-        applicationId "com.gmail.yaroslavlancelot.eafall"
-    }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    applicationVariants.all { variant ->
+        //remove unneeded resources from demo build
+        if (variant.name.contains('demo')) {
+            def excludeAssetsFromDemo = task("excludeAssetsFrom${variant.name}", type: Delete) {
+                String assetsPath = "${buildDir}/intermediates/assets/${variant.dirName}"
+                delete "${assetsPath}/campaign"
+                delete "${assetsPath}/graphics/sprites/alliance/imperials"
+                delete "${assetsPath}/graphics/sprites/alliance/rebels"
+                delete "${assetsPath}/graphics/images/alliance/imperials"
+                delete "${assetsPath}/graphics/images/alliance/rebels"
+            }
+            variant.mergeAssets.finalizedBy excludeAssetsFromDemo
+        }
     }
 }

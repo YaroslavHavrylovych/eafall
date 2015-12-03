@@ -7,19 +7,27 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.gmail.yaroslavlancelot.eafall.BuildConfig;
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.R;
-import com.gmail.yaroslavlancelot.eafall.android.activities.multiplayer.GameServersListActivity;
 import com.gmail.yaroslavlancelot.eafall.android.activities.settings.SettingsActivity;
 import com.gmail.yaroslavlancelot.eafall.android.activities.singleplayer.PreGameCustomizationActivity;
-import com.gmail.yaroslavlancelot.eafall.game.campaign.intents.CampaignIntent;
-import com.gmail.yaroslavlancelot.eafall.game.campaign.intents.StartableIntent;
+import com.gmail.yaroslavlancelot.eafall.game.alliance.mutants.Mutants;
+import com.gmail.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity;
+import com.gmail.yaroslavlancelot.eafall.android.StartableIntent;
+import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 
 /**
  * first game activity with menu etc.
  */
 public class StartupActivity extends BaseNonGameActivity {
+    @Override
+    public void onBackPressed() {
+        StartupActivity.this.finish();
+    }
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,11 +41,6 @@ public class StartupActivity extends BaseNonGameActivity {
         PreferenceManager.setDefaultValues(EaFallApplication.getContext(), R.xml.preferences, false);
     }
 
-    @Override
-    public void onBackPressed() {
-        StartupActivity.this.finish();
-    }
-
     private void initCampaignButton(View campaignButton) {
         if (campaignButton == null) return;
         if (campaignButton instanceof Button) {
@@ -47,8 +50,27 @@ public class StartupActivity extends BaseNonGameActivity {
         campaignButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                StartableIntent campaignIntent = new CampaignIntent();
-                campaignIntent.start(StartupActivity.this);
+                if (BuildConfig.DEMO_VERSION) {
+                    Toast.makeText(StartupActivity.this, R.string.not_int_demo, Toast.LENGTH_SHORT)
+                            .show();
+                } else {
+                    Class cls;
+                    StartableIntent startableIntent;
+                    try {
+                        cls = Class.forName("com.gmail.yaroslavlancelot.eafall.game.campaign.intents.CampaignIntent");
+                        startableIntent = (StartableIntent) cls.newInstance();
+                    } catch (InstantiationException e) {
+                        e.printStackTrace();
+                        return;
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                        return;
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                        return;
+                    }
+                    startableIntent.start(StartupActivity.this);
+                }
             }
         });
     }
@@ -62,8 +84,18 @@ public class StartupActivity extends BaseNonGameActivity {
         singleGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                Intent singleGameIntent = new Intent(StartupActivity.this, PreGameCustomizationActivity.class);
-                startActivity(singleGameIntent);
+                if (BuildConfig.DEMO_VERSION) {
+                    Intent intent = PreGameCustomizationActivity.getSinglePlayerIntent(
+                            SinglePlayerGameActivity.class,
+                            Mutants.ALLIANCE_NAME, Mutants.ALLIANCE_NAME,
+                            IPlayer.ControlType.USER_CONTROL_ON_SERVER_SIDE,
+                            IPlayer.ControlType.BOT_CONTROL_ON_SERVER_SIDE);
+                    startActivity(intent);
+                } else {
+                    Intent singleGameIntent = new Intent(StartupActivity.this,
+                            PreGameCustomizationActivity.class);
+                    startActivity(singleGameIntent);
+                }
             }
         });
     }
@@ -77,8 +109,22 @@ public class StartupActivity extends BaseNonGameActivity {
         singleGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                Intent singleGameIntent = new Intent(StartupActivity.this, GameServersListActivity.class);
-                startActivity(singleGameIntent);
+                if (BuildConfig.DEMO_VERSION) {
+                    Toast.makeText(StartupActivity.this, R.string.not_int_demo, Toast.LENGTH_SHORT)
+                            .show();
+                } else {
+                    Class cls;
+                    try {
+                        cls = Class.forName("com.gmail.yaroslavlancelot.eafall.android" +
+                                ".activities.multiplayer.GameServersListActivity");
+                    } catch (ClassNotFoundException e) {
+                        //TODO mark it somewhere
+                        e.printStackTrace();
+                        return;
+                    }
+                    Intent singleGameIntent = new Intent(StartupActivity.this, cls);
+                    startActivity(singleGameIntent);
+                }
             }
         });
     }

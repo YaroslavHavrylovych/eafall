@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <resources>
-    <string-array name="unit_health_bar_behavior">
+    <string-array name="unit_health_bar_behavior" translatable="false">
         <item>@string/health_bar_default</item>
         <item>@string/health_bar_always_hidden</item>
         <item>@string/health_bar_always_visible</item>
     </string-array>
 
-    <string-array name="unit_health_bar_behavior_value">
+    <string-array name="unit_health_bar_behavior_value" translatable="false">
         <item>DEFAULT</item>
         <item>ALWAYS_HIDDEN</item>
         <item>ALWAYS_VISIBLE</item>

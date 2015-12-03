@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- versions -->
+    <string name="not_int_demo">Doesn\'t exist in demo version</string>
+    <!-- /versions -->
+
     <!-- game types -->
     <string name="campaign">CAMPAIGN</string>
     <string name="single_game">SINGLE GAME</string>

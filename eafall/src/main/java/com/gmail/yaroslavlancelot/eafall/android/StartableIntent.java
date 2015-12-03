@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.eafall.game.campaign.intents;
+package com.gmail.yaroslavlancelot.eafall.android;
 
 import android.app.Activity;
 import android.content.Context;
