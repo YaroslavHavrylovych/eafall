@@ -80,7 +80,7 @@ public class WealthBuildingDummy extends BuildingDummy {
     @Override
     public void loadSpriteResources(Context context, BitmapTextureAtlas textureAtlas, int x, int y, String allianceName) {
         String pathToImage = StringConstants.getPathToBuildings(allianceName) + mBuildingLoader.image_name;
-        TextureRegionHolder.addElementFromAssets(pathToImage, textureAtlas, context, x + getWidth(), y + getHeight());
+        TextureRegionHolder.addElementFromAssets(pathToImage, textureAtlas, context, x, y);
         mSpriteTextureRegionArray[0] = TextureRegionHolder.getInstance().getElement(pathToImage);
     }
 

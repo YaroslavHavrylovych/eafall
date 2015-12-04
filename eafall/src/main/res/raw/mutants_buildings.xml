@@ -30,8 +30,8 @@
     <!-- 20 -->
     <units_building name="invisible_plain">
         <id>20</id>
-        <position_x>1</position_x>
-        <position_y>-6</position_y>
+        <position_x>-14</position_x>
+        <position_y>-14</position_y>
         <upgrades>
             <upgrade id="0">
                 <image_name>invisible_plain.png</image_name>
@@ -50,7 +50,7 @@
     <!-- 30 -->
     <units_building name="hydra_pond">
         <id>30</id>
-        <position_x>87</position_x>
+        <position_x>103</position_x>
         <position_y>34</position_y>
         <upgrades>
             <upgrade id="0">
@@ -70,8 +70,8 @@
     <!-- 40 -->
     <units_building name="poison_cave">
         <id>40</id>
-        <position_x>-83</position_x>
-        <position_y>-9</position_y>
+        <position_x>-89</position_x>
+        <position_y>-19</position_y>
         <upgrades>
             <upgrade id="0">
                 <image_name>poison_cave.png</image_name>
@@ -148,8 +148,8 @@
         </upgrades>
     </units_building>
     <defence_building name="bastion">
-        <position_x>-9</position_x>
-        <position_y>105</position_y>
+        <position_x>-71</position_x>
+        <position_y>41</position_y>
         <image_name>bastion.png</image_name>
         <cost>1200</cost>
         <unit_id>250</unit_id>
@@ -159,17 +159,17 @@
         <first_build_income>20</first_build_income>
         <next_buildings_income>2</next_buildings_income>
         <cost>500</cost>
-        <position_x>-9</position_x>
-        <position_y>105</position_y>
-        <image_name>bastion.png</image_name>
+        <position_x>9</position_x>
+        <position_y>123</position_y>
+        <image_name>reptile_city.png</image_name>
     </wealth_building>
     <special_building name="king_of_snakes">
         <characteristic>attack</characteristic>
         <value>10</value>
         <percentage>true</percentage>
         <cost>500</cost>
-        <position_x>-9</position_x>
-        <position_y>105</position_y>
-        <image_name>bastion.png</image_name>
+        <position_x>59</position_x>
+        <position_y>8</position_y>
+        <image_name>king_of_snakes.png</image_name>
     </special_building>
 </buildings>

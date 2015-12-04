@@ -76,7 +76,7 @@ public class DefenceBuildingDummy extends UnitBuildingDummy {
     public void loadSpriteResources(Context context, BitmapTextureAtlas textureAtlas, int x, int y, String allianceName) {
         String pathToImage = StringConstants.getPathToBuildings(allianceName) + mDefenceBuildingLoader.image_name;
         mSpriteTextureRegionArray[0] = TextureRegionHolder.addElementFromAssets(
-                pathToImage, textureAtlas, context, x + getWidth(), y + getHeight());
+                pathToImage, textureAtlas, context, x, y);
     }
 
     @Override
