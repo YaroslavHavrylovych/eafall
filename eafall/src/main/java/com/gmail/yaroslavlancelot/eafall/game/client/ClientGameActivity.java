@@ -15,7 +15,6 @@ import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
 import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.gmail.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder;
-import com.gmail.yaroslavlancelot.eafall.game.mission.MissionIntent;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.mission.MissionConfig;
 import com.gmail.yaroslavlancelot.eafall.game.constant.CollisionCategories;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
@@ -40,13 +39,16 @@ import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.DetachSpri
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.PauseGameEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.ShowSettingsEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.CreateBuildingEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.BuildingSettingsPopupShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.unit.CreateDefenceUnitEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.periodic.IPeriodic;
 import com.gmail.yaroslavlancelot.eafall.game.events.periodic.time.GameTime;
 import com.gmail.yaroslavlancelot.eafall.game.events.periodic.unit.UnitPositionUpdater;
+import com.gmail.yaroslavlancelot.eafall.game.mission.MissionIntent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.Player;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
+import com.gmail.yaroslavlancelot.eafall.game.popup.BuildingSettingsDialog;
 import com.gmail.yaroslavlancelot.eafall.game.popup.GameOverPopup;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.IRollingPopup;
 import com.gmail.yaroslavlancelot.eafall.game.resources.loaders.ClientResourcesLoader;
@@ -91,6 +93,8 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
     protected List<IPeriodic> mGamePeriodic = new ArrayList<>(2);
     /** defines whether the game is over and who is the winner */
     protected IRuler mRuler;
+    /** popup to change particular building settings */
+    private BuildingSettingsDialog mBuildingSettingsDialog;
 
     @Override
     public EngineOptions onCreateEngineOptions() {
@@ -332,6 +336,21 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
         } else if (abstractSpriteEvent instanceof AttachSpriteEvent) {
             attachSprite(sprite, parent);
         }
+    }
+
+    @SuppressWarnings("unused")
+    /** really used by {@link de.greenrobot.event.EventBus} */
+    public void onEvent(final BuildingSettingsPopupShowEvent event) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (mBuildingSettingsDialog == null) {
+                    mBuildingSettingsDialog = new BuildingSettingsDialog(ClientGameActivity.this);
+                }
+                mBuildingSettingsDialog.init(event.getUnitBuilding());
+                mBuildingSettingsDialog.show();
+            }
+        });
     }
 
     /** detach entity from entity (sprite group, hud or game scene) */

@@ -125,24 +125,24 @@
     <!-- settings -->
     <string name="settings">Налаштування</string>
     <string name="settings_health_bar_behaviour">Полоса здоров’я</string>
+    <string name="developers_mode">Режим розробника</string>
+    <string name="developers_mode_on">Увімкнений</string>
+    <string name="developers_mode_off">Вимкнений</string>
+    <string name="pick_unit_health_bar_behavior">ПОКАЗНИК ЗДОРОВ’Я ЮНІТА</string>
+    <string name="health_bar_default">Прихований доки юніт не атакований</string>
     <string name="health_bar_always_hidden">Прихований</string>
     <string name="health_bar_always_visible">Видимий</string>
     <string name="category_game">Гра</string>
-    <string name="category_other">Інше</string>
-    <string name="category_sounds">Звук</string>
-    <string name="developers_mode">Режим розробника</string>
-    <string name="developers_mode_off">Вимкнений</string>
-    <string name="developers_mode_on">Увімкнений</string>
     <string name="game_sounds">Звуки гри</string>
-    <string name="game_sounds_off">Вимкнені</string>
     <string name="game_sounds_on">Увімкнені</string>
+    <string name="game_sounds_off">Вимкнені</string>
     <string name="game_sounds_volume">Гучність</string>
-    <string name="health_bar_default">Прихований доки юніт не атакований</string>
     <string name="music">Музика</string>
-    <string name="music_off">Вимкена</string>
     <string name="music_on">Увімкнена</string>
+    <string name="music_off">Вимкена</string>
     <string name="music_volume">Гучність</string>
-    <string name="pick_unit_health_bar_behavior">ПОКАЗНИК ЗДОРОВ’Я ЮНІТА</string>
+    <string name="category_sounds">Звук</string>
+    <string name="category_other">Інше</string>
 
     <!-- general -->
     <string name="app_name">Empires Always Fall</string>
@@ -226,14 +226,18 @@
     <string name="description_build_button">Побудувати</string>
     <string name="description_back_button">Повернутись</string>
     <string name="description_upgrade_button">Прокачати</string>
-    <string name="description_path_button_top">Верх</string>
-    <string name="description_path_button_bottom">Низ</string>
-    <string name="description_path_button_pause">Стоп</string>
+    <string name="description_settings_button">Налаштування</string>
     <string name="description_cost">Ціна :</string>
     <string name="description_produce">Створює :</string>
     <string name="description_description">Опис :</string>
     <string name="description_unit_producing_time">Час створення юніта :</string>
     <string name="description_upgrade">Прокачка :</string>
+
+    <!-- building settings -->
+    <string name="unit_movement_path">Оберіть шлях для юніта</string>
+    <string name="building_settings_top">Юніт йде згори</string>
+    <string name="building_settings_bottom">Юніт йде знизу</string>
+    <string name="building_settings_pause">Зупинити виробництво юнітів</string>
 
     <!-- units -->
     <string name="description_building">Будинок :</string>

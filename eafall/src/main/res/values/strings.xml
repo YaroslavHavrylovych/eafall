@@ -132,6 +132,7 @@
     <string name="health_bar_default">Hidden until unit was hit</string>
     <string name="health_bar_always_hidden">Always hidden</string>
     <string name="health_bar_always_visible">Always visible</string>
+    <string name="category_game">Game</string>
     <string name="game_sounds">Game Sounds</string>
     <string name="game_sounds_on">Game sounds enabled</string>
     <string name="game_sounds_off">Game sounds disabled</string>
@@ -141,7 +142,6 @@
     <string name="music_off">Music disabled</string>
     <string name="music_volume">Music</string>
     <string name="category_sounds">Sounds</string>
-    <string name="category_game">Game</string>
     <string name="category_other">Other</string>
 
     <!-- general -->
@@ -226,14 +226,18 @@
     <string name="description_build_button">Build</string>
     <string name="description_back_button">Back</string>
     <string name="description_upgrade_button">Upgrade</string>
-    <string name="description_path_button_top">Top</string>
-    <string name="description_path_button_bottom">Bottom</string>
-    <string name="description_path_button_pause">Pause</string>
+    <string name="description_settings_button">Settings</string>
     <string name="description_cost">Cost :</string>
     <string name="description_produce">Produce :</string>
     <string name="description_description">Description :</string>
     <string name="description_unit_producing_time">Unit producing time :</string>
     <string name="description_upgrade">Upgrade :</string>
+
+    <!-- building settings -->
+    <string name="unit_movement_path">Choose unit path</string>
+    <string name="building_settings_top">Unit uses the top path</string>
+    <string name="building_settings_bottom">Unit uses the bottom path</string>
+    <string name="building_settings_pause">Stop units production</string>
 
     <!-- units -->
     <string name="description_building">Building :</string>
