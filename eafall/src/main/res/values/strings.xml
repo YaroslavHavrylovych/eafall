@@ -96,11 +96,11 @@
     <string name="hydra_pond">Hydra Pond</string>
     <string name="poison_cave">Poison Cave</string>
     <string name="web">Web</string>
-    <string name="mountain_cave">Mountain Cave</string>
+    <string name="mountain_cave">Mountain\nCave</string>
     <string name="hell">Hell</string>
     <string name="bastion">Bastion</string>
     <string name="reptile_city">Reptile City</string>
-    <string name="king_of_snakes">King of Snakes</string>
+    <string name="king_of_snakes">King of\nSnakes</string>
     <!-- /buildings -->
     <!-- units -->
     <string name="lizard">Lizard</string>

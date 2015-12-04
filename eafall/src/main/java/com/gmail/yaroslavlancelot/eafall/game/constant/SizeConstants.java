@@ -54,19 +54,19 @@ public final class SizeConstants {
     /* constructions popup */
     public static final int CONSTRUCTIONS_POPUP_INVOCATION_BUTTON_WIDTH = MENU_BUTTON_WIDTH;
     public static final int CONSTRUCTIONS_POPUP_INVOCATION_BUTTON_HEIGHT = MENU_BUTTON_HEIGHT;
-    public static final int CONSTRUCTIONS_POPUP_ELEMENT_HEIGHT = 123;
-    public static final int CONSTRUCTIONS_POPUP_ELEMENT_WIDTH = 623;
-    public static final int CONSTRUCTIONS_POPUP_ELEMENT_NAME_X = 157;
-    public static final int CONSTRUCTIONS_POPUP_ELEMENT_IMAGE_X = 81;
-    public static final int CONSTRUCTIONS_POPUP_ELEMENT_OXYGEN_IMAGE_X = 487;
+    public static final int CONSTRUCTIONS_POPUP_ELEMENT_HEIGHT = 147;
+    public static final int CONSTRUCTIONS_POPUP_ELEMENT_WIDTH = 624;
+    public static final int CONSTRUCTIONS_POPUP_ELEMENT_NAME_X = 165;
+    public static final int CONSTRUCTIONS_POPUP_ELEMENT_IMAGE_X = 87;
+    public static final int CONSTRUCTIONS_POPUP_ELEMENT_OXYGEN_IMAGE_X = 480;
     public static final int CONSTRUCTIONS_POPUP_ELEMENT_OXYGEN_IMAGE_Y =
-            CONSTRUCTIONS_POPUP_ELEMENT_HEIGHT / 2 + 5;
-    public static final int CONSTRUCTIONS_POPUP_ELEMENT_OXYGEN_VALUE_X = 527;
+            CONSTRUCTIONS_POPUP_ELEMENT_HEIGHT / 2 + 3;
+    public static final int CONSTRUCTIONS_POPUP_ELEMENT_OXYGEN_VALUE_X = 520;
     public static final int CONSTRUCTIONS_POPUP_ELEMENT_OXYGEN_OFFSET = 10;
-    public static final int CONSTRUCTIONS_POPUP_ELEMENT_IMAGE_Y = 59;
-    public static final int CONSTRUCTIONS_POPUP_ELEMENT_IMAGE_SIZE = 103;
-    public static final int CONSTRUCTIONS_POPUP_ROWS = 6;
-    public static final int CONSTRUCTIONS_POPUP_FIRST_ROW_Y = 165;
+    public static final int CONSTRUCTIONS_POPUP_ELEMENT_IMAGE_Y = 70;
+    public static final int CONSTRUCTIONS_POPUP_ELEMENT_IMAGE_SIZE = 100;
+    public static final int CONSTRUCTIONS_POPUP_ROWS = 5;
+    public static final int CONSTRUCTIONS_POPUP_FIRST_ROW_Y = 179;
     public static final int CONSTRUCTIONS_POPUP_FIRST_COLUMN_X = 123;
     public static final int CONSTRUCTIONS_POPUP_SECOND_COLUMN_X = 766;
     public static final int CONSTRUCTIONS_POPUP_WIDTH = 1512;
