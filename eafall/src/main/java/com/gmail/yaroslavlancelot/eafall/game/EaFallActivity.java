@@ -200,35 +200,32 @@ public abstract class EaFallActivity extends BaseGameActivity {
     }
 
     @SuppressWarnings("unused")
-    public void onEvent(final ShowToastEvent showToastEvent) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                int[] ids = showToastEvent.getTextId();
-                String format = LocaleImpl.getInstance().getStringById(ids[0]);
-                String result;
-                if (ids.length > 1) {
-                    Object[] args = new Object[ids.length - 1];
-                    for (int i = 1; i < ids.length; i++) {
-                        args[i - 1] = LocaleImpl.getInstance().getStringById(ids[i]);
-                    }
-                    result = String.format(format, args);
-                } else {
-                    result = format;
-                }
-                Toast toast =
-                        Toast.makeText(EaFallActivity.this, result, showToastEvent.isLongShowedToast()
-                                ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    toast.getView().setBackgroundColor(getResources()
-                            .getColor(android.R.color.transparent, getTheme()));
-                } else {
-                    toast.getView().setBackgroundColor(getResources()
-                            .getColor(android.R.color.transparent));
-                }
-                toast.show();
+    public void onEventMainThread(final ShowToastEvent showToastEvent) {
+        int[] ids = showToastEvent.getTextId();
+        String format = LocaleImpl.getInstance().getStringById(ids[0]);
+        String result;
+        if (ids.length > 1) {
+            Object[] args = new Object[ids.length - 1];
+            for (int i = 1; i < ids.length; i++) {
+                args[i - 1] = LocaleImpl.getInstance().getStringById(ids[i]);
             }
-        });
+            result = String.format(format, args);
+        } else {
+            result = format;
+        }
+        Toast toast =
+                Toast.makeText(EaFallActivity.this, result, showToastEvent.isLongShowedToast()
+                        ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT);
+        if (showToastEvent.isWithoutBackground()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                toast.getView().setBackgroundColor(getResources()
+                        .getColor(android.R.color.transparent, getTheme()));
+            } else {
+                toast.getView().setBackgroundColor(getResources()
+                        .getColor(android.R.color.transparent));
+            }
+        }
+        toast.show();
     }
 
     @SuppressWarnings("unused")

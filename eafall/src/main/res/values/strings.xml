@@ -2,6 +2,7 @@
 <resources>
     <!-- versions -->
     <string name="not_int_demo">Doesn\'t exist in demo version</string>
+    <string name="not_implemented">Not implemented</string>
     <!-- /versions -->
 
     <!-- game types -->

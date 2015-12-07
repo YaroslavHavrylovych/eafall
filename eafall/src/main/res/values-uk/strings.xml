@@ -2,6 +2,7 @@
 <resources>
     <!-- versions -->
     <string name="not_int_demo">Не включено в демо версію</string>
+    <string name="not_implemented">Не реалізовано</string>
     <!-- /versions -->
 
     <!-- game types -->
