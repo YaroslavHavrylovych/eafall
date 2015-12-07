@@ -14,7 +14,7 @@ import com.gmail.yaroslavlancelot.eafall.game.camera.EaFallCamera;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.game.ApplicationSettings;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
-import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.endgame.GameCloseEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.endgame.ActivityCloseEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.ShowToastEvent;
 import com.gmail.yaroslavlancelot.eafall.game.resources.IResourcesLoader;
 import com.gmail.yaroslavlancelot.eafall.game.resources.ResourceFactory;
@@ -232,7 +232,7 @@ public abstract class EaFallActivity extends BaseGameActivity {
     }
 
     @SuppressWarnings("unused")
-    public void onEvent(GameCloseEvent gameCloseEvent) {
+    public void onEvent(ActivityCloseEvent activityCloseEvent) {
         checkedGameClose();
     }
 

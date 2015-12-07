@@ -11,4 +11,5 @@
     <color name="settings_health_bar_text_shadow">#111111</color>
     <color name="health_bar_dialog_text">#cfced3</color>
     <color name="health_bar_dialog_text_shadow">#222222</color>
+    <color name="confirmation_popup_text">#eeeeee</color>
 </resources>

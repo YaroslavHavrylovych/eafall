@@ -156,7 +156,7 @@
     <string name="connect">З’єднати</string>
     <string name="orbital_station">Орбітальна станція</string>
     <string name="unmovable">Нерухомий</string>
-    <string name="exit_confirmation">Ви дійсно хочете вийти?</string>
+    <string name="exit_confirmation">Ви дійсно хочете\nвийти?</string>
     <string name="exit_dialog_title">Вихід</string>
     <string name="used">Використано</string>
     <string name="unused">Не використано</string>

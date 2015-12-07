@@ -3,7 +3,7 @@ package com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.endgame;
 /**
  * @author Yaroslav Havrylovych
  */
-public class GameCloseEvent {
+public class ActivityCloseEvent {
     // ===========================================================
     // Constants
     // ===========================================================

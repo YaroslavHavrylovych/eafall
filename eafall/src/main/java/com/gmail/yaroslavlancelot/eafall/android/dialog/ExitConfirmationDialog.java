@@ -1,6 +1,8 @@
 package com.gmail.yaroslavlancelot.eafall.android.dialog;
 
 import android.app.Dialog;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -43,6 +45,13 @@ public class ExitConfirmationDialog extends Dialog {
     // ===========================================================
     // Methods for/from SuperClass/Interfaces
     // ===========================================================
+
+
+    @Override
+    protected void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+    }
 
     // ===========================================================
     // Methods

@@ -7,7 +7,7 @@ import com.gmail.yaroslavlancelot.eafall.game.GameState;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
-import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.endgame.GameCloseEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.endgame.ActivityCloseEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.PauseGameEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.ShowSettingsEvent;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.RollingPopup;
@@ -145,7 +145,7 @@ public class MenuPopup extends RollingPopup {
         button.setOnClickListener(new ButtonSprite.OnClickListener() {
             @Override
             public void onClick(final ButtonSprite pTextButton, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-                EventBus.getDefault().post(new GameCloseEvent());
+                EventBus.getDefault().post(new ActivityCloseEvent());
             }
         });
         mBackgroundSprite.attachChild(button);

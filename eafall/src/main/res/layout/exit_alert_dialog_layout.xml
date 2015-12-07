@@ -1,36 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_gravity="center_horizontal"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:gravity="center">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="203dip"
+                android:layout_height="153dip"
+                android:background="@drawable/confirmation_popup">
 
     <TextView
         android:id="@+id/exit_confirmation"
         android:text="@string/exit_confirmation"
+        android:textSize="15dip"
+        android:textColor="@color/confirmation_popup_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginBottom="4dp"/>
+        android:layout_marginTop="45dip"
+        android:gravity="center"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
 
     <LinearLayout
+        android:id="@+id/buttons_container"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="35dip"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <Button
             android:id="@+id/yes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="53dip"
+            android:layout_height="23dip"
+            android:layout_margin="5dip"
+            android:textColor="@color/confirmation_popup_text"
+            android:background="@drawable/confirmation_popup_button_selector"
             android:text="@string/yes"/>
 
         <Button
             android:id="@+id/no"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="53dip"
+            android:layout_height="23dip"
+            android:layout_margin="5dip"
+            android:textColor="@color/confirmation_popup_text"
+            android:background="@drawable/confirmation_popup_button_selector"
             android:text="@string/no"/>
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>
