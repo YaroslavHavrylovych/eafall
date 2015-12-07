@@ -50,7 +50,7 @@ import com.gmail.yaroslavlancelot.eafall.game.player.Player;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.popup.BuildingSettingsDialog;
 import com.gmail.yaroslavlancelot.eafall.game.popup.GameOverPopup;
-import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.IRollingPopup;
+import com.gmail.yaroslavlancelot.eafall.game.popup.IPopup;
 import com.gmail.yaroslavlancelot.eafall.game.resources.loaders.ClientResourcesLoader;
 import com.gmail.yaroslavlancelot.eafall.game.rule.IRuler;
 import com.gmail.yaroslavlancelot.eafall.game.rule.RulesFactory;
@@ -102,6 +102,20 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
         mMissionConfig = getIntent().getExtras().getParcelable(MissionIntent.MISSION_CONFIG);
         mPhysicsWorld = new PhysicsWorld(new Vector2(0, 0), false, 2, 2);
         return engineOptions;
+    }
+
+    @Override
+    public void onPauseGame() {
+        if (GameState.isResourcesLoaded()) {
+            pause(true);
+        }
+        super.onPauseGame();
+    }
+
+    @Override
+    public void finish() {
+        pause(true);
+        super.finish();
     }
 
     @Override
@@ -449,7 +463,7 @@ public abstract class ClientGameActivity extends EaFallActivity implements IUnit
         //show popup
         GameOverPopup popup = new GameOverPopup(mHud, mCamera, getVertexBufferObjectManager());
         popup.setSuccess(mRuler.isSuccess());
-        popup.setStateChangeListener(new IRollingPopup.StateChangingListener() {
+        popup.setStateChangeListener(new IPopup.StateChangingListener() {
             @Override
             public void onShowed() {
             }

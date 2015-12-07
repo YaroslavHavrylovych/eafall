@@ -130,7 +130,8 @@ public abstract class Unit extends GameObject implements
 
     @Override
     public void destroy() {
-        PlayersHolder.getPlayer(mPlayerName).getEnemyPlayer()
+        PlayersHolder.getPlayer(mPlayerName)
+                .getEnemyPlayer()
                 .changeMoney(mObjectMaximumHealth / 100);
         clearUpdateHandlers();
         clearEntityModifiers();
@@ -195,7 +196,9 @@ public abstract class Unit extends GameObject implements
         }
         playSound(mFireSound);
         AbstractBullet bullet = BulletsPool.getBullet(mObjectDamage.getDamageType(),
-                PlayersHolder.getPlayer(mPlayerName).getEnemyPlayer().getName());
+                PlayersHolder.getPlayer(mPlayerName)
+                        .getEnemyPlayer()
+                        .getName());
         bullet.setRotation(mRotation);
 
         bulletFire(attackedObject, bullet);

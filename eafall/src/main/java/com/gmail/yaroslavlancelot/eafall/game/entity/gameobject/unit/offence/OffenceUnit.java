@@ -123,7 +123,8 @@ public class OffenceUnit extends Unit {
             return;
         } else {
             GameObject mainTarget = PlayersHolder.getPlayer(mPlayerName)
-                    .getEnemyPlayer().getPlanet();
+                    .getEnemyPlayer()
+                    .getPlanet();
             if (mainTarget != null && mainTarget.isObjectAlive()) {
                 //if main target in view or in attack range
                 if (attackOrMoveIfInRange(mainTarget)) {

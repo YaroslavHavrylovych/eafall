@@ -77,6 +77,15 @@ public class MenuPopup extends RollingPopup {
     // ===========================================================
     // Methods for/from SuperClass/Interfaces
     // ===========================================================
+    @Override
+    public void showPopup() {
+        super.showPopup();
+        if (GameState.isPaused()) {
+            mPauseButton.setText(R.string.menu_pause);
+        } else {
+            mPauseButton.setText(R.string.menu_resume);
+        }
+    }
 
     // ===========================================================
     // Methods

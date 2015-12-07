@@ -174,8 +174,8 @@ public abstract class EaFallActivity extends BaseGameActivity {
 
     @Override
     public void finish() {
-        SelfCleanable.clearMemory();
         super.finish();
+        SelfCleanable.clearMemory();
     }
 
     protected abstract String createMusicPath();
