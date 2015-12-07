@@ -43,6 +43,7 @@ public class MenuPopup extends RollingPopup {
     private TextButton mPauseButton;
     private TextButton mMissionButton;
     private TextButton mSettingsButton;
+    private TextButton mDamageArmorButton;
     private TextButton mExitButton;
 
     // ===========================================================
@@ -84,10 +85,22 @@ public class MenuPopup extends RollingPopup {
         initPauseButton(mPauseButton);
         mMissionButton = createButton(R.string.menu_mission, 1, vboManager);
         initMissionButton(mMissionButton);
-        mSettingsButton = createButton(R.string.menu_settings, 2, vboManager);
+        mDamageArmorButton = createButton(R.string.menu_damage_armor, 2, vboManager);
+        initDamageArmorButton(mDamageArmorButton);
+        mSettingsButton = createButton(R.string.menu_settings, 3, vboManager);
         initSettingsButton(mSettingsButton);
-        mExitButton = createButton(R.string.menu_exit, 3, vboManager);
+        mExitButton = createButton(R.string.menu_exit, 4, vboManager);
         initExitButton(mExitButton);
+    }
+
+    private void initDamageArmorButton(final TextButton button) {
+        button.setOnClickListener(new ButtonSprite.OnClickListener() {
+            @Override
+            public void onClick(final ButtonSprite pTextButton, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+                //TODO armor/damage
+            }
+        });
+        mBackgroundSprite.attachChild(button);
     }
 
     private void initPauseButton(final TextButton button) {

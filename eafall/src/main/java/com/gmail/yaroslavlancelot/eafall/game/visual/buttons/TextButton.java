@@ -91,7 +91,7 @@ public class TextButton extends ButtonSprite {
 
     public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
         IFont font = FontFactory.create(fontManager, textureManager, 256, 256,
-                Typeface.create(Typeface.DEFAULT, Typeface.BOLD),
+                Typeface.create(Typeface.DEFAULT, Typeface.NORMAL),
                 sFontSize, Color.WHITE);
         font.load();
         FontHolder.getInstance().addElement(sFontSizeKey, font);

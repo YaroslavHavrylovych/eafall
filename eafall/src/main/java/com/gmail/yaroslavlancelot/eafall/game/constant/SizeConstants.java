@@ -73,11 +73,11 @@ public final class SizeConstants {
     public static final int CONSTRUCTIONS_POPUP_HEIGHT = 950;
 
     /* menu popup */
-    public static final int MENU_POPUP_WIDTH = 840;
-    public static final int MENU_POPUP_HEIGHT = 649;
-    public static final int MENU_POPUP_BUTTON_WIDTH = 585;
-    public static final int MENU_POPUP_BUTTON_HEIGHT = 250;
-    public static final int MENU_POPUP_FIRST_BUTTON_Y = 30;
+    public static final int MENU_POPUP_WIDTH = 717;
+    public static final int MENU_POPUP_HEIGHT = 711;
+    public static final int MENU_POPUP_BUTTON_WIDTH = 426;
+    public static final int MENU_POPUP_BUTTON_HEIGHT = 190;
+    public static final int MENU_POPUP_FIRST_BUTTON_Y = 72;
 
     /* description popup */
     // general
