@@ -306,6 +306,7 @@ public abstract class EaFallActivity extends BaseGameActivity {
                 if (runnable != null) {
                     runnable.run();
                 }
+                preResourcesLoading();
                 loadResources();
                 onResourcesLoaded();
             }
@@ -313,6 +314,8 @@ public abstract class EaFallActivity extends BaseGameActivity {
         thread.setDaemon(true);
         thread.start();
     }
+
+    protected abstract void preResourcesLoading();
 
     /** show profiling information on screen (using FPS logger) */
     protected void profile() {

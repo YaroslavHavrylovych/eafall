@@ -5,22 +5,22 @@ import android.content.Context;
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
+import com.gmail.yaroslavlancelot.eafall.android.StartableIntent;
 import com.gmail.yaroslavlancelot.eafall.game.EaFallActivity;
 import com.gmail.yaroslavlancelot.eafall.game.audio.LimitedSoundWrapper;
 import com.gmail.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.gmail.yaroslavlancelot.eafall.game.campaign.intents.CampaignIntent;
-import com.gmail.yaroslavlancelot.eafall.game.mission.MissionIntent;
-import com.gmail.yaroslavlancelot.eafall.android.StartableIntent;
 import com.gmail.yaroslavlancelot.eafall.game.campaign.loader.CampaignDataLoader;
 import com.gmail.yaroslavlancelot.eafall.game.campaign.loader.CampaignFileLoader;
 import com.gmail.yaroslavlancelot.eafall.game.campaign.loader.ObjectDataLoader;
 import com.gmail.yaroslavlancelot.eafall.game.campaign.loader.PositionLoader;
-import com.gmail.yaroslavlancelot.eafall.game.mission.MissionDataLoader;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.engine.InstantRotationModifier;
 import com.gmail.yaroslavlancelot.eafall.game.engine.MoveByCircleModifier;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
+import com.gmail.yaroslavlancelot.eafall.game.mission.MissionDataLoader;
+import com.gmail.yaroslavlancelot.eafall.game.mission.MissionIntent;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 import com.gmail.yaroslavlancelot.eafall.game.touch.TouchHelper;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.TextButton;
@@ -79,6 +79,10 @@ public class CampaignActivity extends EaFallActivity {
     @Override
     protected String createMusicPath() {
         return StringConstants.getMusicPath() + "background_1.ogg";
+    }
+
+    @Override
+    protected void preResourcesLoading() {
     }
 
     @Override

@@ -125,7 +125,7 @@ public class OffenceUnit extends Unit {
             GameObject mainTarget = PlayersHolder.getPlayer(mPlayerName)
                     .getEnemyPlayer()
                     .getPlanet();
-            if (mainTarget != null && mainTarget.isObjectAlive()) {
+            if (mainTarget.isObjectAlive()) {
                 //if main target in view or in attack range
                 if (attackOrMoveIfInRange(mainTarget)) {
                     return;

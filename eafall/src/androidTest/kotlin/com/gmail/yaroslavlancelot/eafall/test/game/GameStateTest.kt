@@ -63,6 +63,9 @@ class GameStateTest : AndroidTestCase() {
     }
 
     protected class TestActivity : EaFallActivity {
+        override fun preResourcesLoading() {
+        }
+
         override fun createMusicPath(): String? {
             return StringConstants.getMusicPath() + "background_1.ogg";
         }

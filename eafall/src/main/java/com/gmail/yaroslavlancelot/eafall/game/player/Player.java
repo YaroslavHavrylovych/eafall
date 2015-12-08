@@ -265,11 +265,6 @@ public class Player implements IPlayer {
     }
 
     @Override
-    public void removePlanet() {
-        mPlayerPlanet = null;
-    }
-
-    @Override
     public void changeMoney(final int delta) {
         setMoney(mOxygenAmount + delta);
     }

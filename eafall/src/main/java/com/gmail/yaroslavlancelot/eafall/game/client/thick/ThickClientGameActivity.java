@@ -19,11 +19,13 @@ public abstract class ThickClientGameActivity extends ClientGameActivity {
     /** game objects contact listener */
     protected ContactListener mContactListener;
 
-    /**
-     * initialize physic world. For using in child classes without accessing private fields.
-     */
     @Override
-    protected void initThickClient() {
+    protected void hideSplash() {
+        initThickClient();
+        super.hideSplash();
+    }
+
+    private void initThickClient() {
         mPhysicsWorld.setContactListener(mContactListener = new ContactListener());
         mGamePeriodic.add(MoneyUpdateCycle.getPeriodic());
         createBounds();

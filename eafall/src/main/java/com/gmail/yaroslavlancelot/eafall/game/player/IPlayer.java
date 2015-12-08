@@ -129,9 +129,6 @@ public interface IPlayer {
      */
     void removeObjectFromPlayer(GameObject object);
 
-    /** removing player plane (player defeat) */
-    void removePlanet();
-
     /**
      * change current player money
      *
