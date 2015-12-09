@@ -82,6 +82,24 @@ public abstract class Alliance implements IAlliance {
         return getBuildingDummy(buildingId).getCost(buildingId.getUpgrade());
     }
 
+    @Override
+    public void loadBuildings(TextureManager textureManager) {
+        Context context = EaFallApplication.getContext();
+        loadBuildings_Sprites(textureManager, context);
+        loadBuildings_Images(textureManager, context);
+    }
+
+    @Override
+    public void loadUnits(TextureManager textureManager) {
+        Context context = EaFallApplication.getContext();
+        loadUnits_Images(textureManager, context);
+        //Init after loading. Init will create a pool, so texture atlas he to be loaded.
+        for (int i = 0; i < mUnitDummies.size(); i++) {
+            mUnitDummies.valueAt(i)
+                    .initDummy(SoundFactory.getInstance(), getAllianceName());
+        }
+    }
+
     public BitmapTextureAtlas loadUnitsToTexture(String playerName, TextureManager textureManager) {
         int unitsAmount = mUnitDummies.size();
         int textureManagerElementsInLine = (int) Math.round(Math.sqrt(unitsAmount) + 1);
@@ -193,12 +211,6 @@ public abstract class Alliance implements IAlliance {
         return ret;
     }
 
-    protected void loadBuildings(TextureManager textureManager) {
-        Context context = EaFallApplication.getContext();
-        loadBuildings_Sprites(textureManager, context);
-        loadBuildings_Images(textureManager, context);
-    }
-
     protected void loadBuildings_Sprites(TextureManager textureManager, Context context) {
         //creating texture atlas for loading buildings
         int textureManagerElementsInLine = (int)
@@ -250,16 +262,6 @@ public abstract class Alliance implements IAlliance {
         }
         for (BitmapTextureAtlas textureAtlas : bitmapTextureAtlases) {
             textureAtlas.load();
-        }
-    }
-
-    protected void loadUnits(TextureManager textureManager) {
-        Context context = EaFallApplication.getContext();
-        loadUnits_Images(textureManager, context);
-        //Init after loading. Init will create a pool, so texture atlas he to be loaded.
-        for (int i = 0; i < mUnitDummies.size(); i++) {
-            mUnitDummies.valueAt(i)
-                    .initDummy(SoundFactory.getInstance(), getAllianceName());
         }
     }
 

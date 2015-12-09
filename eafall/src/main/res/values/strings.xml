@@ -9,6 +9,7 @@
     <string name="campaign">CAMPAIGN</string>
     <string name="single_game">SINGLE GAME</string>
     <string name="multiplayer_game">MULTIPLAYER GAME</string>
+    <string name="sandbox">SANDBOX</string>
 
     <!-- pre game customizations -->
     <string name="choose_alliance">Alliance</string>

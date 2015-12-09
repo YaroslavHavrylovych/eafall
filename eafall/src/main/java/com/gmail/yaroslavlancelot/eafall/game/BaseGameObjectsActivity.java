@@ -24,7 +24,9 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.explosion.UnitEx
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.defence.DefenceUnit;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.OffenceUnit;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.IUnitPath;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.PathHelper;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.implementation.TwoWaysUnitPath;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.AbstractSpriteEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.AttachSpriteEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.DetachSpriteEvent;
@@ -32,12 +34,13 @@ import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.PauseGameE
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.ShowSettingsEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.unit.CreateDefenceUnitEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.periodic.IPeriodic;
-import com.gmail.yaroslavlancelot.eafall.game.events.periodic.time.GameTime;
 import com.gmail.yaroslavlancelot.eafall.game.events.periodic.unit.UnitPositionUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.mission.MissionIntent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.Player;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
+import com.gmail.yaroslavlancelot.eafall.game.resources.loaders.game.BaseGameObjectsLoader;
+import com.gmail.yaroslavlancelot.eafall.game.scene.hud.BaseGameHud;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 import com.gmail.yaroslavlancelot.eafall.game.touch.ICameraHandler;
 
@@ -47,7 +50,6 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
-import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.adt.color.Color;
 
 import java.util.ArrayList;
@@ -56,12 +58,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Main game Activity. Extends {@link BaseGameActivity} class and contains main game elements.
- * Loads resources, initialize scene, engine and etc.
+ * Base for the game and sandbox: players initialization, units, background, partly lifecycle.
+ * <br/>
+ * No star, no planets.
  */
-public abstract class BuildingsLessGameActivity extends EaFallActivity implements IUnitCreator {
+public abstract class BaseGameObjectsActivity extends EaFallActivity implements IUnitCreator {
     /** tag, which is used for debugging purpose */
-    public static final String TAG = BuildingsLessGameActivity.class.getCanonicalName();
+    public static final String TAG = BaseGameObjectsActivity.class.getCanonicalName();
     /** contains whole game units/warriors */
     protected final Map<Long, GameObject> mGameObjectsMap = new HashMap<>();
     /** first player */
@@ -74,6 +77,29 @@ public abstract class BuildingsLessGameActivity extends EaFallActivity implement
     protected MissionConfig mMissionConfig;
     /** game cycles (e.g. money increase, timer etc) */
     protected List<IPeriodic> mGamePeriodic = new ArrayList<>(2);
+
+    @Override
+    public OffenceUnit createMovableUnit(IPlayer unitPlayer,
+                                         int unitKey, int x, int y, boolean isTopPath) {
+        IUnitPath unitPath = new TwoWaysUnitPath(PathHelper.isLtrPath(x), isTopPath);
+        return createMovableUnit(unitPlayer, unitKey, x, y, unitPath);
+    }
+
+
+    public OffenceUnit createMovableUnit(IPlayer unitPlayer, int unitKey, int x, int y, IUnitPath unitPath) {
+        OffenceUnit offenceUnit = (OffenceUnit) createUnit(unitKey, unitPlayer, x, y);
+        offenceUnit.setUnitPath(unitPath);
+        return offenceUnit;
+    }
+
+    @Override
+    public Body createPhysicBody(BodiedSprite bodiedSprite, BodyDef.BodyType bodyType,
+                                 FixtureDef fixtureDef) {
+        Body body = PhysicsFactory.createCircleBody(mPhysicsWorld, bodiedSprite, bodyType, fixtureDef);
+        mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(bodiedSprite, body, true, false));
+        bodiedSprite.setBody(body);
+        return body;
+    }
 
     @Override
     public EngineOptions onCreateEngineOptions() {
@@ -98,6 +124,11 @@ public abstract class BuildingsLessGameActivity extends EaFallActivity implement
     }
 
     @Override
+    protected BaseGameHud createHud() {
+        return new BaseGameHud();
+    }
+
+    @Override
     protected String createMusicPath() {
         return StringConstants.getMusicPath() + "background_1.ogg";
     }
@@ -111,13 +142,12 @@ public abstract class BuildingsLessGameActivity extends EaFallActivity implement
 
     @Override
     protected void loadResources() {
+        //has to be before res loading as it sets units amount which used by res loader
+        ((BaseGameObjectsLoader) mResourcesLoader)
+                .setMovableUnitsLimit(mMissionConfig.getMovableUnitsLimit());
         //resources
         mResourcesLoader.loadImages(getTextureManager(), getVertexBufferObjectManager());
         mResourcesLoader.loadFonts(getTextureManager(), getFontManager());
-        //whether or not the mission is bounded (timing)
-        if (mMissionConfig.isTimerEnabled()) {
-            mGamePeriodic.add(GameTime.getPeriodic(mMissionConfig.getTime()));
-        }
     }
 
     @Override
@@ -144,23 +174,6 @@ public abstract class BuildingsLessGameActivity extends EaFallActivity implement
     @Override
     protected void onShowWorkingScene() {
         startPeriodic();
-    }
-
-    @Override
-    public OffenceUnit createMovableUnit(IPlayer unitPlayer,
-                                         int unitKey, int x, int y, boolean isTopPath) {
-        OffenceUnit offenceUnit = (OffenceUnit) createUnit(unitKey, unitPlayer, x, y);
-        offenceUnit.initMovingPath(PathHelper.isLtrPath(x), isTopPath);
-        return offenceUnit;
-    }
-
-    @Override
-    public Body createPhysicBody(BodiedSprite bodiedSprite, BodyDef.BodyType bodyType,
-                                 FixtureDef fixtureDef) {
-        Body body = PhysicsFactory.createCircleBody(mPhysicsWorld, bodiedSprite, bodyType, fixtureDef);
-        mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(bodiedSprite, body, true, false));
-        bodiedSprite.setBody(body);
-        return body;
     }
 
     /**
@@ -193,6 +206,9 @@ public abstract class BuildingsLessGameActivity extends EaFallActivity implement
         alliance = AllianceHolder.getInstance().getElement(
                 intent.getStringExtra(StringConstants.SECOND_PLAYER_ALLIANCE));
         mSecondPlayer = createPlayer(StringConstants.SECOND_PLAYER_CONTROL_BEHAVIOUR_TYPE, alliance);
+        //units map
+        mFirstPlayer.createUnitsMap(true);
+        mSecondPlayer.createUnitsMap(false);
         //color
         mFirstPlayer.setColor(Color.BLUE);
         mSecondPlayer.setColor(Color.RED);

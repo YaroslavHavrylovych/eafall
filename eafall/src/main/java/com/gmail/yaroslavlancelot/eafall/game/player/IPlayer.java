@@ -92,6 +92,13 @@ public interface IPlayer {
     BuildingId[] getBuildingsIds();
 
     /**
+     * create {@link IUnitMap} for the current player
+     *
+     * @param leftPlayer is the player on the left side of the screen
+     */
+    void createUnitsMap(boolean leftPlayer);
+
+    /**
      * Obtain unit from the pool or create new one.
      * <br/>
      * unit will not be added as player object, you have to do it manually

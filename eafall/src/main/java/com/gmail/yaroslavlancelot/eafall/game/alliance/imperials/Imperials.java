@@ -5,7 +5,6 @@ import com.gmail.yaroslavlancelot.eafall.game.alliance.Alliance;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.loader.BuildingListLoader;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.loader.UnitListLoader;
 
-import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /** imperials */
@@ -26,12 +25,6 @@ public class Imperials extends Alliance {
     @Override
     public int getAllianceStringRes() {
         return R.string.imperials;
-    }
-
-    @Override
-    public void loadAllianceResources(final TextureManager textureManager) {
-        loadUnits(textureManager);
-        loadBuildings(textureManager);
     }
 
     @Override

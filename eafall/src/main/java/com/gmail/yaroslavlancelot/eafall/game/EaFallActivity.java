@@ -19,7 +19,7 @@ import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.ShowToastE
 import com.gmail.yaroslavlancelot.eafall.game.resources.IResourcesLoader;
 import com.gmail.yaroslavlancelot.eafall.game.resources.ResourceFactory;
 import com.gmail.yaroslavlancelot.eafall.game.scene.SceneManager;
-import com.gmail.yaroslavlancelot.eafall.game.scene.hud.EaFallHud;
+import com.gmail.yaroslavlancelot.eafall.game.scene.hud.BaseGameHud;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 import com.gmail.yaroslavlancelot.eafall.game.touch.TouchHelper;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
@@ -56,7 +56,7 @@ public abstract class EaFallActivity extends BaseGameActivity {
     /** tag, which is used for debugging purpose */
     public static final String TAG = EaFallActivity.class.getCanonicalName();
     /** user static area */
-    protected EaFallHud mHud;
+    protected BaseGameHud mHud;
     /** game camera */
     protected EaFallCamera mCamera;
     /** background music */
@@ -84,7 +84,7 @@ public abstract class EaFallActivity extends BaseGameActivity {
         mCamera.setBounds(0, 0, SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT);
         mCamera.setBoundsEnabled(true);
         //hud
-        mHud = new EaFallHud();
+        mHud = createHud();
         mHud.setTouchAreaBindingOnActionDownEnabled(true);
         mHud.setOnAreaTouchTraversalFrontToBack();
         mHud.setAlpha(EaFallApplication.getConfig().getHudAlpha());
@@ -177,6 +177,8 @@ public abstract class EaFallActivity extends BaseGameActivity {
         super.finish();
         SelfCleanable.clearMemory();
     }
+
+    protected abstract BaseGameHud createHud();
 
     protected abstract String createMusicPath();
 

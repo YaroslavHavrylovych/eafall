@@ -100,9 +100,13 @@ public final class TouchHelper {
             } else if (event.isActionCancel()) {
                 unPress();
             } else if (event.isActionUp() && mIsItClickEvent) {
-                click();
+                click(event.getX(), event.getY());
             }
             return true;
+        }
+
+        public void click(float x, float y) {
+            click();
         }
 
         public void press() {

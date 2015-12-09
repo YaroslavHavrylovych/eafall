@@ -9,6 +9,7 @@
     <string name="campaign">КАМПАНІЯ</string>
     <string name="single_game">ОДИНОЧНА ГРА</string>
     <string name="multiplayer_game">МУЛЬТИПЛЕЄРНА ГРА</string>
+    <string name="sandbox">ПІСОЧНИЦЯ</string>
 
     <!-- pre game customizations -->
     <string name="choose_alliance">Союзи</string>

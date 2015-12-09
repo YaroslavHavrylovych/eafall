@@ -2,7 +2,7 @@ package com.gmail.yaroslavlancelot.eafall.game.client;
 
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
-import com.gmail.yaroslavlancelot.eafall.game.BuildingsLessGameActivity;
+import com.gmail.yaroslavlancelot.eafall.game.BaseGameObjectsActivity;
 import com.gmail.yaroslavlancelot.eafall.game.constant.CollisionCategories;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
@@ -14,35 +14,42 @@ import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.endgame.GameOverE
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.CreateBuildingEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.BuildingSettingsPopupShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.periodic.IPeriodic;
+import com.gmail.yaroslavlancelot.eafall.game.events.periodic.time.GameTime;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.popup.BuildingSettingsDialog;
 import com.gmail.yaroslavlancelot.eafall.game.popup.GameOverPopup;
 import com.gmail.yaroslavlancelot.eafall.game.popup.IPopup;
-import com.gmail.yaroslavlancelot.eafall.game.resources.loaders.ClientResourcesLoader;
 import com.gmail.yaroslavlancelot.eafall.game.rule.IRuler;
 import com.gmail.yaroslavlancelot.eafall.game.rule.RulesFactory;
+import com.gmail.yaroslavlancelot.eafall.game.scene.hud.BaseGameHud;
+import com.gmail.yaroslavlancelot.eafall.game.scene.hud.ClientGameHud;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 
 import org.andengine.opengl.texture.region.ITextureRegion;
-import org.andengine.ui.activity.BaseGameActivity;
 
 /**
- * Main game Activity. Extends {@link BaseGameActivity} class and contains main game elements.
- * Loads resources, initialize scene, engine and etc.
+ * Extends {@link BaseGameObjectsActivity} with the star, planets,
+ * specific game periodic`s (timer, game lifecycle logic), etc.
  */
-public abstract class ClientGameActivity extends BuildingsLessGameActivity {
+public abstract class ClientGameActivity extends BaseGameObjectsActivity {
     /** defines whether the game is over and who is the winner */
     protected IRuler mRuler;
     /** popup to change particular building settings */
     private BuildingSettingsDialog mBuildingSettingsDialog;
 
     @Override
+    protected BaseGameHud createHud() {
+        return new ClientGameHud();
+    }
+
+    @Override
     protected void loadResources() {
-        //has to be before res loading as it sets units amount which used by res loader
-        ((ClientResourcesLoader) mResourcesLoader)
-                .setMovableUnitsLimit(mMissionConfig.getMovableUnitsLimit());
         super.loadResources();
+        //whether or not the mission is bounded (timing)
+        if (mMissionConfig.isTimerEnabled()) {
+            mGamePeriodic.add(GameTime.getPeriodic(mMissionConfig.getTime()));
+        }
     }
 
     @Override

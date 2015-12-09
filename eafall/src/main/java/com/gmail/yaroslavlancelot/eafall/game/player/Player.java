@@ -124,7 +124,6 @@ public class Player implements IPlayer {
     @Override
     public void setPlanet(final PlanetStaticObject planet) {
         mPlayerPlanet = planet;
-        mUnitMap = new SquareUnitMap(planet.isLeft());
     }
 
     @Override
@@ -192,6 +191,11 @@ public class Player implements IPlayer {
     public BuildingId[] getBuildingsIds() {
         syncBuildingsWithPlanet();
         return mBuildingsTypesIds;
+    }
+
+    @Override
+    public void createUnitsMap(boolean leftPlayer) {
+        mUnitMap = new SquareUnitMap(leftPlayer);
     }
 
     @Override

@@ -21,6 +21,7 @@ import com.gmail.yaroslavlancelot.eafall.game.engine.MoveByCircleModifier;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.mission.MissionDataLoader;
 import com.gmail.yaroslavlancelot.eafall.game.mission.MissionIntent;
+import com.gmail.yaroslavlancelot.eafall.game.scene.hud.BaseGameHud;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 import com.gmail.yaroslavlancelot.eafall.game.touch.TouchHelper;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.TextButton;
@@ -74,6 +75,11 @@ public class CampaignActivity extends EaFallActivity {
     public void onPopulateScene(Scene scene, OnPopulateSceneCallback onPopulateSceneCallback) {
         LoggerHelper.methodInvocation(this.toString(), "onPopulateScene");
         super.onPopulateScene(scene, onPopulateSceneCallback);
+    }
+
+    @Override
+    protected BaseGameHud createHud() {
+        return new BaseGameHud();
     }
 
     @Override

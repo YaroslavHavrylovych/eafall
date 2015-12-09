@@ -12,11 +12,11 @@ import android.widget.Toast;
 import com.gmail.yaroslavlancelot.eafall.BuildConfig;
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.R;
+import com.gmail.yaroslavlancelot.eafall.android.StartableIntent;
 import com.gmail.yaroslavlancelot.eafall.android.activities.settings.SettingsActivity;
 import com.gmail.yaroslavlancelot.eafall.android.activities.singleplayer.PreGameCustomizationActivity;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.mutants.Mutants;
 import com.gmail.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity;
-import com.gmail.yaroslavlancelot.eafall.android.StartableIntent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 
 /**
@@ -50,14 +50,17 @@ public class StartupActivity extends BaseNonGameActivity {
         campaignButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
+                String intentClassName;
                 if (BuildConfig.DEMO_VERSION) {
                     Toast.makeText(StartupActivity.this, R.string.not_int_demo, Toast.LENGTH_SHORT)
                             .show();
                 } else {
+                    intentClassName = "com.gmail.yaroslavlancelot.eafall.game.campaign" +
+                            ".intents.CampaignIntent";
                     Class cls;
                     StartableIntent startableIntent;
                     try {
-                        cls = Class.forName("com.gmail.yaroslavlancelot.eafall.game.campaign.intents.CampaignIntent");
+                        cls = Class.forName(intentClassName);
                         startableIntent = (StartableIntent) cls.newInstance();
                     } catch (InstantiationException e) {
                         e.printStackTrace();
@@ -102,29 +105,46 @@ public class StartupActivity extends BaseNonGameActivity {
 
     private void initMultiplayerGameButton(View singleGameButton) {
         if (singleGameButton == null) return;
-        if (singleGameButton instanceof Button) {
-            Button button = (Button) singleGameButton;
-            button.getPaint().setShader(getTextGradient(button.getLineHeight()));
+        Button button = (Button) singleGameButton;
+        if (BuildConfig.DEMO_VERSION) {
+            button.setText(R.string.sandbox);
+        } else {
+            button.setText(R.string.multiplayer_game);
         }
+        button.getPaint().setShader(getTextGradient(button.getLineHeight()));
         singleGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
+                StartableIntent startableIntent;
                 if (BuildConfig.DEMO_VERSION) {
-                    Toast.makeText(StartupActivity.this, R.string.not_int_demo, Toast.LENGTH_SHORT)
-                            .show();
+                    String intentClassName = "com.gmail.yaroslavlancelot.eafall.game.sandbox" +
+                            ".intents.SandboxIntent";
+                    Class cls;
+                    try {
+                        cls = Class.forName(intentClassName);
+                        startableIntent = (StartableIntent) cls.newInstance();
+                    } catch (InstantiationException e) {
+                        e.printStackTrace();
+                        return;
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                        return;
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                        return;
+                    }
                 } else {
                     Class cls;
                     try {
                         cls = Class.forName("com.gmail.yaroslavlancelot.eafall.android" +
                                 ".activities.multiplayer.GameServersListActivity");
                     } catch (ClassNotFoundException e) {
-                        //TODO mark it somewhere
                         e.printStackTrace();
                         return;
                     }
-                    Intent singleGameIntent = new Intent(StartupActivity.this, cls);
-                    startActivity(singleGameIntent);
+                    startableIntent = new StartableIntent(StartupActivity.this, cls);
                 }
+                startableIntent.start(StartupActivity.this);
             }
         });
     }

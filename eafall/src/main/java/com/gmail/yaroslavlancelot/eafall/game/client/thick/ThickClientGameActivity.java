@@ -47,5 +47,4 @@ public abstract class ThickClientGameActivity extends ClientGameActivity {
                 SizeConstants.GAME_FIELD_HEIGHT + 1, -1, SizeConstants.GAME_FIELD_HEIGHT + 1,
                 CollisionCategories.STATIC_BODY_FIXTURE_DEF);
     }
-
 }

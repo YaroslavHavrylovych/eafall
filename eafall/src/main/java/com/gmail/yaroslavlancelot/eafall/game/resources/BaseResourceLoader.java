@@ -1,4 +1,4 @@
-package com.gmail.yaroslavlancelot.eafall.game.resources.loaders;
+package com.gmail.yaroslavlancelot.eafall.game.resources;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -7,7 +7,6 @@ import android.graphics.Typeface;
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
-import com.gmail.yaroslavlancelot.eafall.game.resources.IResourcesLoader;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.SplashScene;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 
@@ -32,14 +31,14 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Common methods similar for loading
+ * The base resources loader class. Very common methods.
  *
  * @author Yaroslav Havrylovych
  */
-abstract class BaseResourceLoader implements IResourcesLoader {
+public abstract class BaseResourceLoader implements IResourcesLoader {
     private static final String sProfiling = "profiling";
-    protected Set<String> mBigImages = new HashSet<String>(5);
-    protected Set<String> mImagesList = new HashSet<String>(5);
+    protected Set<String> mBigImages = new HashSet<>(5);
+    protected Set<String> mImagesList = new HashSet<>(5);
 
     @Override
     public void addImage(String path, int width, int height) {

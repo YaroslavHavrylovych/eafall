@@ -12,6 +12,7 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.AutoParallaxBackground;
 import org.andengine.entity.scene.background.ParallaxBackground;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.input.touch.detector.ClickDetector;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import java.util.Random;
@@ -38,6 +39,10 @@ public class EaFallScene extends Scene {
 
     public ICameraHandler getCameraHandler() {
         return mGameSceneHandler;
+    }
+
+    public void setClickListener(ClickDetector.IClickDetectorListener clickListener) {
+        mGameSceneHandler.setClickListener(clickListener);
     }
 
     /** set background image to the scene */

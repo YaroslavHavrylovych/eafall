@@ -1,6 +1,7 @@
-package com.gmail.yaroslavlancelot.eafall.game.resources.loaders;
+package com.gmail.yaroslavlancelot.eafall.game.resources.loaders.campaign;
 
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
+import com.gmail.yaroslavlancelot.eafall.game.resources.BaseResourceLoader;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.TextButton;
 
 import org.andengine.opengl.font.FontManager;
@@ -12,12 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Used to load resource for guide campaign (the campaign home page)
+ * Used to load resources for guide campaign (the campaign home page)
  *
  * @author Yaroslav Havrylovych
  */
 public class CampaignResourceLoader extends BaseResourceLoader {
-    private List<TextureAtlas> mAtlases = new ArrayList<TextureAtlas>(5);
+    private List<TextureAtlas> mAtlases = new ArrayList<>(5);
 
     @Override
     public void loadImages(TextureManager textureManager,
