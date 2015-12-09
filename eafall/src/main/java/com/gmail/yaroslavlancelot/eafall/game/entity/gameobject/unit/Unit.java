@@ -167,6 +167,7 @@ public abstract class Unit extends GameObject implements
         } else {
             existingUnit = getParent() != null;
         }
+        setPosition(x, y);
         setRotation(PathHelper.isLeftSide(x) ? 90 : -90);
         mPhysicBody.setActive(true);
         mPhysicBody.setTransform(posX, posY, 0);

@@ -124,7 +124,6 @@ public class Player implements IPlayer {
     @Override
     public void setPlanet(final PlanetStaticObject planet) {
         mPlayerPlanet = planet;
-        mUnitMap = new SquareUnitMap(planet.isLeft());
     }
 
     @Override
@@ -195,6 +194,11 @@ public class Player implements IPlayer {
     }
 
     @Override
+    public void createUnitsMap(boolean leftPlayer) {
+        mUnitMap = new SquareUnitMap(leftPlayer);
+    }
+
+    @Override
     public Unit constructUnit(final int unitKey) {
         return mUnitsPools.get(unitKey).obtainPoolItem();
     }
@@ -262,11 +266,6 @@ public class Player implements IPlayer {
             SharedEvents.valueChanged(MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY,
                     sUnitsAmount.decrementAndGet());
         }
-    }
-
-    @Override
-    public void removePlanet() {
-        mPlayerPlanet = null;
     }
 
     @Override

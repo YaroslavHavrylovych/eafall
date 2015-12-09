@@ -36,16 +36,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * In-game HUD.
+ * <br/>
  * Customized to handle some not {@link HUD} operations
  *
  * @author Yaroslav Havrylovych
  */
-//TODO move the whole hud resources here (player health bar [and buttons?])
-public class EaFallHud extends HUD {
+public class ClientGameHud extends BaseGameHud {
     // ===========================================================
     // Constants
     // ===========================================================
-    private static final String TAG = EaFallHud.class.getCanonicalName();
+    private static final String TAG = ClientGameHud.class.getCanonicalName();
     private static final DecimalFormat TIME_FORMAT = new DecimalFormat("00");
 
     // ===========================================================
@@ -85,6 +86,31 @@ public class EaFallHud extends HUD {
     // ===========================================================
     // Methods
     // ===========================================================
+
+    @Override
+    public void initHudElements(Camera camera, VertexBufferObjectManager vertexManager,
+                                MissionConfig missionConfig) {
+        LoggerHelper.methodInvocation(TAG, "initHudElements");
+        SpriteGroupHolder.attachSpriteGroups(this, BatchingKeys.BatchTag.GAME_HUD.value());
+        //health carcass
+        initHealthCarcass(vertexManager);
+        //menu
+        initMainMenu(vertexManager);
+        //game values (oxygen, offence units limit, time)
+        for (final IPlayer player : PlayersHolder.getInstance().getElements()) {
+            boolean left = player.getPlanet().isLeft();
+            List<HudGameValue> list = left ? mLeftPart : mRightPart;
+            float xPos = left ? SizeConstants.HUD_VALUES_X_LEFT : SizeConstants.HUD_VALUES_X_RIGHT;
+            if (player.getControlType().user()) {
+                initPopups(player, camera, vertexManager);
+                initOxygen(player, list, xPos, vertexManager);
+                initMovableUnitsLimit(player, list, xPos, vertexManager, missionConfig.getMovableUnitsLimit());
+                initTimer(list, xPos, vertexManager, missionConfig);
+            } else {
+                initMovableUnitsLimit(player, list, xPos, vertexManager, missionConfig.getMovableUnitsLimit());
+            }
+        }
+    }
 
     private void initPopups(IPlayer player, Camera camera, VertexBufferObjectManager vboManager) {
         RollingPopupManager.init(player.getName(), this, camera, vboManager);
@@ -154,30 +180,6 @@ public class EaFallHud extends HUD {
     private void initHealthCarcass(VertexBufferObjectManager vertexManager) {
         HealthBarCarcassSprite healthBarCarcassSprite = new HealthBarCarcassSprite(vertexManager);
         SpriteGroupHolder.getGroup(BatchingKeys.PLAYER_HEALTH).attachChild(healthBarCarcassSprite);
-    }
-
-    public void initHudElements(Camera camera, VertexBufferObjectManager vertexManager,
-                                MissionConfig missionConfig) {
-        LoggerHelper.methodInvocation(TAG, "initHudElements");
-        SpriteGroupHolder.attachSpriteGroups(this, BatchingKeys.BatchTag.GAME_HUD.value());
-        //health carcass
-        initHealthCarcass(vertexManager);
-        //menu
-        initMainMenu(vertexManager);
-        //game values (oxygen, offence units limit, time)
-        for (final IPlayer player : PlayersHolder.getInstance().getElements()) {
-            boolean left = player.getPlanet().isLeft();
-            List<HudGameValue> list = left ? mLeftPart : mRightPart;
-            float xPos = left ? SizeConstants.HUD_VALUES_X_LEFT : SizeConstants.HUD_VALUES_X_RIGHT;
-            if (player.getControlType().user()) {
-                initPopups(player, camera, vertexManager);
-                initOxygen(player, list, xPos, vertexManager);
-                initMovableUnitsLimit(player, list, xPos, vertexManager, missionConfig.getMovableUnitsLimit());
-                initTimer(list, xPos, vertexManager, missionConfig);
-            } else {
-                initMovableUnitsLimit(player, list, xPos, vertexManager, missionConfig.getMovableUnitsLimit());
-            }
-        }
     }
 
     /** time text on the screen (if timing enabled) initialization */

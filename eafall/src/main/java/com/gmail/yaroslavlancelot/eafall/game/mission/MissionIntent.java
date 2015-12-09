@@ -28,8 +28,12 @@ public class MissionIntent extends StartableIntent {
     // Constructors
     // ===========================================================
     public MissionIntent(Class activityClass) {
+        this(activityClass, ResourceFactory.TypeResourceLoader.CLIENT);
+    }
+
+    public MissionIntent(Class activityClass, ResourceFactory.TypeResourceLoader resourceLoaderType) {
         super(EaFallApplication.getContext(), activityClass);
-        putExtra(ResourceFactory.RESOURCE_LOADER, ResourceFactory.TypeResourceLoader.CLIENT);
+        putExtra(ResourceFactory.RESOURCE_LOADER, resourceLoaderType);
     }
 
     /**

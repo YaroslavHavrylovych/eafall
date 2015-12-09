@@ -31,11 +31,6 @@ public class ThinClientGameActivity extends ClientGameActivity implements InGame
     }
 
     @Override
-    protected void initThickClient() {
-        // it's thin client, so no actions
-    }
-
-    @Override
     protected void userWantCreateBuilding(final IPlayer userPlayer, BuildingId buildingId) {
         LoggerHelper.methodInvocation(TAG, "userWantCreateBuilding");
         mGameServerConnector.sendClientMessage(0, new BuildingCreationClientMessage(

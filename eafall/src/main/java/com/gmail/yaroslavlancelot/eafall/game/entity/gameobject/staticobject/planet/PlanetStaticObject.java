@@ -154,7 +154,6 @@ public class PlanetStaticObject extends StaticObject implements IPlayerObject {
         for (IBuilding building : mBuildings.values()) {
             building.destroy();
         }
-        PlayersHolder.getPlayer(mPlayerName).removePlanet();
         super.destroy();
     }
 

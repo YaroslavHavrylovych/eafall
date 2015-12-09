@@ -28,6 +28,8 @@ public class OffenceUnit extends Unit {
     private static final long sHealthBarVisibleTime = TimeUnit.SECONDS.toMillis(3);
     /** body type */
     private static final BodyDef.BodyType sBodyType = BodyDef.BodyType.DynamicBody;
+    /** Used to prevent multiple arrays creation */
+    private static float[] mTwoDimensionFloatArray = new float[2];
     /** current unit bonuses */
     protected final Map<Bonus, Long> mBonuses = new HashMap<>();
     /** max velocity for this unit */
@@ -42,7 +44,6 @@ public class OffenceUnit extends Unit {
     private IVelocityListener mVelocityChangedListener;
     /** to track health bar visibility, last time unit took damage */
     private volatile long mLastHitTime;
-    private float[] mTwoDimensionFloatArray = new float[2];
     private long mLastBonusUpdateTime = System.currentTimeMillis();
 
     /** create unit from appropriate builder */
@@ -62,6 +63,10 @@ public class OffenceUnit extends Unit {
 
     public void setVelocityChangedListener(IVelocityListener velocityChangedListener) {
         mVelocityChangedListener = velocityChangedListener;
+    }
+
+    public void setUnitPath(IUnitPath unitPath) {
+        mUnitPath = unitPath;
     }
 
     @Override
@@ -125,6 +130,7 @@ public class OffenceUnit extends Unit {
             GameObject mainTarget = PlayersHolder.getPlayer(mPlayerName)
                     .getEnemyPlayer()
                     .getPlanet();
+            // null checker needed for sandbox
             if (mainTarget != null && mainTarget.isObjectAlive()) {
                 //if main target in view or in attack range
                 if (attackOrMoveIfInRange(mainTarget)) {
@@ -203,10 +209,6 @@ public class OffenceUnit extends Unit {
         synchronized (mBonuses) {
             mBonuses.remove(bonus);
         }
-    }
-
-    public void initMovingPath(boolean ltr, boolean top) {
-        mUnitPath = PathHelper.createUnitPath(ltr, top);
     }
 
     /** remove bonuses which are supposed to die because of passes time */

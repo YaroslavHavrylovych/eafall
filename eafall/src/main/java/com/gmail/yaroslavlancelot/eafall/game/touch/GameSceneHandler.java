@@ -9,6 +9,7 @@ import com.gmail.yaroslavlancelot.eafall.game.camera.EaFallCamera;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.input.touch.detector.ClickDetector;
 import org.andengine.input.touch.detector.PinchZoomDetector;
 import org.andengine.input.touch.detector.ScrollDetector;
 import org.andengine.util.Constants;
@@ -24,6 +25,7 @@ public class GameSceneHandler implements
         IOnSceneTouchListener,
         ICameraHandler,
         EaFallCamera.ICameraMoveCallbacks,
+        ClickDetector.IClickDetectorListener, //click
         PinchZoomDetector.IPinchZoomDetectorListener, //zoom
         ScrollDetector.IScrollDetectorListener //scroll
 {
@@ -55,6 +57,11 @@ public class GameSceneHandler implements
      */
     private ScrollDetector mScrollDetector;
     private VelocityTracker mVelocityTracker;
+    /*
+     * Click
+     */
+    private ClickDetector mClickDetector;
+    private ClickDetector.IClickDetectorListener mClickListener;
 
     // ===========================================================
     // Constructors
@@ -68,6 +75,8 @@ public class GameSceneHandler implements
         //zoom
         mZoomDetector = new PinchZoomDetector(this);
         initPinchZoomMinimumDistance(mZoomDetector);
+        //click
+        mClickDetector = new ClickDetector(this);
     }
 
 
@@ -77,6 +86,10 @@ public class GameSceneHandler implements
 
     protected float getCenterY() {
         return mCamera.getCenterY();
+    }
+
+    public void setClickListener(ClickDetector.IClickDetectorListener clickListener) {
+        mClickListener = clickListener;
     }
 
     @Override
@@ -118,11 +131,14 @@ public class GameSceneHandler implements
         mZoomDetector.onSceneTouchEvent(pScene, pSceneTouchEvent);
         if (mZoomDetector.isZooming()) {
             mScrollDetector.setEnabled(false);
+            mClickDetector.setEnabled(false);
         } else {
             if (pSceneTouchEvent.isActionDown()) {
                 mScrollDetector.setEnabled(true);
+                mClickDetector.setEnabled(true);
             }
             mScrollDetector.onTouchEvent(pSceneTouchEvent);
+            mClickDetector.onTouchEvent(pSceneTouchEvent);
         }
         return true;
     }
@@ -185,6 +201,13 @@ public class GameSceneHandler implements
         final float zoomFactor = getZoomFactor();
         this.mCamera.fling(velocityX / zoomFactor, velocityY / zoomFactor);
         this.mVelocityTracker.recycle();
+    }
+
+    @Override
+    public void onClick(final ClickDetector pClickDetector, final int pPointerID, final float pSceneX, final float pSceneY) {
+        if (mClickListener != null) {
+            mClickListener.onClick(pClickDetector, pPointerID, pSceneX, pSceneY);
+        }
     }
 
     @Override

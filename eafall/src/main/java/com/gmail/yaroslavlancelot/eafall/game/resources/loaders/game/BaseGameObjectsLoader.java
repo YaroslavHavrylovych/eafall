@@ -1,10 +1,9 @@
-package com.gmail.yaroslavlancelot.eafall.game.resources.loaders;
+package com.gmail.yaroslavlancelot.eafall.game.resources.loaders.game;
 
 import android.content.Context;
 
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
-import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.gmail.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder;
@@ -19,13 +18,13 @@ import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.popup.GameOverPopup;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.RollingPopupManager;
-import com.gmail.yaroslavlancelot.eafall.game.scene.hud.EaFallHud;
+import com.gmail.yaroslavlancelot.eafall.game.resources.BaseResourceLoader;
+import com.gmail.yaroslavlancelot.eafall.game.scene.hud.ClientGameHud;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.MenuPopupButton;
 
 import org.andengine.entity.sprite.batch.SpriteGroup;
 import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.texture.TextureManager;
-import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.TextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
@@ -37,20 +36,17 @@ import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /**
- * Client resource loader (alliances, players etc).
- * <br/>
- * Resources which are used in the game.
+ * Loads game resources excluding buildings, the star and planets.
  *
  * @author Yaroslav Havrylovych
  */
-public class ClientResourcesLoader extends BaseResourceLoader {
-    /** original image contains this argb component */
+public abstract class BaseGameObjectsLoader extends BaseResourceLoader {
     private static final ArgbColorComponentsSwapBitmapTextureAtlas.RgbaPart
             ORIGINAL_COLOR = ArgbColorComponentsSwapBitmapTextureAtlas.RgbaPart.B;
     private int mMovableUnitsLimit = 200;
     private int mMovableUnitsBuffer = 30;
 
-    public ClientResourcesLoader() {
+    public BaseGameObjectsLoader() {
         addImage(StringConstants.FILE_BACKGROUND,
                 SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT);
     }
@@ -65,15 +61,11 @@ public class ClientResourcesLoader extends BaseResourceLoader {
         //background
         loadBigImages(textureManager);
         //alliance
-        loadAllianceResources(textureManager);
+        loadAllianceSpecificResources(textureManager);
         //players
-        loadPlayerResources(textureManager, vertexBufferObjectManager);
+        loadPlayerSpecificResources(textureManager, vertexBufferObjectManager);
         //bullets and health bars
         loadBulletAndUnitHealthBar(textureManager, vertexBufferObjectManager);
-        //sun and planets
-        loadSunAndPlanets(textureManager, vertexBufferObjectManager);
-        //oxygen, energy and time
-        EaFallHud.loadResource(EaFallApplication.getContext(), textureManager);
         //explosions
         loadExplosions(textureManager, vertexBufferObjectManager);
         //other
@@ -84,7 +76,7 @@ public class ClientResourcesLoader extends BaseResourceLoader {
 
     @Override
     public void loadFonts(TextureManager textureManager, FontManager fontManager) {
-        EaFallHud.loadFonts(fontManager, textureManager);
+        ClientGameHud.loadFonts(fontManager, textureManager);
         RollingPopupManager.loadFonts(fontManager, textureManager);
         GameOverPopup.loadFonts(fontManager, textureManager);
     }
@@ -99,31 +91,28 @@ public class ClientResourcesLoader extends BaseResourceLoader {
         throw new UnsupportedOperationException("resources unloading not supported in the game");
     }
 
-    private void loadAllianceResources(TextureManager textureManager) {
-        for (IAlliance alliance : AllianceHolder.getInstance().getElements()) {
-            alliance.loadAllianceResources(textureManager);
-        }
+    protected abstract void loadAllianceSpecificResources(TextureManager textureManager);
+
+    protected abstract void loadPlayerSpecificResources(TextureManager textureManager,
+                                                        VertexBufferObjectManager vboManager);
+
+    protected void loadPlayerSpecificBuildings(IAlliance alliance, VertexBufferObjectManager vboManager, IPlayer player) {
+        TextureAtlas textureAtlas = alliance.getBuildingTextureAtlas();
+        SpriteGroup spriteGroup = new SpriteGroup(textureAtlas,
+                alliance.getBuildingsAmount(),
+                vboManager);
+        SpriteGroupHolder.addGroup(BatchingKeys.getBuildingSpriteGroup(player.getName()), spriteGroup);
     }
 
-    private void loadPlayerResources(TextureManager textureManager, VertexBufferObjectManager
-            vertexBufferObjectManager) {
-        for (IPlayer player : PlayersHolder.getInstance().getElements()) {
-            String playerName = player.getName();
-            IAlliance alliance = player.getAlliance();
-            //building SpriteGroup
-            TextureAtlas textureAtlas = alliance.getBuildingTextureAtlas();
-            SpriteGroup spriteGroup = new SpriteGroup(textureAtlas,
-                    alliance.getBuildingsAmount(),
-                    vertexBufferObjectManager);
-            SpriteGroupHolder.addGroup(BatchingKeys.getBuildingSpriteGroup(playerName), spriteGroup);
-            //unit SpriteGroup
-            textureAtlas = alliance.loadUnitsToTexture(playerName, textureManager);
-            spriteGroup = new CleanableSpriteGroup(textureAtlas,
-                    mMovableUnitsLimit + mMovableUnitsBuffer, vertexBufferObjectManager);
-            SpriteGroupHolder.addGroup(BatchingKeys.getUnitSpriteGroup(playerName), spriteGroup);
-            //unit pool
-            player.createUnitPool(vertexBufferObjectManager);
-        }
+
+    protected void loadPlayerSpecificUnits(IAlliance alliance, TextureManager textureManager,
+                                           VertexBufferObjectManager vboManager, IPlayer player) {
+        TextureAtlas textureAtlas = alliance.loadUnitsToTexture(player.getName(), textureManager);
+        SpriteGroup spriteGroup = new CleanableSpriteGroup(textureAtlas,
+                mMovableUnitsLimit + mMovableUnitsBuffer, vboManager);
+        SpriteGroupHolder.addGroup(BatchingKeys.getUnitSpriteGroup(player.getName()), spriteGroup);
+        //unit pool
+        player.createUnitPool(vboManager);
     }
 
     /** load images for bullets, health bars and player colors */
@@ -170,7 +159,7 @@ public class ClientResourcesLoader extends BaseResourceLoader {
                 build = true;
             } catch (ITextureAtlasBuilder.TextureAtlasBuilderException e) {
                 //TODO is it possible?
-                LoggerHelper.printErrorMessage(ClientResourcesLoader.this.toString(),
+                LoggerHelper.printErrorMessage(BaseGameObjectsLoader.this.toString(),
                         "failed to build texture atlas for player health");
             }
         } while (!build);
@@ -179,45 +168,6 @@ public class ClientResourcesLoader extends BaseResourceLoader {
         SpriteGroup spriteGroup = new CleanableSpriteGroup(buildableTextureAtlas,
                 mMovableUnitsLimit * 4, vertexBufferObjectManager);
         SpriteGroupHolder.addGroup(BatchingKeys.BULLET_AND_HEALTH, spriteGroup);
-    }
-
-    private void loadSunAndPlanets(TextureManager textureManager,
-                                   VertexBufferObjectManager vertexBufferObjectManager) {
-        int padding = SizeConstants.BETWEEN_TEXTURES_PADDING;
-        BitmapTextureAtlas atlas = new BitmapTextureAtlas(textureManager,
-                Math.max(padding + 2 * SizeConstants.FILE_SUN_DIAMETER,
-                        padding + 2 * SizeConstants.FILE_PLANET_DIAMETER),
-                SizeConstants.FILE_SUN_DIAMETER
-                        + SizeConstants.BETWEEN_TEXTURES_PADDING
-                        + SizeConstants.FILE_PLANET_DIAMETER,
-                TextureOptions.BILINEAR);
-        //sun
-        TextureRegionHolder.getInstance().addElement(StringConstants.KEY_SUN,
-                BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-                        atlas, EaFallApplication.getContext(),
-                        StringConstants.FILE_SUN, 0, 0));
-        TextureRegionHolder.getInstance().addElement(StringConstants.KEY_SUN_HAZE,
-                BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-                        atlas, EaFallApplication.getContext(),
-                        StringConstants.FILE_SUN_HAZE,
-                        SizeConstants.FILE_SUN_DIAMETER + padding, 0));
-        //planets
-        TextureRegionHolder.getInstance().addElement(StringConstants.KEY_FIRST_PLANET,
-                BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-                        atlas, EaFallApplication.getContext(),
-                        StringConstants.FILE_FIRST_PLANET,
-                        0, SizeConstants.FILE_SUN_DIAMETER + padding));
-        TextureRegionHolder.getInstance().addElement(StringConstants.KEY_SECOND_PLANET,
-                BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-                        atlas, EaFallApplication.getContext(),
-                        StringConstants.FILE_SECOND_PLANET,
-                        SizeConstants.FILE_PLANET_DIAMETER + padding,
-                        SizeConstants.FILE_SUN_DIAMETER + padding));
-
-        atlas.load();
-        //sun + planets SpriteGroup
-        SpriteGroup spriteGroup = new SpriteGroup(atlas, 4, vertexBufferObjectManager);
-        SpriteGroupHolder.addGroup(BatchingKeys.SUN_PLANET, spriteGroup);
     }
 
     /** load units and planets explosions */

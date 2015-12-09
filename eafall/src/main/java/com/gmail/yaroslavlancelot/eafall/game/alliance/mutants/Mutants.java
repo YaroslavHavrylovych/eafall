@@ -5,7 +5,6 @@ import com.gmail.yaroslavlancelot.eafall.game.alliance.Alliance;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.loader.BuildingListLoader;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.loader.UnitListLoader;
 
-import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class Mutants extends Alliance {
@@ -25,12 +24,6 @@ public class Mutants extends Alliance {
     @Override
     public int getAllianceStringRes() {
         return R.string.mutants;
-    }
-
-    @Override
-    public void loadAllianceResources(final TextureManager textureManager) {
-        loadBuildings(textureManager);
-        loadUnits(textureManager);
     }
 
     @Override

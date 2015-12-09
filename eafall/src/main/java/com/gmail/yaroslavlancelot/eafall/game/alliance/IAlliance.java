@@ -33,8 +33,11 @@ public interface IAlliance {
 
     int getBuildingCost(BuildingId buildingId);
 
-    /** load alliance (player independent) resources */
-    void loadAllianceResources(TextureManager textureManager);
+    /** load buildings images */
+    void loadBuildings(TextureManager textureManager);
+
+    /** load units images */
+    void loadUnits(TextureManager textureManager);
 
     /**
      * Creates texture atlas and loads units (sprites) to it.
