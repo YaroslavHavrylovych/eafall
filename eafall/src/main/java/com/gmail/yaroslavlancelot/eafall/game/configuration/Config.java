@@ -16,7 +16,7 @@ import org.andengine.util.adt.color.Color;
 public class Config implements IConfig {
     public final int mDisplayWidth;
     public final int mDisplayHeight;
-    public final int mMaxZoomFactor = 6;
+    public final int mMaxZoomFactor = 3;
     public final float mHudAlpha = 0.85f;
     public final int mMaxSimultaneousSoundStreams = 4;
     private final Color mPlayerSwapColor = Color.BLUE;

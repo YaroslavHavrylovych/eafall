@@ -87,7 +87,7 @@ public class EaFallScene extends Scene {
                     float zoomFactor = getZoomFactor();
                     if (mPreviousZoomFactor - zoomFactor != 0.0f) {
                         mPreviousZoomFactor = zoomFactor;
-                        mBackgroundSprite.setScale(zoomFactor - (zoomFactor - 1) / 2.7f);
+                        mBackgroundSprite.setScale(zoomFactor - (zoomFactor - 1) / 2f);
                     }
                 }
 
