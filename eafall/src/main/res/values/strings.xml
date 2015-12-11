@@ -162,6 +162,10 @@
     <string name="exit_dialog_title">Exit</string>
     <string name="used">Used</string>
     <string name="unused">Unused</string>
+    <string name="three">Three!</string>
+    <string name="two">Two!</string>
+    <string name="one">One!</string>
+    <string name="start">Go!</string>
 
     <!-- network game -->
     <string name="create_game">Create game</string>

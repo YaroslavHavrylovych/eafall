@@ -37,6 +37,7 @@ public final class SizeConstants {
     public static final int HUD_VALUE_OFFSET = 10;
     public static final int HUD_VALUE_TEXT_OFFSET = 30 + HUD_VALUE_OFFSET;
     public static final int HUD_VALUE_TEXT_FONT_SIZE = 35;
+    public static final int HUD_ON_SCREEN_TEXT_FONT_SIZE = 55;
     public static final int HUD_VALUES_Y_PADDING = 60;
     public static final int HUD_VALUES_X_LEFT = 37;
     //7 - max hud text elements amount

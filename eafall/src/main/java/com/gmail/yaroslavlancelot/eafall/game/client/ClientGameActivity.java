@@ -10,6 +10,7 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.SunStaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetStaticObject;
+import com.gmail.yaroslavlancelot.eafall.game.events.GameStartCooldown;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.endgame.GameOverEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.CreateBuildingEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.BuildingSettingsPopupShowEvent;
@@ -64,8 +65,18 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
 
     @Override
     protected void onShowWorkingScene() {
-        startRuler();
         super.onShowWorkingScene();
+        mSceneManager.getWorkingScene().setIgnoreUpdate(true);
+        final GameStartCooldown timerHandler = new GameStartCooldown((ClientGameHud) mHud) {
+            @Override
+            public void timerEnded() {
+                mSceneManager.getWorkingScene().setIgnoreUpdate(false);
+                mFirstPlayer.incomeTime();
+                mSecondPlayer.incomeTime();
+                startRuler();
+            }
+        };
+        timerHandler.start();
     }
 
     /** start tracker which tracks game rules */

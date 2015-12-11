@@ -1,7 +1,9 @@
 package com.gmail.yaroslavlancelot.eafall.game.scene.hud;
 
 import android.content.Context;
+import android.graphics.Color;
 
+import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.GameState;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
@@ -19,17 +21,26 @@ import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.construction.Constru
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.menu.MenuPopup;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.ConstructionPopupButton;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.MenuPopupButton;
+import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 import com.gmail.yaroslavlancelot.eafall.game.visual.other.HealthBarCarcassSprite;
+import com.gmail.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.sprite.ButtonSprite;
+import org.andengine.entity.text.Text;
+import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.font.FontManager;
+import org.andengine.opengl.font.IFont;
+import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.modifier.IModifier;
+import org.andengine.util.modifier.ease.EaseStrongOut;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -43,17 +54,22 @@ import java.util.List;
  * @author Yaroslav Havrylovych
  */
 public class ClientGameHud extends BaseGameHud {
+    public final static String sFontKey = "hud_on_screen_text_font_key";
     // ===========================================================
     // Constants
     // ===========================================================
     private static final String TAG = ClientGameHud.class.getCanonicalName();
     private static final DecimalFormat TIME_FORMAT = new DecimalFormat("00");
-
     // ===========================================================
     // Fields
     // ===========================================================
     private ArrayList<HudGameValue> mLeftPart = new ArrayList<>(3);
     private ArrayList<HudGameValue> mRightPart = new ArrayList<>(3);
+    private Text mHudText;
+    private AlphaModifier mHudTextShowAlphaModifier = new AlphaModifier(.5f, 0, 1,
+            EaseStrongOut.getInstance());
+    private AlphaModifier mHudTextHideAlphaModifier = new AlphaModifier(.5f, 1, 0,
+            EaseStrongOut.getInstance());
 
     // ===========================================================
     // Constructors
@@ -61,10 +77,6 @@ public class ClientGameHud extends BaseGameHud {
 
     // ===========================================================
     // Getter & Setter
-    // ===========================================================
-
-    // ===========================================================
-    // Methods for/from SuperClass/Interfaces
     // ===========================================================
 
     @Override
@@ -83,33 +95,71 @@ public class ClientGameHud extends BaseGameHud {
         pEntity.setAlpha(getAlpha());
     }
 
-    // ===========================================================
-    // Methods
-    // ===========================================================
-
     @Override
-    public void initHudElements(Camera camera, VertexBufferObjectManager vertexManager,
+    public void initHudElements(Camera camera, VertexBufferObjectManager vboManager,
                                 MissionConfig missionConfig) {
         LoggerHelper.methodInvocation(TAG, "initHudElements");
         SpriteGroupHolder.attachSpriteGroups(this, BatchingKeys.BatchTag.GAME_HUD.value());
+        //HUD text
+        mHudText = new Text(SizeConstants.HALF_FIELD_WIDTH, SizeConstants.HALF_FIELD_HEIGHT / 3,
+                FontHolder.getInstance().getElement(sFontKey), "", 50, vboManager);
+        mHudTextHideAlphaModifier.addModifierListener(new IModifier.IModifierListener<IEntity>() {
+            @Override
+            public void onModifierStarted(final IModifier<IEntity> pModifier, final IEntity pItem) {
+            }
+
+            @Override
+            public void onModifierFinished(final IModifier<IEntity> pModifier, final IEntity pItem) {
+                mHudText.setVisible(false);
+                mHudText.setIgnoreUpdate(true);
+            }
+        });
+        attachChild(mHudText);
         //health carcass
-        initHealthCarcass(vertexManager);
+        initHealthCarcass(vboManager);
         //menu
-        initMainMenu(vertexManager);
+        initMainMenu(vboManager);
         //game values (oxygen, offence units limit, time)
         for (final IPlayer player : PlayersHolder.getInstance().getElements()) {
             boolean left = player.getPlanet().isLeft();
             List<HudGameValue> list = left ? mLeftPart : mRightPart;
             float xPos = left ? SizeConstants.HUD_VALUES_X_LEFT : SizeConstants.HUD_VALUES_X_RIGHT;
             if (player.getControlType().user()) {
-                initPopups(player, camera, vertexManager);
-                initOxygen(player, list, xPos, vertexManager);
-                initMovableUnitsLimit(player, list, xPos, vertexManager, missionConfig.getMovableUnitsLimit());
-                initTimer(list, xPos, vertexManager, missionConfig);
+                initPopups(player, camera, vboManager);
+                initOxygen(player, list, xPos, vboManager);
+                initMovableUnitsLimit(player, list, xPos, vboManager, missionConfig.getMovableUnitsLimit());
+                initTimer(list, xPos, vboManager, missionConfig);
             } else {
-                initMovableUnitsLimit(player, list, xPos, vertexManager, missionConfig.getMovableUnitsLimit());
+                initMovableUnitsLimit(player, list, xPos, vboManager, missionConfig.getMovableUnitsLimit());
             }
         }
+    }
+
+    // ===========================================================
+    // Methods for/from SuperClass/Interfaces
+    // ===========================================================
+
+    // ===========================================================
+    // Methods
+    // ===========================================================
+
+    public void showHudText(int text) {
+        showHudText(LocaleImpl.getInstance().getStringById(text));
+    }
+
+    public void showHudText(String text) {
+        mHudText.unregisterEntityModifier(mHudTextHideAlphaModifier);
+        mHudText.setText(text);
+        mHudTextShowAlphaModifier.reset();
+        mHudText.registerEntityModifier(mHudTextShowAlphaModifier);
+        mHudText.setVisible(true);
+        mHudText.setIgnoreUpdate(false);
+    }
+
+    public void hideHudText() {
+        mHudText.unregisterEntityModifier(mHudTextShowAlphaModifier);
+        mHudTextHideAlphaModifier.reset();
+        mHudText.registerEntityModifier(mHudTextHideAlphaModifier);
     }
 
     private void initPopups(IPlayer player, Camera camera, VertexBufferObjectManager vboManager) {
@@ -235,6 +285,13 @@ public class ClientGameHud extends BaseGameHud {
 
     public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
         HudGameValue.loadFonts(fontManager, textureManager);
+        final ITexture fontTexture = new BitmapTextureAtlas(textureManager, 512, 1024);
+        IFont font = FontFactory.createFromAsset(fontManager, fontTexture,
+                EaFallApplication.getContext().getAssets(), "fonts/MyriadPro-Regular.ttf",
+                SizeConstants.HUD_ON_SCREEN_TEXT_FONT_SIZE,
+                true, Color.WHITE);
+        font.load();
+        FontHolder.getInstance().addElement(sFontKey, font);
     }
 
     // ===========================================================

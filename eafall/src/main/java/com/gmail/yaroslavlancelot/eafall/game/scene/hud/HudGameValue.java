@@ -56,19 +56,6 @@ public class HudGameValue {
         mText.setText(text);
     }
 
-    // ===========================================================
-    // Methods
-    // ===========================================================
-    public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
-        final ITexture fontTexture = new BitmapTextureAtlas(textureManager, 512, 2048);
-        IFont font = FontFactory.createFromAsset(fontManager, fontTexture,
-                EaFallApplication.getContext().getAssets(), "fonts/MyriadPro-Regular.ttf",
-                SizeConstants.HUD_VALUE_TEXT_FONT_SIZE,
-                true, Color.WHITE);
-        font.load();
-        FontHolder.getInstance().addElement(sFontKey, font);
-    }
-
     public void attachToParent(IEntity parent) {
         parent.attachChild(mImage);
         parent.attachChild(mText);
@@ -87,6 +74,19 @@ public class HudGameValue {
 
     private void setOffset(IEntity entity, int x, int y) {
         entity.setPosition(entity.getX() + x, entity.getY() + y);
+    }
+
+    // ===========================================================
+    // Methods
+    // ===========================================================
+    public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
+        final ITexture fontTexture = new BitmapTextureAtlas(textureManager, 512, 1024);
+        IFont font = FontFactory.createFromAsset(fontManager, fontTexture,
+                EaFallApplication.getContext().getAssets(), "fonts/MyriadPro-Regular.ttf",
+                SizeConstants.HUD_VALUE_TEXT_FONT_SIZE,
+                true, Color.WHITE);
+        font.load();
+        FontHolder.getInstance().addElement(sFontKey, font);
     }
 
     // ===========================================================

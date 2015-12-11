@@ -5,6 +5,7 @@ import com.gmail.yaroslavlancelot.eafall.game.EaFallActivity
 import com.gmail.yaroslavlancelot.eafall.game.GameState
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants
 import com.gmail.yaroslavlancelot.eafall.game.scene.SceneManager
+import com.gmail.yaroslavlancelot.eafall.game.scene.hud.BaseGameHud
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -63,6 +64,10 @@ class GameStateTest : AndroidTestCase() {
     }
 
     protected class TestActivity : EaFallActivity {
+        override fun createHud(): BaseGameHud? {
+            return BaseGameHud()
+        }
+
         override fun preResourcesLoading() {
         }
 
