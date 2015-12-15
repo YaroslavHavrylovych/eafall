@@ -43,7 +43,9 @@ public abstract class Building implements IBuilding {
 
             @Override
             public void doubleClick() {
-                onDoubleClick();
+                if (PlayersHolder.getPlayer(mPlayerName).getControlType().user()) {
+                    onDoubleClick();
+                }
             }
 
             @Override
