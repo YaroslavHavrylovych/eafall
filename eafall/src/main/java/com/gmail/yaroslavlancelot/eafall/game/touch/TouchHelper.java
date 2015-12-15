@@ -2,6 +2,8 @@ package com.gmail.yaroslavlancelot.eafall.game.touch;
 
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.IConfig;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.setlectable.Selectable;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.setlectable.selector.SelectorFactory;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.IEntity;
@@ -10,6 +12,7 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.ITouchCallback;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.input.touch.detector.ClickDetector;
+import org.andengine.input.touch.detector.HoldDetector;
 import org.andengine.util.Constants;
 
 /** Helping functions to work with touch events */
@@ -171,8 +174,8 @@ public final class TouchHelper {
 
     /** Gives click callback without bounding an event. */
     public static class UnboundedClickListener implements ITouchCallback {
-        private ClickDetector.IClickDetectorListener mClickListener;
-        private ClickDetector mClickDetector;
+        protected ClickDetector.IClickDetectorListener mClickListener;
+        protected ClickDetector mClickDetector;
 
         /**
          * Unbounded click listener constructor
@@ -187,6 +190,105 @@ public final class TouchHelper {
         @Override
         public boolean onAreaTouched(final TouchEvent event, float touchAreaLocalX, float touchAreaLocalY) {
             mClickDetector.onManagedTouchEvent(event);
+            return false;
+        }
+    }
+
+    /**
+     * Click callbacks without event bounding. Implemented to be used with {@link Selectable}.
+     * Handle the highlighting logic and gives callback about events.
+     */
+    public static abstract class UnboundedSelectorEvents implements ITouchCallback {
+        private final Selectable mSelectable;
+        private final int mClickTriggerMillis = 500;
+        private final int mDoubleClickTriggerMillis = mClickTriggerMillis;
+        private HoldDetector.IHoldDetectorListener mHoldListener;
+        private ClickDetector.IClickDetectorListener mClickListener;
+        private ClickDetector mClickDetector;
+        private HoldDetector mHoldDetector;
+        private boolean mHandling;
+
+        public UnboundedSelectorEvents(Selectable selectable) {
+            mSelectable = selectable;
+            initClick();
+            initHoldClick();
+        }
+
+        private void initHoldClick() {
+            mHoldListener = new HoldDetector.IHoldDetectorListener() {
+                @Override
+                public void onHoldStarted(final HoldDetector pHoldDetector, final int pPointerID, final float pHoldX, final float pHoldY) {
+                    mHandling = false;
+                    SelectorFactory.getSelector().unblock();
+                    SelectorFactory.getSelector().deselect();
+                    mHoldDetector.reset();
+                    holdClick();
+                }
+
+                @Override
+                public void onHold(final HoldDetector pHoldDetector, final long pHoldTimeMilliseconds, final int pPointerID, final float pHoldX, final float pHoldY) {
+                }
+
+                @Override
+                public void onHoldFinished(final HoldDetector pHoldDetector, final long pHoldTimeMilliseconds, final int pPointerID, final float pHoldX, final float pHoldY) {
+                }
+            };
+            mHoldDetector = new HoldDetector(mHoldListener);
+            mHoldDetector.setTriggerHoldMinimumMilliseconds(mClickTriggerMillis);
+        }
+
+        private void initClick() {
+            mClickListener = new ClickDetector.IClickDetectorListener() {
+                private long mClickTime = 0;
+
+                @Override
+                public void onClick(final ClickDetector pClickDetector, final int pPointerID, final float pSceneX, final float pSceneY) {
+                    long time = System.currentTimeMillis();
+                    if (time - mClickTime < mDoubleClickTriggerMillis) {
+                        mClickTime = 0;
+                        doubleClick();
+                        return;
+                    } else {
+                        mClickTime = time;
+                    }
+                    SelectorFactory.getSelector().select(mSelectable);
+                    click();
+                }
+            };
+            mClickDetector = new ClickDetector(mClickListener);
+            mClickDetector.setTriggerClickMaximumMilliseconds(mClickTriggerMillis);
+        }
+
+        public abstract void click();
+
+        public abstract void doubleClick();
+
+        public abstract void holdClick();
+
+        @Override
+        public boolean onAreaTouched(final TouchEvent event, final float touchAreaLocalX, final float touchAreaLocalY) {
+            if (event.isActionDown() && SelectorFactory.getSelector().isBlocked()) {
+                mHandling = false;
+                return false;
+            }
+            if (event.isActionDown() && !SelectorFactory.getSelector().isBlocked()) {
+                mHandling = true;
+                SelectorFactory.getSelector().block();
+                SelectorFactory.getSelector().highlight(mSelectable);
+            }
+
+            if (!mHandling) {
+                return false;
+            }
+
+            if (event.isActionUp() || event.isActionCancel() || event.isActionOutside()) {
+                mHandling = false;
+                SelectorFactory.getSelector().unblock();
+                SelectorFactory.getSelector().deselect();
+            }
+
+            mClickDetector.onManagedTouchEvent(event);
+            mHoldDetector.onManagedTouchEvent(event);
             return false;
         }
     }

@@ -27,6 +27,7 @@ import com.gmail.yaroslavlancelot.eafall.game.scene.hud.BaseGameHud;
 import com.gmail.yaroslavlancelot.eafall.game.scene.hud.ClientGameHud;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 
+import org.andengine.entity.IEntity;
 import org.andengine.opengl.texture.region.ITextureRegion;
 
 /**
@@ -107,7 +108,17 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
                                               long... unitUniqueId) {
         LoggerHelper.methodInvocation(TAG, "createPlanet");
         PlanetStaticObject planet = new PlanetStaticObject(x, y, textureRegion,
-                getVertexBufferObjectManager());
+                getVertexBufferObjectManager()) {
+            @Override
+            public void registerTouch(final IEntity entity) {
+                mSceneManager.getWorkingScene().registerTouchArea(entity);
+            }
+
+            @Override
+            public void unregisterTouch(final IEntity entity) {
+                mSceneManager.getWorkingScene().unregisterTouchArea(entity);
+            }
+        };
         int planetNameRes = player.getControlType().user()
                 ? mMissionConfig.getPlayerPlanet() : mMissionConfig.getOpponentPlanet();
         planet.init(player.getName(), planetNameRes, this, mMissionConfig.getPlanetHealth());

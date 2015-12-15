@@ -121,7 +121,6 @@ public class VeryFirstBot implements Runnable {
             }
         } catch (Exception ex) {
             //TODO this has to be marked somewhere to find why does this happen
-            LoggerHelper.printErrorMessage(TAG, ex.getMessage());
         }
     }
 

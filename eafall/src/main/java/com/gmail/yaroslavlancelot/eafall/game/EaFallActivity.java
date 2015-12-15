@@ -14,6 +14,7 @@ import com.gmail.yaroslavlancelot.eafall.game.camera.EaFallCamera;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.game.ApplicationSettings;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.setlectable.selector.SelectorFactory;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.endgame.ActivityCloseEvent;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.ShowToastEvent;
 import com.gmail.yaroslavlancelot.eafall.game.resources.IResourcesLoader;
@@ -308,6 +309,7 @@ public abstract class EaFallActivity extends BaseGameActivity {
                 if (runnable != null) {
                     runnable.run();
                 }
+                SelectorFactory.loadResources(getTextureManager());
                 preResourcesLoading();
                 loadResources();
                 onResourcesLoaded();
@@ -366,6 +368,7 @@ public abstract class EaFallActivity extends BaseGameActivity {
     protected void initWorkingScene() {
         mSceneManager.initWorkingScene(mCamera);
         onPopulateWorkingScene(mSceneManager.getWorkingScene());
+        SelectorFactory.init(getVertexBufferObjectManager(), mSceneManager.getWorkingScene());
     }
 
     protected abstract void onPopulateWorkingScene(EaFallScene scene);

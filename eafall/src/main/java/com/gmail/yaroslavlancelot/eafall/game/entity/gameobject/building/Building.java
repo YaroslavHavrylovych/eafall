@@ -4,8 +4,10 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.B
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.StaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.health.IHealthBar;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.BuildingsAmountChangedEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.BuildingDescriptionShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
+import com.gmail.yaroslavlancelot.eafall.game.touch.TouchHelper;
 
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
@@ -28,12 +30,30 @@ public abstract class Building implements IBuilding {
     /** income which give all buildings of the current type (can be in percents) */
     private int mIncome;
 
-    public Building(BuildingDummy dummy, VertexBufferObjectManager objectManager, String playerName) {
+    public Building(BuildingDummy dummy, VertexBufferObjectManager objectManager, final String playerName) {
         mBuildingType = dummy.getBuildingType();
         mPlayerName = playerName;
         mDummy = dummy;
         // init first unit building
         mBuildingStaticObject = getBuildingByUpgrade(mUpgrade, dummy, objectManager);
+        mBuildingStaticObject.setTouchCallback(new TouchHelper.UnboundedSelectorEvents(this) {
+            @Override
+            public void click() {
+            }
+
+            @Override
+            public void doubleClick() {
+                onDoubleClick();
+            }
+
+            @Override
+            public void holdClick() {
+                if (PlayersHolder.getPlayer(mPlayerName).getControlType().user()) {
+                    EventBus.getDefault().post(new BuildingDescriptionShowEvent(
+                            BuildingId.makeId(mDummy.getBuildingId(), mUpgrade), mPlayerName));
+                }
+            }
+        });
     }
 
     public int getAmountLimit() {
@@ -70,13 +90,18 @@ public abstract class Building implements IBuilding {
     }
 
     @Override
+    public void setIgnoreUpdates(final boolean ignoreUpdates) {
+        mBuildingStaticObject.setIgnoreUpdate(ignoreUpdates);
+    }
+
+    @Override
     public float getX() {
-        return mDummy.getX();
+        return mBuildingStaticObject.getX();
     }
 
     @Override
     public float getY() {
-        return mDummy.getY();
+        return mBuildingStaticObject.getY();
     }
 
     @Override
@@ -109,13 +134,21 @@ public abstract class Building implements IBuilding {
         mBuildingStaticObject.detachSelf();
     }
 
-    @Override
-    public void setIgnoreUpdates(final boolean ignoreUpdates) {
-        mBuildingStaticObject.setIgnoreUpdate(ignoreUpdates);
-    }
-
     protected void setIncome(int income) {
         mIncome = income;
+    }
+
+    @Override
+    public float getWidth() {
+        return mDummy.getWidth();
+    }
+
+    @Override
+    public float getHeight() {
+        return mDummy.getHeight();
+    }
+
+    protected void onDoubleClick() {
     }
 
     protected static StaticObject getBuildingByUpgrade(final int upgrade,

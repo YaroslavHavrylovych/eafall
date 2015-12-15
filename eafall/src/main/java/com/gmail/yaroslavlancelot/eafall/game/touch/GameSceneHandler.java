@@ -5,6 +5,8 @@ import android.view.VelocityTracker;
 
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.game.camera.EaFallCamera;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.setlectable.selector.Selector;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.setlectable.selector.SelectorFactory;
 
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
@@ -39,7 +41,8 @@ public class GameSceneHandler implements
     // ===========================================================
     // Fields
     // ===========================================================
-
+    /** Used to deselect a selected scene object */
+    private final Selector mSceneObjectSelector;
     /** camera for moving */
     private EaFallCamera mCamera;
     /*
@@ -77,6 +80,8 @@ public class GameSceneHandler implements
         initPinchZoomMinimumDistance(mZoomDetector);
         //click
         mClickDetector = new ClickDetector(this);
+        //selector
+        mSceneObjectSelector = SelectorFactory.getSelector();
     }
 
 
@@ -128,6 +133,10 @@ public class GameSceneHandler implements
 
     @Override
     public boolean onSceneTouchEvent(final Scene pScene, final TouchEvent pSceneTouchEvent) {
+        if (pSceneTouchEvent.isActionDown() && !mSceneObjectSelector.isBlocked()) {
+            mSceneObjectSelector.unblock();
+            mSceneObjectSelector.deselect();
+        }
         mZoomDetector.onSceneTouchEvent(pScene, pSceneTouchEvent);
         if (mZoomDetector.isZooming()) {
             mScrollDetector.setEnabled(false);
@@ -168,6 +177,8 @@ public class GameSceneHandler implements
             repositionCameraWithZoom(zoomChange);
         }
         setZoomFactor(newZoom);
+        mSceneObjectSelector.unblock();
+        mSceneObjectSelector.deselect();
     }
 
     @Override
@@ -180,6 +191,8 @@ public class GameSceneHandler implements
     public void onScrollStarted(ScrollDetector pScrollDetector, final TouchEvent pSceneTouchEvent,
                                 int pPointerID, float pDistanceX, float pDistanceY) {
         mVelocityTracker = VelocityTracker.obtain();// Used for smooth scroll start
+        mSceneObjectSelector.unblock();
+        mSceneObjectSelector.deselect();
     }
 
     @Override

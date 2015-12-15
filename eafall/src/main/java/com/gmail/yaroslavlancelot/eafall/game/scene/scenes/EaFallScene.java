@@ -53,6 +53,7 @@ public class EaFallScene extends Scene {
                 TextureRegionHolder.getInstance().getElement(backgroundFilePath),
                 vertexBufferObjectManager);
         setTouchAreaBindingOnActionMoveEnabled(true);
+        setOnAreaTouchTraversalFrontToBack();
         AutoParallaxBackground background = new AutoParallaxBackground(0, 0, 0, 0);
         background.setParallaxValue(new Random().nextInt(SizeConstants.GAME_FIELD_WIDTH));
         background.attachParallaxEntity(
