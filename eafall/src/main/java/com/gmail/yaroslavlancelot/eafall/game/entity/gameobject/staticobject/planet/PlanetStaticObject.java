@@ -23,6 +23,7 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.O
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.SpecialBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.WealthBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.Armor;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.setlectable.Selectable;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.StaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.shipyards.IShipyard;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.shipyards.ShipyardFactory;
@@ -33,12 +34,14 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.health.PlayerHealthBar;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.ShowToastEvent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
+import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.RollingPopupManager;
+import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.construction.ConstructionsPopup;
 import com.gmail.yaroslavlancelot.eafall.game.touch.TouchHelper;
 
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
+import org.andengine.entity.IEntity;
 import org.andengine.entity.sprite.AnimatedSprite;
-import org.andengine.input.touch.detector.ClickDetector;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -53,7 +56,7 @@ import java.util.Set;
 import de.greenrobot.event.EventBus;
 
 /** represent player planet */
-public class PlanetStaticObject extends StaticObject implements IPlayerObject {
+public abstract class PlanetStaticObject extends StaticObject implements IPlayerObject, Selectable {
     /** tag, which is used for debugging purpose */
     public static final String TAG = PlanetStaticObject.class.getCanonicalName();
     /** current planet buildings */
@@ -64,12 +67,6 @@ public class PlanetStaticObject extends StaticObject implements IPlayerObject {
     private IShipyard mPlanetShipyard;
     /** current planet player name */
     private String mPlayerName;
-    /** true - if it's left planet and false in other case */
-    private boolean mIsLeft;
-    /** exit with double click */
-    private long mOnPlanetLastClick = 0;
-    /** suppressor single click hint */
-    private TimerHandler mOnPlanetClickHintHandler;
     /** contains true if suppressor was used */
     private boolean mIsSuppressorUsed = false;
 
@@ -79,13 +76,12 @@ public class PlanetStaticObject extends StaticObject implements IPlayerObject {
                 textureRegion, objectManager);
         mIncomeIncreasingValue = 10;
         mObjectArmor = new Armor(Armor.ArmorType.MIXED.name(), 10);
-        mIsLeft = x < SizeConstants.HALF_FIELD_WIDTH;
         mChildren = new SmartList<>(12);
         setSpriteGroupName(BatchingKeys.SUN_PLANET);
     }
 
     public boolean isLeft() {
-        return mIsLeft;
+        return mX < SizeConstants.HALF_FIELD_WIDTH;
     }
 
     public int getExistingBuildingsTypesAmount() {
@@ -173,6 +169,10 @@ public class PlanetStaticObject extends StaticObject implements IPlayerObject {
                 PathHelper.isLtrPath(getX()));
     }
 
+    public abstract void registerTouch(IEntity entity);
+
+    public abstract void unregisterTouch(IEntity entity);
+
     public void init(String playerName, int planetNameRes, IUnitCreator creator, int objectMaximumHealth) {
         setPlayer(playerName);
         initHealthBar();
@@ -245,52 +245,42 @@ public class PlanetStaticObject extends StaticObject implements IPlayerObject {
         }
         boolean result = building.buyBuilding();
         if (result && building.getAmount() == 1) {
-            building.getEntity().attachSelf();
+            StaticObject stObj = building.getEntity();
+            stObj.attachSelf();
+            registerTouch(stObj);
         }
         return result;
     }
 
     /** Suppressor triggered by double click on the planet and kill all enemies on you side of the game field */
-    private void initTouchCallbacks(int planetNameRes) {
-        initPlanetSingleClickHint(planetNameRes);
-        setTouchCallback(new TouchHelper.UnboundedClickListener(new ClickDetector.IClickDetectorListener() {
+    private void initTouchCallbacks(final int planetNameRes) {
+        setTouchCallback(new TouchHelper.UnboundedSelectorEvents(this) {
             @Override
-            public void onClick(final ClickDetector pClickDetector, final int pPointerID, final float pSceneX, final float pSceneY) {
-                long time = System.currentTimeMillis();
-                long delta = time - mOnPlanetLastClick;
-                if (delta < TouchHelper.mMultipleClickTime) {
-                    PlanetStaticObject.this.unregisterUpdateHandler(mOnPlanetClickHintHandler);
-                    if (PlayersHolder.getPlayer(mPlayerName).getControlType().user()) {
-                        useSuppressor();
-                    } else {
-                        EventBus.getDefault().post(new ShowToastEvent(false, R.string.wrong_planet_suppressor));
-                    }
-                    return;
-                } else if (delta > TouchHelper.mMultipleClickDividerTime) {
-                    PlanetStaticObject.this.unregisterUpdateHandler(mOnPlanetClickHintHandler);
-                    mOnPlanetClickHintHandler.reset();
-                    PlanetStaticObject.this.registerUpdateHandler(mOnPlanetClickHintHandler);
-                }
-                mOnPlanetLastClick = time;
+            public void click() {
+                final IPlayer player = PlayersHolder.getPlayer(mPlayerName);
+                final int playerRes = player.getControlType().user() ?
+                        R.string.player_planet_text : R.string.opponent_planet_text;
+                EventBus.getDefault().post(new ShowToastEvent(true, playerRes, planetNameRes,
+                        player.getAlliance().getAllianceStringRes(),
+                        mIsSuppressorUsed ? R.string.used : R.string.unused));
             }
-        }));
-    }
 
-    /** init single click on the planet hint */
-    private void initPlanetSingleClickHint(final int planetNameRes) {
-        final IPlayer player = PlayersHolder.getPlayer(mPlayerName);
-        final int playerRes = player.getControlType().user() ?
-                R.string.player_planet_text : R.string.opponent_planet_text;
-        mOnPlanetClickHintHandler = new TimerHandler(TouchHelper.mMultipleClickHintTime,
-                new ITimerCallback() {
-                    @Override
-                    public void onTimePassed(final TimerHandler pTimerHandler) {
-                        PlanetStaticObject.this.unregisterUpdateHandler(pTimerHandler);
-                        EventBus.getDefault().post(new ShowToastEvent(true, playerRes, planetNameRes,
-                                player.getAlliance().getAllianceStringRes(),
-                                mIsSuppressorUsed ? R.string.used : R.string.unused));
-                    }
-                });
+            @Override
+            public void doubleClick() {
+                if (PlayersHolder.getPlayer(mPlayerName).getControlType().user()) {
+                    useSuppressor();
+                } else {
+                    EventBus.getDefault().post(new ShowToastEvent(false, R.string.wrong_planet_suppressor));
+                }
+            }
+
+            @Override
+            public void holdClick() {
+                if (PlayersHolder.getPlayer(mPlayerName).getControlType().user()) {
+                    RollingPopupManager.getPopup(ConstructionsPopup.KEY).triggerPopup();
+                }
+            }
+        });
     }
 
     /** get buildings amount for passed building type */
@@ -305,7 +295,7 @@ public class PlanetStaticObject extends StaticObject implements IPlayerObject {
             mIsSuppressorUsed = true;
             EventBus.getDefault().post(new ShowToastEvent(false, R.string.suppressor_being_used));
             IPlayer enemy = PlayersHolder.getPlayer(mPlayerName).getEnemyPlayer();
-            List<Unit> enemies = enemy.getUnitMap().getUnitOnSide(mIsLeft);
+            List<Unit> enemies = enemy.getUnitMap().getUnitOnSide(isLeft());
             for (int i = 0; i < enemies.size(); i++) {
                 enemies.get(i).kill();
             }

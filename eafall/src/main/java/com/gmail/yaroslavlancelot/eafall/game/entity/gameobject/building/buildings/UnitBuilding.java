@@ -6,6 +6,7 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.Buildin
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.OffenceBuildingDummy;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.StaticObject;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.BuildingDescriptionShowEvent;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.BuildingSettingsPopupShowEvent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
@@ -55,6 +56,12 @@ public class UnitBuilding extends Building implements IUnitBuilding {
         }
 
         return true;
+    }
+
+    @Override
+    protected void onDoubleClick() {
+        super.onDoubleClick();
+        EventBus.getDefault().post(new BuildingSettingsPopupShowEvent(this));
     }
 
     @Override

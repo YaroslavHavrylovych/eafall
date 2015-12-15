@@ -1,9 +1,13 @@
 package com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building;
 
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.setlectable.Selectable;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.StaticObject;
 
-/** General interface for existing buildings. Used by planet to simplify buildings usage. */
-public interface IBuilding {
+/**
+ * General interface for existing buildings. Used by planet to simplify buildings usage.
+ * is a selectable element on the game scene
+ */
+public interface IBuilding extends Selectable {
     /** return current building type */
     BuildingType getBuildingType();
 
@@ -22,14 +26,14 @@ public interface IBuilding {
     /** return building upgrade */
     int getUpgrade();
 
+    /** set building {@link org.andengine.entity.Entity} to ignore or receive updates */
+    void setIgnoreUpdates(boolean stop);
+
     /** get building abscissa on the planet (starting from the planet bottom left) */
     float getX();
 
     /** get building ordinate on the planet (starting from the planet bottom left) */
     float getY();
-
-    /** set building {@link org.andengine.entity.Entity} to ignore or receive updates */
-    void setIgnoreUpdates(boolean stop);
 
     /** byu new building */
     boolean buyBuilding();

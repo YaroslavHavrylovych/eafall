@@ -56,10 +56,12 @@ public final class StringConstants {
     public static final String FILE_FIRST_PLANET = "graphics/sprites/planet_1.png";
     /** file name for red planet */
     public static final String FILE_SECOND_PLANET = "graphics/sprites/planet_2.png";
-    /** unit explosion animation */
-    public static final String KEY_UNIT_EXPLOSION = "graphics/sprites/explosion/explosion_unit.png";
+    /** selector image */
+    public static final String FILE_SELECTOR = "graphics/sprites/select/selector.png";
     /** planet explosion animation */
     public static final String KEY_PLANET_EXPLOSION = "graphics/sprites/explosion/explosion_planet.png";
+    /** unit explosion animation */
+    public static final String KEY_UNIT_EXPLOSION = "graphics/sprites/explosion/explosion_unit.png";
     /** used like key for sun static object */
     public static final String KEY_SUN_HAZE = "sun_key_top";
     /** used like key for sun static object */
