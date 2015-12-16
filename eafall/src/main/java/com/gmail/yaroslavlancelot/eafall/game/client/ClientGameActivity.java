@@ -3,6 +3,9 @@ package com.gmail.yaroslavlancelot.eafall.game.client;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.BaseGameObjectsActivity;
+import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
+import com.gmail.yaroslavlancelot.eafall.game.client.thick.income.ClientIncomeHandler;
+import com.gmail.yaroslavlancelot.eafall.game.configuration.mission.MissionConfig;
 import com.gmail.yaroslavlancelot.eafall.game.constant.CollisionCategories;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
@@ -17,6 +20,7 @@ import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.descriptio
 import com.gmail.yaroslavlancelot.eafall.game.events.periodic.IPeriodic;
 import com.gmail.yaroslavlancelot.eafall.game.events.periodic.time.GameTime;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
+import com.gmail.yaroslavlancelot.eafall.game.player.Player;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.popup.BuildingSettingsDialog;
 import com.gmail.yaroslavlancelot.eafall.game.popup.GameOverPopup;
@@ -62,6 +66,12 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
         initFirstPlanet();
         initSecondPlanet();
         super.onPopulateWorkingScene(scene);
+        for (IPlayer player : PlayersHolder.getInstance().getElements()) {
+            if (player.getControlType().user()) {
+                ClientIncomeHandler.init(player, mSceneManager.getWorkingScene(),
+                        getVertexBufferObjectManager());
+            }
+        }
     }
 
     @Override
@@ -78,6 +88,12 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
             }
         };
         timerHandler.start();
+    }
+
+    @Override
+    protected IPlayer createPlayer(String name, IAlliance alliance, IPlayer.ControlType playerType,
+                                   final MissionConfig missionConfig) {
+        return new Player(name, alliance, playerType, 10, missionConfig);
     }
 
     /** start tracker which tracks game rules */
@@ -192,7 +208,6 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
         });
         popup.showPopup();
     }
-
 
     @SuppressWarnings("unused")
     /** really used by {@link de.greenrobot.event.EventBus} */

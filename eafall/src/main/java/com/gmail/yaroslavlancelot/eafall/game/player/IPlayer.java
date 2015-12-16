@@ -92,6 +92,15 @@ public interface IPlayer {
     BuildingId[] getBuildingsIds();
 
     /**
+     * Player can get money out of the dead unit if:
+     * <br/>
+     * Random.nextInt({@link #getUnitDeathIncomeChance()}) == 0
+     *
+     * @return value which contains chance to get money out of dead unit
+     */
+    int getUnitDeathIncomeChance();
+
+    /**
      * create {@link IUnitMap} for the current player
      *
      * @param leftPlayer is the player on the left side of the screen

@@ -7,6 +7,7 @@ import com.gmail.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.gmail.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder;
+import com.gmail.yaroslavlancelot.eafall.game.client.thick.income.ClientIncomeHandler;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
@@ -41,6 +42,7 @@ public class ClientResourcesLoader extends BaseGameObjectsLoader {
         //other
         Context context = EaFallApplication.getContext();
         RollingPopupManager.loadResource(context, textureManager);
+        ClientIncomeHandler.loadImages(textureManager);
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
+import com.gmail.yaroslavlancelot.eafall.game.client.thick.income.ClientIncomeHandler;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.game.ApplicationSettings;
 import com.gmail.yaroslavlancelot.eafall.game.configuration.mission.MissionConfig;
 import com.gmail.yaroslavlancelot.eafall.game.entity.AfterInitializationPool;
@@ -44,6 +45,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Player implements IPlayer {
     private static final String TAG = Player.class.getCanonicalName();
     public final int INIT_MONEY_VALUE = 600;
+    /** chance to produce income to an enemy after the death of the unit */
+    public final int mUnitDeathIncomeChane;
     /** fixture def of the player (used for bullet creation) */
     protected final FixtureDef mPlayerFixtureDef;
     /** used for {@link SharedEvents} */
@@ -82,7 +85,8 @@ public class Player implements IPlayer {
     /** units map to improve positioning operations performance */
     private SquareUnitMap mUnitMap;
 
-    public Player(final String playerName, IAlliance alliance, ControlType playerType, MissionConfig missionConfig) {
+    public Player(final String playerName, IAlliance alliance, ControlType playerType,
+                  int unitDeathIncomeChance, MissionConfig missionConfig) {
         mPlayerName = playerName;
         MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY = "UNIT_CREATED_" + playerName;
         OXYGEN_CHANGED_CALLBACK_KEY = "OXYGEN_CHANGED_" + playerName;
@@ -93,6 +97,7 @@ public class Player implements IPlayer {
         initBuildingsTypes(alliance);
         mControlType = playerType;
         mPlayerFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f, false);
+        mUnitDeathIncomeChane = unitDeathIncomeChance;
         initSettingsCallbacks();
     }
 
@@ -194,6 +199,11 @@ public class Player implements IPlayer {
     }
 
     @Override
+    public int getUnitDeathIncomeChance() {
+        return mUnitDeathIncomeChane;
+    }
+
+    @Override
     public void createUnitsMap(boolean leftPlayer) {
         mUnitMap = new SquareUnitMap(leftPlayer);
     }
@@ -275,11 +285,18 @@ public class Player implements IPlayer {
 
     @Override
     public void incomeTime() {
+        int value;
         if (mIsFirstIncome.getAndSet(false)) {
-            changeMoney(INIT_MONEY_VALUE);
-            return;
+            value = INIT_MONEY_VALUE;
+        } else {
+            value = mPlayerPlanet.getIncome();
         }
-        changeMoney(mPlayerPlanet.getIncome());
+        if (mControlType.user()) {
+            ClientIncomeHandler.getIncomeHandler().makeIncome(
+                    ClientIncomeHandler.IncomeType.PLANET, value);
+        } else {
+            changeMoney(value);
+        }
     }
 
     @Override

@@ -37,7 +37,6 @@ import com.gmail.yaroslavlancelot.eafall.game.events.periodic.IPeriodic;
 import com.gmail.yaroslavlancelot.eafall.game.events.periodic.unit.UnitPositionUpdater;
 import com.gmail.yaroslavlancelot.eafall.game.mission.MissionIntent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
-import com.gmail.yaroslavlancelot.eafall.game.player.Player;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.resources.loaders.game.BaseGameObjectsLoader;
 import com.gmail.yaroslavlancelot.eafall.game.scene.hud.BaseGameHud;
@@ -151,11 +150,6 @@ public abstract class BaseGameObjectsActivity extends EaFallActivity implements 
     }
 
     @Override
-    protected void initWorkingScene() {
-        super.initWorkingScene();
-    }
-
-    @Override
     protected void onPopulateWorkingScene(final EaFallScene scene) {
         scene.setBackground(StringConstants.FILE_BACKGROUND, getVertexBufferObjectManager());
         mSceneManager.getWorkingScene().registerUpdateHandler(mPhysicsWorld);
@@ -249,10 +243,18 @@ public abstract class BaseGameObjectsActivity extends EaFallActivity implements 
     protected IPlayer createPlayer(String playerNameInExtra, IAlliance alliance) {
         Intent intent = getIntent();
         IPlayer.ControlType playerType = IPlayer.ControlType.valueOf(intent.getStringExtra(playerNameInExtra));
-        IPlayer player = new Player(playerNameInExtra, alliance, playerType, mMissionConfig);
+        IPlayer player = createPlayer(playerNameInExtra, alliance, playerType, mMissionConfig);
         mGamePeriodic.add(new UnitPositionUpdater(player));
         return player;
     }
+
+    /**
+     * Different game types have different player creation parameters. In our case it's
+     * a chance to get money out of the dead unit. We can define it only on later stages.
+     */
+    protected abstract IPlayer createPlayer(String name, IAlliance alliance,
+                                            IPlayer.ControlType playerType,
+                                            MissionConfig missionConfig);
 
     @SuppressWarnings("unused")
     /** really used by {@link de.greenrobot.event.EventBus} */

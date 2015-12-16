@@ -2,11 +2,14 @@ package com.gmail.yaroslavlancelot.eafall.game.sandbox.activity;
 
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.BaseGameObjectsActivity;
+import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
+import com.gmail.yaroslavlancelot.eafall.game.configuration.mission.MissionConfig;
 import com.gmail.yaroslavlancelot.eafall.game.constant.CollisionCategories;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.IUnitPath;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.implementation.MoveToCenterPath;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
+import com.gmail.yaroslavlancelot.eafall.game.player.Player;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 
 import org.andengine.extension.physics.box2d.PhysicsFactory;
@@ -42,6 +45,19 @@ public class SandboxActivity extends BaseGameObjectsActivity {
         hideSplash();
     }
 
+    @Override
+    protected void initWorkingScene() {
+        super.initWorkingScene();
+        EaFallScene scene = mSceneManager.getWorkingScene();
+        scene.setClickListener(new ClickDetector.IClickDetectorListener() {
+            @Override
+            public void onClick(final ClickDetector pClickDetector, final int pPointerID, final float pSceneX, final float pSceneY) {
+                IUnitPath path = new MoveToCenterPath();
+                createMovableUnit(mCurrentPlayer, mCurrentUnitKey, (int) pSceneX, (int) pSceneY, path);
+            }
+        });
+    }
+
     // ===========================================================
     // Methods for/from SuperClass/Interfaces
     // ===========================================================
@@ -54,16 +70,9 @@ public class SandboxActivity extends BaseGameObjectsActivity {
     }
 
     @Override
-    protected void initWorkingScene() {
-        super.initWorkingScene();
-        EaFallScene scene = mSceneManager.getWorkingScene();
-        scene.setClickListener(new ClickDetector.IClickDetectorListener() {
-            @Override
-            public void onClick(final ClickDetector pClickDetector, final int pPointerID, final float pSceneX, final float pSceneY) {
-                IUnitPath path = new MoveToCenterPath();
-                createMovableUnit(mCurrentPlayer, mCurrentUnitKey, (int) pSceneX, (int) pSceneY, path);
-            }
-        });
+    protected IPlayer createPlayer(String name, IAlliance alliance, IPlayer.ControlType playerType,
+                                   MissionConfig missionConfig) {
+        return new Player(name, alliance, playerType, -1, missionConfig);
     }
 
     // ===========================================================

@@ -12,6 +12,8 @@ public final class SizeConstants {
     public static final int GAME_FIELD_HEIGHT = 1080;
     public static final int HALF_FIELD_HEIGHT = GAME_FIELD_HEIGHT / 2;
     public static final int PLANET_DIAMETER = 250;
+    public static final int INCOME_IMAGE_SIZE = 75;
+    public static final int INCOME_IMAGE_FILE_SIZE = 75;
     public static final int SHIPYARD_SPAWN_LENGTH = 185;
     public static final int FILE_PLANET_DIAMETER = 250;
     public static final int ADDITION_MARGIN_FOR_PLANET = 20;

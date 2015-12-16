@@ -12,6 +12,7 @@ import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.engine.ArgbColorComponentsSwapBitmapTextureAtlas;
 import com.gmail.yaroslavlancelot.eafall.game.engine.CleanableSpriteGroup;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.setlectable.selector.SelectorFactory;
 import com.gmail.yaroslavlancelot.eafall.game.entity.health.PlayerHealthBar;
 import com.gmail.yaroslavlancelot.eafall.game.entity.health.UnitHealthBar;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
@@ -58,6 +59,8 @@ public abstract class BaseGameObjectsLoader extends BaseResourceLoader {
     @Override
     public void loadImages(TextureManager textureManager,
                            VertexBufferObjectManager vertexBufferObjectManager) {
+        //selector
+        SelectorFactory.loadResources(textureManager);
         //background
         loadBigImages(textureManager);
         //alliance

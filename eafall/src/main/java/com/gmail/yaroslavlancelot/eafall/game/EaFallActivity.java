@@ -309,7 +309,6 @@ public abstract class EaFallActivity extends BaseGameActivity {
                 if (runnable != null) {
                     runnable.run();
                 }
-                SelectorFactory.loadResources(getTextureManager());
                 preResourcesLoading();
                 loadResources();
                 onResourcesLoaded();

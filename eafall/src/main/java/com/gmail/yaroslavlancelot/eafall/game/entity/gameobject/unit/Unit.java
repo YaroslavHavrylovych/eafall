@@ -5,6 +5,7 @@ import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.audio.LimitedSoundWrapper;
 import com.gmail.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.gmail.yaroslavlancelot.eafall.game.client.IPhysicCreator;
+import com.gmail.yaroslavlancelot.eafall.game.client.thick.income.ClientIncomeHandler;
 import com.gmail.yaroslavlancelot.eafall.game.engine.CleanableSpriteGroup;
 import com.gmail.yaroslavlancelot.eafall.game.engine.ManualFinishRotationModifier;
 import com.gmail.yaroslavlancelot.eafall.game.entity.bullets.AbstractBullet;
@@ -24,8 +25,11 @@ import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
 import org.andengine.entity.modifier.RotationModifier;
+import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 import org.andengine.util.math.MathUtils;
+
+import java.util.Random;
 
 /**
  * base class for dynamic and static/unmovable objects which can attack other objects
@@ -38,6 +42,8 @@ public abstract class Unit extends GameObject implements
     public static final String TAG = Unit.class.getCanonicalName();
     /** tag for logger */
     public static final float ROTATION_SPEED = .0044f;
+    /** unit Random instance */
+    private static volatile Random sRandom = new Random();
     /** update time for current object */
     protected float mUpdateCycleTime = .5f;
     /** delay time between attacks */
@@ -114,6 +120,21 @@ public abstract class Unit extends GameObject implements
         final UnitExplosionAnimation unitExplosionAnimation = UnitExplosionPool.getExplosion();
         unitExplosionAnimation.setPosition(mX, mY);
         unitExplosionAnimation.init(this);
+        IPlayer enemyPlayer = PlayersHolder.getPlayer(mPlayerName).getEnemyPlayer();
+        int incomeChance = enemyPlayer.getUnitDeathIncomeChance();
+        if (incomeChance > 0) {
+            int doneIfOne = sRandom.nextInt(incomeChance);
+            if (doneIfOne == 0) {
+                int money = mObjectMaximumHealth >> 2;
+                if (enemyPlayer.getControlType().user()) {
+                    ButtonSprite incomeButton = ClientIncomeHandler.getIncomeHandler().makeIncome(
+                            ClientIncomeHandler.IncomeType.UNIT, money);
+                    incomeButton.setPosition(mX, mY);
+                } else {
+                    enemyPlayer.changeMoney(money);
+                }
+            }
+        }
     }
 
     @Override
