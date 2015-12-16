@@ -36,7 +36,7 @@ public class ClientIncomeHandler extends SelfCleanable {
         mPlayer = player;
         PlanetStaticObject planet = player.getPlanet();
         float x = planet.getX(), y = planet.getY();
-        float xOffset = planet.getWidth() / 2 + SizeConstants.INCOME_IMAGE_SIZE / 4,
+        float xOffset = planet.getWidth() / 2 - SizeConstants.INCOME_IMAGE_SIZE / 2,
                 yOffset = planet.getHeight() / 2 + SizeConstants.INCOME_IMAGE_SIZE / 4;
         y += yOffset;
         if (planet.isLeft()) {
