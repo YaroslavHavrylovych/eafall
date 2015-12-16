@@ -19,7 +19,7 @@ public abstract class GameStartCooldown {
     // ===========================================================
     // Fields
     // ===========================================================
-    public final int COOLDOWN = 7;
+    public final int COOLDOWN = 4;
     private ClientGameHud mClientGameHud;
 
     // ===========================================================
@@ -77,13 +77,13 @@ public abstract class GameStartCooldown {
             case 0:
                 id = R.string.start;
                 break;
-            case 2:
+            case 1:
                 id = R.string.one;
                 break;
-            case 4:
+            case 2:
                 id = R.string.two;
                 break;
-            case 6:
+            case 3:
                 id = R.string.three;
                 break;
             default:
