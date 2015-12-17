@@ -7,7 +7,7 @@ import com.gmail.yaroslavlancelot.eafall.game.configuration.mission.MissionConfi
 import com.gmail.yaroslavlancelot.eafall.game.constant.CollisionCategories;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.IUnitPath;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.implementation.MoveToCenterPath;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.implementation.MoveToPointThroughTheCenterPath;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.Player;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
@@ -48,15 +48,22 @@ public class SandboxActivity extends BaseGameObjectsActivity {
     protected void initWorkingScene() {
         super.initWorkingScene();
         EaFallScene scene = mSceneManager.getWorkingScene();
-        final IUnitPath path = new MoveToCenterPath();
+        final IUnitPath path1 = new MoveToPointThroughTheCenterPath(
+                SizeConstants.HALF_FIELD_WIDTH + SizeConstants.HALF_FIELD_WIDTH / 2,
+                SizeConstants.HALF_FIELD_HEIGHT);
+        final IUnitPath path2 = new MoveToPointThroughTheCenterPath(
+                SizeConstants.HALF_FIELD_WIDTH / 2, SizeConstants.HALF_FIELD_HEIGHT);
         scene.setClickListener(new ClickDetector.IClickDetectorListener() {
             @Override
             public void onClick(final ClickDetector pClickDetector, final int pPointerID, final float pSceneX, final float pSceneY) {
                 IPlayer player;
+                IUnitPath path;
                 if (pSceneX < SizeConstants.HALF_FIELD_WIDTH) {
                     player = mFirstPlayer;
+                    path = path1;
                 } else {
                     player = mSecondPlayer;
+                    path = path2;
                 }
                 createMovableUnit(player, mCurrentUnitKey, (int) pSceneX, (int) pSceneY, path);
             }
