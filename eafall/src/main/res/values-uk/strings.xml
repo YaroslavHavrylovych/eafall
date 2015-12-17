@@ -166,6 +166,7 @@
     <string name="two">Два!</string>
     <string name="one">Один!</string>
     <string name="start">В бій!</string>
+    <string name="units_capacity_reached">Досягнуто максимально мажливої кількості юнітів</string>
 
     <!-- network game -->
     <string name="create_game">Створити гру</string>

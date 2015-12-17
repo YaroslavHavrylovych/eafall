@@ -1,5 +1,6 @@
 package com.gmail.yaroslavlancelot.eafall.game.sandbox.activity;
 
+import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.BaseGameObjectsActivity;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
@@ -8,12 +9,15 @@ import com.gmail.yaroslavlancelot.eafall.game.constant.CollisionCategories;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.IUnitPath;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.implementation.MoveToPointThroughTheCenterPath;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.ShowToastEvent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.Player;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.input.touch.detector.ClickDetector;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * Game sandbox. You can create any unit to play with.
@@ -65,7 +69,12 @@ public class SandboxActivity extends BaseGameObjectsActivity {
                     player = mSecondPlayer;
                     path = path2;
                 }
-                createMovableUnit(player, mCurrentUnitKey, (int) pSceneX, (int) pSceneY, path);
+                if (player.getUnitsAmount() < player.getUnitsLimit()) {
+                    createMovableUnit(player, mCurrentUnitKey, (int) pSceneX, (int) pSceneY, path);
+                } else {
+                    EventBus.getDefault().post(
+                            new ShowToastEvent(false, R.string.units_capacity_reached));
+                }
             }
         });
     }

@@ -166,6 +166,7 @@
     <string name="two">Two!</string>
     <string name="one">One!</string>
     <string name="start">Go!</string>
+    <string name="units_capacity_reached">Units capacity reached</string>
 
     <!-- network game -->
     <string name="create_game">Create game</string>
