@@ -28,7 +28,6 @@ public class SandboxActivity extends BaseGameObjectsActivity {
     // ===========================================================
     // Fields
     // ===========================================================
-    private IPlayer mCurrentPlayer;
     private int mCurrentUnitKey;
 
     // ===========================================================
@@ -49,11 +48,17 @@ public class SandboxActivity extends BaseGameObjectsActivity {
     protected void initWorkingScene() {
         super.initWorkingScene();
         EaFallScene scene = mSceneManager.getWorkingScene();
+        final IUnitPath path = new MoveToCenterPath();
         scene.setClickListener(new ClickDetector.IClickDetectorListener() {
             @Override
             public void onClick(final ClickDetector pClickDetector, final int pPointerID, final float pSceneX, final float pSceneY) {
-                IUnitPath path = new MoveToCenterPath();
-                createMovableUnit(mCurrentPlayer, mCurrentUnitKey, (int) pSceneX, (int) pSceneY, path);
+                IPlayer player;
+                if (pSceneX < SizeConstants.HALF_FIELD_WIDTH) {
+                    player = mFirstPlayer;
+                } else {
+                    player = mSecondPlayer;
+                }
+                createMovableUnit(player, mCurrentUnitKey, (int) pSceneX, (int) pSceneY, path);
             }
         });
     }
@@ -63,7 +68,6 @@ public class SandboxActivity extends BaseGameObjectsActivity {
     // ===========================================================
     @Override
     protected void hideSplash() {
-        mCurrentPlayer = mFirstPlayer;
         mCurrentUnitKey = mFirstPlayer.getAlliance().getUnitsIds().first();
         createBounds();
         super.hideSplash();
