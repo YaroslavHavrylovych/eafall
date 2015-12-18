@@ -7,7 +7,7 @@ import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
  *
  * @author Yaroslav Havrylovych
  */
-public class MoveToCenterPath extends BasePath {
+public class MoveToPointThroughTheCenterPath extends BasePath {
     // ===========================================================
     // Constants
     // ===========================================================
@@ -15,10 +15,17 @@ public class MoveToCenterPath extends BasePath {
     // ===========================================================
     // Fields
     // ===========================================================
+    private final float mPointX;
+    private final float mPointY;
+    private final float EPSILON = SizeConstants.HALF_FIELD_WIDTH / 4;
 
     // ===========================================================
     // Constructors
     // ===========================================================
+    public MoveToPointThroughTheCenterPath(float x, float y) {
+        mPointX = x;
+        mPointY = y;
+    }
 
     // ===========================================================
     // Getter & Setter
@@ -29,8 +36,12 @@ public class MoveToCenterPath extends BasePath {
     // ===========================================================
     @Override
     public void getNextPathPoint(final float[] currentPoint, final float[] nextPoint) {
-        nextPoint[0] = SizeConstants.HALF_FIELD_WIDTH;
-        nextPoint[1] = SizeConstants.HALF_FIELD_HEIGHT;
+        if (Math.abs(mPointX - currentPoint[0]) > EPSILON) {
+            nextPoint[1] = currentPoint[1];
+        } else {
+            nextPoint[1] = mPointY;
+        }
+        nextPoint[0] = mPointX;
     }
 
     // ===========================================================

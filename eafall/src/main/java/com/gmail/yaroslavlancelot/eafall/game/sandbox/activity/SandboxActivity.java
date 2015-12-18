@@ -1,5 +1,6 @@
 package com.gmail.yaroslavlancelot.eafall.game.sandbox.activity;
 
+import com.gmail.yaroslavlancelot.eafall.R;
 import com.gmail.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.gmail.yaroslavlancelot.eafall.game.BaseGameObjectsActivity;
 import com.gmail.yaroslavlancelot.eafall.game.alliance.IAlliance;
@@ -7,13 +8,20 @@ import com.gmail.yaroslavlancelot.eafall.game.configuration.mission.MissionConfi
 import com.gmail.yaroslavlancelot.eafall.game.constant.CollisionCategories;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.IUnitPath;
-import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.implementation.MoveToCenterPath;
+import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.implementation.MoveToPointThroughTheCenterPath;
+import com.gmail.yaroslavlancelot.eafall.game.events.SharedEvents;
+import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.ShowToastEvent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.Player;
+import com.gmail.yaroslavlancelot.eafall.game.sandbox.popup.SandboxDescriptionPopup;
+import com.gmail.yaroslavlancelot.eafall.game.scene.hud.BaseGameHud;
+import com.gmail.yaroslavlancelot.eafall.game.scene.hud.SandboxGameHud;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.input.touch.detector.ClickDetector;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * Game sandbox. You can create any unit to play with.
@@ -28,7 +36,6 @@ public class SandboxActivity extends BaseGameObjectsActivity {
     // ===========================================================
     // Fields
     // ===========================================================
-    private IPlayer mCurrentPlayer;
     private int mCurrentUnitKey;
 
     // ===========================================================
@@ -40,30 +47,64 @@ public class SandboxActivity extends BaseGameObjectsActivity {
     // ===========================================================
 
     @Override
+    protected BaseGameHud createHud() {
+        return new SandboxGameHud() {
+            @Override
+            protected int getCurrentUnitId() {
+                return mCurrentUnitKey;
+            }
+        };
+    }
+
+    @Override
     public void onResourcesLoaded() {
         super.onResourcesLoaded();
         hideSplash();
     }
 
+    // ===========================================================
+    // Methods for/from SuperClass/Interfaces
+    // ===========================================================
+
     @Override
     protected void initWorkingScene() {
         super.initWorkingScene();
+        SharedEvents.addCallback(new SharedEvents.DataChangedCallback(SandboxDescriptionPopup.SANDBOX_UNIT_CHANGED_KEY) {
+            @Override
+            public void callback(final String key, final Object value) {
+                mCurrentUnitKey = (Integer) value;
+            }
+        });
         EaFallScene scene = mSceneManager.getWorkingScene();
+        final IUnitPath path1 = new MoveToPointThroughTheCenterPath(
+                SizeConstants.HALF_FIELD_WIDTH + SizeConstants.HALF_FIELD_WIDTH / 2,
+                SizeConstants.HALF_FIELD_HEIGHT);
+        final IUnitPath path2 = new MoveToPointThroughTheCenterPath(
+                SizeConstants.HALF_FIELD_WIDTH / 2, SizeConstants.HALF_FIELD_HEIGHT);
         scene.setClickListener(new ClickDetector.IClickDetectorListener() {
             @Override
             public void onClick(final ClickDetector pClickDetector, final int pPointerID, final float pSceneX, final float pSceneY) {
-                IUnitPath path = new MoveToCenterPath();
-                createMovableUnit(mCurrentPlayer, mCurrentUnitKey, (int) pSceneX, (int) pSceneY, path);
+                IPlayer player;
+                IUnitPath path;
+                if (pSceneX < SizeConstants.HALF_FIELD_WIDTH) {
+                    player = mFirstPlayer;
+                    path = path1;
+                } else {
+                    player = mSecondPlayer;
+                    path = path2;
+                }
+                if (player.getUnitsAmount() < player.getUnitsLimit()) {
+                    createMovableUnit(player, mCurrentUnitKey, (int) pSceneX, (int) pSceneY, path);
+                } else {
+                    EventBus.getDefault().post(
+                            new ShowToastEvent(false, R.string.units_capacity_reached));
+                }
             }
         });
     }
 
-    // ===========================================================
-    // Methods for/from SuperClass/Interfaces
-    // ===========================================================
     @Override
     protected void hideSplash() {
-        mCurrentPlayer = mFirstPlayer;
         mCurrentUnitKey = mFirstPlayer.getAlliance().getUnitsIds().first();
         createBounds();
         super.hideSplash();

@@ -277,7 +277,7 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
             @Override
             public void holdClick() {
                 if (PlayersHolder.getPlayer(mPlayerName).getControlType().user()) {
-                    RollingPopupManager.getPopup(ConstructionsPopup.KEY).triggerPopup();
+                    RollingPopupManager.getInstance().getPopup(ConstructionsPopup.KEY).triggerPopup();
                 }
             }
         });

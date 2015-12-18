@@ -39,7 +39,6 @@ import com.gmail.yaroslavlancelot.eafall.game.mission.MissionIntent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.resources.loaders.game.BaseGameObjectsLoader;
-import com.gmail.yaroslavlancelot.eafall.game.scene.hud.BaseGameHud;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 import com.gmail.yaroslavlancelot.eafall.game.touch.ICameraHandler;
 
@@ -120,11 +119,6 @@ public abstract class BaseGameObjectsActivity extends EaFallActivity implements 
     public void finish() {
         pause(true);
         super.finish();
-    }
-
-    @Override
-    protected BaseGameHud createHud() {
-        return new BaseGameHud();
     }
 
     @Override

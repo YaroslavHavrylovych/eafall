@@ -16,8 +16,10 @@ import com.gmail.yaroslavlancelot.eafall.game.events.SharedEvents;
 import com.gmail.yaroslavlancelot.eafall.game.events.periodic.time.GameTime;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
+import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.IRollingPopup;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.RollingPopupManager;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.construction.ConstructionsPopup;
+import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.DescriptionPopup;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.menu.MenuPopup;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.ConstructionPopupButton;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.MenuPopupButton;
@@ -49,7 +51,11 @@ import java.util.List;
 /**
  * In-game HUD.
  * <br/>
- * Customized to handle some not {@link HUD} operations
+ * Customized to handle some not {@link HUD} operations:
+ * <ul>
+ * <li>init's on screen text and hud elements</li>
+ * <li>load's resources</li>
+ * </ul>
  *
  * @author Yaroslav Havrylovych
  */
@@ -78,16 +84,6 @@ public class ClientGameHud extends BaseGameHud {
     // ===========================================================
     // Getter & Setter
     // ===========================================================
-
-    @Override
-    public void setAlpha(final float pAlpha) {
-        super.setAlpha(pAlpha);
-        if (mChildren != null) {
-            for (IEntity child : mChildren) {
-                child.setAlpha(pAlpha);
-            }
-        }
-    }
 
     @Override
     public void attachChild(final IEntity pEntity) throws IllegalStateException {
@@ -163,14 +159,20 @@ public class ClientGameHud extends BaseGameHud {
     }
 
     private void initPopups(IPlayer player, Camera camera, VertexBufferObjectManager vboManager) {
-        RollingPopupManager.init(player.getName(), this, camera, vboManager);
+        RollingPopupManager.init(this, camera, vboManager);
+        //description
+        IRollingPopup popup = new DescriptionPopup(this, camera, vboManager);
+        RollingPopupManager.getInstance().addPopup(DescriptionPopup.KEY, popup);
+        // buildings
+        popup = new ConstructionsPopup(player.getName(), this, camera, vboManager);
+        RollingPopupManager.getInstance().addPopup(ConstructionsPopup.KEY, popup);
         //constructions button
         ConstructionPopupButton button = new ConstructionPopupButton(vboManager);
         button.setOnClickListener(new ButtonSprite.OnClickListener() {
             @Override
             public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
                 if (GameState.isResumed()) {
-                    RollingPopupManager.getPopup(ConstructionsPopup.KEY).triggerPopup();
+                    RollingPopupManager.getInstance().getPopup(ConstructionsPopup.KEY).triggerPopup();
                 }
             }
         });
@@ -221,7 +223,7 @@ public class ClientGameHud extends BaseGameHud {
         menuButton.setOnClickListener(new ButtonSprite.OnClickListener() {
             @Override
             public void onClick(final ButtonSprite pButtonSprite, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-                RollingPopupManager.getPopup(MenuPopup.KEY).showPopup();
+                RollingPopupManager.getInstance().getPopup(MenuPopup.KEY).showPopup();
             }
         });
         registerTouchArea(menuButton);

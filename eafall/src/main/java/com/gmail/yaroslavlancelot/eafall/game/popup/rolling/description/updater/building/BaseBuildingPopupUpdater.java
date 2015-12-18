@@ -12,7 +12,6 @@ import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.descriptio
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.updater.BasePopupUpdater;
-import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.TextButton;
 import com.gmail.yaroslavlancelot.eafall.general.EbSubscribersHolder;
 import com.gmail.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 
@@ -179,11 +178,9 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
     public static void loadFonts(FontManager fontManager, TextureManager textureManager) {
         //amount font
         AmountDrawer.loadFonts(fontManager, textureManager);
-        TextButton.loadFonts(fontManager, textureManager);
     }
 
     public static void loadResources(Context context, TextureManager textureManager) {
-        TextButton.loadResources(context, textureManager);
         AmountDrawer.loadResources(context, textureManager);
     }
 }

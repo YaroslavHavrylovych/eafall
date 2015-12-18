@@ -166,6 +166,7 @@
     <string name="two">Two!</string>
     <string name="one">One!</string>
     <string name="start">Go!</string>
+    <string name="units_capacity_reached">Units capacity reached</string>
 
     <!-- network game -->
     <string name="create_game">Create game</string>
@@ -227,6 +228,9 @@
     <!-- /fire rate -->
 
     <!-- description popup -->
+
+    <!-- sandbox -->
+    <string name="sandbox_select">Select</string>
 
     <!-- buildings -->
     <string name="description_build_button">Build</string>

@@ -8,6 +8,7 @@ import com.gmail.yaroslavlancelot.eafall.EaFallApplication;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.SplashScene;
+import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.TextButton;
 import com.gmail.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 
 import org.andengine.opengl.font.FontFactory;
@@ -61,6 +62,12 @@ public abstract class BaseResourceLoader implements IResourcesLoader {
     public void loadSplashImages(TextureManager textureManager,
                                  VertexBufferObjectManager vertexBufferObjectManager) {
         SplashScene.loadResources(EaFallApplication.getContext(), textureManager);
+    }
+
+    @Override
+    public void loadFonts(TextureManager textureManager, FontManager fontManager) {
+        //button
+        TextButton.loadFonts(fontManager, textureManager);
     }
 
     @Override
