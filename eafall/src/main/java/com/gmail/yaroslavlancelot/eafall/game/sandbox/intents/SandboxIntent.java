@@ -14,6 +14,9 @@ import com.gmail.yaroslavlancelot.eafall.game.sandbox.activity.SandboxActivity;
  * @author Yaroslav Havrylovych
  */
 public class SandboxIntent extends MissionIntent {
+    public static final String FIRST_PLAYER_NAME = StringConstants.FIRST_PLAYER_CONTROL_BEHAVIOUR_TYPE;
+    public static final String SECOND_PLAYER_NAME = StringConstants.SECOND_PLAYER_CONTROL_BEHAVIOUR_TYPE;
+
     public SandboxIntent(Class activityClass) {
         super(activityClass);
         putExtra(ResourceFactory.RESOURCE_LOADER, ResourceFactory.TypeResourceLoader.SANDBOX);

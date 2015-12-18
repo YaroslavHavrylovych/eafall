@@ -19,4 +19,8 @@ public class UnitByBuildingDescriptionShowEvent {
     public String getPlayerName() {
         return mPlayerName;
     }
+
+    public void setId(BuildingId id) {
+        mUnitId = id;
+    }
 }

@@ -32,12 +32,6 @@ public class CampaignResourceLoader extends BaseResourceLoader {
     }
 
     @Override
-    public void loadFonts(TextureManager textureManager, FontManager fontManager) {
-        //button
-        TextButton.loadFonts(fontManager, textureManager);
-    }
-
-    @Override
     public void unloadFonts(final FontManager fontManager) {
         throw new UnsupportedOperationException("fonts unloading not supported in campaign");
     }

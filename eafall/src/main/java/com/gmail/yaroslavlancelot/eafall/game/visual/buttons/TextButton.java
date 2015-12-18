@@ -23,7 +23,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /** for using in popup (generally for buildings) */
 public class TextButton extends ButtonSprite {
-    private final static String sFontSizeKey = "game_button_phont_size_key";
+    private final static String sFontSizeKey = "game_button_font_size_key";
     private final static int sFontSize = 45;
     private final static int padding = 30;
     private Text mText;

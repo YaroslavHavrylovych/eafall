@@ -17,11 +17,11 @@ import com.gmail.yaroslavlancelot.eafall.game.entity.health.PlayerHealthBar;
 import com.gmail.yaroslavlancelot.eafall.game.entity.health.UnitHealthBar;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
-import com.gmail.yaroslavlancelot.eafall.game.popup.GameOverPopup;
 import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.RollingPopupManager;
 import com.gmail.yaroslavlancelot.eafall.game.resources.BaseResourceLoader;
 import com.gmail.yaroslavlancelot.eafall.game.scene.hud.ClientGameHud;
 import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.MenuPopupButton;
+import com.gmail.yaroslavlancelot.eafall.game.visual.buttons.TextButton;
 
 import org.andengine.entity.sprite.batch.SpriteGroup;
 import org.andengine.opengl.font.FontManager;
@@ -73,15 +73,9 @@ public abstract class BaseGameObjectsLoader extends BaseResourceLoader {
         loadExplosions(textureManager, vertexBufferObjectManager);
         //other
         Context context = EaFallApplication.getContext();
+        TextButton.loadResources(context, textureManager);
         RollingPopupManager.loadResource(context, textureManager);
         MenuPopupButton.loadResources(context, textureManager);
-    }
-
-    @Override
-    public void loadFonts(TextureManager textureManager, FontManager fontManager) {
-        ClientGameHud.loadFonts(fontManager, textureManager);
-        RollingPopupManager.loadFonts(fontManager, textureManager);
-        GameOverPopup.loadFonts(fontManager, textureManager);
     }
 
     @Override
@@ -92,6 +86,13 @@ public abstract class BaseGameObjectsLoader extends BaseResourceLoader {
     @Override
     public void unloadImages(final TextureManager textureManager) {
         throw new UnsupportedOperationException("resources unloading not supported in the game");
+    }
+
+    @Override
+    public void loadFonts(TextureManager textureManager, FontManager fontManager) {
+        super.loadFonts(textureManager, fontManager);
+        RollingPopupManager.loadFonts(fontManager, textureManager);
+        ClientGameHud.loadFonts(fontManager, textureManager);
     }
 
     protected abstract void loadAllianceSpecificResources(TextureManager textureManager);

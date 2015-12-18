@@ -4,10 +4,12 @@ import com.gmail.yaroslavlancelot.eafall.game.configuration.mission.MissionConfi
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.camera.hud.HUD;
+import org.andengine.entity.IEntity;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /**
- * Custom HUD used in the game (to unify the work)
+ * Custom HUD used in the game (to unify the work).
+ * Custom setAlpha which  passed to children.
  *
  * @author Yaroslav Havrylovych
  */
@@ -31,6 +33,15 @@ public class BaseGameHud extends HUD {
     // ===========================================================
     // Methods for/from SuperClass/Interfaces
     // ===========================================================
+    @Override
+    public void setAlpha(final float pAlpha) {
+        super.setAlpha(pAlpha);
+        if (mChildren != null) {
+            for (IEntity child : mChildren) {
+                child.setAlpha(pAlpha);
+            }
+        }
+    }
 
     // ===========================================================
     // Methods

@@ -13,10 +13,13 @@ import com.gmail.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.PlayersHolder;
-import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.RollingPopupManager;
+import com.gmail.yaroslavlancelot.eafall.game.popup.GameOverPopup;
+import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.construction.ConstructionsPopup;
+import com.gmail.yaroslavlancelot.eafall.game.popup.rolling.description.DescriptionPopup;
 import com.gmail.yaroslavlancelot.eafall.game.scene.hud.ClientGameHud;
 
 import org.andengine.entity.sprite.batch.SpriteGroup;
+import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
@@ -41,8 +44,16 @@ public class ClientResourcesLoader extends BaseGameObjectsLoader {
         ClientGameHud.loadResource(EaFallApplication.getContext(), textureManager);
         //other
         Context context = EaFallApplication.getContext();
-        RollingPopupManager.loadResource(context, textureManager);
+        ConstructionsPopup.loadResource(context, textureManager);
+        DescriptionPopup.loadResources(context, textureManager);
         ClientIncomeHandler.loadImages(textureManager);
+    }
+
+    @Override
+    public void loadFonts(final TextureManager textureManager, final FontManager fontManager) {
+        super.loadFonts(textureManager, fontManager);
+        DescriptionPopup.loadFonts(fontManager, textureManager);
+        GameOverPopup.loadFonts(fontManager, textureManager);
     }
 
     @Override

@@ -29,6 +29,9 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import de.greenrobot.event.EventBus;
 
 /**
+ * Game menu main popup which contains pause, missions description, damage/armor popup,
+ * settings and exit buttons.
+ *
  * @author Yaroslav Havrylovych
  */
 public class MenuPopup extends RollingPopup {
@@ -168,10 +171,11 @@ public class MenuPopup extends RollingPopup {
         float width = SizeConstants.MENU_POPUP_BUTTON_WIDTH;
         float popup_height = SizeConstants.MENU_POPUP_HEIGHT;
         float popup_width = SizeConstants.MENU_POPUP_WIDTH;
+        ITiledTextureRegion tiledTextureRegion = (ITiledTextureRegion) TextureRegionHolder
+                .getRegion(StringConstants.FILE_MENU_POPUP_BUTTON);
         TextButton button = new TextButton(popup_width / 2,
                 popup_height - SizeConstants.MENU_POPUP_FIRST_BUTTON_Y - height / 2 - position * height,
-                width, height, (ITiledTextureRegion) TextureRegionHolder
-                .getRegion(StringConstants.FILE_MENU_POPUP_BUTTON), vboManager);
+                width, height, tiledTextureRegion, vboManager);
         button.setFixedSize(true);
         button.setText(LocaleImpl.getInstance().getStringById(stringId));
         return button;

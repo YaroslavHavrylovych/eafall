@@ -9,9 +9,13 @@ import com.gmail.yaroslavlancelot.eafall.game.constant.CollisionCategories;
 import com.gmail.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.IUnitPath;
 import com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.implementation.MoveToPointThroughTheCenterPath;
+import com.gmail.yaroslavlancelot.eafall.game.events.SharedEvents;
 import com.gmail.yaroslavlancelot.eafall.game.events.aperiodic.ingame.ShowToastEvent;
 import com.gmail.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.gmail.yaroslavlancelot.eafall.game.player.Player;
+import com.gmail.yaroslavlancelot.eafall.game.sandbox.popup.SandboxDescriptionPopup;
+import com.gmail.yaroslavlancelot.eafall.game.scene.hud.BaseGameHud;
+import com.gmail.yaroslavlancelot.eafall.game.scene.hud.SandboxGameHud;
 import com.gmail.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 
 import org.andengine.extension.physics.box2d.PhysicsFactory;
@@ -43,14 +47,34 @@ public class SandboxActivity extends BaseGameObjectsActivity {
     // ===========================================================
 
     @Override
+    protected BaseGameHud createHud() {
+        return new SandboxGameHud() {
+            @Override
+            protected int getCurrentUnitId() {
+                return mCurrentUnitKey;
+            }
+        };
+    }
+
+    @Override
     public void onResourcesLoaded() {
         super.onResourcesLoaded();
         hideSplash();
     }
 
+    // ===========================================================
+    // Methods for/from SuperClass/Interfaces
+    // ===========================================================
+
     @Override
     protected void initWorkingScene() {
         super.initWorkingScene();
+        SharedEvents.addCallback(new SharedEvents.DataChangedCallback(SandboxDescriptionPopup.SANDBOX_UNIT_CHANGED_KEY) {
+            @Override
+            public void callback(final String key, final Object value) {
+                mCurrentUnitKey = (Integer) value;
+            }
+        });
         EaFallScene scene = mSceneManager.getWorkingScene();
         final IUnitPath path1 = new MoveToPointThroughTheCenterPath(
                 SizeConstants.HALF_FIELD_WIDTH + SizeConstants.HALF_FIELD_WIDTH / 2,
@@ -79,9 +103,6 @@ public class SandboxActivity extends BaseGameObjectsActivity {
         });
     }
 
-    // ===========================================================
-    // Methods for/from SuperClass/Interfaces
-    // ===========================================================
     @Override
     protected void hideSplash() {
         mCurrentUnitKey = mFirstPlayer.getAlliance().getUnitsIds().first();
