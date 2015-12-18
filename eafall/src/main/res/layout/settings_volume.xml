@@ -33,7 +33,7 @@
             android:layout_weight="510"
             android:layout_height="match_parent">
 
-            <com.gmail.yaroslavlancelot.eafall.android.view.MagicTextView
+            <com.yaroslavlancelot.eafall.android.view.MagicTextView
                 android:id="@+id/volume_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -80,7 +80,7 @@
                     android:background="@drawable/volume_increase_selector"/>
             </LinearLayout>
 
-            <com.gmail.yaroslavlancelot.eafall.android.view.PercentLight
+            <com.yaroslavlancelot.eafall.android.view.PercentLight
                 android:id="@+id/light"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
