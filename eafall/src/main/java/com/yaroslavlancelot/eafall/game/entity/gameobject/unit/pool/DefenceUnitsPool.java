@@ -1,6 +1,5 @@
 package com.yaroslavlancelot.eafall.game.entity.gameobject.unit.pool;
 
-import com.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.yaroslavlancelot.eafall.game.entity.AfterInitializationPool;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.unit.defence.DefenceUnit;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.unit.defence.DefenceUnitBuilder;
@@ -19,12 +18,12 @@ public class DefenceUnitsPool extends AfterInitializationPool<DefenceUnit> {
 
     @Override
     protected DefenceUnit allocatePoolItem() {
-        LoggerHelper.printVerboseMessage(TAG, "New stat. unit allocated. Available items count=" + getAvailableItems());
+        //TODO logger was here
         DefenceUnit defenceUnit = new DefenceUnit(mDefenceUnitBuilder) {
             @Override
             protected void onDestroyed() {
                 super.onDestroyed();
-                LoggerHelper.printVerboseMessage(TAG, "Stationary unit recycled. Available items count=" + getAvailableItems());
+                //TODO logger was here
                 recycle(this);
             }
         };

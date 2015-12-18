@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.yaroslavlancelot.eafall.R;
-import com.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.yaroslavlancelot.eafall.android.activities.BaseNonGameActivity;
 import com.yaroslavlancelot.eafall.game.alliance.imperials.Imperials;
 import com.yaroslavlancelot.eafall.game.alliance.rebels.Rebels;
@@ -139,7 +138,7 @@ public class ServerGameCreationActivity extends BaseNonGameActivity implements P
     }
 
     private void initDiscoveryServer() {
-        LoggerHelper.printDebugMessage(TAG, "init discovery server");
+        //TODO logger was here
         mServerIp = WifiUtils.getWifiIPv4AddressRaw(this);
 
         mSocketDiscoveryServer = new SocketDiscoveryServer(mServerIp);
@@ -150,7 +149,7 @@ public class ServerGameCreationActivity extends BaseNonGameActivity implements P
         String ipValue = getConvertedServerIp(mServerIp);
         mServerIpTextView.setText(ipValue);
         mServerIpTextView.setVisibility(View.VISIBLE);
-        LoggerHelper.printDebugMessage(TAG, "server ip = " + ipValue);
+        //TODO logger was here
     }
 
     private String getConvertedServerIp(byte[] serverIp) {

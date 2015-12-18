@@ -1,6 +1,5 @@
 package com.yaroslavlancelot.eafall.game.entity.gameobject;
 
-import com.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.yaroslavlancelot.eafall.game.audio.LimitedSoundWrapper;
 import com.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.yaroslavlancelot.eafall.game.constant.SizeConstants;
@@ -55,8 +54,7 @@ public abstract class GameObject extends BodiedSprite {
 
     protected GameObject(float x, float y, float width, float height, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
         super(x, y, width, height, textureRegion, vertexBufferObjectManager);
-        LoggerHelper.printInformationMessage(LoggerHelper.PERFORMANCE_TAG,
-                "objects amount: " + sGameObjectsTracker.get());
+        //TODO logger was here
     }
 
     public long getObjectUniqueId() {

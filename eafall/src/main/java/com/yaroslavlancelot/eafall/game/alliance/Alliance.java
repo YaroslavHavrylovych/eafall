@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.SparseArray;
 
 import com.yaroslavlancelot.eafall.EaFallApplication;
-import com.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
@@ -206,7 +205,7 @@ public abstract class Alliance implements IAlliance {
         try {
             ret = new Persister().read(cls, context.getResources().openRawResource(rawId));
         } catch (Exception e) {
-            LoggerHelper.printErrorMessage(TAG, "Reading file exception = " + e.getMessage());
+            //TODO logger was here
         }
         return ret;
     }

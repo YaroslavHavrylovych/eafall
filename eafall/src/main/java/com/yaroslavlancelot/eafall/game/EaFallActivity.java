@@ -6,7 +6,6 @@ import android.widget.Toast;
 
 import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.R;
-import com.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.yaroslavlancelot.eafall.android.dialog.ExitConfirmationDialog;
 import com.yaroslavlancelot.eafall.game.audio.BackgroundMusic;
 import com.yaroslavlancelot.eafall.game.audio.SoundFactory;
@@ -73,7 +72,7 @@ public abstract class EaFallActivity extends BaseGameActivity {
 
     @Override
     public EngineOptions onCreateEngineOptions() {
-        LoggerHelper.methodInvocation(TAG, "onCreateEngineOptions");
+        //TODO logger was here
         GameState.resetState();
         //pre-in-game
         GameObject.clearCounter();
@@ -118,7 +117,7 @@ public abstract class EaFallActivity extends BaseGameActivity {
 
     @Override
     public void onCreateResources(OnCreateResourcesCallback onCreateResourcesCallback) {
-        LoggerHelper.methodInvocation(TAG, "onCreateResources");
+        //TODO logger was here
 
         mResourcesLoader.loadProfilingFonts(getTextureManager(), getFontManager());
         mResourcesLoader.loadSplashImages(getTextureManager(), getVertexBufferObjectManager());
@@ -130,7 +129,7 @@ public abstract class EaFallActivity extends BaseGameActivity {
 
     @Override
     public void onCreateScene(final OnCreateSceneCallback onCreateSceneCallback) {
-        LoggerHelper.methodInvocation(TAG, "onCreateScene");
+        //TODO logger was here
         mSceneManager.initSplashScene();
         onCreateSceneCallback.onCreateSceneFinished(mSceneManager.getSplashScene());
     }
@@ -243,8 +242,7 @@ public abstract class EaFallActivity extends BaseGameActivity {
      */
     protected void checkedGameClose() {
         boolean resourcesLoaded = GameState.isResourcesLoaded();
-        LoggerHelper.printVerboseMessage(TAG,
-                "back button click. Resources loaded=" + resourcesLoaded);
+        //TODO logger was here
         if (GameState.isGameEnded()) {
             finish();
         } else if (!resourcesLoaded) {

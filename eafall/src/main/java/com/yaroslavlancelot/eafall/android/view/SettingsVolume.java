@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.R;
-import com.yaroslavlancelot.eafall.android.LoggerHelper;
 
 /**
  * Settings float element which have own seek-bar and a checkbox. The element can be disabled
@@ -146,7 +145,7 @@ public class SettingsVolume extends LinearLayout {
 
     /** used in constructor to initialize the view */
     private void _init_() {
-        LoggerHelper.methodInvocation(getClass().getName(), "_init_");
+        //TODO logger was here
         View view = inflate(getContext(), R.layout.settings_volume, this);
         mLight = (PercentLight) view.findViewById(R.id.light);
         mIncreaseButton = (Button) view.findViewById(R.id.increase);

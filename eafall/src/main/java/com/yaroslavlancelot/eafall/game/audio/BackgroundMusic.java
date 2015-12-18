@@ -3,7 +3,6 @@ package com.yaroslavlancelot.eafall.game.audio;
 import android.content.Context;
 
 import com.yaroslavlancelot.eafall.EaFallApplication;
-import com.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.yaroslavlancelot.eafall.game.configuration.game.ApplicationSettings;
 
 import org.andengine.audio.music.Music;
@@ -40,7 +39,7 @@ public class BackgroundMusic {
         try {
             return MusicFactory.createMusicFromAsset(musicManager, context, path);
         } catch (IOException e) {
-            LoggerHelper.printErrorMessage(TAG, "can't instantiate music");
+            //TODO logger was here
         }
         return null;
     }

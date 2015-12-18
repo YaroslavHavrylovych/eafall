@@ -12,7 +12,6 @@ import android.view.View;
 
 import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.R;
-import com.yaroslavlancelot.eafall.android.LoggerHelper;
 
 import org.andengine.util.adt.map.SparseFloatArray;
 import org.andengine.util.math.MathUtils;
@@ -96,7 +95,7 @@ public class PercentLight extends View {
 
     /** class initialization */
     private void _init_() {
-        LoggerHelper.methodInvocation(getClass().getName(), "_init_");
+        //TODO logger was here
         setWillNotDraw(false);
         mPartlyDrawable = new PartlyDrawable();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {

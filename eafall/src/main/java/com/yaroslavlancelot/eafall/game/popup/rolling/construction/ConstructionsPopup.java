@@ -3,7 +3,6 @@ package com.yaroslavlancelot.eafall.game.popup.rolling.construction;
 import android.content.Context;
 import android.util.SparseArray;
 
-import com.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
@@ -109,7 +108,7 @@ public class ConstructionsPopup extends RollingPopup {
         item.setOnClickListener(new TouchHelper.OnClickListener() {
             @Override
             public void onClick() {
-                LoggerHelper.printDebugMessage(TAG, "showPopup building description");
+                //TODO logger was here
                 mStateChangingListener.setBuildingId(buildingId);
                 setStateChangeListener(mStateChangingListener);
                 hidePopup();

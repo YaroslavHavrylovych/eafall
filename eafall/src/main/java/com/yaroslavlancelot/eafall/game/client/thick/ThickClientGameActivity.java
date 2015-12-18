@@ -1,6 +1,5 @@
 package com.yaroslavlancelot.eafall.game.client.thick;
 
-import com.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.yaroslavlancelot.eafall.game.client.ClientGameActivity;
 import com.yaroslavlancelot.eafall.game.constant.CollisionCategories;
 import com.yaroslavlancelot.eafall.game.constant.SizeConstants;
@@ -33,7 +32,7 @@ public abstract class ThickClientGameActivity extends ClientGameActivity {
 
     /** bound for objects so they can't get out of the screen */
     private void createBounds() {
-        LoggerHelper.methodInvocation(TAG, "createBounds");
+        //TODO logger was here
         PhysicsFactory.createLineBody(
                 mPhysicsWorld, -1, -1, -1, SizeConstants.GAME_FIELD_HEIGHT + 1,
                 CollisionCategories.STATIC_BODY_FIXTURE_DEF);

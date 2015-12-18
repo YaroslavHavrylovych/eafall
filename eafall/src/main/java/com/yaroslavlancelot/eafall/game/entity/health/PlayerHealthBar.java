@@ -1,7 +1,6 @@
 package com.yaroslavlancelot.eafall.game.entity.health;
 
 import com.yaroslavlancelot.eafall.EaFallApplication;
-import com.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder;
 import com.yaroslavlancelot.eafall.game.constant.SizeConstants;
@@ -169,8 +168,7 @@ public class PlayerHealthBar implements IHealthBar {
                 build = true;
             } catch (ITextureAtlasBuilder.TextureAtlasBuilderException e) {
                 //TODO is it possible?
-                LoggerHelper.printErrorMessage(TAG,
-                        "failed to build texture atlas for player health");
+                //TODO logger was here
             }
         } while (!build);
         textureAtlas.load();

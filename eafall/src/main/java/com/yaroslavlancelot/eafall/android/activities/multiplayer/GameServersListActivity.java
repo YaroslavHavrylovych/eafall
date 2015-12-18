@@ -11,7 +11,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.yaroslavlancelot.eafall.R;
-import com.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.yaroslavlancelot.eafall.android.activities.BaseNonGameActivity;
 import com.yaroslavlancelot.eafall.network.client.callbacks.PreGameStartClient;
 import com.yaroslavlancelot.eafall.network.client.connector.GameServerConnector;
@@ -134,7 +133,7 @@ public class GameServersListActivity extends BaseNonGameActivity implements
                         mServerConnectorMap.put(ipAddress, serverConnector);
                     }
                 } catch (final Throwable t) {
-                    LoggerHelper.printErrorMessage(TAG, t.toString());
+                    //TODO logger was here
                 }
             }
         }).start();
@@ -214,12 +213,12 @@ public class GameServersListActivity extends BaseNonGameActivity implements
 
     @Override
     public void onStarted(final ServerConnector<SocketConnection> serverConnector) {
-        LoggerHelper.printInformationMessage(TAG, "CLIENT: Connected to server.");
+        //TODO logger was here
     }
 
     @Override
     public void onTerminated(final ServerConnector<SocketConnection> serverConnector) {
-        LoggerHelper.printInformationMessage(TAG, "Disconnected from Server.");
+        //TODO logger was here
     }
 
     @Override
@@ -252,20 +251,20 @@ public class GameServersListActivity extends BaseNonGameActivity implements
         IDiscoveryData.DefaultDiscoveryData discoveryData = (IDiscoveryData.DefaultDiscoveryData) pDiscoveryData;
         try {
             final String ipAddressAsString = IPUtils.ipAddressToString(discoveryData.getServerIP());
-            LoggerHelper.printInformationMessage(TAG, "DiscoveryClient: Server discovered at: " + ipAddressAsString + ":" + discoveryData.getServerPort());
+            //TODO logger was here
             initClient(ipAddressAsString, discoveryData.getServerPort());
         } catch (final UnknownHostException e) {
-            LoggerHelper.printErrorMessage(TAG, "DiscoveryClient: IPException: " + e);
+            //TODO logger was here
         }
     }
 
     @Override
     public void onTimeout(final SocketServerDiscoveryClient socketServerDiscoveryClient, final SocketTimeoutException socketTimeoutException) {
-        LoggerHelper.printErrorMessage(TAG, "DiscoveryClient: Timeout: " + socketTimeoutException);
+        //TODO logger was here
     }
 
     @Override
     public void onException(final SocketServerDiscoveryClient socketServerDiscoveryClient, final Throwable throwable) {
-        LoggerHelper.printErrorMessage(TAG, "DiscoveryClient: Exception: " + throwable);
+        //TODO logger was here
     }
 }

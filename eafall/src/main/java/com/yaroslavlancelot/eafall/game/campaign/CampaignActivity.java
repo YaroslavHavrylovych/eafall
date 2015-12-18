@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.R;
-import com.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.yaroslavlancelot.eafall.android.StartableIntent;
 import com.yaroslavlancelot.eafall.game.EaFallActivity;
 import com.yaroslavlancelot.eafall.game.audio.LimitedSoundWrapper;
@@ -56,14 +55,14 @@ public class CampaignActivity extends EaFallActivity {
 
     @Override
     public EngineOptions onCreateEngineOptions() {
-        LoggerHelper.methodInvocation(this.toString(), "onCreateEngineOptions");
+        //TODO logger was here
         mCampaignFileName = getIntent().getExtras().getString(CampaignIntent.CAMPAIGN_FILE_NAME);
         return super.onCreateEngineOptions();
     }
 
     @Override
     public void onCreateResources(final OnCreateResourcesCallback onCreateResourcesCallback) {
-        LoggerHelper.methodInvocation(this.toString(), "onCreateResources");
+        //TODO logger was here
         super.onCreateResources(onCreateResourcesCallback);
         // we loading sounds and music here and
         // wouldn't reload this sounds when reloading the campaign screen
@@ -73,7 +72,7 @@ public class CampaignActivity extends EaFallActivity {
 
     @Override
     public void onPopulateScene(Scene scene, OnPopulateSceneCallback onPopulateSceneCallback) {
-        LoggerHelper.methodInvocation(this.toString(), "onPopulateScene");
+        //TODO logger was here
         super.onPopulateScene(scene, onPopulateSceneCallback);
     }
 
@@ -93,9 +92,9 @@ public class CampaignActivity extends EaFallActivity {
 
     @Override
     protected void loadResources() {
-        LoggerHelper.printDebugMessage(TAG, "campaign file name = " + mCampaignFileName);
+        //TODO logger was here
         mCampaignFileLoader = loadObjects(mCampaignFileName, CampaignFileLoader.class);
-        LoggerHelper.printDebugMessage(TAG, "mCampaignFileLoader = " + mCampaignFileLoader);
+        //TODO logger was here
         //adding resources
         mResourcesLoader.addImage(mCampaignFileLoader.background,
                 SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT);
@@ -114,21 +113,21 @@ public class CampaignActivity extends EaFallActivity {
 
     @Override
     public void onResourcesLoaded() {
-        LoggerHelper.methodInvocation(this.toString(), "onResourcesLoaded");
+        //TODO logger was here
         super.onResourcesLoaded();
         hideSplash();
     }
 
     @Override
     protected void initWorkingScene() {
-        LoggerHelper.methodInvocation(this.toString(), "initWorkingScene");
+        //TODO logger was here
         mSceneManager.initWorkingScene(mCamera, mCampaignFileLoader.parallax_background);
         onPopulateWorkingScene(mSceneManager.getWorkingScene());
     }
 
     @Override
     protected void onPopulateWorkingScene(final EaFallScene scene) {
-        LoggerHelper.methodInvocation(this.toString(), "onPopulateWorkingScene");
+        //TODO logger was here
         VertexBufferObjectManager vertexManager = getVertexBufferObjectManager();
         //background
         scene.setBackground(mCampaignFileLoader.background, vertexManager);
@@ -147,7 +146,7 @@ public class CampaignActivity extends EaFallActivity {
 
     @Override
     protected void onShowWorkingScene() {
-        LoggerHelper.methodInvocation(this.toString(), "onShowWorkingScene");
+        //TODO logger was here
     }
 
     @Override
@@ -158,7 +157,7 @@ public class CampaignActivity extends EaFallActivity {
     private List<Sprite> populateObjects(EaFallScene scene, VertexBufferObjectManager vertexManager) {
         int size = mCampaignFileLoader.getObjectsList().size();
         List<Sprite> elementsList = new ArrayList<>(size);
-        LoggerHelper.printVerboseMessage(TAG, "campaign loading objects amount = " + size);
+        //TODO logger was here
         for (ObjectDataLoader dataLoader : mCampaignFileLoader.getObjectsList()) {
             PositionLoader position = dataLoader.position;
             Sprite sprite = new Sprite(position.x, position.y,
@@ -180,14 +179,13 @@ public class CampaignActivity extends EaFallActivity {
     private List<Sprite> populateCampaigns(EaFallScene scene, VertexBufferObjectManager vertexManager) {
         List<Sprite> elementsList = new ArrayList<>(mCampaignFileLoader.getCampaignsList().size());
         for (CampaignDataLoader dataLoader : mCampaignFileLoader.getCampaignsList()) {
-            LoggerHelper.printVerboseMessage(TAG, "campaign loading element=" + dataLoader.name);
+            //TODO logger was here
             PositionLoader position = dataLoader.position;
             Sprite sprite = new Sprite(position.x, position.y,
                     TextureRegionHolder.getRegion(dataLoader.picture), vertexManager);
             sprite.setTag(dataLoader.id);
             if (dataLoader.rotation != null) {
-                LoggerHelper.printVerboseMessage(TAG, "campaign element=" + dataLoader.name
-                        + ", rotation = " + dataLoader.rotation);
+                //TODO logger was here
                 sprite.registerEntityModifier(new InstantRotationModifier(dataLoader.rotation));
             }
             elementsList.add(sprite);
@@ -227,11 +225,11 @@ public class CampaignActivity extends EaFallActivity {
     }
 
     private void updateCampaignActivity(final CampaignDataLoader campaignDataLoader) {
-        LoggerHelper.methodInvocation(this.toString(), "updateCampaignActivity");
+        //TODO logger was here
         startAsyncResourceLoading(new Runnable() {
             @Override
             public void run() {
-                LoggerHelper.methodInvocation(this.toString(), "update campaign new thread started");
+                //TODO logger was here
                 mResourcesLoader.loadSplashImages(getTextureManager(), getVertexBufferObjectManager());
                 mSceneManager.initSplashScene();
                 mSceneManager.showSplash();
@@ -265,7 +263,7 @@ public class CampaignActivity extends EaFallActivity {
         try {
             ret = new Persister().read(cls, context.getAssets().open(path));
         } catch (Exception e) {
-            LoggerHelper.printErrorMessage(TAG, "File read exception = " + e.getMessage());
+            //TODO logger was here
         }
         return ret;
     }

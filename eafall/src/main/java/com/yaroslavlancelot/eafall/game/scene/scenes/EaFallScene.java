@@ -1,6 +1,5 @@
 package com.yaroslavlancelot.eafall.game.scene.scenes;
 
-import com.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.yaroslavlancelot.eafall.game.audio.SoundOperationsImpl;
 import com.yaroslavlancelot.eafall.game.camera.EaFallCamera;
 import com.yaroslavlancelot.eafall.game.constant.SizeConstants;
@@ -75,7 +74,7 @@ public class EaFallScene extends Scene {
      * @param camera camera to pass to the scene touch listener
      */
     public void initGameSceneHandler(EaFallCamera camera) {
-        LoggerHelper.methodInvocation(TAG, "initGameSceneHandler");
+        //TODO logger was here
         /* main scene touch listener */
         mGameSceneHandler = new GameSceneHandler(camera) {
             private float mPreviousZoomFactor = MIN_ZOOM_FACTOR;

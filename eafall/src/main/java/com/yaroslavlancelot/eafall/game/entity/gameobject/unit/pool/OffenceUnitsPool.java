@@ -1,6 +1,5 @@
 package com.yaroslavlancelot.eafall.game.entity.gameobject.unit.pool;
 
-import com.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.yaroslavlancelot.eafall.game.entity.AfterInitializationPool;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.OffenceUnit;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.OffenceUnitBuilder;
@@ -20,12 +19,12 @@ public class OffenceUnitsPool extends AfterInitializationPool<OffenceUnit> {
 
     @Override
     protected OffenceUnit allocatePoolItem() {
-        LoggerHelper.printVerboseMessage(TAG, "New offence unit allocated. Available items count=" + getAvailableItems());
+        //TODO logger was here
         OffenceUnit offenceUnit = new OffenceUnit(mOffenceUnitBuilder) {
             @Override
             protected void onDestroyed() {
                 super.onDestroyed();
-                LoggerHelper.printVerboseMessage(TAG, "Movable unit recycled. Available items count=" + getAvailableItems());
+                //TODO logger was here
                 recycle(this);
             }
         };

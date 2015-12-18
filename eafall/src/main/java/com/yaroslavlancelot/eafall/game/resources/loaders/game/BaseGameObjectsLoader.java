@@ -3,7 +3,6 @@ package com.yaroslavlancelot.eafall.game.resources.loaders.game;
 import android.content.Context;
 
 import com.yaroslavlancelot.eafall.EaFallApplication;
-import com.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.yaroslavlancelot.eafall.game.alliance.IAlliance;
 import com.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder;
@@ -163,8 +162,7 @@ public abstract class BaseGameObjectsLoader extends BaseResourceLoader {
                 build = true;
             } catch (ITextureAtlasBuilder.TextureAtlasBuilderException e) {
                 //TODO is it possible?
-                LoggerHelper.printErrorMessage(BaseGameObjectsLoader.this.toString(),
-                        "failed to build texture atlas for player health");
+                //TODO logger was here
             }
         } while (!build);
         buildableTextureAtlas.load();

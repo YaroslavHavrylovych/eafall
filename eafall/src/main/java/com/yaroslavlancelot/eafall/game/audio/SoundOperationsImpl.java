@@ -3,7 +3,6 @@ package com.yaroslavlancelot.eafall.game.audio;
 import android.content.Context;
 
 import com.yaroslavlancelot.eafall.EaFallApplication;
-import com.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.yaroslavlancelot.eafall.game.configuration.game.ApplicationSettings;
 import com.yaroslavlancelot.eafall.game.touch.ICameraHandler;
 
@@ -96,7 +95,7 @@ public class SoundOperationsImpl implements SoundOperations {
             return new LimitedSoundWrapper(SoundFactory.createSoundFromAsset(soundManager, context,
                     path));
         } catch (IOException e) {
-            LoggerHelper.printErrorMessage(TAG, "can't instantiate sounds");
+            //TODO logger was here
         }
         return null;
     }

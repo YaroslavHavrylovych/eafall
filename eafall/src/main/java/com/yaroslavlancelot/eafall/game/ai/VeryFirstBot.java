@@ -1,6 +1,5 @@
 package com.yaroslavlancelot.eafall.game.ai;
 
-import com.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.yaroslavlancelot.eafall.game.GameState;
 import com.yaroslavlancelot.eafall.game.alliance.IAlliance;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
@@ -37,7 +36,7 @@ public class VeryFirstBot implements Runnable {
     private final IPlayer mBotPlayer;
 
     public VeryFirstBot(IPlayer botPlayer) {
-        LoggerHelper.methodInvocation(TAG, "VeryFirstBot");
+        //TODO logger was here
         mBotPlayer = botPlayer;
     }
 
@@ -95,16 +94,16 @@ public class VeryFirstBot implements Runnable {
                 if (!buildingsToBuild.isEmpty()) {
                     final BuildingId buildingId = buildingsToBuild.get(
                             new Random().nextInt(buildingsToBuild.size()));
-                    LoggerHelper.printVerboseMessage(TAG, "picked building id=" + buildingId);
+                    //TODO logger was here
                     final IBuilding building;
                     if (buildingsToUpgrade.contains(buildingId)) {
-                        LoggerHelper.printVerboseMessage(TAG, "Upgrade instead of build");
+                        //TODO logger was here
                         building = planet.getBuilding(buildingId.getId());
                         building.upgradeBuilding();
                         randomizeUnitPath(building);
                         continue;
                     }
-                    LoggerHelper.printVerboseMessage(TAG, "Build");
+                    //TODO logger was here
                     final PlanetStaticObject finalPlanet = planet;
                     finalPlanet.createBuilding(buildingId);
                     building = planet.getBuilding(buildingId.getId());
@@ -112,8 +111,8 @@ public class VeryFirstBot implements Runnable {
                 } else if (!buildingsToUpgrade.isEmpty()) {
                     BuildingId buildingId = buildingsToUpgrade.get(
                             new Random().nextInt(buildingsToUpgrade.size()));
-                    LoggerHelper.printVerboseMessage(TAG, "picked building id=" + buildingId);
-                    LoggerHelper.printVerboseMessage(TAG, "Upgrade");
+                    //TODO logger was here
+                    //TODO logger was here
                     final IBuilding building = planet.getBuilding(buildingId.getId());
                     building.upgradeBuilding();
                     randomizeUnitPath(building);

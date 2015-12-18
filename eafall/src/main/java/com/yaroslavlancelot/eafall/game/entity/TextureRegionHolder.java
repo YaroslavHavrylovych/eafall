@@ -2,7 +2,6 @@ package com.yaroslavlancelot.eafall.game.entity;
 
 import android.content.Context;
 
-import com.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.yaroslavlancelot.eafall.general.Holder;
 
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
@@ -70,7 +69,7 @@ public class TextureRegionHolder extends Holder<ITextureRegion> {
                     textureAtlas, context, path);
             return sTextureRegionHolderUtils.addElement(key, textureRegion);
         }
-        LoggerHelper.printWarnMessage(TAG, "resource with the key=" + key + " exist");
+        //TODO logger was here
         return sTextureRegionHolderUtils.getElement(key);
     }
 
@@ -91,7 +90,7 @@ public class TextureRegionHolder extends Holder<ITextureRegion> {
                     textureAtlas, context, path, x, y);
             return sTextureRegionHolderUtils.addElement(key, textureRegion);
         }
-        LoggerHelper.printWarnMessage(TAG, "resource with the key=" + key + " exist");
+        //TODO logger was here
         return sTextureRegionHolderUtils.getElement(key);
     }
 
@@ -110,7 +109,7 @@ public class TextureRegionHolder extends Holder<ITextureRegion> {
                     (textureAtlas, source, x, y);
             return sTextureRegionHolderUtils.addElement(key, textureRegion);
         }
-        LoggerHelper.printWarnMessage(TAG, "resource with the key=" + key + " exist");
+        //TODO logger was here
         return sTextureRegionHolderUtils.getElement(key);
     }
 
@@ -131,7 +130,7 @@ public class TextureRegionHolder extends Holder<ITextureRegion> {
                     BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(textureAtlas,
                             context, key, x, y, columns, rows));
         }
-        LoggerHelper.printWarnMessage(TAG, "resource with the key=" + key + " exist");
+        //TODO logger was here
     }
 
     public static ITextureRegion getRegion(String key) {

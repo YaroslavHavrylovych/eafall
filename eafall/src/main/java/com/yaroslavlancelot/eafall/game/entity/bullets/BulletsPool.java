@@ -1,6 +1,5 @@
 package com.yaroslavlancelot.eafall.game.entity.bullets;
 
-import com.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.yaroslavlancelot.eafall.game.entity.AfterInitializationPool;
 import com.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
@@ -87,14 +86,14 @@ public class BulletsPool {
 
         @Override
         protected AbstractBullet allocatePoolItem() {
-            LoggerHelper.printVerboseMessage(TAG, "New bullet allocated. Available items count=" + getAvailableItems());
+            //TODO logger was here
             AbstractBullet bullet;
             if (mBulletFile.equals(StringConstants.FILE_QUAKER_BULLET)) {
                 bullet = new QuakerBullet(mWidth, mHeight, TextureRegionHolder.getRegion(mBulletFile), mObjectManager) {
                     @Override
                     protected void onBulletDestroyed() {
                         super.onBulletDestroyed();
-                        LoggerHelper.printVerboseMessage(TAG, "Bullet recycled. Available items count=" + getAvailableItems());
+                        //TODO logger was here
                         recycle(this);
                     }
                 };
@@ -103,7 +102,7 @@ public class BulletsPool {
                     @Override
                     protected void onBulletDestroyed() {
                         super.onBulletDestroyed();
-                        LoggerHelper.printVerboseMessage(TAG, "Bullet recycled. Available items count=" + getAvailableItems());
+                        //TODO logger was here
                         recycle(this);
                     }
                 };

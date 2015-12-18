@@ -1,7 +1,6 @@
 package com.yaroslavlancelot.eafall.game.client.thin;
 
 import com.badlogic.gdx.physics.box2d.Body;
-import com.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.yaroslavlancelot.eafall.game.client.ClientGameActivity;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
@@ -32,31 +31,31 @@ public class ThinClientGameActivity extends ClientGameActivity implements InGame
 
     @Override
     protected void userWantCreateBuilding(final IPlayer userPlayer, BuildingId buildingId) {
-        LoggerHelper.methodInvocation(TAG, "userWantCreateBuilding");
+        //TODO logger was here
         mGameServerConnector.sendClientMessage(0, new BuildingCreationClientMessage(
                 userPlayer.getName(), buildingId.getId(), buildingId.getUpgrade()));
-        LoggerHelper.printInformationMessage(TAG, "send building request player= " + userPlayer.getName() + ", building=" + buildingId + "");
+        //TODO logger was here
     }
 
     @Override
     public void onResourcesLoaded() {
         super.onResourcesLoaded();
-        LoggerHelper.methodInvocation(TAG, "onResourcesLoaded");
+        //TODO logger was here
         mGameServerConnector.sendClientMessage(0, new GameLoadedClientMessage());
-        LoggerHelper.printInformationMessage(TAG, "send gameLoaded");
+        //TODO logger was here
     }
 
     @Override
     public void buildingCreated(BuildingId buildingId, final String playerName) {
-        LoggerHelper.methodInvocation(TAG, "buildingCreated");
-        LoggerHelper.printDebugMessage(TAG, "buildingId=" + buildingId + ", playerName=" + playerName);
+        //TODO logger was here
+        //TODO logger was here
         PlanetStaticObject planetStaticObject = PlayersHolder.getPlayer(playerName).getPlanet();
         planetStaticObject.createBuilding(buildingId);
     }
 
     @Override
     public void unitCreated(final String playerName, final int unitId, final float x, final float y, final long unitUniqueId) {
-        LoggerHelper.printDebugMessage(TAG, "unitCreated=" + unitUniqueId + "(" + x + "," + y + ")");
+        //TODO logger was here
         runOnUpdateThread(new Runnable() {
             @Override
             public void run() {
@@ -73,15 +72,14 @@ public class ThinClientGameActivity extends ClientGameActivity implements InGame
         final float velocityX = unitChangePositionServerMessage.getVelocityX(),
                 velocityY = unitChangePositionServerMessage.getVelocityY();
         final float rotation = unitChangePositionServerMessage.getRotationAngle();
-        LoggerHelper.printDebugMessage(TAG, "unitMoved=" + unitUniqueId + "(" + x + "," + y + "), vel(" +
-                +velocityX + "," + velocityY + "), rotation=" + rotation);
+        //TODO logger was here
         final GameObject gameObject = getGameObjectById(unitUniqueId);
 
         runOnUpdateThread(new Runnable() {
             @Override
             public void run() {
                 if (gameObject == null || !(gameObject instanceof OffenceUnit)) {
-                    LoggerHelper.printInformationMessage(TAG, "try yo move uncreated unit or it's not a unit");
+                    //TODO logger was here
                     return;
                 }
                 OffenceUnit unit = (OffenceUnit) gameObject;
@@ -98,7 +96,7 @@ public class ThinClientGameActivity extends ClientGameActivity implements InGame
     public void gameObjectHealthChanged(long gameObjectUniqueId, final int newUnitHealth) {
         final GameObject gameObject = getGameObjectById(gameObjectUniqueId);
         if (gameObject == null) {
-            LoggerHelper.printInformationMessage(TAG, "try to change health of unexisting unit");
+            //TODO logger was here
             return;
         }
         runOnUpdateThread(new Runnable() {
@@ -114,11 +112,11 @@ public class ThinClientGameActivity extends ClientGameActivity implements InGame
         final GameObject gameObject = getGameObjectById(gameObjectUniqueId);
         final GameObject objectToAttack = getGameObjectById(attackedGameObjectUniqueId);
         if (gameObject == null || objectToAttack == null) {
-            LoggerHelper.printErrorMessage(TAG, "one of the object in attack is not exist");
+            //TODO logger was here
             return;
         }
         if (!(gameObject instanceof Unit)) {
-            LoggerHelper.printErrorMessage(TAG, "attacker is not unit in fire operation");
+            //TODO logger was here
             return;
         }
         runOnUpdateThread(new Runnable() {

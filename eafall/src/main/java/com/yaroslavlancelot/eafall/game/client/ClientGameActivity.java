@@ -1,7 +1,6 @@
 package com.yaroslavlancelot.eafall.game.client;
 
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.yaroslavlancelot.eafall.game.BaseGameObjectsActivity;
 import com.yaroslavlancelot.eafall.game.alliance.IAlliance;
 import com.yaroslavlancelot.eafall.game.client.thick.income.ClientIncomeHandler;
@@ -122,7 +121,7 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
                                               String key,
                                               IPlayer player,
                                               long... unitUniqueId) {
-        LoggerHelper.methodInvocation(TAG, "createPlanet");
+        //TODO logger was here
         PlanetStaticObject planet = new PlanetStaticObject(x, y, textureRegion,
                 getVertexBufferObjectManager()) {
             @Override

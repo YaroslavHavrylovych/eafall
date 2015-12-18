@@ -1,6 +1,5 @@
 package com.yaroslavlancelot.eafall.game.client.thick.single;
 
-import com.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.yaroslavlancelot.eafall.game.ai.VeryFirstBot;
 import com.yaroslavlancelot.eafall.game.client.thick.ThickClientGameActivity;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
@@ -37,7 +36,7 @@ public class SinglePlayerGameActivity extends ThickClientGameActivity {
     }
 
     protected void initBotControlledPlayer(final IPlayer initializingPlayer) {
-        LoggerHelper.methodInvocation(TAG, "initBotControlledPlayer");
+        //TODO logger was here
         Thread thread = new Thread(new VeryFirstBot(initializingPlayer));
         thread.setDaemon(true);
         thread.setPriority(Thread.MIN_PRIORITY);

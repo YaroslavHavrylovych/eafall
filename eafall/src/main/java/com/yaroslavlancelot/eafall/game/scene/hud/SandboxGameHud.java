@@ -2,7 +2,6 @@ package com.yaroslavlancelot.eafall.game.scene.hud;
 
 import android.content.Context;
 
-import com.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder;
 import com.yaroslavlancelot.eafall.game.configuration.mission.MissionConfig;
@@ -87,7 +86,7 @@ public abstract class SandboxGameHud extends BaseGameHud {
     @Override
     public void initHudElements(Camera camera, VertexBufferObjectManager vboManager,
                                 MissionConfig missionConfig) {
-        LoggerHelper.methodInvocation(TAG, "initHudElements");
+        //TODO logger was here
         SpriteGroupHolder.attachSpriteGroups(this, BatchingKeys.BatchTag.GAME_HUD.value());
         //menu
         initMainMenu(vboManager);

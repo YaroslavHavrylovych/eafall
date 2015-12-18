@@ -1,7 +1,5 @@
 package com.yaroslavlancelot.eafall.game.engine;
 
-import com.yaroslavlancelot.eafall.android.LoggerHelper;
-
 import org.andengine.entity.IEntity;
 import org.andengine.entity.sprite.batch.SpriteGroup;
 import org.andengine.opengl.texture.ITexture;
@@ -49,7 +47,7 @@ public class CleanableSpriteGroup extends SpriteGroup {
     @Override
     protected void assertCapacity() {
         if (getChildCount() >= mCapacity) {
-            LoggerHelper.printWarnMessage(this.getClass().getSimpleName(), "cleanable limit reached");
+            //TODO logger was here
             for (Iterator<IEntity> iterator = mChildren.iterator(); iterator.hasNext(); ) {
                 IEntity child = iterator.next();
                 if (child.getTag() == RECYCLE) {

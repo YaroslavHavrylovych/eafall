@@ -4,7 +4,6 @@ import android.util.SparseArray;
 
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.yaroslavlancelot.eafall.EaFallApplication;
-import com.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.yaroslavlancelot.eafall.game.alliance.IAlliance;
 import com.yaroslavlancelot.eafall.game.client.thick.income.ClientIncomeHandler;
 import com.yaroslavlancelot.eafall.game.configuration.game.ApplicationSettings;
@@ -253,7 +252,7 @@ public class Player implements IPlayer {
 
     @Override
     public void addObjectToPlayer(final Unit object) {
-        LoggerHelper.printVerboseMessage(TAG, String.format("Player(%s) object added", getName()));
+        //TODO logger was here
         synchronized (mPlayerUnits) {
             mPlayerUnits.add(object);
         }
@@ -268,7 +267,7 @@ public class Player implements IPlayer {
 
     @Override
     public void removeObjectFromPlayer(final GameObject object) {
-        LoggerHelper.printVerboseMessage(TAG, String.format("Player(%s) object removed", getName()));
+        //TODO logger was here
         synchronized (mPlayerUnits) {
             mPlayerUnits.remove(object);
         }

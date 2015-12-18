@@ -1,6 +1,5 @@
 package com.yaroslavlancelot.eafall.game.popup.rolling;
 
-import com.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.yaroslavlancelot.eafall.game.popup.PopupScene;
 
@@ -56,7 +55,7 @@ public abstract class RollingPopup extends PopupScene implements IRollingPopup {
 
     @Override
     public void triggerPopup() {
-        LoggerHelper.printDebugMessage(TAG, "showPopup popup = " + !mIsPopupShowing);
+        //TODO logger was here
         if (mIsPopupShowing) {
             hidePopup();
         } else {

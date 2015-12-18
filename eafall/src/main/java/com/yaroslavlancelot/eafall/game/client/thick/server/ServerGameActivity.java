@@ -1,7 +1,6 @@
 package com.yaroslavlancelot.eafall.game.client.thick.server;
 
 import com.badlogic.gdx.physics.box2d.Contact;
-import com.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.yaroslavlancelot.eafall.game.client.thick.ThickClientGameActivity;
 import com.yaroslavlancelot.eafall.game.entity.ContactListener;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.GameObject;
@@ -58,11 +57,11 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
 
     @Override
     protected void userWantCreateBuilding(final IPlayer userPlayer, BuildingId buildingId) {
-        LoggerHelper.printInformationMessage(TAG, "user want to create building with id=" + buildingId);
+        //TODO logger was here
         PlanetStaticObject planetStaticObject = userPlayer.getPlanet();
         if (planetStaticObject != null) {
             boolean isBuildingCreated = userPlayer.getPlanet().createBuilding(buildingId);
-            LoggerHelper.printDebugMessage(TAG, "isBuildingCreated=" + isBuildingCreated);
+            //TODO logger was here
             if (isBuildingCreated) {
                 mGameSocketServer.sendBroadcastServerMessage(0, new BuildingCreatedServerMessage(
                         buildingId.getId(), buildingId.getUpgrade(), userPlayer.getName()));

@@ -1,7 +1,6 @@
 package com.yaroslavlancelot.eafall.game.entity.gameobject.unit;
 
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.yaroslavlancelot.eafall.game.audio.LimitedSoundWrapper;
 import com.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.yaroslavlancelot.eafall.game.client.IPhysicCreator;
@@ -174,7 +173,7 @@ public abstract class Unit extends GameObject implements
      * WARNING: unit player name have to be assigned before init() triggers
      */
     public void init(float x, float y, IPhysicCreator physicCreator) {
-        LoggerHelper.methodInvocation(TAG, "init(float, float, IPhysicCreator)");
+        //TODO logger was here
         setTag(0);
         IPlayer player = PlayersHolder.getPlayer(mPlayerName);
         mObjectCurrentHealth = mObjectMaximumHealth;

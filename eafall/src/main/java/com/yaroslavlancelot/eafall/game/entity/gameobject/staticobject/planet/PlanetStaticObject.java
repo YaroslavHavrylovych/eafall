@@ -1,7 +1,6 @@
 package com.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet;
 
 import com.yaroslavlancelot.eafall.R;
-import com.yaroslavlancelot.eafall.android.LoggerHelper;
 import com.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder;
 import com.yaroslavlancelot.eafall.game.client.IUnitCreator;
@@ -200,7 +199,7 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
      * @return true if building amount was increased and false in other case
      */
     public boolean createBuilding(BuildingId buildingId) {
-        LoggerHelper.methodInvocation(TAG, "createBuilding");
+        //TODO logger was here
         IBuilding building = mBuildings.get(buildingId.getId());
         if (building == null) {
             final BuildingDummy buildingDummy = PlayersHolder.getPlayer(mPlayerName).getAlliance()

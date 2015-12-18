@@ -8,7 +8,6 @@ import com.yaroslavlancelot.eafall.network.client.messages.GameLoadedClientMessa
 import com.yaroslavlancelot.eafall.network.client.messages.constants.ClientMessagesConstants;
 import com.yaroslavlancelot.eafall.network.server.callbacks.InGameServer;
 import com.yaroslavlancelot.eafall.network.server.callbacks.PreGameStartServer;
-import com.yaroslavlancelot.eafall.android.LoggerHelper;
 
 import org.andengine.extension.multiplayer.adt.message.client.IClientMessage;
 import org.andengine.extension.multiplayer.server.IClientMessageHandler;
@@ -48,15 +47,15 @@ public class GameSocketServer extends SocketServer<SocketConnectionClientConnect
     @Override
     protected SocketConnectionClientConnector newClientConnector(final SocketConnection pSocketConnection) throws IOException {
         mClientIp = pSocketConnection.getSocket().getInetAddress().getHostAddress();
-        LoggerHelper.printInformationMessage(TAG, "New client connector created with client " + mClientIp);
+        //TODO logger was here
         final SocketConnectionClientConnector clientConnector = new SocketConnectionClientConnector(pSocketConnection);
 
         clientConnector.registerClientMessage(CONNECTION_ESTABLISHED, ConnectionEstablishedClientMessage.class, new IClientMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ClientConnector<SocketConnection> pClientConnector, final IClientMessage pClientMessage) throws IOException {
-                LoggerHelper.printInformationMessage(TAG, "RECEIVED MESSAGE: sender = CLIENT, type = " + CONNECTION_ESTABLISHED);
+                //TODO logger was here
                 int protocolVersion = ((ConnectionEstablishedClientMessage) pClientMessage).getProtocolVersion();
-                LoggerHelper.printDebugMessage(TAG, "protocolVersion=" + protocolVersion);
+                //TODO logger was here
                 synchronized (mPreGameStartServer) {
                     mPreGameStartServer.clientConnectionEstablished(mClientIp);
                 }
@@ -66,7 +65,7 @@ public class GameSocketServer extends SocketServer<SocketConnectionClientConnect
         clientConnector.registerClientMessage(BUILDING_CREATION, BuildingCreationClientMessage.class, new IClientMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ClientConnector<SocketConnection> pClientConnector, final IClientMessage pClientMessage) throws IOException {
-                LoggerHelper.printInformationMessage(TAG, "RECEIVED MESSAGE: sender = CLIENT, type = " + BUILDING_CREATION);
+                //TODO logger was here
                 BuildingCreationClientMessage message = (BuildingCreationClientMessage) pClientMessage;
                 //ToDo Remove EventBus
                 EventBus.getDefault().post(new CreateBuildingEvent(message.getPlayerName(), message.getBuildingId()));
@@ -77,7 +76,7 @@ public class GameSocketServer extends SocketServer<SocketConnectionClientConnect
         clientConnector.registerClientMessage(GAME_LOADED, GameLoadedClientMessage.class, new IClientMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ClientConnector<SocketConnection> pClientConnector, final IClientMessage pClientMessage) throws IOException {
-                LoggerHelper.printInformationMessage(TAG, "RECEIVED MESSAGE: sender = CLIENT, type = " + GAME_LOADED);
+                //TODO logger was here
                 synchronized (mInGameServer) {
                     mInGameServer.gameLoaded();
                 }
