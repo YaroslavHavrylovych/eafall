@@ -42,6 +42,7 @@
 -keepattributes *Annotation*
 -keepattributes Signature
 -keep public class org.simpleframework.**{ *; }
+-keep public class com.yaroslavlancelot.eafall.game.sandbox.intents.**{ *; }
 -keep class org.simpleframework.xml.**{ *; }
 -keep class org.simpleframework.xml.core.**{ *; }
 -keep class org.simpleframework.xml.util.**{ *; }
