@@ -7,7 +7,7 @@
             android:summaryOn="@string/game_sounds_on"
             android:summaryOff="@string/game_sounds_off"
             android:defaultValue="true"/>
-        <com.gmail.yaroslavlancelot.eafall.general.settings.SeekBarPreference
+        <com.yaroslavlancelot.eafall.general.settings.SeekBarPreference
             android:dependency="@string/pref_sounds_enabled"
             android:key="@string/pref_sounds_volume"
             android:title="@string/game_sounds_volume"
@@ -19,7 +19,7 @@
             android:summaryOn="@string/music_on"
             android:summaryOff="@string/music_off"
             android:defaultValue="true"/>
-        <com.gmail.yaroslavlancelot.eafall.general.settings.SeekBarPreference
+        <com.yaroslavlancelot.eafall.general.settings.SeekBarPreference
             android:dependency="@string/pref_music_enabled"
             android:key="@string/pref_music_volume"
             android:title="@string/music_volume"

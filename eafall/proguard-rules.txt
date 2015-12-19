@@ -42,6 +42,7 @@
 -keepattributes *Annotation*
 -keepattributes Signature
 -keep public class org.simpleframework.**{ *; }
+-keep public class com.yaroslavlancelot.eafall.game.sandbox.intents.**{ *; }
 -keep class org.simpleframework.xml.**{ *; }
 -keep class org.simpleframework.xml.core.**{ *; }
 -keep class org.simpleframework.xml.util.**{ *; }
@@ -49,13 +50,13 @@
 ##############
 ## loaders ###
 ##############
--keep public class com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.building.loader.** {
+-keep public class com.yaroslavlancelot.eafall.game.entity.gameobject.building.loader.** {
     public private <fields>;
 }
--keep public class com.gmail.yaroslavlancelot.eafall.game.entity.gameobject.unit.loader.** {
+-keep public class com.yaroslavlancelot.eafall.game.entity.gameobject.unit.loader.** {
     public private <fields>;
 }
--keep public class com.gmail.yaroslavlancelot.eafall.game.campaign.loader.** {
+-keep public class com.yaroslavlancelot.eafall.game.campaign.loader.** {
     public private <fields>;
 }
 

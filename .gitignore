@@ -18,7 +18,7 @@ CVS
 .hg
 .bzr
 
-#gradle
+# Gradle
 .gradle
 target/**
 bin/**
@@ -27,9 +27,12 @@ doc/**
 gen/**
 gdb.setup
 gdbserver
-proguard/**
 
-#IDE:
+# Application
+proguard/**
+eafall/keystore/**
+
+# IDE:
 *.settings
 *.classpath
 *.project

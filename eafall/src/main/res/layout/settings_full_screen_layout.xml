@@ -83,7 +83,7 @@
             android:layout_weight="118"/>
 
         <!-- game sounds -->
-        <com.gmail.yaroslavlancelot.eafall.android.view.SettingsVolume
+        <com.yaroslavlancelot.eafall.android.view.SettingsVolume
             android:id="@+id/sound_volume"
             android:layout_width="match_parent"
             android:layout_height="0dip"
@@ -95,7 +95,7 @@
             android:layout_weight="89"/>
 
         <!-- game music -->
-        <com.gmail.yaroslavlancelot.eafall.android.view.SettingsVolume
+        <com.yaroslavlancelot.eafall.android.view.SettingsVolume
             android:id="@+id/music_volume"
             android:layout_width="match_parent"
             android:layout_height="0dip"
@@ -199,7 +199,7 @@
                             android:padding="10dip"
                             android:background="@drawable/settings_dev_mode_inner_shape">
 
-                            <com.gmail.yaroslavlancelot.eafall.android.view.MagicTextView
+                            <com.yaroslavlancelot.eafall.android.view.MagicTextView
                                 android:text="@string/developers_mode"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
