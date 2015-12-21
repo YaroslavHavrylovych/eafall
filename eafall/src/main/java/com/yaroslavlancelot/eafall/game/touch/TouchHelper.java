@@ -200,8 +200,8 @@ public final class TouchHelper {
      */
     public static abstract class UnboundedSelectorEvents implements ITouchCallback {
         private final Selectable mSelectable;
-        private final int mClickTriggerMillis = 500;
-        private final int mDoubleClickTriggerMillis = mClickTriggerMillis;
+        public static final int CLICK_TRIGGER_MILLIS = 499;
+        public static final int DOUBLE_CLICK_TRIGGER_MILLIS = CLICK_TRIGGER_MILLIS;
         private HoldDetector.IHoldDetectorListener mHoldListener;
         private ClickDetector.IClickDetectorListener mClickListener;
         private ClickDetector mClickDetector;
@@ -234,7 +234,7 @@ public final class TouchHelper {
                 }
             };
             mHoldDetector = new HoldDetector(mHoldListener);
-            mHoldDetector.setTriggerHoldMinimumMilliseconds(mClickTriggerMillis);
+            mHoldDetector.setTriggerHoldMinimumMilliseconds(CLICK_TRIGGER_MILLIS);
         }
 
         private void initClick() {
@@ -244,7 +244,7 @@ public final class TouchHelper {
                 @Override
                 public void onClick(final ClickDetector pClickDetector, final int pPointerID, final float pSceneX, final float pSceneY) {
                     long time = System.currentTimeMillis();
-                    if (time - mClickTime < mDoubleClickTriggerMillis) {
+                    if (time - mClickTime < DOUBLE_CLICK_TRIGGER_MILLIS) {
                         mClickTime = 0;
                         doubleClick();
                         return;
@@ -256,7 +256,7 @@ public final class TouchHelper {
                 }
             };
             mClickDetector = new ClickDetector(mClickListener);
-            mClickDetector.setTriggerClickMaximumMilliseconds(mClickTriggerMillis);
+            mClickDetector.setTriggerClickMaximumMilliseconds(CLICK_TRIGGER_MILLIS);
         }
 
         public abstract void click();

@@ -66,6 +66,8 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
     private IShipyard mPlanetShipyard;
     /** current planet player name */
     private String mPlayerName;
+    /** used to prevent click trigger if double click operation were performed */
+    private TimerHandler mClickHandler;
     /** contains true if suppressor was used */
     private boolean mIsSuppressorUsed = false;
 
@@ -253,9 +255,11 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
 
     /** Suppressor triggered by double click on the planet and kill all enemies on you side of the game field */
     private void initTouchCallbacks(final int planetNameRes) {
-        setTouchCallback(new TouchHelper.UnboundedSelectorEvents(this) {
+        mClickHandler = new TimerHandler(
+                TouchHelper.UnboundedSelectorEvents.DOUBLE_CLICK_TRIGGER_MILLIS * 1f / 1000f,
+                false, new ITimerCallback() {
             @Override
-            public void click() {
+            public void onTimePassed(final TimerHandler pTimerHandler) {
                 final IPlayer player = PlayersHolder.getPlayer(mPlayerName);
                 final int playerRes = player.getControlType().user() ?
                         R.string.player_planet_text : R.string.opponent_planet_text;
@@ -263,20 +267,29 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
                         player.getAlliance().getAllianceStringRes(),
                         mIsSuppressorUsed ? R.string.used : R.string.unused));
             }
+        });
+        mClickHandler.setTimerCallbackTriggered(true);
+        registerUpdateHandler(mClickHandler);
+        setTouchCallback(new TouchHelper.UnboundedSelectorEvents(this) {
+            @Override
+            public void click() {
+                mClickHandler.reset();
+            }
 
             @Override
             public void doubleClick() {
+                mClickHandler.setTimerCallbackTriggered(true);
                 if (PlayersHolder.getPlayer(mPlayerName).getControlType().user()) {
-                    useSuppressor();
-                } else {
-                    EventBus.getDefault().post(new ShowToastEvent(false, R.string.wrong_planet_suppressor));
+                    RollingPopupManager.getInstance().getPopup(ConstructionsPopup.KEY).triggerPopup();
                 }
             }
 
             @Override
             public void holdClick() {
                 if (PlayersHolder.getPlayer(mPlayerName).getControlType().user()) {
-                    RollingPopupManager.getInstance().getPopup(ConstructionsPopup.KEY).triggerPopup();
+                    useSuppressor();
+                } else {
+                    EventBus.getDefault().post(new ShowToastEvent(false, R.string.wrong_planet_suppressor));
                 }
             }
         });

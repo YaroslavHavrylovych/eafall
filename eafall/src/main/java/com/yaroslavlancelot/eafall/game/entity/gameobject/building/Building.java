@@ -1,14 +1,18 @@
 package com.yaroslavlancelot.eafall.game.entity.gameobject.building;
 
+import com.yaroslavlancelot.eafall.R;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.StaticObject;
 import com.yaroslavlancelot.eafall.game.entity.health.IHealthBar;
+import com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.ShowToastEvent;
 import com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.BuildingsAmountChangedEvent;
 import com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.BuildingDescriptionShowEvent;
 import com.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.yaroslavlancelot.eafall.game.touch.TouchHelper;
 
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import de.greenrobot.event.EventBus;
@@ -27,6 +31,8 @@ public abstract class Building implements IBuilding {
     protected int mUpgrade;
     /** displayed on the planet building */
     protected StaticObject mBuildingStaticObject;
+    /** used to prevent click trigger if double click operation were performed */
+    private TimerHandler mClickHandler;
     /** income which give all buildings of the current type (can be in percents) */
     private int mIncome;
 
@@ -36,13 +42,30 @@ public abstract class Building implements IBuilding {
         mDummy = dummy;
         // init first unit building
         mBuildingStaticObject = getBuildingByUpgrade(mUpgrade, dummy, objectManager);
+        //touch
+        mClickHandler = new TimerHandler(
+                TouchHelper.UnboundedSelectorEvents.DOUBLE_CLICK_TRIGGER_MILLIS * 1f / 1000f,
+                false, new ITimerCallback() {
+            @Override
+            public void onTimePassed(final TimerHandler pTimerHandler) {
+                if (PlayersHolder.getPlayer(mPlayerName).getControlType().user()) {
+                    EventBus.getDefault().post(new BuildingDescriptionShowEvent(
+                            BuildingId.makeId(mDummy.getBuildingId(), mUpgrade), mPlayerName));
+                }
+            }
+        });
+
+        mClickHandler.setTimerCallbackTriggered(true);
+        mBuildingStaticObject.registerUpdateHandler(mClickHandler);
         mBuildingStaticObject.setTouchCallback(new TouchHelper.UnboundedSelectorEvents(this) {
             @Override
             public void click() {
+                mClickHandler.reset();
             }
 
             @Override
             public void doubleClick() {
+                mClickHandler.setTimerCallbackTriggered(true);
                 if (PlayersHolder.getPlayer(mPlayerName).getControlType().user()) {
                     onDoubleClick();
                 }
@@ -51,8 +74,9 @@ public abstract class Building implements IBuilding {
             @Override
             public void holdClick() {
                 if (PlayersHolder.getPlayer(mPlayerName).getControlType().user()) {
-                    EventBus.getDefault().post(new BuildingDescriptionShowEvent(
-                            BuildingId.makeId(mDummy.getBuildingId(), mUpgrade), mPlayerName));
+                    PlayersHolder.getPlayer(mPlayerName).getPlanet().useSuppressor();
+                } else {
+                    EventBus.getDefault().post(new ShowToastEvent(false, R.string.wrong_planet_suppressor));
                 }
             }
         });
