@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 
 import com.yaroslavlancelot.eafall.EaFallApplication;
-import com.yaroslavlancelot.eafall.game.GameState;
 import com.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder;
 import com.yaroslavlancelot.eafall.game.configuration.mission.MissionConfig;
@@ -32,6 +31,7 @@ import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.text.Text;
+import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.font.IFont;
@@ -75,10 +75,15 @@ public class ClientGameHud extends BaseGameHud {
             EaseStrongOut.getInstance());
     private AlphaModifier mHudTextHideAlphaModifier = new AlphaModifier(.5f, 1, 0,
             EaseStrongOut.getInstance());
+    private MenuPopupButton mMenuButton;
+    private ConstructionPopupButton mConstructionButton;
+    private boolean mBlockInput = false;
+    private boolean mShowingText;
 
     // ===========================================================
     // Constructors
     // ===========================================================
+
 
     // ===========================================================
     // Getter & Setter
@@ -93,7 +98,6 @@ public class ClientGameHud extends BaseGameHud {
     @Override
     public void initHudElements(Camera camera, VertexBufferObjectManager vboManager,
                                 MissionConfig missionConfig) {
-        //TODO logger was here
         SpriteGroupHolder.attachSpriteGroups(this, BatchingKeys.BatchTag.GAME_HUD.value());
         //HUD text
         mHudText = new Text(SizeConstants.HALF_FIELD_WIDTH, SizeConstants.HALF_FIELD_HEIGHT / 3,
@@ -138,23 +142,52 @@ public class ClientGameHud extends BaseGameHud {
     // Methods
     // ===========================================================
 
+    @Override
+    public boolean onSceneTouchEvent(final TouchEvent pSceneTouchEvent) {
+        boolean res = mBlockInput | super.onSceneTouchEvent(pSceneTouchEvent);
+        if (!mBlockInput) {
+            if (pSceneTouchEvent.isActionDown()) {
+                hideHudText();
+            }
+        }
+        return res;
+    }
+
+    /** if true - blocks user input (the only thing works on screen is menu button and it's popups) */
+    public void blockInput(boolean block) {
+        if (mBlockInput != block) {
+            mBlockInput = block;
+            if (mBlockInput) {
+                unregisterTouchArea(mConstructionButton);
+            } else {
+                registerTouchArea(mConstructionButton);
+            }
+        }
+    }
+
     public void showHudText(int text) {
         showHudText(LocaleImpl.getInstance().getStringById(text));
     }
 
     public void showHudText(String text) {
-        mHudText.unregisterEntityModifier(mHudTextHideAlphaModifier);
+        if (!mShowingText) {
+            mShowingText = true;
+            mHudText.unregisterEntityModifier(mHudTextHideAlphaModifier);
+            mHudTextShowAlphaModifier.reset();
+            mHudText.registerEntityModifier(mHudTextShowAlphaModifier);
+            mHudText.setVisible(true);
+            mHudText.setIgnoreUpdate(false);
+        }
         mHudText.setText(text);
-        mHudTextShowAlphaModifier.reset();
-        mHudText.registerEntityModifier(mHudTextShowAlphaModifier);
-        mHudText.setVisible(true);
-        mHudText.setIgnoreUpdate(false);
     }
 
     public void hideHudText() {
-        mHudText.unregisterEntityModifier(mHudTextShowAlphaModifier);
-        mHudTextHideAlphaModifier.reset();
-        mHudText.registerEntityModifier(mHudTextHideAlphaModifier);
+        if (mShowingText) {
+            mShowingText = false;
+            mHudText.unregisterEntityModifier(mHudTextShowAlphaModifier);
+            mHudTextHideAlphaModifier.reset();
+            mHudText.registerEntityModifier(mHudTextHideAlphaModifier);
+        }
     }
 
     private void initPopups(IPlayer player, Camera camera, VertexBufferObjectManager vboManager) {
@@ -166,17 +199,15 @@ public class ClientGameHud extends BaseGameHud {
         popup = new ConstructionsPopup(player.getName(), this, camera, vboManager);
         RollingPopupManager.getInstance().addPopup(ConstructionsPopup.KEY, popup);
         //constructions button
-        ConstructionPopupButton button = new ConstructionPopupButton(vboManager);
-        button.setOnClickListener(new ButtonSprite.OnClickListener() {
+        mConstructionButton = new ConstructionPopupButton(vboManager);
+        mConstructionButton.setOnClickListener(new ButtonSprite.OnClickListener() {
             @Override
             public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                if (GameState.isResumed()) {
-                    RollingPopupManager.getInstance().getPopup(ConstructionsPopup.KEY).triggerPopup();
-                }
+                RollingPopupManager.getInstance().getPopup(ConstructionsPopup.KEY).triggerPopup();
             }
         });
-        attachChild(button);
-        registerTouchArea(button);
+        attachChild(mConstructionButton);
+        registerTouchArea(mConstructionButton);
     }
 
     private void initOxygen(IPlayer player, List<HudGameValue> list, float x,
@@ -217,15 +248,15 @@ public class ClientGameHud extends BaseGameHud {
 
     /** attaches main menu buttons to the scene and init`s click listener */
     private void initMainMenu(VertexBufferObjectManager objectManager) {
-        MenuPopupButton menuButton = new MenuPopupButton(objectManager);
-        attachChild(menuButton);
-        menuButton.setOnClickListener(new ButtonSprite.OnClickListener() {
+        mMenuButton = new MenuPopupButton(objectManager);
+        attachChild(mMenuButton);
+        mMenuButton.setOnClickListener(new ButtonSprite.OnClickListener() {
             @Override
             public void onClick(final ButtonSprite pButtonSprite, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
                 RollingPopupManager.getInstance().getPopup(MenuPopup.KEY).showPopup();
             }
         });
-        registerTouchArea(menuButton);
+        registerTouchArea(mMenuButton);
     }
 
     private void initHealthCarcass(VertexBufferObjectManager vertexManager) {

@@ -85,9 +85,6 @@ public abstract class EaFallActivity extends BaseGameActivity {
         mCamera.setBoundsEnabled(true);
         //hud
         mHud = createHud();
-        mHud.setTouchAreaBindingOnActionDownEnabled(true);
-        mHud.setOnAreaTouchTraversalFrontToBack();
-        mHud.setAlpha(EaFallApplication.getConfig().getHudAlpha());
         mCamera.setHUD(mHud);
         //resource manager
         ResourceFactory.TypeResourceLoader typeResourceLoader = (ResourceFactory.TypeResourceLoader)

@@ -1,5 +1,6 @@
 package com.yaroslavlancelot.eafall.game.scene.hud;
 
+import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.game.configuration.mission.MissionConfig;
 
 import org.andengine.engine.camera.Camera;
@@ -25,6 +26,12 @@ public class BaseGameHud extends HUD {
     // ===========================================================
     // Constructors
     // ===========================================================
+    public BaseGameHud() {
+        setTouchAreaBindingOnActionDownEnabled(true);
+        setOnAreaTouchTraversalFrontToBack();
+        setAlpha(EaFallApplication.getConfig().getHudAlpha());
+    }
+
 
     // ===========================================================
     // Getter & Setter

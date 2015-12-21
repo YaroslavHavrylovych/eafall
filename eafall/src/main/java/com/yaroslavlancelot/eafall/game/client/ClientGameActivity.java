@@ -77,9 +77,11 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
     protected void onShowWorkingScene() {
         super.onShowWorkingScene();
         mSceneManager.getWorkingScene().setIgnoreUpdate(true);
+        ((ClientGameHud) mHud).blockInput(true);
         final GameStartCooldown timerHandler = new GameStartCooldown((ClientGameHud) mHud) {
             @Override
             public void timerEnded() {
+                ((ClientGameHud) mHud).blockInput(false);
                 mSceneManager.getWorkingScene().setIgnoreUpdate(false);
                 mFirstPlayer.incomeTime();
                 mSecondPlayer.incomeTime();
