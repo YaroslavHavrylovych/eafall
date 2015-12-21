@@ -46,6 +46,7 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
     private int mStarCodeName;
     private int mPlayerPlanet;
     private int mOpponentPlanet;
+    private int mStartMoney;
 
     // ===========================================================
     // Constructors
@@ -69,6 +70,7 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
         mStarConstellation = in.readInt();
         mPlayerPlanet = in.readInt();
         mOpponentPlanet = in.readInt();
+        mStartMoney = in.readInt();
         mMissionType = (MissionType) in.readSerializable();
     }
 
@@ -119,6 +121,10 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
         return mOpponentPlanet;
     }
 
+    public int getStartMoney() {
+        return mStartMoney;
+    }
+
     // ===========================================================
     // Methods for/from SuperClass/Interfaces
     // ===========================================================
@@ -143,6 +149,7 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
         dest.writeInt(mStarConstellation);
         dest.writeInt(mPlayerPlanet);
         dest.writeInt(mOpponentPlanet);
+        dest.writeInt(mStartMoney);
         dest.writeSerializable(mMissionType);
     }
 
@@ -162,12 +169,14 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
         mStarConstellation = R.string.no_constellation;
         mPlayerPlanet = R.string.earth;
         mOpponentPlanet = R.string.earth;
+        mStartMoney = 1000;
     }
 
     private void init(MissionDataLoader loadedData) {
         initType(loadedData.definition);
         if (loadedData.definition.time_limit != null) mTime = loadedData.definition.time_limit;
         if (loadedData.max_oxygen != null) mMaxOxygenAmount = loadedData.max_oxygen;
+        if (loadedData.max_oxygen != null) mStartMoney = loadedData.start_money;
         if (loadedData.planet_health != null) mPlanetHealth = loadedData.planet_health;
         if (loadedData.player_planet != null)
             mPlayerPlanet = getStringResourceByName(loadedData.player_planet);

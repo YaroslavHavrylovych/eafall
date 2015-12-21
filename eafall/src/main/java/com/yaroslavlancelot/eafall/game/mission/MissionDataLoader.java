@@ -29,6 +29,9 @@ public class MissionDataLoader {
     @Element(name = "opponent_planet")
     public String opponent_planet;
 
+    @Element(name = "start_money", required = false)
+    public Integer start_money;
+
     @Element(name = "max_oxygen", required = false)
     public Integer max_oxygen;
 

@@ -43,11 +43,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 /** Player player implementation */
 public class Player implements IPlayer {
     private static final String TAG = Player.class.getCanonicalName();
-    public final int INIT_MONEY_VALUE = 600;
     /** chance to produce income to an enemy after the death of the unit */
     public final int mUnitDeathIncomeChane;
     /** fixture def of the player (used for bullet creation) */
     protected final FixtureDef mPlayerFixtureDef;
+    /** player start money */
+    private final int START_MONEY_VALUE;
     /** used for {@link SharedEvents} */
     private final String MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY;
     /** used for {@link SharedEvents} */
@@ -97,6 +98,7 @@ public class Player implements IPlayer {
         mControlType = playerType;
         mPlayerFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f, false);
         mUnitDeathIncomeChane = unitDeathIncomeChance;
+        START_MONEY_VALUE = missionConfig.getStartMoney();
         initSettingsCallbacks();
     }
 
@@ -286,7 +288,7 @@ public class Player implements IPlayer {
     public void incomeTime() {
         int value;
         if (mIsFirstIncome.getAndSet(false)) {
-            value = INIT_MONEY_VALUE;
+            value = START_MONEY_VALUE;
         } else {
             value = mPlayerPlanet.getIncome();
         }
