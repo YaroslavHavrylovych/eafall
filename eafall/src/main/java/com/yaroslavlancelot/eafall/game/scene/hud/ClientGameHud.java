@@ -60,6 +60,8 @@ import java.util.List;
  */
 public class ClientGameHud extends BaseGameHud {
     public final static String sFontKey = "hud_on_screen_text_font_key";
+    /** maximum amount of characters for HUD */
+    public static final int MAXIMUM_HUD_TEXT_CHARACTERS = 100;
     // ===========================================================
     // Constants
     // ===========================================================
@@ -101,7 +103,8 @@ public class ClientGameHud extends BaseGameHud {
         SpriteGroupHolder.attachSpriteGroups(this, BatchingKeys.BatchTag.GAME_HUD.value());
         //HUD text
         mHudText = new Text(SizeConstants.HALF_FIELD_WIDTH, SizeConstants.HALF_FIELD_HEIGHT / 3,
-                FontHolder.getInstance().getElement(sFontKey), "", 50, vboManager);
+                FontHolder.getInstance().getElement(sFontKey), "",
+                MAXIMUM_HUD_TEXT_CHARACTERS, vboManager);
         mHudTextHideAlphaModifier.addModifierListener(new IModifier.IModifierListener<IEntity>() {
             @Override
             public void onModifierStarted(final IModifier<IEntity> pModifier, final IEntity pItem) {
@@ -165,10 +168,24 @@ public class ClientGameHud extends BaseGameHud {
         }
     }
 
+    /**
+     * shows text on HUD
+     * <p/>
+     * WARNING: maximum {@link #MAXIMUM_HUD_TEXT_CHARACTERS} characters
+     *
+     * @param text string resource id
+     */
     public void showHudText(int text) {
         showHudText(LocaleImpl.getInstance().getStringById(text));
     }
 
+    /**
+     * shows text on HUD
+     * <p/>
+     * WARNING: maximum {@link #MAXIMUM_HUD_TEXT_CHARACTERS} characters*
+     *
+     * @param text string to display
+     */
     public void showHudText(String text) {
         if (!mShowingText) {
             mShowingText = true;
@@ -181,6 +198,7 @@ public class ClientGameHud extends BaseGameHud {
         mHudText.setText(text);
     }
 
+    /** hide on screen text */
     public void hideHudText() {
         if (mShowingText) {
             mShowingText = false;

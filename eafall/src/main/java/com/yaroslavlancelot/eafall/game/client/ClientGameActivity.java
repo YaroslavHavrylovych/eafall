@@ -13,6 +13,7 @@ import com.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.SunStaticObject;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetStaticObject;
 import com.yaroslavlancelot.eafall.game.events.GameStartCooldown;
+import com.yaroslavlancelot.eafall.game.events.aperiodic.ShowHudTextEvent;
 import com.yaroslavlancelot.eafall.game.events.aperiodic.endgame.GameOverEvent;
 import com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.CreateBuildingEvent;
 import com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.BuildingSettingsPopupShowEvent;
@@ -29,6 +30,7 @@ import com.yaroslavlancelot.eafall.game.rule.RulesFactory;
 import com.yaroslavlancelot.eafall.game.scene.hud.BaseGameHud;
 import com.yaroslavlancelot.eafall.game.scene.hud.ClientGameHud;
 import com.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
+import com.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 
 import org.andengine.entity.IEntity;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -184,6 +186,23 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
                 mBuildingSettingsDialog.show();
             }
         });
+    }
+
+    @SuppressWarnings("unused")
+    public void onEventMainThread(final ShowHudTextEvent showToastEvent) {
+        int[] ids = showToastEvent.getTextId();
+        String format = LocaleImpl.getInstance().getStringById(ids[0]);
+        String result;
+        if (ids.length > 1) {
+            Object[] args = new Object[ids.length - 1];
+            for (int i = 1; i < ids.length; i++) {
+                args[i - 1] = LocaleImpl.getInstance().getStringById(ids[i]);
+            }
+            result = String.format(format, args);
+        } else {
+            result = format;
+        }
+        ((ClientGameHud) mHud).showHudText(result);
     }
 
     @SuppressWarnings("unused")
