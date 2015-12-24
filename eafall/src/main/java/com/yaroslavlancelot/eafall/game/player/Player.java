@@ -86,6 +86,7 @@ public class Player implements IPlayer {
     private SquareUnitMap mUnitMap;
 
     public Player(final String playerName, IAlliance alliance, ControlType playerType,
+                  int startMoney,
                   int unitDeathIncomeChance, MissionConfig missionConfig) {
         mPlayerName = playerName;
         MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY = "UNIT_CREATED_" + playerName;
@@ -98,7 +99,7 @@ public class Player implements IPlayer {
         mControlType = playerType;
         mPlayerFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f, false);
         mUnitDeathIncomeChane = unitDeathIncomeChance;
-        START_MONEY_VALUE = missionConfig.getStartMoney();
+        START_MONEY_VALUE = startMoney;
         initSettingsCallbacks();
     }
 

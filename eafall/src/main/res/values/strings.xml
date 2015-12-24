@@ -7,9 +7,15 @@
 
     <!-- game types -->
     <string name="campaign">CAMPAIGN</string>
+    <string name="tutorial">TUTORIAL</string>
     <string name="single_game">SINGLE GAME</string>
     <string name="multiplayer_game">MULTIPLAYER GAME</string>
     <string name="sandbox">SANDBOX</string>
+
+    <!-- tutorial -->
+    <string name="tutorial_click_plus">Click on \'+\' to get more oxygen</string>
+    <string name="tutorial_oxygen_value">Check your new oxygen amount\n(click anywhere to continue)</string>
+    <!-- /tutorial -->
 
     <!-- pre game customizations -->
     <string name="choose_alliance">Alliance</string>

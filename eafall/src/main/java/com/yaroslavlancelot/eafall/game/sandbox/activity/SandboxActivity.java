@@ -111,8 +111,8 @@ public class SandboxActivity extends BaseGameObjectsActivity {
 
     @Override
     protected IPlayer createPlayer(String name, IAlliance alliance, IPlayer.ControlType playerType,
-                                   MissionConfig missionConfig) {
-        return new Player(name, alliance, playerType, -1, missionConfig);
+                                   int startMoney, MissionConfig missionConfig) {
+        return new Player(name, alliance, playerType, 0, -1, missionConfig);
     }
 
     // ===========================================================

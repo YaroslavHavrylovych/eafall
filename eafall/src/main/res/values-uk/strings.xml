@@ -7,9 +7,15 @@
 
     <!-- game types -->
     <string name="campaign">КАМПАНІЯ</string>
+    <string name="tutorial">НАВЧАННЯ</string>
     <string name="single_game">ОДИНОЧНА ГРА</string>
     <string name="multiplayer_game">МУЛЬТИПЛЕЄРНА ГРА</string>
     <string name="sandbox">ПІСОЧНИЦЯ</string>
+
+    <!-- tutorial -->
+    <string name="tutorial_click_plus">Натисніть \'+\', щоб отримати кисень</string>
+    <string name="tutorial_oxygen_value">Перевірте нове значення кисню\n(натисніть екран для продовження)</string>
+    <!-- /tutorial -->
 
     <!-- pre game customizations -->
     <string name="choose_alliance">Союзи</string>

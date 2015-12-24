@@ -190,10 +190,12 @@ public abstract class BaseGameObjectsActivity extends EaFallActivity implements 
         Intent intent = getIntent();
         IAlliance alliance = AllianceHolder.getInstance().getElement(
                 intent.getStringExtra(StringConstants.FIRST_PLAYER_ALLIANCE));
-        mFirstPlayer = createPlayer(StringConstants.FIRST_PLAYER_CONTROL_BEHAVIOUR_TYPE, alliance);
+        mFirstPlayer = createPlayer(StringConstants.FIRST_PLAYER_CONTROL_BEHAVIOUR_TYPE, alliance,
+                mMissionConfig.getPlayerStartMoney());
         alliance = AllianceHolder.getInstance().getElement(
                 intent.getStringExtra(StringConstants.SECOND_PLAYER_ALLIANCE));
-        mSecondPlayer = createPlayer(StringConstants.SECOND_PLAYER_CONTROL_BEHAVIOUR_TYPE, alliance);
+        mSecondPlayer = createPlayer(StringConstants.SECOND_PLAYER_CONTROL_BEHAVIOUR_TYPE, alliance,
+                mMissionConfig.getOpponentStartMoney());
         //units map
         mFirstPlayer.createUnitsMap(true);
         mSecondPlayer.createUnitsMap(false);
@@ -234,10 +236,10 @@ public abstract class BaseGameObjectsActivity extends EaFallActivity implements 
     }
 
     /** create new player depending on player control type which stored in extra */
-    protected IPlayer createPlayer(String playerNameInExtra, IAlliance alliance) {
+    protected IPlayer createPlayer(String playerNameInExtra, IAlliance alliance, int startMoney) {
         Intent intent = getIntent();
         IPlayer.ControlType playerType = IPlayer.ControlType.valueOf(intent.getStringExtra(playerNameInExtra));
-        IPlayer player = createPlayer(playerNameInExtra, alliance, playerType, mMissionConfig);
+        IPlayer player = createPlayer(playerNameInExtra, alliance, playerType, startMoney, mMissionConfig);
         mGamePeriodic.add(new UnitPositionUpdater(player));
         return player;
     }
@@ -248,6 +250,7 @@ public abstract class BaseGameObjectsActivity extends EaFallActivity implements 
      */
     protected abstract IPlayer createPlayer(String name, IAlliance alliance,
                                             IPlayer.ControlType playerType,
+                                            int startMoney,
                                             MissionConfig missionConfig);
 
     @SuppressWarnings("unused")

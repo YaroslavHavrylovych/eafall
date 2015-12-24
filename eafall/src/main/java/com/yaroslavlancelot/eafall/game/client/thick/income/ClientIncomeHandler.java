@@ -10,6 +10,9 @@ import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Used to display income images on the screen.
  *
@@ -27,6 +30,7 @@ public class ClientIncomeHandler extends SelfCleanable {
     // Fields
     // ===========================================================
     private IncomeButton mPlanetIncome;
+    private List<IncomeListener> mIncomeListener;
 
     // ===========================================================
     // Constructors
@@ -35,23 +39,15 @@ public class ClientIncomeHandler extends SelfCleanable {
         mScene = scene;
         mPlayer = player;
         PlanetStaticObject planet = player.getPlanet();
-        float x = planet.getX(), y = planet.getY();
-        float xOffset = planet.getWidth() / 2 - SizeConstants.INCOME_IMAGE_SIZE / 2,
-                yOffset = planet.getHeight() / 2 + SizeConstants.INCOME_IMAGE_SIZE / 4;
-        y += yOffset;
-        if (planet.isLeft()) {
-            x += xOffset;
-        } else {
-            x -= xOffset;
-        }
         mPlanetIncome = createIncomeButton(vbo);
-        mPlanetIncome.setPosition(x, y);
+        mPlanetIncome.setPosition(
+                getPlanetIncomeX(planet.getX(), planet.getWidth()),
+                getPlanetIncomeY(planet.getY(), planet.getHeight()));
     }
 
     // ===========================================================
     // Getter & Setter
     // ===========================================================
-
     public static ClientIncomeHandler getIncomeHandler() {
         return INSTANCE;
     }
@@ -63,6 +59,31 @@ public class ClientIncomeHandler extends SelfCleanable {
     public void clear() {
         mPlanetIncome = null;
         INSTANCE = null;
+        if (mIncomeListener != null) {
+            mIncomeListener.clear();
+            mIncomeListener = null;
+        }
+    }
+
+    /**
+     * adds income listener
+     *
+     * @param incomeListener callbacks when income appears
+     */
+    public void registerIncomeListener(IncomeListener incomeListener) {
+        if (mIncomeListener == null) {
+            mIncomeListener = new ArrayList<>(1);
+        }
+        mIncomeListener.add(incomeListener);
+    }
+
+    /**
+     * removes income listener
+     *
+     * @param incomeListener income listener to remove
+     */
+    public void unregisterIncomeListener(IncomeListener incomeListener) {
+        mIncomeListener.remove(incomeListener);
     }
 
     // ===========================================================
@@ -79,6 +100,11 @@ public class ClientIncomeHandler extends SelfCleanable {
         incomeButton.resetAnimation();
         mScene.attachChild(incomeButton);
         mScene.registerTouchArea(incomeButton);
+        if (mIncomeListener != null && mIncomeListener.size() > 0) {
+            for (int i = 0; i < mIncomeListener.size(); i++) {
+                mIncomeListener.get(i).onIncome(money, incomeType, incomeButton);
+            }
+        }
         return incomeButton;
     }
 
@@ -89,6 +115,37 @@ public class ClientIncomeHandler extends SelfCleanable {
                 mScene.unregisterTouchArea(this);
             }
         };
+    }
+
+    /**
+     * needed value
+     *
+     * @param planetY      planet abscissa
+     * @param planetHeight planet width
+     * @return the planet income image center abscissa
+     */
+    public static float getPlanetIncomeY(float planetY, float planetHeight) {
+        float y = planetY;
+        float yOffset = planetHeight / 2 + SizeConstants.INCOME_IMAGE_SIZE / 4;
+        y += yOffset;
+        return y;
+    }
+
+    /**
+     * needed value
+     *
+     * @param planetX     planet abscissa
+     * @param planetWidth planet width
+     * @return the planet income image center abscissa
+     */
+    public static float getPlanetIncomeX(float planetX, float planetWidth) {
+        float xOffset = planetWidth / 2 - SizeConstants.INCOME_IMAGE_SIZE / 2;
+        if (PlanetStaticObject.isLeft(planetX)) {
+            planetX += xOffset;
+        } else {
+            planetX -= xOffset;
+        }
+        return planetX;
     }
 
     public static void init(IPlayer player, Scene scene, VertexBufferObjectManager vbo) {
@@ -113,5 +170,10 @@ public class ClientIncomeHandler extends SelfCleanable {
         PLANET,
         /** can be achieved by killing enemy units */
         UNIT
+    }
+
+    /** Income callback */
+    public interface IncomeListener {
+        void onIncome(int value, IncomeType incomeType, ButtonSprite button);
     }
 }

@@ -37,12 +37,13 @@ public class MissionIntent extends StartableIntent {
     }
 
     /**
-     * used for campaigns missions
+     * Initialized with mission data loader
      *
-     * @param missionData mission data
+     * @param activityClass custom class to start mission
+     * @param missionData   mission data
      */
-    public MissionIntent(MissionDataLoader missionData) {
-        this(SinglePlayerGameActivity.class);
+    public MissionIntent(Class activityClass, MissionDataLoader missionData) {
+        this(activityClass);
         putExtra(StringConstants.FIRST_PLAYER_CONTROL_BEHAVIOUR_TYPE,
                 IPlayer.ControlType.USER_CONTROL_ON_SERVER_SIDE.toString());
         putExtra(StringConstants.FIRST_PLAYER_ALLIANCE,
@@ -51,6 +52,15 @@ public class MissionIntent extends StartableIntent {
                 IPlayer.ControlType.BOT_CONTROL_ON_SERVER_SIDE.toString());
         putExtra(StringConstants.SECOND_PLAYER_ALLIANCE, missionData.opponent_alliance);
         putExtra(MISSION_CONFIG, new MissionConfig(missionData));
+    }
+
+    /**
+     * Initialized with mission data loader
+     *
+     * @param missionData mission data
+     */
+    public MissionIntent(MissionDataLoader missionData) {
+        this(SinglePlayerGameActivity.class, missionData);
     }
 
     // ===========================================================

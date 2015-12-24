@@ -82,7 +82,7 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
     }
 
     public boolean isLeft() {
-        return mX < SizeConstants.HALF_FIELD_WIDTH;
+        return isLeft(mX);
     }
 
     public int getExistingBuildingsTypesAmount() {
@@ -316,5 +316,9 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
 
     public IBuilding getBuilding(int id) {
         return mBuildings.get(id);
+    }
+
+    public static boolean isLeft(float x) {
+        return x < SizeConstants.HALF_FIELD_WIDTH;
     }
 }
