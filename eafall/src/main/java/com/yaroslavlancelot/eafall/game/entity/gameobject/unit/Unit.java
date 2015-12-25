@@ -60,7 +60,7 @@ public abstract class Unit extends GameObject implements
     /** unit shout sound */
     protected LimitedSoundWrapper mFireSound;
     /** take care about unit rotation */
-    protected RotationModifier mUnitRotationModifier = new ManualFinishRotationModifier(0, 0, 0);
+    protected ManualFinishRotationModifier mUnitRotationModifier = new ManualFinishRotationModifier(0, 0, 0);
     /** unit player name */
     protected String mPlayerName;
 
@@ -68,6 +68,7 @@ public abstract class Unit extends GameObject implements
     public Unit(UnitBuilder unitBuilder) {
         super(-100, -100, unitBuilder.getWidth(), unitBuilder.getHeight(),
                 unitBuilder.getTextureRegion(), unitBuilder.getObjectManager());
+        mUnitRotationModifier.setFinished(true);
         initHealth(unitBuilder.mHealth);
         mObjectArmor = new Armor(unitBuilder.getArmor().getArmorType(),
                 unitBuilder.getArmor().getArmorValue());

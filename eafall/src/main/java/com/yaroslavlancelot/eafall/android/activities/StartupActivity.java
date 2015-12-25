@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.yaroslavlancelot.eafall.BuildConfig;
 import com.yaroslavlancelot.eafall.EaFallApplication;
@@ -17,7 +16,9 @@ import com.yaroslavlancelot.eafall.android.activities.settings.SettingsActivity;
 import com.yaroslavlancelot.eafall.android.activities.singleplayer.PreGameCustomizationActivity;
 import com.yaroslavlancelot.eafall.game.alliance.mutants.Mutants;
 import com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity;
+import com.yaroslavlancelot.eafall.game.mission.MissionIntent;
 import com.yaroslavlancelot.eafall.game.player.IPlayer;
+import com.yaroslavlancelot.eafall.game.tutorial.TutorialMissionDataLoader;
 
 /**
  * first game activity with menu etc.
@@ -42,23 +43,32 @@ public class StartupActivity extends BaseNonGameActivity {
     }
 
     private void initCampaignButton(View campaignButton) {
-        if (campaignButton == null) return;
-        if (campaignButton instanceof Button) {
-            Button button = (Button) campaignButton;
-            button.getPaint().setShader(getTextGradient(button.getLineHeight()));
+        Button button = (Button) campaignButton;
+        button.getPaint().setShader(getTextGradient(button.getLineHeight()));
+        if (BuildConfig.DEMO_VERSION) {
+            button.setText(R.string.tutorial);
+        } else {
+            button.setText(R.string.campaign);
         }
         campaignButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                String intentClassName;
+                StartableIntent startableIntent;
                 if (BuildConfig.DEMO_VERSION) {
-                    Toast.makeText(StartupActivity.this, R.string.not_int_demo, Toast.LENGTH_SHORT)
-                            .show();
+                    String activityClassName = "com.yaroslavlancelot.eafall.game.tutorial" +
+                            ".TutorialActivity";
+                    Class cls;
+                    try {
+                        cls = Class.forName(activityClassName);
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                        return;
+                    }
+                    startableIntent = new MissionIntent(cls, new TutorialMissionDataLoader());
                 } else {
-                    intentClassName = "com.yaroslavlancelot.eafall.game.campaign" +
+                    String intentClassName = "com.yaroslavlancelot.eafall.game.campaign" +
                             ".intents.CampaignIntent";
                     Class cls;
-                    StartableIntent startableIntent;
                     try {
                         cls = Class.forName(intentClassName);
                         startableIntent = (StartableIntent) cls.newInstance();
@@ -72,18 +82,15 @@ public class StartupActivity extends BaseNonGameActivity {
                         e.printStackTrace();
                         return;
                     }
-                    startableIntent.start(StartupActivity.this);
                 }
+                startableIntent.start(StartupActivity.this);
             }
         });
     }
 
     private void initSingleGameButton(View singleGameButton) {
-        if (singleGameButton == null) return;
-        if (singleGameButton instanceof Button) {
-            Button button = (Button) singleGameButton;
-            button.getPaint().setShader(getTextGradient(button.getLineHeight()));
-        }
+        Button button = (Button) singleGameButton;
+        button.getPaint().setShader(getTextGradient(button.getLineHeight()));
         singleGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -104,7 +111,6 @@ public class StartupActivity extends BaseNonGameActivity {
     }
 
     private void initMultiplayerGameButton(View singleGameButton) {
-        if (singleGameButton == null) return;
         Button button = (Button) singleGameButton;
         if (BuildConfig.DEMO_VERSION) {
             button.setText(R.string.sandbox);

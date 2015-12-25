@@ -4,7 +4,7 @@ import com.yaroslavlancelot.eafall.R;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.StaticObject;
 import com.yaroslavlancelot.eafall.game.entity.health.IHealthBar;
-import com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.ShowToastEvent;
+import com.yaroslavlancelot.eafall.game.events.aperiodic.ShowHudTextEvent;
 import com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.BuildingsAmountChangedEvent;
 import com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.BuildingDescriptionShowEvent;
 import com.yaroslavlancelot.eafall.game.player.IPlayer;
@@ -76,7 +76,7 @@ public abstract class Building implements IBuilding {
                 if (PlayersHolder.getPlayer(mPlayerName).getControlType().user()) {
                     PlayersHolder.getPlayer(mPlayerName).getPlanet().useSuppressor();
                 } else {
-                    EventBus.getDefault().post(new ShowToastEvent(false, R.string.wrong_planet_suppressor));
+                    EventBus.getDefault().post(new ShowHudTextEvent(R.string.wrong_planet_suppressor));
                 }
             }
         });

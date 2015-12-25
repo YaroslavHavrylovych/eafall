@@ -13,6 +13,7 @@ import com.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.SunStaticObject;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetStaticObject;
 import com.yaroslavlancelot.eafall.game.events.GameStartCooldown;
+import com.yaroslavlancelot.eafall.game.events.aperiodic.ShowHudTextEvent;
 import com.yaroslavlancelot.eafall.game.events.aperiodic.endgame.GameOverEvent;
 import com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.CreateBuildingEvent;
 import com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.BuildingSettingsPopupShowEvent;
@@ -29,6 +30,7 @@ import com.yaroslavlancelot.eafall.game.rule.RulesFactory;
 import com.yaroslavlancelot.eafall.game.scene.hud.BaseGameHud;
 import com.yaroslavlancelot.eafall.game.scene.hud.ClientGameHud;
 import com.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
+import com.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 
 import org.andengine.entity.IEntity;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -41,7 +43,7 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
     /** defines whether the game is over and who is the winner */
     protected IRuler mRuler;
     /** popup to change particular building settings */
-    private BuildingSettingsDialog mBuildingSettingsDialog;
+    protected BuildingSettingsDialog mBuildingSettingsDialog;
 
     @Override
     protected BaseGameHud createHud() {
@@ -77,9 +79,11 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
     protected void onShowWorkingScene() {
         super.onShowWorkingScene();
         mSceneManager.getWorkingScene().setIgnoreUpdate(true);
+        ((ClientGameHud) mHud).blockInput(true);
         final GameStartCooldown timerHandler = new GameStartCooldown((ClientGameHud) mHud) {
             @Override
             public void timerEnded() {
+                ((ClientGameHud) mHud).blockInput(false);
                 mSceneManager.getWorkingScene().setIgnoreUpdate(false);
                 mFirstPlayer.incomeTime();
                 mSecondPlayer.incomeTime();
@@ -91,8 +95,9 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
 
     @Override
     protected IPlayer createPlayer(String name, IAlliance alliance, IPlayer.ControlType playerType,
+                                   int startMoney,
                                    final MissionConfig missionConfig) {
-        return new Player(name, alliance, playerType, 10, missionConfig);
+        return new Player(name, alliance, playerType, startMoney, 10, missionConfig);
     }
 
     /** start tracker which tracks game rules */
@@ -178,10 +183,30 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
                 if (mBuildingSettingsDialog == null) {
                     mBuildingSettingsDialog = new BuildingSettingsDialog(ClientGameActivity.this);
                 }
+                if (event.getDismissListener() != null) {
+                    mBuildingSettingsDialog.setOnDismissListener(event.getDismissListener());
+                }
                 mBuildingSettingsDialog.init(event.getUnitBuilding());
                 mBuildingSettingsDialog.show();
             }
         });
+    }
+
+    @SuppressWarnings("unused")
+    public void onEventMainThread(final ShowHudTextEvent showToastEvent) {
+        int[] ids = showToastEvent.getTextId();
+        String format = LocaleImpl.getInstance().getStringById(ids[0]);
+        String result;
+        if (ids.length > 1) {
+            Object[] args = new Object[ids.length - 1];
+            for (int i = 1; i < ids.length; i++) {
+                args[i - 1] = LocaleImpl.getInstance().getStringById(ids[i]);
+            }
+            result = String.format(format, args);
+        } else {
+            result = format;
+        }
+        ((ClientGameHud) mHud).showHudText(result);
     }
 
     @SuppressWarnings("unused")

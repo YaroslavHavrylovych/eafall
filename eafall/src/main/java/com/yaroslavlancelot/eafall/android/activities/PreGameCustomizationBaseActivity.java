@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 
 import com.yaroslavlancelot.eafall.R;
+import com.yaroslavlancelot.eafall.android.StartableIntent;
 import com.yaroslavlancelot.eafall.game.alliance.imperials.Imperials;
 import com.yaroslavlancelot.eafall.game.alliance.mutants.Mutants;
 import com.yaroslavlancelot.eafall.game.alliance.rebels.Rebels;
@@ -80,11 +81,11 @@ public abstract class PreGameCustomizationBaseActivity extends BaseNonGameActivi
     }
 
     /** @return intent initialized as a game to start */
-    public static Intent getSinglePlayerIntent(Class activityToStartClass,
-                                               String alliance1, String alliance2,
-                                               IPlayer.ControlType player1ControlType,
-                                               IPlayer.ControlType player2ControlType) {
-        Intent intent = new MissionIntent(activityToStartClass);
+    public static StartableIntent getSinglePlayerIntent(Class activityToStartClass,
+                                                        String alliance1, String alliance2,
+                                                        IPlayer.ControlType player1ControlType,
+                                                        IPlayer.ControlType player2ControlType) {
+        StartableIntent intent = new MissionIntent(activityToStartClass);
         intent.putExtra(MissionIntent.MISSION_CONFIG, new MissionConfig());
         intent.putExtra(StringConstants.FIRST_PLAYER_CONTROL_BEHAVIOUR_TYPE,
                 player1ControlType.toString()).

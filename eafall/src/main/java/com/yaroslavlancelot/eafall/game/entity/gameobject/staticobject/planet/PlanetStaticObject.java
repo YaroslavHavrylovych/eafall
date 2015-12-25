@@ -30,7 +30,7 @@ import com.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.PathHelper;
 import com.yaroslavlancelot.eafall.game.entity.health.IHealthBar;
 import com.yaroslavlancelot.eafall.game.entity.health.PlayerHealthBar;
-import com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.ShowToastEvent;
+import com.yaroslavlancelot.eafall.game.events.aperiodic.ShowHudTextEvent;
 import com.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.yaroslavlancelot.eafall.game.popup.rolling.RollingPopupManager;
@@ -82,7 +82,7 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
     }
 
     public boolean isLeft() {
-        return mX < SizeConstants.HALF_FIELD_WIDTH;
+        return isLeft(mX);
     }
 
     public int getExistingBuildingsTypesAmount() {
@@ -263,7 +263,7 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
                 final IPlayer player = PlayersHolder.getPlayer(mPlayerName);
                 final int playerRes = player.getControlType().user() ?
                         R.string.player_planet_text : R.string.opponent_planet_text;
-                EventBus.getDefault().post(new ShowToastEvent(true, playerRes, planetNameRes,
+                EventBus.getDefault().post(new ShowHudTextEvent(playerRes, planetNameRes,
                         player.getAlliance().getAllianceStringRes(),
                         mIsSuppressorUsed ? R.string.used : R.string.unused));
             }
@@ -289,7 +289,7 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
                 if (PlayersHolder.getPlayer(mPlayerName).getControlType().user()) {
                     useSuppressor();
                 } else {
-                    EventBus.getDefault().post(new ShowToastEvent(false, R.string.wrong_planet_suppressor));
+                    EventBus.getDefault().post(new ShowHudTextEvent(R.string.wrong_planet_suppressor));
                 }
             }
         });
@@ -305,7 +305,7 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
     public void useSuppressor() {
         if (!mIsSuppressorUsed) {
             mIsSuppressorUsed = true;
-            EventBus.getDefault().post(new ShowToastEvent(false, R.string.suppressor_being_used));
+            EventBus.getDefault().post(new ShowHudTextEvent(R.string.suppressor_being_used));
             IPlayer enemy = PlayersHolder.getPlayer(mPlayerName).getEnemyPlayer();
             List<Unit> enemies = enemy.getUnitMap().getUnitOnSide(isLeft());
             for (int i = 0; i < enemies.size(); i++) {
@@ -316,5 +316,9 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
 
     public IBuilding getBuilding(int id) {
         return mBuildings.get(id);
+    }
+
+    public static boolean isLeft(float x) {
+        return x < SizeConstants.HALF_FIELD_WIDTH;
     }
 }

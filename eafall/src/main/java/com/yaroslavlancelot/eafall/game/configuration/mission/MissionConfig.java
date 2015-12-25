@@ -46,7 +46,8 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
     private int mStarCodeName;
     private int mPlayerPlanet;
     private int mOpponentPlanet;
-    private int mStartMoney;
+    private int mPlayerStartMoney;
+    private int mOpponentStartMoney;
 
     // ===========================================================
     // Constructors
@@ -69,8 +70,9 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
         mStarCodeName = in.readInt();
         mStarConstellation = in.readInt();
         mPlayerPlanet = in.readInt();
+        mPlayerStartMoney = in.readInt();
         mOpponentPlanet = in.readInt();
-        mStartMoney = in.readInt();
+        mOpponentStartMoney = in.readInt();
         mMissionType = (MissionType) in.readSerializable();
     }
 
@@ -121,8 +123,12 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
         return mOpponentPlanet;
     }
 
-    public int getStartMoney() {
-        return mStartMoney;
+    public int getPlayerStartMoney() {
+        return mPlayerStartMoney;
+    }
+
+    public int getOpponentStartMoney() {
+        return mOpponentStartMoney;
     }
 
     // ===========================================================
@@ -148,8 +154,9 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
         dest.writeInt(mStarCodeName);
         dest.writeInt(mStarConstellation);
         dest.writeInt(mPlayerPlanet);
+        dest.writeInt(mPlayerStartMoney);
         dest.writeInt(mOpponentPlanet);
-        dest.writeInt(mStartMoney);
+        dest.writeInt(mOpponentStartMoney);
         dest.writeSerializable(mMissionType);
     }
 
@@ -168,15 +175,19 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
         mStarCodeName = R.string.sun;
         mStarConstellation = R.string.no_constellation;
         mPlayerPlanet = R.string.earth;
+        mPlayerStartMoney = 1000;
         mOpponentPlanet = R.string.earth;
-        mStartMoney = 1000;
+        mOpponentStartMoney = 1000;
     }
 
     private void init(MissionDataLoader loadedData) {
         initType(loadedData.definition);
         if (loadedData.definition.time_limit != null) mTime = loadedData.definition.time_limit;
         if (loadedData.max_oxygen != null) mMaxOxygenAmount = loadedData.max_oxygen;
-        if (loadedData.max_oxygen != null) mStartMoney = loadedData.start_money;
+        if (loadedData.player_start_money != null)
+            mPlayerStartMoney = loadedData.player_start_money;
+        if (loadedData.opponent_start_money != null)
+            mOpponentStartMoney = loadedData.opponent_start_money;
         if (loadedData.planet_health != null) mPlanetHealth = loadedData.planet_health;
         if (loadedData.player_planet != null)
             mPlayerPlanet = getStringResourceByName(loadedData.player_planet);

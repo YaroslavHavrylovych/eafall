@@ -16,7 +16,7 @@ public class Armor {
             new float[]{1f, 1.05f, 1.4f, .6f, 1.1f, .6f},
             new float[]{.8f, 1f, 1f, 1f, 1f, 1f},
             new float[]{1f, 1.3f, .75f, .95f, 1.2f, .6f},
-            new float[]{.8f, .6f, .45f, .8f, .7f, 2.2f}
+            new float[]{.5f, .4f, .45f, .5f, .5f, 2.2f}
     };
     private int mArmorValue;
     private volatile int mAdditionalArmor;

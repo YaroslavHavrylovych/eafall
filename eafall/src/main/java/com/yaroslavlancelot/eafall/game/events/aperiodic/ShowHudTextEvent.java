@@ -1,48 +1,40 @@
-package com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description;
-
-import android.content.DialogInterface;
-
-import com.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.IUnitBuilding;
+package com.yaroslavlancelot.eafall.game.events.aperiodic;
 
 /**
- * Event to open building settings popup
+ * Event contains text to display on HUD.
  *
  * @author Yaroslav Havrylovych
  */
-public class BuildingSettingsPopupShowEvent {
+public class ShowHudTextEvent {
     // ===========================================================
     // Constants
     // ===========================================================
 
     // ===========================================================
     // Fields
-    private final IUnitBuilding mUnitBuilding;
-    private final DialogInterface.OnDismissListener mDismissListener;
-
     // ===========================================================
+    private int[] mTextId;
 
     // ===========================================================
     // Constructors
     // ===========================================================
-    public BuildingSettingsPopupShowEvent(IUnitBuilding unitBuilding) {
-        this(unitBuilding, null);
+
+    /**
+     * Event to show a on hud text
+     *
+     * @param text text to display. Can multiple text. The first argument will be the string
+     *             which will contain (String.format) next strings.
+     */
+    public ShowHudTextEvent(int... text) {
+        mTextId = text;
     }
 
-    public BuildingSettingsPopupShowEvent(IUnitBuilding unitBuilding,
-                                          DialogInterface.OnDismissListener listener) {
-        mUnitBuilding = unitBuilding;
-        mDismissListener = listener;
-    }
 
     // ===========================================================
     // Getter & Setter
     // ===========================================================
-    public IUnitBuilding getUnitBuilding() {
-        return mUnitBuilding;
-    }
-
-    public DialogInterface.OnDismissListener getDismissListener() {
-        return mDismissListener;
+    public int[] getTextId() {
+        return mTextId;
     }
 
     // ===========================================================

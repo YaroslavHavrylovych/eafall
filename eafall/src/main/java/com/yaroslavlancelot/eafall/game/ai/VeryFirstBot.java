@@ -3,6 +3,7 @@ package com.yaroslavlancelot.eafall.game.ai;
 import com.yaroslavlancelot.eafall.game.GameState;
 import com.yaroslavlancelot.eafall.game.alliance.IAlliance;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
+import com.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingType;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.building.IBuilding;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.UnitBuilding;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
@@ -32,11 +33,10 @@ import java.util.Random;
 //TODO stop bot when game finished
 public class VeryFirstBot implements Runnable {
     public static final String TAG = VeryFirstBot.class.getCanonicalName();
-    public static final int DELAY_BETWEEN_ITERATIONS = 500;
+    public static final int DELAY_BETWEEN_ITERATIONS = 300;
     private final IPlayer mBotPlayer;
 
     public VeryFirstBot(IPlayer botPlayer) {
-        //TODO logger was here
         mBotPlayer = botPlayer;
     }
 
@@ -66,6 +66,12 @@ public class VeryFirstBot implements Runnable {
                 if (planet == null) {
                     return;
                 }
+
+                //suppressor
+                if (planet.getObjectCurrentHealth() < planet.getMaximumObjectHealth() / 2 && !planet.isSuppressorUsed()) {
+                    planet.useSuppressor();
+                }
+
                 int money = mBotPlayer.getMoney();
                 buildingsToBuild.clear();
                 buildingsToUpgrade.clear();
@@ -78,6 +84,9 @@ public class VeryFirstBot implements Runnable {
                     buildingDummy = alliance.getBuildingDummy(buildingId);
                     amountOnPlanet = planet.getBuildingsAmount(buildingId.getId());
                     if (amountOnPlanet < buildingDummy.getAmountLimit()) {
+                        if (buildingDummy.getBuildingType() == BuildingType.DEFENCE_BUILDING) {
+                            continue;
+                        }
                         if (money >= buildingDummy.getCost(buildingId.getUpgrade())) {
                             buildingsToBuild.add(buildingId);
                         }
@@ -94,25 +103,19 @@ public class VeryFirstBot implements Runnable {
                 if (!buildingsToBuild.isEmpty()) {
                     final BuildingId buildingId = buildingsToBuild.get(
                             new Random().nextInt(buildingsToBuild.size()));
-                    //TODO logger was here
                     final IBuilding building;
                     if (buildingsToUpgrade.contains(buildingId)) {
-                        //TODO logger was here
                         building = planet.getBuilding(buildingId.getId());
                         building.upgradeBuilding();
                         randomizeUnitPath(building);
                         continue;
                     }
-                    //TODO logger was here
-                    final PlanetStaticObject finalPlanet = planet;
-                    finalPlanet.createBuilding(buildingId);
+                    planet.createBuilding(buildingId);
                     building = planet.getBuilding(buildingId.getId());
                     randomizeUnitPath(building);
                 } else if (!buildingsToUpgrade.isEmpty()) {
                     BuildingId buildingId = buildingsToUpgrade.get(
                             new Random().nextInt(buildingsToUpgrade.size()));
-                    //TODO logger was here
-                    //TODO logger was here
                     final IBuilding building = planet.getBuilding(buildingId.getId());
                     building.upgradeBuilding();
                     randomizeUnitPath(building);

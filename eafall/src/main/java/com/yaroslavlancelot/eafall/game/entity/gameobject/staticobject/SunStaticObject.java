@@ -8,7 +8,7 @@ import com.yaroslavlancelot.eafall.game.engine.InstantRotationModifier;
 import com.yaroslavlancelot.eafall.game.entity.BatchedSprite;
 import com.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.yaroslavlancelot.eafall.game.entity.health.IHealthBar;
-import com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.ShowToastEvent;
+import com.yaroslavlancelot.eafall.game.events.aperiodic.ShowHudTextEvent;
 import com.yaroslavlancelot.eafall.game.touch.TouchHelper;
 
 import org.andengine.entity.modifier.IEntityModifier;
@@ -53,10 +53,9 @@ public class SunStaticObject extends StaticObject {
         setTouchCallback(new TouchHelper.UnboundedClickListener(new ClickDetector.IClickDetectorListener() {
             @Override
             public void onClick(final ClickDetector pClickDetector, final int pPointerID, final float pSceneX, final float pSceneY) {
-                EventBus.getDefault().post(new ShowToastEvent(true,
+                EventBus.getDefault().post(new ShowHudTextEvent(
                         R.string.planet_system_star, constellationName, starName));
             }
         }));
     }
-
 }

@@ -32,9 +32,11 @@
                                         <xs:element name="name" type="xs:string"/>
                                         <xs:element name="player_alliance" type="xs:string"/>
                                         <xs:element name="player_planet" type="xs:string"/>
+                                        <xs:element name="player_start_money" type="xs:integer"
+                                                    minOccurs="0"/>
                                         <xs:element name="opponent_alliance" type="xs:string"/>
                                         <xs:element name="opponent_planet" type="xs:string"/>
-                                        <xs:element name="start_money" type="xs:integer"
+                                        <xs:element name="opponent_start_money" type="xs:integer"
                                                     minOccurs="0"/>
                                         <xs:element name="max_oxygen"
                                                     type="xs:integer"

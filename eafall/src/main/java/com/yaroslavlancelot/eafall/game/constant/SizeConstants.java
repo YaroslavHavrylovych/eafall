@@ -34,6 +34,11 @@ public final class SizeConstants {
     public static final int FIELD_PARTITION_SIZE = 120;
     public static final int BULLET_MASS_DAMAGE_RADIUS = FIELD_PARTITION_SIZE / 2;
 
+    /* Tutorial */
+    public static final int TUTORIAL_POINTER_WIDTH = 330;
+    public static final int TUTORIAL_POINTER_HEIGHT = 100;
+    public static final int TUTORIAL_TEXT_FONT_SIZE = 60;
+
     /* HUD */
     //positions
     public static final int HUD_VALUE_OFFSET = 10;

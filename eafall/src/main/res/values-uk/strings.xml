@@ -7,9 +7,29 @@
 
     <!-- game types -->
     <string name="campaign">КАМПАНІЯ</string>
+    <string name="tutorial">ВИШКІЛ</string>
     <string name="single_game">ОДИНОЧНА ГРА</string>
     <string name="multiplayer_game">МУЛЬТИПЛЕЄРНА ГРА</string>
     <string name="sandbox">ПІСОЧНИЦЯ</string>
+
+    <!-- tutorial -->
+    <string name="tutorial_click_plus">Натисніть \'+\', щоб отримати кисень</string>
+    <string name="tutorial_oxygen_value">Перевірте нове значення кисню\n(натисніть екран для продовження)</string>
+    <string name="tutorial_constructions_button">Натисніть, щоб побачити доступні будинки</string>
+    <string name="tutorial_construction_popup">Наявні будинки і ціни</string>
+    <string name="tutorial_constructions_defence_building">Для захисту найкраще збудувати оборонну споруду</string>
+    <string name="tutorial_description_object_characteristics">Нижче ви можете знайти характеристики будинку</string>
+    <string name="tutorial_description_object_unit">Щоб побачити характеристики юніта ви можете:\nнатиснути на зображення юніта\nабо натиснути на його ім’я</string>
+    <string name="tutorial_description_create_building">А зараз час для побудови</string>
+    <string name="tutorial_description_buildings_amount">Кількість будинків змінилась</string>
+    <string name="tutorial_description_previous_building">Натисніть стрілку, щоб перейти до попереднього будинку</string>
+    <string name="tutorial_description_create_building_2">Зараз час створити інший будинок</string>
+    <string name="tutorial_description_building_settings">Натисніть кнопку, щоб відкрити налаштування будинку</string>
+    <string name="tutorial_description_hide">Натисніть на вільне місце, щоб сховати попап</string>
+    <string name="tutorial_description_suppressor_usage">Якщо Ви програєте, то зробіть затяжний клік на Вашу планету\nце викличе заглучувач</string>
+    <string name="tutorial_description_suppressor_description">Заглучувач знищить всіх супротивників\nна ваші частині ігрового поля</string>
+    <string name="tutorial_task">Ваша задача вижити решту часу\nЩасти!</string>
+    <!-- /tutorial -->
 
     <!-- pre game customizations -->
     <string name="choose_alliance">Союзи</string>
@@ -233,10 +253,10 @@
     <string name="sandbox_select">Використати</string>
 
     <!-- buildings -->
-    <string name="description_build_button">Побудувати</string>
+    <string name="description_build_button">Побуд.</string>
     <string name="description_back_button">Повернутись</string>
-    <string name="description_upgrade_button">Прокачати</string>
-    <string name="description_settings_button">Налаштування</string>
+    <string name="description_upgrade_button">Прокач.</string>
+    <string name="description_settings_button">Налашт.</string>
     <string name="description_cost">Ціна :</string>
     <string name="description_produce">Створює :</string>
     <string name="description_description">Опис :</string>
@@ -247,7 +267,7 @@
     <string name="unit_movement_path">Оберіть шлях для юніта</string>
     <string name="building_settings_top">Юніт йде згори</string>
     <string name="building_settings_bottom">Юніт йде знизу</string>
-    <string name="building_settings_pause">Зупинити виробництво юнітів</string>
+    <string name="building_settings_pause">Зупинити виробництво</string>
 
     <!-- units -->
     <string name="description_building">Будинок :</string>
@@ -286,8 +306,8 @@
 
     <!-- mission -->
     <!-- results -->
-    <string name="win">Ти виграв!</string>
-    <string name="lose">Ти програв!</string>
+    <string name="win">Ви перемогли!</string>
+    <string name="lose">Ви програли!</string>
     <!-- /results -->
     <!-- /mission -->
 </resources>

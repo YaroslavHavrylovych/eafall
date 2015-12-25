@@ -126,9 +126,17 @@ public class SquareUnitMap implements IUnitMap, IUnitMapUpdater {
     @Override
     public List<Unit> getUnitOnSide(boolean left) {
         mTmpUnitList.clear();
-        for (int i = 0; i < N / 2; i++) {
-            for (int j = 0; j < M; j++) {
-                mTmpUnitList.addAll(mPartitions.get(i).get(j));
+        if (left) {
+            for (int i = 0; i < N / 2; i++) {
+                for (int j = 0; j < M; j++) {
+                    mTmpUnitList.addAll(mPartitions.get(i).get(j));
+                }
+            }
+        } else {
+            for (int i = N / 2; i < N; i++) {
+                for (int j = 0; j < M; j++) {
+                    mTmpUnitList.addAll(mPartitions.get(i).get(j));
+                }
             }
         }
         return mTmpUnitList;
@@ -165,7 +173,7 @@ public class SquareUnitMap implements IUnitMap, IUnitMapUpdater {
      * if they're in the given range
      */
     private void addFromPartition(int x, int y, int range, int n, int m) {
-        if (n < 0 || n > N_1 || m < 0 || m > N_1) {
+        if (n < 0 || n > N_1 || m < 0 || m > M_1) {
             return;
         }
         List<Unit> partition = mPartitions.get(n).get(m);

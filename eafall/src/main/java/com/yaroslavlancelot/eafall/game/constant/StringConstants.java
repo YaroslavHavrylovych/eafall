@@ -84,6 +84,8 @@ public final class StringConstants {
     public static final String FILE_BUILDINGS_POPUP_UP_BUTTON = "graphics/icons/up_button.png";
     /** income image */
     public static final String FILE_INCOME = "graphics/icons/income.png";
+    /** tutorial pointer image */
+    public static final String FILE_TUTORIAL_POINTER = "graphics/icons/pointer.png";
     /** game menu button */
     public static final String FILE_MENU_BUTTON = "graphics/icons/menu_button.png";
     /** amount value background */

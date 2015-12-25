@@ -86,6 +86,7 @@ public class Player implements IPlayer {
     private SquareUnitMap mUnitMap;
 
     public Player(final String playerName, IAlliance alliance, ControlType playerType,
+                  int startMoney,
                   int unitDeathIncomeChance, MissionConfig missionConfig) {
         mPlayerName = playerName;
         MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY = "UNIT_CREATED_" + playerName;
@@ -98,7 +99,7 @@ public class Player implements IPlayer {
         mControlType = playerType;
         mPlayerFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f, false);
         mUnitDeathIncomeChane = unitDeathIncomeChance;
-        START_MONEY_VALUE = missionConfig.getStartMoney();
+        START_MONEY_VALUE = startMoney;
         initSettingsCallbacks();
     }
 
@@ -254,10 +255,7 @@ public class Player implements IPlayer {
 
     @Override
     public void addObjectToPlayer(final Unit object) {
-        //TODO logger was here
-        synchronized (mPlayerUnits) {
-            mPlayerUnits.add(object);
-        }
+        mPlayerUnits.add(object);
         if (object instanceof OffenceUnit) {
             for (Bonus bonus : mUnitBonuses) {
                 ((OffenceUnit) object).addBonus(bonus, Integer.MAX_VALUE);
@@ -269,10 +267,7 @@ public class Player implements IPlayer {
 
     @Override
     public void removeObjectFromPlayer(final GameObject object) {
-        //TODO logger was here
-        synchronized (mPlayerUnits) {
-            mPlayerUnits.remove(object);
-        }
+        mPlayerUnits.remove(object);
         if (object instanceof OffenceUnit) {
             SharedEvents.valueChanged(MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY,
                     sUnitsAmount.decrementAndGet());

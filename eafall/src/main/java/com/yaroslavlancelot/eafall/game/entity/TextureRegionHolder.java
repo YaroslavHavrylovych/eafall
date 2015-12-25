@@ -69,7 +69,6 @@ public class TextureRegionHolder extends Holder<ITextureRegion> {
                     textureAtlas, context, path);
             return sTextureRegionHolderUtils.addElement(key, textureRegion);
         }
-        //TODO logger was here
         return sTextureRegionHolderUtils.getElement(key);
     }
 
@@ -90,7 +89,6 @@ public class TextureRegionHolder extends Holder<ITextureRegion> {
                     textureAtlas, context, path, x, y);
             return sTextureRegionHolderUtils.addElement(key, textureRegion);
         }
-        //TODO logger was here
         return sTextureRegionHolderUtils.getElement(key);
     }
 
@@ -109,7 +107,6 @@ public class TextureRegionHolder extends Holder<ITextureRegion> {
                     (textureAtlas, source, x, y);
             return sTextureRegionHolderUtils.addElement(key, textureRegion);
         }
-        //TODO logger was here
         return sTextureRegionHolderUtils.getElement(key);
     }
 
@@ -130,7 +127,6 @@ public class TextureRegionHolder extends Holder<ITextureRegion> {
                     BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(textureAtlas,
                             context, key, x, y, columns, rows));
         }
-        //TODO logger was here
     }
 
     public static ITextureRegion getRegion(String key) {
