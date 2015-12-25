@@ -7,7 +7,7 @@
 
     <!-- game types -->
     <string name="campaign">CAMPAIGN</string>
-    <string name="tutorial">CAMP</string>
+    <string name="tutorial">TRAININGS</string>
     <string name="single_game">SINGLE GAME</string>
     <string name="multiplayer_game">MULTIPLAYER GAME</string>
     <string name="sandbox">SANDBOX</string>
