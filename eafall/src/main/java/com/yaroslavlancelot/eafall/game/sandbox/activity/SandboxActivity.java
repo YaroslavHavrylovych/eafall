@@ -1,5 +1,7 @@
 package com.yaroslavlancelot.eafall.game.sandbox.activity;
 
+import android.widget.Toast;
+
 import com.yaroslavlancelot.eafall.R;
 import com.yaroslavlancelot.eafall.game.BaseGameObjectsActivity;
 import com.yaroslavlancelot.eafall.game.alliance.IAlliance;
@@ -107,6 +109,17 @@ public class SandboxActivity extends BaseGameObjectsActivity {
         mCurrentUnitKey = mFirstPlayer.getAlliance().getUnitsIds().first();
         createBounds();
         super.hideSplash();
+    }
+
+    @Override
+    protected void onShowWorkingScene() {
+        super.onShowWorkingScene();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(SandboxActivity.this, R.string.sandbox_hint, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override

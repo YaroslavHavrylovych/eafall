@@ -7,7 +7,7 @@
 
     <!-- game types -->
     <string name="campaign">CAMPAIGN</string>
-    <string name="tutorial">DISCIPLINE</string>
+    <string name="tutorial">CAMP</string>
     <string name="single_game">SINGLE GAME</string>
     <string name="multiplayer_game">MULTIPLAYER GAME</string>
     <string name="sandbox">SANDBOX</string>
@@ -251,6 +251,7 @@
 
     <!-- sandbox -->
     <string name="sandbox_select">Select</string>
+    <string name="sandbox_hint">Click on the game field to add units</string>
 
     <!-- buildings -->
     <string name="description_build_button">Build</string>

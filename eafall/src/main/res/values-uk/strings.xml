@@ -251,6 +251,7 @@
 
     <!-- sandbox -->
     <string name="sandbox_select">Використати</string>
+    <string name="sandbox_hint">Натисніть на ігрове поле, щоб додати юнітів</string>
 
     <!-- buildings -->
     <string name="description_build_button">Побуд.</string>
