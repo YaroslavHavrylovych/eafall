@@ -16,7 +16,7 @@
     <string name="tutorial_click_plus">Натисніть \'+\', щоб отримати кисень</string>
     <string name="tutorial_oxygen_value">Перевірте нове значення кисню\n(натисніть екран для продовження)</string>
     <string name="tutorial_constructions_button">Натисніть, щоб побачити доступні будинки</string>
-    <string name="tutorial_construction_popup">Наявні будинки і ціни</string>
+    <string name="tutorial_construction_popup">Наявні будинки і їх ціни</string>
     <string name="tutorial_constructions_defence_building">Для захисту найкраще збудувати оборонну споруду</string>
     <string name="tutorial_description_object_characteristics">Нижче ви можете знайти характеристики будинку</string>
     <string name="tutorial_description_object_unit">Щоб побачити характеристики юніта ви можете:\nнатиснути на зображення юніта\nабо натиснути на його ім’я</string>
