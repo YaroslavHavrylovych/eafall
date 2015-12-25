@@ -84,9 +84,9 @@ public class MenuPopup extends RollingPopup {
     public void showPopup() {
         super.showPopup();
         if (GameState.isPaused()) {
-            mPauseButton.setText(R.string.menu_pause);
-        } else {
             mPauseButton.setText(R.string.menu_resume);
+        } else {
+            mPauseButton.setText(R.string.menu_pause);
         }
     }
 
