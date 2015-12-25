@@ -7,7 +7,7 @@
 
     <!-- game types -->
     <string name="campaign">CAMPAIGN</string>
-    <string name="tutorial">TUTORIAL</string>
+    <string name="tutorial">DISCIPLINE</string>
     <string name="single_game">SINGLE GAME</string>
     <string name="multiplayer_game">MULTIPLAYER GAME</string>
     <string name="sandbox">SANDBOX</string>
@@ -15,6 +15,20 @@
     <!-- tutorial -->
     <string name="tutorial_click_plus">Click on \'+\' to get more oxygen</string>
     <string name="tutorial_oxygen_value">Check your new oxygen amount\n(click anywhere to continue)</string>
+    <string name="tutorial_constructions_button">Click on the button to see available constructions</string>
+    <string name="tutorial_construction_popup">Existing constructions and prices</string>
+    <string name="tutorial_constructions_defence_building">For protection better to create the defence building</string>
+    <string name="tutorial_description_object_characteristics">Below you can find the displayed building characteristics</string>
+    <string name="tutorial_description_object_unit">The unit characteristics you can find with:\nclick on the unit image\nor click on his name</string>
+    <string name="tutorial_description_create_building">Now time to create the defence building</string>
+    <string name="tutorial_description_buildings_amount">Buildings amount were changed</string>
+    <string name="tutorial_description_previous_building">Click an arrow to move to the previous building</string>
+    <string name="tutorial_description_create_building_2">Now time to create another building</string>
+    <string name="tutorial_description_building_settings">Click on the button to check the building settings</string>
+    <string name="tutorial_description_hide">Click an empty area to hide the popup</string>
+    <string name="tutorial_description_suppressor_usage">If you\'re losing you can long-click on you planet\nto trigger the suppressor</string>
+    <string name="tutorial_description_suppressor_description">Suppressor destroys all units\non your side of the game field</string>
+    <string name="tutorial_task">Your task to survive the rest of the time\nGood luck!</string>
     <!-- /tutorial -->
 
     <!-- pre game customizations -->

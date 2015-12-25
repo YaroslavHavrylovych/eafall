@@ -1,5 +1,7 @@
 package com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description;
 
+import android.content.DialogInterface;
+
 import com.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.IUnitBuilding;
 
 /**
@@ -15,13 +17,21 @@ public class BuildingSettingsPopupShowEvent {
     // ===========================================================
     // Fields
     private final IUnitBuilding mUnitBuilding;
+    private final DialogInterface.OnDismissListener mDismissListener;
+
     // ===========================================================
 
     // ===========================================================
     // Constructors
     // ===========================================================
     public BuildingSettingsPopupShowEvent(IUnitBuilding unitBuilding) {
+        this(unitBuilding, null);
+    }
+
+    public BuildingSettingsPopupShowEvent(IUnitBuilding unitBuilding,
+                                          DialogInterface.OnDismissListener listener) {
         mUnitBuilding = unitBuilding;
+        mDismissListener = listener;
     }
 
     // ===========================================================
@@ -31,6 +41,9 @@ public class BuildingSettingsPopupShowEvent {
         return mUnitBuilding;
     }
 
+    public DialogInterface.OnDismissListener getDismissListener() {
+        return mDismissListener;
+    }
 
     // ===========================================================
     // Methods for/from SuperClass/Interfaces

@@ -5,7 +5,9 @@ import com.yaroslavlancelot.eafall.game.touch.TouchHelper;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.CameraScene;
+import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
+import org.andengine.input.touch.TouchEvent;
 
 /**
  * @author Yaroslav Havrylovych
@@ -17,6 +19,8 @@ public class PopupScene extends CameraScene implements IPopup {
     protected Scene mScene;
     /** state change callback */
     protected IRollingPopup.StateChangingListener mStateChangingListener;
+    /** if true then block all touch operations */
+    protected boolean mBlockedTouch;
 
     // ===========================================================
     // Constants
@@ -44,6 +48,10 @@ public class PopupScene extends CameraScene implements IPopup {
     // ===========================================================
     // Getter & Setter
     // ===========================================================
+
+    public void setScene(Scene scene) {
+        mScene = scene;
+    }
 
     // ===========================================================
     // Methods for/from SuperClass/Interfaces
@@ -93,6 +101,25 @@ public class PopupScene extends CameraScene implements IPopup {
     // Methods
     // ===========================================================
 
+    @Override
+    public void setOnSceneTouchListener(final IOnSceneTouchListener pOnSceneTouchListener) {
+        mBlockedTouch = pOnSceneTouchListener == null;
+        super.setOnSceneTouchListener(pOnSceneTouchListener);
+    }
+
+    @Override
+    public boolean onSceneTouchEvent(final TouchEvent pSceneTouchEvent) {
+        return mBlockedTouch || super.onSceneTouchEvent(pSceneTouchEvent);
+    }
+
+    public void resetTouchToDefault() {
+        setOnSceneTouchListener(createSceneTouchHandler());
+    }
+
+    public void removeTouch() {
+        setOnSceneTouchListener(null);
+    }
+
     protected TouchHelper.SceneTouchListener createSceneTouchHandler() {
         return new TouchHelper.SceneTouchListener() {
             @Override
@@ -110,7 +137,7 @@ public class PopupScene extends CameraScene implements IPopup {
 
     /** attach to the screen */
     protected void attachPopupScene() {
-        mScene.setChildScene(this, false, true, true);
+        mScene.setChildScene(this, false, false, false);
     }
 
     // ===========================================================

@@ -43,7 +43,7 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
     /** defines whether the game is over and who is the winner */
     protected IRuler mRuler;
     /** popup to change particular building settings */
-    private BuildingSettingsDialog mBuildingSettingsDialog;
+    protected BuildingSettingsDialog mBuildingSettingsDialog;
 
     @Override
     protected BaseGameHud createHud() {
@@ -182,6 +182,9 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
             public void run() {
                 if (mBuildingSettingsDialog == null) {
                     mBuildingSettingsDialog = new BuildingSettingsDialog(ClientGameActivity.this);
+                }
+                if (event.getDismissListener() != null) {
+                    mBuildingSettingsDialog.setOnDismissListener(event.getDismissListener());
                 }
                 mBuildingSettingsDialog.init(event.getUnitBuilding());
                 mBuildingSettingsDialog.show();

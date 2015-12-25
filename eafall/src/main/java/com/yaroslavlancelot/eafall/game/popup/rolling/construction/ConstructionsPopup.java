@@ -34,7 +34,7 @@ public class ConstructionsPopup extends RollingPopup {
     /** building of this player popup is showing */
     private final String mPlayerName;
     /** used to invoke building description after constructions popup was hided */
-    private final CustomStateListener mStateChangingListener = new CustomStateListener();
+    private final CustomStateListener mDescriptionInvokerStateListener = new CustomStateListener();
     /** The key is the serial number of the building in the list of the buildings */
     private SparseArray<ConstructionsPopupItemFactory.BuildingPopupItem> mItems;
 
@@ -108,9 +108,11 @@ public class ConstructionsPopup extends RollingPopup {
         item.setOnClickListener(new TouchHelper.OnClickListener() {
             @Override
             public void onClick() {
-                //TODO logger was here
-                mStateChangingListener.setBuildingId(buildingId);
-                setStateChangeListener(mStateChangingListener);
+                if (mStateChangingListener != null) {
+                    mStateChangingListener.onHided();
+                }
+                mDescriptionInvokerStateListener.setBuildingId(buildingId);
+                setStateChangeListener(mDescriptionInvokerStateListener);
                 hidePopup();
             }
         });

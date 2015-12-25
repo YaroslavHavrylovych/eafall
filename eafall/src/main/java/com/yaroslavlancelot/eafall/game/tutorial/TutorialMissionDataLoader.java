@@ -41,11 +41,11 @@ public class TutorialMissionDataLoader extends MissionDataLoader {
         name = "tutorial_mission";
         player_alliance = Mutants.ALLIANCE_NAME;
         player_planet = "earth";
-        player_start_money = 270;
+        player_start_money = 1865;
         opponent_alliance = Mutants.ALLIANCE_NAME;
         opponent_planet = "faked_earth";
-        opponent_start_money = 1000;
-        max_oxygen = 1000;
+        opponent_start_money = 5000;
+        max_oxygen = 5000;
         planet_health = 5000;
         offensive_units_limit = 50;
         star_code_name = "sun";

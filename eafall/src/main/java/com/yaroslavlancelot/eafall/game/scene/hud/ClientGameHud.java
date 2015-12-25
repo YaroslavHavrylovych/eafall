@@ -90,6 +90,14 @@ public class ClientGameHud extends BaseGameHud {
     // ===========================================================
     // Getter & Setter
     // ===========================================================
+    public ConstructionPopupButton getConstructionButton() {
+        return mConstructionButton;
+    }
+
+
+    // ===========================================================
+    // Methods for/from SuperClass/Interfaces
+    // ===========================================================
 
     @Override
     public void attachChild(final IEntity pEntity) throws IllegalStateException {
@@ -137,14 +145,6 @@ public class ClientGameHud extends BaseGameHud {
         }
     }
 
-    // ===========================================================
-    // Methods for/from SuperClass/Interfaces
-    // ===========================================================
-
-    // ===========================================================
-    // Methods
-    // ===========================================================
-
     @Override
     public boolean onSceneTouchEvent(final TouchEvent pSceneTouchEvent) {
         boolean res = mBlockInput | super.onSceneTouchEvent(pSceneTouchEvent);
@@ -155,6 +155,10 @@ public class ClientGameHud extends BaseGameHud {
         }
         return res;
     }
+
+    // ===========================================================
+    // Methods
+    // ===========================================================
 
     /** if true - blocks user input (the only thing works on screen is menu button and it's popups) */
     public void blockInput(boolean block) {

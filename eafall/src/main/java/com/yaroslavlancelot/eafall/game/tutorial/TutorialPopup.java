@@ -14,9 +14,11 @@ import com.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 import com.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 
 import org.andengine.engine.camera.Camera;
+import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
+import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.font.IFont;
@@ -122,6 +124,21 @@ public class TutorialPopup extends PopupScene {
                         MathUtils.isInBounds(y_c - half_height, y_c + half_height, y)) {
                     hidePopup();
                 }
+            }
+        });
+    }
+
+    public void passClickEvent(final float x_c, final float y_c, final float half_width, final float half_height) {
+        setOnSceneTouchListener(new IOnSceneTouchListener() {
+            @Override
+            public boolean onSceneTouchEvent(final Scene pScene, final TouchEvent pSceneTouchEvent) {
+                float x = pSceneTouchEvent.getX();
+                float y = pSceneTouchEvent.getY();
+                if (MathUtils.isInBounds(x_c - half_width, x_c + half_width, x) &&
+                        MathUtils.isInBounds(y_c - half_height, y_c + half_height, y)) {
+                    return false;
+                }
+                return true;
             }
         });
     }
