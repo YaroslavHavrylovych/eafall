@@ -255,10 +255,7 @@ public class Player implements IPlayer {
 
     @Override
     public void addObjectToPlayer(final Unit object) {
-        //TODO logger was here
-        synchronized (mPlayerUnits) {
-            mPlayerUnits.add(object);
-        }
+        mPlayerUnits.add(object);
         if (object instanceof OffenceUnit) {
             for (Bonus bonus : mUnitBonuses) {
                 ((OffenceUnit) object).addBonus(bonus, Integer.MAX_VALUE);
@@ -270,10 +267,7 @@ public class Player implements IPlayer {
 
     @Override
     public void removeObjectFromPlayer(final GameObject object) {
-        //TODO logger was here
-        synchronized (mPlayerUnits) {
-            mPlayerUnits.remove(object);
-        }
+        mPlayerUnits.remove(object);
         if (object instanceof OffenceUnit) {
             SharedEvents.valueChanged(MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY,
                     sUnitsAmount.decrementAndGet());

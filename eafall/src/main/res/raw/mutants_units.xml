@@ -209,12 +209,12 @@
         <health>1000</health>
         <armor>mixed</armor>
         <armor_value>40</armor_value>
-        <damage>higgson</damage>
-        <damage_value>150</damage_value>
+        <damage>quaker</damage>
+        <damage_value>250</damage_value>
         <attack_radius>170</attack_radius>
         <view_radius>170</view_radius>
         <speed>1</speed>
         <reload_time>2.5</reload_time>
-        <sound>annihilation_1s.ogg</sound>
+        <sound>electrical_1s.ogg</sound>
     </unit>
 </units>

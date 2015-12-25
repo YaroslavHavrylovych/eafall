@@ -72,7 +72,7 @@ public abstract class EaFallActivity extends BaseGameActivity {
 
     @Override
     public EngineOptions onCreateEngineOptions() {
-        //TODO logger was here
+        SelfCleanable.clearMemory();
         GameState.resetState();
         //pre-in-game
         GameObject.clearCounter();
@@ -114,8 +114,6 @@ public abstract class EaFallActivity extends BaseGameActivity {
 
     @Override
     public void onCreateResources(OnCreateResourcesCallback onCreateResourcesCallback) {
-        //TODO logger was here
-
         mResourcesLoader.loadProfilingFonts(getTextureManager(), getFontManager());
         mResourcesLoader.loadSplashImages(getTextureManager(), getVertexBufferObjectManager());
         //sound && music
@@ -126,7 +124,6 @@ public abstract class EaFallActivity extends BaseGameActivity {
 
     @Override
     public void onCreateScene(final OnCreateSceneCallback onCreateSceneCallback) {
-        //TODO logger was here
         mSceneManager.initSplashScene();
         onCreateSceneCallback.onCreateSceneFinished(mSceneManager.getSplashScene());
     }

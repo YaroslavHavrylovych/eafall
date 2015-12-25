@@ -44,14 +44,14 @@ public class TutorialMissionDataLoader extends MissionDataLoader {
         player_start_money = 1865;
         opponent_alliance = Mutants.ALLIANCE_NAME;
         opponent_planet = "faked_earth";
-        opponent_start_money = 5000;
+        opponent_start_money = 4500;
         max_oxygen = 5000;
         planet_health = 5000;
         offensive_units_limit = 50;
         star_code_name = "sun";
         star_constellation = "no_constellation";
         definition = new DefinitionLoader();
-        definition.time_limit = 180;
+        definition.time_limit = 130;
         definition.type = MissionConfig.MissionType.SURVIVE.toString();
     }
 

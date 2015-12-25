@@ -306,8 +306,8 @@
 
     <!-- mission -->
     <!-- results -->
-    <string name="win">Ти виграв!</string>
-    <string name="lose">Ти програв!</string>
+    <string name="win">Ви перемогли!</string>
+    <string name="lose">Ви програли!</string>
     <!-- /results -->
     <!-- /mission -->
 </resources>
