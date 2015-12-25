@@ -200,7 +200,7 @@ public final class TouchHelper {
      */
     public static abstract class UnboundedSelectorEvents implements ITouchCallback {
         private final Selectable mSelectable;
-        public static final int CLICK_TRIGGER_MILLIS = 499;
+        public static final int CLICK_TRIGGER_MILLIS = 299;
         public static final int DOUBLE_CLICK_TRIGGER_MILLIS = CLICK_TRIGGER_MILLIS;
         private HoldDetector.IHoldDetectorListener mHoldListener;
         private ClickDetector.IClickDetectorListener mClickListener;
