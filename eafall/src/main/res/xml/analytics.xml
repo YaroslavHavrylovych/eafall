@@ -9,6 +9,9 @@
     <!-- session tracker -->
     <integer name="ga_sessionTimeout">300</integer>
 
+    <!-- can store data on the device before send it to the server -->
+    <integer name="ga_dispatchPeriod">60</integer>
+
     <!-- activity tracking -->
     <bool name="ga_autoActivityTracking">true</bool>
     <string
