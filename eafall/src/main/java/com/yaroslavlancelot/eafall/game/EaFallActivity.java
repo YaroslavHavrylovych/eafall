@@ -71,6 +71,18 @@ public abstract class EaFallActivity extends BaseGameActivity {
     private TimerHandler mExitHintHandler;
 
     @Override
+    public void onResumeGame() {
+        super.onResumeGame();
+        mBackgroundMusic.playBackgroundMusic();
+    }
+
+    @Override
+    public void onPauseGame() {
+        super.onPauseGame();
+        mBackgroundMusic.pauseBackgroundMusic();
+    }
+
+    @Override
     public EngineOptions onCreateEngineOptions() {
         SelfCleanable.clearMemory();
         GameState.resetState();
@@ -135,18 +147,6 @@ public abstract class EaFallActivity extends BaseGameActivity {
 
         initExitHint();
         startAsyncResourceLoading();
-    }
-
-    @Override
-    public void onResumeGame() {
-        super.onResumeGame();
-        mBackgroundMusic.playBackgroundMusic();
-    }
-
-    @Override
-    public void onPauseGame() {
-        super.onPauseGame();
-        mBackgroundMusic.pauseBackgroundMusic();
     }
 
     @Override

@@ -40,12 +40,13 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
     private boolean mClientGameLoaded;
 
     @Override
-    public EngineOptions onCreateEngineOptions() {
-        mServerGameLoaded = false;
-        mClientGameLoaded = false;
-        mGameSocketServer = GameSocketServer.getGameSocketServer();
-        mGameSocketServer.addInGameCallback(ServerGameActivity.this);
-        return super.onCreateEngineOptions();
+    public void onResourcesLoaded() {
+        super.onResourcesLoaded();
+        mServerGameLoaded = true;
+        if (mClientGameLoaded) {
+            mGameSocketServer.sendBroadcastServerMessage(0, new GameStartedServerMessage());
+            registerContactCallback();
+        }
     }
 
     @Override
@@ -57,11 +58,9 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
 
     @Override
     protected void userWantCreateBuilding(final IPlayer userPlayer, BuildingId buildingId) {
-        //TODO logger was here
         PlanetStaticObject planetStaticObject = userPlayer.getPlanet();
         if (planetStaticObject != null) {
             boolean isBuildingCreated = userPlayer.getPlanet().createBuilding(buildingId);
-            //TODO logger was here
             if (isBuildingCreated) {
                 mGameSocketServer.sendBroadcastServerMessage(0, new BuildingCreatedServerMessage(
                         buildingId.getId(), buildingId.getUpgrade(), userPlayer.getName()));
@@ -77,6 +76,15 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
     }
 
     @Override
+    public EngineOptions onCreateEngineOptions() {
+        mServerGameLoaded = false;
+        mClientGameLoaded = false;
+        mGameSocketServer = GameSocketServer.getGameSocketServer();
+        mGameSocketServer.addInGameCallback(ServerGameActivity.this);
+        return super.onCreateEngineOptions();
+    }
+
+    @Override
     protected Unit createUnit(int unitKey, IPlayer unitPlayer, float x, float y) {
         Unit unit = super.createUnit(unitKey, unitPlayer, x, y);
 
@@ -84,16 +92,6 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
         unit.setGameObjectHealthChangedListener(this);
         unit.setUnitFireCallback(this);
         return unit;
-    }
-
-    @Override
-    public void onResourcesLoaded() {
-        super.onResourcesLoaded();
-        mServerGameLoaded = true;
-        if (mClientGameLoaded) {
-            mGameSocketServer.sendBroadcastServerMessage(0, new GameStartedServerMessage());
-            registerContactCallback();
-        }
     }
 
     @Override

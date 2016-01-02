@@ -2,16 +2,22 @@ package com.yaroslavlancelot.eafall;
 
 import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 import com.yaroslavlancelot.eafall.game.configuration.Config;
 import com.yaroslavlancelot.eafall.game.configuration.IConfig;
 import com.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 
-public class EaFallApplication extends Application {
+public class EaFallApplication extends MultiDexApplication {
     /** application context */
     private static volatile Context sContext;
     /** application config */
     private static volatile IConfig sConfig;
+    /** Application tracker */
+    private static Tracker mDefaultTracker;
 
     public static Context getContext() {
         return sContext;
@@ -26,11 +32,29 @@ public class EaFallApplication extends Application {
         sConfig = config;
     }
 
+    /**
+     * Gets the default {@link Tracker} for this {@link Application}.
+     *
+     * @return application tracker
+     */
+    public static Tracker getDefaultTracker() {
+        return mDefaultTracker;
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
         sContext = getApplicationContext();
-        sConfig = Config.createConfig(sContext);
-        LocaleImpl.init(sContext);
+        sConfig = Config.createConfig(this);
+        GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+        mDefaultTracker = analytics.newTracker(R.xml.analytics);
+        LocaleImpl.init(this);
     }
+
 }

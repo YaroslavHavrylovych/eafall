@@ -1,2 +1,2 @@
 ./gradlew :eafall:clean
-./gradlew :eafall:assembleDevDebug --no-rebuild
+./gradlew :eafall:assembleDemoDebug --no-rebuild

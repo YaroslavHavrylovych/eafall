@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- app id -->
+    <string name="ga_trackingId">UA-71865833-1</string>
+
+    <!--exception tracking-->
+    <bool name="ga_reportUncaughtExceptions">true</bool>
+
+    <!-- session tracker -->
+    <integer name="ga_sessionTimeout">300</integer>
+
+    <!-- activity tracking -->
+    <bool name="ga_autoActivityTracking">true</bool>
+    <string
+        name="com.yaroslavlancelot.eafall.game.tutorial.TutorialActivity">
+        Tutorial
+    </string>
+    <string
+        name="com.yaroslavlancelot.eafall.game.sandbox.activity.SandboxActivity">
+        Sandbox
+    </string>
+    <string
+        name="com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity">
+        Single_player
+    </string>
+    <string
+        name="com.yaroslavlancelot.eafall.game.client.thin.ThinClientGameActivity">
+        Client
+    </string>
+    <string
+        name="com.yaroslavlancelot.eafall.android.activities.singleplayer.PreGameCustomizationActivity">
+        Single_creation
+    </string>
+    <string
+        name="com.yaroslavlancelot.eafall.game.client.thick.server.ServerGameActivity">
+        Server
+    </string>
+    <string
+        name="com.yaroslavlancelot.eafall.android.activities.multiplayer.GameServersListActivity">
+        Servers_list
+    </string>
+    <string
+        name="com.yaroslavlancelot.eafall.android.activities.multiplayer.ServerGameCreationActivity">
+        Server_creation
+    </string>
+    <string
+        name="com.yaroslavlancelot.eafall.android.activities.multiplayer.ClientWaitForGameActivity">
+        Client_waits
+    </string>
+    <string
+        name="com.yaroslavlancelot.eafall.game.campaign.CampaignActivity">
+        Campaign
+    </string>
+    <string
+        name="com.yaroslavlancelot.eafall.android.activities.settings.SettingsActivity">
+        Settings
+    </string>
+</resources>
