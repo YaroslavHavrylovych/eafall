@@ -23,6 +23,12 @@ public class ThinClientGameActivity extends ClientGameActivity implements InGame
     private volatile GameServerConnector mGameServerConnector;
 
     @Override
+    public void onResourcesLoaded() {
+        super.onResourcesLoaded();
+        mGameServerConnector.sendClientMessage(0, new GameLoadedClientMessage());
+    }
+
+    @Override
     public EngineOptions onCreateEngineOptions() {
         mGameServerConnector = GameServerConnector.getGameServerConnector();
         mGameServerConnector.addInGameCallback(this);
@@ -31,31 +37,18 @@ public class ThinClientGameActivity extends ClientGameActivity implements InGame
 
     @Override
     protected void userWantCreateBuilding(final IPlayer userPlayer, BuildingId buildingId) {
-        //TODO logger was here
         mGameServerConnector.sendClientMessage(0, new BuildingCreationClientMessage(
                 userPlayer.getName(), buildingId.getId(), buildingId.getUpgrade()));
-        //TODO logger was here
-    }
-
-    @Override
-    public void onResourcesLoaded() {
-        super.onResourcesLoaded();
-        //TODO logger was here
-        mGameServerConnector.sendClientMessage(0, new GameLoadedClientMessage());
-        //TODO logger was here
     }
 
     @Override
     public void buildingCreated(BuildingId buildingId, final String playerName) {
-        //TODO logger was here
-        //TODO logger was here
         PlanetStaticObject planetStaticObject = PlayersHolder.getPlayer(playerName).getPlanet();
         planetStaticObject.createBuilding(buildingId);
     }
 
     @Override
     public void unitCreated(final String playerName, final int unitId, final float x, final float y, final long unitUniqueId) {
-        //TODO logger was here
         runOnUpdateThread(new Runnable() {
             @Override
             public void run() {
@@ -72,7 +65,6 @@ public class ThinClientGameActivity extends ClientGameActivity implements InGame
         final float velocityX = unitChangePositionServerMessage.getVelocityX(),
                 velocityY = unitChangePositionServerMessage.getVelocityY();
         final float rotation = unitChangePositionServerMessage.getRotationAngle();
-        //TODO logger was here
         final GameObject gameObject = getGameObjectById(unitUniqueId);
 
         runOnUpdateThread(new Runnable() {
