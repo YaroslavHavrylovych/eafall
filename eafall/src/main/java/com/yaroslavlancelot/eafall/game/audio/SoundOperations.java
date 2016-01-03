@@ -12,4 +12,6 @@ public interface SoundOperations {
     void playSound(LimitedSoundWrapper sound, float x, float y);
 
     void playSound(LimitedSoundWrapper sound);
+
+    void clear();
 }

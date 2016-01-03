@@ -111,10 +111,9 @@ public abstract class UnitDummy {
         return mPathToSprite + playerName;
     }
 
-    public void initDummy(SoundOperations soundOperations, String allianceName) {
-        //if null then the game sound disabled
-        final String soubdPath = StringConstants.getSoundsPath(allianceName.toLowerCase()) + mUnitLoader.sound;
-        mFireSound = soundOperations.loadSound(soubdPath);
+    public void loadSounds(SoundOperations soundOperations) {
+        String soundPath = StringConstants.SOUND_SHOT_PATH + mUnitLoader.damage.toLowerCase() + ".ogg";
+        mFireSound = soundOperations.loadSound(soundPath);
     }
 
     /** create and return stationary unit builder */

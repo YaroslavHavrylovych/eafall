@@ -17,7 +17,6 @@
                             <xs:element name="view_radius" type="xs:positiveInteger"/>
                             <xs:element name="speed" type="xs:positiveInteger"/>
                             <xs:element name="reload_time" type="xs:float"/>
-                            <xs:element name="sound" type="xs:string"/>
                         </xs:sequence>
                         <xs:attribute name="name" use="required"/>
                     </xs:complexType>

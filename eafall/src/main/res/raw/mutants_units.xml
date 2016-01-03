@@ -13,7 +13,6 @@
         <view_radius>110</view_radius>
         <speed>75</speed>
         <reload_time>2.8</reload_time>
-        <sound>electrical_1s.ogg</sound>
     </unit>
     <unit name="tortoise">
         <id>11</id>
@@ -26,7 +25,6 @@
         <view_radius>120</view_radius>
         <speed>80</speed>
         <reload_time>2.5</reload_time>
-        <sound>electrical_1s.ogg</sound>
     </unit>
     <unit name="dragon">
         <id>12</id>
@@ -39,7 +37,6 @@
         <view_radius>220</view_radius>
         <speed>85</speed>
         <reload_time>2.5</reload_time>
-        <sound>electrical_1s.ogg</sound>
     </unit>
     <!-- invisible plain -->
     <unit name="scorpion">
@@ -53,7 +50,6 @@
         <view_radius>100</view_radius>
         <speed>175</speed>
         <reload_time>1</reload_time>
-        <sound>annihilation_1s.ogg</sound>
     </unit>
     <unit name="king_scorpion">
         <id>21</id>
@@ -66,7 +62,6 @@
         <view_radius>100</view_radius>
         <speed>180</speed>
         <reload_time>1</reload_time>
-        <sound>annihilation_1s.ogg</sound>
     </unit>
     <!-- hydra pond -->
     <unit name="young_hydra">
@@ -80,7 +75,6 @@
         <view_radius>100</view_radius>
         <speed>140</speed>
         <reload_time>1.5</reload_time>
-        <sound>electrical_1s.ogg</sound>
     </unit>
     <unit name="hydra">
         <id>31</id>
@@ -93,7 +87,6 @@
         <view_radius>110</view_radius>
         <speed>140</speed>
         <reload_time>1.4</reload_time>
-        <sound>electrical_1s.ogg</sound>
     </unit>
     <!-- poison cave -->
     <unit name="eel">
@@ -107,7 +100,6 @@
         <view_radius>140</view_radius>
         <speed>110</speed>
         <reload_time>1.7</reload_time>
-        <sound>magnetic_1s.ogg</sound>
     </unit>
     <unit name="cobra">
         <id>41</id>
@@ -120,7 +112,6 @@
         <view_radius>160</view_radius>
         <speed>130</speed>
         <reload_time>1.8</reload_time>
-        <sound>magnetic_1s.ogg</sound>
     </unit>
     <!-- web -->
     <unit name="spider1">
@@ -134,7 +125,6 @@
         <view_radius>110</view_radius>
         <speed>160</speed>
         <reload_time>1.5</reload_time>
-        <sound>higgs_3s.ogg</sound>
     </unit>
     <unit name="spider2">
         <id>51</id>
@@ -147,7 +137,6 @@
         <view_radius>130</view_radius>
         <speed>140</speed>
         <reload_time>1.4</reload_time>
-        <sound>higgs_3s.ogg</sound>
     </unit>
     <!-- mountain cave -->
     <unit name="bat">
@@ -161,7 +150,6 @@
         <view_radius>100</view_radius>
         <speed>140</speed>
         <reload_time>1.5</reload_time>
-        <sound>annihilation_1s.ogg</sound>
     </unit>
     <unit name="vampire">
         <id>61</id>
@@ -174,7 +162,6 @@
         <view_radius>100</view_radius>
         <speed>155</speed>
         <reload_time>1.6</reload_time>
-        <sound>annihilation_1s.ogg</sound>
     </unit>
     <!-- hell -->
     <unit name="agat">
@@ -188,7 +175,6 @@
         <view_radius>140</view_radius>
         <speed>150</speed>
         <reload_time>1.7</reload_time>
-        <sound>annihilation_1s.ogg</sound>
     </unit>
     <unit name="kak">
         <id>71</id>
@@ -201,7 +187,6 @@
         <view_radius>150</view_radius>
         <speed>170</speed>
         <reload_time>1.8</reload_time>
-        <sound>annihilation_1s.ogg</sound>
     </unit>
     <!-- orbital station -->
     <unit name="orbital_station">
@@ -215,6 +200,5 @@
         <view_radius>170</view_radius>
         <speed>1</speed>
         <reload_time>2.5</reload_time>
-        <sound>electrical_1s.ogg</sound>
     </unit>
 </units>

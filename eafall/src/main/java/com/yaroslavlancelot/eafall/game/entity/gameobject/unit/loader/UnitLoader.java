@@ -39,7 +39,4 @@ public class UnitLoader {
 
     @Element(name = "reload_time")
     public Float reload_time;
-
-    @Element(name = "sound")
-    public String sound;
 }
