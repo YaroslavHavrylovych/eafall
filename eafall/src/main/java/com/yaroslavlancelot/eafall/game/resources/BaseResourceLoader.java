@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.Typeface;
 
 import com.yaroslavlancelot.eafall.EaFallApplication;
+import com.yaroslavlancelot.eafall.game.audio.GeneralSoundKeys;
+import com.yaroslavlancelot.eafall.game.audio.SoundOperations;
 import com.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.yaroslavlancelot.eafall.game.scene.scenes.SplashScene;
@@ -68,6 +70,16 @@ public abstract class BaseResourceLoader implements IResourcesLoader {
     public void loadFonts(TextureManager textureManager, FontManager fontManager) {
         //button
         TextButton.loadFonts(fontManager, textureManager);
+    }
+
+    @Override
+    public void loadSounds(SoundOperations soundOperations) {
+        soundOperations.loadSound(GeneralSoundKeys.SELECT);
+        soundOperations.loadSound(GeneralSoundKeys.BUTTON_CLICK);
+        soundOperations.loadSound(GeneralSoundKeys.TICK);
+        soundOperations.loadSound(GeneralSoundKeys.DENIED);
+        soundOperations.loadSound(GeneralSoundKeys.PRESS);
+        soundOperations.loadSound(GeneralSoundKeys.UNPRESS);
     }
 
     @Override

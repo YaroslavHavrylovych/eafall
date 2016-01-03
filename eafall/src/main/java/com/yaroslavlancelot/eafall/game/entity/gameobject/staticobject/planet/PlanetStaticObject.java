@@ -1,6 +1,8 @@
 package com.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet;
 
 import com.yaroslavlancelot.eafall.R;
+import com.yaroslavlancelot.eafall.game.audio.GeneralSoundKeys;
+import com.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder;
 import com.yaroslavlancelot.eafall.game.client.IUnitCreator;
@@ -58,6 +60,8 @@ import de.greenrobot.event.EventBus;
 public abstract class PlanetStaticObject extends StaticObject implements IPlayerObject, Selectable {
     /** tag, which is used for debugging purpose */
     public static final String TAG = PlanetStaticObject.class.getCanonicalName();
+    /** planet explosion sound path */
+    public static final String PLANET_EXPLOSION_SOUND = "audio/sound/boom/big_bada_boom.ogg";
     /** current planet buildings */
     private final Map<Integer, IBuilding> mBuildings = new HashMap<>(15);
     /** current planet unit buildings (used for faster access to unit buildings) */
@@ -124,9 +128,10 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
         final AnimatedSprite animatedSprite = new AnimatedSprite(mX, mY,
                 (ITiledTextureRegion) TextureRegionHolder.getRegion(StringConstants.KEY_PLANET_EXPLOSION),
                 getVertexBufferObjectManager());
-        animatedSprite.animate(50, false, new AnimatedSprite.IAnimationListener() {
+        animatedSprite.animate(81, false, new AnimatedSprite.IAnimationListener() {
             @Override
             public void onAnimationStarted(final AnimatedSprite pAnimatedSprite, final int pInitialLoopCount) {
+                SoundFactory.getInstance().playSound(PLANET_EXPLOSION_SOUND);
                 destroy();
             }
 
@@ -201,7 +206,6 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
      * @return true if building amount was increased and false in other case
      */
     public boolean createBuilding(BuildingId buildingId) {
-        //TODO logger was here
         IBuilding building = mBuildings.get(buildingId.getId());
         if (building == null) {
             final BuildingDummy buildingDummy = PlayersHolder.getPlayer(mPlayerName).getAlliance()
@@ -273,11 +277,13 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
         setTouchCallback(new TouchHelper.UnboundedSelectorEvents(this) {
             @Override
             public void click() {
+                SoundFactory.getInstance().playSound(GeneralSoundKeys.SELECT);
                 mClickHandler.reset();
             }
 
             @Override
             public void doubleClick() {
+                SoundFactory.getInstance().playSound(GeneralSoundKeys.SELECT);
                 mClickHandler.setTimerCallbackTriggered(true);
                 if (PlayersHolder.getPlayer(mPlayerName).getControlType().user()) {
                     RollingPopupManager.getInstance().getPopup(ConstructionsPopup.KEY).triggerPopup();
@@ -305,8 +311,11 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
     public void useSuppressor() {
         if (!mIsSuppressorUsed) {
             mIsSuppressorUsed = true;
-            EventBus.getDefault().post(new ShowHudTextEvent(R.string.suppressor_being_used));
-            IPlayer enemy = PlayersHolder.getPlayer(mPlayerName).getEnemyPlayer();
+            IPlayer yourPlayer = PlayersHolder.getPlayer(mPlayerName);
+            if (yourPlayer.getControlType().user()) {
+                EventBus.getDefault().post(new ShowHudTextEvent(R.string.suppressor_being_used));
+            }
+            IPlayer enemy = yourPlayer.getEnemyPlayer();
             List<Unit> enemies = enemy.getUnitMap().getUnitOnSide(isLeft());
             for (int i = 0; i < enemies.size(); i++) {
                 enemies.get(i).kill();

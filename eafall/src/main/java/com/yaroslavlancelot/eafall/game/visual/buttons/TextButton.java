@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 
 import com.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
+import com.yaroslavlancelot.eafall.game.visual.buttons.sound.ButtonSpriteClickButton;
 import com.yaroslavlancelot.eafall.game.visual.font.FontHolder;
 import com.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 
@@ -22,7 +23,7 @@ import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /** for using in popup (generally for buildings) */
-public class TextButton extends ButtonSprite {
+public class TextButton extends ButtonSpriteClickButton {
     private final static String sFontSizeKey = "game_button_font_size_key";
     private final static int sFontSize = 45;
     private final static int padding = 30;

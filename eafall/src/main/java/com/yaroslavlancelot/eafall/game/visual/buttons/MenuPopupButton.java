@@ -5,8 +5,8 @@ import android.content.Context;
 import com.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
+import com.yaroslavlancelot.eafall.game.visual.buttons.sound.ButtonSpritePressButton;
 
-import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
@@ -17,7 +17,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
  * @author Yaroslav Havrylovych
  */
 //TODO load it in a SpriteBatch with other hud buttons
-public class MenuPopupButton extends ButtonSprite {
+public class MenuPopupButton extends ButtonSpritePressButton {
     // ===========================================================
     // Constants
     // ===========================================================

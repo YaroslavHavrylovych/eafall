@@ -5,12 +5,14 @@ import android.content.Context;
 import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.yaroslavlancelot.eafall.game.alliance.IAlliance;
+import com.yaroslavlancelot.eafall.game.audio.SoundOperations;
 import com.yaroslavlancelot.eafall.game.batching.BatchingKeys;
 import com.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder;
 import com.yaroslavlancelot.eafall.game.client.thick.income.ClientIncomeHandler;
 import com.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
+import com.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetStaticObject;
 import com.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.yaroslavlancelot.eafall.game.popup.GameOverPopup;
@@ -72,6 +74,13 @@ public class ClientResourcesLoader extends BaseGameObjectsLoader {
             loadPlayerSpecificBuildings(alliance, vboManager, player);
             loadPlayerSpecificUnits(alliance, textureManager, vboManager, player);
         }
+    }
+
+    @Override
+    public void loadSounds(final SoundOperations soundOperations) {
+        super.loadSounds(soundOperations);
+        soundOperations.loadSound(ClientIncomeHandler.INCOME_SOUND, 0);
+        soundOperations.loadSound(PlanetStaticObject.PLANET_EXPLOSION_SOUND, 0);
     }
 
     private void loadSunAndPlanets(TextureManager textureManager,

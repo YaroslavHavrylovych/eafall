@@ -5,8 +5,8 @@ import android.content.Context;
 import com.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
+import com.yaroslavlancelot.eafall.game.visual.buttons.sound.ButtonSpritePressButton;
 
-import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
@@ -14,7 +14,7 @@ import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /** trigger buildings popup (already initialized) */
-public class ConstructionPopupButton extends ButtonSprite {
+public class ConstructionPopupButton extends ButtonSpritePressButton {
     public ConstructionPopupButton(VertexBufferObjectManager vertexBufferObjectManager) {
         super(SizeConstants.GAME_FIELD_WIDTH / 2,
                 SizeConstants.CONSTRUCTIONS_POPUP_INVOCATION_BUTTON_HEIGHT / 2,

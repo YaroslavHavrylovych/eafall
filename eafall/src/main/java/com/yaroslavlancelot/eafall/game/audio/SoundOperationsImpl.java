@@ -45,11 +45,16 @@ public class SoundOperationsImpl implements SoundOperations {
 
     @Override
     public synchronized LimitedSoundWrapper loadSound(final String path) {
+        return loadSound(path, LimitedSoundWrapper.DEFAULT_LIMIT);
+    }
+
+    @Override
+    public synchronized LimitedSoundWrapper loadSound(final String path, int delay) {
         LimitedSoundWrapper sound;
         if (mSounds.containsKey(path)) {
             sound = mSounds.get(path);
         } else {
-            sound = loadSound(path, mContext, mSoundManager);
+            sound = loadSound(path, mContext, delay, mSoundManager);
             mSounds.put(path, sound);
         }
         return sound;
@@ -75,6 +80,11 @@ public class SoundOperationsImpl implements SoundOperations {
             return;
         }
         sound.checkedPlay();
+    }
+
+    @Override
+    public void playSound(final String key) {
+        mSounds.get(key).play();
     }
 
     @Override
@@ -104,10 +114,11 @@ public class SoundOperationsImpl implements SoundOperations {
         setMasterVolume(settings.getSoundVolumeMax());
     }
 
-    private static LimitedSoundWrapper loadSound(String path, Context context, SoundManager soundManager) {
+    private static LimitedSoundWrapper loadSound(String path, Context context,
+                                                 int delay, SoundManager soundManager) {
         try {
             return new LimitedSoundWrapper(SoundFactory.createSoundFromAsset(soundManager, context,
-                    path));
+                    path), delay);
         } catch (IOException e) {
             //TODO logger was here
         }

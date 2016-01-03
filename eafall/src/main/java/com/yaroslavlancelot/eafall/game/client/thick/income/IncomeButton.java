@@ -3,6 +3,8 @@ package com.yaroslavlancelot.eafall.game.client.thick.income;
 import android.content.Context;
 
 import com.yaroslavlancelot.eafall.EaFallApplication;
+import com.yaroslavlancelot.eafall.game.audio.GeneralSoundKeys;
+import com.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
@@ -46,6 +48,7 @@ abstract class IncomeButton extends ButtonSprite {
             public void onClick(final ButtonSprite pButtonSprite,
                                 final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
                 player.changeMoney(mMoney);
+                SoundFactory.getInstance().playSound(GeneralSoundKeys.TICK);
                 detachSelf();
             }
         });

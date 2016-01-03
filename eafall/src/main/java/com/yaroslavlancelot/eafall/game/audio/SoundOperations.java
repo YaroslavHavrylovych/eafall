@@ -9,9 +9,13 @@ public interface SoundOperations {
 
     LimitedSoundWrapper loadSound(String path);
 
+    LimitedSoundWrapper loadSound(String path, int delay);
+
     void playSound(LimitedSoundWrapper sound, float x, float y);
 
     void playSound(LimitedSoundWrapper sound);
+
+    void playSound(String key);
 
     void clear();
 }

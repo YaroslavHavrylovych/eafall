@@ -1,5 +1,7 @@
 package com.yaroslavlancelot.eafall.game.resources;
 
+import com.yaroslavlancelot.eafall.game.audio.SoundOperations;
+
 import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -30,6 +32,8 @@ public interface IResourcesLoader {
 
     void loadFonts(TextureManager textureManager,
                    FontManager fontManager);
+
+    void loadSounds(SoundOperations soundOperations);
 
     void unloadFonts(FontManager fontManager);
 
