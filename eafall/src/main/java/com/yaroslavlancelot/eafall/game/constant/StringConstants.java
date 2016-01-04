@@ -106,6 +106,8 @@ public final class StringConstants {
     public static String FILE_BACKGROUND = StringConstants.getImagesPath() + "background.png";
     /** path to the shot sounds */
     public static String SOUND_SHOT_PATH = "audio/sound/shot/";
+    /** clock tick sound path */
+    public static String SOUND_CLOCK_TICK_PATH = "audio/sound/clock_tick.ogg";
 
     /**
      * private constructor

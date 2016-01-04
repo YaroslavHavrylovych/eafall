@@ -84,6 +84,7 @@ public class ClientResourcesLoader extends BaseGameObjectsLoader {
         soundOperations.loadSound(ClientIncomeHandler.INCOME_SOUND, 100);
         soundOperations.loadSound(PlanetStaticObject.PLANET_EXPLOSION_SOUND, 200);
         soundOperations.loadSound(SuppressorSoundableAnimation.SOUND, 200);
+        soundOperations.loadSound(StringConstants.SOUND_CLOCK_TICK_PATH, 50);
     }
 
     private void loadSunAndPlanets(TextureManager textureManager,

@@ -121,14 +121,12 @@ public class CampaignActivity extends EaFallActivity {
 
     @Override
     protected void initWorkingScene() {
-        //TODO logger was here
         mSceneManager.initWorkingScene(mCamera, mCampaignFileLoader.parallax_background);
         onPopulateWorkingScene(mSceneManager.getWorkingScene());
     }
 
     @Override
     protected void onPopulateWorkingScene(final EaFallScene scene) {
-        //TODO logger was here
         VertexBufferObjectManager vertexManager = getVertexBufferObjectManager();
         //background
         scene.setBackground(mCampaignFileLoader.background, vertexManager);

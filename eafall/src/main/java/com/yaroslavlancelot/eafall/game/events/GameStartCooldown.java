@@ -1,6 +1,8 @@
 package com.yaroslavlancelot.eafall.game.events;
 
 import com.yaroslavlancelot.eafall.R;
+import com.yaroslavlancelot.eafall.game.audio.SoundFactory;
+import com.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.yaroslavlancelot.eafall.game.scene.hud.ClientGameHud;
 
 import org.andengine.engine.handler.timer.ITimerCallback;
@@ -91,6 +93,7 @@ public abstract class GameStartCooldown {
                 show = false;
         }
         if (show) {
+            SoundFactory.getInstance().playSound(StringConstants.SOUND_CLOCK_TICK_PATH);
             mClientGameHud.showHudText(id);
         } else {
             mClientGameHud.hideHudText();
