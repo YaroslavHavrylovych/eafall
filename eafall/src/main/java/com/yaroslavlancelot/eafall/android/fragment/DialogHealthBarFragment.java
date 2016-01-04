@@ -1,5 +1,6 @@
 package com.yaroslavlancelot.eafall.android.fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import com.yaroslavlancelot.eafall.android.dialog.HealthBarDialog;
 import com.yaroslavlancelot.eafall.game.configuration.game.ApplicationSettings;
 
 /** Health bar picker fragment */
+@SuppressLint("ValidFragment")
 public abstract class DialogHealthBarFragment extends Fragment implements HealthBarDialog.OnClose {
     private HealthBarDialog.HealthBarTypeSet mCallback;
     private int mSelectedId = R.id.health_bar_default;

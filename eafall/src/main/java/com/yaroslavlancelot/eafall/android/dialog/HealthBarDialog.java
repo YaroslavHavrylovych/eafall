@@ -1,5 +1,6 @@
 package com.yaroslavlancelot.eafall.android.dialog;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -75,6 +76,7 @@ public class HealthBarDialog extends DialogFragment {
      * to initialize callbacks and content.
      */
     private void initSettingsFragment() {
+        @SuppressLint("ValidFragment")
         DialogHealthBarFragment dialogFragment = new DialogHealthBarFragment() {
             @Override
             public void onClose() {
