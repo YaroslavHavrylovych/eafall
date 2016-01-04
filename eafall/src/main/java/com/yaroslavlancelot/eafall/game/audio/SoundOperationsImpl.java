@@ -11,6 +11,8 @@ import org.andengine.audio.sound.SoundManager;
 import org.andengine.util.math.MathUtils;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * base SoundOperations implementation
@@ -22,8 +24,8 @@ public class SoundOperationsImpl implements SoundOperations {
     private SoundManager mSoundManager;
     private Context mContext;
     private ICameraHandler mCameraHandler;
-    //TODO we can load/unload sounds at runtime
     private boolean mSoundDisabled;
+    private Map<String, LimitedSoundWrapper> mSounds = new HashMap<>(10);
 
     SoundOperationsImpl(SoundManager soundManager) {
         mSoundManager = soundManager;
@@ -42,8 +44,20 @@ public class SoundOperationsImpl implements SoundOperations {
     }
 
     @Override
-    public LimitedSoundWrapper loadSound(final String path) {
-        return getSound(path, mContext, mSoundManager);
+    public synchronized LimitedSoundWrapper loadSound(final String path) {
+        return loadSound(path, LimitedSoundWrapper.DEFAULT_LIMIT);
+    }
+
+    @Override
+    public synchronized LimitedSoundWrapper loadSound(final String path, int delay) {
+        LimitedSoundWrapper sound;
+        if (mSounds.containsKey(path)) {
+            sound = mSounds.get(path);
+        } else {
+            sound = loadSound(path, mContext, delay, mSoundManager);
+            mSounds.put(path, sound);
+        }
+        return sound;
     }
 
     @Override
@@ -68,6 +82,16 @@ public class SoundOperationsImpl implements SoundOperations {
         sound.checkedPlay();
     }
 
+    @Override
+    public void playSound(final String key) {
+        mSounds.get(key).play();
+    }
+
+    @Override
+    public synchronized void clear() {
+        mSoundManager.releaseAll();
+    }
+
     private void initSettingsCallbacks() {
         final ApplicationSettings settings
                 = EaFallApplication.getConfig().getSettings();
@@ -90,10 +114,11 @@ public class SoundOperationsImpl implements SoundOperations {
         setMasterVolume(settings.getSoundVolumeMax());
     }
 
-    public static LimitedSoundWrapper getSound(String path, Context context, SoundManager soundManager) {
+    private static LimitedSoundWrapper loadSound(String path, Context context,
+                                                 int delay, SoundManager soundManager) {
         try {
             return new LimitedSoundWrapper(SoundFactory.createSoundFromAsset(soundManager, context,
-                    path));
+                    path), delay);
         } catch (IOException e) {
             //TODO logger was here
         }

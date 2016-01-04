@@ -104,6 +104,10 @@ public final class StringConstants {
     public static final String FILE_HEALTH_BAR_CARCASS = "graphics/icons/health_bar_carcass.png";
     /** background */
     public static String FILE_BACKGROUND = StringConstants.getImagesPath() + "background.png";
+    /** path to the shot sounds */
+    public static String SOUND_SHOT_PATH = "audio/sound/shot/";
+    /** clock tick sound path */
+    public static String SOUND_CLOCK_TICK_PATH = "audio/sound/clock_tick.ogg";
 
     /**
      * private constructor
@@ -141,9 +145,5 @@ public final class StringConstants {
 
     public static String getPathToUnits_Image(String allianceName) {
         return getPathToAllianceImages(allianceName) + "/units/";
-    }
-
-    public static String getSoundsPath(String allianceName) {
-        return "audio/sound/alliance/" + allianceName.toLowerCase() + SEPARATOR;
     }
 }

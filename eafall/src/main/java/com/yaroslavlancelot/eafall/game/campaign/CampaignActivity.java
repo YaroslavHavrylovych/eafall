@@ -6,6 +6,7 @@ import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.R;
 import com.yaroslavlancelot.eafall.android.StartableIntent;
 import com.yaroslavlancelot.eafall.game.EaFallActivity;
+import com.yaroslavlancelot.eafall.game.audio.GeneralSoundKeys;
 import com.yaroslavlancelot.eafall.game.audio.LimitedSoundWrapper;
 import com.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.yaroslavlancelot.eafall.game.campaign.intents.CampaignIntent;
@@ -67,7 +68,7 @@ public class CampaignActivity extends EaFallActivity {
         // we loading sounds and music here and
         // wouldn't reload this sounds when reloading the campaign screen
         //sound
-        mSelectSound = SoundFactory.getInstance().loadSound("audio/sound/select.ogg");
+        mSelectSound = SoundFactory.getInstance().loadSound(GeneralSoundKeys.SELECT);
     }
 
     @Override
@@ -120,14 +121,12 @@ public class CampaignActivity extends EaFallActivity {
 
     @Override
     protected void initWorkingScene() {
-        //TODO logger was here
         mSceneManager.initWorkingScene(mCamera, mCampaignFileLoader.parallax_background);
         onPopulateWorkingScene(mSceneManager.getWorkingScene());
     }
 
     @Override
     protected void onPopulateWorkingScene(final EaFallScene scene) {
-        //TODO logger was here
         VertexBufferObjectManager vertexManager = getVertexBufferObjectManager();
         //background
         scene.setBackground(mCampaignFileLoader.background, vertexManager);

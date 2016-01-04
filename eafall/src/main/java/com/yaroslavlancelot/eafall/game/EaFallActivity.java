@@ -73,7 +73,9 @@ public abstract class EaFallActivity extends BaseGameActivity {
     @Override
     public void onResumeGame() {
         super.onResumeGame();
-        mBackgroundMusic.playBackgroundMusic();
+        if (mSceneManager.getWorkingScene() != null) {
+            mBackgroundMusic.playBackgroundMusic();
+        }
     }
 
     @Override
@@ -130,6 +132,7 @@ public abstract class EaFallActivity extends BaseGameActivity {
         mResourcesLoader.loadSplashImages(getTextureManager(), getVertexBufferObjectManager());
         //sound && music
         SoundFactory.init(getSoundManager());
+        mResourcesLoader.loadSounds(SoundFactory.getInstance());
         mBackgroundMusic = new BackgroundMusic(createMusicPath(), getMusicManager(), this);
         onCreateResourcesCallback.onCreateResourcesFinished();
     }
@@ -236,7 +239,6 @@ public abstract class EaFallActivity extends BaseGameActivity {
      */
     protected void checkedGameClose() {
         boolean resourcesLoaded = GameState.isResourcesLoaded();
-        //TODO logger was here
         if (GameState.isGameEnded()) {
             finish();
         } else if (!resourcesLoaded) {
@@ -369,9 +371,7 @@ public abstract class EaFallActivity extends BaseGameActivity {
         mSceneManager.hideSplash();
         mSceneManager.clearSplashScene();
         mResourcesLoader.unloadSplashImages();
-        if (mBackgroundMusic != null) {
-            mBackgroundMusic.playBackgroundMusic();
-        }
+        mBackgroundMusic.playBackgroundMusic();
         onShowWorkingScene();
         GameState.setState(GameState.State.RESUMED);
     }

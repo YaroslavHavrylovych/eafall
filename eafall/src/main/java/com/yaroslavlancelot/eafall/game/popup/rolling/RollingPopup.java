@@ -1,5 +1,7 @@
 package com.yaroslavlancelot.eafall.game.popup.rolling;
 
+import com.yaroslavlancelot.eafall.game.audio.GeneralSoundKeys;
+import com.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.yaroslavlancelot.eafall.game.popup.PopupScene;
 
@@ -47,6 +49,7 @@ public abstract class RollingPopup extends PopupScene implements IRollingPopup {
         if (!isShowing() || mRollingInProcess) {
             return;
         }
+        SoundFactory.getInstance().playSound(GeneralSoundKeys.TICK);
         mRollingInProcess = true;
         unregisterTouchArea(mBackgroundSprite);
         mCollapseModifier.reset();

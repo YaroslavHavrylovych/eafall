@@ -13,7 +13,6 @@
         <view_radius>200</view_radius>
         <speed>170</speed>
         <reload_time>1.2</reload_time>
-        <sound>annihilation_1s.ogg</sound>
     </unit>
     <unit name="grant">
         <id>11</id>
@@ -26,7 +25,6 @@
         <view_radius>200</view_radius>
         <speed>170</speed>
         <reload_time>1.1</reload_time>
-        <sound>annihilation_1s.ogg</sound>
     </unit>
     <unit name="sergeant">
         <id>12</id>
@@ -39,7 +37,6 @@
         <view_radius>200</view_radius>
         <speed>150</speed>
         <reload_time>1.1</reload_time>
-        <sound>annihilation_1s.ogg</sound>
     </unit>
     <!-- tent -->
     <unit name="boy_scout">
@@ -53,7 +50,6 @@
         <view_radius>200</view_radius>
         <speed>210</speed>
         <reload_time>1.0</reload_time>
-        <sound>electrical_1s.ogg</sound>
     </unit>
     <unit name="scout">
         <id>21</id>
@@ -66,7 +62,6 @@
         <view_radius>200</view_radius>
         <speed>210</speed>
         <reload_time>1.2</reload_time>
-        <sound>electrical_1s.ogg</sound>
     </unit>
     <!-- barracks -->
     <unit name="infantrymen">
@@ -80,7 +75,6 @@
         <view_radius>200</view_radius>
         <speed>120</speed>
         <reload_time>1.5</reload_time>
-        <sound>electrical_1s.ogg</sound>
     </unit>
     <unit name="SF">
         <id>31</id>
@@ -93,7 +87,6 @@
         <view_radius>200</view_radius>
         <speed>110</speed>
         <reload_time>1.4</reload_time>
-        <sound>electrical_1s.ogg</sound>
     </unit>
     <!-- shooters hall -->
     <unit name="sniper">
@@ -107,7 +100,6 @@
         <view_radius>200</view_radius>
         <speed>120</speed>
         <reload_time>2.0</reload_time>
-        <sound>neutrino_3s.ogg</sound>
     </unit>
     <unit name="killer">
         <id>41</id>
@@ -120,7 +112,6 @@
         <view_radius>250</view_radius>
         <speed>110</speed>
         <reload_time>2.1</reload_time>
-        <sound>neutrino_3s.ogg</sound>
     </unit>
     <!-- training center -->
     <unit name="agent">
@@ -134,7 +125,6 @@
         <view_radius>200</view_radius>
         <speed>160</speed>
         <reload_time>1.5</reload_time>
-        <sound>magnetic_1s.ogg</sound>
     </unit>
     <unit name="spy">
         <id>51</id>
@@ -147,7 +137,6 @@
         <view_radius>200</view_radius>
         <speed>160</speed>
         <reload_time>1.2</reload_time>
-        <sound>magnetic_1s.ogg</sound>
     </unit>
     <!-- workshop -->
     <unit name="robot">
@@ -161,7 +150,6 @@
         <view_radius>200</view_radius>
         <speed>160</speed>
         <reload_time>1.3</reload_time>
-        <sound>annihilation_1s.ogg</sound>
     </unit>
     <unit name="metal_killer">
         <id>61</id>
@@ -174,7 +162,6 @@
         <view_radius>200</view_radius>
         <speed>160</speed>
         <reload_time>1.2</reload_time>
-        <sound>annihilation_1s.ogg</sound>
     </unit>
     <!-- laboratory -->
     <unit name="demolisher">
@@ -188,7 +175,6 @@
         <view_radius>200</view_radius>
         <speed>110</speed>
         <reload_time>3.5</reload_time>
-        <sound>higgs_3s.ogg</sound>
     </unit>
     <!-- bunker -->
     <unit name="superman">
@@ -202,7 +188,6 @@
         <view_radius>200</view_radius>
         <speed>130</speed>
         <reload_time>2.1</reload_time>
-        <sound>annihilation_1s.ogg</sound>
     </unit>
     <!-- orbital station -->
     <unit name="orbital_station">
@@ -216,6 +201,5 @@
         <view_radius>300</view_radius>
         <speed>1</speed>
         <reload_time>2</reload_time>
-        <sound>annihilation_1s.ogg</sound>
     </unit>
 </units>

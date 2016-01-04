@@ -1,5 +1,6 @@
 package com.yaroslavlancelot.eafall.game.client.thick.income;
 
+import com.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetStaticObject;
 import com.yaroslavlancelot.eafall.game.player.IPlayer;
@@ -22,6 +23,7 @@ public class ClientIncomeHandler extends SelfCleanable {
     // ===========================================================
     // Constants
     // ===========================================================
+    public static final String INCOME_SOUND = "audio/sound/oxygen/income.ogg";
     private static ClientIncomeHandler INSTANCE;
     private final IPlayer mPlayer;
     private final Scene mScene;
@@ -96,6 +98,7 @@ public class ClientIncomeHandler extends SelfCleanable {
         } else {
             incomeButton = createIncomeButton(mPlanetIncome.getVertexBufferObjectManager());
         }
+        SoundFactory.getInstance().playSound(INCOME_SOUND);
         incomeButton.setMoney(money);
         incomeButton.resetAnimation();
         mScene.attachChild(incomeButton);

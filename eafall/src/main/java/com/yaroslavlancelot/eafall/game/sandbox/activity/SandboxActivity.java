@@ -5,6 +5,8 @@ import android.widget.Toast;
 import com.yaroslavlancelot.eafall.R;
 import com.yaroslavlancelot.eafall.game.BaseGameObjectsActivity;
 import com.yaroslavlancelot.eafall.game.alliance.IAlliance;
+import com.yaroslavlancelot.eafall.game.audio.GeneralSoundKeys;
+import com.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.yaroslavlancelot.eafall.game.configuration.mission.MissionConfig;
 import com.yaroslavlancelot.eafall.game.constant.CollisionCategories;
 import com.yaroslavlancelot.eafall.game.constant.SizeConstants;
@@ -95,8 +97,10 @@ public class SandboxActivity extends BaseGameObjectsActivity {
                     path = path2;
                 }
                 if (player.getUnitsAmount() < player.getUnitsLimit()) {
+                    SoundFactory.getInstance().playSound(GeneralSoundKeys.TICK);
                     createMovableUnit(player, mCurrentUnitKey, (int) pSceneX, (int) pSceneY, path);
                 } else {
+                    SoundFactory.getInstance().playSound(GeneralSoundKeys.DENIED);
                     EventBus.getDefault().post(
                             new ShowToastEvent(false, R.string.units_capacity_reached));
                 }

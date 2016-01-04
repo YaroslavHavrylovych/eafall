@@ -1,16 +1,19 @@
-package com.yaroslavlancelot.eafall.game.visual.buttons;
+package com.yaroslavlancelot.eafall.game.visual.buttons.sound;
 
-import com.yaroslavlancelot.eafall.game.visual.buttons.sound.ButtonSpriteSelectButton;
+import com.yaroslavlancelot.eafall.game.audio.GeneralSoundKeys;
+import com.yaroslavlancelot.eafall.game.audio.SoundFactory;
 
+import org.andengine.entity.sprite.ButtonSprite;
+import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /**
- * Used to extend arrow buttons clickable areas.
+ * Sound on a click
  *
  * @author Yaroslav Havrylovych
  */
-public class ArrowButtonSprite extends ButtonSpriteSelectButton {
+public class ButtonSpriteClickButton extends ButtonSprite {
     // ===========================================================
     // Constants
     // ===========================================================
@@ -18,11 +21,14 @@ public class ArrowButtonSprite extends ButtonSpriteSelectButton {
     // ===========================================================
     // Fields
     // ===========================================================
+    protected Boolean mSound = true;
 
     // ===========================================================
     // Constructors
     // ===========================================================
-    public ArrowButtonSprite(final float pX, final float pY, final ITiledTextureRegion pTiledTextureRegion, final VertexBufferObjectManager pVertexBufferObjectManager) {
+    public ButtonSpriteClickButton(float pX, float pY,
+                                   ITiledTextureRegion pTiledTextureRegion,
+                                   VertexBufferObjectManager pVertexBufferObjectManager) {
         super(pX, pY, pTiledTextureRegion, pVertexBufferObjectManager);
     }
 
@@ -30,16 +36,24 @@ public class ArrowButtonSprite extends ButtonSpriteSelectButton {
     // Getter & Setter
     // ===========================================================
 
+    /** play click sound if true and false in other case */
+    public void setSound(final Boolean sound) {
+        mSound = sound;
+    }
+
+
     // ===========================================================
     // Methods for/from SuperClass/Interfaces
     // ===========================================================
+
     @Override
-    public boolean contains(final float pX, final float pY) {
-        float[] coordinates = convertLocalCoordinatesToSceneCoordinates(mWidth / 2, mHeight / 2);
-        return this.isVisible() &&
-                pX > coordinates[0] - mWidth - mWidth && pX < coordinates[0] + mWidth + mWidth &&
-                pY > coordinates[1] - mHeight && pY < coordinates[1] + mHeight;
+    public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+        if (mSound && pSceneTouchEvent.isActionUp() && this.mState == State.PRESSED) {
+            SoundFactory.getInstance().playSound(GeneralSoundKeys.BUTTON_CLICK);
+        }
+        return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
     }
+
 
     // ===========================================================
     // Methods

@@ -85,6 +85,9 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
     @Override
     public void clear() {
         super.clear();
+        if (mBaseButton != null) {
+            mBaseButton.setSound(true);
+        }
         mAmountDrawer.detach();
         mBuildingId = sNoValue;
         mPlayerName = "";
@@ -112,6 +115,7 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
         //build button
         mBaseButton.setText(LocaleImpl.getInstance().getStringById(R.string.description_build_button));
         mBaseButton.setPosition(mBaseButton.getWidth() / 2, mBaseButton.getHeight() / 2);
+        mBaseButton.setSound(false);
         if (!mBaseButton.hasParent()) {
             drawArea.attachChild(mBaseButton);
         }

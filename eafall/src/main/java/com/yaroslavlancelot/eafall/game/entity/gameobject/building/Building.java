@@ -1,6 +1,8 @@
 package com.yaroslavlancelot.eafall.game.entity.gameobject.building;
 
 import com.yaroslavlancelot.eafall.R;
+import com.yaroslavlancelot.eafall.game.audio.GeneralSoundKeys;
+import com.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.StaticObject;
 import com.yaroslavlancelot.eafall.game.entity.health.IHealthBar;
@@ -60,11 +62,13 @@ public abstract class Building implements IBuilding {
         mBuildingStaticObject.setTouchCallback(new TouchHelper.UnboundedSelectorEvents(this) {
             @Override
             public void click() {
+                SoundFactory.getInstance().playSound(GeneralSoundKeys.SELECT);
                 mClickHandler.reset();
             }
 
             @Override
             public void doubleClick() {
+                SoundFactory.getInstance().playSound(GeneralSoundKeys.SELECT);
                 mClickHandler.setTimerCallbackTriggered(true);
                 if (PlayersHolder.getPlayer(mPlayerName).getControlType().user()) {
                     onDoubleClick();
@@ -132,13 +136,17 @@ public abstract class Building implements IBuilding {
 
     @Override
     public boolean buyBuilding() {
+        IPlayer player = PlayersHolder.getPlayer(mPlayerName);
         if (getAmount() >= getAmountLimit()) {
+            if (player.getControlType().user()) {
+                SoundFactory.getInstance().playSound(GeneralSoundKeys.DENIED);
+            }
             return false;
         }
-        IPlayer player = PlayersHolder.getPlayer(mPlayerName);
         if (!player.getControlType().clientSide()) {
             int cost = mDummy.getCost(mUpgrade);
             if (player.getMoney() < cost) {
+                SoundFactory.getInstance().playSound(GeneralSoundKeys.DENIED);
                 return false;
             }
             player.changeMoney(-cost);
@@ -150,6 +158,9 @@ public abstract class Building implements IBuilding {
         EventBus.getDefault().post(new BuildingsAmountChangedEvent(mPlayerName,
                 BuildingId.makeId(mDummy.getBuildingId(), mUpgrade),
                 mBuildingsAmount));
+        if (player.getControlType().user()) {
+            SoundFactory.getInstance().playSound(GeneralSoundKeys.BUTTON_CLICK);
+        }
         return true;
     }
 

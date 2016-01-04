@@ -92,10 +92,8 @@ public abstract class Alliance implements IAlliance {
     public void loadUnits(TextureManager textureManager) {
         Context context = EaFallApplication.getContext();
         loadUnits_Images(textureManager, context);
-        //Init after loading. Init will create a pool, so texture atlas he to be loaded.
         for (int i = 0; i < mUnitDummies.size(); i++) {
-            mUnitDummies.valueAt(i)
-                    .initDummy(SoundFactory.getInstance(), getAllianceName());
+            mUnitDummies.valueAt(i).loadSounds(SoundFactory.getInstance());
         }
     }
 
