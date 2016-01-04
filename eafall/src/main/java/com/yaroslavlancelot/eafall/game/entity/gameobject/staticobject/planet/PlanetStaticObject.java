@@ -8,6 +8,7 @@ import com.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder;
 import com.yaroslavlancelot.eafall.game.client.IUnitCreator;
 import com.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.yaroslavlancelot.eafall.game.constant.StringConstants;
+import com.yaroslavlancelot.eafall.game.entity.SuppressorSoundableAnimation;
 import com.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.IPlayerObject;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
@@ -312,9 +313,19 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
         if (!mIsSuppressorUsed) {
             mIsSuppressorUsed = true;
             IPlayer yourPlayer = PlayersHolder.getPlayer(mPlayerName);
+            //text
             if (yourPlayer.getControlType().user()) {
                 EventBus.getDefault().post(new ShowHudTextEvent(R.string.suppressor_being_used));
             }
+            //animation and sound
+            SuppressorSoundableAnimation suppressor = new SuppressorSoundableAnimation(mX, mY, getVertexBufferObjectManager());
+            IEntity parent = getParent();
+            if (parent != null) {
+                parent = parent.getParent();
+                parent.attachChild(suppressor);
+                suppressor.startAnimation(!isLeft());
+            }
+            //death
             IPlayer enemy = yourPlayer.getEnemyPlayer();
             List<Unit> enemies = enemy.getUnitMap().getUnitOnSide(isLeft());
             for (int i = 0; i < enemies.size(); i++) {

@@ -11,6 +11,7 @@ import com.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder;
 import com.yaroslavlancelot.eafall.game.client.thick.income.ClientIncomeHandler;
 import com.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.yaroslavlancelot.eafall.game.constant.StringConstants;
+import com.yaroslavlancelot.eafall.game.entity.SuppressorSoundableAnimation;
 import com.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetStaticObject;
 import com.yaroslavlancelot.eafall.game.player.IPlayer;
@@ -46,6 +47,7 @@ public class ClientResourcesLoader extends BaseGameObjectsLoader {
         ClientGameHud.loadResource(EaFallApplication.getContext(), textureManager);
         //other
         Context context = EaFallApplication.getContext();
+        SuppressorSoundableAnimation.loadResources(textureManager);
         ConstructionsPopup.loadResource(context, textureManager);
         DescriptionPopup.loadResources(context, textureManager);
         ClientIncomeHandler.loadImages(textureManager);
@@ -79,8 +81,9 @@ public class ClientResourcesLoader extends BaseGameObjectsLoader {
     @Override
     public void loadSounds(final SoundOperations soundOperations) {
         super.loadSounds(soundOperations);
-        soundOperations.loadSound(ClientIncomeHandler.INCOME_SOUND, 0);
-        soundOperations.loadSound(PlanetStaticObject.PLANET_EXPLOSION_SOUND, 0);
+        soundOperations.loadSound(ClientIncomeHandler.INCOME_SOUND, 100);
+        soundOperations.loadSound(PlanetStaticObject.PLANET_EXPLOSION_SOUND, 200);
+        soundOperations.loadSound(SuppressorSoundableAnimation.SOUND, 200);
     }
 
     private void loadSunAndPlanets(TextureManager textureManager,
