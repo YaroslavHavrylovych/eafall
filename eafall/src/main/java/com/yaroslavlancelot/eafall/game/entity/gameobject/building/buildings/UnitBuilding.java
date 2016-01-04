@@ -14,7 +14,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import de.greenrobot.event.EventBus;
 
-public class UnitBuilding extends Building implements IUnitBuilding {
+public abstract class UnitBuilding extends Building implements IUnitBuilding {
     /** if production is paused */
     protected boolean mPaused = false;
     /** building dummy link */
@@ -144,8 +144,7 @@ public class UnitBuilding extends Building implements IUnitBuilding {
             mCreationTime = mOffenceBuildingDummy.getUnitCreationTime(nextUpgrade);
         }
 
-        oldBuilding.detachSelf();
-        newBuilding.attachSelf();
+        updateRepresentation(oldBuilding, newBuilding);
 
         mUpgrade = nextUpgrade;
         //change description popup

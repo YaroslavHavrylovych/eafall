@@ -15,6 +15,8 @@ import com.yaroslavlancelot.eafall.game.touch.TouchHelper;
 
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
+import org.andengine.entity.IEntity;
+import org.andengine.entity.shape.ITouchCallback;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import de.greenrobot.event.EventBus;
@@ -25,6 +27,8 @@ public abstract class Building implements IBuilding {
     protected final String mPlayerName;
     /** current building group type */
     private final BuildingType mBuildingType;
+    /** building touch callback */
+    private final ITouchCallback mTouchCallback;
     /** current building dummy */
     protected BuildingDummy mDummy;
     /** amount of buildings of the current building type */
@@ -56,10 +60,9 @@ public abstract class Building implements IBuilding {
                 }
             }
         });
-
         mClickHandler.setTimerCallbackTriggered(true);
         mBuildingStaticObject.registerUpdateHandler(mClickHandler);
-        mBuildingStaticObject.setTouchCallback(new TouchHelper.UnboundedSelectorEvents(this) {
+        mTouchCallback = new TouchHelper.UnboundedSelectorEvents(this) {
             @Override
             public void click() {
                 SoundFactory.getInstance().playSound(GeneralSoundKeys.SELECT);
@@ -83,7 +86,8 @@ public abstract class Building implements IBuilding {
                     EventBus.getDefault().post(new ShowHudTextEvent(R.string.wrong_planet_suppressor));
                 }
             }
-        });
+        };
+        mBuildingStaticObject.setTouchCallback(mTouchCallback);
     }
 
     public int getAmountLimit() {
@@ -185,12 +189,29 @@ public abstract class Building implements IBuilding {
         return mDummy.getHeight();
     }
 
+    /** changes old building with new one */
+    protected void updateRepresentation(StaticObject oldObj, StaticObject newObj) {
+        oldObj.detachSelf();
+        oldObj.unregisterUpdateHandler(mClickHandler);
+        oldObj.removeTouchCallback();
+        unregisterTouch(mBuildingStaticObject);
+        newObj.registerUpdateHandler(mClickHandler);
+        newObj.setTouchCallback(mTouchCallback);
+        newObj.attachSelf();
+        mBuildingStaticObject = newObj;
+        registerTouch(mBuildingStaticObject);
+    }
+
+    public abstract void registerTouch(IEntity entity);
+
+    public abstract void unregisterTouch(IEntity entity);
+
     protected void onDoubleClick() {
     }
 
-    protected static StaticObject getBuildingByUpgrade(final int upgrade,
-                                                       final BuildingDummy buildingDummy,
-                                                       VertexBufferObjectManager objectManager) {
+    protected StaticObject getBuildingByUpgrade(final int upgrade,
+                                                final BuildingDummy buildingDummy,
+                                                VertexBufferObjectManager objectManager) {
         return new StaticObject(buildingDummy.getX(), buildingDummy.getY(),
                 buildingDummy.getSpriteTextureRegionArray(upgrade), objectManager) {
             {

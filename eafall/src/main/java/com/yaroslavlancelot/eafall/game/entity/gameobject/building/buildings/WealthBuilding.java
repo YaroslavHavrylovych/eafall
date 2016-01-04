@@ -3,6 +3,7 @@ package com.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.building.Building;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.WealthBuildingDummy;
 
+import org.andengine.entity.IEntity;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /** building for increasing existing wealth in percents */
@@ -28,5 +29,15 @@ public class WealthBuilding extends Building {
             setIncome(getIncome() + wealthBuildingDummy.getNextBuildingsIncome());
         }
         return result;
+    }
+
+    @Override
+    public void registerTouch(final IEntity entity) {
+        throw new UnsupportedOperationException("trying to register touch for building where it's prohibited");
+    }
+
+    @Override
+    public void unregisterTouch(final IEntity entity) {
+        throw new UnsupportedOperationException("trying to unregister touch for building where it's prohibited");
     }
 }

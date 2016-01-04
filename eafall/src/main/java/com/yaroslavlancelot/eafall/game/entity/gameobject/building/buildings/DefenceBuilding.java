@@ -8,6 +8,7 @@ import com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.unit.CreateDefen
 import com.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
+import org.andengine.entity.IEntity;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import de.greenrobot.event.EventBus;
@@ -74,5 +75,15 @@ public class DefenceBuilding extends Building {
                     mPlayerName, x, y));
         }
         return true;
+    }
+
+    @Override
+    public void registerTouch(final IEntity entity) {
+        throw new UnsupportedOperationException("trying to register touch for building where it's prohibited");
+    }
+
+    @Override
+    public void unregisterTouch(final IEntity entity) {
+        throw new UnsupportedOperationException("trying to unregister touch for building where it's prohibited");
     }
 }

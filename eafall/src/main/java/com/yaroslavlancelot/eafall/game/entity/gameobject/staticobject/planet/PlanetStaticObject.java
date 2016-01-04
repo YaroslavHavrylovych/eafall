@@ -219,7 +219,17 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
                 case CREEP_BUILDING: {
                     IUnitBuilding unitBuilding =
                             new UnitBuilding((OffenceBuildingDummy) buildingDummy,
-                                    getVertexBufferObjectManager(), mPlayerName);
+                                    getVertexBufferObjectManager(), mPlayerName) {
+                                @Override
+                                public void registerTouch(final IEntity entity) {
+                                    PlanetStaticObject.this.registerTouch(entity);
+                                }
+
+                                @Override
+                                public void unregisterTouch(final IEntity entity) {
+                                    PlanetStaticObject.this.unregisterTouch(entity);
+                                }
+                            };
                     mUnitBuildings.add(unitBuilding);
                     building = unitBuilding;
                     break;

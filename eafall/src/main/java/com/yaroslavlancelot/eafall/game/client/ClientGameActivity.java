@@ -10,6 +10,7 @@ import com.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
+import com.yaroslavlancelot.eafall.game.entity.gameobject.setlectable.selector.SelectorFactory;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.SunStaticObject;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetStaticObject;
 import com.yaroslavlancelot.eafall.game.events.GameStartCooldown;
@@ -223,6 +224,7 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
         popup.setStateChangeListener(new IPopup.StateChangingListener() {
             @Override
             public void onShowed() {
+                SelectorFactory.getSelector().deselect();
             }
 
             @Override

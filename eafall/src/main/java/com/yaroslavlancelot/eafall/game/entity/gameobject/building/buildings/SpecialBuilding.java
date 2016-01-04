@@ -4,6 +4,7 @@ import com.yaroslavlancelot.eafall.game.entity.gameobject.building.Building;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.SpecialBuildingDummy;
 import com.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
+import org.andengine.entity.IEntity;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /** building which give specific to each alliance bonus */
@@ -27,5 +28,15 @@ public class SpecialBuilding extends Building {
             PlayersHolder.getPlayer(mPlayerName).addBonus(((SpecialBuildingDummy) mDummy).getBonus());
         }
         return buildingBought;
+    }
+
+    @Override
+    public void registerTouch(final IEntity entity) {
+        throw new UnsupportedOperationException("trying to register touch for building where it's prohibited");
+    }
+
+    @Override
+    public void unregisterTouch(final IEntity entity) {
+        throw new UnsupportedOperationException("trying to unregister touch for building where it's prohibited");
     }
 }
