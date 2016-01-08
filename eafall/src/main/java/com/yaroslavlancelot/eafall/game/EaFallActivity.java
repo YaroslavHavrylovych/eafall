@@ -1,7 +1,6 @@
 package com.yaroslavlancelot.eafall.game;
 
 import android.app.Dialog;
-import android.os.Build;
 import android.widget.Toast;
 
 import com.yaroslavlancelot.eafall.EaFallApplication;
@@ -215,15 +214,15 @@ public abstract class EaFallActivity extends BaseGameActivity {
         Toast toast =
                 Toast.makeText(EaFallActivity.this, result, showToastEvent.isLongShowedToast()
                         ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT);
-        if (showToastEvent.isWithoutBackground()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                toast.getView().setBackgroundColor(getResources()
-                        .getColor(android.R.color.transparent, getTheme()));
-            } else {
-                toast.getView().setBackgroundColor(getResources()
-                        .getColor(android.R.color.transparent));
-            }
-        }
+//        if (showToastEvent.isWithoutBackground()) {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                toast.getView().setBackgroundColor(getResources()
+//                        .getColor(android.R.color.transparent, getTheme()));
+//            } else {
+        toast.getView().setBackgroundColor(getResources()
+                .getColor(android.R.color.transparent));
+//            }
+//        }
         toast.show();
     }
 
