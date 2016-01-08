@@ -186,7 +186,7 @@
     <string name="two">Два!</string>
     <string name="one">Один!</string>
     <string name="start">В бій!</string>
-    <string name="units_capacity_reached">Досягнуто максимально мажливої кількості юнітів</string>
+    <string name="units_capacity_reached">Досягнуто максимально можливої кількості юнітів</string>
 
     <!-- network game -->
     <string name="create_game">Створити гру</string>
@@ -223,12 +223,12 @@
     <!-- /planet system -->
 
     <!-- armor -->
-    <string name="armor_unarmored">роззброєний</string>
-    <string name="armor_physical">фізичний</string>
-    <string name="armor_electromagnetic">електромагнітний</string>
-    <string name="armor_cherenkov">черенков</string>
-    <string name="armor_higgs">хігс</string>
-    <string name="armor_mixed">змішаний</string>
+    <string name="armor_unarmored">неброньований</string>
+    <string name="armor_physical">фізична</string>
+    <string name="armor_electromagnetic">електромагнітна</string>
+    <string name="armor_cherenkov">Чєрєнкова</string>
+    <string name="armor_higgs">Хігса</string>
+    <string name="armor_mixed">змішана</string>
     <!-- /armor -->
 
     <!-- damage -->

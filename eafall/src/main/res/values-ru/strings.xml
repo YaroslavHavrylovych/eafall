@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Versions -->
+    <string name="not_int_demo">Не включено в демо версию</string>
+    <string name="not_implemented">Не реализовано</string>
+    <!-- / Versions -->
+
+    <!-- Game types -->
+    <string name="campaign">КАМПАНИЯ</string>
+    <string name="tutorial">ОБУЧЕНИЕ</string>
+    <string name="single_game">ОДИНОЧНАЯ ИГРА</string>
+    <string name="multiplayer_game">МНОГОПОЛЬЗОВАТЕЛЬСКАЯ ИГРА</string>
+    <string name="sandbox">ПЕСОЧНИЦА</string>
+
+    <!-- Tutorial -->
+    <string name="tutorial_click_plus">Нажмите \'+\', чтобы получить кислород</string>
+    <string name="tutorial_oxygen_value">Проверьте новое значение кислорода \n (нажмите на экран для продолжения)</string>
+    <string name="tutorial_constructions_button">Нажмите, чтобы увидеть доступные строения</string>
+    <string name="tutorial_construction_popup">Имеющиеся строения и их цены</string>
+    <string name="tutorial_constructions_defence_building">Для защиты лучше построить оборонительное сооружение</string>
+    <string name="tutorial_description_object_characteristics">Ниже вы можете найти характеристики строений</string>
+    <string name="tutorial_description_object_unit">Чтобы увидеть характеристики юнита вы можете:\nнажать на изображение юнита \nлибо же нажать на его имя</string>
+    <string name="tutorial_description_create_building">А сейчас время для построения</string>
+    <string name="tutorial_description_buildings_amount">Количество строений изменилось</string>
+    <string name="tutorial_description_previous_building">Нажмите на стрелку, чтобы перейти к предыдущему строению</string>
+    <string name="tutorial_description_create_building_2">Сейчас время создать другое строение</string>
+    <string name="tutorial_description_building_settings">Нажмите на кнопку, чтобы открыть настройки строения</string>
+    <string name="tutorial_description_hide">Нажмите на свободное место, чтобы скрыть попап</string>
+    <string name="tutorial_description_suppressor_usage">Если Вы проигрываете,\nто сделайте затяжной клик на Вашу планету,\nэто вызовет подавитель</string>
+    <string name="tutorial_description_suppressor_description">Подавитель уничтожит всех противников\nна вашей стороне игрового поля</string>
+    <string name="tutorial_task">Ваша задача выжить оставшееся время\nУдачи!</string>
+    <!-- / Tutorial -->
+
+    <!-- Pre game customizations -->
+    <string name="choose_alliance">Союзы</string>
+
+    <string-array name="alliances">
+        <item>@string/imperials</item>
+        <item>@string/rebels</item>
+        <item>@string/mutants</item>
+   </string-array>
+
+    <string name="imperials">Империя</string>
+    <string name="rebels">Повстанцы</string>
+    <string name="mutants">Мутанты</string>
+
+    <string name="planet1">Планета 1</string>
+    <string name="planet2">Планета 2</string>
+    <!-- / Pre game customizations -->
+
+    <!-- Unions -->
+    <!-- Imperials -->
+    <!-- Buildings -->
+    <string name="camp">Лагерь</string>
+    <string name="tent">Палатка</string>
+    <string name="barracks">Ангары</string>
+    <string name="shooters_hall">Стрелецкий Зал</string>
+    <string name="training_center">Тренировочный Центр</string>
+    <string name="workshop">Мастерская</string>
+    <string name="laboratory">Лаборатория</string>
+    <string name="bunker">Бункер</string>
+    <string name="defender">Защитник</string>
+    <string name="municipality">Муниципалитет</string>
+    <string name="earth_artifact">Артифакт с Земли</string>
+    <!-- / Buildings -->
+    <!-- Units -->
+    <string name="conscript">Призывник</string>
+    <string name="grant">Боец</string>
+    <string name="sergeant">Сержант</string>
+    <string name="boy_scout">Пластун</string>
+    <string name="scout">Опекун</string>
+    <string name="infantrymen">Пехотинец</string>
+    <string name="SF">СВ</string>
+    <string name="sniper">Снайпер</string>
+    <string name="killer">Убийца</string>
+    <string name="agent">Агент</string>
+    <string name="spy">Шпион</string>
+    <string name="robot">Робот</string>
+    <string name="metal_killer">Зализячник</string>
+    <string name="demolisher">Взрыватель</string>
+    <string name="superman">Супермен</string>
+    <!-- / Units -->
+
+    <!-- Rebels -->
+    <!-- Buildings -->
+    <string name="underground">​​Хранилище</string>
+    <string name="factory">Фабрика</string>
+    <string name="bomos">Алтарь</string>
+    <string name="hospital">Госпиталь</string>
+    <string name="minery">Шахта</string>
+    <string name="artillery">Артиллерия</string>
+    <string name="sabotage_center">Диверсионный центр</string>
+    <string name="fort">Форт</string>
+    <string name="caches">Крыивка</string>
+    <string name="space_material">Космическая материя</string>
+    <!-- / Buildings -->
+    <!-- Units -->
+    <string name="machine_gunner">Механический стрелок</string>
+    <string name="mechanical_soldier">Механический солдат</string>
+    <string name="oplot_u">Оплот В</string>
+    <string name="oplot_m">Оплот М</string>
+    <string name="suicide">Смертник</string>
+    <string name="priest">Священник</string>
+    <string name="doctor">Врач</string>
+    <string name="shaman">Шаман</string>
+    <string name="engineer">Инженер</string>
+    <string name="exploder">Взрыватель</string>
+    <string name="ballista">Баллиста</string>
+    <string name="thor">Тор</string>
+    <string name="recruiter">Вербовщик</string>
+    <string name="saboteur">Диверсант</string>
+    <!-- / Units -->
+
+    <!-- Mutants -->
+    <!-- Buildings -->
+    <string name="water_cave">Водная\nпещера</string>
+    <string name="invisible_plain">Скрытая\nместность</string>
+    <string name="hydra_pond">Плотина Гидр</string>
+    <string name="poison_cave">Ядовитая\nПещера</string>
+    <string name="web">Паутина</string>
+    <string name="mountain_cave">Пещера\nв Горах</string>
+    <string name="hell">Пекло</string>
+    <string name="bastion">Бастион</string>
+    <string name="reptile_city">Город\nРептилий</string>
+    <string name="king_of_snakes">Король Змей</string>
+    <!-- / Buildings -->
+    <!-- Units -->
+    <string name="lizard">Ящерица</string>
+    <string name="tortoise">Черепаха</string>
+    <string name="dragon">Дракон</string>
+    <string name="scorpion">Скорпион</string>
+    <string name="king_scorpion">Король Скорпион</string>
+    <string name="young_hydra">Молодая Гидра</string>
+    <string name="hydra">Гидра</string>
+    <string name="eel">Уж</string>
+    <string name="cobra">Кобра</string>
+    <string name="spider1">Паук 1</string>
+    <string name="spider2">Паук 2</string>
+    <string name="bat">Летучая мышь</string>
+    <string name="vampire">Вампир</string>
+    <string name="agat">Агат</string>
+    <string name="kak">Кек</string>
+    <!-- Units -->
+    <!-- / Mutants -->
+    <!-- / Unions -->
+
+    <!-- Settings -->
+    <string name="settings">Настройка</string>
+    <string name="settings_health_bar_behaviour">Полоса здоровья</string>
+    <string name="developers_mode">Режим разработчика</string>
+    <string name="developers_mode_on">Включен</string>
+    <string name="developers_mode_off">Выкл</string>
+    <string name="pick_unit_health_bar_behavior">ПОКАЗАТЕЛЬ ЗДОРОВЬЯ ЮНИТА</string>
+    <string name="health_bar_default">Скрытый, пока юнит не атакован</string>
+    <string name="health_bar_always_hidden">Скрытый</string>
+    <string name="health_bar_always_visible">Видимый</string>
+    <string name="category_game">Игра</string>
+    <string name="game_sounds">Звуки игры</string>
+    <string name="game_sounds_on">Включенные</string>
+    <string name="game_sounds_off">Отключены</string>
+    <string name="game_sounds_volume">Громкость</string>
+    <string name="music">Музыка</string>
+    <string name="music_on">Включена</string>
+    <string name="music_off">Вимкена</string>
+    <string name="music_volume">Громкость</string>
+    <string name="category_sounds">Звук</string>
+    <string name="category_other">Другое</string>
+
+    <!-- General -->
+    <string name="app_name">Empires Always Fall</string>
+    <string name="exit">Выход</string>
+    <string name="back">Назад</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="done">Готово</string>
+    <string name="exit_click">Двойной клик, чтобы выйти</string>
+    <string name="exit_loading">Нельзя выйти при загрузке</string>
+    <string name="connect">Соединить</string>
+    <string name="orbital_station">Орбитальная станция</string>
+    <string name="unmovable">Неподвижный</string>
+    <string name="exit_confirmation">Действительно хотите\nвыйти?</string>
+    <string name="exit_dialog_title">Выход</string>
+    <string name="used">использован</string>
+    <string name="unused">не использован</string>
+    <string name="three">Три!</string>
+    <string name="two">Два!</string>
+    <string name="one">Один!</string>
+    <string name="start">В бой!</string>
+    <string name="units_capacity_reached">Достигнуто максимально возможноого количества юнитов</string>
+
+    <!-- Network game -->
+    <string name="create_game">Создать игру</string>
+    <string name="direct_ip">Указать ip</string>
+    <string name="games_list">Список игр</string>
+    <string name="ip_address">Ip адрес:</string>
+
+    <!-- Creating server -->
+    <string name="your_ip_address">Адрес Вашего сервера</string>
+    <string name="template_ip">125.125.125.125</string>
+    <string name="no_opponents">Не один клиент еще не подключился к Вашему серверу…</string>
+    <string name="your_opponent_name">Имя Вашего оппонента</string>
+    <string name="your_opponent_ip">Адрес Вашего оппонента</string>
+    <string name="start_game">Начать игру</string>
+    <string name="ip_address_separator">.</string>
+    <string name="connected_client_with_ip">Подключение клиента с адресом:</string>
+
+    <!-- Client connected to server -->
+    <string name="you_are_connected_to_server">Вы подключены к серверу с адресом:</string>
+
+    <!-- Planet system -->
+    <string name="planet_system_star">Звезда принадлежит созвездию: %1$s\nКодовое название звезды: %2$s</string>
+    <string name="no_constellation">Не принадлежит</string>
+    <string name="player_planet_text">Ваша база: %1$s\nНаименование союза: %2$s\nПодавитель: %3$s</string>
+    <string name="opponent_planet_text">База Вашего врага: %1$s\nНаименование союза: %2$s\nПодавитель: %3$s</string>
+    <string name="suppressor_being_used">Подавитель было использовано</string>
+    <string name="wrong_planet_suppressor">Использовать Подавитель можно только на собственной базе</string>
+    <!-- Stars -->
+    <string name="sun">Гелиос</string>
+    <!-- / Stars -->
+    <!-- Planets -->
+    <string name="earth">Земля</string>
+    <!-- / Planets -->
+    <!-- / Planet system -->
+
+    <!-- Armor -->
+    <string name="armor_unarmored">небронированный</string>
+    <string name="armor_physical">физическая</string>
+    <string name="armor_electromagnetic">электромагнитная</string>
+    <string name="armor_cherenkov">Черенкова</string>
+    <string name="armor_higgs">Хиггса</string>
+    <string name="armor_mixed">смешаннай</string>
+    <!-- / Armor -->
+
+    <!-- Damage -->
+    <string name="damage_railgun">рельса</string>
+    <string name="damage_laser">лазер</string>
+    <string name="damage_neutrino">нейтрино</string>
+    <string name="damage_higgson">хигсон</string>
+    <string name="damage_annihilator">аннигилятор</string>
+    <string name="damage_quaker">разрушитель</string>
+    <!-- / Damage -->
+
+    <!-- Fire rate -->
+    <string name="fire_rate_very_slow">очень низкая</string>
+    <string name="fire_rate_slow">низкая</string>
+    <string name="fire_rate_normal">нормальная</string>
+    <string name="fire_rate_high">высокая</string>
+    <!-- / Fire rate -->
+
+    <!-- Description popup -->
+
+    <!-- Sandbox -->
+    <string name="sandbox_select">Использовать</string>
+    <string name="sandbox_hint">Нажмите на игровое поле, чтобы добавить юнита</string>
+
+    <!-- Buildings -->
+    <string name="description_build_button">Постр.</string>
+    <string name="description_back_button">Вернуться</string>
+    <string name="description_upgrade_button">Прокач.</string>
+    <string name="description_settings_button">Настр.</string>
+    <string name="description_cost">Цена :</string>
+    <string name="description_produce">Создает :</string>
+    <string name="description_description">Описание :</string>
+    <string name="description_unit_producing_time">Время создания юнита :</string>
+    <string name="description_upgrade">Прокачка :</string>
+
+    <!-- Building settings -->
+    <string name="unit_movement_path">Выберите путь для юнита</string>
+    <string name="building_settings_top">Юнит идет сверху</string>
+    <string name="building_settings_bottom">Юнит идет снизу</string>
+    <string name="building_settings_pause">Остановить производство</string>
+
+    <!-- Units -->
+    <string name="description_building">Строение :</string>
+    <string name="description_speed">Скорость :</string>
+    <string name="description_health">Здоровье :</string>
+    <string name="description_reload_time">Скорострельность :</string>
+    <string name="description_unique">Особое :</string>
+    <string name="description_damage">Урон :</string>
+    <string name="description_armor">Броня :</string>
+
+    <!-- Descriptions -->
+    <string name="earth_artifact_description">Священный артефакт Повстанцев\nнайденный в недрах Земли.\nДобавляет 10\u0025 к здоровью юнита.</string>
+    <string name="space_material_description">Мощный артефакт Имперцев, изобретенный их учеными.\nДает 10\u0025 шанс избежать повреждений.</string>
+    <string name="king_of_snakes_description">Ценный артефакт Мутантов,\nбыл найден в открытом космосе.\n10\u0025 увеличение повреждений от юнита.</string>
+    <string name="municipality_description">20\u0025 увеличение дохода от первого строения. \nКаждое следующее строение увеличивает доход на 1\u0025.</string>
+    <string name="caches_description">20\u0025 увеличение дохода от первого строения. \nКаждое следующее строение увеличивает доход на 1\u0025.</string>
+    <string name="reptile_city_description">20\u0025 увеличение дохода от первого строения. \nКаждое следующее строение увеличивает доход на 1\u0025.</string>
+    <!-- / Descriptions -->
+    <!-- / Description popup -->
+
+    <!-- Menu popup -->
+    <string name="menu_pause">Пауза</string>
+    <string name="menu_resume">Продолжить</string>
+    <string name="menu_mission">Миссия</string>
+    <string name="menu_damage_armor">Атака/Защита</string>
+    <string name="menu_settings">Настройки</string>
+    <string name="menu_exit">Выход</string>
+    <!-- / Menu popup -->
+
+    <!-- Campaign -->
+    <!-- Guide campaign -->
+    <string name="campaign_guide_start">Начать</string>
+    <string name="campaign_guide_enter">Осмотреть</string>
+    <!-- / Guide campaign -->
+    <!-- / Campaign -->
+
+    <!-- Mission -->
+    <!-- Results -->
+    <string name="win">Вы победили!</string>
+    <string name="lose">Вы проиграли!</string>
+    <!-- / Results -->
+    <!-- / Mission -->
+</resources>
