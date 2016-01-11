@@ -5,12 +5,15 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
+import com.google.android.gms.analytics.ExceptionReporter;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
+import com.yaroslavlancelot.eafall.android.analytics.FullStacktraceExceptionParser;
 import com.yaroslavlancelot.eafall.game.configuration.Config;
 import com.yaroslavlancelot.eafall.game.configuration.IConfig;
 import com.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 
+/** Custom multi-dex application */
 public class EaFallApplication extends MultiDexApplication {
     /** application context */
     private static volatile Context sContext;
@@ -52,9 +55,16 @@ public class EaFallApplication extends MultiDexApplication {
         super.onCreate();
         sContext = getApplicationContext();
         sConfig = Config.createConfig(this);
+        LocaleImpl.init(this);
         GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
         mDefaultTracker = analytics.newTracker(R.xml.analytics);
-        LocaleImpl.init(this);
+        ExceptionReporter customReporter = new ExceptionReporter(
+                mDefaultTracker,
+                Thread.getDefaultUncaughtExceptionHandler(), // Current default uncaught exception handler
+                this);
+        customReporter.setExceptionParser(new FullStacktraceExceptionParser());
+        // Make customReporter as the new default uncaught exception handler.
+        Thread.setDefaultUncaughtExceptionHandler(customReporter);
     }
 
 }

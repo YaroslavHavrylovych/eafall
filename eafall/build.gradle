@@ -1,18 +1,16 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
+int target_v = 21
+
 buildscript {
     ext {
-        mint_sdk_v = 11
         kotlin_v = '1.0.0-beta-3593'
-        target_v = 21
-        build_tools_v = "21.1.2"
-        android_support_lib_v = 'v7:21.0.2'
         exclude_java = []
     }
 
     repositories {
-        mavenCentral()
+        jcenter()
     }
 
     dependencies {
@@ -21,25 +19,30 @@ buildscript {
 }
 
 repositories {
-    mavenCentral()
+    jcenter()
 }
 
 dependencies {
     compile project(':andenginemultiplayerextension')
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
     compile 'de.greenrobot:eventbus:2.4.0'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_v"
-    compile "com.android.support:appcompat-$android_support_lib_v"
-    compile "com.google.android.gms:play-services-analytics:8.4.0"
+    compile "com.android.support:appcompat-v7:21.0.2"
+    compile 'com.google.android.gms:play-services-analytics:8.4.0'
     compile 'com.android.support:multidex:1.0.1'
 }
 
 android {
     compileSdkVersion target_v
-    buildToolsVersion build_tools_v
+    buildToolsVersion "21.1.2"
+
+    packagingOptions {
+        pickFirst 'META-INF/LICENSE.txt'
+    }
 
     defaultConfig {
-        minSdkVersion mint_sdk_v
+        minSdkVersion 11
         targetSdkVersion target_v
 
         multiDexEnabled true

@@ -3,14 +3,11 @@
     <!-- app id -->
     <string name="ga_trackingId">UA-71865833-1</string>
 
-    <!--exception tracking-->
-    <bool name="ga_reportUncaughtExceptions">true</bool>
-
     <!-- session tracker -->
     <integer name="ga_sessionTimeout">300</integer>
 
-    <!-- can store data on the device before send it to the server -->
-    <integer name="ga_dispatchPeriod">60</integer>
+    <!-- Minutes amount to store data on the device before send it to the server -->
+    <integer name="ga_dispatchPeriod">30</integer>
 
     <!-- activity tracking -->
     <bool name="ga_autoActivityTracking">true</bool>
