@@ -257,10 +257,11 @@ public class TutorialActivity extends SinglePlayerGameActivity {
                                 PlanetStaticObject planet = mFirstPlayer.getPlanet();
                                 mTutorialPopup.initText1(1040, 910, R.string.tutorial_click_plus);
                                 mTutorialPopup.initPointer1(525, 805, 160);
-                                mTutorialPopup.setClickableArea(
-                                        ClientIncomeHandler.getPlanetIncomeX(planet.getX(), planet.getWidth()),
-                                        ClientIncomeHandler.getPlanetIncomeY(planet.getY(), planet.getHeight()),
-                                        25, 25);
+                                float x = ClientIncomeHandler.getPlanetIncomeX(planet.getX(), planet.getWidth());
+                                float y = ClientIncomeHandler.getPlanetIncomeY(planet.getY(), planet.getHeight());
+                                float[] res = mCamera.getCameraSceneCoordinatesFromSceneCoordinates(x, y);
+                                mTutorialPopup.setClickableArea(res[0], res[1],
+                                        SizeConstants.INCOME_IMAGE_SIZE, SizeConstants.INCOME_IMAGE_SIZE);
                                 mTutorialPopup.setStateChangeListener(new IPopup.StateChangingListener() {
                                     @Override
                                     public void onShowed() {

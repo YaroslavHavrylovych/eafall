@@ -36,13 +36,13 @@ public class GameSceneHandler implements
     // ===========================================================
 
     public static final float MAX_ZOOM_FACTOR = EaFallApplication.getConfig().getMaxZoomFactor();
-    public static final float MIN_ZOOM_FACTOR = 1;
+    /** Used to deselect a selected scene object */
+    private final Selector mSceneObjectSelector;
 
     // ===========================================================
     // Fields
     // ===========================================================
-    /** Used to deselect a selected scene object */
-    private final Selector mSceneObjectSelector;
+    protected float mMinZoomFactor = 1;
     /** camera for moving */
     private EaFallCamera mCamera;
     /*
@@ -91,6 +91,14 @@ public class GameSceneHandler implements
 
     protected float getCenterY() {
         return mCamera.getCenterY();
+    }
+
+    public float getMinZoomFactor() {
+        return mMinZoomFactor;
+    }
+
+    public void setMinZoomFactor(final float minZoomFactor) {
+        mMinZoomFactor = minZoomFactor;
     }
 
     public void setClickListener(ClickDetector.IClickDetectorListener clickListener) {
@@ -169,7 +177,7 @@ public class GameSceneHandler implements
     @Override
     public void onPinchZoom(PinchZoomDetector pPinchZoomDetector, TouchEvent pTouchEvent,
                             float pZoomFactor) {
-        float newZoom = MathUtils.bringToBounds(MIN_ZOOM_FACTOR, MAX_ZOOM_FACTOR,
+        float newZoom = MathUtils.bringToBounds(mMinZoomFactor, MAX_ZOOM_FACTOR,
                 mInitialTouchZoomFactor * pZoomFactor);
         float zoomChange = newZoom - mCamera.getZoomFactor();
         //if zoomChange < 0 (zoom out) then this method works strange (and unneeded in general)

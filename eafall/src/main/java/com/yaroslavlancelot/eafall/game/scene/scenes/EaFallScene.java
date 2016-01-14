@@ -40,6 +40,14 @@ public class EaFallScene extends Scene {
         return mGameSceneHandler;
     }
 
+    public float getMinZoomFactor() {
+        return mGameSceneHandler.getMinZoomFactor();
+    }
+
+    public void setMinZoomFactor(float zoomFactor) {
+        mGameSceneHandler.setMinZoomFactor(zoomFactor);
+    }
+
     public void setClickListener(ClickDetector.IClickDetectorListener clickListener) {
         mGameSceneHandler.setClickListener(clickListener);
     }
@@ -74,10 +82,9 @@ public class EaFallScene extends Scene {
      * @param camera camera to pass to the scene touch listener
      */
     public void initGameSceneHandler(EaFallCamera camera) {
-        //TODO logger was here
         /* main scene touch listener */
         mGameSceneHandler = new GameSceneHandler(camera) {
-            private float mPreviousZoomFactor = MIN_ZOOM_FACTOR;
+            private float mPreviousZoomFactor = mMinZoomFactor;
 
             @Override
             public void cameraMove(final float deltaX, final float deltaY) {
@@ -96,7 +103,7 @@ public class EaFallScene extends Scene {
                 }
 
                 if (deltaY != 0.0) {
-                    float multiplier = Math.min(0.92f, mBackgroundSprite.getScaleY() /
+                    float multiplier = Math.min(0.7f, mBackgroundSprite.getScaleY() /
                             getZoomFactor());
                     float delta = SizeConstants.HALF_FIELD_HEIGHT - getCenterY();
                     mBackgroundSprite.setY(SizeConstants.HALF_FIELD_HEIGHT + delta * multiplier);

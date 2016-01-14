@@ -15,8 +15,6 @@ import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.input.touch.detector.ClickDetector;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-import java.util.Random;
-
 import de.greenrobot.event.EventBus;
 
 /**
@@ -31,7 +29,6 @@ public class SunStaticObject extends StaticObject {
                 TextureRegionHolder.getRegion(StringConstants.KEY_SUN), vertexBufferObjectManager);
         mIncomeIncreasingValue = 0;
         setSpriteGroupName(BatchingKeys.SUN_PLANET);
-        setRotation(new Random().nextInt(360));
         IEntityModifier bottomSunRotation = new InstantRotationModifier(135);
         registerEntityModifier(bottomSunRotation);
         //haze

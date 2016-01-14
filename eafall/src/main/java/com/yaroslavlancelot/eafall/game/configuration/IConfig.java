@@ -13,6 +13,8 @@ import org.andengine.util.adt.color.Color;
 public interface IConfig {
     int getMaxZoomFactor();
 
+    float getMinZoomFactor();
+
     int getMaxSimultaneousSoundStreams();
 
     int getUnitBuildingsLimit();

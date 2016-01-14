@@ -67,6 +67,10 @@ public class ClientIncomeHandler extends SelfCleanable {
         }
     }
 
+    // ===========================================================
+    // Methods
+    // ===========================================================
+
     /**
      * adds income listener
      *
@@ -88,9 +92,7 @@ public class ClientIncomeHandler extends SelfCleanable {
         mIncomeListener.remove(incomeListener);
     }
 
-    // ===========================================================
-    // Methods
-    // ===========================================================
+    /** Used to create income button */
     public ButtonSprite makeIncome(IncomeType incomeType, int money) {
         IncomeButton incomeButton;
         if (incomeType == IncomeType.PLANET) {

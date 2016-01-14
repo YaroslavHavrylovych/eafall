@@ -81,7 +81,8 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
         super.onShowWorkingScene();
         mSceneManager.getWorkingScene().setIgnoreUpdate(true);
         ((ClientGameHud) mHud).blockInput(true);
-        final GameStartCooldown timerHandler = new GameStartCooldown((ClientGameHud) mHud) {
+        final GameStartCooldown timerHandler = new GameStartCooldown((ClientGameHud) mHud,
+                mSceneManager.getWorkingScene(), mCamera) {
             @Override
             public void timerEnded() {
                 ((ClientGameHud) mHud).blockInput(false);
@@ -127,7 +128,6 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
                                               String key,
                                               IPlayer player,
                                               long... unitUniqueId) {
-        //TODO logger was here
         PlanetStaticObject planet = new PlanetStaticObject(x, y, textureRegion,
                 getVertexBufferObjectManager()) {
             @Override

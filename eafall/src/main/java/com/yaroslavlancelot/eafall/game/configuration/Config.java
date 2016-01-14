@@ -17,6 +17,7 @@ public class Config implements IConfig {
     public final int mDisplayWidth;
     public final int mDisplayHeight;
     public final int mMaxZoomFactor = 3;
+    public final float mMinZoomFactor = 1.3f;
     public final float mHudAlpha = 0.85f;
     public final int mMaxSimultaneousSoundStreams = 4;
     private final Color mPlayerSwapColor = Color.BLUE;
@@ -37,6 +38,11 @@ public class Config implements IConfig {
     @Override
     public int getMaxZoomFactor() {
         return mMaxZoomFactor;
+    }
+
+    @Override
+    public float getMinZoomFactor() {
+        return mMinZoomFactor;
     }
 
     @Override
