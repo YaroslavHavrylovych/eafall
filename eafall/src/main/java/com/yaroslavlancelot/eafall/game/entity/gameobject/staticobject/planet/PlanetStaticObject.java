@@ -83,6 +83,9 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
         mIncomeIncreasingValue = 10;
         mObjectArmor = new Armor(Armor.ArmorType.MIXED.name(), 10);
         mChildren = new SmartList<>(12);
+        if (!isLeft(x)) {
+            setFlippedHorizontal(true);
+        }
         setSpriteGroupName(BatchingKeys.SUN_PLANET);
     }
 

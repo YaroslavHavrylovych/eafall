@@ -21,6 +21,7 @@ import com.yaroslavlancelot.eafall.game.popup.rolling.construction.Constructions
 import com.yaroslavlancelot.eafall.game.popup.rolling.description.DescriptionPopup;
 import com.yaroslavlancelot.eafall.game.scene.hud.ClientGameHud;
 
+import org.andengine.entity.sprite.batch.FlippableSpriteGroup;
 import org.andengine.entity.sprite.batch.SpriteGroup;
 import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.texture.TextureManager;
@@ -122,7 +123,7 @@ public class ClientResourcesLoader extends BaseGameObjectsLoader {
 
         atlas.load();
         //sun + planets SpriteGroup
-        SpriteGroup spriteGroup = new SpriteGroup(atlas, 4, vertexBufferObjectManager);
+        SpriteGroup spriteGroup = new FlippableSpriteGroup(atlas, 4, vertexBufferObjectManager);
         SpriteGroupHolder.addGroup(BatchingKeys.SUN_PLANET, spriteGroup);
     }
 }

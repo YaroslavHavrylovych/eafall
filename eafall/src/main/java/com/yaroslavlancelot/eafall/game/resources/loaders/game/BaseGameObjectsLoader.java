@@ -22,6 +22,7 @@ import com.yaroslavlancelot.eafall.game.scene.hud.ClientGameHud;
 import com.yaroslavlancelot.eafall.game.visual.buttons.MenuPopupButton;
 import com.yaroslavlancelot.eafall.game.visual.buttons.TextButton;
 
+import org.andengine.entity.sprite.batch.FlippableSpriteGroup;
 import org.andengine.entity.sprite.batch.SpriteGroup;
 import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.texture.TextureManager;
@@ -101,7 +102,7 @@ public abstract class BaseGameObjectsLoader extends BaseResourceLoader {
 
     protected void loadPlayerSpecificBuildings(IAlliance alliance, VertexBufferObjectManager vboManager, IPlayer player) {
         TextureAtlas textureAtlas = alliance.getBuildingTextureAtlas();
-        SpriteGroup spriteGroup = new SpriteGroup(textureAtlas,
+        SpriteGroup spriteGroup = new FlippableSpriteGroup(textureAtlas,
                 alliance.getBuildingsAmount(),
                 vboManager);
         SpriteGroupHolder.addGroup(BatchingKeys.getBuildingSpriteGroup(player.getName()), spriteGroup);
