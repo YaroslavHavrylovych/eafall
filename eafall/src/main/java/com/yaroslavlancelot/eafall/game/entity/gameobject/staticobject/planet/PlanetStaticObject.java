@@ -83,6 +83,9 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
         mIncomeIncreasingValue = 10;
         mObjectArmor = new Armor(Armor.ArmorType.MIXED.name(), 10);
         mChildren = new SmartList<>(12);
+        if (!isLeft()) {
+            setFlippedHorizontal(true);
+        }
         setSpriteGroupName(BatchingKeys.SUN_PLANET);
     }
 
@@ -255,8 +258,9 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
             }
             StaticObject buildingStatObj = building.getEntity();
             buildingStatObj.setSpriteGroupName(BatchingKeys.getBuildingSpriteGroup(mPlayerName));
+            float xOffset = isLeft() ? buildingStatObj.getX() : -buildingStatObj.getX();
             buildingStatObj.setPosition(
-                    getX() + buildingStatObj.getX(), getY() + buildingStatObj.getY());
+                    getX() + xOffset, getY() + buildingStatObj.getY());
             mBuildings.put(buildingId.getId(), building);
         }
         boolean result = building.buyBuilding();

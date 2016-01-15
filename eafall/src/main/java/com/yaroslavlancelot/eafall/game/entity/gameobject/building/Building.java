@@ -5,6 +5,7 @@ import com.yaroslavlancelot.eafall.game.audio.GeneralSoundKeys;
 import com.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.StaticObject;
+import com.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetStaticObject;
 import com.yaroslavlancelot.eafall.game.entity.health.IHealthBar;
 import com.yaroslavlancelot.eafall.game.events.aperiodic.ShowHudTextEvent;
 import com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.BuildingsAmountChangedEvent;
@@ -215,6 +216,8 @@ public abstract class Building implements IBuilding {
         return new StaticObject(buildingDummy.getX(), buildingDummy.getY(),
                 buildingDummy.getSpriteTextureRegionArray(upgrade), objectManager) {
             {
+                PlanetStaticObject planet = PlayersHolder.getPlayer(mPlayerName).getPlanet();
+                setFlippedHorizontal(planet.isFlippedHorizontal());
                 setCost(buildingDummy.getCost(upgrade));
                 setIncome((int) (getCost() * 0.03));
                 setWidth(buildingDummy.getWidth());

@@ -21,6 +21,7 @@ import com.yaroslavlancelot.eafall.game.popup.rolling.construction.Constructions
 import com.yaroslavlancelot.eafall.game.popup.rolling.description.DescriptionPopup;
 import com.yaroslavlancelot.eafall.game.scene.hud.ClientGameHud;
 
+import org.andengine.entity.sprite.batch.FlippableSpriteGroup;
 import org.andengine.entity.sprite.batch.SpriteGroup;
 import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.texture.TextureManager;
@@ -111,18 +112,18 @@ public class ClientResourcesLoader extends BaseGameObjectsLoader {
         TextureRegionHolder.getInstance().addElement(StringConstants.KEY_FIRST_PLANET,
                 BitmapTextureAtlasTextureRegionFactory.createFromAsset(
                         atlas, EaFallApplication.getContext(),
-                        StringConstants.FILE_FIRST_PLANET,
+                        StringConstants.PLANET,
                         0, SizeConstants.FILE_SUN_DIAMETER + padding));
         TextureRegionHolder.getInstance().addElement(StringConstants.KEY_SECOND_PLANET,
                 BitmapTextureAtlasTextureRegionFactory.createFromAsset(
                         atlas, EaFallApplication.getContext(),
-                        StringConstants.FILE_SECOND_PLANET,
+                        StringConstants.PLANET,
                         SizeConstants.FILE_PLANET_DIAMETER + padding,
                         SizeConstants.FILE_SUN_DIAMETER + padding));
 
         atlas.load();
         //sun + planets SpriteGroup
-        SpriteGroup spriteGroup = new SpriteGroup(atlas, 4, vertexBufferObjectManager);
+        SpriteGroup spriteGroup = new FlippableSpriteGroup(atlas, 4, vertexBufferObjectManager);
         SpriteGroupHolder.addGroup(BatchingKeys.SUN_PLANET, spriteGroup);
     }
 }
