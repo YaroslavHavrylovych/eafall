@@ -112,12 +112,12 @@ public class ClientResourcesLoader extends BaseGameObjectsLoader {
         TextureRegionHolder.getInstance().addElement(StringConstants.KEY_FIRST_PLANET,
                 BitmapTextureAtlasTextureRegionFactory.createFromAsset(
                         atlas, EaFallApplication.getContext(),
-                        StringConstants.FILE_FIRST_PLANET,
+                        StringConstants.PLANET,
                         0, SizeConstants.FILE_SUN_DIAMETER + padding));
         TextureRegionHolder.getInstance().addElement(StringConstants.KEY_SECOND_PLANET,
                 BitmapTextureAtlasTextureRegionFactory.createFromAsset(
                         atlas, EaFallApplication.getContext(),
-                        StringConstants.FILE_SECOND_PLANET,
+                        StringConstants.PLANET,
                         SizeConstants.FILE_PLANET_DIAMETER + padding,
                         SizeConstants.FILE_SUN_DIAMETER + padding));
 

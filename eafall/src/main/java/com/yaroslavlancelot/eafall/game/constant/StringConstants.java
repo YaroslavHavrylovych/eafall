@@ -53,9 +53,7 @@ public final class StringConstants {
     /** unit health bar */
     public static final String FILE_HEALTH_BAR_UNIT = "graphics/sprites/health/unit_health_bar.png";
     /** file name for blue planet */
-    public static final String FILE_FIRST_PLANET = "graphics/sprites/planet_1.png";
-    /** file name for red planet */
-    public static final String FILE_SECOND_PLANET = "graphics/sprites/planet_2.png";
+    public static final String PLANET = "graphics/sprites/earth.png";
     /** selector image */
     public static final String FILE_SELECTOR = "graphics/sprites/select/selector.png";
     /** planet explosion animation */
