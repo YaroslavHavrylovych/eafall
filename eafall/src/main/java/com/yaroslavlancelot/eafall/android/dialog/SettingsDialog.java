@@ -47,7 +47,7 @@ public class SettingsDialog extends DialogFragment {
     @Override
     @NonNull
     public Dialog onCreateDialog(final Bundle savedInstanceState) {
-        Dialog dialog = new Dialog(getActivity(), R.style.Theme_NoTitleBar_Fullscreen_NoBackground);
+        Dialog dialog = new Dialog(getActivity(), R.style.Theme_NoTitleBar_Fullscreen_BlackBackground);
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         return dialog;
     }

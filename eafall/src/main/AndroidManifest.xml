@@ -12,7 +12,7 @@
         android:name=".EaFallApplication"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
-        android:theme="@style/Theme.NoTitleBar.Fullscreen.NoBackground"
+        android:theme="@style/Theme.NoTitleBar.Fullscreen.BlackBackground"
         android:allowBackup="false">
         <activity
             android:name="com.yaroslavlancelot.eafall.android.activities.StartupActivity"
