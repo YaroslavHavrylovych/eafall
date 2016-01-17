@@ -114,14 +114,14 @@
     <!-- mutants -->
     <!-- buildings -->
     <string name="water_cave">Водна Печера</string>
-    <string name="invisible_plain">Схована місцина</string>
+    <string name="invisible_plain">Схована\nмісцина</string>
     <string name="hydra_pond">Загата Гідр</string>
-    <string name="poison_cave">Отруйна Печера</string>
+    <string name="poison_cave">Отруйна\nПечера</string>
     <string name="web">Павутина</string>
-    <string name="mountain_cave">Печера в Горах</string>
+    <string name="mountain_cave">Гірська\nпечера</string>
     <string name="hell">Пекло</string>
     <string name="bastion">Бастіон</string>
-    <string name="reptile_city">Місто Рептилій</string>
+    <string name="reptile_city">Місто\nРептилій</string>
     <string name="king_of_snakes">Король Змій</string>
     <!-- /buildings -->
     <!-- units -->
@@ -282,7 +282,7 @@
     <!-- descriptions -->
     <string name="earth_artifact_description">Священий артефакт Мутантів знайдений в надрах Землі.\nДодає 10\u0025 до здоров’я юніта.</string>
     <string name="space_material_description">Могутній артефакт Імперців, винайдений їх вченими.\nДає 10\u0025 шанс уникнути пошкоджень.</string>
-    <string name="king_of_snakes_description">Цінний артефакт Повстанців, був знайдений у відкритому космосі.\n10\u0025 збільшення пошкодження від юніта.</string>
+    <string name="king_of_snakes_description">Цінний артефакт Повстанців,\nбув знайдений у відкритому космосі.\n10\u0025 збільшення пошкодження від юніта.</string>
     <string name="municipality_description">На 20\u0025 збільшення доходу від першого будинку.\nКожен наступний будинок додає 1\u0025 до доходу.</string>
     <string name="caches_description">На 20\u0025 збільшення доходу від першого будинку.\nКожен наступний будинок додає 1\u0025 до доходу.</string>
     <string name="reptile_city_description">На 20\u0025 збільшення доходу від першого будинку.\nКожен наступний будинок додає 1\u0025 до доходу.</string>
