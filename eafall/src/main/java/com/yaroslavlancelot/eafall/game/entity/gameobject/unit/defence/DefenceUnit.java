@@ -1,6 +1,7 @@
 package com.yaroslavlancelot.eafall.game.entity.gameobject.unit.defence;
 
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.yaroslavlancelot.eafall.game.engine.InstantRotationModifier;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.unit.filtering.IUnitMap;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.PathHelper;
@@ -8,6 +9,8 @@ import com.yaroslavlancelot.eafall.game.player.PlayersHolder;
 
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
+
+import java.util.Random;
 
 /** Basic class for all stationary/unmovable game units ( */
 public class DefenceUnit extends Unit {
@@ -21,6 +24,7 @@ public class DefenceUnit extends Unit {
     public DefenceUnit(DefenceUnitBuilder unitBuilder) {
         super(unitBuilder);
         mUpdateCycleTime = .7f;
+        registerEntityModifier(new InstantRotationModifier(20 + new Random().nextInt(20)));
     }
 
     @Override
