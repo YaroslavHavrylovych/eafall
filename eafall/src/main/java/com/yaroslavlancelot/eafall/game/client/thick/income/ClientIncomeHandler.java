@@ -116,8 +116,9 @@ public class ClientIncomeHandler extends SelfCleanable {
     private IncomeButton createIncomeButton(VertexBufferObjectManager vbo) {
         return new IncomeButton(0, 0, mPlayer, vbo) {
             @Override
-            void timeout() {
+            public boolean detachSelf() {
                 mScene.unregisterTouchArea(this);
+                return super.detachSelf();
             }
         };
     }

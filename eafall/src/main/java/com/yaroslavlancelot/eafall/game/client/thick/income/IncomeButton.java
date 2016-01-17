@@ -28,7 +28,7 @@ import org.andengine.util.modifier.IModifier;
  *
  * @author Yaroslav Havrylovych
  */
-abstract class IncomeButton extends ButtonSprite {
+class IncomeButton extends ButtonSprite {
     private final static float START_VALUE = .5f;
     private final static float END_VALUE = 1f;
     private final static int APPEARANCE_TIME = 5;
@@ -60,7 +60,6 @@ abstract class IncomeButton extends ButtonSprite {
             public void onTimePassed(final TimerHandler pTimerHandler) {
                 setMoney(0);
                 detachSelf();
-                timeout();
             }
         });
         registerUpdateHandler(mTimerHandler);
@@ -97,8 +96,6 @@ abstract class IncomeButton extends ButtonSprite {
         mValueModifier.reset(mValueModifier.getDuration(), START_VALUE, END_VALUE);
         mTimerHandler.reset();
     }
-
-    abstract void timeout();
 
     public static void loadImages(TextureManager textureManager) {
         Context context = EaFallApplication.getContext();
