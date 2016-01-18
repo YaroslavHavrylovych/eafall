@@ -51,7 +51,7 @@ public class TutorialMissionDataLoader extends MissionDataLoader {
         star_code_name = "sun";
         star_constellation = "no_constellation";
         definition = new DefinitionLoader();
-        definition.time_limit = 130;
+        definition.time_limit = 160;
         definition.type = MissionConfig.MissionType.SURVIVE.toString();
     }
 
