@@ -22,7 +22,7 @@ public final class SizeConstants {
     public static final int BUILDING_SIZE = 100;
     public static final int BUILDING_IMAGE_SIZE = 100;
     public static final int BUILDING_BIG_IMAGE_SIZE = 400;
-    public static final int UNIT_SIZE = 25;
+    public static final int UNIT_SIZE = 36;
     public static final int UNIT_FILE_SIZE = 36;
     public static final int UNIT_BIG_IMAGE_SIZE = 400;
     public static final int BETWEEN_TEXTURES_PADDING = 3;
