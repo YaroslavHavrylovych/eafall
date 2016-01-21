@@ -32,8 +32,30 @@ public class ServerGameCreationActivity extends BaseNonGameActivity implements P
     private TextView mClientIpTextView;
 
     @Override
-    protected void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onPause() {
+        super.onPause();
+        stopDiscoveryServer();
+        stopServer();
+        mServerIpTextView.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        stopDiscoveryServer();
+        stopServer();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initServer();
+        initDiscoveryServer();
+        updateIpValue();
+    }
+
+    @Override
+    protected void onCustomCreate(final Bundle savedInstanceState) {
         setContentView(R.layout.creating_server_layout);
         initBackButton(findViewById(R.id.back));
         mServerIpTextView = (TextView) findViewById(R.id.your_ip_address_value);
@@ -41,6 +63,19 @@ public class ServerGameCreationActivity extends BaseNonGameActivity implements P
         initClientConnectedTextView(findViewById(R.id.client_connected_text_view));
         initClientIpTextView(findViewById(R.id.client_ip_text_view));
         initStartGameButton(findViewById(R.id.start_game));
+    }
+
+    @Override
+    public void clientConnectionEstablished(final String clientIp) {
+        mNoOpponentsTextView.post(new Runnable() {
+            @Override
+            public void run() {
+                mNoOpponentsTextView.setVisibility(View.GONE);
+                mClientConnectedTextView.setVisibility(View.VISIBLE);
+                mClientIpTextView.setText(mGameSocketServer.getClientIp());
+                mClientIpTextView.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     private void initBackButton(View exitButton) {
@@ -90,21 +125,6 @@ public class ServerGameCreationActivity extends BaseNonGameActivity implements P
         });
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        stopDiscoveryServer();
-        stopServer();
-        mServerIpTextView.setVisibility(View.INVISIBLE);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        stopDiscoveryServer();
-        stopServer();
-    }
-
     private void stopDiscoveryServer() {
         if (mSocketDiscoveryServer != null) {
             mSocketDiscoveryServer.terminate();
@@ -123,14 +143,6 @@ public class ServerGameCreationActivity extends BaseNonGameActivity implements P
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        initServer();
-        initDiscoveryServer();
-        updateIpValue();
-    }
-
     private void initServer() {
         mGameSocketServer = new GameSocketServer(SocketDiscoveryServer.SERVER_PORT, new ClientConnectorListener());
         mGameSocketServer.addPreGameStartCallback(ServerGameCreationActivity.this);
@@ -138,7 +150,6 @@ public class ServerGameCreationActivity extends BaseNonGameActivity implements P
     }
 
     private void initDiscoveryServer() {
-        //TODO logger was here
         mServerIp = WifiUtils.getWifiIPv4AddressRaw(this);
 
         mSocketDiscoveryServer = new SocketDiscoveryServer(mServerIp);
@@ -149,7 +160,6 @@ public class ServerGameCreationActivity extends BaseNonGameActivity implements P
         String ipValue = getConvertedServerIp(mServerIp);
         mServerIpTextView.setText(ipValue);
         mServerIpTextView.setVisibility(View.VISIBLE);
-        //TODO logger was here
     }
 
     private String getConvertedServerIp(byte[] serverIp) {
@@ -161,18 +171,5 @@ public class ServerGameCreationActivity extends BaseNonGameActivity implements P
             }
         }
         return ipValue;
-    }
-
-    @Override
-    public void clientConnectionEstablished(final String clientIp) {
-        mNoOpponentsTextView.post(new Runnable() {
-            @Override
-            public void run() {
-                mNoOpponentsTextView.setVisibility(View.GONE);
-                mClientConnectedTextView.setVisibility(View.VISIBLE);
-                mClientIpTextView.setText(mGameSocketServer.getClientIp());
-                mClientIpTextView.setVisibility(View.VISIBLE);
-            }
-        });
     }
 }
