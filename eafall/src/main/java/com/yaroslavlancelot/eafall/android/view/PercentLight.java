@@ -95,7 +95,6 @@ public class PercentLight extends View {
 
     /** class initialization */
     private void _init_() {
-        //TODO logger was here
         setWillNotDraw(false);
         mPartlyDrawable = new PartlyDrawable();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {

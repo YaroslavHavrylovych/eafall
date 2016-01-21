@@ -7,13 +7,13 @@
     </style>
 
     <style name="SettingsTitle">
-        <item name="android:textSize">@dimen/settings_volume_title</item>
+        <item name="android:textSize">@dimen/settings_title_text</item>
         <item name="android:gravity">center_vertical</item>
     </style>
 
     <style name="SettingsCheckboxTitle">
         <item name="android:textColor">@color/settings_checkbox_title</item>
-        <item name="android:textSize">@dimen/settings_volume_title</item>
+        <item name="android:textSize">@dimen/settings_check_box_title</item>
         <item name="android:gravity">center_vertical</item>
         <item name="strokeColor">@color/settings_checkbox_title_shadow</item>
         <item name="strokeJoinStyle">miter</item>
@@ -23,7 +23,7 @@
 
     <style name="SettingsCheckboxDescription">
         <item name="android:textColor">@color/settings_checkbox_description</item>
-        <item name="android:textSize">@dimen/settings_volume_description</item>
+        <item name="android:textSize">@dimen/settings_check_box_description</item>
         <item name="android:textStyle">bold</item>
         <item name="android:shadowColor">@color/settings_checkbox_description_shadow</item>
         <item name="android:shadowDx">0</item>
@@ -34,14 +34,14 @@
 
     <style name="SettingsDevModeCheckboxDescription">
         <item name="android:textColor">@color/settings_checkbox_description</item>
-        <item name="android:textSize">@dimen/settings_volume_description</item>
+        <item name="android:textSize">@dimen/settings_check_box_description</item>
         <item name="android:textStyle">bold</item>
         <item name="android:gravity">center_vertical</item>
     </style>
 
     <style name="SettingsHealthBarText">
         <item name="android:textColor">@color/settings_health_bar_text</item>
-        <item name="android:textSize">@dimen/settings_health_bar_behaviour_text_size</item>
+        <item name="android:textSize">@dimen/settings_health_bar_button_text</item>
         <item name="android:gravity">center</item>
         <item name="android:shadowColor">@color/settings_health_bar_text_shadow</item>
         <item name="android:shadowDx">0</item>

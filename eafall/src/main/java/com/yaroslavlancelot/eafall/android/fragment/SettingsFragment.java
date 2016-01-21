@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.yaroslavlancelot.eafall.EaFallApplication;
@@ -40,7 +41,7 @@ public class SettingsFragment extends Fragment {
     /** unit health bar behaviour picket */
     private Button mHealthBarBehaviour;
     /** settings on screen back button */
-    private Button mBackButton;
+    private ImageButton mBackButton;
     /** back button on click listener */
     private View.OnClickListener mBackButtonOnClickListener;
 
@@ -57,7 +58,7 @@ public class SettingsFragment extends Fragment {
         //header
         TextView textView = (TextView) view.findViewById(R.id.title_text);
         textView.getPaint().setShader(StartupActivity.getTextGradient(
-                (int) getResources().getDimension(R.dimen.settings_title_text_size)));
+                (int) getResources().getDimension(R.dimen.health_bar_dialog_title_text_size)));
         //background music volume
         mMusicVolume = (SettingsVolume) view.findViewById(R.id.music_volume);
         mMusicVolume.setTitle(R.string.music_volume);
@@ -76,7 +77,7 @@ public class SettingsFragment extends Fragment {
         mHealthBarBehaviour = (Button) view.findViewById(R.id.health_bar_behaviour);
         initHealthBar(mHealthBarBehaviour);
         //back button
-        mBackButton = (Button) view.findViewById(R.id.back_button);
+        mBackButton = (ImageButton) view.findViewById(R.id.back_button);
         mBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {

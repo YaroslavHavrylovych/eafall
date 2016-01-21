@@ -29,10 +29,14 @@
     <dimen name="default_button_height">25dp</dimen>
     <dimen name="default_button_text_size">15dp</dimen>
 
+    <!-- health bar dialog -->
+    <dimen name="health_bar_dialog_title_text_size">15dp</dimen>
+
     <!-- settings -->
-    <dimen name="settings_title_text_size">15dp</dimen>
-    <dimen name="settings_health_bar_behaviour_text_size">15dp</dimen>
-    <dimen name="settings_volume_title">17dp</dimen>
-    <dimen name="settings_volume_description">11dp</dimen>
-    <dimen name="settings_health_bar_text">16dp</dimen>
+    <dimen name="settings_title_text">12dp</dimen>
+    <dimen name="settings_health_bar_button_text">15dp</dimen>
+    <dimen name="settings_check_box_title">15dp</dimen>
+    <dimen name="settings_check_box_description">10dp</dimen>
+    <dimen name="settings_dev_mode_inner_background_padding">10dip</dimen>
+    <dimen name="settings_dev_mode_check_box_padding">10dip</dimen>
 </resources>
