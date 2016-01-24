@@ -58,7 +58,7 @@ public class SettingsFragment extends Fragment {
         //header
         TextView textView = (TextView) view.findViewById(R.id.title_text);
         textView.getPaint().setShader(StartupActivity.getTextGradient(
-                (int) getResources().getDimension(R.dimen.health_bar_dialog_title_text_size)));
+                (int) getResources().getDimension(R.dimen.settings_title_text)));
         //background music volume
         mMusicVolume = (SettingsVolume) view.findViewById(R.id.music_volume);
         mMusicVolume.setTitle(R.string.music_volume);

@@ -29,9 +29,6 @@
     <dimen name="default_button_height">25dp</dimen>
     <dimen name="default_button_text_size">15dp</dimen>
 
-    <!-- health bar dialog -->
-    <dimen name="health_bar_dialog_title_text_size">15dp</dimen>
-
     <!-- settings -->
     <dimen name="settings_title_text">12dp</dimen>
     <dimen name="settings_health_bar_button_text">15dp</dimen>
@@ -39,4 +36,24 @@
     <dimen name="settings_check_box_description">10dp</dimen>
     <dimen name="settings_dev_mode_inner_background_padding">10dip</dimen>
     <dimen name="settings_dev_mode_check_box_padding">10dip</dimen>
+
+    <!-- dialogs -->
+    <dimen name="dialog_title_text">15sp</dimen>
+
+    <!-- health bar -->
+    <dimen name="dialog_health_bar_width">358dp</dimen>
+    <dimen name="dialog_health_bar_title_height">58dp</dimen>
+    <dimen name="dialog_health_bar_other_height">248dp</dimen>
+    <dimen name="dialog_health_bar_text">15sp</dimen>
+    <dimen name="dialog_health_bar_radio_group_padding_top">15dp</dimen>
+    <dimen name="dialog_health_bar_radio_group_padding_left">25dp</dimen>
+    <dimen name="dialog_health_bar_checkbox_layout_margin">5dp</dimen>
+    <dimen name="dialog_health_bar_checkbox_padding_left">10dp</dimen>
+    <dimen name="dialog_health_bar_done_button_height">45dp</dimen>
+    <dimen name="dialog_health_bar_done_button_width">146dp</dimen>
+    <dimen name="dialog_health_bar_done_button_margin_top">205dp</dimen>
+    <dimen name="dialog_health_bar_done_button_padding_top">2dp</dimen>
+    <dimen name="dialog_health_bar_done_button_padding_bottom">2dp</dimen>
+    <dimen name="dialog_health_bar_done_button_padding_left">5dp</dimen>
+    <dimen name="dialog_health_bar_done_button_padding_right">5dp</dimen>
 </resources>
