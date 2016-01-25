@@ -28,10 +28,13 @@
                 android:layout_height="match_parent"
                 android:layout_weight="44"/>
 
-            <Button
+            <ImageButton
                 android:id="@+id/back_button"
                 android:layout_height="match_parent"
-                android:background="@drawable/campaign_back_button_selector"
+                android:src="@drawable/campaign_back_button_selector"
+                android:background="@null"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
                 android:layout_width="0dip"
                 android:layout_weight="160"/>
         </LinearLayout>
@@ -196,7 +199,7 @@
                             android:orientation="vertical"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:padding="10dip"
+                            android:padding="@dimen/settings_dev_mode_inner_background_padding"
                             android:background="@drawable/settings_dev_mode_inner_shape">
 
                             <com.yaroslavlancelot.eafall.android.view.MagicTextView
@@ -215,7 +218,8 @@
 
                         <CheckBox
                             android:id="@+id/developers_mode_checkbox"
-                            android:layout_marginLeft="10dip"
+                            android:layout_marginLeft="@dimen/settings_dev_mode_check_box_padding"
+                            android:layout_marginStart="@dimen/settings_dev_mode_check_box_padding"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@null"

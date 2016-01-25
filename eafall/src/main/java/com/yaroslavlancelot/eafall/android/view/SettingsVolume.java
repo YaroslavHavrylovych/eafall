@@ -145,7 +145,6 @@ public class SettingsVolume extends LinearLayout {
 
     /** used in constructor to initialize the view */
     private void _init_() {
-        //TODO logger was here
         View view = inflate(getContext(), R.layout.settings_volume, this);
         mLight = (PercentLight) view.findViewById(R.id.light);
         mIncreaseButton = (Button) view.findViewById(R.id.increase);

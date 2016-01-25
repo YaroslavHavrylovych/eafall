@@ -12,8 +12,7 @@ import com.yaroslavlancelot.eafall.android.fragment.SettingsFragment;
  */
 public class SettingsActivity extends BaseNonGameActivity {
     @Override
-    protected void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCustomCreate(final Bundle savedInstanceState) {
         setContentView(R.layout.holder_layout);
         initSettingsFragment();
     }

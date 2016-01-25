@@ -24,12 +24,10 @@ import com.yaroslavlancelot.eafall.game.player.IPlayer;
 public abstract class PreGameCustomizationBaseActivity extends BaseNonGameActivity {
     protected Button mStartTheGame;
     protected Spinner mAlliance1;
-    ;
     protected Spinner mAlliance2;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCustomCreate(Bundle savedInstanceState) {
         setContentView(R.layout.pre_game_cutomization);
 
         mStartTheGame = (Button) findViewById(R.id.start_game);

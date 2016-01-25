@@ -53,13 +53,97 @@ public class GameServersListActivity extends BaseNonGameActivity implements
     private Map<String, GameServerConnector> mServerConnectorMap;
 
     @Override
-    protected void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onPause() {
+        super.onPause();
+        stopSocketDiscoveryClient();
+        stopClients();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        stopSocketDiscoveryClient();
+        stopClients();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            initSocketDiscoveryClient();
+        } catch (WifiUtils.WifiUtilsException e) {
+            e.printStackTrace();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+
+        mSocketServerDiscoveryClient.discoverAsync();
+    }
+
+    @Override
+    protected void onCustomCreate(final Bundle savedInstanceState) {
         setContentView(R.layout.network_game_layout);
         initBackButton(findViewById(R.id.back));
         initGamesList((ListView) findViewById(R.id.games_list_list_view));
         initCreateServerButton(findViewById(R.id.create_game));
         initDirectIpButton(findViewById(R.id.direct_ip));
+    }
+
+    @Override
+    public void onStarted(final ServerConnector<SocketConnection> serverConnector) {
+        //TODO logger was here
+    }
+
+    @Override
+    public void onTerminated(final ServerConnector<SocketConnection> serverConnector) {
+        //TODO logger was here
+    }
+
+    @Override
+    public void gameStart(final String serverIP) {
+        gameStop(serverIP);
+    }
+
+    @Override
+    public void gameStop(final String serverIP) {
+        synchronized (mServersListView) {
+            mArrayAdapter.remove(serverIP);
+        }
+    }
+
+    @Override
+    public void gameWaitingForPlayers(final String serverIP) {
+        mServersListView.post(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (mServersListView) {
+                    mArrayAdapter.add(serverIP);
+                    mArrayAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onDiscovery(final SocketServerDiscoveryClient pSocketServerDiscoveryClient, final IDiscoveryData pDiscoveryData) {
+        IDiscoveryData.DefaultDiscoveryData discoveryData = (IDiscoveryData.DefaultDiscoveryData) pDiscoveryData;
+        try {
+            final String ipAddressAsString = IPUtils.ipAddressToString(discoveryData.getServerIP());
+            //TODO logger was here
+            initClient(ipAddressAsString, discoveryData.getServerPort());
+        } catch (final UnknownHostException e) {
+            //TODO logger was here
+        }
+    }
+
+    @Override
+    public void onTimeout(final SocketServerDiscoveryClient socketServerDiscoveryClient, final SocketTimeoutException socketTimeoutException) {
+        //TODO logger was here
+    }
+
+    @Override
+    public void onException(final SocketServerDiscoveryClient socketServerDiscoveryClient, final Throwable throwable) {
+        //TODO logger was here
     }
 
     private void initBackButton(View exitButton) {
@@ -139,13 +223,6 @@ public class GameServersListActivity extends BaseNonGameActivity implements
         }).start();
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        stopSocketDiscoveryClient();
-        stopClients();
-    }
-
     private void stopSocketDiscoveryClient() {
         if (mSocketServerDiscoveryClient != null) {
             mSocketServerDiscoveryClient.terminate();
@@ -162,27 +239,6 @@ public class GameServersListActivity extends BaseNonGameActivity implements
             }
             mServerConnectorMap = null;
         }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        stopSocketDiscoveryClient();
-        stopClients();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        try {
-            initSocketDiscoveryClient();
-        } catch (WifiUtils.WifiUtilsException e) {
-            e.printStackTrace();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-
-        mSocketServerDiscoveryClient.discoverAsync();
     }
 
     private void initSocketDiscoveryClient() throws UnknownHostException, WifiUtils.WifiUtilsException {
@@ -209,62 +265,5 @@ public class GameServersListActivity extends BaseNonGameActivity implements
         //create SocketServerDiscoveryClient
         mSocketServerDiscoveryClient = new SocketServerDiscoveryClient(WifiUtils.getBroadcastIPAddressRaw(this),
                 IDiscoveryData.DefaultDiscoveryData.class, this);
-    }
-
-    @Override
-    public void onStarted(final ServerConnector<SocketConnection> serverConnector) {
-        //TODO logger was here
-    }
-
-    @Override
-    public void onTerminated(final ServerConnector<SocketConnection> serverConnector) {
-        //TODO logger was here
-    }
-
-    @Override
-    public void gameStart(final String serverIP) {
-        gameStop(serverIP);
-    }
-
-    @Override
-    public void gameStop(final String serverIP) {
-        synchronized (mServersListView) {
-            mArrayAdapter.remove(serverIP);
-        }
-    }
-
-    @Override
-    public void gameWaitingForPlayers(final String serverIP) {
-        mServersListView.post(new Runnable() {
-            @Override
-            public void run() {
-                synchronized (mServersListView) {
-                    mArrayAdapter.add(serverIP);
-                    mArrayAdapter.notifyDataSetChanged();
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onDiscovery(final SocketServerDiscoveryClient pSocketServerDiscoveryClient, final IDiscoveryData pDiscoveryData) {
-        IDiscoveryData.DefaultDiscoveryData discoveryData = (IDiscoveryData.DefaultDiscoveryData) pDiscoveryData;
-        try {
-            final String ipAddressAsString = IPUtils.ipAddressToString(discoveryData.getServerIP());
-            //TODO logger was here
-            initClient(ipAddressAsString, discoveryData.getServerPort());
-        } catch (final UnknownHostException e) {
-            //TODO logger was here
-        }
-    }
-
-    @Override
-    public void onTimeout(final SocketServerDiscoveryClient socketServerDiscoveryClient, final SocketTimeoutException socketTimeoutException) {
-        //TODO logger was here
-    }
-
-    @Override
-    public void onException(final SocketServerDiscoveryClient socketServerDiscoveryClient, final Throwable throwable) {
-        //TODO logger was here
     }
 }

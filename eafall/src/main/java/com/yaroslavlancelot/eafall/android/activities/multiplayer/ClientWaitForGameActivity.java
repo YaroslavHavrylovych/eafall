@@ -7,9 +7,9 @@ import android.widget.TextView;
 
 import com.yaroslavlancelot.eafall.R;
 import com.yaroslavlancelot.eafall.android.activities.BaseNonGameActivity;
-import com.yaroslavlancelot.eafall.game.client.thin.ThinClientGameActivity;
 import com.yaroslavlancelot.eafall.game.alliance.imperials.Imperials;
 import com.yaroslavlancelot.eafall.game.alliance.rebels.Rebels;
+import com.yaroslavlancelot.eafall.game.client.thin.ThinClientGameActivity;
 import com.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.yaroslavlancelot.eafall.network.client.callbacks.PreGameStartClient;
@@ -20,26 +20,13 @@ import com.yaroslavlancelot.eafall.network.client.connector.GameServerConnector;
  */
 public class ClientWaitForGameActivity extends BaseNonGameActivity implements PreGameStartClient {
     @Override
-    protected void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCustomCreate(final Bundle savedInstanceState) {
         setContentView(R.layout.client_connected_to_server_layout);
         GameServerConnector gameServerConnector = GameServerConnector.getGameServerConnector();
         if (gameServerConnector == null) return;
         String serverIp = gameServerConnector.getServerIp();
         initServerIpTextView(findViewById(R.id.server_ip_string), serverIp);
         GameServerConnector.getGameServerConnector().addPreGameStartCallback(this);
-    }
-
-    /**
-     * display server ip address (so client can know where he is connected)
-     *
-     * @param view           to display server ip address
-     * @param serverIpString server ip to be shown
-     */
-    private void initServerIpTextView(View view, String serverIpString) {
-        if (view == null) return;
-        TextView serverIpTextView = (TextView) view;
-        serverIpTextView.setText(serverIpString);
     }
 
     @Override
@@ -62,5 +49,17 @@ public class ClientWaitForGameActivity extends BaseNonGameActivity implements Pr
     @Override
     public void gameWaitingForPlayers(final String serverIP) {
         throw new UnsupportedOperationException("game in state WaitingForPlayers trying to set this state again");
+    }
+
+    /**
+     * display server ip address (so client can know where he is connected)
+     *
+     * @param view           to display server ip address
+     * @param serverIpString server ip to be shown
+     */
+    private void initServerIpTextView(View view, String serverIpString) {
+        if (view == null) return;
+        TextView serverIpTextView = (TextView) view;
+        serverIpTextView.setText(serverIpString);
     }
 }
