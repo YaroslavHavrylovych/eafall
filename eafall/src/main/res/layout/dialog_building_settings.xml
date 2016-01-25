@@ -6,9 +6,9 @@
 
     <TextView
         android:id="@+id/title_container"
-        android:layout_width="387dip"
         android:gravity="center"
-        android:layout_height="63dip"
+        android:layout_width="@dimen/dialog_building_settings_width"
+        android:layout_height="@dimen/dialog_building_settings_header_height"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:background="@drawable/settings_building_dialog_header"
@@ -19,31 +19,28 @@
         android:id="@+id/building_settings"
         android:layout_below="@id/title_container"
         android:layout_centerHorizontal="true"
-        android:layout_width="387dip"
-        android:layout_height="248dip"
+        android:layout_width="@dimen/dialog_building_settings_width"
+        android:layout_height="@dimen/dialog_building_settings_body_height"
         android:background="@drawable/settings_building_dialog_background"
-        android:paddingTop="20dip"
-        android:paddingLeft="40dip"
+        android:paddingTop="@dimen/dialog_building_settings_elements_padding_top"
+        android:paddingLeft="@dimen/dialog_building_settings_elements_padding_left"
         android:orientation="vertical">
 
         <RadioButton
             android:id="@+id/building_settings_top"
             style="@style/DialogRadioButtonDefault"
-            android:layout_margin="10dip"
             android:button="@drawable/path_top_checkbox_selector"
             android:text="@string/building_settings_top"/>
 
         <RadioButton
             android:id="@+id/building_settings_bottom"
             style="@style/DialogRadioButtonDefault"
-            android:layout_margin="10dip"
             android:button="@drawable/path_bottom_checkbox_selector"
             android:text="@string/building_settings_bottom"/>
 
         <RadioButton
             android:id="@+id/building_settings_pause"
             style="@style/DialogRadioButtonDefault"
-            android:layout_margin="10dip"
             android:button="@drawable/path_pause_checkbox_selector"
             android:text="@string/building_settings_pause"/>
     </RadioGroup>
@@ -51,14 +48,13 @@
     <Button
         android:id="@+id/done_button"
         android:layout_below="@id/title_container"
-        android:layout_marginTop="205dip"
-        android:paddingLeft="5dip"
-        android:paddingRight="5dip"
-        android:paddingTop="2dip"
-        android:paddingBottom="2dip"
-        android:layout_width="wrap_content"
-        android:minWidth="150dip"
-        android:layout_height="45dp"
+        android:layout_marginTop="@dimen/dialog_building_settings_done_btn_margin_top"
+        android:paddingLeft="@dimen/dialog_building_settings_done_btn_padding_left"
+        android:paddingRight="@dimen/dialog_building_settings_done_btn_padding_right"
+        android:paddingTop="@dimen/dialog_building_settings_done_btn_padding_top"
+        android:paddingBottom="@dimen/dialog_building_settings_done_btn_padding_bottom"
+        android:layout_width="@dimen/dialog_building_settings_done_btn_width"
+        android:layout_height="@dimen/dialog_building_settings_done_btn_height"
         android:layout_centerHorizontal="true"
         style="@style/DialogTitleText"
         android:text="@string/done"

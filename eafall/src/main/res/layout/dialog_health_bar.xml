@@ -28,9 +28,9 @@
         android:layout_width="@dimen/dialog_health_bar_width"
         android:layout_height="@dimen/dialog_health_bar_other_height"
         android:background="@drawable/health_bar_dialog_background"
-        android:paddingTop="@dimen/dialog_health_bar_radio_group_padding_top"
-        android:paddingLeft="@dimen/dialog_health_bar_radio_group_padding_left"
-        android:paddingStart="@dimen/dialog_health_bar_radio_group_padding_left"
+        android:paddingTop="@dimen/dialog_health_bar_elements_padding_top"
+        android:paddingLeft="@dimen/dialog_health_bar_elements_padding_left"
+        android:paddingStart="@dimen/dialog_health_bar_elements_padding_left"
         android:orientation="vertical">
 
         <RadioButton

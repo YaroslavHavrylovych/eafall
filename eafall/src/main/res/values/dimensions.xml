@@ -39,14 +39,14 @@
 
     <!-- dialogs -->
     <dimen name="dialog_title_text">15sp</dimen>
+    <dimen name="dialog_body_text">15sp</dimen>
 
     <!-- health bar -->
     <dimen name="dialog_health_bar_width">358dp</dimen>
     <dimen name="dialog_health_bar_title_height">58dp</dimen>
     <dimen name="dialog_health_bar_other_height">248dp</dimen>
-    <dimen name="dialog_health_bar_text">15sp</dimen>
-    <dimen name="dialog_health_bar_radio_group_padding_top">15dp</dimen>
-    <dimen name="dialog_health_bar_radio_group_padding_left">25dp</dimen>
+    <dimen name="dialog_health_bar_elements_padding_top">16dp</dimen>
+    <dimen name="dialog_health_bar_elements_padding_left">25dp</dimen>
     <dimen name="dialog_health_bar_checkbox_layout_margin">5dp</dimen>
     <dimen name="dialog_health_bar_checkbox_padding_left">10dp</dimen>
     <dimen name="dialog_health_bar_done_button_height">45dp</dimen>
@@ -56,4 +56,19 @@
     <dimen name="dialog_health_bar_done_button_padding_bottom">2dp</dimen>
     <dimen name="dialog_health_bar_done_button_padding_left">5dp</dimen>
     <dimen name="dialog_health_bar_done_button_padding_right">5dp</dimen>
+
+    <!-- building settings -->
+    <dimen name="dialog_building_settings_width">387dp</dimen>
+    <dimen name="dialog_building_settings_header_height">63dp</dimen>
+    <dimen name="dialog_building_settings_body_height">248dp</dimen>
+    <dimen name="dialog_building_settings_elements_padding_top">16dp</dimen>
+    <dimen name="dialog_building_settings_elements_padding_left">40dp</dimen>
+    <dimen name="dialog_building_settings_checkbox_margin">10dp</dimen>
+    <dimen name="dialog_building_settings_done_btn_margin_top">205dp</dimen>
+    <dimen name="dialog_building_settings_done_btn_padding_top">2dp</dimen>
+    <dimen name="dialog_building_settings_done_btn_padding_bottom">2dp</dimen>
+    <dimen name="dialog_building_settings_done_btn_padding_left">5dp</dimen>
+    <dimen name="dialog_building_settings_done_btn_padding_right">5dp</dimen>
+    <dimen name="dialog_building_settings_done_btn_height">45dp</dimen>
+    <dimen name="dialog_building_settings_done_btn_width">146dp</dimen>
 </resources>

@@ -39,15 +39,15 @@
 
     <!-- dialogs -->
     <dimen name="dialog_title_text">19sp</dimen>
+    <dimen name="dialog_body_text">18sp</dimen>
 
     <!-- health bar -->
     <dimen name="dialog_health_bar_width">447dp</dimen>
     <dimen name="dialog_health_bar_title_height">72dp</dimen>
     <dimen name="dialog_health_bar_other_height">310dp</dimen>
-    <dimen name="dialog_health_bar_text">18sp</dimen>
-    <dimen name="dialog_health_bar_radio_group_padding_top">24dp</dimen>
-    <dimen name="dialog_health_bar_radio_group_padding_left">31dp</dimen>
-    <dimen name="dialog_health_bar_checkbox_layout_margin">6dp</dimen>
+    <dimen name="dialog_health_bar_elements_padding_top">24dp</dimen>
+    <dimen name="dialog_health_bar_elements_padding_left">31dp</dimen>
+    <dimen name="dialog_health_bar_checkbox_layout_margin">13dp</dimen>
     <dimen name="dialog_health_bar_checkbox_padding_left">12dp</dimen>
     <dimen name="dialog_health_bar_done_button_height">56dp</dimen>
     <dimen name="dialog_health_bar_done_button_width">182dp</dimen>
@@ -56,4 +56,19 @@
     <dimen name="dialog_health_bar_done_button_padding_bottom">3dp</dimen>
     <dimen name="dialog_health_bar_done_button_padding_left">6dp</dimen>
     <dimen name="dialog_health_bar_done_button_padding_right">6dp</dimen>
+
+    <!-- building settings -->
+    <dimen name="dialog_building_settings_width">384dp</dimen>
+    <dimen name="dialog_building_settings_header_height">79dp</dimen>
+    <dimen name="dialog_building_settings_body_height">310dp</dimen>
+    <dimen name="dialog_building_settings_elements_padding_top">22dp</dimen>
+    <dimen name="dialog_building_settings_elements_padding_left">50dp</dimen>
+    <dimen name="dialog_building_settings_checkbox_margin">13dp</dimen>
+    <dimen name="dialog_building_settings_done_btn_margin_top">256dp</dimen>
+    <dimen name="dialog_building_settings_done_btn_padding_top">3dp</dimen>
+    <dimen name="dialog_building_settings_done_btn_padding_bottom">3dp</dimen>
+    <dimen name="dialog_building_settings_done_btn_padding_left">6dp</dimen>
+    <dimen name="dialog_building_settings_done_btn_padding_right">6dp</dimen>
+    <dimen name="dialog_building_settings_done_btn_height">56dp</dimen>
+    <dimen name="dialog_building_settings_done_btn_width">183dp</dimen>
 </resources>
