@@ -71,4 +71,15 @@
     <dimen name="dialog_building_settings_done_btn_padding_right">5dp</dimen>
     <dimen name="dialog_building_settings_done_btn_height">45dp</dimen>
     <dimen name="dialog_building_settings_done_btn_width">146dp</dimen>
+
+    <!-- exit popup -->
+    <dimen name="dialog_exit_width">270dp</dimen>
+    <dimen name="dialog_exit_height">204dp</dimen>
+    <dimen name="dialog_exit_body_text">20sp</dimen>
+    <dimen name="dialog_exit_text_margin_top">55dp</dimen>
+    <dimen name="dialog_exit_buttons_margin_bottom">45dp</dimen>
+    <dimen name="dialog_exit_button_text">16sp</dimen>
+    <dimen name="dialog_exit_button_margin">10dp</dimen>
+    <dimen name="dialog_exit_button_height">31dp</dimen>
+    <dimen name="dialog_exit_button_width">80dp</dimen>
 </resources>

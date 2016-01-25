@@ -67,4 +67,13 @@
         <item name="android:textSize">@dimen/dialog_title_text</item>
         <item name="android:textColor">@color/health_bar_dialog_text</item>
     </style>
+
+    <style name="ExitDialogButton">
+        <item name="android:layout_width">@dimen/dialog_exit_button_width</item>
+        <item name="android:layout_height">@dimen/dialog_exit_button_height</item>
+        <item name="android:layout_margin">@dimen/dialog_exit_button_margin</item>
+        <item name="android:textColor">@color/confirmation_popup_text</item>
+        <item name="android:textSize">@dimen/dialog_exit_button_text</item>
+        <item name="android:background">@drawable/confirmation_popup_button_selector</item>
+    </style>
 </resources>
