@@ -30,8 +30,7 @@ public class StartupActivity extends BaseNonGameActivity {
     }
 
     @Override
-    protected void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCustomCreate(final Bundle savedInstanceState) {
         setContentView(R.layout.startup_layout);
         initCampaignButton(findViewById(R.id.campaign));
         initSingleGameButton(findViewById(R.id.single_game));

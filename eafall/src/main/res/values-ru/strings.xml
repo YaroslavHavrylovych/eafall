@@ -151,7 +151,7 @@
     <string name="developers_mode_on">Включен</string>
     <string name="developers_mode_off">Выкл</string>
     <string name="pick_unit_health_bar_behavior">ПОКАЗАТЕЛЬ ЗДОРОВЬЯ ЮНИТА</string>
-    <string name="health_bar_default">Скрытый, пока юнит не атакован</string>
+    <string name="health_bar_default">Скрытый, пока юнит\nне атакован</string>
     <string name="health_bar_always_hidden">Скрытый</string>
     <string name="health_bar_always_visible">Видимый</string>
     <string name="category_game">Игра</string>
@@ -265,10 +265,10 @@
     <string name="description_upgrade">Прокачка :</string>
 
     <!-- Building settings -->
-    <string name="unit_movement_path">Выберите путь для юнита</string>
-    <string name="building_settings_top">Юнит идет сверху</string>
-    <string name="building_settings_bottom">Юнит идет снизу</string>
-    <string name="building_settings_pause">Остановить производство</string>
+    <string name="unit_movement_path">ТРАЕКТОРИЯ ЮНИТА</string>
+    <string name="building_settings_top">Юнит движется\nсверху от звезды</string>
+    <string name="building_settings_bottom">Юнит движется\nснизу от звезды</string>
+    <string name="building_settings_pause">Остановить\nпроизводство</string>
 
     <!-- Units -->
     <string name="description_building">Строение :</string>

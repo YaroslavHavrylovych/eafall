@@ -148,10 +148,10 @@
     <string name="settings">Settings</string>
     <string name="settings_health_bar_behaviour">Health bar</string>
     <string name="developers_mode">Developers mode</string>
-    <string name="developers_mode_on">Developers mode enabled</string>
-    <string name="developers_mode_off">Developers mode disabled</string>
+    <string name="developers_mode_on">Dev. mode enabled</string>
+    <string name="developers_mode_off">Dev. mode disabled</string>
     <string name="pick_unit_health_bar_behavior">HEALTH BAR BEHAVIOUR</string>
-    <string name="health_bar_default">Hidden until unit was hit</string>
+    <string name="health_bar_default">Hidden until unit\nwas hit</string>
     <string name="health_bar_always_hidden">Always hidden</string>
     <string name="health_bar_always_visible">Always visible</string>
     <string name="category_game">Game</string>
@@ -265,10 +265,10 @@
     <string name="description_upgrade">Upgrade :</string>
 
     <!-- building settings -->
-    <string name="unit_movement_path">Choose unit path</string>
-    <string name="building_settings_top">Unit uses the top path</string>
-    <string name="building_settings_bottom">Unit uses the bottom path</string>
-    <string name="building_settings_pause">Stop units production</string>
+    <string name="unit_movement_path">UNIT PATH</string>
+    <string name="building_settings_top">Unit moves atop\nof the star</string>
+    <string name="building_settings_bottom">Unit moves bottom\nof the star</string>
+    <string name="building_settings_pause">Stop\nproduction</string>
 
     <!-- units -->
     <string name="description_building">Building :</string>

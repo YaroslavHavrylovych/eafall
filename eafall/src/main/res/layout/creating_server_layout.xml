@@ -1,72 +1,72 @@
-<?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/background_layout"
                 android:orientation="vertical"
+                android:layout_gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
     <TextView
-            android:id="@+id/your_ip_address_text"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/your_ip_address"/>
+        android:id="@+id/your_ip_address_text"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/your_ip_address"/>
 
     <TextView
-            android:id="@+id/your_ip_address_value"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@id/your_ip_address_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="invisible"
-            android:text="@string/template_ip"/>
+        android:id="@+id/your_ip_address_value"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@id/your_ip_address_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:text="@string/template_ip"/>
 
     <TextView
-            android:id="@+id/no_opponents_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/no_opponents"/>
+        android:id="@+id/no_opponents_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/no_opponents"/>
 
     <TextView
-            android:id="@+id/client_connected_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:text="@string/connected_client_with_ip"/>
+        android:id="@+id/client_connected_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:text="@string/connected_client_with_ip"/>
 
     <TextView
-            android:id="@+id/client_ip_text_view"
-            android:layout_below="@id/client_connected_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:text="@string/template_ip"/>
+        android:id="@+id/client_ip_text_view"
+        android:layout_below="@id/client_connected_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="@string/template_ip"/>
 
     <LinearLayout
-            android:id="@+id/footer"
-            android:layout_alignParentBottom="true"
-            android:layout_width="match_parent"
+        android:id="@+id/footer"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/back"
             android:layout_height="wrap_content"
-            android:weightSum="2">
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:textSize="@dimen/default_button_text_size"
+            android:text="@string/back"/>
 
         <Button
-                android:id="@+id/back"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:textSize="@dimen/default_button_text_size"
-                android:text="@string/back"/>
-
-        <Button
-                android:id="@+id/start_game"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:textSize="@dimen/default_button_text_size"
-                android:text="@string/start_game"/>
+            android:id="@+id/start_game"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:textSize="@dimen/default_button_text_size"
+            android:text="@string/start_game"/>
     </LinearLayout>
 </RelativeLayout>

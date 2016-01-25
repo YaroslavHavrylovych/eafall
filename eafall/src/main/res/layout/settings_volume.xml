@@ -21,8 +21,8 @@
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="153"
-            android:button="@null"
-            android:background="@drawable/settings_checkbox_selector"/>
+            android:button="@drawable/settings_checkbox_selector"
+            android:background="@null"/>
 
         <LinearLayout
             android:id="@+id/text"

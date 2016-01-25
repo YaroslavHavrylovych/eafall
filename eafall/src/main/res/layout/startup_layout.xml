@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/background_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
+                android:layout_gravity="center"
                 android:background="@drawable/startup_background">
 
     <ImageView
-        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/startup_screen_logo_height"
         android:layout_marginTop="@dimen/startup_screen_logo_margin_top"
         android:layout_marginBottom="@dimen/startup_screen_logo_margin_bottom"
         android:id="@+id/logo"
         android:src="@drawable/startup_logo"
+        android:adjustViewBounds="true"
         android:scaleType="fitCenter"/>
 
     <LinearLayout
@@ -21,6 +25,7 @@
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
+        android:gravity="center"
         android:layout_below="@+id/logo">
 
         <Button
