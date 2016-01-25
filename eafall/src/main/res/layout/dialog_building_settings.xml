@@ -29,18 +29,21 @@
         <RadioButton
             android:id="@+id/building_settings_top"
             style="@style/DialogRadioButtonDefault"
+            android:layout_margin="@dimen/dialog_building_settings_checkbox_margin"
             android:button="@drawable/path_top_checkbox_selector"
             android:text="@string/building_settings_top"/>
 
         <RadioButton
             android:id="@+id/building_settings_bottom"
             style="@style/DialogRadioButtonDefault"
+            android:layout_margin="@dimen/dialog_building_settings_checkbox_margin"
             android:button="@drawable/path_bottom_checkbox_selector"
             android:text="@string/building_settings_bottom"/>
 
         <RadioButton
             android:id="@+id/building_settings_pause"
             style="@style/DialogRadioButtonDefault"
+            android:layout_margin="@dimen/dialog_building_settings_checkbox_margin"
             android:button="@drawable/path_pause_checkbox_selector"
             android:text="@string/building_settings_pause"/>
     </RadioGroup>

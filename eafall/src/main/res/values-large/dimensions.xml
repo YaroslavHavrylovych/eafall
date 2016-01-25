@@ -38,8 +38,8 @@
     <dimen name="settings_dev_mode_padding">20dip</dimen>
 
     <!-- dialogs -->
-    <dimen name="dialog_title_text">19sp</dimen>
-    <dimen name="dialog_body_text">18sp</dimen>
+    <dimen name="dialog_title_text">25sp</dimen>
+    <dimen name="dialog_body_text">24sp</dimen>
 
     <!-- health bar -->
     <dimen name="dialog_health_bar_width">447dp</dimen>
@@ -61,9 +61,9 @@
     <dimen name="dialog_building_settings_width">384dp</dimen>
     <dimen name="dialog_building_settings_header_height">79dp</dimen>
     <dimen name="dialog_building_settings_body_height">310dp</dimen>
-    <dimen name="dialog_building_settings_elements_padding_top">22dp</dimen>
+    <dimen name="dialog_building_settings_elements_padding_top">10dp</dimen>
     <dimen name="dialog_building_settings_elements_padding_left">50dp</dimen>
-    <dimen name="dialog_building_settings_checkbox_margin">13dp</dimen>
+    <dimen name="dialog_building_settings_checkbox_margin">10dp</dimen>
     <dimen name="dialog_building_settings_done_btn_margin_top">256dp</dimen>
     <dimen name="dialog_building_settings_done_btn_padding_top">3dp</dimen>
     <dimen name="dialog_building_settings_done_btn_padding_bottom">3dp</dimen>

@@ -36,16 +36,19 @@
         <RadioButton
             android:id="@+id/health_bar_default"
             style="@style/DialogRadioButtonDefault"
+            android:layout_margin="@dimen/dialog_health_bar_checkbox_layout_margin"
             android:text="@string/health_bar_default"/>
 
         <RadioButton
             android:id="@+id/health_bar_visible"
             style="@style/DialogRadioButtonDefault"
+            android:layout_margin="@dimen/dialog_health_bar_checkbox_layout_margin"
             android:text="@string/health_bar_always_visible"/>
 
         <RadioButton
             android:id="@+id/health_bar_invisible"
             style="@style/DialogRadioButtonDefault"
+            android:layout_margin="@dimen/dialog_health_bar_checkbox_layout_margin"
             android:text="@string/health_bar_always_hidden"/>
     </RadioGroup>
 

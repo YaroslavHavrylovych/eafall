@@ -61,7 +61,7 @@
     <dimen name="dialog_building_settings_width">387dp</dimen>
     <dimen name="dialog_building_settings_header_height">63dp</dimen>
     <dimen name="dialog_building_settings_body_height">248dp</dimen>
-    <dimen name="dialog_building_settings_elements_padding_top">16dp</dimen>
+    <dimen name="dialog_building_settings_elements_padding_top">10dp</dimen>
     <dimen name="dialog_building_settings_elements_padding_left">40dp</dimen>
     <dimen name="dialog_building_settings_checkbox_margin">10dp</dimen>
     <dimen name="dialog_building_settings_done_btn_margin_top">205dp</dimen>

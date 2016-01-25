@@ -52,7 +52,6 @@
     <style name="DialogRadioButtonDefault">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_margin">@dimen/dialog_health_bar_checkbox_layout_margin</item>
         <item name="android:paddingLeft">@dimen/dialog_health_bar_checkbox_padding_left</item>
         <item name="android:textSize">@dimen/dialog_body_text</item>
         <item name="android:textColor">@color/health_bar_dialog_text</item>
