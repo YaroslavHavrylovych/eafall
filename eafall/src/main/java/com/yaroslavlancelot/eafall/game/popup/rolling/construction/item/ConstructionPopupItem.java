@@ -117,31 +117,14 @@ public class ConstructionPopupItem extends ButtonSprite implements Constructions
 
     private Text constructNameText(int objectNameId) {
         IFont font = FontHolder.getInstance().getElement(FONT);
+        String text = LocaleImpl.getInstance().getStringById(objectNameId);
+        float maxWidth = FontUtils.measureText(font, "_12_LETTERS_");
+        text = com.yaroslavlancelot.eafall.game.engine.FontUtils
+                .splitLinesByMaxWidth(text, font, maxWidth);
         mConstructionName = new RecenterText(
                 SizeConstants.CONSTRUCTIONS_POPUP_ELEMENT_NAME_X,
                 SizeConstants.CONSTRUCTIONS_POPUP_ELEMENT_HEIGHT / 2,
-                font, getObjectNameById(objectNameId, font), getVertexBufferObjectManager());
+                font, text, getVertexBufferObjectManager());
         return mConstructionName;
-    }
-
-    /**
-     * creates string for give object by id.
-     * <br/>
-     * can insert line-breaks if multiple words present (line-break placed before the last word)
-     *
-     * @param id object string id
-     * @return the object name instantiated text
-     */
-    private String getObjectNameById(int id, IFont font) {
-        String value = LocaleImpl.getInstance().getStringById(id);
-        float length = FontUtils.measureText(font, value);
-        if (length >= SizeConstants.CONSTRUCTIONS_POPUP_ELEMENT_OXYGEN_IMAGE_X
-                - SizeConstants.CONSTRUCTIONS_POPUP_ELEMENT_OXYGEN_OFFSET) {
-            int ind = value.lastIndexOf(" ");
-            if (ind != -1) {
-                value = new StringBuilder(value).replace(ind, ind + 1, "\n").toString();
-            }
-        }
-        return value;
     }
 }

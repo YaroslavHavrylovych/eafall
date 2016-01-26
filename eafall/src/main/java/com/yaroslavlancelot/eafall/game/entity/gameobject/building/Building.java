@@ -125,6 +125,11 @@ public abstract class Building implements IBuilding {
     }
 
     @Override
+    public BuildingDummy getBuildingDummy() {
+        return mDummy;
+    }
+
+    @Override
     public void setIgnoreUpdates(final boolean ignoreUpdates) {
         mBuildingStaticObject.setIgnoreUpdate(ignoreUpdates);
     }

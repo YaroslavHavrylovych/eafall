@@ -9,10 +9,12 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.yaroslavlancelot.eafall.R;
 import com.yaroslavlancelot.eafall.android.activities.StartupActivity;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.IUnitBuilding;
+import com.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 
 /**
  * Building settings dialog fragment
@@ -30,6 +32,7 @@ public class BuildingSettingsDialog extends Dialog {
     /** Health bar unit behaviour from the settings */
     private IUnitBuilding mUnitBuilding;
     private int mSelectedId;
+    private TextView mTitle;
 
     // ===========================================================
     // Constructors
@@ -52,6 +55,8 @@ public class BuildingSettingsDialog extends Dialog {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        mTitle = (TextView) findViewById(R.id.title_container);
+        updateTitle(mUnitBuilding.getBuildingDummy().getStringId());
         //variants
         RadioGroup radioGroup = (RadioGroup) findViewById(R.id.building_settings);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -91,6 +96,8 @@ public class BuildingSettingsDialog extends Dialog {
     // Methods
     // ===========================================================
     public void init(IUnitBuilding unitBuilding) {
+        updateTitle(unitBuilding.getBuildingDummy().getStringId());
+        //select one
         mUnitBuilding = unitBuilding;
         if (unitBuilding.isPaused()) {
             mSelectedId = R.id.building_settings_pause;
@@ -99,9 +106,15 @@ public class BuildingSettingsDialog extends Dialog {
         } else {
             mSelectedId = R.id.building_settings_bottom;
         }
-        //select one
         RadioButton radioButton = (RadioButton) findViewById(mSelectedId);
         radioButton.setChecked(true);
+    }
+
+    private void updateTitle(int resId) {
+        if (mTitle != null) {
+            String str = LocaleImpl.getInstance().getStringById(resId);
+            mTitle.setText(str.toUpperCase());
+        }
     }
 
     // ===========================================================

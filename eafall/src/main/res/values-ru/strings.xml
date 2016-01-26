@@ -113,15 +113,15 @@
 
     <!-- Mutants -->
     <!-- Buildings -->
-    <string name="water_cave">Водная\nпещера</string>
-    <string name="invisible_plain">Скрытая\nместность</string>
+    <string name="water_cave">Водная пещера</string>
+    <string name="invisible_plain">Скрытая местность</string>
     <string name="hydra_pond">Плотина Гидр</string>
-    <string name="poison_cave">Ядовитая\nПещера</string>
+    <string name="poison_cave">Ядовитая Пещера</string>
     <string name="web">Паутина</string>
-    <string name="mountain_cave">Горная\nпещера</string>
+    <string name="mountain_cave">Горная пещера</string>
     <string name="hell">Пекло</string>
     <string name="bastion">Бастион</string>
-    <string name="reptile_city">Город\nРептилий</string>
+    <string name="reptile_city">Город Рептилий</string>
     <string name="king_of_snakes">Король Змей</string>
     <!-- / Buildings -->
     <!-- Units -->

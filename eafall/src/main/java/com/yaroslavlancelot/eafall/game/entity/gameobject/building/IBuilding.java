@@ -1,5 +1,6 @@
 package com.yaroslavlancelot.eafall.game.entity.gameobject.building;
 
+import com.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.setlectable.Selectable;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.StaticObject;
 
@@ -25,6 +26,9 @@ public interface IBuilding extends Selectable {
 
     /** return building upgrade */
     int getUpgrade();
+
+    /** returns current building dummy */
+    BuildingDummy getBuildingDummy();
 
     /** set building {@link org.andengine.entity.Entity} to ignore or receive updates */
     void setIgnoreUpdates(boolean stop);

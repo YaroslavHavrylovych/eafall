@@ -114,14 +114,14 @@
     <!-- mutants -->
     <!-- buildings -->
     <string name="water_cave">Водна Печера</string>
-    <string name="invisible_plain">Схована\nмісцина</string>
+    <string name="invisible_plain">Схована місцина</string>
     <string name="hydra_pond">Загата Гідр</string>
-    <string name="poison_cave">Отруйна\nПечера</string>
+    <string name="poison_cave">Отруйна Печера</string>
     <string name="web">Павутина</string>
-    <string name="mountain_cave">Гірська\nпечера</string>
+    <string name="mountain_cave">Гірська печера</string>
     <string name="hell">Пекло</string>
     <string name="bastion">Бастіон</string>
-    <string name="reptile_city">Місто\nРептилій</string>
+    <string name="reptile_city">Місто Рептилій</string>
     <string name="king_of_snakes">Король Змій</string>
     <!-- /buildings -->
     <!-- units -->
