@@ -57,17 +57,17 @@ public class QuakerBullet extends AbstractBullet {
     // ===========================================================
     @Override
     protected float duration(final float distance) {
-        if (distance < 100) {
+        if (distance < 150) {
             return 0.4f;
-        } else if (distance < 200) {
-            return 0.8f;
         } else if (distance < 300) {
-            return 1.2f;
+            return 0.8f;
         } else if (distance < 400) {
-            return 1.6f;
+            return 1.2f;
         } else if (distance < 500) {
-            return 2f;
+            return 1.6f;
         } else if (distance < 600) {
+            return 2f;
+        } else if (distance < 700) {
             return 2.4f;
         }
         return 3f;

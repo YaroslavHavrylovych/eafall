@@ -86,14 +86,12 @@ public class BulletsPool {
 
         @Override
         protected AbstractBullet allocatePoolItem() {
-            //TODO logger was here
             AbstractBullet bullet;
             if (mBulletFile.equals(StringConstants.FILE_QUAKER_BULLET)) {
                 bullet = new QuakerBullet(mWidth, mHeight, TextureRegionHolder.getRegion(mBulletFile), mObjectManager) {
                     @Override
                     protected void onBulletDestroyed() {
                         super.onBulletDestroyed();
-                        //TODO logger was here
                         recycle(this);
                     }
                 };
@@ -102,7 +100,6 @@ public class BulletsPool {
                     @Override
                     protected void onBulletDestroyed() {
                         super.onBulletDestroyed();
-                        //TODO logger was here
                         recycle(this);
                     }
                 };
