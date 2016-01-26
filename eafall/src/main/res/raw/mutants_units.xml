@@ -9,8 +9,8 @@
         <armor_value>5</armor_value>
         <damage>quaker</damage>
         <damage_value>90</damage_value>
-        <attack_radius>100</attack_radius>
-        <view_radius>110</view_radius>
+        <attack_radius>144</attack_radius>
+        <view_radius>158</view_radius>
         <speed>75</speed>
         <reload_time>2.8</reload_time>
     </unit>
@@ -21,8 +21,8 @@
         <armor_value>7</armor_value>
         <damage>quaker</damage>
         <damage_value>100</damage_value>
-        <attack_radius>110</attack_radius>
-        <view_radius>120</view_radius>
+        <attack_radius>158</attack_radius>
+        <view_radius>172</view_radius>
         <speed>80</speed>
         <reload_time>2.5</reload_time>
     </unit>
@@ -33,8 +33,8 @@
         <armor_value>10</armor_value>
         <damage>quaker</damage>
         <damage_value>130</damage_value>
-        <attack_radius>200</attack_radius>
-        <view_radius>220</view_radius>
+        <attack_radius>288</attack_radius>
+        <view_radius>316</view_radius>
         <speed>85</speed>
         <reload_time>2.5</reload_time>
     </unit>
@@ -46,8 +46,8 @@
         <armor_value>5</armor_value>
         <damage>higgson</damage>
         <damage_value>80</damage_value>
-        <attack_radius>10</attack_radius>
-        <view_radius>100</view_radius>
+        <attack_radius>14</attack_radius>
+        <view_radius>144</view_radius>
         <speed>175</speed>
         <reload_time>1</reload_time>
     </unit>
@@ -58,8 +58,8 @@
         <armor_value>8</armor_value>
         <damage>higgson</damage>
         <damage_value>100</damage_value>
-        <attack_radius>10</attack_radius>
-        <view_radius>100</view_radius>
+        <attack_radius>14</attack_radius>
+        <view_radius>144</view_radius>
         <speed>180</speed>
         <reload_time>1</reload_time>
     </unit>
@@ -71,8 +71,8 @@
         <armor_value>5</armor_value>
         <damage>laser</damage>
         <damage_value>90</damage_value>
-        <attack_radius>90</attack_radius>
-        <view_radius>100</view_radius>
+        <attack_radius>129</attack_radius>
+        <view_radius>144</view_radius>
         <speed>140</speed>
         <reload_time>1.5</reload_time>
     </unit>
@@ -83,8 +83,8 @@
         <armor_value>12</armor_value>
         <damage>laser</damage>
         <damage_value>110</damage_value>
-        <attack_radius>100</attack_radius>
-        <view_radius>110</view_radius>
+        <attack_radius>144</attack_radius>
+        <view_radius>158</view_radius>
         <speed>140</speed>
         <reload_time>1.4</reload_time>
     </unit>
@@ -96,8 +96,8 @@
         <armor_value>5</armor_value>
         <damage>neutrino</damage>
         <damage_value>120</damage_value>
-        <attack_radius>130</attack_radius>
-        <view_radius>140</view_radius>
+        <attack_radius>187</attack_radius>
+        <view_radius>201</view_radius>
         <speed>110</speed>
         <reload_time>1.7</reload_time>
     </unit>
@@ -108,8 +108,8 @@
         <armor_value>5</armor_value>
         <damage>neutrino</damage>
         <damage_value>150</damage_value>
-        <attack_radius>150</attack_radius>
-        <view_radius>160</view_radius>
+        <attack_radius>216</attack_radius>
+        <view_radius>230</view_radius>
         <speed>130</speed>
         <reload_time>1.8</reload_time>
     </unit>
@@ -121,8 +121,8 @@
         <armor_value>10</armor_value>
         <damage>railgun</damage>
         <damage_value>100</damage_value>
-        <attack_radius>100</attack_radius>
-        <view_radius>110</view_radius>
+        <attack_radius>144</attack_radius>
+        <view_radius>158</view_radius>
         <speed>160</speed>
         <reload_time>1.5</reload_time>
     </unit>
@@ -133,8 +133,8 @@
         <armor_value>10</armor_value>
         <damage>railgun</damage>
         <damage_value>110</damage_value>
-        <attack_radius>120</attack_radius>
-        <view_radius>130</view_radius>
+        <attack_radius>172</attack_radius>
+        <view_radius>187</view_radius>
         <speed>140</speed>
         <reload_time>1.4</reload_time>
     </unit>
@@ -146,8 +146,8 @@
         <armor_value>15</armor_value>
         <damage>laser</damage>
         <damage_value>120</damage_value>
-        <attack_radius>20</attack_radius>
-        <view_radius>100</view_radius>
+        <attack_radius>28</attack_radius>
+        <view_radius>144</view_radius>
         <speed>140</speed>
         <reload_time>1.5</reload_time>
     </unit>
@@ -158,8 +158,8 @@
         <armor_value>20</armor_value>
         <damage>laser</damage>
         <damage_value>150</damage_value>
-        <attack_radius>20</attack_radius>
-        <view_radius>100</view_radius>
+        <attack_radius>28</attack_radius>
+        <view_radius>144</view_radius>
         <speed>155</speed>
         <reload_time>1.6</reload_time>
     </unit>
@@ -171,8 +171,8 @@
         <armor_value>10</armor_value>
         <damage>annihilator</damage>
         <damage_value>120</damage_value>
-        <attack_radius>130</attack_radius>
-        <view_radius>140</view_radius>
+        <attack_radius>187</attack_radius>
+        <view_radius>201</view_radius>
         <speed>150</speed>
         <reload_time>1.7</reload_time>
     </unit>
@@ -183,8 +183,8 @@
         <armor_value>10</armor_value>
         <damage>annihilator</damage>
         <damage_value>150</damage_value>
-        <attack_radius>140</attack_radius>
-        <view_radius>150</view_radius>
+        <attack_radius>201</attack_radius>
+        <view_radius>216</view_radius>
         <speed>170</speed>
         <reload_time>1.8</reload_time>
     </unit>
@@ -196,8 +196,8 @@
         <armor_value>40</armor_value>
         <damage>quaker</damage>
         <damage_value>250</damage_value>
-        <attack_radius>170</attack_radius>
-        <view_radius>170</view_radius>
+        <attack_radius>244</attack_radius>
+        <view_radius>244</view_radius>
         <speed>1</speed>
         <reload_time>2.5</reload_time>
     </unit>

@@ -30,7 +30,6 @@ public class SquareUnitMap implements IUnitMap, IUnitMapUpdater {
     public final int N_1 = N - 1;
     public final int M_1 = M - 1;
     public final int PARTITION_SIZE = SizeConstants.FIELD_PARTITION_SIZE;
-    public final int HALF_PARTITION_SIZE = PARTITION_SIZE / 2;
     private final boolean mLtr;
 
     // ===========================================================

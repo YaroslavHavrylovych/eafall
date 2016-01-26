@@ -32,7 +32,7 @@ public final class SizeConstants {
     public static final int UNIT_HEALTH_BAR_HEIGHT = 3;
     public static final int UNIT_HEALTH_BAR_FILE_SIZE = 3;
     public static final int FIELD_PARTITION_SIZE = 120;
-    public static final int BULLET_MASS_DAMAGE_RADIUS = FIELD_PARTITION_SIZE / 2;
+    public static final int BULLET_MASS_DAMAGE_RADIUS = 90;
 
     /* Tutorial */
     public static final int TUTORIAL_POINTER_WIDTH = 330;
