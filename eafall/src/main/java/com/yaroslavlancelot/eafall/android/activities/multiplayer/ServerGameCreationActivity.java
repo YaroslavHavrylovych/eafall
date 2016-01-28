@@ -7,10 +7,11 @@ import android.widget.TextView;
 
 import com.yaroslavlancelot.eafall.R;
 import com.yaroslavlancelot.eafall.android.activities.BaseNonGameActivity;
-import com.yaroslavlancelot.eafall.game.alliance.imperials.Imperials;
-import com.yaroslavlancelot.eafall.game.alliance.rebels.Rebels;
+import com.yaroslavlancelot.eafall.game.alliance.mutants.Mutants;
 import com.yaroslavlancelot.eafall.game.client.thick.server.ServerGameActivity;
+import com.yaroslavlancelot.eafall.game.configuration.mission.MissionConfig;
 import com.yaroslavlancelot.eafall.game.constant.StringConstants;
+import com.yaroslavlancelot.eafall.game.mission.MissionIntent;
 import com.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.yaroslavlancelot.eafall.network.server.GameSocketServer;
 import com.yaroslavlancelot.eafall.network.server.callbacks.PreGameStartServer;
@@ -114,10 +115,11 @@ public class ServerGameCreationActivity extends BaseNonGameActivity implements P
                 mGameSocketServer = null;
                 Intent startServerIntent = new Intent(ServerGameCreationActivity.this, ServerGameActivity.class);
                 startServerIntent.
+                        putExtra(MissionIntent.MISSION_CONFIG, new MissionConfig()).
                         putExtra(StringConstants.SECOND_PLAYER_CONTROL_BEHAVIOUR_TYPE,
                                 IPlayer.ControlType.REMOTE_CONTROL_ON_SERVER_SIDE.toString()).
-                        putExtra(StringConstants.SECOND_PLAYER_ALLIANCE, Rebels.ALLIANCE_NAME).
-                        putExtra(StringConstants.FIRST_PLAYER_ALLIANCE, Imperials.ALLIANCE_NAME).
+                        putExtra(StringConstants.SECOND_PLAYER_ALLIANCE, Mutants.ALLIANCE_NAME).
+                        putExtra(StringConstants.FIRST_PLAYER_ALLIANCE, Mutants.ALLIANCE_NAME).
                         putExtra(StringConstants.FIRST_PLAYER_CONTROL_BEHAVIOUR_TYPE,
                                 IPlayer.ControlType.USER_CONTROL_ON_SERVER_SIDE.toString());
                 startActivity(startServerIntent);

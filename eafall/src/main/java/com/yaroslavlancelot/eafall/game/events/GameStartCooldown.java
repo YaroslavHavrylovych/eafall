@@ -6,6 +6,8 @@ import com.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.yaroslavlancelot.eafall.game.camera.EaFallCamera;
 import com.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.yaroslavlancelot.eafall.game.constant.StringConstants;
+import com.yaroslavlancelot.eafall.game.player.IPlayer;
+import com.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.yaroslavlancelot.eafall.game.scene.hud.ClientGameHud;
 import com.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 
@@ -102,7 +104,13 @@ public abstract class GameStartCooldown {
                 id = R.string.three;
                 mCamera.setMaxZoomFactorChange(.1f);
                 mCamera.setZoomFactor(EaFallApplication.getConfig().getMinZoomFactor());
-                mCamera.setCenter(SizeConstants.HALF_FIELD_WIDTH - 200, SizeConstants.HALF_FIELD_HEIGHT); //1.3
+                for (IPlayer player : PlayersHolder.getInstance().getElements()) {
+                    if (player.getControlType().user()) {
+                        int change = player.getPlanet().isLeft() ? -200 : 200;
+                        mCamera.setCenter(SizeConstants.HALF_FIELD_WIDTH + change,
+                                SizeConstants.HALF_FIELD_HEIGHT);
+                    }
+                }
                 mCamera.setMaxVelocity(SizeConstants.HALF_FIELD_WIDTH / 13,
                         SizeConstants.HALF_FIELD_HEIGHT / 13);
                 mScene.setMinZoomFactor(EaFallApplication.getConfig().getMinZoomFactor());

@@ -71,7 +71,6 @@ public class ThinClientGameActivity extends ClientGameActivity implements InGame
             @Override
             public void run() {
                 if (gameObject == null || !(gameObject instanceof OffenceUnit)) {
-                    //TODO logger was here
                     return;
                 }
                 OffenceUnit unit = (OffenceUnit) gameObject;
@@ -88,7 +87,6 @@ public class ThinClientGameActivity extends ClientGameActivity implements InGame
     public void gameObjectHealthChanged(long gameObjectUniqueId, final int newUnitHealth) {
         final GameObject gameObject = getGameObjectById(gameObjectUniqueId);
         if (gameObject == null) {
-            //TODO logger was here
             return;
         }
         runOnUpdateThread(new Runnable() {
@@ -104,11 +102,9 @@ public class ThinClientGameActivity extends ClientGameActivity implements InGame
         final GameObject gameObject = getGameObjectById(gameObjectUniqueId);
         final GameObject objectToAttack = getGameObjectById(attackedGameObjectUniqueId);
         if (gameObject == null || objectToAttack == null) {
-            //TODO logger was here
             return;
         }
         if (!(gameObject instanceof Unit)) {
-            //TODO logger was here
             return;
         }
         runOnUpdateThread(new Runnable() {
@@ -116,7 +112,7 @@ public class ThinClientGameActivity extends ClientGameActivity implements InGame
             public void run() {
                 Unit unit = (Unit) gameObject;
                 if (unit.isObjectAlive()) {
-                    //TODO this probably wouldn't work (rotation logic were changed)
+                    //TODO this probably wouldn't work (rotation logic was changed)
                     unit.fire(objectToAttack);
                 }
             }

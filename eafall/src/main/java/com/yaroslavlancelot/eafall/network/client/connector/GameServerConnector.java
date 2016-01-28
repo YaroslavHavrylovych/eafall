@@ -41,7 +41,6 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
         registerServerMessage(WAITING_FOR_PLAYERS, WaitingForPlayersServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
-                //TODO logger was here
                 synchronized (mPreGameStartClientList) {
                     for (PreGameStartClient preGameStartClient : mPreGameStartClientList) {
                         preGameStartClient.gameWaitingForPlayers(mServerIp);
@@ -53,7 +52,6 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
         registerServerMessage(STARTING_GAME, StartingGameServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
-                //TODO logger was here
                 synchronized (mPreGameStartClientList) {
                     for (PreGameStartClient preGameStartClient : mPreGameStartClientList) {
                         preGameStartClient.gameStart(mServerIp);
@@ -65,7 +63,6 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
         registerServerMessage(BUILDING_CREATED, BuildingCreatedServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
-                //TODO logger was here
                 BuildingCreatedServerMessage buildingCreatedServerMessage = (BuildingCreatedServerMessage) pServerMessage;
                 synchronized (mInGameClientList) {
                     for (InGameClient inGameClient : mInGameClientList) {
@@ -78,7 +75,6 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
         registerServerMessage(UNIT_CREATED, UnitCreatedServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
-                //TODO logger was here
                 UnitCreatedServerMessage unitCreatedServerMessage = (UnitCreatedServerMessage) pServerMessage;
                 synchronized (mInGameClientList) {
                     for (InGameClient inGameClient : mInGameClientList) {
@@ -92,7 +88,6 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
         registerServerMessage(UNIT_MOVED, UnitChangePositionServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
-                //TODO logger was here
                 UnitChangePositionServerMessage unitChangePositionServerMessage = (UnitChangePositionServerMessage) pServerMessage;
                 synchronized (mInGameClientList) {
                     for (InGameClient inGameClient : mInGameClientList) {
@@ -105,7 +100,6 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
         registerServerMessage(GAME_OBJECT_HEALTH_CHANGED, GameObjectHealthChangedServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
-                //TODO logger was here
                 GameObjectHealthChangedServerMessage gameObjectHealthChangedServerMessage = (GameObjectHealthChangedServerMessage) pServerMessage;
                 synchronized (mInGameClientList) {
                     for (InGameClient inGameClient : mInGameClientList) {
@@ -119,7 +113,6 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
         registerServerMessage(UNIT_FIRE, UnitFireServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
-                //TODO logger was here
                 UnitFireServerMessage unitFireServerMessage = (UnitFireServerMessage) pServerMessage;
                 synchronized (mInGameClientList) {
                     for (InGameClient inGameClient : mInGameClientList) {
@@ -133,7 +126,6 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
         registerServerMessage(MONEY_CHANGED, MoneyChangedServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
-                //TODO logger was here
                 MoneyChangedServerMessage unitFireServerMessage = (MoneyChangedServerMessage) pServerMessage;
                 synchronized (mInGameClientList) {
                     for (InGameClient inGameClient : mInGameClientList) {
@@ -146,7 +138,6 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
         registerServerMessage(GAME_STARTED, GameStartedServerMessage.class, new IServerMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
-                //TODO logger was here
                 synchronized (mInGameClientList) {
                     for (InGameClient inGameClient : mInGameClientList) {
                         inGameClient.gameStarted();

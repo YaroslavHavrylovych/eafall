@@ -34,7 +34,6 @@ import com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.PauseGameEvent;
 import com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.ShowSettingsEvent;
 import com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.unit.CreateDefenceUnitEvent;
 import com.yaroslavlancelot.eafall.game.events.periodic.IPeriodic;
-import com.yaroslavlancelot.eafall.game.events.periodic.unit.UnitPositionUpdater;
 import com.yaroslavlancelot.eafall.game.mission.MissionIntent;
 import com.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.yaroslavlancelot.eafall.game.player.PlayersHolder;
@@ -100,19 +99,19 @@ public abstract class BaseGameObjectsActivity extends EaFallActivity implements 
     }
 
     @Override
-    public EngineOptions onCreateEngineOptions() {
-        EngineOptions engineOptions = super.onCreateEngineOptions();
-        mMissionConfig = getIntent().getExtras().getParcelable(MissionIntent.MISSION_CONFIG);
-        mPhysicsWorld = new PhysicsWorld(new Vector2(0, 0), false, 2, 2);
-        return engineOptions;
-    }
-
-    @Override
     public void onPauseGame() {
         if (GameState.isResourcesLoaded()) {
             pause(true);
         }
         super.onPauseGame();
+    }
+
+    @Override
+    public EngineOptions onCreateEngineOptions() {
+        EngineOptions engineOptions = super.onCreateEngineOptions();
+        mMissionConfig = getIntent().getExtras().getParcelable(MissionIntent.MISSION_CONFIG);
+        mPhysicsWorld = new PhysicsWorld(new Vector2(0, 0), false, 2, 2);
+        return engineOptions;
     }
 
     @Override
@@ -196,9 +195,6 @@ public abstract class BaseGameObjectsActivity extends EaFallActivity implements 
                 intent.getStringExtra(StringConstants.SECOND_PLAYER_ALLIANCE));
         mSecondPlayer = createPlayer(StringConstants.SECOND_PLAYER_CONTROL_BEHAVIOUR_TYPE, alliance,
                 mMissionConfig.getOpponentStartMoney());
-        //units map
-        mFirstPlayer.createUnitsMap(true);
-        mSecondPlayer.createUnitsMap(false);
         //color
         mFirstPlayer.setColor(Color.BLUE);
         mSecondPlayer.setColor(Color.RED);
@@ -240,7 +236,6 @@ public abstract class BaseGameObjectsActivity extends EaFallActivity implements 
         Intent intent = getIntent();
         IPlayer.ControlType playerType = IPlayer.ControlType.valueOf(intent.getStringExtra(playerNameInExtra));
         IPlayer player = createPlayer(playerNameInExtra, alliance, playerType, startMoney, mMissionConfig);
-        mGamePeriodic.add(new UnitPositionUpdater(player));
         return player;
     }
 

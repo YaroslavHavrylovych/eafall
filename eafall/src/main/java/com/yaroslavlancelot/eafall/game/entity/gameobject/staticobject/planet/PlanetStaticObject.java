@@ -186,7 +186,9 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
     public void init(String playerName, int planetNameRes, IUnitCreator creator, int objectMaximumHealth) {
         setPlayer(playerName);
         initHealthBar();
-        initShipyard(playerName, creator);
+        if (!PlayersHolder.getPlayer(mPlayerName).getControlType().clientSide()) {
+            initShipyard(playerName, creator);
+        }
         initHealth(objectMaximumHealth);
         initTouchCallbacks(planetNameRes);
     }

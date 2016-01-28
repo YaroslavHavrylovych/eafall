@@ -7,10 +7,11 @@ import android.widget.TextView;
 
 import com.yaroslavlancelot.eafall.R;
 import com.yaroslavlancelot.eafall.android.activities.BaseNonGameActivity;
-import com.yaroslavlancelot.eafall.game.alliance.imperials.Imperials;
-import com.yaroslavlancelot.eafall.game.alliance.rebels.Rebels;
+import com.yaroslavlancelot.eafall.game.alliance.mutants.Mutants;
 import com.yaroslavlancelot.eafall.game.client.thin.ThinClientGameActivity;
+import com.yaroslavlancelot.eafall.game.configuration.mission.MissionConfig;
 import com.yaroslavlancelot.eafall.game.constant.StringConstants;
+import com.yaroslavlancelot.eafall.game.mission.MissionIntent;
 import com.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.yaroslavlancelot.eafall.network.client.callbacks.PreGameStartClient;
 import com.yaroslavlancelot.eafall.network.client.connector.GameServerConnector;
@@ -34,9 +35,10 @@ public class ClientWaitForGameActivity extends BaseNonGameActivity implements Pr
         GameServerConnector.getGameServerConnector().removePreGameStartCallback(this);
         Intent clientGameIntent = new Intent(ClientWaitForGameActivity.this, ThinClientGameActivity.class);
         clientGameIntent.
+                putExtra(MissionIntent.MISSION_CONFIG, new MissionConfig()).
                 putExtra(StringConstants.SECOND_PLAYER_CONTROL_BEHAVIOUR_TYPE, IPlayer.ControlType.USER_CONTROL_ON_CLIENT_SIDE.toString()).
-                putExtra(StringConstants.SECOND_PLAYER_ALLIANCE, Rebels.ALLIANCE_NAME).
-                putExtra(StringConstants.FIRST_PLAYER_ALLIANCE, Imperials.ALLIANCE_NAME).
+                putExtra(StringConstants.SECOND_PLAYER_ALLIANCE, Mutants.ALLIANCE_NAME).
+                putExtra(StringConstants.FIRST_PLAYER_ALLIANCE, Mutants.ALLIANCE_NAME).
                 putExtra(StringConstants.FIRST_PLAYER_CONTROL_BEHAVIOUR_TYPE, IPlayer.ControlType.REMOTE_CONTROL_ON_CLIENT_SIDE.toString());
         startActivity(clientGameIntent);
     }

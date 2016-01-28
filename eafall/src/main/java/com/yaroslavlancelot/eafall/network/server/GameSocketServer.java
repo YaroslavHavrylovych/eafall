@@ -44,18 +44,19 @@ public class GameSocketServer extends SocketServer<SocketConnectionClientConnect
         return oldGameSocketServer;
     }
 
+    public String getClientIp() {
+        return mClientIp;
+    }
+
     @Override
     protected SocketConnectionClientConnector newClientConnector(final SocketConnection pSocketConnection) throws IOException {
         mClientIp = pSocketConnection.getSocket().getInetAddress().getHostAddress();
-        //TODO logger was here
         final SocketConnectionClientConnector clientConnector = new SocketConnectionClientConnector(pSocketConnection);
 
         clientConnector.registerClientMessage(CONNECTION_ESTABLISHED, ConnectionEstablishedClientMessage.class, new IClientMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ClientConnector<SocketConnection> pClientConnector, final IClientMessage pClientMessage) throws IOException {
-                //TODO logger was here
                 int protocolVersion = ((ConnectionEstablishedClientMessage) pClientMessage).getProtocolVersion();
-                //TODO logger was here
                 synchronized (mPreGameStartServer) {
                     mPreGameStartServer.clientConnectionEstablished(mClientIp);
                 }
@@ -65,9 +66,7 @@ public class GameSocketServer extends SocketServer<SocketConnectionClientConnect
         clientConnector.registerClientMessage(BUILDING_CREATION, BuildingCreationClientMessage.class, new IClientMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ClientConnector<SocketConnection> pClientConnector, final IClientMessage pClientMessage) throws IOException {
-                //TODO logger was here
                 BuildingCreationClientMessage message = (BuildingCreationClientMessage) pClientMessage;
-                //ToDo Remove EventBus
                 EventBus.getDefault().post(new CreateBuildingEvent(message.getPlayerName(), message.getBuildingId()));
             }
         });
@@ -76,7 +75,6 @@ public class GameSocketServer extends SocketServer<SocketConnectionClientConnect
         clientConnector.registerClientMessage(GAME_LOADED, GameLoadedClientMessage.class, new IClientMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ClientConnector<SocketConnection> pClientConnector, final IClientMessage pClientMessage) throws IOException {
-                //TODO logger was here
                 synchronized (mInGameServer) {
                     mInGameServer.gameLoaded();
                 }
@@ -84,10 +82,6 @@ public class GameSocketServer extends SocketServer<SocketConnectionClientConnect
         });
 
         return clientConnector;
-    }
-
-    public String getClientIp() {
-        return mClientIp;
     }
 
     public void addPreGameStartCallback(PreGameStartServer preGameStartServer) {

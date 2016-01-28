@@ -44,8 +44,7 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
         super.onResourcesLoaded();
         mServerGameLoaded = true;
         if (mClientGameLoaded) {
-            mGameSocketServer.sendBroadcastServerMessage(0, new GameStartedServerMessage());
-            registerContactCallback();
+            startTheGame();
         }
     }
 
@@ -87,7 +86,6 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
     @Override
     protected Unit createUnit(int unitKey, IPlayer unitPlayer, float x, float y) {
         Unit unit = super.createUnit(unitKey, unitPlayer, x, y);
-
         mGameSocketServer.sendBroadcastServerMessage(0, new UnitCreatedServerMessage(unitPlayer.getName(), unitKey, unit));
         unit.setGameObjectHealthChangedListener(this);
         unit.setUnitFireCallback(this);
@@ -114,11 +112,15 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
     public void gameLoaded() {
         mClientGameLoaded = true;
         if (mServerGameLoaded) {
-            mGameSocketServer.sendBroadcastServerMessage(0, new GameStartedServerMessage());
-            hideSplash();
-            registerContactCallback();
+            startTheGame();
         }
         initMoney();
+    }
+
+    private void startTheGame() {
+        mGameSocketServer.sendBroadcastServerMessage(0, new GameStartedServerMessage());
+        hideSplash();
+        registerContactCallback();
     }
 
     @SuppressWarnings("unused")
