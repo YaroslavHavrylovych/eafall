@@ -10,6 +10,7 @@ import com.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.Buildin
 import com.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.UnitBuildingDummy;
 import com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.BuildingsAmountChangedEvent;
 import com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.CreateBuildingEvent;
+import com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.UpgradeBuildingEvent;
 import com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.BuildingDescriptionShowEvent;
 import com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.UnitByBuildingDescriptionShowEvent;
 import com.yaroslavlancelot.eafall.game.player.IPlayer;
@@ -96,7 +97,7 @@ public class UnitBuildingPopupUpdater extends BaseBuildingPopupUpdater {
             mUpgradeButton.setOnClickListener(new ButtonSprite.OnClickListener() {
                 @Override
                 public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                    player.getPlanet().getBuilding(buildingId.getId()).upgradeBuilding();
+                    EventBus.getDefault().post(new UpgradeBuildingEvent(mPlayerName, buildingId));
                 }
             });
         }

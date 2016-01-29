@@ -4,8 +4,10 @@ import com.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.yaroslavlancelot.eafall.game.entity.AfterInitializationPool;
 import com.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage;
+import com.yaroslavlancelot.eafall.network.client.NetworkUtils;
 
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.modifier.IModifier;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,9 +18,11 @@ public class BulletsPool {
     private volatile static BulletsPool BULLETS_POOL;
     private VertexBufferObjectManager mObjectManager;
     private Map<Damage.DamageType, Pool> mPools = new HashMap<>(Damage.DamageType.values().length);
+    private boolean mClientSide;
 
     private BulletsPool(VertexBufferObjectManager objectManager) {
         mObjectManager = objectManager;
+        mClientSide = NetworkUtils.isClientSide();
         for (Damage.DamageType damageType : Damage.DamageType.values()) {
             mPools.put(damageType, new Pool(damageType));
         }
@@ -90,6 +94,15 @@ public class BulletsPool {
             if (mBulletFile.equals(StringConstants.FILE_QUAKER_BULLET)) {
                 bullet = new QuakerBullet(mWidth, mHeight, TextureRegionHolder.getRegion(mBulletFile), mObjectManager) {
                     @Override
+                    public void onModifierFinished(final IModifier pModifier, final Object pItem) {
+                        if (mClientSide) {
+                            destroy();
+                        } else {
+                            super.onModifierFinished(pModifier, pItem);
+                        }
+                    }
+
+                    @Override
                     protected void onBulletDestroyed() {
                         super.onBulletDestroyed();
                         recycle(this);
@@ -97,6 +110,15 @@ public class BulletsPool {
                 };
             } else {
                 bullet = new SingleBullet(mWidth, mHeight, TextureRegionHolder.getRegion(mBulletFile), mObjectManager) {
+                    @Override
+                    public void onModifierFinished(final IModifier pModifier, final Object pItem) {
+                        if (mClientSide) {
+                            destroy();
+                        } else {
+                            super.onModifierFinished(pModifier, pItem);
+                        }
+                    }
+
                     @Override
                     protected void onBulletDestroyed() {
                         super.onBulletDestroyed();

@@ -7,6 +7,8 @@ public interface InGameClient {
 
     void buildingCreated(BuildingId buildingId, String playerName);
 
+    void buildingUpgraded(BuildingId buildingId, String playerName);
+
     void unitCreated(String playerName, int unitId, float x, float y, long uniqueId);
 
     void unitMoved(UnitChangePositionServerMessage unitChangePositionServerMessage);

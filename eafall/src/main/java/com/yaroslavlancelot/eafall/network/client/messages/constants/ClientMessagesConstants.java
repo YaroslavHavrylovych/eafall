@@ -7,4 +7,5 @@ public interface ClientMessagesConstants {
     short CONNECTION_ESTABLISHED = 1;
     short BUILDING_CREATION = 2;
     short GAME_LOADED = 3;
+    short BUILDING_UPGRADE = 4;
 }

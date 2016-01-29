@@ -17,6 +17,7 @@ import com.yaroslavlancelot.eafall.game.events.GameStartCooldown;
 import com.yaroslavlancelot.eafall.game.events.aperiodic.ShowHudTextEvent;
 import com.yaroslavlancelot.eafall.game.events.aperiodic.endgame.GameOverEvent;
 import com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.CreateBuildingEvent;
+import com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.UpgradeBuildingEvent;
 import com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.description.BuildingSettingsPopupShowEvent;
 import com.yaroslavlancelot.eafall.game.events.periodic.IPeriodic;
 import com.yaroslavlancelot.eafall.game.events.periodic.time.GameTime;
@@ -237,9 +238,19 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
 
     @SuppressWarnings("unused")
     /** really used by {@link de.greenrobot.event.EventBus} */
-    public void onEvent(final CreateBuildingEvent createBuildingEvent) {
-        userWantCreateBuilding(PlayersHolder.getPlayer(createBuildingEvent.getPlayerName()), createBuildingEvent.getBuildingId());
+    public void onEvent(final UpgradeBuildingEvent upgradeBuildingEvent) {
+        userWantUpgradeBuilding(PlayersHolder.getPlayer(upgradeBuildingEvent.getPlayerName()),
+                upgradeBuildingEvent.getBuildingId());
     }
+
+    @SuppressWarnings("unused")
+    /** really used by {@link de.greenrobot.event.EventBus} */
+    public void onEvent(final CreateBuildingEvent createBuildingEvent) {
+        userWantCreateBuilding(PlayersHolder.getPlayer(createBuildingEvent.getPlayerName()),
+                createBuildingEvent.getBuildingId());
+    }
+
+    protected abstract void userWantUpgradeBuilding(IPlayer userPlayer, BuildingId buildingId);
 
     protected abstract void userWantCreateBuilding(IPlayer userPlayer, BuildingId buildingId);
 }

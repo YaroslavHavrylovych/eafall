@@ -167,7 +167,6 @@ public interface IPlayer {
 
     /** Constant to define what player control type will be used */
     enum ControlType {
-        //TODO this used in extras as String param. Need to use it as enum (enum can be passed in extras as it serialized)
         /*
          * SERVER SIDE
          */
@@ -200,7 +199,6 @@ public interface IPlayer {
 
         /** return true if type parameter corresponding to client side */
         public boolean clientSide() {
-            //TODO check this when you will check the multiplayer
             return this == ControlType.REMOTE_CONTROL_ON_CLIENT_SIDE
                     || this == ControlType.USER_CONTROL_ON_CLIENT_SIDE;
         }

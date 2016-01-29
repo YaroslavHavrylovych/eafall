@@ -17,6 +17,7 @@ import com.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.yaroslavlancelot.eafall.network.server.GameSocketServer;
 import com.yaroslavlancelot.eafall.network.server.callbacks.InGameServer;
 import com.yaroslavlancelot.eafall.network.server.messages.BuildingCreatedServerMessage;
+import com.yaroslavlancelot.eafall.network.server.messages.BuildingUpgradedServerMessage;
 import com.yaroslavlancelot.eafall.network.server.messages.GameObjectHealthChangedServerMessage;
 import com.yaroslavlancelot.eafall.network.server.messages.GameStartedServerMessage;
 import com.yaroslavlancelot.eafall.network.server.messages.MoneyChangedServerMessage;
@@ -53,6 +54,19 @@ public class ServerGameActivity extends ThickClientGameActivity implements InGam
         PlanetStaticObject planetStaticObject = super.createPlanet(x, y, textureRegion, key, player, uniquesId);
         planetStaticObject.setGameObjectHealthChangedListener(this);
         return planetStaticObject;
+    }
+
+    @Override
+    protected void userWantUpgradeBuilding(final IPlayer userPlayer, final BuildingId buildingId) {
+        PlanetStaticObject planetStaticObject = userPlayer.getPlanet();
+        if (planetStaticObject != null) {
+            boolean isBuildingUpgraded = planetStaticObject.getBuilding(buildingId.getId())
+                    .upgradeBuilding();
+            if (isBuildingUpgraded) {
+                mGameSocketServer.sendBroadcastServerMessage(0, new BuildingUpgradedServerMessage(
+                        buildingId.getId(), buildingId.getUpgrade(), userPlayer.getName()));
+            }
+        }
     }
 
     @Override

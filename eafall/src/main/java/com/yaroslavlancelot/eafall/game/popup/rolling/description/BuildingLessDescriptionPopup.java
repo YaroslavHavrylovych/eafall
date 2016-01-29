@@ -60,8 +60,20 @@ public abstract class BuildingLessDescriptionPopup extends RollingPopup {
 
     protected abstract BaseUnitPopupUpdater createUnitPopupUpdater(VertexBufferObjectManager vboManager);
 
-    protected void onEvent() {
-        clear();
+    /**
+     * Basic verification before showing popup.
+     * <p/>
+     * Clears current displayed information.
+     *
+     * @param player player which initiates popup showing
+     * @return true if popup has to be shown and false in other case
+     */
+    protected boolean onEvent(IPlayer player) {
+        if (player.getControlType().user()) {
+            clear();
+            return true;
+        }
+        return false;
     }
 
     protected void clear() {
@@ -71,7 +83,9 @@ public abstract class BuildingLessDescriptionPopup extends RollingPopup {
     @SuppressWarnings("unused")
     /** really used by {@link de.greenrobot.event.EventBus} */
     public void onEvent(final UnitByBuildingDescriptionShowEvent unitByBuildingDescriptionShowEvent) {
-        onEvent();
+        if (!onEvent(PlayersHolder.getPlayer(unitByBuildingDescriptionShowEvent.getPlayerName()))) {
+            return;
+        }
         Object objectId = unitByBuildingDescriptionShowEvent.getBuildingId();
         IPlayer player = PlayersHolder.getPlayer(unitByBuildingDescriptionShowEvent.getPlayerName());
         mDescriptionPopupBackground.setLeftBlockVisibility(true);

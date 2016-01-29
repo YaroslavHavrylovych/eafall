@@ -3,6 +3,7 @@ package com.yaroslavlancelot.eafall.network.client.connector;
 import com.yaroslavlancelot.eafall.network.client.callbacks.InGameClient;
 import com.yaroslavlancelot.eafall.network.client.callbacks.PreGameStartClient;
 import com.yaroslavlancelot.eafall.network.server.messages.BuildingCreatedServerMessage;
+import com.yaroslavlancelot.eafall.network.server.messages.BuildingUpgradedServerMessage;
 import com.yaroslavlancelot.eafall.network.server.messages.GameObjectHealthChangedServerMessage;
 import com.yaroslavlancelot.eafall.network.server.messages.GameStartedServerMessage;
 import com.yaroslavlancelot.eafall.network.server.messages.MoneyChangedServerMessage;
@@ -67,6 +68,18 @@ public class GameServerConnector extends ServerConnector<SocketConnection> imple
                 synchronized (mInGameClientList) {
                     for (InGameClient inGameClient : mInGameClientList) {
                         inGameClient.buildingCreated(buildingCreatedServerMessage.getBuildingId(), buildingCreatedServerMessage.getPlayerName());
+                    }
+                }
+            }
+        });
+
+        registerServerMessage(BUILDING_UPGRADED, BuildingUpgradedServerMessage.class, new IServerMessageHandler<SocketConnection>() {
+            @Override
+            public void onHandleMessage(final ServerConnector<SocketConnection> pServerConnector, final IServerMessage pServerMessage) throws IOException {
+                BuildingUpgradedServerMessage buildingUpgradedServerMessage = (BuildingUpgradedServerMessage) pServerMessage;
+                synchronized (mInGameClientList) {
+                    for (InGameClient inGameClient : mInGameClientList) {
+                        inGameClient.buildingUpgraded(buildingUpgradedServerMessage.getBuildingId(), buildingUpgradedServerMessage.getPlayerName());
                     }
                 }
             }

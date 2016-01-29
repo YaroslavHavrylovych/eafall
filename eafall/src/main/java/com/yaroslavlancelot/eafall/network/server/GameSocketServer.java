@@ -1,8 +1,10 @@
 package com.yaroslavlancelot.eafall.network.server;
 
 import com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.CreateBuildingEvent;
+import com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.UpgradeBuildingEvent;
 import com.yaroslavlancelot.eafall.network.client.connector.GameServerConnector;
 import com.yaroslavlancelot.eafall.network.client.messages.BuildingCreationClientMessage;
+import com.yaroslavlancelot.eafall.network.client.messages.BuildingUpgradingClientMessage;
 import com.yaroslavlancelot.eafall.network.client.messages.ConnectionEstablishedClientMessage;
 import com.yaroslavlancelot.eafall.network.client.messages.GameLoadedClientMessage;
 import com.yaroslavlancelot.eafall.network.client.messages.constants.ClientMessagesConstants;
@@ -57,9 +59,7 @@ public class GameSocketServer extends SocketServer<SocketConnectionClientConnect
             @Override
             public void onHandleMessage(final ClientConnector<SocketConnection> pClientConnector, final IClientMessage pClientMessage) throws IOException {
                 int protocolVersion = ((ConnectionEstablishedClientMessage) pClientMessage).getProtocolVersion();
-                synchronized (mPreGameStartServer) {
-                    mPreGameStartServer.clientConnectionEstablished(mClientIp);
-                }
+                mPreGameStartServer.clientConnectionEstablished(mClientIp);
             }
         });
 
@@ -71,13 +71,18 @@ public class GameSocketServer extends SocketServer<SocketConnectionClientConnect
             }
         });
 
+        clientConnector.registerClientMessage(BUILDING_UPGRADE, BuildingUpgradingClientMessage.class, new IClientMessageHandler<SocketConnection>() {
+            @Override
+            public void onHandleMessage(final ClientConnector<SocketConnection> pClientConnector, final IClientMessage pClientMessage) throws IOException {
+                BuildingUpgradingClientMessage message = (BuildingUpgradingClientMessage) pClientMessage;
+                EventBus.getDefault().post(new UpgradeBuildingEvent(message.getPlayerName(), message.getBuildingId()));
+            }
+        });
 
         clientConnector.registerClientMessage(GAME_LOADED, GameLoadedClientMessage.class, new IClientMessageHandler<SocketConnection>() {
             @Override
             public void onHandleMessage(final ClientConnector<SocketConnection> pClientConnector, final IClientMessage pClientMessage) throws IOException {
-                synchronized (mInGameServer) {
-                    mInGameServer.gameLoaded();
-                }
+                mInGameServer.gameLoaded();
             }
         });
 

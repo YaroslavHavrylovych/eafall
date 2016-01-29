@@ -69,7 +69,9 @@ public class DescriptionPopup extends BuildingLessDescriptionPopup {
     @SuppressWarnings("unused")
     /** really used by {@link de.greenrobot.event.EventBus} */
     public void onEvent(final BuildingDescriptionShowEvent buildingDescriptionShowEvent) {
-        onEvent();
+        if (!onEvent(PlayersHolder.getPlayer(buildingDescriptionShowEvent.getPlayerName()))) {
+            return;
+        }
         BuildingId buildingId = buildingDescriptionShowEvent.getObjectId();
         IPlayer player = PlayersHolder.getPlayer(buildingDescriptionShowEvent.getPlayerName());
         BuildingDummy buildingDummy = player.getAlliance().getBuildingDummy(buildingId);

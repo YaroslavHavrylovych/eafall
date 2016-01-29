@@ -28,15 +28,22 @@ public class SinglePlayerGameActivity extends ThickClientGameActivity {
     }
 
     @Override
+    protected void userWantUpgradeBuilding(final IPlayer userPlayer, final BuildingId buildingId) {
+        PlanetStaticObject planetStaticObject = userPlayer.getPlanet();
+        if (planetStaticObject != null) {
+            planetStaticObject.getBuilding(buildingId.getId()).upgradeBuilding();
+        }
+    }
+
+    @Override
     protected void userWantCreateBuilding(final IPlayer userPlayer, BuildingId buildingId) {
         PlanetStaticObject planetStaticObject = userPlayer.getPlanet();
         if (planetStaticObject != null) {
-            userPlayer.getPlanet().createBuilding(buildingId);
+            planetStaticObject.createBuilding(buildingId);
         }
     }
 
     protected void initBotControlledPlayer(final IPlayer initializingPlayer) {
-        //TODO logger was here
         Thread thread = new Thread(new VeryFirstBot(initializingPlayer));
         thread.setDaemon(true);
         thread.setPriority(Thread.MIN_PRIORITY);

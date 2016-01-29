@@ -12,6 +12,7 @@ import com.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.yaroslavlancelot.eafall.network.client.callbacks.InGameClient;
 import com.yaroslavlancelot.eafall.network.client.connector.GameServerConnector;
 import com.yaroslavlancelot.eafall.network.client.messages.BuildingCreationClientMessage;
+import com.yaroslavlancelot.eafall.network.client.messages.BuildingUpgradingClientMessage;
 import com.yaroslavlancelot.eafall.network.client.messages.GameLoadedClientMessage;
 import com.yaroslavlancelot.eafall.network.server.messages.UnitChangePositionServerMessage;
 
@@ -36,6 +37,12 @@ public class ThinClientGameActivity extends ClientGameActivity implements InGame
     }
 
     @Override
+    protected void userWantUpgradeBuilding(final IPlayer userPlayer, BuildingId buildingId) {
+        mGameServerConnector.sendClientMessage(0, new BuildingUpgradingClientMessage(
+                userPlayer.getName(), buildingId.getId(), buildingId.getUpgrade()));
+    }
+
+    @Override
     protected void userWantCreateBuilding(final IPlayer userPlayer, BuildingId buildingId) {
         mGameServerConnector.sendClientMessage(0, new BuildingCreationClientMessage(
                 userPlayer.getName(), buildingId.getId(), buildingId.getUpgrade()));
@@ -44,7 +51,17 @@ public class ThinClientGameActivity extends ClientGameActivity implements InGame
     @Override
     public void buildingCreated(BuildingId buildingId, final String playerName) {
         PlanetStaticObject planetStaticObject = PlayersHolder.getPlayer(playerName).getPlanet();
-        planetStaticObject.createBuilding(buildingId);
+        if (planetStaticObject != null) {
+            planetStaticObject.createBuilding(buildingId);
+        }
+    }
+
+    @Override
+    public void buildingUpgraded(final BuildingId buildingId, final String playerName) {
+        PlanetStaticObject planetStaticObject = PlayersHolder.getPlayer(playerName).getPlanet();
+        if (planetStaticObject != null) {
+            planetStaticObject.getBuilding(buildingId.getId()).upgradeBuilding();
+        }
     }
 
     @Override
@@ -112,7 +129,7 @@ public class ThinClientGameActivity extends ClientGameActivity implements InGame
             public void run() {
                 Unit unit = (Unit) gameObject;
                 if (unit.isObjectAlive()) {
-                    //TODO this probably wouldn't work (rotation logic was changed)
+                    //TODO I think it can cause crashes because of
                     unit.fire(objectToAttack);
                 }
             }
