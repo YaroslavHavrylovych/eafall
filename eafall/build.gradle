@@ -1,11 +1,11 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
-int target_v = 21
+int target_v = 24
 
 buildscript {
     ext {
-        kotlin_v = '1.0.0-beta-3593'
+        kotlin_v = '1.0.3'
         exclude_java = []
     }
 
@@ -28,14 +28,14 @@ dependencies {
     compile 'de.greenrobot:eventbus:2.4.0'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_v"
-    compile "com.android.support:appcompat-v7:21.0.2"
+    compile "com.android.support:appcompat-v7:24.1.1"
     compile 'com.google.android.gms:play-services-analytics:8.3.0'
     compile 'com.android.support:multidex:1.0.1'
 }
 
 android {
     compileSdkVersion target_v
-    buildToolsVersion "21.1.2"
+    buildToolsVersion "24.0.1"
 
     packagingOptions {
         pickFirst 'META-INF/LICENSE.txt'
@@ -82,24 +82,23 @@ android {
         main.java.srcDirs += "src/main/kotlin"
     }
 
-//    signingConfigs {
-//        release {
-//            def console = System.console()
-//            if (console != null) {
-//                storeFile file("keystore/eafall_demo.keystore")
-//                def pass = new String(console.readPassword("\n\$ Enter keystore password: "))
-//                storePassword "$pass"
-//                keyPassword "$pass"
-//                keyAlias console.readLine("\n\$ Enter key alias: ")
-//            }
-//        }
-//    }
+    signingConfigs {
+        release {
+            def console = System.console()
+            if (console != null) {
+                storeFile file("keystore/eafall_demo.keystore")
+                storePassword ""
+                keyPassword ""
+                keyAlias ""
+            }
+        }
+    }
 
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-//            signingConfig signingConfigs.release
+            signingConfig signingConfigs.release
         }
     }
 
@@ -112,7 +111,7 @@ android {
         //remove unneeded resources from demo build
         if (variant.name.contains('demo')) {
             def excludeAssetsFromDemo = task("excludeAssetsFrom${variant.name}", type: Delete) {
-                String assetsPath = "${buildDir}/intermediates/assets/${variant.dirName}"
+                def assetsPath = "${buildDir}/intermediates/assets/${variant.dirName}"
                 delete "${assetsPath}/campaign"
                 delete "${assetsPath}/graphics/sprites/alliance/imperials"
                 delete "${assetsPath}/graphics/sprites/alliance/rebels"
@@ -122,6 +121,55 @@ android {
             variant.mergeAssets.finalizedBy excludeAssetsFromDemo
         }
     }
+}
+
+task askForPasswords << {
+    def cons = System.console()
+    def pass, alias
+    if (cons != null) {
+        pass = new String(cons.readPassword("\n\$ Enter keystore password: "))
+        alias = cons.readLine("\n\$ Enter alias name: ")
+    } else {
+        pass = readStringInDialog("Enter a keystore password", "Please enter it here")
+        alias = readStringInDialog("Enter your alias", "Please enter it here")
+    }
+
+    if (pass == null || alias == null || pass.size() <= 0 || alias.size() <= 0) {
+        throw new InvalidUserDataException("You must enter both a password and an alias to proceed")
+    }
+
+    android.signingConfigs.release.storePassword = pass
+    android.signingConfigs.release.keyPassword = pass
+    android.signingConfigs.release.keyAlias = alias
+}
+
+tasks.whenTaskAdded { theTask ->
+    if (theTask.name.toLowerCase().contains("packageRelease".toLowerCase())) {
+        theTask.dependsOn "askForPasswords"
+    }
+}
+
+def String readStringInDialog(title, hint) {
+//    new SwingBuilder().edt {
+//        dialog(modal: true, // Otherwise the build will continue running before you closed the dialog
+//                title: title, // Dialog title
+//                alwaysOnTop: true, // pretty much what the name says
+//                resizable: false, // Don't allow the user to resize the dialog
+//                locationRelativeTo: null, // Place dialog in center of the screen
+//                pack: true, // We need to pack the dialog (so it will take the size of it's children)
+//                show: true // Let's show it
+//        ) {
+//            vbox {
+//                label(text: hint)
+//                input = passwordField()
+//                button(defaultButton: true, text: 'OK', actionPerformed: {
+//                    def pass = input.password
+//                    dispose()
+//                    return pass
+//                })
+//            }
+//        }
+//    }
 }
 
 //doesn't work if it's at the top of the file
