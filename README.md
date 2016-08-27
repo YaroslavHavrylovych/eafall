@@ -1,7 +1,9 @@
 # EAFall 
 
-The Private game project started at the mid of 2013 as a hobby and still in progress.
-Starting from the April 2015 has at least one the fully dedicated developer.
+The game project started at the mid of 2013.
+Starting from the April 2015 has at least one the fully dedicated developer till 2016.
+Huge pause was till August 2016. In progress again.
+Take a look on the repo usage to get updated info.
 
 Project wiki you can find [here](https://bitbucket.org/yaroslav_havrylovych/eafall/wiki/Home).
 
@@ -9,8 +11,8 @@ Project wiki you can find [here](https://bitbucket.org/yaroslav_havrylovych/eafa
 The project uses [AndEngine](https://github.com/nicolasgramlich/AndEngine) graphics, physics and network engines.
 
 
+Everything is under [Apache version 2 license](license.md)
 
 
 ---------------------------------------
-All rights reserved
-© Yaroslav Havrylovych
+Yaroslav Havrylovych
