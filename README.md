@@ -11,7 +11,7 @@ Project wiki you can find [here](https://bitbucket.org/yaroslav_havrylovych/eafa
 The project uses [AndEngine](https://github.com/nicolasgramlich/AndEngine) graphics, physics and network engines.
 
 
-Everything is under [Apache version 2 license](license.md)
+Everything is under [Apache version 2 license](license.txt)
 
 
 ---------------------------------------
