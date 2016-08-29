@@ -26,6 +26,7 @@ import com.yaroslavlancelot.eafall.game.entity.gameobject.unit.defence.DefenceUn
 import com.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.OffenceUnit;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.IUnitPath;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.PathHelper;
+import com.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.implementation.SingleWayUnitPath;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.implementation.TwoWaysUnitPath;
 import com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.AbstractSpriteEvent;
 import com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.AttachSpriteEvent;
@@ -60,6 +61,7 @@ import java.util.Map;
  * <br/>
  * No star, no planets.
  */
+//TODO unit creator can be implemented as separate class ot accept way enum or a constant but not boolean
 public abstract class BaseGameObjectsActivity extends EaFallActivity implements IUnitCreator {
     /** tag, which is used for debugging purpose */
     public static final String TAG = BaseGameObjectsActivity.class.getCanonicalName();
@@ -79,11 +81,18 @@ public abstract class BaseGameObjectsActivity extends EaFallActivity implements 
     @Override
     public OffenceUnit createMovableUnit(IPlayer unitPlayer,
                                          int unitKey, int x, int y, boolean isTopPath) {
-        IUnitPath unitPath = new TwoWaysUnitPath(PathHelper.isLtrPath(x), isTopPath);
+        boolean isLtrPath = PathHelper.isLtrPath(x);
+        IUnitPath unitPath;
+        if (mMissionConfig.isSingleWay()) {
+            unitPath = new SingleWayUnitPath(isLtrPath, y);
+        } else {
+            unitPath = new TwoWaysUnitPath(isLtrPath, isTopPath);
+        }
         return createMovableUnit(unitPlayer, unitKey, x, y, unitPath);
     }
 
 
+    @Override
     public OffenceUnit createMovableUnit(IPlayer unitPlayer, int unitKey, int x, int y, IUnitPath unitPath) {
         OffenceUnit offenceUnit = (OffenceUnit) createUnit(unitKey, unitPlayer, x, y);
         offenceUnit.setUnitPath(unitPath);
@@ -100,19 +109,19 @@ public abstract class BaseGameObjectsActivity extends EaFallActivity implements 
     }
 
     @Override
-    public EngineOptions onCreateEngineOptions() {
-        EngineOptions engineOptions = super.onCreateEngineOptions();
-        mMissionConfig = getIntent().getExtras().getParcelable(MissionIntent.MISSION_CONFIG);
-        mPhysicsWorld = new PhysicsWorld(new Vector2(0, 0), false, 2, 2);
-        return engineOptions;
-    }
-
-    @Override
     public void onPauseGame() {
         if (GameState.isResourcesLoaded()) {
             pause(true);
         }
         super.onPauseGame();
+    }
+
+    @Override
+    public EngineOptions onCreateEngineOptions() {
+        EngineOptions engineOptions = super.onCreateEngineOptions();
+        mMissionConfig = getIntent().getExtras().getParcelable(MissionIntent.MISSION_CONFIG);
+        mPhysicsWorld = new PhysicsWorld(new Vector2(0, 0), false, 2, 2);
+        return engineOptions;
     }
 
     @Override

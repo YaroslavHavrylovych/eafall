@@ -62,7 +62,6 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
 
     @Override
     protected void onPopulateWorkingScene(final EaFallScene scene) {
-        //initSun
         createSun();
         //planets
         initFirstPlanet();
@@ -162,8 +161,14 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
         mFirstPlayer.setPlanet(planet);
     }
 
-    /** create sun */
+    /**
+     * create game field star (sun) if needed
+     * @return {@link SunStaticObject} or null if the game-field doesn't need star
+     */
     protected SunStaticObject createSun() {
+        if (!mMissionConfig.isSunPresent()) {
+            return null;
+        }
         SunStaticObject sunStaticObject = new SunStaticObject(
                 SizeConstants.HALF_FIELD_WIDTH, SizeConstants.HALF_FIELD_HEIGHT,
                 mEngine.getVertexBufferObjectManager());

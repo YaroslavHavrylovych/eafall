@@ -1,0 +1,59 @@
+<campaigns
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="scheme/campaign_scheme_definition.xml">
+
+    <background>graphics/images/background.png</background>
+    <parallax_background>false</parallax_background>
+
+    <campaign id="0">
+        <name>imperials_campaign</name>
+        <picture>graphics/sprites/earth.png</picture>
+        <width>128</width>
+        <height>128</height>
+        <rotation>20</rotation>
+        <position>
+            <x>960</x>
+            <y>540</y>
+        </position>
+        <mission id="0">
+            <name>Killer</name>
+            <player_alliance>Rebels</player_alliance>
+            <player_planet>earth</player_planet>
+            <opponent_alliance>Rebels</opponent_alliance>
+            <opponent_planet>earth</opponent_planet>
+            <max_oxygen>1500</max_oxygen>
+            <planet_health>5000</planet_health>
+            <offensive_units_limit>7</offensive_units_limit>
+            <star_constellation>no_constellation</star_constellation>
+            <single_way>true</single_way>
+            <definition>
+                <time_limit>500</time_limit>
+                <type>collect</type>
+                <value>4000</value>
+            </definition>
+        </mission>
+    </campaign>
+    <object>
+        <picture>graphics/sprites/object/meteor.png</picture>
+        <width>40</width>
+        <height>51</height>
+        <radius>200</radius>
+        <duration>4</duration>
+        <position>
+            <x>960</x>
+            <y>540</y>
+        </position>
+    </object>
+    <object>
+        <picture>graphics/sprites/object/meteor.png</picture>
+        <width>40</width>
+        <height>51</height>
+        <rotation>5</rotation>
+        <radius>200</radius>
+        <duration>10</duration>
+        <position>
+            <x>300</x>
+            <y>540</y>
+        </position>
+    </object>
+</campaigns>
