@@ -12,8 +12,7 @@ import com.yaroslavlancelot.eafall.game.resources.ResourceFactory;
  */
 public class CampaignIntent extends StartableIntent {
     public static final String CAMPAIGN_FILE_NAME = "campaign_file_name";
-    private static final String DEFAULT_CAMPAIGN = "guide_campaign";
-
+    private static final String DEFAULT_CAMPAIGN = "demo_campaign";
 
     public CampaignIntent(String campaignFileName) {
         super(EaFallApplication.getContext(), CampaignActivity.class);

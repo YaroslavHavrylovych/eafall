@@ -27,6 +27,7 @@ public class OffenceBuildingPopupUpdater extends UnitBuildingPopupUpdater {
     private TextButton mBuildingSettingsButton;
     /** buildings settings button click listener */
     private BuildingSettingsClickListener mBuildingSettingsListener;
+    private boolean mShowBuildingSettingsButton = true;
 
     public OffenceBuildingPopupUpdater(VertexBufferObjectManager vertexBufferObjectManager, Scene scene) {
         super(vertexBufferObjectManager, scene);
@@ -37,6 +38,11 @@ public class OffenceBuildingPopupUpdater extends UnitBuildingPopupUpdater {
         mBuildingSettingsListener = new BuildingSettingsClickListener();
         mBuildingSettingsButton.setOnClickListener(mBuildingSettingsListener);
         mDescriptionAreaUpdater = new OffenceBuildingDescriptionAreaUpdater(vertexBufferObjectManager, scene);
+    }
+
+    /** if set to false then setting button will be invisible (not created) on the popup */
+    public void setShowBuildingSettingsButton(final boolean showBuildingSettingsButton) {
+        mShowBuildingSettingsButton = showBuildingSettingsButton;
     }
 
     @Override
@@ -56,7 +62,7 @@ public class OffenceBuildingPopupUpdater extends UnitBuildingPopupUpdater {
                 (building == null && buildingId.getUpgrade() > 0)
                         //user looking the upgrade, this upgraded building not exist
                         || (building != null && buildingId.getUpgrade() > building.getUpgrade());
-        if (building == null || upgradeShowed) {
+        if (!mShowBuildingSettingsButton || building == null || upgradeShowed) {
             mBuildingSettingsButton.setVisible(false);
         } else {
             ButtonSprite button = mUpgradeButton.getParent() != null ? mUpgradeButton : mBaseButton;
@@ -67,7 +73,6 @@ public class OffenceBuildingPopupUpdater extends UnitBuildingPopupUpdater {
             }
             mBuildingSettingsListener.setUnitBuilding(building);
             mBuildingSettingsButton.setVisible(true);
-
         }
     }
 

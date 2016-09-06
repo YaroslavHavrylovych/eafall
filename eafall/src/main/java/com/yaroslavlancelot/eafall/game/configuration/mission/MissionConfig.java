@@ -7,7 +7,6 @@ import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.R;
 import com.yaroslavlancelot.eafall.game.mission.DefinitionLoader;
 import com.yaroslavlancelot.eafall.game.mission.MissionDataLoader;
-import com.yaroslavlancelot.eafall.general.SelfCleanable;
 
 /**
  * Mission config. Used in single game (mission) to evaluate game rules and
@@ -15,7 +14,7 @@ import com.yaroslavlancelot.eafall.general.SelfCleanable;
  *
  * @author Yaroslav Havrylovych
  */
-public class MissionConfig extends SelfCleanable implements Parcelable {
+public class MissionConfig implements Parcelable {
     // ===========================================================
     // Constants
     // ===========================================================
@@ -48,6 +47,7 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
     private int mOpponentPlanet;
     private int mPlayerStartMoney;
     private int mOpponentStartMoney;
+    private boolean mSingleWay;
 
     // ===========================================================
     // Constructors
@@ -73,6 +73,7 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
         mPlayerStartMoney = in.readInt();
         mOpponentPlanet = in.readInt();
         mOpponentStartMoney = in.readInt();
+        mSingleWay = in.readInt() == 1;
         mMissionType = (MissionType) in.readSerializable();
     }
 
@@ -131,14 +132,17 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
         return mOpponentStartMoney;
     }
 
+    public boolean isSunPresent() {
+        return mStarCodeName != NO_VALUE;
+    }
+
+    public boolean isSingleWay() {
+        return mSingleWay;
+    }
+
     // ===========================================================
     // Methods for/from SuperClass/Interfaces
     // ===========================================================
-    @Override
-    public void clear() {
-        resetToDefault();
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -157,6 +161,7 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
         dest.writeInt(mPlayerStartMoney);
         dest.writeInt(mOpponentPlanet);
         dest.writeInt(mOpponentStartMoney);
+        dest.writeInt(mSingleWay ? 1 : 0);
         dest.writeSerializable(mMissionType);
     }
 
@@ -172,17 +177,19 @@ public class MissionConfig extends SelfCleanable implements Parcelable {
         mMissionType = MissionType.WIN;
         mValue = NO_VALUE;
         mTime = NO_VALUE;
-        mStarCodeName = R.string.sun;
+        mStarCodeName = NO_VALUE;
         mStarConstellation = R.string.no_constellation;
         mPlayerPlanet = R.string.earth;
         mPlayerStartMoney = 1000;
         mOpponentPlanet = R.string.earth;
         mOpponentStartMoney = 1000;
+        mSingleWay = false;
     }
 
     private void init(MissionDataLoader loadedData) {
         initType(loadedData.definition);
         if (loadedData.definition.time_limit != null) mTime = loadedData.definition.time_limit;
+        if (loadedData.single_way != null) mSingleWay = loadedData.single_way;
         if (loadedData.max_oxygen != null) mMaxOxygenAmount = loadedData.max_oxygen;
         if (loadedData.player_start_money != null)
             mPlayerStartMoney = loadedData.player_start_money;

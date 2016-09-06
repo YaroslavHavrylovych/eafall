@@ -56,14 +56,12 @@ public class CampaignActivity extends EaFallActivity {
 
     @Override
     public EngineOptions onCreateEngineOptions() {
-        //TODO logger was here
         mCampaignFileName = getIntent().getExtras().getString(CampaignIntent.CAMPAIGN_FILE_NAME);
         return super.onCreateEngineOptions();
     }
 
     @Override
     public void onCreateResources(final OnCreateResourcesCallback onCreateResourcesCallback) {
-        //TODO logger was here
         super.onCreateResources(onCreateResourcesCallback);
         // we loading sounds and music here and
         // wouldn't reload this sounds when reloading the campaign screen
@@ -73,7 +71,6 @@ public class CampaignActivity extends EaFallActivity {
 
     @Override
     public void onPopulateScene(Scene scene, OnPopulateSceneCallback onPopulateSceneCallback) {
-        //TODO logger was here
         super.onPopulateScene(scene, onPopulateSceneCallback);
     }
 
@@ -93,9 +90,7 @@ public class CampaignActivity extends EaFallActivity {
 
     @Override
     protected void loadResources() {
-        //TODO logger was here
         mCampaignFileLoader = loadObjects(mCampaignFileName, CampaignFileLoader.class);
-        //TODO logger was here
         //adding resources
         mResourcesLoader.addImage(mCampaignFileLoader.background,
                 SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT);
@@ -114,7 +109,6 @@ public class CampaignActivity extends EaFallActivity {
 
     @Override
     public void onResourcesLoaded() {
-        //TODO logger was here
         super.onResourcesLoaded();
         hideSplash();
     }
@@ -145,7 +139,6 @@ public class CampaignActivity extends EaFallActivity {
 
     @Override
     protected void onShowWorkingScene() {
-        //TODO logger was here
     }
 
     @Override
@@ -156,7 +149,6 @@ public class CampaignActivity extends EaFallActivity {
     private List<Sprite> populateObjects(EaFallScene scene, VertexBufferObjectManager vertexManager) {
         int size = mCampaignFileLoader.getObjectsList().size();
         List<Sprite> elementsList = new ArrayList<>(size);
-        //TODO logger was here
         for (ObjectDataLoader dataLoader : mCampaignFileLoader.getObjectsList()) {
             PositionLoader position = dataLoader.position;
             Sprite sprite = new Sprite(position.x, position.y,
@@ -178,13 +170,11 @@ public class CampaignActivity extends EaFallActivity {
     private List<Sprite> populateCampaigns(EaFallScene scene, VertexBufferObjectManager vertexManager) {
         List<Sprite> elementsList = new ArrayList<>(mCampaignFileLoader.getCampaignsList().size());
         for (CampaignDataLoader dataLoader : mCampaignFileLoader.getCampaignsList()) {
-            //TODO logger was here
             PositionLoader position = dataLoader.position;
             Sprite sprite = new Sprite(position.x, position.y,
                     TextureRegionHolder.getRegion(dataLoader.picture), vertexManager);
             sprite.setTag(dataLoader.id);
             if (dataLoader.rotation != null) {
-                //TODO logger was here
                 sprite.registerEntityModifier(new InstantRotationModifier(dataLoader.rotation));
             }
             elementsList.add(sprite);
@@ -224,11 +214,9 @@ public class CampaignActivity extends EaFallActivity {
     }
 
     private void updateCampaignActivity(final CampaignDataLoader campaignDataLoader) {
-        //TODO logger was here
         startAsyncResourceLoading(new Runnable() {
             @Override
             public void run() {
-                //TODO logger was here
                 mResourcesLoader.loadSplashImages(getTextureManager(), getVertexBufferObjectManager());
                 mSceneManager.initSplashScene();
                 mSceneManager.showSplash();

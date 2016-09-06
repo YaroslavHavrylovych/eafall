@@ -17,41 +17,19 @@
         </position>
         <mission id="0">
             <name>Killer</name>
-            <player_alliance>Mutants</player_alliance>
+            <player_alliance>Rebels</player_alliance>
             <player_planet>earth</player_planet>
             <opponent_alliance>Rebels</opponent_alliance>
             <opponent_planet>earth</opponent_planet>
-            <max_oxygen>215</max_oxygen>
+            <max_oxygen>1500</max_oxygen>
             <planet_health>5000</planet_health>
             <offensive_units_limit>7</offensive_units_limit>
-            <star_code_name>sun</star_code_name>
             <star_constellation>no_constellation</star_constellation>
+            <single_way>true</single_way>
             <definition>
                 <time_limit>500</time_limit>
                 <type>collect</type>
-                <value>213</value>
-            </definition>
-        </mission>
-    </campaign>
-    <campaign id="1">
-        <name>rebels_campaign</name>
-        <picture>graphics/sprites/earth.png</picture>
-        <width>128</width>
-        <height>128</height>
-        <rotation>100</rotation>
-        <position>
-            <x>300</x>
-            <y>540</y>
-        </position>
-        <mission id="1">
-            <name>Helper</name>
-            <player_alliance>Mutants</player_alliance>
-            <player_planet>earth</player_planet>
-            <opponent_alliance>Rebels</opponent_alliance>
-            <opponent_planet>earth</opponent_planet>
-            <definition>
-                <time_limit>10</time_limit>
-                <type>win</type>
+                <value>4000</value>
             </definition>
         </mission>
     </campaign>

@@ -50,6 +50,9 @@ public class MissionDataLoader {
     @Element(name = "star_constellation", required = false)
     public String star_constellation;
 
+    @Element(name = "single_way", required = false)
+    public Boolean single_way;
+
     @Element(name = "definition")
     public DefinitionLoader definition;
 }
