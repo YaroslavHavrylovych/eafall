@@ -53,6 +53,11 @@ public class DescriptionPopup extends BuildingLessDescriptionPopup {
         mDefenceBuildingPopupUpdater = new DefenceBuildingPopupUpdater(vertexBufferObjectManager, this);
     }
 
+    /** if set to false then setting button will be invisible (not created) on the popup */
+    public void setShowBuildingSettingsButton(boolean showBuildingSettingsButton) {
+        mOffenceBuildingPopupUpdater.setShowBuildingSettingsButton(showBuildingSettingsButton);
+    }
+
     @Override
     protected BaseUnitPopupUpdater createUnitPopupUpdater(final VertexBufferObjectManager vboManager) {
         return new UnitPopupUpdater(vboManager, this);

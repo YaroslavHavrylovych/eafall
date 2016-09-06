@@ -39,6 +39,8 @@ import com.yaroslavlancelot.eafall.game.events.periodic.unit.UnitPositionUpdater
 import com.yaroslavlancelot.eafall.game.mission.MissionIntent;
 import com.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.yaroslavlancelot.eafall.game.player.PlayersHolder;
+import com.yaroslavlancelot.eafall.game.popup.rolling.RollingPopupManager;
+import com.yaroslavlancelot.eafall.game.popup.rolling.description.DescriptionPopup;
 import com.yaroslavlancelot.eafall.game.resources.loaders.game.BaseGameObjectsLoader;
 import com.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 import com.yaroslavlancelot.eafall.game.touch.ICameraHandler;
@@ -160,6 +162,8 @@ public abstract class BaseGameObjectsActivity extends EaFallActivity implements 
         SpriteGroupHolder.attachSpriteGroups(scene, BatchingKeys.BatchTag.GAME_SCENE.value());
         //hud
         mHud.initHudElements(mCamera, getVertexBufferObjectManager(), mMissionConfig);
+        ((DescriptionPopup) RollingPopupManager.getInstance().getPopup(DescriptionPopup.KEY))
+                .setShowBuildingSettingsButton(!mMissionConfig.isSingleWay());
         //pools
         BulletsPool.init(getVertexBufferObjectManager());
         UnitExplosionPool.init(getVertexBufferObjectManager());

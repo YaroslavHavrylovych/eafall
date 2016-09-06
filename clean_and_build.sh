@@ -5,7 +5,7 @@ DEV="Dev";
 build_variant=$1
 
 if [ "$build_variant" = "" ]; then
-   build_variant=$DEMO 
+   build_variant=$DEV
 else 
     if [ "$build_variant" = "1" ]; then
         build_variant=$DEV
@@ -18,5 +18,11 @@ fi
 
 result=":eafall:assemble${build_variant}Debug"
 
-eval "./gradlew :eafall:clean"
-eval "./gradlew ${result} --no-rebuild"
+toEvalStr="./gradlew :eafall:clean"
+
+echo ${toEvalStr}
+eval "${toEvalStr}"
+
+toEvalStr="./gradlew ${result} --no-rebuild"
+echo ${toEvalStr}
+eval "${toEvalStr}"

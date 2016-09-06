@@ -23,13 +23,15 @@ public class SingleWayUnitPath implements IUnitPath {
     protected int mCurrentPointIndex;
     // array which holds unit check points x
     private float[] mX;
-    private float mY;
+    private int mY;
 
 
     /**
      * Create path
      *
      * @param ltr true if unit should move from left to right and false if vice versa
+     * @param y   current unit position.
+     *            The final y (goal) will be the average between y and the center of the screen.
      */
     public SingleWayUnitPath(boolean ltr, float y) {
         float[] x;
@@ -39,7 +41,7 @@ public class SingleWayUnitPath implements IUnitPath {
             x = xArrayBackward;
         }
         mX = x;
-        mY = y;
+        mY = ((int) y + SizeConstants.HALF_FIELD_HEIGHT) / 2;
         mCurrentPointIndex = 1;
     }
 

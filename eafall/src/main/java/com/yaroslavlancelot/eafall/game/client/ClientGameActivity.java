@@ -163,6 +163,7 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
 
     /**
      * create game field star (sun) if needed
+     *
      * @return {@link SunStaticObject} or null if the game-field doesn't need star
      */
     protected SunStaticObject createSun() {
@@ -183,6 +184,9 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
     @SuppressWarnings("unused")
     /** really used by {@link de.greenrobot.event.EventBus} */
     public void onEvent(final BuildingSettingsPopupShowEvent event) {
+        if (mMissionConfig.isSingleWay()) {
+            return;
+        }
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
