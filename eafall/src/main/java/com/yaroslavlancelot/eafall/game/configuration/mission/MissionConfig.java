@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.R;
+import com.yaroslavlancelot.eafall.game.ai.VeryFirstBot;
 import com.yaroslavlancelot.eafall.game.mission.DefinitionLoader;
 import com.yaroslavlancelot.eafall.game.mission.MissionDataLoader;
 
@@ -48,6 +49,7 @@ public class MissionConfig implements Parcelable {
     private int mPlayerStartMoney;
     private int mOpponentStartMoney;
     private boolean mSingleWay;
+    private String mBotLogic;
 
     // ===========================================================
     // Constructors
@@ -62,6 +64,7 @@ public class MissionConfig implements Parcelable {
     }
 
     protected MissionConfig(Parcel in) {
+        mBotLogic = in.readString();
         mMovableUnitsLimit = in.readInt();
         mTime = in.readInt();
         mPlanetHealth = in.readInt();
@@ -140,6 +143,10 @@ public class MissionConfig implements Parcelable {
         return mSingleWay;
     }
 
+    public String getBotLogic() {
+        return mBotLogic;
+    }
+
     // ===========================================================
     // Methods for/from SuperClass/Interfaces
     // ===========================================================
@@ -150,6 +157,7 @@ public class MissionConfig implements Parcelable {
 
     @Override
     public void writeToParcel(final Parcel dest, final int flags) {
+        dest.writeString(mBotLogic);
         dest.writeInt(mMovableUnitsLimit);
         dest.writeInt(mTime);
         dest.writeInt(mPlanetHealth);
@@ -184,6 +192,7 @@ public class MissionConfig implements Parcelable {
         mOpponentPlanet = R.string.earth;
         mOpponentStartMoney = 1000;
         mSingleWay = false;
+        mBotLogic = VeryFirstBot.class.getName();
     }
 
     private void init(MissionDataLoader loadedData) {
@@ -206,6 +215,7 @@ public class MissionConfig implements Parcelable {
             mStarConstellation = getStringResourceByName(loadedData.star_constellation);
         if (loadedData.offensive_units_limit != null)
             mMovableUnitsLimit = loadedData.offensive_units_limit;
+        mBotLogic = loadedData.enemy_logic_handler == null ? VeryFirstBot.class.getName() : loadedData.enemy_logic_handler;
     }
 
     private int getStringResourceByName(String aString) {

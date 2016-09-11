@@ -5,7 +5,6 @@ import com.yaroslavlancelot.eafall.game.alliance.IAlliance;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingType;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.building.IBuilding;
-import com.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.UnitBuilding;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetStaticObject;
 import com.yaroslavlancelot.eafall.game.player.IPlayer;
@@ -27,14 +26,11 @@ import timber.log.Timber;
  * If you can upgrade it this or next move that do that in other case - build</ul>
  * </li>
  * <p/>
- * Randomly decides the path for the units.
  *
  * @author Yaroslav Havrylovych
  */
-//TODO FYI : bot works in another thread and it has to do some actions in the update thread
-//TODO stop bot when game finished
-public class VeryFirstBot implements IBot {
-    public static final String TAG = VeryFirstBot.class.getCanonicalName();
+public class SingleWayBot implements IBot {
+    public static final String TAG = SingleWayBot.class.getCanonicalName();
     public static final int DELAY_BETWEEN_ITERATIONS = 300;
     private IPlayer mBotPlayer;
 
@@ -106,18 +102,14 @@ public class VeryFirstBot implements IBot {
                     if (buildingsToUpgrade.contains(buildingId)) {
                         building = planet.getBuilding(buildingId.getId());
                         building.upgradeBuilding();
-                        randomizeUnitPath(building);
                         continue;
                     }
                     planet.createBuilding(buildingId);
-                    building = planet.getBuilding(buildingId.getId());
-                    randomizeUnitPath(building);
                 } else if (!buildingsToUpgrade.isEmpty()) {
                     BuildingId buildingId = buildingsToUpgrade.get(
                             new Random().nextInt(buildingsToUpgrade.size()));
                     final IBuilding building = planet.getBuilding(buildingId.getId());
                     building.upgradeBuilding();
-                    randomizeUnitPath(building);
                 }
             }
         } catch (Exception ex) {
@@ -126,7 +118,7 @@ public class VeryFirstBot implements IBot {
     }
 
     @Override
-    public synchronized void init(final IPlayer botPlayer) {
+    public void init(final IPlayer botPlayer) {
         mBotPlayer = botPlayer;
     }
 
@@ -135,15 +127,6 @@ public class VeryFirstBot implements IBot {
             Thread.sleep(DELAY_BETWEEN_ITERATIONS);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
-    }
-
-    private void randomizeUnitPath(IBuilding building) {
-        if (building == null) {
-            return;
-        }
-        if (building instanceof UnitBuilding) {
-            ((UnitBuilding) building).setPath(new Random().nextBoolean());
         }
     }
 }

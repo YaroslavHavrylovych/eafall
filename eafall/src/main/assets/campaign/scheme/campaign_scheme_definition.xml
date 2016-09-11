@@ -47,6 +47,9 @@
                                         <xs:element name="offensive_units_limit"
                                                     type="xs:integer"
                                                     minOccurs="0"/>
+                                        <xs:element name="enemy_logic_handler"
+                                                    type="xs:string"
+                                                    minOccurs="0"/>
                                         <xs:element name="star_code_name"
                                                     type="xs:string"
                                                     minOccurs="0"/>
