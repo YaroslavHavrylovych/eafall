@@ -13,6 +13,8 @@ import com.yaroslavlancelot.eafall.game.configuration.Config;
 import com.yaroslavlancelot.eafall.game.configuration.IConfig;
 import com.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 
+import timber.log.Timber;
+
 /** Custom multi-dex application */
 public class EaFallApplication extends MultiDexApplication {
     /** application context */
@@ -63,8 +65,9 @@ public class EaFallApplication extends MultiDexApplication {
                 Thread.getDefaultUncaughtExceptionHandler(), // Current default uncaught exception handler
                 this);
         customReporter.setExceptionParser(new FullStacktraceExceptionParser());
-        // Make customReporter as the new default uncaught exception handler.
         Thread.setDefaultUncaughtExceptionHandler(customReporter);
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        }
     }
-
 }

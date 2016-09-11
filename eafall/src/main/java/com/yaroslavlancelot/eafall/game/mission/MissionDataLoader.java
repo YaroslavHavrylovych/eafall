@@ -44,6 +44,9 @@ public class MissionDataLoader {
     @Element(name = "offensive_units_limit", required = false)
     public Integer offensive_units_limit;
 
+    @Element(name = "enemy_logic_handler", required = false)
+    public String enemy_logic_handler;
+
     @Element(name = "star_code_name", required = false)
     public String star_code_name;
 
