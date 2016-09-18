@@ -49,6 +49,7 @@ public class MissionConfig implements Parcelable {
     private int mPlayerStartMoney;
     private int mOpponentStartMoney;
     private boolean mSingleWay;
+    private boolean mSuppressor;
     private String mBotLogic;
 
     // ===========================================================
@@ -77,6 +78,7 @@ public class MissionConfig implements Parcelable {
         mOpponentPlanet = in.readInt();
         mOpponentStartMoney = in.readInt();
         mSingleWay = in.readInt() == 1;
+        mSuppressor = in.readInt() == 1;
         mMissionType = (MissionType) in.readSerializable();
     }
 
@@ -143,6 +145,10 @@ public class MissionConfig implements Parcelable {
         return mSingleWay;
     }
 
+    public boolean isSuppressorEnabled() {
+        return mSuppressor;
+    }
+
     public String getBotLogic() {
         return mBotLogic;
     }
@@ -170,6 +176,7 @@ public class MissionConfig implements Parcelable {
         dest.writeInt(mOpponentPlanet);
         dest.writeInt(mOpponentStartMoney);
         dest.writeInt(mSingleWay ? 1 : 0);
+        dest.writeInt(mSuppressor ? 1 : 0);
         dest.writeSerializable(mMissionType);
     }
 
@@ -177,7 +184,9 @@ public class MissionConfig implements Parcelable {
     // Methods
     // ===========================================================
 
-    /** sets default mission values */
+    /**
+     * sets default mission values
+     */
     private void resetToDefault() {
         mMovableUnitsLimit = 200;
         mPlanetHealth = 5000;
@@ -192,6 +201,7 @@ public class MissionConfig implements Parcelable {
         mOpponentPlanet = R.string.earth;
         mOpponentStartMoney = 1000;
         mSingleWay = false;
+        mSuppressor = true;
         mBotLogic = VeryFirstBot.class.getName();
     }
 
@@ -199,6 +209,7 @@ public class MissionConfig implements Parcelable {
         initType(loadedData.definition);
         if (loadedData.definition.time_limit != null) mTime = loadedData.definition.time_limit;
         if (loadedData.single_way != null) mSingleWay = loadedData.single_way;
+        if (loadedData.suppressor != null) mSuppressor = loadedData.suppressor;
         if (loadedData.max_oxygen != null) mMaxOxygenAmount = loadedData.max_oxygen;
         if (loadedData.player_start_money != null)
             mPlayerStartMoney = loadedData.player_start_money;
@@ -235,11 +246,17 @@ public class MissionConfig implements Parcelable {
     // Inner and Anonymous Classes
     // ===========================================================
     public enum MissionType {
-        /** destroy you opponent planet (can use timing) */
+        /**
+         * destroy you opponent planet (can use timing)
+         */
         WIN,
-        /** survive for give period of a time (timing is mandatory) */
+        /**
+         * survive for give period of a time (timing is mandatory)
+         */
         SURVIVE,
-        /** collect particular amount of oxygen (timing is mandatory) */
+        /**
+         * collect particular amount of oxygen (timing is mandatory)
+         */
         COLLECT
     }
 }

@@ -74,12 +74,13 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
     /** used to prevent click trigger if double click operation were performed */
     private TimerHandler mClickHandler;
     /** contains true if suppressor was used */
-    private boolean mIsSuppressorUsed = false;
+    private boolean mIsSuppressorUsed;
 
-    public PlanetStaticObject(float x, float y, ITextureRegion textureRegion,
+    public PlanetStaticObject(float x, float y, boolean isSuppressorEnabled, ITextureRegion textureRegion,
                               VertexBufferObjectManager objectManager) {
         super(x, y, SizeConstants.PLANET_DIAMETER, SizeConstants.PLANET_DIAMETER,
                 textureRegion, objectManager);
+        mIsSuppressorUsed = !isSuppressorEnabled;
         mIncomeIncreasingValue = 10;
         mObjectArmor = new Armor(Armor.ArmorType.MIXED.name(), 10);
         mChildren = new SmartList<>(12);
