@@ -11,7 +11,7 @@ import com.yaroslavlancelot.eafall.test.game.popup.PopupSceneTest
 import junit.framework.TestSuite
 
 /** run all tests  */
-public class DefaultInstrumentationTestRunner : InstrumentationTestRunner() {
+class DefaultInstrumentationTestRunner : InstrumentationTestRunner() {
     override fun getAllTests(): TestSuite {
         val suite = InstrumentationTestSuite(this)
 
