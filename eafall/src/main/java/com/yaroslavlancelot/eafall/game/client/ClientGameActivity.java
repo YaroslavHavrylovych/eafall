@@ -127,8 +127,8 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
                                               String key,
                                               IPlayer player,
                                               long... unitUniqueId) {
-        PlanetStaticObject planet = new PlanetStaticObject(x, y, textureRegion,
-                getVertexBufferObjectManager()) {
+        PlanetStaticObject planet = new PlanetStaticObject(x, y, mMissionConfig.isSuppressorEnabled(),
+                textureRegion, getVertexBufferObjectManager()) {
             @Override
             public void registerTouch(final IEntity entity) {
                 mSceneManager.getWorkingScene().registerTouchArea(entity);

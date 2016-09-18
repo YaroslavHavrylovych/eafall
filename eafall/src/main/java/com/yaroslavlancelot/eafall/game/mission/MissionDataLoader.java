@@ -56,6 +56,9 @@ public class MissionDataLoader {
     @Element(name = "single_way", required = false)
     public Boolean single_way;
 
+    @Element(name = "suppressor", required = false)
+    public Boolean suppressor;
+
     @Element(name = "definition")
     public DefinitionLoader definition;
 }
