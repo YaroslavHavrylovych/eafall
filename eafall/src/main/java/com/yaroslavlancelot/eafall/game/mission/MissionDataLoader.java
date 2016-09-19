@@ -17,6 +17,9 @@ public class MissionDataLoader {
     @Element(name = "name")
     public String name;
 
+    @Element(name = "game_handler", required = false)
+    public String game_handler;
+
     @Element(name = "player_alliance")
     public String player_alliance;
 

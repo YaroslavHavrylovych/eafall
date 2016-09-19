@@ -14,6 +14,7 @@ import com.yaroslavlancelot.eafall.game.campaign.loader.CampaignDataLoader;
 import com.yaroslavlancelot.eafall.game.campaign.loader.CampaignFileLoader;
 import com.yaroslavlancelot.eafall.game.campaign.loader.ObjectDataLoader;
 import com.yaroslavlancelot.eafall.game.campaign.loader.PositionLoader;
+import com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity;
 import com.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.yaroslavlancelot.eafall.game.engine.InstantRotationModifier;
@@ -37,6 +38,8 @@ import org.simpleframework.xml.core.Persister;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * Used to display missions list and/or campaigns list.
@@ -209,8 +212,19 @@ public class CampaignActivity extends EaFallActivity {
         mResourcesLoader.unloadImages(getTextureManager());
         SelfCleanable.clearMemory();
         finish();
-        StartableIntent campaignIntent = new MissionIntent(missionData);
+        StartableIntent campaignIntent = new MissionIntent(getMissionActivity(missionData), missionData);
         campaignIntent.start(CampaignActivity.this);
+    }
+
+    private Class<? extends SinglePlayerGameActivity> getMissionActivity(MissionDataLoader missionData) {
+        try {
+            return (Class<? extends SinglePlayerGameActivity>) Class.forName(missionData.game_handler.trim());
+        } catch (ClassNotFoundException e) {
+            Timber.e(e, "Can't find class [%s]", missionData.game_handler);
+        } catch (ClassCastException e) {
+            Timber.e(e, "Can't case class [%s]", missionData.game_handler);
+        }
+        return SinglePlayerGameActivity.class;
     }
 
     private void updateCampaignActivity(final CampaignDataLoader campaignDataLoader) {
