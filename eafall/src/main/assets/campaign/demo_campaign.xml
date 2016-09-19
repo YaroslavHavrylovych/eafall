@@ -1,5 +1,5 @@
 <campaigns xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="scheme/campaign_scheme_definition.xml">
+           xsi:noNamespaceSchemaLocation="scheme/campaign_scheme_definition.xml">
 
     <background>graphics/images/background.png</background>
     <parallax_background>false</parallax_background>
@@ -16,6 +16,7 @@
         </position>
         <mission id="0">
             <name>Killer</name>
+            <game_handler>com.yaroslavlancelot.eafall.game.tutorial.TutorialActivity</game_handler>
             <player_alliance>Rebels</player_alliance>
             <player_planet>earth</player_planet>
             <opponent_alliance>Rebels</opponent_alliance>
@@ -23,7 +24,8 @@
             <max_oxygen>1500</max_oxygen>
             <planet_health>5000</planet_health>
             <offensive_units_limit>7</offensive_units_limit>
-            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.SingleWayBot</enemy_logic_handler>
+            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.SingleWayBot
+            </enemy_logic_handler>
             <star_constellation>no_constellation</star_constellation>
             <single_way>true</single_way>
             <suppressor>false</suppressor>

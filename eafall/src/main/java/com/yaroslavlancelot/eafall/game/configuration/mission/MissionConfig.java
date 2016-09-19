@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.R;
 import com.yaroslavlancelot.eafall.game.ai.VeryFirstBot;
+import com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity;
 import com.yaroslavlancelot.eafall.game.mission.DefinitionLoader;
 import com.yaroslavlancelot.eafall.game.mission.MissionDataLoader;
 
@@ -51,6 +52,7 @@ public class MissionConfig implements Parcelable {
     private boolean mSingleWay;
     private boolean mSuppressor;
     private String mBotLogic;
+    private String mGameHandler;
 
     // ===========================================================
     // Constructors
@@ -66,6 +68,7 @@ public class MissionConfig implements Parcelable {
 
     protected MissionConfig(Parcel in) {
         mBotLogic = in.readString();
+        mGameHandler = in.readString();
         mMovableUnitsLimit = in.readInt();
         mTime = in.readInt();
         mPlanetHealth = in.readInt();
@@ -153,6 +156,10 @@ public class MissionConfig implements Parcelable {
         return mBotLogic;
     }
 
+    public String getGameHandler() {
+        return mGameHandler;
+    }
+
     // ===========================================================
     // Methods for/from SuperClass/Interfaces
     // ===========================================================
@@ -164,6 +171,7 @@ public class MissionConfig implements Parcelable {
     @Override
     public void writeToParcel(final Parcel dest, final int flags) {
         dest.writeString(mBotLogic);
+        dest.writeString(mGameHandler);
         dest.writeInt(mMovableUnitsLimit);
         dest.writeInt(mTime);
         dest.writeInt(mPlanetHealth);
@@ -203,6 +211,7 @@ public class MissionConfig implements Parcelable {
         mSingleWay = false;
         mSuppressor = true;
         mBotLogic = VeryFirstBot.class.getName();
+        mGameHandler = SinglePlayerGameActivity.class.getName();
     }
 
     private void init(MissionDataLoader loadedData) {
@@ -227,6 +236,7 @@ public class MissionConfig implements Parcelable {
         if (loadedData.offensive_units_limit != null)
             mMovableUnitsLimit = loadedData.offensive_units_limit;
         mBotLogic = loadedData.enemy_logic_handler == null ? VeryFirstBot.class.getName() : loadedData.enemy_logic_handler;
+        mGameHandler = loadedData.game_handler == null ? SinglePlayerGameActivity.class.getName() : loadedData.game_handler;
     }
 
     private int getStringResourceByName(String aString) {

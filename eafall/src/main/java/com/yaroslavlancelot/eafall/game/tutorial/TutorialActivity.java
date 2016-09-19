@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.view.MotionEvent;
 
 import com.yaroslavlancelot.eafall.R;
+import com.yaroslavlancelot.eafall.game.BaseTutorialActivity;
 import com.yaroslavlancelot.eafall.game.client.thick.income.ClientIncomeHandler;
 import com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity;
 import com.yaroslavlancelot.eafall.game.constant.SizeConstants;
@@ -39,7 +40,7 @@ import de.greenrobot.event.EventBus;
  *
  * @author Yaroslav Havrylovych
  */
-public class TutorialActivity extends SinglePlayerGameActivity {
+public class TutorialActivity extends BaseTutorialActivity {
     // ===========================================================
     // Constants
     // ===========================================================
@@ -47,7 +48,6 @@ public class TutorialActivity extends SinglePlayerGameActivity {
     // ===========================================================
     // Fields
     // ===========================================================
-    private TutorialPopup mTutorialPopup;
     private boolean mWaitingForBuildingCreation = false;
     private boolean mWaitingForDescriptionUpdate = false;
     private int mCreatedBuildingsAmount = 0;
@@ -63,19 +63,9 @@ public class TutorialActivity extends SinglePlayerGameActivity {
     // ===========================================================
     // Methods for/from SuperClass/Interfaces
     // ===========================================================
-
-
-    @Override
-    protected void startAsyncResourceLoading() {
-        super.startAsyncResourceLoading();
-        TutorialPopup.loadResources(this, getTextureManager());
-        TutorialPopup.loadFonts(getFontManager(), getTextureManager());
-    }
-
     @Override
     protected void onPopulateWorkingScene(final EaFallScene scene) {
         super.onPopulateWorkingScene(scene);
-        mTutorialPopup = new TutorialPopup(mHud, mCamera, getVertexBufferObjectManager());
         ClientIncomeHandler.getIncomeHandler().registerIncomeListener(new HintableIncomeListener());
     }
 
@@ -83,22 +73,6 @@ public class TutorialActivity extends SinglePlayerGameActivity {
     // ===========================================================
     // Methods
     // ===========================================================
-    private void emulateClick(IEntity entity) {
-        long time = System.currentTimeMillis();
-        entity.onAreaTouched(createTouch(entity, MotionEvent.ACTION_DOWN, time), 0, 0);
-        entity.onAreaTouched(createTouch(entity, MotionEvent.ACTION_UP, time), 0, 0);
-    }
-
-    private TouchEvent createTouch(IEntity entity, int action, long time) {
-        long eventTime = time + 100;
-        int metaState = 0;
-        float x = entity.getX();
-        float y = entity.getY();
-
-        MotionEvent motionEvent = MotionEvent.obtain(time, eventTime, action,
-                entity.getX(), entity.getY(), metaState);
-        return TouchEvent.obtain(x, y, action, 0, motionEvent);
-    }
 
     // ===========================================================
     // Inner and Anonymous Classes
@@ -106,11 +80,11 @@ public class TutorialActivity extends SinglePlayerGameActivity {
 
     /**
      * 5
-     * <p/>
+     * <p>
      * defence building created
-     * <p/>
+     * <p>
      * and
-     * <p/>
+     * <p>
      * 7
      * building settings
      */
@@ -210,7 +184,7 @@ public class TutorialActivity extends SinglePlayerGameActivity {
 
     /**
      * 6
-     * <p/>
+     * <p>
      * unit building creation
      */
     public void onEvent(final BuildingDescriptionShowEvent event) {
@@ -232,7 +206,7 @@ public class TutorialActivity extends SinglePlayerGameActivity {
 
     /**
      * 1
-     * <p/>
+     * <p>
      * first hint to press '+'
      */
     private class HintableIncomeListener implements ClientIncomeHandler.IncomeListener {
@@ -291,7 +265,7 @@ public class TutorialActivity extends SinglePlayerGameActivity {
 
     /**
      * 2
-     * <p/>
+     * <p>
      * shows oxygen
      */
     private class ShowOxygenValueCallback implements ITimerCallback {
@@ -348,7 +322,7 @@ public class TutorialActivity extends SinglePlayerGameActivity {
 
     /**
      * 3
-     * <p/>
+     * <p>
      * shows hint on constructions
      */
     private class ConstructionsPopupCallback implements PopupScene.StateChangingListener {
@@ -406,7 +380,7 @@ public class TutorialActivity extends SinglePlayerGameActivity {
 
     /**
      * 4
-     * <p/>
+     * <p>
      * Before defence building creation
      */
     private class DescriptionDefenceBuildingListener implements IPopup.StateChangingListener {
@@ -474,7 +448,7 @@ public class TutorialActivity extends SinglePlayerGameActivity {
 
     /**
      * 8
-     * <p/>
+     * <p>
      * shows final messages before an end of the tutorial
      */
     private class DescriptionHiddenListener implements IPopup.StateChangingListener {
