@@ -3,12 +3,12 @@ package com.yaroslavlancelot.eafall.game.tutorial;
 import com.yaroslavlancelot.eafall.game.alliance.mutants.Mutants;
 import com.yaroslavlancelot.eafall.game.configuration.mission.MissionConfig;
 import com.yaroslavlancelot.eafall.game.mission.DefinitionLoader;
-import com.yaroslavlancelot.eafall.game.mission.MissionDataLoader;
+import com.yaroslavlancelot.eafall.game.mission.MissionDetailsLoader;
 
 /**
  * @author Yaroslav Havrylovych
  */
-public class TutorialMissionDataLoader extends MissionDataLoader {
+public class TutorialMissionDetailsLoader extends MissionDetailsLoader {
     // ===========================================================
     // Constants
     // ===========================================================
@@ -20,7 +20,7 @@ public class TutorialMissionDataLoader extends MissionDataLoader {
     // ===========================================================
     // Constructors
     // ===========================================================
-    public TutorialMissionDataLoader() {
+    public TutorialMissionDetailsLoader() {
         reset();
     }
 
@@ -37,7 +37,6 @@ public class TutorialMissionDataLoader extends MissionDataLoader {
     // Methods
     // ===========================================================
     public void reset() {
-        id = "0";
         name = "tutorial_mission";
         player_alliance = Mutants.ALLIANCE_NAME;
         player_planet = "earth";

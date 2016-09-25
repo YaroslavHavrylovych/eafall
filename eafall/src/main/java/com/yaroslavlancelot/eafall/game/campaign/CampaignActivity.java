@@ -20,7 +20,7 @@ import com.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.yaroslavlancelot.eafall.game.engine.InstantRotationModifier;
 import com.yaroslavlancelot.eafall.game.engine.MoveByCircleModifier;
 import com.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
-import com.yaroslavlancelot.eafall.game.mission.MissionDataLoader;
+import com.yaroslavlancelot.eafall.game.mission.MissionDetailsLoader;
 import com.yaroslavlancelot.eafall.game.mission.MissionIntent;
 import com.yaroslavlancelot.eafall.game.scene.hud.BaseGameHud;
 import com.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
@@ -208,7 +208,7 @@ public class CampaignActivity extends EaFallActivity {
         });
     }
 
-    private void startMission(final MissionDataLoader missionData) {
+    private void startMission(final MissionDetailsLoader missionData) {
         mResourcesLoader.unloadImages(getTextureManager());
         SelfCleanable.clearMemory();
         finish();
@@ -216,7 +216,7 @@ public class CampaignActivity extends EaFallActivity {
         campaignIntent.start(CampaignActivity.this);
     }
 
-    private Class<? extends SinglePlayerGameActivity> getMissionActivity(MissionDataLoader missionData) {
+    private Class<? extends SinglePlayerGameActivity> getMissionActivity(MissionDetailsLoader missionData) {
         try {
             return (Class<? extends SinglePlayerGameActivity>) Class.forName(missionData.game_handler.trim());
         } catch (ClassNotFoundException e) {

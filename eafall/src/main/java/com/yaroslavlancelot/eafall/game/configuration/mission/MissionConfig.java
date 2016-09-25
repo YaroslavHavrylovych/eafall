@@ -8,7 +8,7 @@ import com.yaroslavlancelot.eafall.R;
 import com.yaroslavlancelot.eafall.game.ai.VeryFirstBot;
 import com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity;
 import com.yaroslavlancelot.eafall.game.mission.DefinitionLoader;
-import com.yaroslavlancelot.eafall.game.mission.MissionDataLoader;
+import com.yaroslavlancelot.eafall.game.mission.MissionDetailsLoader;
 
 /**
  * Mission config. Used in single game (mission) to evaluate game rules and
@@ -61,7 +61,7 @@ public class MissionConfig implements Parcelable {
         resetToDefault();
     }
 
-    public MissionConfig(MissionDataLoader missionData) {
+    public MissionConfig(MissionDetailsLoader missionData) {
         this();
         init(missionData);
     }
@@ -214,7 +214,7 @@ public class MissionConfig implements Parcelable {
         mGameHandler = SinglePlayerGameActivity.class.getName();
     }
 
-    private void init(MissionDataLoader loadedData) {
+    private void init(MissionDetailsLoader loadedData) {
         initType(loadedData.definition);
         if (loadedData.definition.time_limit != null) mTime = loadedData.definition.time_limit;
         if (loadedData.single_way != null) mSingleWay = loadedData.single_way;

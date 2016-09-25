@@ -20,11 +20,11 @@ public class CampaignFileLoader {
     @Element(name = "parallax_background", required = false)
     public Boolean parallax_background;
 
-    @ElementList(required = true, inline = true)
-    List<CampaignDataLoader> mCampaignDataLoaderList = new ArrayList<>(8);
+    @ElementList(inline = true)
+    private List<CampaignDataLoader> mCampaignDataLoaderList = new ArrayList<>(8);
 
     @ElementList(required = false, inline = true)
-    List<ObjectDataLoader> mCampaignObjectLoaderList = new ArrayList<>(2);
+    private List<ObjectDataLoader> mCampaignObjectLoaderList = new ArrayList<>(2);
 
     public List<CampaignDataLoader> getCampaignsList() {
         return mCampaignDataLoaderList;

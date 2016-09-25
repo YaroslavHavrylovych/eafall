@@ -1,6 +1,5 @@
 package com.yaroslavlancelot.eafall.game.mission;
 
-import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -9,11 +8,8 @@ import org.simpleframework.xml.Root;
  *
  * @author Yaroslav Havrylovych
  */
-@Root(name = "mission")
-public class MissionDataLoader {
-    @Attribute(name = "id")
-    public String id;
-
+@Root(name = "mission_details")
+public class MissionDetailsLoader {
     @Element(name = "name")
     public String name;
 
