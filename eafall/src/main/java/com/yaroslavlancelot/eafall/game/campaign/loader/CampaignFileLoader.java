@@ -14,6 +14,8 @@ import java.util.List;
  */
 @Root(strict = false)
 public class CampaignFileLoader {
+    /** campaign file name */
+    private String mFileName;
     @Element(name = "background")
     public String background;
 
@@ -27,10 +29,27 @@ public class CampaignFileLoader {
     private List<ObjectDataLoader> mCampaignObjectLoaderList = new ArrayList<>(2);
 
     public List<CampaignDataLoader> getCampaignsList() {
+        checkInit();
         return mCampaignDataLoaderList;
     }
 
     public List<ObjectDataLoader> getObjectsList() {
+        checkInit();
         return mCampaignObjectLoaderList;
+    }
+
+    /**
+     * Check is campaign file loaded init fully
+     *
+     * @throws IllegalStateException if it doesn't init
+     */
+    private void checkInit() {
+        if (mFileName == null) {
+            throw new IllegalStateException("CampaignFileLoaded not totally init. File name missing.");
+        }
+    }
+
+    public void init(String fileName) {
+        mFileName = fileName;
     }
 }

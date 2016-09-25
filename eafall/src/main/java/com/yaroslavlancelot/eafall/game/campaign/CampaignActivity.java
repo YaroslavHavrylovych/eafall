@@ -94,6 +94,7 @@ public class CampaignActivity extends EaFallActivity {
     @Override
     protected void loadResources() {
         mCampaignFileLoader = loadObjects(mCampaignFileName, CampaignFileLoader.class);
+        mCampaignFileLoader.init(mCampaignFileName);
         //adding resources
         mResourcesLoader.addImage(mCampaignFileLoader.background,
                 SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT);

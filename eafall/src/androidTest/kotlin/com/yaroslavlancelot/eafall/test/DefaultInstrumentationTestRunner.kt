@@ -3,6 +3,7 @@ package com.yaroslavlancelot.eafall.test
 import android.test.InstrumentationTestRunner
 import android.test.InstrumentationTestSuite
 import com.yaroslavlancelot.eafall.test.game.GameStateTest
+import com.yaroslavlancelot.eafall.test.game.campaign.passage.SharedPreferencesTest
 import com.yaroslavlancelot.eafall.test.game.entity.gameobject.GameObjectTest
 import com.yaroslavlancelot.eafall.test.game.entity.gameobject.equipment.DamageArmorTest
 import com.yaroslavlancelot.eafall.test.game.entity.gameobject.unit.dynamic.OffenceUnitTest
@@ -24,6 +25,8 @@ class DefaultInstrumentationTestRunner : InstrumentationTestRunner() {
         suite.addTestSuite(GameStateTest::class.java)
         //popup
         suite.addTestSuite(PopupSceneTest::class.java)
+        //campaign
+        suite.addTestSuite(SharedPreferencesTest::class.java)
 
         return suite
     }
