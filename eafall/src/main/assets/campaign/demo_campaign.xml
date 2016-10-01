@@ -14,7 +14,7 @@
             <x>960</x>
             <y>540</y>
         </position>
-        <mission id="0">
+        <mission_details>
             <name>Killer</name>
             <game_handler>com.yaroslavlancelot.eafall.game.tutorial.TutorialActivity</game_handler>
             <player_alliance>Rebels</player_alliance>
@@ -34,7 +34,7 @@
                 <type>collect</type>
                 <value>4000</value>
             </definition>
-        </mission>
+        </mission_details>
     </campaign>
     <object>
         <picture>graphics/sprites/object/meteor.png</picture>

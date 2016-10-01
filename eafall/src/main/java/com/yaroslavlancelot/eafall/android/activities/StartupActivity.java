@@ -18,7 +18,7 @@ import com.yaroslavlancelot.eafall.game.alliance.mutants.Mutants;
 import com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity;
 import com.yaroslavlancelot.eafall.game.mission.MissionIntent;
 import com.yaroslavlancelot.eafall.game.player.IPlayer;
-import com.yaroslavlancelot.eafall.game.tutorial.TutorialMissionDataLoader;
+import com.yaroslavlancelot.eafall.game.tutorial.TutorialMissionDetailsLoader;
 
 /**
  * first game activity with menu etc.
@@ -63,7 +63,7 @@ public class StartupActivity extends BaseNonGameActivity {
                         e.printStackTrace();
                         return;
                     }
-                    startableIntent = new MissionIntent(cls, new TutorialMissionDataLoader());
+                    startableIntent = new MissionIntent(cls, new TutorialMissionDetailsLoader());
                 } else {
                     String intentClassName = "com.yaroslavlancelot.eafall.game.campaign" +
                             ".intents.CampaignIntent";

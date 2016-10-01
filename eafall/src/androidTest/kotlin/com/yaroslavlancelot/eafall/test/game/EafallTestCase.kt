@@ -4,6 +4,9 @@ import android.test.AndroidTestCase
 import junit.framework.Assert
 
 /**
+ * Base class for out tests (was created to support old kotlin tests with new junit as it start
+ * to fail tests after some new updates)
+ *
  * @author Yaroslav Havrylovych
  */
 abstract class EaFallTestCase : AndroidTestCase() {
