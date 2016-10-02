@@ -2,14 +2,14 @@
            xsi:noNamespaceSchemaLocation="scheme/campaign_scheme_definition.xml">
 
     <background>graphics/images/background.png</background>
-    <parallax_background>false</parallax_background>
+    <parallax_background>true</parallax_background>
 
     <campaign id="0">
         <name>imperials_campaign</name>
-        <picture>graphics/sprites/earth.png</picture>
+        <picture>graphics/images/campaign/mars.png</picture>
         <width>128</width>
         <height>128</height>
-        <rotation>20</rotation>
+        <rotation>30</rotation>
         <position>
             <x>960</x>
             <y>540</y>
@@ -37,11 +37,9 @@
         </mission_details>
     </campaign>
     <object>
-        <picture>graphics/sprites/object/meteor.png</picture>
-        <width>40</width>
-        <height>51</height>
-        <radius>200</radius>
-        <duration>4</duration>
+        <picture>graphics/images/campaign/planet_shadow.png</picture>
+        <width>661</width>
+        <height>651</height>
         <position>
             <x>960</x>
             <y>540</y>
@@ -52,10 +50,10 @@
         <width>40</width>
         <height>51</height>
         <rotation>5</rotation>
-        <radius>200</radius>
+        <radius>400</radius>
         <duration>10</duration>
         <position>
-            <x>300</x>
+            <x>960</x>
             <y>540</y>
         </position>
     </object>

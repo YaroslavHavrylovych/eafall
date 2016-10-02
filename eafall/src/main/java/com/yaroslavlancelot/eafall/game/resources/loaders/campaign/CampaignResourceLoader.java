@@ -1,12 +1,18 @@
 package com.yaroslavlancelot.eafall.game.resources.loaders.campaign;
 
+import android.content.Context;
+
 import com.yaroslavlancelot.eafall.EaFallApplication;
+import com.yaroslavlancelot.eafall.game.constant.StringConstants;
+import com.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.yaroslavlancelot.eafall.game.resources.BaseResourceLoader;
 import com.yaroslavlancelot.eafall.game.visual.buttons.TextButton;
 
 import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.texture.TextureManager;
+import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.TextureAtlas;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import java.util.ArrayList;
@@ -29,6 +35,15 @@ public class CampaignResourceLoader extends BaseResourceLoader {
         mAtlases.add(loadSmallImages(textureManager));
         //button
         mAtlases.add(TextButton.loadResources(EaFallApplication.getContext(), textureManager));
+        //foreground
+        mAtlases.add(loadForeground(textureManager, EaFallApplication.getContext()));
+    }
+
+    private TextureAtlas loadForeground(TextureManager textureManager, Context context) {
+        BitmapTextureAtlas atlas = new BitmapTextureAtlas(textureManager, 1920, 1080, TextureOptions.BILINEAR);
+        TextureRegionHolder.addElementFromAssets(StringConstants.FILE_CAMPAIGN_HUD_FOREGROUND, atlas, context, 0, 0);
+        atlas.load();
+        return atlas;
     }
 
     @Override

@@ -17,11 +17,13 @@ import com.yaroslavlancelot.eafall.game.campaign.loader.PositionLoader;
 import com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity;
 import com.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.yaroslavlancelot.eafall.game.constant.StringConstants;
+import com.yaroslavlancelot.eafall.game.engine.BackwardInstantRotationModifier;
 import com.yaroslavlancelot.eafall.game.engine.InstantRotationModifier;
 import com.yaroslavlancelot.eafall.game.engine.MoveByCircleModifier;
 import com.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.yaroslavlancelot.eafall.game.mission.MissionDetailsLoader;
 import com.yaroslavlancelot.eafall.game.mission.MissionIntent;
+import com.yaroslavlancelot.eafall.game.resources.IResourcesLoader;
 import com.yaroslavlancelot.eafall.game.scene.hud.BaseGameHud;
 import com.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 import com.yaroslavlancelot.eafall.game.touch.TouchHelper;
@@ -31,6 +33,7 @@ import com.yaroslavlancelot.eafall.general.SelfCleanable;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.scene.Scene;
+import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -49,12 +52,9 @@ import timber.log.Timber;
  * @author Yaroslav Havrylovych
  */
 public class CampaignActivity extends EaFallActivity {
-    private final static String SELECTED_IMAGE = "graphics/icons/selected.png";
-    private final static int NOT_SELECTED = -1;
     private String mCampaignFileName;
     private CampaignFileLoader mCampaignFileLoader;
     private LimitedSoundWrapper mSelectSound;
-    private Sprite mSelectImage;
     private TextButton mStartButton;
 
     @Override
@@ -95,14 +95,13 @@ public class CampaignActivity extends EaFallActivity {
     protected void loadResources() {
         mCampaignFileLoader = loadObjects(mCampaignFileName, CampaignFileLoader.class);
         mCampaignFileLoader.init(mCampaignFileName);
-        //adding resources
+        //load background
         mResourcesLoader.addImage(mCampaignFileLoader.background,
                 SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT);
+        //load campaign objects (planets and additional elements)
         for (CampaignDataLoader dataLoader : mCampaignFileLoader.getCampaignsList()) {
             mResourcesLoader.addImage(dataLoader.picture, dataLoader.width, dataLoader.height);
         }
-        mResourcesLoader.addImage(SELECTED_IMAGE,
-                SizeConstants.SELECTOR_IMAGE_SIZE, SizeConstants.SELECTOR_IMAGE_SIZE);
         for (ObjectDataLoader dataLoader : mCampaignFileLoader.getObjectsList()) {
             mResourcesLoader.addImage(dataLoader.picture, dataLoader.width, dataLoader.height);
         }
@@ -129,16 +128,12 @@ public class CampaignActivity extends EaFallActivity {
         //background
         scene.setBackground(mCampaignFileLoader.background, vertexManager);
         //populate
-        List<Sprite> campaigns = populateCampaigns(scene, vertexManager);
+        populateCampaigns(scene, vertexManager);
         populateObjects(scene, vertexManager);
-        //selected
-        mSelectImage = new Sprite(0, 0, TextureRegionHolder.getRegion(SELECTED_IMAGE), vertexManager);
-        scene.attachChild(mSelectImage);
         /* HUD */
-        //start button
+        mHud.attachChild(new Sprite(SizeConstants.HALF_FIELD_WIDTH, SizeConstants.HALF_FIELD_HEIGHT,
+                TextureRegionHolder.getRegion(StringConstants.FILE_CAMPAIGN_HUD_FOREGROUND), getVertexBufferObjectManager()));
         initStartButton();
-        //select
-        select(campaigns.get(0));
     }
 
     @Override
@@ -179,7 +174,7 @@ public class CampaignActivity extends EaFallActivity {
                     TextureRegionHolder.getRegion(dataLoader.picture), vertexManager);
             sprite.setTag(dataLoader.id);
             if (dataLoader.rotation != null) {
-                sprite.registerEntityModifier(new InstantRotationModifier(dataLoader.rotation));
+                sprite.registerEntityModifier(new BackwardInstantRotationModifier(dataLoader.rotation));
             }
             elementsList.add(sprite);
             scene.attachChild(sprite);
@@ -199,12 +194,12 @@ public class CampaignActivity extends EaFallActivity {
         mStartButton.setOnClickListener(new ButtonSprite.OnClickListener() {
             @Override
             public void onClick(final ButtonSprite pButtonSprite, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-                CampaignDataLoader campaignDataLoader = getCampaign(mSelectImage.getTag());
-                if (campaignDataLoader.isMission()) {
-                    startMission(campaignDataLoader.mission);
-                } else {
-                    updateCampaignActivity(campaignDataLoader);
-                }
+//                CampaignDataLoader campaignDataLoader = getCampaign(mSelectImage.getTag());
+//                if (campaignDataLoader.isMission()) {
+//                    startMission(campaignDataLoader.mission);
+//                } else {
+//                    updateCampaignActivity(campaignDataLoader);
+//                }
             }
         });
     }
@@ -265,7 +260,7 @@ public class CampaignActivity extends EaFallActivity {
         try {
             ret = new Persister().read(cls, context.getAssets().open(path));
         } catch (Exception e) {
-            //TODO logger was here
+            Timber.e(e, "can't load objects in campaign");
         }
         return ret;
     }
@@ -276,12 +271,9 @@ public class CampaignActivity extends EaFallActivity {
     }
 
     private void select(IEntity entity) {
-        mSelectImage.setPosition(entity);
-        mSelectImage.setVisible(true);
-        mSelectImage.setTag(entity.getTag());
         //start button
         mStartButton.setVisible(true);
-        CampaignDataLoader data = getCampaign(mSelectImage.getTag());
+        CampaignDataLoader data = getCampaign(0);
         String text;
         if (!data.isMission()) {
             text = getString(R.string.campaign_guide_enter);
@@ -293,9 +285,6 @@ public class CampaignActivity extends EaFallActivity {
     }
 
     private void unselect(IEntity entity) {
-        mSelectImage.setPosition(entity);
-        mSelectImage.setTag(NOT_SELECTED);
-        mSelectImage.setVisible(false);
         mStartButton.setVisible(false);
         mHud.unregisterTouchArea(mStartButton);
     }
