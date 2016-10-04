@@ -3,6 +3,7 @@ package com.yaroslavlancelot.eafall.game.resources.loaders.campaign;
 import android.content.Context;
 
 import com.yaroslavlancelot.eafall.EaFallApplication;
+import com.yaroslavlancelot.eafall.game.campaign.visual.CampaignTitleText;
 import com.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.yaroslavlancelot.eafall.game.resources.BaseResourceLoader;
@@ -29,6 +30,7 @@ public class CampaignResourceLoader extends BaseResourceLoader {
     @Override
     public void loadImages(TextureManager textureManager,
                            VertexBufferObjectManager vertexBufferObjectManager) {
+        super.loadImages(textureManager, vertexBufferObjectManager);
         //background
         mAtlases.addAll(loadBigImages(textureManager));
         //images
@@ -37,6 +39,12 @@ public class CampaignResourceLoader extends BaseResourceLoader {
         mAtlases.add(TextButton.loadResources(EaFallApplication.getContext(), textureManager));
         //foreground
         mAtlases.add(loadForeground(textureManager, EaFallApplication.getContext()));
+    }
+
+    @Override
+    public void loadFonts(TextureManager textureManager, FontManager fontManager) {
+        super.loadFonts(textureManager, fontManager);
+        CampaignTitleText.loadFonts(fontManager, textureManager);
     }
 
     private TextureAtlas loadForeground(TextureManager textureManager, Context context) {

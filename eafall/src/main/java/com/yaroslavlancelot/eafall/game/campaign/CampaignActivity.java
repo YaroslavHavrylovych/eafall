@@ -6,14 +6,12 @@ import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.R;
 import com.yaroslavlancelot.eafall.android.StartableIntent;
 import com.yaroslavlancelot.eafall.game.EaFallActivity;
-import com.yaroslavlancelot.eafall.game.audio.GeneralSoundKeys;
-import com.yaroslavlancelot.eafall.game.audio.LimitedSoundWrapper;
-import com.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.yaroslavlancelot.eafall.game.campaign.intents.CampaignIntent;
 import com.yaroslavlancelot.eafall.game.campaign.loader.CampaignDataLoader;
 import com.yaroslavlancelot.eafall.game.campaign.loader.CampaignFileLoader;
 import com.yaroslavlancelot.eafall.game.campaign.loader.ObjectDataLoader;
 import com.yaroslavlancelot.eafall.game.campaign.loader.PositionLoader;
+import com.yaroslavlancelot.eafall.game.campaign.visual.CampaignTitleText;
 import com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity;
 import com.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.yaroslavlancelot.eafall.game.constant.StringConstants;
@@ -21,21 +19,19 @@ import com.yaroslavlancelot.eafall.game.engine.BackwardInstantRotationModifier;
 import com.yaroslavlancelot.eafall.game.engine.InstantRotationModifier;
 import com.yaroslavlancelot.eafall.game.engine.MoveByCircleModifier;
 import com.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
+import com.yaroslavlancelot.eafall.game.entity.gameobject.setlectable.selector.SelectorFactory;
 import com.yaroslavlancelot.eafall.game.mission.MissionDetailsLoader;
 import com.yaroslavlancelot.eafall.game.mission.MissionIntent;
-import com.yaroslavlancelot.eafall.game.resources.IResourcesLoader;
 import com.yaroslavlancelot.eafall.game.scene.hud.BaseGameHud;
 import com.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
-import com.yaroslavlancelot.eafall.game.touch.TouchHelper;
 import com.yaroslavlancelot.eafall.game.visual.buttons.TextButton;
 import com.yaroslavlancelot.eafall.general.SelfCleanable;
 
 import org.andengine.engine.options.EngineOptions;
-import org.andengine.entity.IEntity;
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.text.Text;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.simpleframework.xml.core.Persister;
 
@@ -54,8 +50,9 @@ import timber.log.Timber;
 public class CampaignActivity extends EaFallActivity {
     private String mCampaignFileName;
     private CampaignFileLoader mCampaignFileLoader;
-    private LimitedSoundWrapper mSelectSound;
     private TextButton mStartButton;
+    private Text mTitleText;
+    private int mScreenId;
 
     @Override
     public EngineOptions onCreateEngineOptions() {
@@ -69,7 +66,6 @@ public class CampaignActivity extends EaFallActivity {
         // we loading sounds and music here and
         // wouldn't reload this sounds when reloading the campaign screen
         //sound
-        mSelectSound = SoundFactory.getInstance().loadSound(GeneralSoundKeys.SELECT);
     }
 
     @Override
@@ -108,6 +104,7 @@ public class CampaignActivity extends EaFallActivity {
         //loading resources
         mResourcesLoader.loadImages(getTextureManager(), getVertexBufferObjectManager());
         mResourcesLoader.loadFonts(getTextureManager(), getFontManager());
+        SelectorFactory.getSelector().block(); //we  don't need selector in the campaign
     }
 
     @Override
@@ -118,8 +115,14 @@ public class CampaignActivity extends EaFallActivity {
 
     @Override
     protected void initWorkingScene() {
+        initCampaignData();
         mSceneManager.initWorkingScene(mCamera, mCampaignFileLoader.parallax_background);
         onPopulateWorkingScene(mSceneManager.getWorkingScene());
+        initHud();
+    }
+
+    private void initCampaignData() {
+        mScreenId = 0;
     }
 
     @Override
@@ -130,10 +133,29 @@ public class CampaignActivity extends EaFallActivity {
         //populate
         populateCampaigns(scene, vertexManager);
         populateObjects(scene, vertexManager);
-        /* HUD */
+    }
+
+    private void initHud() {
         mHud.attachChild(new Sprite(SizeConstants.HALF_FIELD_WIDTH, SizeConstants.HALF_FIELD_HEIGHT,
                 TextureRegionHolder.getRegion(StringConstants.FILE_CAMPAIGN_HUD_FOREGROUND), getVertexBufferObjectManager()));
+        mTitleText = new CampaignTitleText(350, 1006, getVertexBufferObjectManager());
+        mHud.attachChild(mTitleText);
+        mStartButton = new TextButton(
+                SizeConstants.CAMPAIGN_START_BUTTON_X, SizeConstants.CAMPAIGN_START_BUTTON_Y,
+                SizeConstants.CAMPAIGN_START_BUTTON_WIDTH, SizeConstants.CAMPAIGN_START_BUTTON_HEIGHT,
+                getVertexBufferObjectManager());
+        mStartButton.setFixedSize(true);
         initStartButton();
+        updateHudValues();
+    }
+
+    private void updateHudValues() {
+        String title = getString(getResources().getIdentifier(
+                mCampaignFileLoader.getCampaignsList().get(mScreenId).name, "string",
+                getApplicationInfo().packageName));
+        Timber.v("Campaign title is [%s]", title);
+        mTitleText.setText(title);
+        mStartButton.setText(R.string.campaign_guide_start);
     }
 
     @Override
@@ -178,30 +200,25 @@ public class CampaignActivity extends EaFallActivity {
             }
             elementsList.add(sprite);
             scene.attachChild(sprite);
-            sprite.setTouchCallback(new ElementTouchCallback(sprite));
             scene.registerTouchArea(sprite);
         }
         return elementsList;
     }
 
     private void initStartButton() {
-        mStartButton = new TextButton(
-                SizeConstants.CAMPAIGN_START_BUTTON_X, SizeConstants.CAMPAIGN_START_BUTTON_Y,
-                SizeConstants.CAMPAIGN_START_BUTTON_WIDTH, SizeConstants.CAMPAIGN_START_BUTTON_HEIGHT,
-                getVertexBufferObjectManager());
-        mStartButton.setVisible(false);
         mHud.attachChild(mStartButton);
         mStartButton.setOnClickListener(new ButtonSprite.OnClickListener() {
             @Override
             public void onClick(final ButtonSprite pButtonSprite, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-//                CampaignDataLoader campaignDataLoader = getCampaign(mSelectImage.getTag());
-//                if (campaignDataLoader.isMission()) {
-//                    startMission(campaignDataLoader.mission);
-//                } else {
-//                    updateCampaignActivity(campaignDataLoader);
-//                }
+                CampaignDataLoader campaignDataLoader = getCampaign(mScreenId);
+                if (campaignDataLoader.isMission()) {
+                    startMission(campaignDataLoader.mission);
+                } else {
+                    updateCampaignActivity(campaignDataLoader);
+                }
             }
         });
+        mHud.registerTouchArea(mStartButton);
     }
 
     private void startMission(final MissionDetailsLoader missionData) {
@@ -263,41 +280,5 @@ public class CampaignActivity extends EaFallActivity {
             Timber.e(e, "can't load objects in campaign");
         }
         return ret;
-    }
-
-    private void click(IEntity entity) {
-        SoundFactory.getInstance().playSound(mSelectSound);
-        select(entity);
-    }
-
-    private void select(IEntity entity) {
-        //start button
-        mStartButton.setVisible(true);
-        CampaignDataLoader data = getCampaign(0);
-        String text;
-        if (!data.isMission()) {
-            text = getString(R.string.campaign_guide_enter);
-        } else {
-            text = getString(R.string.campaign_guide_start);
-        }
-        mStartButton.setText(text);
-        mHud.registerTouchArea(mStartButton);
-    }
-
-    private void unselect(IEntity entity) {
-        mStartButton.setVisible(false);
-        mHud.unregisterTouchArea(mStartButton);
-    }
-
-    private class ElementTouchCallback extends TouchHelper.EntityCustomTouch {
-        public ElementTouchCallback(IEntity object) {
-            super(object);
-        }
-
-        @Override
-        public void click() {
-            super.click();
-            CampaignActivity.this.click(mObject);
-        }
     }
 }

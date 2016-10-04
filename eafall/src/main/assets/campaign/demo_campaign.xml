@@ -5,7 +5,7 @@
     <parallax_background>true</parallax_background>
 
     <campaign id="0">
-        <name>imperials_campaign</name>
+        <name>campaign_demo_tutorial1</name>
         <picture>graphics/images/campaign/mars.png</picture>
         <width>128</width>
         <height>128</height>

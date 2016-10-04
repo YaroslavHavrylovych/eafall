@@ -302,6 +302,7 @@
     <!-- guide campaign -->
     <string name="campaign_guide_start">Start</string>
     <string name="campaign_guide_enter">Enter</string>
+    <string name="campaign_demo_tutorial1">Intro</string>
     <!-- /guide campaign -->
     <!-- /campaign -->
 

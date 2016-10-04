@@ -9,6 +9,7 @@ import com.yaroslavlancelot.eafall.game.audio.GeneralSoundKeys;
 import com.yaroslavlancelot.eafall.game.audio.SoundOperations;
 import com.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
+import com.yaroslavlancelot.eafall.game.entity.gameobject.setlectable.selector.SelectorFactory;
 import com.yaroslavlancelot.eafall.game.scene.scenes.SplashScene;
 import com.yaroslavlancelot.eafall.game.visual.buttons.TextButton;
 import com.yaroslavlancelot.eafall.game.visual.font.FontHolder;
@@ -50,6 +51,12 @@ public abstract class BaseResourceLoader implements IResourcesLoader {
         } else {
             mImagesList.add(path);
         }
+    }
+
+    @Override
+    public void loadImages(TextureManager textureManager, VertexBufferObjectManager vertexBufferObjectManager) {
+        //selector
+        SelectorFactory.loadResources(textureManager);
     }
 
     @Override
