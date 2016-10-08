@@ -134,6 +134,9 @@ public final class SizeConstants {
     public static final int CAMPAIGN_START_BUTTON_X = 1612;
     public static final int CAMPAIGN_START_BUTTON_Y = 90;
     public static final int CAMPAIGN_TITLE_TEXT = 50;
+    public static final int CAMPAIGN_BACK_BUTTON_SIZE = 160;
+    public static final int CAMPAIGN_BACK_BUTTON_X = 123;
+    public static final int CAMPAIGN_BACK_BUTTON_Y = 131;
 
 
     private SizeConstants() {

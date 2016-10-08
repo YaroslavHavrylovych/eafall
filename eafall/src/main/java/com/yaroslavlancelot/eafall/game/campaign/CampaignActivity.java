@@ -24,6 +24,7 @@ import com.yaroslavlancelot.eafall.game.mission.MissionDetailsLoader;
 import com.yaroslavlancelot.eafall.game.mission.MissionIntent;
 import com.yaroslavlancelot.eafall.game.scene.hud.BaseGameHud;
 import com.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
+import com.yaroslavlancelot.eafall.game.visual.buttons.BackButton;
 import com.yaroslavlancelot.eafall.game.visual.buttons.TextButton;
 import com.yaroslavlancelot.eafall.general.SelfCleanable;
 
@@ -51,6 +52,7 @@ public class CampaignActivity extends EaFallActivity {
     private String mCampaignFileName;
     private CampaignFileLoader mCampaignFileLoader;
     private TextButton mStartButton;
+    private BackButton mBackButton;
     private Text mTitleText;
     private int mScreenId;
 
@@ -101,6 +103,7 @@ public class CampaignActivity extends EaFallActivity {
         for (ObjectDataLoader dataLoader : mCampaignFileLoader.getObjectsList()) {
             mResourcesLoader.addImage(dataLoader.picture, dataLoader.width, dataLoader.height);
         }
+        BackButton.loadImages(getTextureManager());
         //loading resources
         mResourcesLoader.loadImages(getTextureManager(), getVertexBufferObjectManager());
         mResourcesLoader.loadFonts(getTextureManager(), getFontManager());
@@ -145,6 +148,16 @@ public class CampaignActivity extends EaFallActivity {
                 SizeConstants.CAMPAIGN_START_BUTTON_WIDTH, SizeConstants.CAMPAIGN_START_BUTTON_HEIGHT,
                 getVertexBufferObjectManager());
         mStartButton.setFixedSize(true);
+        mBackButton = new BackButton(SizeConstants.CAMPAIGN_BACK_BUTTON_X, SizeConstants.CAMPAIGN_BACK_BUTTON_Y,
+                getVertexBufferObjectManager());
+        mHud.attachChild(mBackButton);
+        mHud.registerTouchArea(mBackButton);
+        mBackButton.setOnClickListener(new ButtonSprite.OnClickListener() {
+            @Override
+            public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                CampaignActivity.this.finish();
+            }
+        });
         initStartButton();
         updateHudValues();
     }
