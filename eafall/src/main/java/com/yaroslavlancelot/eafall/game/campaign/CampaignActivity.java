@@ -44,6 +44,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
+//TODO update title in updateScreen
 /**
  * Used to display missions list and/or campaigns list.
  * <br/>
@@ -131,6 +132,8 @@ public class CampaignActivity extends EaFallActivity {
         mSceneManager.initWorkingScene(mCamera, mCampaignFileLoader.parallax_background);
         onPopulateWorkingScene(mSceneManager.getWorkingScene());
         initHud();
+        mScreenId = mCampaignPassage.getPassedCampaignsAmount();
+        updateScreen();
     }
 
     private void initCampaignData() {
@@ -187,18 +190,24 @@ public class CampaignActivity extends EaFallActivity {
             @Override
             public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
                 mScreenId += 1;
-                mCamera.setCenter(SizeConstants.HALF_FIELD_WIDTH + (mScreenId - 1) * SizeConstants.GAME_FIELD_WIDTH,
-                        SizeConstants.HALF_FIELD_HEIGHT);
+                updateScreen();
             }
         });
         mPreviousScreenButton.setOnClickListener(new ButtonSprite.OnClickListener() {
             @Override
             public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
                 mScreenId -= 1;
-                mCamera.setCenter(SizeConstants.HALF_FIELD_WIDTH + mScreenId * SizeConstants.GAME_FIELD_WIDTH,
-                        SizeConstants.HALF_FIELD_HEIGHT);
+                updateScreen();
             }
         });
+    }
+
+    private void updateScreen() {
+        mCamera.setCenter(SizeConstants.HALF_FIELD_WIDTH + mScreenId * SizeConstants.GAME_FIELD_WIDTH,
+                SizeConstants.HALF_FIELD_HEIGHT);
+        mPreviousScreenButton.setEnabled(mScreenId > 0);
+        mNextScreenButton.setEnabled(mScreenId < mCampaignFileLoader.getCampaignsList().size() - 1);
+        mStartButton.setVisible(mScreenId <= mCampaignPassage.getPassedCampaignsAmount());
     }
 
     private void updateHudValues() {

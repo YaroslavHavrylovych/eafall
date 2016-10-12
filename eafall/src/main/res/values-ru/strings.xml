@@ -38,7 +38,7 @@
         <item>@string/imperials</item>
         <item>@string/rebels</item>
         <item>@string/mutants</item>
-   </string-array>
+    </string-array>
 
     <string name="imperials">Империя</string>
     <string name="rebels">Повстанцы</string>
@@ -303,6 +303,7 @@
     <string name="campaign_guide_start">Начать</string>
     <string name="campaign_guide_enter">Осмотреть</string>
     <string name="campaign_demo_tutorial1">Вступ</string>
+    <string name="campaign_demo_tutorial2">Первый бой</string>
     <!-- / Guide campaign -->
     <!-- / Campaign -->
 

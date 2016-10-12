@@ -47,8 +47,8 @@
     Description:
     bla-bla-bla
     -->
-    <campaign id="0">
-        <name>campaign_demo_tutorial1</name>
+    <campaign id="1">
+        <name>campaign_demo_tutorial2</name>
         <picture>graphics/images/campaign/mars.png</picture>
         <width>128</width>
         <height>128</height>
@@ -104,15 +104,6 @@
         </position>
     </object>
     <!-- to the second mission -->
-    <object>
-        <picture>graphics/images/campaign/planet_shadow.png</picture>
-        <width>661</width>
-        <height>651</height>
-        <position>
-            <x>2939</x>
-            <y>540</y>
-        </position>
-    </object>
     <object>
         <picture>graphics/sprites/object/meteor.png</picture>
         <width>40</width>
