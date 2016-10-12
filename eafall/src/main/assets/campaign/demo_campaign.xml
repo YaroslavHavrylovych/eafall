@@ -4,6 +4,11 @@
     <background>graphics/images/background.png</background>
     <parallax_background>true</parallax_background>
 
+    <!--
+    The first intor mission.
+    Description:
+    bla-bla-bla
+    -->
     <campaign id="0">
         <name>campaign_demo_tutorial1</name>
         <picture>graphics/images/campaign/mars.png</picture>
@@ -11,7 +16,7 @@
         <height>128</height>
         <rotation>30</rotation>
         <position>
-            <x>960</x>
+            <x>1019</x>
             <y>540</y>
         </position>
         <mission_details>
@@ -36,12 +41,53 @@
             </definition>
         </mission_details>
     </campaign>
+
+    <!--
+    The second mission.
+    Description:
+    bla-bla-bla
+    -->
+    <campaign id="0">
+        <name>campaign_demo_tutorial1</name>
+        <picture>graphics/images/campaign/mars.png</picture>
+        <width>128</width>
+        <height>128</height>
+        <rotation>30</rotation>
+        <position>
+            <x>2939</x>
+            <y>540</y>
+        </position>
+        <mission_details>
+            <name>Killer</name>
+            <game_handler>com.yaroslavlancelot.eafall.game.tutorial.TutorialActivity</game_handler>
+            <player_alliance>Rebels</player_alliance>
+            <player_planet>earth</player_planet>
+            <opponent_alliance>Rebels</opponent_alliance>
+            <opponent_planet>earth</opponent_planet>
+            <max_oxygen>1500</max_oxygen>
+            <planet_health>5000</planet_health>
+            <offensive_units_limit>7</offensive_units_limit>
+            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.SingleWayBot
+            </enemy_logic_handler>
+            <star_constellation>no_constellation</star_constellation>
+            <single_way>true</single_way>
+            <suppressor>false</suppressor>
+            <definition>
+                <time_limit>500</time_limit>
+                <type>collect</type>
+                <value>4000</value>
+            </definition>
+        </mission_details>
+    </campaign>
+
+    <!-- additional screen elements -->
+    <!-- to the first mission -->
     <object>
         <picture>graphics/images/campaign/planet_shadow.png</picture>
         <width>661</width>
         <height>651</height>
         <position>
-            <x>960</x>
+            <x>1019</x>
             <y>540</y>
         </position>
     </object>
@@ -53,7 +99,29 @@
         <radius>400</radius>
         <duration>10</duration>
         <position>
-            <x>960</x>
+            <x>1019</x>
+            <y>540</y>
+        </position>
+    </object>
+    <!-- to the second mission -->
+    <object>
+        <picture>graphics/images/campaign/planet_shadow.png</picture>
+        <width>661</width>
+        <height>651</height>
+        <position>
+            <x>2939</x>
+            <y>540</y>
+        </position>
+    </object>
+    <object>
+        <picture>graphics/sprites/object/meteor.png</picture>
+        <width>40</width>
+        <height>51</height>
+        <rotation>5</rotation>
+        <radius>400</radius>
+        <duration>10</duration>
+        <position>
+            <x>2939</x>
             <y>540</y>
         </position>
     </object>

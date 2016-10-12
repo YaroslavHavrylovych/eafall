@@ -32,7 +32,6 @@ public abstract class ThickClientGameActivity extends ClientGameActivity {
 
     /** bound for objects so they can't get out of the screen */
     private void createBounds() {
-        //TODO logger was here
         PhysicsFactory.createLineBody(
                 mPhysicsWorld, -1, -1, -1, SizeConstants.GAME_FIELD_HEIGHT + 1,
                 CollisionCategories.STATIC_BODY_FIXTURE_DEF);

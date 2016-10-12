@@ -84,8 +84,10 @@ public final class StringConstants {
     public static final String FILE_BUILDINGS_POPUP_UP_BUTTON = "graphics/icons/up_button.png";
     /** income image */
     public static final String FILE_INCOME = "graphics/icons/income.png";
-    /** campaign back button active */
+    /** campaign back button */
     public static final String FILE_CAMPAIGN_BACK_BUTTON = "graphics/sprites/buttons/campaign_back_button.png";
+    /** campaign next button */
+    public static final String FILE_CAMPAIGN_NEXT_BUTTON = "graphics/images/campaign/next_button.png";
     /** tutorial pointer image */
     public static final String FILE_TUTORIAL_POINTER = "graphics/icons/pointer.png";
     /** game menu button */

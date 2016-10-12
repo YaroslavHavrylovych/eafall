@@ -11,7 +11,10 @@ import com.yaroslavlancelot.eafall.game.campaign.loader.CampaignDataLoader;
 import com.yaroslavlancelot.eafall.game.campaign.loader.CampaignFileLoader;
 import com.yaroslavlancelot.eafall.game.campaign.loader.ObjectDataLoader;
 import com.yaroslavlancelot.eafall.game.campaign.loader.PositionLoader;
+import com.yaroslavlancelot.eafall.game.campaign.pass.CampaignPassage;
+import com.yaroslavlancelot.eafall.game.campaign.pass.CampaignPassageFactory;
 import com.yaroslavlancelot.eafall.game.campaign.visual.CampaignTitleText;
+import com.yaroslavlancelot.eafall.game.campaign.visual.NextButton;
 import com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity;
 import com.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.yaroslavlancelot.eafall.game.constant.StringConstants;
@@ -55,11 +58,16 @@ public class CampaignActivity extends EaFallActivity {
     private BackButton mBackButton;
     private Text mTitleText;
     private int mScreenId;
+    private CampaignPassage mCampaignPassage;
+    private NextButton mNextScreenButton;
+    private NextButton mPreviousScreenButton;
 
     @Override
     public EngineOptions onCreateEngineOptions() {
         mCampaignFileName = getIntent().getExtras().getString(CampaignIntent.CAMPAIGN_FILE_NAME);
-        return super.onCreateEngineOptions();
+        EngineOptions engineOptions = super.onCreateEngineOptions();
+        mCamera.setBoundsEnabled(false);
+        return engineOptions;
     }
 
     @Override
@@ -104,6 +112,7 @@ public class CampaignActivity extends EaFallActivity {
             mResourcesLoader.addImage(dataLoader.picture, dataLoader.width, dataLoader.height);
         }
         BackButton.loadImages(getTextureManager());
+        NextButton.loadImages(getTextureManager());
         //loading resources
         mResourcesLoader.loadImages(getTextureManager(), getVertexBufferObjectManager());
         mResourcesLoader.loadFonts(getTextureManager(), getFontManager());
@@ -125,6 +134,8 @@ public class CampaignActivity extends EaFallActivity {
     }
 
     private void initCampaignData() {
+        mCampaignPassage = CampaignPassageFactory.getInstance()
+                .getCampaignPassage(mCampaignFileName, getApplicationContext());
         mScreenId = 0;
     }
 
@@ -152,6 +163,15 @@ public class CampaignActivity extends EaFallActivity {
                 getVertexBufferObjectManager());
         mHud.attachChild(mBackButton);
         mHud.registerTouchArea(mBackButton);
+        mNextScreenButton = new NextButton(SizeConstants.CAMPAIGN_NEXT_RIGHT_BUTTON_X, SizeConstants.CAMPAIGN_NEXT_BUTTON_Y,
+                getVertexBufferObjectManager(), true);
+        mPreviousScreenButton = new NextButton(SizeConstants.CAMPAIGN_NEXT_LEFT_BUTTON_X, SizeConstants.CAMPAIGN_NEXT_BUTTON_Y,
+                getVertexBufferObjectManager(), false);
+        mHud.attachChild(mNextScreenButton);
+        mHud.attachChild(mPreviousScreenButton);
+        mHud.registerTouchArea(mNextScreenButton);
+        mHud.registerTouchArea(mPreviousScreenButton);
+        initNextPreviousButtonsListeners();
         mBackButton.setOnClickListener(new ButtonSprite.OnClickListener() {
             @Override
             public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
@@ -160,6 +180,25 @@ public class CampaignActivity extends EaFallActivity {
         });
         initStartButton();
         updateHudValues();
+    }
+
+    private void initNextPreviousButtonsListeners() {
+        mNextScreenButton.setOnClickListener(new ButtonSprite.OnClickListener() {
+            @Override
+            public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                mScreenId += 1;
+                mCamera.setCenter(SizeConstants.HALF_FIELD_WIDTH + (mScreenId - 1) * SizeConstants.GAME_FIELD_WIDTH,
+                        SizeConstants.HALF_FIELD_HEIGHT);
+            }
+        });
+        mPreviousScreenButton.setOnClickListener(new ButtonSprite.OnClickListener() {
+            @Override
+            public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                mScreenId -= 1;
+                mCamera.setCenter(SizeConstants.HALF_FIELD_WIDTH + mScreenId * SizeConstants.GAME_FIELD_WIDTH,
+                        SizeConstants.HALF_FIELD_HEIGHT);
+            }
+        });
     }
 
     private void updateHudValues() {
