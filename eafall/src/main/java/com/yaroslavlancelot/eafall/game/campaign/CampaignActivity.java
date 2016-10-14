@@ -59,6 +59,7 @@ public class CampaignActivity extends EaFallActivity {
     private Text mTitleText;
     private int mScreenId;
     private CampaignPassage mCampaignPassage;
+    private Sprite mMissionLogo;
     private NextButton mNextScreenButton;
     private NextButton mPreviousScreenButton;
 
@@ -111,6 +112,7 @@ public class CampaignActivity extends EaFallActivity {
         for (ObjectDataLoader dataLoader : mCampaignFileLoader.getObjectsList()) {
             mResourcesLoader.addImage(dataLoader.picture, dataLoader.width, dataLoader.height);
         }
+        mResourcesLoader.addImage(StringConstants.FILE_LOGO, 170, 170);
         BackButton.loadImages(getTextureManager());
         NextButton.loadImages(getTextureManager());
         //loading resources
@@ -165,6 +167,8 @@ public class CampaignActivity extends EaFallActivity {
                 getVertexBufferObjectManager());
         mHud.attachChild(mBackButton);
         mHud.registerTouchArea(mBackButton);
+        mMissionLogo = new Sprite(153, 945, TextureRegionHolder.getRegion(StringConstants.FILE_LOGO), getVertexBufferObjectManager());
+        mHud.attachChild(mMissionLogo);
         mNextScreenButton = new NextButton(SizeConstants.CAMPAIGN_NEXT_RIGHT_BUTTON_X, SizeConstants.CAMPAIGN_NEXT_BUTTON_Y,
                 getVertexBufferObjectManager(), true);
         mPreviousScreenButton = new NextButton(SizeConstants.CAMPAIGN_NEXT_LEFT_BUTTON_X, SizeConstants.CAMPAIGN_NEXT_BUTTON_Y,

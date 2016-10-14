@@ -18,6 +18,8 @@ public final class StringConstants {
     public static final String IMAGES_PATH = "graphics/images" + SEPARATOR;
     /** sun file name (top image) */
     public static final String FILE_SUN = "graphics/sprites/sun/sun.png";
+    /** the only available for now logo path */
+    public static final String FILE_LOGO = "graphics/images/alliance/mutants/mutants_logo.png";
     /** sun file name (bottom image) */
     public static final String FILE_SUN_HAZE = "graphics/sprites/sun/sun_haze.png";
     /** splash screen file name */
