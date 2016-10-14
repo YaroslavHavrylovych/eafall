@@ -18,7 +18,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import timber.log.Timber;
 
 /** text used in description popup */
-public class CampaignTitleText extends Text {
+public class CampaignTitleText extends RecenterText {
     public final static int sFontSize = SizeConstants.CAMPAIGN_TITLE_TEXT;
     public final static String sFontKey = "campaign_title_text_font_key";
 

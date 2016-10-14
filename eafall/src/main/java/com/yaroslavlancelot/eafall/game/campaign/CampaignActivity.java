@@ -44,7 +44,6 @@ import java.util.List;
 
 import timber.log.Timber;
 
-//TODO update title in updateScreen
 /**
  * Used to display missions list and/or campaigns list.
  * <br/>
@@ -155,7 +154,7 @@ public class CampaignActivity extends EaFallActivity {
     private void initHud() {
         mHud.attachChild(new Sprite(SizeConstants.HALF_FIELD_WIDTH, SizeConstants.HALF_FIELD_HEIGHT,
                 TextureRegionHolder.getRegion(StringConstants.FILE_CAMPAIGN_HUD_FOREGROUND), getVertexBufferObjectManager()));
-        mTitleText = new CampaignTitleText(350, 1006, getVertexBufferObjectManager());
+        mTitleText = new CampaignTitleText(320, 1006, getVertexBufferObjectManager());
         mHud.attachChild(mTitleText);
         mStartButton = new TextButton(
                 SizeConstants.CAMPAIGN_START_BUTTON_X, SizeConstants.CAMPAIGN_START_BUTTON_Y,
@@ -208,14 +207,14 @@ public class CampaignActivity extends EaFallActivity {
         mPreviousScreenButton.setEnabled(mScreenId > 0);
         mNextScreenButton.setEnabled(mScreenId < mCampaignFileLoader.getCampaignsList().size() - 1);
         mStartButton.setVisible(mScreenId <= mCampaignPassage.getPassedCampaignsAmount());
-    }
-
-    private void updateHudValues() {
         String title = getString(getResources().getIdentifier(
                 mCampaignFileLoader.getCampaignsList().get(mScreenId).name, "string",
                 getApplicationInfo().packageName));
         Timber.v("Campaign title is [%s]", title);
         mTitleText.setText(title);
+    }
+
+    private void updateHudValues() {
         mStartButton.setText(R.string.campaign_guide_start);
     }
 
