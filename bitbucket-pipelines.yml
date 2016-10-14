@@ -1,7 +1,10 @@
-image: java:8
+image: uber/android-build-environment:latest
 
 pipelines:
   default:
     - step:
-        script: # Building a dev build variant
+        script: 
+            # Grab the Android Support Repo which isn't included in the container
+          - echo y | android update sdk --filter "extra-android-m2repository" --no-ui -a
+            # Building a dev build variant
           - ./gradlew clean assembleDevDebug
