@@ -80,6 +80,44 @@
         </mission_details>
     </campaign>
 
+    <!--
+    The third mission.
+    Description:
+    bla-bla-bla
+    -->
+    <campaign id="2">
+        <name>campaign_demo_tutorial3</name>
+        <picture>graphics/images/campaign/mars.png</picture>
+        <width>128</width>
+        <height>128</height>
+        <rotation>30</rotation>
+        <position>
+            <x>4859</x>
+            <y>540</y>
+        </position>
+        <mission_details>
+            <name>Killer</name>
+            <game_handler>com.yaroslavlancelot.eafall.game.tutorial.TutorialActivity</game_handler>
+            <player_alliance>Rebels</player_alliance>
+            <player_planet>earth</player_planet>
+            <opponent_alliance>Rebels</opponent_alliance>
+            <opponent_planet>earth</opponent_planet>
+            <max_oxygen>1500</max_oxygen>
+            <planet_health>5000</planet_health>
+            <offensive_units_limit>7</offensive_units_limit>
+            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.SingleWayBot
+            </enemy_logic_handler>
+            <star_constellation>no_constellation</star_constellation>
+            <single_way>true</single_way>
+            <suppressor>false</suppressor>
+            <definition>
+                <time_limit>500</time_limit>
+                <type>collect</type>
+                <value>4000</value>
+            </definition>
+        </mission_details>
+    </campaign>
+
     <!-- additional screen elements -->
     <!-- to the first mission -->
     <object>
