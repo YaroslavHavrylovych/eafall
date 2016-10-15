@@ -23,8 +23,8 @@ import com.yaroslavlancelot.eafall.game.engine.InstantRotationModifier;
 import com.yaroslavlancelot.eafall.game.engine.MoveByCircleModifier;
 import com.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.setlectable.selector.SelectorFactory;
+import com.yaroslavlancelot.eafall.game.mission.CampaignMissionIntent;
 import com.yaroslavlancelot.eafall.game.mission.MissionDetailsLoader;
-import com.yaroslavlancelot.eafall.game.mission.MissionIntent;
 import com.yaroslavlancelot.eafall.game.scene.hud.BaseGameHud;
 import com.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 import com.yaroslavlancelot.eafall.game.visual.buttons.BackButton;
@@ -44,6 +44,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
+//TODO will open new campaign even if you pass some old one, fix this
 /**
  * Used to display missions list and/or campaigns list.
  * <br/>
@@ -65,7 +66,8 @@ public class CampaignActivity extends EaFallActivity {
 
     @Override
     public EngineOptions onCreateEngineOptions() {
-        mCampaignFileName = getIntent().getExtras().getString(CampaignIntent.CAMPAIGN_FILE_NAME);
+        mCampaignFileName = getIntent().getExtras().getString(CampaignIntent.CAMPAIGN_FILE_NAME_KEY);
+        initCampaignData();
         EngineOptions engineOptions = super.onCreateEngineOptions();
         mCamera.setBoundsEnabled(false);
         return engineOptions;
@@ -129,7 +131,6 @@ public class CampaignActivity extends EaFallActivity {
 
     @Override
     protected void initWorkingScene() {
-        initCampaignData();
         mSceneManager.initWorkingScene(mCamera, mCampaignFileLoader.parallax_background);
         onPopulateWorkingScene(mSceneManager.getWorkingScene());
         initHud();
@@ -141,6 +142,10 @@ public class CampaignActivity extends EaFallActivity {
         mCampaignPassage = CampaignPassageFactory.getInstance()
                 .getCampaignPassage(mCampaignFileName, getApplicationContext());
         mScreenId = 0;
+        if (getIntent().getExtras().getBoolean(CampaignIntent.GAME_RESULT_SUCCESS_KEY, false)) {
+            getIntent().getExtras().remove(CampaignIntent.GAME_RESULT_SUCCESS_KEY);
+            mCampaignPassage.markNewCampaignPassed();
+        }
     }
 
     @Override
@@ -274,12 +279,7 @@ public class CampaignActivity extends EaFallActivity {
         mStartButton.setOnClickListener(new ButtonSprite.OnClickListener() {
             @Override
             public void onClick(final ButtonSprite pButtonSprite, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-                CampaignDataLoader campaignDataLoader = getCampaign(mScreenId);
-                if (campaignDataLoader.isMission()) {
-                    startMission(campaignDataLoader.mission);
-                } else {
-                    updateCampaignActivity(campaignDataLoader);
-                }
+                startMission(getCampaign(mScreenId).mission);
             }
         });
         mHud.registerTouchArea(mStartButton);
@@ -288,9 +288,9 @@ public class CampaignActivity extends EaFallActivity {
     private void startMission(final MissionDetailsLoader missionData) {
         mResourcesLoader.unloadImages(getTextureManager());
         SelfCleanable.clearMemory();
-        finish();
-        StartableIntent campaignIntent = new MissionIntent(getMissionActivity(missionData), missionData);
-        campaignIntent.start(CampaignActivity.this);
+        StartableIntent campaignIntent = new CampaignMissionIntent(getMissionActivity(missionData),
+                missionData, mCampaignFileName);
+        campaignIntent.start(this);
     }
 
     private Class<? extends SinglePlayerGameActivity> getMissionActivity(MissionDetailsLoader missionData) {
@@ -302,20 +302,6 @@ public class CampaignActivity extends EaFallActivity {
             Timber.e(e, "Can't case class [%s]", missionData.game_handler);
         }
         return SinglePlayerGameActivity.class;
-    }
-
-    private void updateCampaignActivity(final CampaignDataLoader campaignDataLoader) {
-        startAsyncResourceLoading(new Runnable() {
-            @Override
-            public void run() {
-                mResourcesLoader.loadSplashImages(getTextureManager(), getVertexBufferObjectManager());
-                mSceneManager.initSplashScene();
-                mSceneManager.showSplash();
-                mCampaignFileName = CampaignIntent.getPathToCampaign(campaignDataLoader.name);
-                mResourcesLoader.unloadImages(getTextureManager());
-                TextureRegionHolder.getInstance().clear();
-            }
-        });
     }
 
     /**

@@ -21,7 +21,9 @@
         </position>
         <mission_details>
             <name>Killer</name>
-            <game_handler>com.yaroslavlancelot.eafall.game.tutorial.TutorialActivity</game_handler>
+            <game_handler>
+                com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
+            </game_handler>
             <player_alliance>Rebels</player_alliance>
             <player_planet>earth</player_planet>
             <opponent_alliance>Rebels</opponent_alliance>
@@ -35,9 +37,8 @@
             <single_way>true</single_way>
             <suppressor>false</suppressor>
             <definition>
-                <time_limit>500</time_limit>
-                <type>collect</type>
-                <value>4000</value>
+                <time_limit>10</time_limit>
+                <type>survive</type>
             </definition>
         </mission_details>
     </campaign>
@@ -59,7 +60,9 @@
         </position>
         <mission_details>
             <name>Killer</name>
-            <game_handler>com.yaroslavlancelot.eafall.game.tutorial.TutorialActivity</game_handler>
+            <game_handler>
+                com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
+            </game_handler>
             <player_alliance>Rebels</player_alliance>
             <player_planet>earth</player_planet>
             <opponent_alliance>Rebels</opponent_alliance>
@@ -73,9 +76,8 @@
             <single_way>true</single_way>
             <suppressor>false</suppressor>
             <definition>
-                <time_limit>500</time_limit>
-                <type>collect</type>
-                <value>4000</value>
+                <time_limit>10</time_limit>
+                <type>survive</type>
             </definition>
         </mission_details>
     </campaign>
@@ -97,7 +99,9 @@
         </position>
         <mission_details>
             <name>Killer</name>
-            <game_handler>com.yaroslavlancelot.eafall.game.tutorial.TutorialActivity</game_handler>
+            <game_handler>
+                com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
+            </game_handler>
             <player_alliance>Rebels</player_alliance>
             <player_planet>earth</player_planet>
             <opponent_alliance>Rebels</opponent_alliance>
@@ -111,9 +115,8 @@
             <single_way>true</single_way>
             <suppressor>false</suppressor>
             <definition>
-                <time_limit>500</time_limit>
-                <type>collect</type>
-                <value>4000</value>
+                <time_limit>10</time_limit>
+                <type>survive</type>
             </definition>
         </mission_details>
     </campaign>

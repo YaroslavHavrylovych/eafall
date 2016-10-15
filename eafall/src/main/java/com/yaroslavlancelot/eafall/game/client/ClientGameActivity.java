@@ -238,10 +238,14 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
 
             @Override
             public void onHided() {
-                ClientGameActivity.this.finish();
+                onGameOver();
             }
         });
         popup.showPopup();
+    }
+
+    protected void onGameOver() {
+        ClientGameActivity.this.finish();
     }
 
     @SuppressWarnings("unused")
