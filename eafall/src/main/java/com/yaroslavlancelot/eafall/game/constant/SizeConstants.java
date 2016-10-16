@@ -129,11 +129,19 @@ public final class SizeConstants {
     public static final int DESCRIPTION_POPUP_ADDITIONAL_AREA_Y = 240;
 
     /* campaign */
-    public static final int CAMPAIGN_START_BUTTON_WIDTH = 200;
-    public static final int CAMPAIGN_START_BUTTON_HEIGHT = 75;
-    public static final int CAMPAIGN_START_BUTTON_X = GAME_FIELD_WIDTH -
-            CAMPAIGN_START_BUTTON_WIDTH / 2;
-    public static final int CAMPAIGN_START_BUTTON_Y = CAMPAIGN_START_BUTTON_HEIGHT / 2;
+    public static final int CAMPAIGN_START_BUTTON_WIDTH = 610;
+    public static final int CAMPAIGN_START_BUTTON_HEIGHT = 150;
+    public static final int CAMPAIGN_START_BUTTON_X = 1612;
+    public static final int CAMPAIGN_START_BUTTON_Y = 90;
+    public static final int CAMPAIGN_TITLE_TEXT = 50;
+    public static final int CAMPAIGN_BACK_BUTTON_SIZE = 160;
+    public static final int CAMPAIGN_BACK_BUTTON_X = 123;
+    public static final int CAMPAIGN_BACK_BUTTON_Y = 131;
+    public static final int CAMPAIGN_NEXT_BUTTON_WIDTH = 167;
+    public static final int CAMPAIGN_NEXT_BUTTON_HEIGHT = 194;
+    public static final int CAMPAIGN_NEXT_BUTTON_Y = 520;
+    public static final int CAMPAIGN_NEXT_RIGHT_BUTTON_X = 1673;
+    public static final int CAMPAIGN_NEXT_LEFT_BUTTON_X = 366;
 
 
     private SizeConstants() {

@@ -59,8 +59,7 @@ public abstract class BaseGameObjectsLoader extends BaseResourceLoader {
     @Override
     public void loadImages(TextureManager textureManager,
                            VertexBufferObjectManager vertexBufferObjectManager) {
-        //selector
-        SelectorFactory.loadResources(textureManager);
+        super.loadImages(textureManager, vertexBufferObjectManager);
         //background
         loadBigImages(textureManager);
         //alliance

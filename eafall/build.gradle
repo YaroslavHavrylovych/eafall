@@ -4,7 +4,7 @@ apply plugin: 'kotlin-android'
 int target_v = 24
 
 buildscript {
-    ext.kotlin_version = '1.0.3'
+    ext.kotlin_version = '1.0.4'
     ext.exclude_java = []
 
     repositories {
@@ -28,20 +28,20 @@ dependencies {
     compile 'de.greenrobot:eventbus:2.4.0'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile "com.android.support:appcompat-v7:24.2.1"
-    compile 'com.google.android.gms:play-services-analytics:9.4.0'
+    compile 'com.google.android.gms:play-services-analytics:9.6.1'
     compile 'com.jakewharton.timber:timber:4.3.0'
     compile 'com.android.support:multidex:1.0.1'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     //tests
     testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
-    androidTestCompile 'com.android.support.test:runner:0.4'
-    androidTestCompile 'com.android.support.test:rules:0.4'
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile 'com.android.support.test:rules:0.5'
     androidTestCompile 'com.android.support:support-annotations:24.2.1'
 }
 
 android {
     compileSdkVersion target_v
-    buildToolsVersion "24.0.2"
+    buildToolsVersion "24.0.3"
 
     packagingOptions {
         pickFirst 'META-INF/LICENSE.txt'

@@ -1,7 +1,12 @@
 package com.yaroslavlancelot.eafall.game.client.thick.single;
 
+import android.app.Activity;
+import android.content.Intent;
+
+import com.yaroslavlancelot.eafall.android.StartableIntent;
 import com.yaroslavlancelot.eafall.game.ai.IBot;
 import com.yaroslavlancelot.eafall.game.ai.VeryFirstBot;
+import com.yaroslavlancelot.eafall.game.campaign.intents.CampaignIntent;
 import com.yaroslavlancelot.eafall.game.client.thick.ThickClientGameActivity;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetStaticObject;
@@ -59,5 +64,16 @@ public class SinglePlayerGameActivity extends ThickClientGameActivity {
         thread.setPriority(Thread.MIN_PRIORITY);
         mBotThread = thread;
         mBotThread.start();
+    }
+
+    @Override
+    protected void onGameOver() {
+        String campaignFileName = getIntent().getStringExtra(CampaignIntent.CAMPAIGN_FILE_NAME_KEY);
+        if (campaignFileName != null) {
+            StartableIntent intent = new CampaignIntent(campaignFileName, mRuler.isSuccess(),
+                    getIntent().getIntExtra(CampaignIntent.CAMPAIGN_MISSION_ID_KEY, 0));
+            intent.start(SinglePlayerGameActivity.this);
+        }
+        super.onGameOver();
     }
 }

@@ -5,6 +5,11 @@ import android.content.SharedPreferences;
 
 import com.yaroslavlancelot.eafall.EaFallApplication;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
+import timber.log.Timber;
+
 /**
  * Implementation for {@link CampaignPassage} where data stored in {@link android.content.SharedPreferences}
  *
@@ -24,7 +29,12 @@ class CampaignPassageSharedPrefImpl implements CampaignPassage {
      * @param context  used to store and retrieve data from preferences
      */
     CampaignPassageSharedPrefImpl(String fileName, Context context) {
-        mFileName = fileName;
+        try {
+            mFileName = URLEncoder.encode(fileName, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            Timber.e(e, "can't campaign encode file name");
+            mFileName = fileName.substring(fileName.length() - 1);
+        }
         mContext = context;
     }
 
