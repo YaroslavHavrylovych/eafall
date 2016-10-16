@@ -8,5 +8,7 @@ pipelines:
           - echo y | android update sdk --filter "extra-android-m2repository" --no-ui -a
             # copy android licenses
           - cp -r ./android_licenses /usr/local/android-sdk/licenses
+            # update submodules (libraries)
+          - git submodule update --recursive
             # Building a dev build variant
           - ./gradlew clean assembleDevDebug
