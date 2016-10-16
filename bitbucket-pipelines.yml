@@ -6,5 +6,7 @@ pipelines:
         script: 
             # Grab the Android Support Repo which isn't included in the container
           - echo y | android update sdk --filter "extra-android-m2repository" --no-ui -a
+            # copy android licenses
+          - cp -r ./android_licenses /usr/local/android-sdk/licenses
             # Building a dev build variant
           - ./gradlew clean assembleDevDebug
