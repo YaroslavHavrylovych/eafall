@@ -14,6 +14,7 @@ public class CampaignIntent extends StartableIntent {
     public static final String CAMPAIGN_FILE_NAME_KEY = "campaign_file_name";
     private static final String DEFAULT_CAMPAIGN = "demo_campaign";
     public static final String GAME_RESULT_SUCCESS_KEY = "single_player_game_result_key";
+    public static final String CAMPAIGN_MISSION_ID_KEY = "campaign_mission_key";
 
     public CampaignIntent(String campaignFileName) {
         super(EaFallApplication.getContext(), CampaignActivity.class);
@@ -21,9 +22,10 @@ public class CampaignIntent extends StartableIntent {
         putExtra(ResourceFactory.RESOURCE_LOADER, ResourceFactory.TypeResourceLoader.CAMPAIGN);
     }
 
-    public CampaignIntent(String campaignFileName, boolean success) {
+    public CampaignIntent(String campaignFileName, boolean success, Integer missionId) {
         this(campaignFileName);
         putExtra(GAME_RESULT_SUCCESS_KEY, success);
+        putExtra(CAMPAIGN_MISSION_ID_KEY, missionId);
     }
 
     public CampaignIntent() {

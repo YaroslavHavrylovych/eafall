@@ -70,7 +70,8 @@ public class SinglePlayerGameActivity extends ThickClientGameActivity {
     protected void onGameOver() {
         String campaignFileName = getIntent().getStringExtra(CampaignIntent.CAMPAIGN_FILE_NAME_KEY);
         if (campaignFileName != null) {
-            StartableIntent intent = new CampaignIntent(campaignFileName, mRuler.isSuccess());
+            StartableIntent intent = new CampaignIntent(campaignFileName, mRuler.isSuccess(),
+                    getIntent().getIntExtra(CampaignIntent.CAMPAIGN_MISSION_ID_KEY, 0));
             intent.start(SinglePlayerGameActivity.this);
         }
         super.onGameOver();

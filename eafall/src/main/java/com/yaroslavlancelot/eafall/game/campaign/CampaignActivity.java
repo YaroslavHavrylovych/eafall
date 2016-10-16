@@ -44,7 +44,6 @@ import java.util.List;
 
 import timber.log.Timber;
 
-//TODO will open new campaign even if you pass some old one, fix this
 /**
  * Used to display missions list and/or campaigns list.
  * <br/>
@@ -144,7 +143,10 @@ public class CampaignActivity extends EaFallActivity {
         mScreenId = 0;
         if (getIntent().getExtras().getBoolean(CampaignIntent.GAME_RESULT_SUCCESS_KEY, false)) {
             getIntent().getExtras().remove(CampaignIntent.GAME_RESULT_SUCCESS_KEY);
-            mCampaignPassage.markNewCampaignPassed();
+            int missionId = getIntent().getExtras().getInt(CampaignIntent.CAMPAIGN_MISSION_ID_KEY);
+            if (missionId == mCampaignPassage.getPassedCampaignsAmount()) {
+                mCampaignPassage.markNewCampaignPassed();
+            }
         }
     }
 
@@ -211,6 +213,8 @@ public class CampaignActivity extends EaFallActivity {
     }
 
     private void updateScreen() {
+        int amountOfMissions = mCampaignFileLoader.getCampaignsList().size();
+        mScreenId = mScreenId < amountOfMissions ? mScreenId : amountOfMissions - 1;
         mCamera.setCenter(SizeConstants.HALF_FIELD_WIDTH + mScreenId * SizeConstants.GAME_FIELD_WIDTH,
                 SizeConstants.HALF_FIELD_HEIGHT);
         mPreviousScreenButton.setEnabled(mScreenId > 0);
@@ -289,7 +293,7 @@ public class CampaignActivity extends EaFallActivity {
         mResourcesLoader.unloadImages(getTextureManager());
         SelfCleanable.clearMemory();
         StartableIntent campaignIntent = new CampaignMissionIntent(getMissionActivity(missionData),
-                missionData, mCampaignFileName);
+                missionData, mCampaignFileName, mScreenId);
         campaignIntent.start(this);
     }
 
