@@ -9,6 +9,6 @@ pipelines:
             # copy android licenses
           - cp -r ./android_licenses /usr/local/android-sdk/licenses
             # update submodules (libraries)
-          - git submodule update --recursive
+          - git submodule update --remote --merge
             # Building a dev build variant
           - ./gradlew clean assembleDevDebug
