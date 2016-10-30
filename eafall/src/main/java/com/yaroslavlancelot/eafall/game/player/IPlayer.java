@@ -112,7 +112,7 @@ public interface IPlayer {
      * <br/>
      * unit will not be added as player object, you have to do it manually
      *
-     * @param unitKey unit id
+     * @param unitKey unit screen
      * @return created unit
      */
     Unit constructUnit(int unitKey);

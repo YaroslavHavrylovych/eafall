@@ -245,7 +245,8 @@ public class CampaignActivity extends EaFallActivity {
         List<Sprite> elementsList = new ArrayList<>(size);
         for (ObjectDataLoader dataLoader : mCampaignFileLoader.getObjectsList()) {
             PositionLoader position = dataLoader.position;
-            Sprite sprite = new Sprite(position.x, position.y,
+            Sprite sprite = new Sprite(
+                    position.x + dataLoader.screen * SizeConstants.GAME_FIELD_WIDTH, position.y,
                     TextureRegionHolder.getRegion(dataLoader.picture), vertexManager);
             if (dataLoader.rotation != null) {
                 sprite.registerEntityModifier(new InstantRotationModifier(dataLoader.rotation));
@@ -265,9 +266,10 @@ public class CampaignActivity extends EaFallActivity {
         List<Sprite> elementsList = new ArrayList<>(mCampaignFileLoader.getCampaignsList().size());
         for (CampaignDataLoader dataLoader : mCampaignFileLoader.getCampaignsList()) {
             PositionLoader position = dataLoader.position;
-            Sprite sprite = new Sprite(position.x, position.y,
+            Sprite sprite = new Sprite(
+                    position.x + dataLoader.screen * SizeConstants.GAME_FIELD_WIDTH, position.y,
                     TextureRegionHolder.getRegion(dataLoader.picture), vertexManager);
-            sprite.setTag(dataLoader.id);
+            sprite.setTag(dataLoader.screen);
             if (dataLoader.rotation != null) {
                 sprite.registerEntityModifier(new BackwardInstantRotationModifier(dataLoader.rotation));
             }
@@ -309,15 +311,15 @@ public class CampaignActivity extends EaFallActivity {
     }
 
     /**
-     * search for campaign with given id
+     * search for campaign with given screen
      *
-     * @param id given campaign id
+     * @param id given campaign screen
      * @return {@link CampaignDataLoader} instance or null if no such campaign loaded
      */
     private CampaignDataLoader getCampaign(int id) {
         CampaignDataLoader campaignDataLoader = null;
         for (CampaignDataLoader data : mCampaignFileLoader.getCampaignsList()) {
-            if (data.id == id) {
+            if (data.screen == id) {
                 campaignDataLoader = data;
                 break;
             }

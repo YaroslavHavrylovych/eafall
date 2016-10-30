@@ -36,7 +36,7 @@ public abstract class BaseNonGameActivity extends FragmentActivity {
      * Used instead of {@link BaseNonGameActivity#onCreate(Bundle)}.
      * <p/>
      * YOU MUST set content view in this method and this view have to has
-     * id {@link R.id#background_layout} as an background element.
+     * screen {@link R.id#background_layout} as an background element.
      * It will be used to set aspect ration for the activity.
      *
      * @param savedInstanceState came from onCreate

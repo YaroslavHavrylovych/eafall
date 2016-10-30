@@ -5,7 +5,7 @@
     <background>graphics/images/background.png</background>
     <parallax_background>false</parallax_background>
 
-    <campaign id="0">
+    <campaign screen="0">
         <name>imperials_campaign</name>
         <picture>graphics/sprites/earth.png</picture>
         <width>128</width>
@@ -15,7 +15,7 @@
             <y>280</y>
         </position>
     </campaign>
-    <campaign id="1">
+    <campaign screen="1">
         <name>rebels_campaign</name>
         <picture>graphics/sprites/earth.png</picture>
         <width>128</width>

@@ -302,9 +302,16 @@
     <!-- Guide campaign -->
     <string name="campaign_guide_start">Начать</string>
     <string name="campaign_guide_enter">Осмотреть</string>
-    <string name="campaign_demo_tutorial1">Вступ</string>
-    <string name="campaign_demo_tutorial2">Первый бой</string>
-    <string name="campaign_demo_tutorial3">Второй бой</string>
+    <string name="campaign_demo_tutorial1">Макошь</string>
+    <string name="campaign_demo_tutorial2">Даждьбог</string>
+    <string name="campaign_demo_tutorial3">Чорнобог</string>
+    <string name="campaign_demo_tutorial4">Сварог</string>
+    <string name="campaign_demo_tutorial5">Сімаргл</string>
+    <string name="campaign_demo_tutorial6">Велес</string>
+    <string name="campaign_demo_tutorial7">Стрибог</string>
+    <string name="campaign_demo_tutorial8">Марог</string>
+    <string name="campaign_demo_tutorial9">Ярило</string>
+    <string name="campaign_demo_tutorial10">Лада</string>
     <!-- / Guide campaign -->
     <!-- / Campaign -->
 

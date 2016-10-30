@@ -140,13 +140,13 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
     }
 
     /**
-     * creates {@link BuildingId} by the give id. If building exist on the planet
+     * creates {@link BuildingId} by the give screen. If building exist on the planet
      * then upgrade value of the result BuildingId will be equal to the upgrade of
      * the building on the planet. If the building doesn't exist then upgrade will
      * be equal to 0.
      *
      * @param player player which building is this
-     * @param id     id of the building
+     * @param id     screen of the building
      * @return {@link BuildingId} instance
      */
     private BuildingId createBuildingId(IPlayer player, int id) {

@@ -10,7 +10,7 @@ public class UnitLoader {
     @Attribute(name = "name")
     public String name;
 
-    @Element(name = "id")
+    @Element(name = "screen")
     public Integer id;
 
     @Element(name = "health")

@@ -21,7 +21,7 @@ public class BuildingsAmountChangedEvent {
         mNewBuildingsAmount = newBuildingsAmount;
     }
 
-    /** returns building key/id in player */
+    /** returns building key/screen in player */
     public BuildingId getBuildingId() {
         return mBuildingId;
     }

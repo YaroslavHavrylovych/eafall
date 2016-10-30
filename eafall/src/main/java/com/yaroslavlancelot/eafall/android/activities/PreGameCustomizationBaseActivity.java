@@ -60,7 +60,7 @@ public abstract class PreGameCustomizationBaseActivity extends BaseNonGameActivi
 
     /**
      * Return alliance name (as English version in R.string.choose_alliance) based
-     * on current selected id in spinner passed in params.
+     * on current selected screen in spinner passed in params.
      *
      * @param spinner spinner to search for alliance in
      * @return Selected alliance name in English.

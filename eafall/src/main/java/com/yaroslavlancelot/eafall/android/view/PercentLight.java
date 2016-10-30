@@ -75,7 +75,7 @@ public class PercentLight extends View {
         mPartlyDrawable.setId(mPartlyDrawable.mCurrentValueId - 1);
     }
 
-    /** search the id with the closest corresponding value and set it as the current value */
+    /** search the screen with the closest corresponding value and set it as the current value */
     private void updateIdByValue(float value) {
         int currentValueId = mValueToPercentage.indexOfValue(value);
         if (currentValueId == -1) {

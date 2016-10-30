@@ -177,7 +177,7 @@ public class ClientGameHud extends BaseGameHud {
      * <p/>
      * WARNING: maximum {@link #MAXIMUM_HUD_TEXT_CHARACTERS} characters
      *
-     * @param text string resource id
+     * @param text string resource screen
      */
     public void showHudText(int text) {
         showHudText(LocaleImpl.getInstance().getStringById(text));

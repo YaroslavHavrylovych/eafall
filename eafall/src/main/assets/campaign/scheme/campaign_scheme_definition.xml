@@ -85,13 +85,14 @@
                                 </xs:complexType>
                             </xs:element>
                         </xs:sequence>
-                        <xs:attribute name="id" type="xs:nonNegativeInteger" use="required"/>
+                        <xs:attribute name="screen" type="xs:nonNegativeInteger" use="required"/>
                     </xs:complexType>
                 </xs:element>
 
                 <xs:element name="object" maxOccurs="unbounded" minOccurs="0">
                     <xs:complexType>
                         <xs:sequence>
+                            <xs:element name="screen" type="xs:integer"/>
                             <xs:element name="picture" type="xs:string"/>
                             <xs:element name="width" type="xs:integer"/>
                             <xs:element name="height" type="xs:integer"/>

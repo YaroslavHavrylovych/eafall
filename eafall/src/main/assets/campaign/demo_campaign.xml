@@ -4,12 +4,7 @@
     <background>graphics/images/background.png</background>
     <parallax_background>true</parallax_background>
 
-    <!--
-    The first intor mission.
-    Description:
-    bla-bla-bla
-    -->
-    <campaign id="0">
+    <campaign screen="0">
         <name>campaign_demo_tutorial1</name>
         <picture>graphics/images/campaign/mars.png</picture>
         <width>128</width>
@@ -43,19 +38,14 @@
         </mission_details>
     </campaign>
 
-    <!--
-    The second mission.
-    Description:
-    bla-bla-bla
-    -->
-    <campaign id="1">
+    <campaign screen="1">
         <name>campaign_demo_tutorial2</name>
         <picture>graphics/images/campaign/mars.png</picture>
         <width>128</width>
         <height>128</height>
         <rotation>30</rotation>
         <position>
-            <x>2939</x>
+            <x>1019</x>
             <y>540</y>
         </position>
         <mission_details>
@@ -82,19 +72,252 @@
         </mission_details>
     </campaign>
 
-    <!--
-    The third mission.
-    Description:
-    bla-bla-bla
-    -->
-    <campaign id="2">
+    <campaign screen="2">
         <name>campaign_demo_tutorial3</name>
         <picture>graphics/images/campaign/mars.png</picture>
         <width>128</width>
         <height>128</height>
         <rotation>30</rotation>
         <position>
-            <x>4859</x>
+            <x>1019</x>
+            <y>540</y>
+        </position>
+        <mission_details>
+            <name>Killer</name>
+            <game_handler>
+                com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
+            </game_handler>
+            <player_alliance>Rebels</player_alliance>
+            <player_planet>earth</player_planet>
+            <opponent_alliance>Rebels</opponent_alliance>
+            <opponent_planet>earth</opponent_planet>
+            <max_oxygen>1500</max_oxygen>
+            <planet_health>5000</planet_health>
+            <offensive_units_limit>7</offensive_units_limit>
+            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.SingleWayBot
+            </enemy_logic_handler>
+            <star_constellation>no_constellation</star_constellation>
+            <single_way>true</single_way>
+            <suppressor>false</suppressor>
+            <definition>
+                <time_limit>10</time_limit>
+                <type>survive</type>
+            </definition>
+        </mission_details>
+    </campaign>
+
+    <campaign screen="3">
+        <name>campaign_demo_tutorial4</name>
+        <picture>graphics/images/campaign/mars.png</picture>
+        <width>128</width>
+        <height>128</height>
+        <rotation>30</rotation>
+        <position>
+            <x>1019</x>
+            <y>540</y>
+        </position>
+        <mission_details>
+            <name>Killer</name>
+            <game_handler>
+                com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
+            </game_handler>
+            <player_alliance>Rebels</player_alliance>
+            <player_planet>earth</player_planet>
+            <opponent_alliance>Rebels</opponent_alliance>
+            <opponent_planet>earth</opponent_planet>
+            <max_oxygen>1500</max_oxygen>
+            <planet_health>5000</planet_health>
+            <offensive_units_limit>7</offensive_units_limit>
+            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.SingleWayBot
+            </enemy_logic_handler>
+            <star_constellation>no_constellation</star_constellation>
+            <single_way>true</single_way>
+            <suppressor>false</suppressor>
+            <definition>
+                <time_limit>10</time_limit>
+                <type>survive</type>
+            </definition>
+        </mission_details>
+    </campaign>
+
+    <campaign screen="4">
+        <name>campaign_demo_tutorial5</name>
+        <picture>graphics/images/campaign/mars.png</picture>
+        <width>128</width>
+        <height>128</height>
+        <rotation>30</rotation>
+        <position>
+            <x>1019</x>
+            <y>540</y>
+        </position>
+        <mission_details>
+            <name>Killer</name>
+            <game_handler>
+                com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
+            </game_handler>
+            <player_alliance>Rebels</player_alliance>
+            <player_planet>earth</player_planet>
+            <opponent_alliance>Rebels</opponent_alliance>
+            <opponent_planet>earth</opponent_planet>
+            <max_oxygen>1500</max_oxygen>
+            <planet_health>5000</planet_health>
+            <offensive_units_limit>7</offensive_units_limit>
+            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.SingleWayBot
+            </enemy_logic_handler>
+            <star_constellation>no_constellation</star_constellation>
+            <single_way>true</single_way>
+            <suppressor>false</suppressor>
+            <definition>
+                <time_limit>10</time_limit>
+                <type>survive</type>
+            </definition>
+        </mission_details>
+    </campaign>
+
+    <campaign screen="5">
+        <name>campaign_demo_tutorial6</name>
+        <picture>graphics/images/campaign/mars.png</picture>
+        <width>128</width>
+        <height>128</height>
+        <rotation>30</rotation>
+        <position>
+            <x>1019</x>
+            <y>540</y>
+        </position>
+        <mission_details>
+            <name>Killer</name>
+            <game_handler>
+                com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
+            </game_handler>
+            <player_alliance>Rebels</player_alliance>
+            <player_planet>earth</player_planet>
+            <opponent_alliance>Rebels</opponent_alliance>
+            <opponent_planet>earth</opponent_planet>
+            <max_oxygen>1500</max_oxygen>
+            <planet_health>5000</planet_health>
+            <offensive_units_limit>7</offensive_units_limit>
+            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.SingleWayBot
+            </enemy_logic_handler>
+            <star_constellation>no_constellation</star_constellation>
+            <single_way>true</single_way>
+            <suppressor>false</suppressor>
+            <definition>
+                <time_limit>10</time_limit>
+                <type>survive</type>
+            </definition>
+        </mission_details>
+    </campaign>
+
+    <campaign screen="6">
+        <name>campaign_demo_tutorial7</name>
+        <picture>graphics/images/campaign/mars.png</picture>
+        <width>128</width>
+        <height>128</height>
+        <rotation>30</rotation>
+        <position>
+            <x>1019</x>
+            <y>540</y>
+        </position>
+        <mission_details>
+            <name>Killer</name>
+            <game_handler>
+                com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
+            </game_handler>
+            <player_alliance>Rebels</player_alliance>
+            <player_planet>earth</player_planet>
+            <opponent_alliance>Rebels</opponent_alliance>
+            <opponent_planet>earth</opponent_planet>
+            <max_oxygen>1500</max_oxygen>
+            <planet_health>5000</planet_health>
+            <offensive_units_limit>7</offensive_units_limit>
+            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.SingleWayBot
+            </enemy_logic_handler>
+            <star_constellation>no_constellation</star_constellation>
+            <single_way>true</single_way>
+            <suppressor>false</suppressor>
+            <definition>
+                <time_limit>10</time_limit>
+                <type>survive</type>
+            </definition>
+        </mission_details>
+    </campaign>
+
+    <campaign screen="7">
+        <name>campaign_demo_tutorial8</name>
+        <picture>graphics/images/campaign/mars.png</picture>
+        <width>128</width>
+        <height>128</height>
+        <rotation>30</rotation>
+        <position>
+            <x>1019</x>
+            <y>540</y>
+        </position>
+        <mission_details>
+            <name>Killer</name>
+            <game_handler>
+                com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
+            </game_handler>
+            <player_alliance>Rebels</player_alliance>
+            <player_planet>earth</player_planet>
+            <opponent_alliance>Rebels</opponent_alliance>
+            <opponent_planet>earth</opponent_planet>
+            <max_oxygen>1500</max_oxygen>
+            <planet_health>5000</planet_health>
+            <offensive_units_limit>7</offensive_units_limit>
+            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.SingleWayBot
+            </enemy_logic_handler>
+            <star_constellation>no_constellation</star_constellation>
+            <single_way>true</single_way>
+            <suppressor>false</suppressor>
+            <definition>
+                <time_limit>10</time_limit>
+                <type>survive</type>
+            </definition>
+        </mission_details>
+    </campaign>
+
+    <campaign screen="8">
+        <name>campaign_demo_tutorial9</name>
+        <picture>graphics/images/campaign/mars.png</picture>
+        <width>128</width>
+        <height>128</height>
+        <rotation>30</rotation>
+        <position>
+            <x>1019</x>
+            <y>540</y>
+        </position>
+        <mission_details>
+            <name>Killer</name>
+            <game_handler>
+                com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
+            </game_handler>
+            <player_alliance>Rebels</player_alliance>
+            <player_planet>earth</player_planet>
+            <opponent_alliance>Rebels</opponent_alliance>
+            <opponent_planet>earth</opponent_planet>
+            <max_oxygen>1500</max_oxygen>
+            <planet_health>5000</planet_health>
+            <offensive_units_limit>7</offensive_units_limit>
+            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.SingleWayBot
+            </enemy_logic_handler>
+            <star_constellation>no_constellation</star_constellation>
+            <single_way>true</single_way>
+            <suppressor>false</suppressor>
+            <definition>
+                <time_limit>10</time_limit>
+                <type>survive</type>
+            </definition>
+        </mission_details>
+    </campaign>
+
+    <campaign screen="9">
+        <name>campaign_demo_tutorial10</name>
+        <picture>graphics/images/campaign/mars.png</picture>
+        <width>128</width>
+        <height>128</height>
+        <rotation>30</rotation>
+        <position>
+            <x>1019</x>
             <y>540</y>
         </position>
         <mission_details>
@@ -122,8 +345,8 @@
     </campaign>
 
     <!-- additional screen elements -->
-    <!-- to the first mission -->
     <object>
+        <screen>0</screen>
         <picture>graphics/images/campaign/planet_shadow.png</picture>
         <width>661</width>
         <height>651</height>
@@ -133,6 +356,7 @@
         </position>
     </object>
     <object>
+        <screen>0</screen>
         <picture>graphics/sprites/object/meteor.png</picture>
         <width>40</width>
         <height>51</height>
@@ -144,8 +368,9 @@
             <y>540</y>
         </position>
     </object>
-    <!-- to the second mission -->
+
     <object>
+        <screen>1</screen>
         <picture>graphics/sprites/object/meteor.png</picture>
         <width>40</width>
         <height>51</height>
@@ -153,7 +378,7 @@
         <radius>400</radius>
         <duration>10</duration>
         <position>
-            <x>2939</x>
+            <x>1019</x>
             <y>540</y>
         </position>
     </object>

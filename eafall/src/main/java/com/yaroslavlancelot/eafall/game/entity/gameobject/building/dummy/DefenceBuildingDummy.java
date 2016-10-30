@@ -13,7 +13,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 
 /** for creation orbital stations (defence buildings) */
 public class DefenceBuildingDummy extends UnitBuildingDummy {
-    /** building id */
+    /** building screen */
     private static final int BUILDING_ID = 250;
     /** data loaded from xml which store buildings data (in string format) */
     private DefenceBuildingLoader mDefenceBuildingLoader;

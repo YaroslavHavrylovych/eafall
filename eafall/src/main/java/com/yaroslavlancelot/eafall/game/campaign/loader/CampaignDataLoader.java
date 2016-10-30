@@ -13,8 +13,8 @@ import org.simpleframework.xml.Root;
  */
 @Root(name = "campaign")
 public class CampaignDataLoader {
-    @Attribute(name = "id")
-    public Integer id;
+    @Attribute(name = "screen")
+    public Integer screen;
 
     @Element(name = "name")
     public String name;

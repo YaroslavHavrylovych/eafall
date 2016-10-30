@@ -302,9 +302,16 @@
     <!-- guide campaign -->
     <string name="campaign_guide_start">Start</string>
     <string name="campaign_guide_enter">Enter</string>
-    <string name="campaign_demo_tutorial1">Intro</string>
-    <string name="campaign_demo_tutorial2">First battle</string>
-    <string name="campaign_demo_tutorial3">Second battle</string>
+    <string name="campaign_demo_tutorial1">Makosh</string>
+    <string name="campaign_demo_tutorial2">Dazbog</string>
+    <string name="campaign_demo_tutorial3">Chernobog</string>
+    <string name="campaign_demo_tutorial4">Svarog</string>
+    <string name="campaign_demo_tutorial5">Simargl</string>
+    <string name="campaign_demo_tutorial6">Veles</string>
+    <string name="campaign_demo_tutorial7">Stribog</string>
+    <string name="campaign_demo_tutorial8">Morana</string>
+    <string name="campaign_demo_tutorial9">Jarilo</string>
+    <string name="campaign_demo_tutorial10">Lada</string>
     <!-- /guide campaign -->
     <!-- /campaign -->
 

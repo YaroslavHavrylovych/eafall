@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- app id -->
+    <!-- app screen -->
     <string name="ga_trackingId">UA-71865833-1</string>
 
     <!-- session tracker -->

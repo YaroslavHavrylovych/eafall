@@ -6,10 +6,15 @@ pipelines:
         script: 
             # Grab the Android Support Repo which isn't included in the container
           - echo y | android update sdk --filter "extra-android-m2repository" --no-ui -a
+          - pwd
+          - ls ./
             # update submodules (libraries)
           - git clone https://yaroslav_havrylovych@bitbucket.org/yaroslav_havrylovych/andengine.git
+          - ls ./andengine
           - git clone https://yaroslav_havrylovych@bitbucket.org/yaroslav_havrylovych/andenginephysicsbox2dextension.git
+          - ls ./andenginephysicsbox2dextension
           - git clone https://yaroslav_havrylovych@bitbucket.org/yaroslav_havrylovych/andenginemultiplayerextension.git
+          - ls ./andenginemultiplayerextension
             # copy android licenses
           - cp -r ./android_licenses /usr/local/android-sdk/licenses
             # Building a dev build variant

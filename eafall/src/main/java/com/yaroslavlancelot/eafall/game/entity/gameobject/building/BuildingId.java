@@ -1,11 +1,11 @@
 package com.yaroslavlancelot.eafall.game.entity.gameobject.building;
 
 /**
- * buildings have custom id's. Each building have not just int as id but
- * it's id and upgrade. So the real building id is the combination of the building id + it's upgrade
+ * buildings have custom screen's. Each building have not just int as screen but
+ * it's screen and upgrade. So the real building screen is the combination of the building screen + it's upgrade
  */
 public class BuildingId {
-    /** building line id */
+    /** building line screen */
     private final int mId;
     /** current building line upgrade */
     private final int mUpgrade;

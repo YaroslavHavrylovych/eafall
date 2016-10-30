@@ -42,7 +42,7 @@ import de.greenrobot.event.EventBus;
  * Customized to handle some not {@link HUD} operations:
  * <ul>
  * <li>init's on screen text and hud elements</li>
- * <li>passes selected unit id to the game popup</li>
+ * <li>passes selected unit screen to the game popup</li>
  * <li>load's resources</li>
  * </ul>
  *

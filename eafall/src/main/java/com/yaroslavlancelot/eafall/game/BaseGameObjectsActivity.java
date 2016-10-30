@@ -364,7 +364,7 @@ public abstract class BaseGameObjectsActivity extends EaFallActivity implements 
                 unitEvent.getX(), unitEvent.getY());
     }
 
-    /** return unit if it exist (live) by using unit unique id */
+    /** return unit if it exist (live) by using unit unique screen */
     protected GameObject getGameObjectById(long id) {
         return mGameObjectsMap.get(id);
     }
