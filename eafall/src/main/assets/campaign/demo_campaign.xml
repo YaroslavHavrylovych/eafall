@@ -1,5 +1,5 @@
 <campaigns xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xsi:noNamespaceSchemaLocation="scheme/campaign_scheme_definition.xml">
+    xsi:noNamespaceSchemaLocation="scheme/campaign_scheme_definition.xml">
 
     <background>graphics/images/background.png</background>
     <parallax_background>true</parallax_background>
@@ -15,25 +15,25 @@
             <y>540</y>
         </position>
         <mission_details>
-            <name>Killer</name>
+            <name>Makosh</name>
             <game_handler>
                 com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
             </game_handler>
+            <!-- TODO we have to bound units usage here (e.g. 4 unit types for you and 3 for opponent) -->
             <player_alliance>Rebels</player_alliance>
             <player_planet>earth</player_planet>
             <opponent_alliance>Rebels</opponent_alliance>
             <opponent_planet>earth</opponent_planet>
             <max_oxygen>1500</max_oxygen>
-            <planet_health>5000</planet_health>
-            <offensive_units_limit>7</offensive_units_limit>
+            <planet_health>3000</planet_health>
+            <offensive_units_limit>30</offensive_units_limit>
             <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.SingleWayBot
             </enemy_logic_handler>
             <star_constellation>no_constellation</star_constellation>
             <single_way>true</single_way>
             <suppressor>false</suppressor>
             <definition>
-                <time_limit>10</time_limit>
-                <type>survive</type>
+                <type>win</type>
             </definition>
         </mission_details>
     </campaign>
@@ -49,7 +49,7 @@
             <y>540</y>
         </position>
         <mission_details>
-            <name>Killer</name>
+            <name>Dazbog</name>
             <game_handler>
                 com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
             </game_handler>
@@ -57,20 +57,22 @@
             <player_planet>earth</player_planet>
             <opponent_alliance>Rebels</opponent_alliance>
             <opponent_planet>earth</opponent_planet>
-            <max_oxygen>1500</max_oxygen>
+            <max_oxygen>5000</max_oxygen>
             <planet_health>5000</planet_health>
-            <offensive_units_limit>7</offensive_units_limit>
-            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.SingleWayBot
+            <offensive_units_limit>100</offensive_units_limit>
+            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.VeryFirstBot
             </enemy_logic_handler>
-            <star_constellation>no_constellation</star_constellation>
-            <single_way>true</single_way>
+            <star_constellation>sun</star_constellation>
+            <single_way>false</single_way>
             <suppressor>false</suppressor>
             <definition>
-                <time_limit>10</time_limit>
-                <type>survive</type>
+                <time_limit>300</time_limit>
+                <type>win</type>
             </definition>
         </mission_details>
     </campaign>
+
+    <!-- TODO separate constellation for alliance player -->
 
     <campaign screen="2">
         <name>campaign_demo_tutorial3</name>
@@ -83,7 +85,7 @@
             <y>540</y>
         </position>
         <mission_details>
-            <name>Killer</name>
+            <name>Chernobog</name>
             <game_handler>
                 com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
             </game_handler>
@@ -91,17 +93,18 @@
             <player_planet>earth</player_planet>
             <opponent_alliance>Rebels</opponent_alliance>
             <opponent_planet>earth</opponent_planet>
-            <max_oxygen>1500</max_oxygen>
+            <max_oxygen>5000</max_oxygen>
             <planet_health>5000</planet_health>
-            <offensive_units_limit>7</offensive_units_limit>
-            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.SingleWayBot
+            <offensive_units_limit>200</offensive_units_limit>
+            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.VeryFirstBot
             </enemy_logic_handler>
-            <star_constellation>no_constellation</star_constellation>
-            <single_way>true</single_way>
-            <suppressor>false</suppressor>
+            <star_constellation>sun</star_constellation>
+            <single_way>false</single_way>
+            <suppressor>true</suppressor>
             <definition>
-                <time_limit>10</time_limit>
-                <type>survive</type>
+                <time_limit>180</time_limit>
+                <type>collect</type>
+                <value>4000</value>
             </definition>
         </mission_details>
     </campaign>
@@ -117,7 +120,7 @@
             <y>540</y>
         </position>
         <mission_details>
-            <name>Killer</name>
+            <name>Svarog</name>
             <game_handler>
                 com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
             </game_handler>
@@ -127,15 +130,14 @@
             <opponent_planet>earth</opponent_planet>
             <max_oxygen>1500</max_oxygen>
             <planet_health>5000</planet_health>
-            <offensive_units_limit>7</offensive_units_limit>
-            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.SingleWayBot
+            <offensive_units_limit>150</offensive_units_limit>
+            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.VeryFirstBot
             </enemy_logic_handler>
-            <star_constellation>no_constellation</star_constellation>
-            <single_way>true</single_way>
-            <suppressor>false</suppressor>
+            <star_constellation>sun</star_constellation>
+            <single_way>false</single_way>
+            <suppressor>true</suppressor>
             <definition>
-                <time_limit>10</time_limit>
-                <type>survive</type>
+                <type>win</type>
             </definition>
         </mission_details>
     </campaign>
@@ -151,7 +153,7 @@
             <y>540</y>
         </position>
         <mission_details>
-            <name>Killer</name>
+            <name>Simargl</name>
             <game_handler>
                 com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
             </game_handler>
@@ -159,17 +161,17 @@
             <player_planet>earth</player_planet>
             <opponent_alliance>Rebels</opponent_alliance>
             <opponent_planet>earth</opponent_planet>
-            <max_oxygen>1500</max_oxygen>
+            <max_oxygen>3000</max_oxygen>
             <planet_health>5000</planet_health>
-            <offensive_units_limit>7</offensive_units_limit>
-            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.SingleWayBot
+            <offensive_units_limit>200</offensive_units_limit>
+            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.VeryFirstBot
             </enemy_logic_handler>
-            <star_constellation>no_constellation</star_constellation>
-            <single_way>true</single_way>
-            <suppressor>false</suppressor>
+            <star_constellation>sun</star_constellation>
+            <single_way>false</single_way>
+            <suppressor>true</suppressor>
             <definition>
-                <time_limit>10</time_limit>
-                <type>survive</type>
+                <time_limit>300</time_limit>
+                <type>win</type>
             </definition>
         </mission_details>
     </campaign>
@@ -185,7 +187,7 @@
             <y>540</y>
         </position>
         <mission_details>
-            <name>Killer</name>
+            <name>Veles</name>
             <game_handler>
                 com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
             </game_handler>
@@ -195,15 +197,15 @@
             <opponent_planet>earth</opponent_planet>
             <max_oxygen>1500</max_oxygen>
             <planet_health>5000</planet_health>
-            <offensive_units_limit>7</offensive_units_limit>
+            <offensive_units_limit>100</offensive_units_limit>
             <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.SingleWayBot
             </enemy_logic_handler>
             <star_constellation>no_constellation</star_constellation>
             <single_way>true</single_way>
-            <suppressor>false</suppressor>
+            <suppressor>true</suppressor>
             <definition>
-                <time_limit>10</time_limit>
-                <type>survive</type>
+                <time_limit>300</time_limit>
+                <type>win</type>
             </definition>
         </mission_details>
     </campaign>
@@ -219,7 +221,7 @@
             <y>540</y>
         </position>
         <mission_details>
-            <name>Killer</name>
+            <name>Stribog</name>
             <game_handler>
                 com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
             </game_handler>
@@ -229,15 +231,14 @@
             <opponent_planet>earth</opponent_planet>
             <max_oxygen>1500</max_oxygen>
             <planet_health>5000</planet_health>
-            <offensive_units_limit>7</offensive_units_limit>
-            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.SingleWayBot
+            <offensive_units_limit>200</offensive_units_limit>
+            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.VeryFirstBot
             </enemy_logic_handler>
             <star_constellation>no_constellation</star_constellation>
-            <single_way>true</single_way>
-            <suppressor>false</suppressor>
+            <single_way>false</single_way>
+            <suppressor>true</suppressor>
             <definition>
-                <time_limit>10</time_limit>
-                <type>survive</type>
+                <type>win</type>
             </definition>
         </mission_details>
     </campaign>
@@ -253,7 +254,7 @@
             <y>540</y>
         </position>
         <mission_details>
-            <name>Killer</name>
+            <name>Morana</name>
             <game_handler>
                 com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
             </game_handler>
@@ -263,15 +264,14 @@
             <opponent_planet>earth</opponent_planet>
             <max_oxygen>1500</max_oxygen>
             <planet_health>5000</planet_health>
-            <offensive_units_limit>7</offensive_units_limit>
-            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.SingleWayBot
+            <offensive_units_limit>200</offensive_units_limit>
+            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.VeryFirstBot
             </enemy_logic_handler>
-            <star_constellation>no_constellation</star_constellation>
-            <single_way>true</single_way>
-            <suppressor>false</suppressor>
+            <star_constellation>sun</star_constellation>
+            <single_way>false</single_way>
+            <suppressor>true</suppressor>
             <definition>
-                <time_limit>10</time_limit>
-                <type>survive</type>
+                <type>win</type>
             </definition>
         </mission_details>
     </campaign>
@@ -287,7 +287,7 @@
             <y>540</y>
         </position>
         <mission_details>
-            <name>Killer</name>
+            <name>Jarilo</name>
             <game_handler>
                 com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
             </game_handler>
@@ -297,14 +297,14 @@
             <opponent_planet>earth</opponent_planet>
             <max_oxygen>1500</max_oxygen>
             <planet_health>5000</planet_health>
-            <offensive_units_limit>7</offensive_units_limit>
+            <offensive_units_limit>200</offensive_units_limit>
             <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.SingleWayBot
             </enemy_logic_handler>
-            <star_constellation>no_constellation</star_constellation>
-            <single_way>true</single_way>
-            <suppressor>false</suppressor>
+            <star_constellation>sun</star_constellation>
+            <single_way>false</single_way>
+            <suppressor>true</suppressor>
             <definition>
-                <time_limit>10</time_limit>
+                <time_limit>300</time_limit>
                 <type>survive</type>
             </definition>
         </mission_details>
@@ -321,7 +321,7 @@
             <y>540</y>
         </position>
         <mission_details>
-            <name>Killer</name>
+            <name>Lada</name>
             <game_handler>
                 com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
             </game_handler>
@@ -331,15 +331,14 @@
             <opponent_planet>earth</opponent_planet>
             <max_oxygen>1500</max_oxygen>
             <planet_health>5000</planet_health>
-            <offensive_units_limit>7</offensive_units_limit>
+            <offensive_units_limit>200</offensive_units_limit>
             <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.SingleWayBot
             </enemy_logic_handler>
-            <star_constellation>no_constellation</star_constellation>
-            <single_way>true</single_way>
-            <suppressor>false</suppressor>
+            <star_constellation>sun</star_constellation>
+            <single_way>false</single_way>
+            <suppressor>true</suppressor>
             <definition>
-                <time_limit>10</time_limit>
-                <type>survive</type>
+                <type>win</type>
             </definition>
         </mission_details>
     </campaign>
