@@ -286,6 +286,7 @@ public class CampaignActivity extends EaFallActivity {
             @Override
             public void onClick(final ButtonSprite pButtonSprite, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
                 startMission(getCampaign(mScreenId).mission);
+                finish();
             }
         });
         mHud.registerTouchArea(mStartButton);

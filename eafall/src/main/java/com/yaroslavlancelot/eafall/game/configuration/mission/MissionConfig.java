@@ -53,6 +53,8 @@ public class MissionConfig implements Parcelable {
     private boolean mSuppressor;
     private String mBotLogic;
     private String mGameHandler;
+    private int mPlayerBuildingsLimit;
+    private int mOpponentBuildingsLimit;
 
     // ===========================================================
     // Constructors
@@ -78,8 +80,10 @@ public class MissionConfig implements Parcelable {
         mStarConstellation = in.readInt();
         mPlayerPlanet = in.readInt();
         mPlayerStartMoney = in.readInt();
+        mPlayerBuildingsLimit = in.readInt();
         mOpponentPlanet = in.readInt();
         mOpponentStartMoney = in.readInt();
+        mOpponentBuildingsLimit = in.readInt();
         mSingleWay = in.readInt() == 1;
         mSuppressor = in.readInt() == 1;
         mMissionType = (MissionType) in.readSerializable();
@@ -156,6 +160,14 @@ public class MissionConfig implements Parcelable {
         return mBotLogic;
     }
 
+    public int getPlayerBuildingsLimit() {
+        return mPlayerBuildingsLimit;
+    }
+
+    public int getOpponentBuildingsLimit() {
+        return mOpponentBuildingsLimit;
+    }
+
     public String getGameHandler() {
         return mGameHandler;
     }
@@ -181,8 +193,10 @@ public class MissionConfig implements Parcelable {
         dest.writeInt(mStarConstellation);
         dest.writeInt(mPlayerPlanet);
         dest.writeInt(mPlayerStartMoney);
+        dest.writeInt(mPlayerBuildingsLimit);
         dest.writeInt(mOpponentPlanet);
         dest.writeInt(mOpponentStartMoney);
+        dest.writeInt(mOpponentBuildingsLimit);
         dest.writeInt(mSingleWay ? 1 : 0);
         dest.writeInt(mSuppressor ? 1 : 0);
         dest.writeSerializable(mMissionType);
@@ -206,8 +220,10 @@ public class MissionConfig implements Parcelable {
         mStarConstellation = R.string.no_constellation;
         mPlayerPlanet = R.string.earth;
         mPlayerStartMoney = 1000;
+        mPlayerBuildingsLimit = NO_VALUE;
         mOpponentPlanet = R.string.earth;
         mOpponentStartMoney = 1000;
+        mOpponentBuildingsLimit = NO_VALUE;
         mSingleWay = false;
         mSuppressor = true;
         mBotLogic = VeryFirstBot.class.getName();
@@ -222,8 +238,18 @@ public class MissionConfig implements Parcelable {
         if (loadedData.max_oxygen != null) mMaxOxygenAmount = loadedData.max_oxygen;
         if (loadedData.player_start_money != null)
             mPlayerStartMoney = loadedData.player_start_money;
+        if (loadedData.player_available_buildings != null) {
+            mPlayerBuildingsLimit = loadedData.player_available_buildings;
+        } else {
+            mPlayerBuildingsLimit = NO_VALUE;
+        }
         if (loadedData.opponent_start_money != null)
             mOpponentStartMoney = loadedData.opponent_start_money;
+        if (loadedData.opponent_available_buildings != null) {
+            mOpponentBuildingsLimit = loadedData.opponent_available_buildings;
+        } else {
+            mOpponentBuildingsLimit = NO_VALUE;
+        }
         if (loadedData.planet_health != null) mPlanetHealth = loadedData.planet_health;
         if (loadedData.player_planet != null)
             mPlayerPlanet = getStringResourceByName(loadedData.player_planet);

@@ -19,10 +19,11 @@
             <game_handler>
                 com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
             </game_handler>
-            <!-- TODO we have to bound units usage here (e.g. 4 unit types for you and 3 for opponent) -->
-            <player_alliance>Rebels</player_alliance>
+            <player_alliance>Mutants</player_alliance>
+            <player_available_buildings>4</player_available_buildings>
             <player_planet>earth</player_planet>
-            <opponent_alliance>Rebels</opponent_alliance>
+            <opponent_alliance>Mutants</opponent_alliance>
+            <opponent_available_buildings>3</opponent_available_buildings>
             <opponent_planet>earth</opponent_planet>
             <max_oxygen>1500</max_oxygen>
             <planet_health>3000</planet_health>
@@ -53,9 +54,9 @@
             <game_handler>
                 com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
             </game_handler>
-            <player_alliance>Rebels</player_alliance>
+            <player_alliance>Mutants</player_alliance>
             <player_planet>earth</player_planet>
-            <opponent_alliance>Rebels</opponent_alliance>
+            <opponent_alliance>Mutants</opponent_alliance>
             <opponent_planet>earth</opponent_planet>
             <max_oxygen>5000</max_oxygen>
             <planet_health>5000</planet_health>
@@ -89,9 +90,9 @@
             <game_handler>
                 com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
             </game_handler>
-            <player_alliance>Rebels</player_alliance>
+            <player_alliance>Mutants</player_alliance>
             <player_planet>earth</player_planet>
-            <opponent_alliance>Rebels</opponent_alliance>
+            <opponent_alliance>Mutants</opponent_alliance>
             <opponent_planet>earth</opponent_planet>
             <max_oxygen>5000</max_oxygen>
             <planet_health>5000</planet_health>
@@ -124,9 +125,9 @@
             <game_handler>
                 com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
             </game_handler>
-            <player_alliance>Rebels</player_alliance>
+            <player_alliance>Mutants</player_alliance>
             <player_planet>earth</player_planet>
-            <opponent_alliance>Rebels</opponent_alliance>
+            <opponent_alliance>Mutants</opponent_alliance>
             <opponent_planet>earth</opponent_planet>
             <max_oxygen>1500</max_oxygen>
             <planet_health>5000</planet_health>
@@ -157,9 +158,9 @@
             <game_handler>
                 com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
             </game_handler>
-            <player_alliance>Rebels</player_alliance>
+            <player_alliance>Mutants</player_alliance>
             <player_planet>earth</player_planet>
-            <opponent_alliance>Rebels</opponent_alliance>
+            <opponent_alliance>Mutants</opponent_alliance>
             <opponent_planet>earth</opponent_planet>
             <max_oxygen>3000</max_oxygen>
             <planet_health>5000</planet_health>
@@ -191,9 +192,9 @@
             <game_handler>
                 com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
             </game_handler>
-            <player_alliance>Rebels</player_alliance>
+            <player_alliance>Mutants</player_alliance>
             <player_planet>earth</player_planet>
-            <opponent_alliance>Rebels</opponent_alliance>
+            <opponent_alliance>Mutants</opponent_alliance>
             <opponent_planet>earth</opponent_planet>
             <max_oxygen>1500</max_oxygen>
             <planet_health>5000</planet_health>
@@ -225,9 +226,9 @@
             <game_handler>
                 com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
             </game_handler>
-            <player_alliance>Rebels</player_alliance>
+            <player_alliance>Mutants</player_alliance>
             <player_planet>earth</player_planet>
-            <opponent_alliance>Rebels</opponent_alliance>
+            <opponent_alliance>Mutants</opponent_alliance>
             <opponent_planet>earth</opponent_planet>
             <max_oxygen>1500</max_oxygen>
             <planet_health>5000</planet_health>
@@ -258,9 +259,9 @@
             <game_handler>
                 com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
             </game_handler>
-            <player_alliance>Rebels</player_alliance>
+            <player_alliance>Mutants</player_alliance>
             <player_planet>earth</player_planet>
-            <opponent_alliance>Rebels</opponent_alliance>
+            <opponent_alliance>Mutants</opponent_alliance>
             <opponent_planet>earth</opponent_planet>
             <max_oxygen>1500</max_oxygen>
             <planet_health>5000</planet_health>
@@ -291,9 +292,9 @@
             <game_handler>
                 com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
             </game_handler>
-            <player_alliance>Rebels</player_alliance>
+            <player_alliance>Mutants</player_alliance>
             <player_planet>earth</player_planet>
-            <opponent_alliance>Rebels</opponent_alliance>
+            <opponent_alliance>Mutants</opponent_alliance>
             <opponent_planet>earth</opponent_planet>
             <max_oxygen>1500</max_oxygen>
             <planet_health>5000</planet_health>
@@ -325,9 +326,9 @@
             <game_handler>
                 com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
             </game_handler>
-            <player_alliance>Rebels</player_alliance>
+            <player_alliance>Mutants</player_alliance>
             <player_planet>earth</player_planet>
-            <opponent_alliance>Rebels</opponent_alliance>
+            <opponent_alliance>Mutants</opponent_alliance>
             <opponent_planet>earth</opponent_planet>
             <max_oxygen>1500</max_oxygen>
             <planet_health>5000</planet_health>

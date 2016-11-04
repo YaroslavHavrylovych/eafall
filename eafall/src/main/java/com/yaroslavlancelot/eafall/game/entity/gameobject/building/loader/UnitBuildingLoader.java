@@ -14,7 +14,7 @@ public class UnitBuildingLoader {
     @Attribute(name = "name", required = true)
     public String name;
 
-    @Element(name = "screen")
+    @Element(name = "id")
     public Integer id;
 
     @Element(name = "position_x")

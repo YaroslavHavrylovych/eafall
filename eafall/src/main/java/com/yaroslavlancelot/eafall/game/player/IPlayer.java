@@ -20,6 +20,8 @@ import java.util.List;
  * @author Yaroslav Havrylovych
  */
 public interface IPlayer {
+    int DEFAULT_CHANCE_INCOME_UNIT_DEATH = 10;
+
     /**
      * returns string key which used in
      * {@link com.yaroslavlancelot.eafall.game.events.SharedEvents}
@@ -164,6 +166,8 @@ public interface IPlayer {
      * positions update.
      */
     void updateUnitsPositions();
+
+    int getBuildingsLimit();
 
     /** Constant to define what player control type will be used */
     enum ControlType {

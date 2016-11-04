@@ -62,12 +62,19 @@ public abstract class BaseBuildingPopupUpdater extends BasePopupUpdater {
         final int id = buildingId.getId();
         int before = -1;
         int after = Integer.MAX_VALUE;
+        int buildingsLimit = player.getBuildingsLimit();
+        int i = 0;
         for (Integer ind : player.getAlliance().getBuildingsIds()) {
-            if (id > ind && before < ind) {
-                before = ind;
-            }
-            if (id < ind && after > ind) {
-                after = ind;
+            if (i < buildingsLimit) {
+                if (id > ind && before < ind) {
+                    before = ind;
+                }
+                if (id < ind && after > ind) {
+                    after = ind;
+                }
+                i++;
+            } else {
+                break;
             }
         }
         if (before != -1) {

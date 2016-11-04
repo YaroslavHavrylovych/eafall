@@ -7,7 +7,7 @@ import org.simpleframework.xml.Root;
 /** update of particular building */
 @Root(name = "upgrade")
 public class UnitBuildingUpgradeLoader {
-    @Attribute(name = "screen", required = true)
+    @Attribute(name = "id")
     public Integer id;
 
     @Element(name = "image_name")

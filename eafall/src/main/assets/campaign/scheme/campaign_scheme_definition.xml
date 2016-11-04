@@ -33,10 +33,16 @@
                                         <xs:element name="game_handler" maxOccurs="1"
                                                     minOccurs="0" type="xs:string"/>
                                         <xs:element name="player_alliance" type="xs:string"/>
+                                        <xs:element name="player_available_buildings"
+                                                    minOccurs="0"
+                                                    type="xs:integer"/>
                                         <xs:element name="player_planet" type="xs:string"/>
                                         <xs:element name="player_start_money" minOccurs="0"
                                                     type="xs:integer"/>
                                         <xs:element name="opponent_alliance" type="xs:string"/>
+                                        <xs:element name="opponent_available_buildings"
+                                                    minOccurs="0"
+                                                    type="xs:integer"/>
                                         <xs:element name="opponent_planet" type="xs:string"/>
                                         <xs:element name="opponent_start_money" minOccurs="0"
                                                     type="xs:integer"/>

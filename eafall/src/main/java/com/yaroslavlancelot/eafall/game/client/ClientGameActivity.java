@@ -96,9 +96,10 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
 
     @Override
     protected IPlayer createPlayer(String name, IAlliance alliance, IPlayer.ControlType playerType,
-                                   int startMoney,
+                                   int startMoney, int buildingsLimit,
                                    final MissionConfig missionConfig) {
-        return new Player(name, alliance, playerType, startMoney, 10, missionConfig);
+        return new Player(name, alliance, playerType, startMoney,
+                IPlayer.DEFAULT_CHANCE_INCOME_UNIT_DEATH, buildingsLimit, missionConfig);
     }
 
     /** start tracker which tracks game rules */
