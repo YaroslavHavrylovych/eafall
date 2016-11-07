@@ -26,6 +26,7 @@ import com.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.yaroslavlancelot.eafall.game.popup.BuildingSettingsDialog;
 import com.yaroslavlancelot.eafall.game.popup.GameOverPopup;
 import com.yaroslavlancelot.eafall.game.popup.IPopup;
+import com.yaroslavlancelot.eafall.game.resources.loaders.game.ClientResourcesLoader;
 import com.yaroslavlancelot.eafall.game.rule.IRuler;
 import com.yaroslavlancelot.eafall.game.rule.RulesFactory;
 import com.yaroslavlancelot.eafall.game.scene.hud.BaseGameHud;
@@ -53,6 +54,8 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
 
     @Override
     protected void loadResources() {
+        ((ClientResourcesLoader) mResourcesLoader).setSunPath(
+                mMissionConfig.getSunPath(), mMissionConfig.getSunHasePath());
         super.loadResources();
         //whether or not the mission is bounded (timing)
         if (mMissionConfig.isTimerEnabled()) {

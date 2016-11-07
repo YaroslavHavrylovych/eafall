@@ -1,5 +1,5 @@
 <campaigns xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="scheme/campaign_scheme_definition.xml">
+           xsi:noNamespaceSchemaLocation="scheme/campaign_scheme_definition.xml">
 
     <background>graphics/images/background.png</background>
     <parallax_background>true</parallax_background>
@@ -19,6 +19,8 @@
             <game_handler>
                 com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
             </game_handler>
+            <!--TODO NO SUN at all - debug -->
+            <blue_sun>false</blue_sun>
             <player_alliance>Mutants</player_alliance>
             <player_available_buildings>4</player_available_buildings>
             <player_planet>earth</player_planet>
@@ -31,7 +33,7 @@
             <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.SingleWayBot
             </enemy_logic_handler>
             <star_constellation>no_constellation</star_constellation>
-            <single_way>true</single_way>
+            <single_way>false</single_way>
             <suppressor>false</suppressor>
             <definition>
                 <type>win</type>
@@ -54,9 +56,12 @@
             <game_handler>
                 com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
             </game_handler>
+            <blue_sun>false</blue_sun>
             <player_alliance>Mutants</player_alliance>
+            <player_available_buildings>7</player_available_buildings>
             <player_planet>earth</player_planet>
             <opponent_alliance>Mutants</opponent_alliance>
+            <opponent_available_buildings>7</opponent_available_buildings>
             <opponent_planet>earth</opponent_planet>
             <max_oxygen>5000</max_oxygen>
             <planet_health>5000</planet_health>
@@ -90,9 +95,12 @@
             <game_handler>
                 com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
             </game_handler>
+            <blue_sun>false</blue_sun>
             <player_alliance>Mutants</player_alliance>
+            <player_available_buildings>7</player_available_buildings>
             <player_planet>earth</player_planet>
             <opponent_alliance>Mutants</opponent_alliance>
+            <opponent_available_buildings>7</opponent_available_buildings>
             <opponent_planet>earth</opponent_planet>
             <max_oxygen>5000</max_oxygen>
             <planet_health>5000</planet_health>
@@ -125,6 +133,7 @@
             <game_handler>
                 com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
             </game_handler>
+            <blue_sun>false</blue_sun>
             <player_alliance>Mutants</player_alliance>
             <player_planet>earth</player_planet>
             <opponent_alliance>Mutants</opponent_alliance>
@@ -158,6 +167,7 @@
             <game_handler>
                 com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
             </game_handler>
+            <blue_sun>false</blue_sun>
             <player_alliance>Mutants</player_alliance>
             <player_planet>earth</player_planet>
             <opponent_alliance>Mutants</opponent_alliance>
@@ -192,6 +202,7 @@
             <game_handler>
                 com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
             </game_handler>
+            <blue_sun>false</blue_sun>
             <player_alliance>Mutants</player_alliance>
             <player_planet>earth</player_planet>
             <opponent_alliance>Mutants</opponent_alliance>
@@ -226,6 +237,7 @@
             <game_handler>
                 com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
             </game_handler>
+            <blue_sun>false</blue_sun>
             <player_alliance>Mutants</player_alliance>
             <player_planet>earth</player_planet>
             <opponent_alliance>Mutants</opponent_alliance>
@@ -259,6 +271,7 @@
             <game_handler>
                 com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
             </game_handler>
+            <blue_sun>false</blue_sun>
             <player_alliance>Mutants</player_alliance>
             <player_planet>earth</player_planet>
             <opponent_alliance>Mutants</opponent_alliance>
@@ -292,6 +305,7 @@
             <game_handler>
                 com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
             </game_handler>
+            <blue_sun>false</blue_sun>
             <player_alliance>Mutants</player_alliance>
             <player_planet>earth</player_planet>
             <opponent_alliance>Mutants</opponent_alliance>
@@ -326,6 +340,7 @@
             <game_handler>
                 com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
             </game_handler>
+            <blue_sun>false</blue_sun>
             <player_alliance>Mutants</player_alliance>
             <player_planet>earth</player_planet>
             <opponent_alliance>Mutants</opponent_alliance>

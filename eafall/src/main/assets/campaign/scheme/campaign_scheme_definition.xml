@@ -32,6 +32,7 @@
                                         <xs:element name="name" type="xs:string"/>
                                         <xs:element name="game_handler" maxOccurs="1"
                                                     minOccurs="0" type="xs:string"/>
+                                        <xs:element name="blue_sun" type="xs:boolean"/>
                                         <xs:element name="player_alliance" type="xs:string"/>
                                         <xs:element name="player_available_buildings"
                                                     minOccurs="0"

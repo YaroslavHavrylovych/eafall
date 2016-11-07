@@ -16,6 +16,9 @@ public class MissionDetailsLoader {
     @Element(name = "game_handler", required = false)
     public String game_handler;
 
+    @Element(name = "blue_sun")
+    public Boolean blue_sun;
+
     @Element(name = "player_alliance")
     public String player_alliance;
 
