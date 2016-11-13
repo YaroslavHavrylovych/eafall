@@ -16,9 +16,6 @@ public class MissionDetailsLoader {
     @Element(name = "game_handler", required = false)
     public String game_handler;
 
-    @Element(name = "blue_sun")
-    public Boolean blue_sun;
-
     @Element(name = "player_alliance")
     public String player_alliance;
 
@@ -60,6 +57,9 @@ public class MissionDetailsLoader {
 
     @Element(name = "star_constellation", required = false)
     public String star_constellation;
+
+    @Element(name = "blue_star", required = false)
+    public Boolean blue_star;
 
     @Element(name = "single_way", required = false)
     public Boolean single_way;

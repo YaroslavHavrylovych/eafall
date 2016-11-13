@@ -53,7 +53,7 @@ public class MissionConfig implements Parcelable {
     private boolean mSingleWay;
     private boolean mSuppressor;
     private String mSunPath;
-    private String mSunHasePath;
+    private String mSunHazePath;
     private String mBotLogic;
     private String mGameHandler;
     private int mPlayerBuildingsLimit;
@@ -75,7 +75,7 @@ public class MissionConfig implements Parcelable {
         mBotLogic = in.readString();
         mGameHandler = in.readString();
         mSunPath = in.readString();
-        mSunHasePath = in.readString();
+        mSunHazePath = in.readString();
         mMovableUnitsLimit = in.readInt();
         mTime = in.readInt();
         mPlanetHealth = in.readInt();
@@ -181,8 +181,8 @@ public class MissionConfig implements Parcelable {
         return mSunPath;
     }
 
-    public String getSunHasePath() {
-        return mSunHasePath;
+    public String getSunHazePath() {
+        return mSunHazePath;
     }
 
     // ===========================================================
@@ -198,7 +198,7 @@ public class MissionConfig implements Parcelable {
         dest.writeString(mBotLogic);
         dest.writeString(mGameHandler);
         dest.writeString(mSunPath);
-        dest.writeString(mSunHasePath);
+        dest.writeString(mSunHazePath);
         dest.writeInt(mMovableUnitsLimit);
         dest.writeInt(mTime);
         dest.writeInt(mPlanetHealth);
@@ -229,7 +229,7 @@ public class MissionConfig implements Parcelable {
         mPlanetHealth = 5000;
         mMaxOxygenAmount = 2000;
         mMissionType = MissionType.WIN;
-        mSunHasePath = StringConstants.FILE_SUN_HAZE;
+        mSunHazePath = StringConstants.FILE_SUN_HAZE;
         mSunPath = StringConstants.FILE_SUN;
         mValue = NO_VALUE;
         mTime = NO_VALUE;
@@ -252,12 +252,12 @@ public class MissionConfig implements Parcelable {
         if (loadedData.definition.time_limit != null) mTime = loadedData.definition.time_limit;
         if (loadedData.single_way != null) mSingleWay = loadedData.single_way;
         if (loadedData.suppressor != null) mSuppressor = loadedData.suppressor;
-        if (loadedData.blue_sun) {
+        if (loadedData.blue_star) {
             mSunPath = StringConstants.FILE_SUN;
-            mSunHasePath = StringConstants.FILE_SUN_HAZE;
+            mSunHazePath = StringConstants.FILE_SUN_HAZE;
         } else {
             mSunPath = StringConstants.FILE_BLUE_SUN;
-            mSunHasePath = StringConstants.FILE_BLUE_SUN_HAZE;
+            mSunHazePath = StringConstants.FILE_BLUE_SUN_HAZE;
         }
         if (loadedData.max_oxygen != null) mMaxOxygenAmount = loadedData.max_oxygen;
         if (loadedData.player_start_money != null)

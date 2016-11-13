@@ -19,8 +19,6 @@
             <game_handler>
                 com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
             </game_handler>
-            <!--TODO NO SUN at all - debug -->
-            <blue_sun>false</blue_sun>
             <player_alliance>Mutants</player_alliance>
             <player_available_buildings>4</player_available_buildings>
             <player_planet>earth</player_planet>
@@ -32,8 +30,7 @@
             <offensive_units_limit>30</offensive_units_limit>
             <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.SingleWayBot
             </enemy_logic_handler>
-            <star_constellation>no_constellation</star_constellation>
-            <single_way>false</single_way>
+            <single_way>true</single_way>
             <suppressor>false</suppressor>
             <definition>
                 <type>win</type>
@@ -56,7 +53,6 @@
             <game_handler>
                 com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
             </game_handler>
-            <blue_sun>false</blue_sun>
             <player_alliance>Mutants</player_alliance>
             <player_available_buildings>7</player_available_buildings>
             <player_planet>earth</player_planet>

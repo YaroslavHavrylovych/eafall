@@ -32,7 +32,6 @@
                                         <xs:element name="name" type="xs:string"/>
                                         <xs:element name="game_handler" maxOccurs="1"
                                                     minOccurs="0" type="xs:string"/>
-                                        <xs:element name="blue_sun" type="xs:boolean"/>
                                         <xs:element name="player_alliance" type="xs:string"/>
                                         <xs:element name="player_available_buildings"
                                                     minOccurs="0"
@@ -59,6 +58,8 @@
                                                     type="xs:string"/>
                                         <xs:element name="star_constellation" minOccurs="0"
                                                     type="xs:string"/>
+                                        <xs:element name="blue_star" minOccurs="0"
+                                                    type="xs:boolean"/>
                                         <xs:element name="single_way" minOccurs="0"
                                                     type="xs:boolean"/>
                                         <xs:element name="suppressor" maxOccurs="1" minOccurs="0"
