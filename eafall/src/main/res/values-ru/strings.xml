@@ -166,12 +166,13 @@
     <string name="category_sounds">Звук</string>
     <string name="category_other">Другое</string>
 
-    <!-- General -->
+    <!-- general -->
     <string name="app_name">Empires Always Fall</string>
     <string name="exit">Выход</string>
     <string name="back">Назад</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
+    <string name="next">Дальше</string>
     <string name="done">Готово</string>
     <string name="exit_click">Двойной клик, чтобы выйти</string>
     <string name="exit_loading">Нельзя выйти при загрузке</string>
@@ -313,6 +314,19 @@
     <string name="campaign_demo_tutorial9">Ярило</string>
     <string name="campaign_demo_tutorial10">Лада</string>
     <!-- / Guide campaign -->
+
+    <!-- plot -->
+    <string name="campaign_demo_plot1">20 лютого… як сніг на голову./:Макож оголосив війну і напав одразу ж. Вимог не було./:Ми будемо захищатись…</string>
+    <string name="campaign_demo_plot2">27 лютого, зявляється підкріплення, Дажбог./:Атакуються наша кораблі. Додаткової інформації немає…</string>
+    <string name="campaign_demo_plot3">16 березня, Чорнобого ще один ворог./:Оголошуємо мобілізацію, ситуація невідома і, здається, неконтрольована./:Потрібно підрахувати резерв і приготуватись до затяжної кампанії.</string>
+    <string name="campaign_demo_plot4">18 березня, почувши про напади на Ладу, одразу було вислано підкріплення./:Навіть якщо весь всесвіт стане проти нас, ми невідступимо./:В корінь потрібно підсікати таки напади і відразу.</string>
+    <string name="campaign_demo_plot5">24 березня, отримали напад одразу від двох: Сімаргл і Велес/:Лада відтягла Велеса на себе, що ж, в бій</string>
+    <string name="campaign_demo_plot6">24 березня, Сварога було атаковано вдвох, як низько./: Відтягли велеса, тепер наш час повренути борг.</string>
+    <string name="campaign_demo_plot7">27 березня, атака збоку Стрибога./:В цей же час на терени Лади вторгся Марог.</string>
+    <string name="campaign_demo_plot8">27 березня, Марог/:Сили вже закінчують, але ми зможемо./:По нашим даним Сварог перемагає і Марог останній союзник агресії./:Здається це кінець війні.</string>
+    <string name="campaign_demo_plot9">2 квітня, день зміни порядків./:Єдиний невтягнути у війну Ярило, вторгся на нашу територію./:Це наймогутніший військовий обєкт наразі, ми не встоємо.:/Займаємо глуху оборну і сподіваємось, що Лада прийде вчасно… або помститься за нас.</string>
+    <string name="campaign_demo_plot10">11 квітня, Сварог пав./:Ми не маємо морального права зупинитись, якщо не нападемо ми, то нападуть на нас./:Світ вже ніколи не відновиться.</string>
+    <!-- /plot -->
     <!-- / Campaign -->
 
     <!-- Mission -->

@@ -82,4 +82,10 @@
     <dimen name="dialog_exit_button_margin">10dp</dimen>
     <dimen name="dialog_exit_button_height">31dp</dimen>
     <dimen name="dialog_exit_button_width">80dp</dimen>
+
+    <!-- campaign -->
+    <dimen name="campaign_story_teller_dialog_height">259dp</dimen>
+    <dimen name="campaign_story_teller_dialog_text">17sp</dimen>
+    <dimen name="campaign_story_teller_dialog_margin_top">70dp</dimen>
+    <dimen name="campaign_story_teller_dialog_sides_margin">20dp</dimen>
 </resources>

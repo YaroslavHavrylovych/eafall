@@ -6,6 +6,7 @@ import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.R;
 import com.yaroslavlancelot.eafall.android.StartableIntent;
 import com.yaroslavlancelot.eafall.game.EaFallActivity;
+import com.yaroslavlancelot.eafall.game.ai.IBot;
 import com.yaroslavlancelot.eafall.game.campaign.intents.CampaignIntent;
 import com.yaroslavlancelot.eafall.game.campaign.loader.CampaignDataLoader;
 import com.yaroslavlancelot.eafall.game.campaign.loader.CampaignFileLoader;
@@ -13,6 +14,7 @@ import com.yaroslavlancelot.eafall.game.campaign.loader.ObjectDataLoader;
 import com.yaroslavlancelot.eafall.game.campaign.loader.PositionLoader;
 import com.yaroslavlancelot.eafall.game.campaign.pass.CampaignPassage;
 import com.yaroslavlancelot.eafall.game.campaign.pass.CampaignPassageFactory;
+import com.yaroslavlancelot.eafall.game.campaign.plot.PlotPresenter;
 import com.yaroslavlancelot.eafall.game.campaign.visual.CampaignTitleText;
 import com.yaroslavlancelot.eafall.game.campaign.visual.NextButton;
 import com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity;
@@ -284,9 +286,30 @@ public class CampaignActivity extends EaFallActivity {
         mHud.attachChild(mStartButton);
         mStartButton.setOnClickListener(new ButtonSprite.OnClickListener() {
             @Override
-            public void onClick(final ButtonSprite pButtonSprite, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-                startMission(getCampaign(mScreenId).mission);
-                finish();
+            public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX,
+                                float pTouchAreaLocalY) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        int plot = getResources().getIdentifier(
+                                "campaign_demo_plot" + (mScreenId + 1), "string",
+                                getApplicationInfo().packageName);
+                        PlotPresenter plotPresenter = new PlotPresenter(plot, CampaignActivity.this,
+                                new PlotPresenter.PlotPresentedCallback() {
+                                    @Override
+                                    public void onPresentationDone() {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                startMission(getCampaign(mScreenId).mission);
+                                                finish();
+                                            }
+                                        });
+                                    }
+                                });
+                        plotPresenter.startPresentation();
+                    }
+                });
             }
         });
         mHud.registerTouchArea(mStartButton);
