@@ -17,7 +17,7 @@
         <mission_details>
             <name>Makosh</name>
             <game_handler>
-                com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
+                com.yaroslavlancelot.eafall.game.campaign.missions.FirstMissionActivity
             </game_handler>
             <player_alliance>Mutants</player_alliance>
             <player_available_buildings>4</player_available_buildings>
@@ -51,7 +51,7 @@
         <mission_details>
             <name>Dazbog</name>
             <game_handler>
-                com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
+                com.yaroslavlancelot.eafall.game.campaign.missions.SecondMissionActivity
             </game_handler>
             <player_alliance>Mutants</player_alliance>
             <player_available_buildings>7</player_available_buildings>
@@ -74,8 +74,6 @@
         </mission_details>
     </campaign>
 
-    <!-- TODO separate constellation for alliance player -->
-
     <campaign screen="2">
         <name>campaign_demo_tutorial3</name>
         <picture>graphics/images/campaign/mars.png</picture>
@@ -89,7 +87,7 @@
         <mission_details>
             <name>Chernobog</name>
             <game_handler>
-                com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
+                com.yaroslavlancelot.eafall.game.campaign.missions.ThirdMissionActivity
             </game_handler>
             <player_alliance>Mutants</player_alliance>
             <player_available_buildings>7</player_available_buildings>
@@ -99,7 +97,7 @@
             <opponent_planet>earth</opponent_planet>
             <max_oxygen>5000</max_oxygen>
             <planet_health>5000</planet_health>
-            <offensive_units_limit>200</offensive_units_limit>
+            <offensive_units_limit>50</offensive_units_limit>
             <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.VeryFirstBot
             </enemy_logic_handler>
             <star_constellation>sun</star_constellation>
@@ -302,7 +300,7 @@
             <max_oxygen>1500</max_oxygen>
             <planet_health>5000</planet_health>
             <offensive_units_limit>200</offensive_units_limit>
-            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.SingleWayBot
+            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.VeryFirstBot
             </enemy_logic_handler>
             <star_constellation>sun</star_constellation>
             <single_way>false</single_way>
@@ -336,7 +334,7 @@
             <max_oxygen>1500</max_oxygen>
             <planet_health>5000</planet_health>
             <offensive_units_limit>200</offensive_units_limit>
-            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.SingleWayBot
+            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.VeryFirstBot
             </enemy_logic_handler>
             <star_constellation>sun</star_constellation>
             <single_way>false</single_way>

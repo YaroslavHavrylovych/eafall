@@ -1,8 +1,5 @@
 package com.yaroslavlancelot.eafall.game.client.thick.single;
 
-import android.app.Activity;
-import android.content.Intent;
-
 import com.yaroslavlancelot.eafall.android.StartableIntent;
 import com.yaroslavlancelot.eafall.game.ai.IBot;
 import com.yaroslavlancelot.eafall.game.ai.VeryFirstBot;

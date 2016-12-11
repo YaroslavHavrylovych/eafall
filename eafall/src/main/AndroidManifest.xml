@@ -10,10 +10,10 @@
 
     <application
         android:name=".EaFallApplication"
+        android:allowBackup="false"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
-        android:theme="@style/Theme.NoTitleBar.Fullscreen.BlackBackground"
-        android:allowBackup="false">
+        android:theme="@style/Theme.NoTitleBar.Fullscreen.BlackBackground">
         <activity
             android:name="com.yaroslavlancelot.eafall.android.activities.StartupActivity"
             android:screenOrientation="landscape">
@@ -55,6 +55,17 @@
         <activity
             android:name=".android.activities.settings.SettingsActivity"
             android:label="@string/settings"
+            android:screenOrientation="landscape"/>
+
+        <!-- missions -->
+        <activity
+            android:name=".game.campaign.missions.FirstMissionActivity"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".game.campaign.missions.SecondMissionActivity"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".game.campaign.missions.ThirdMissionActivity"
             android:screenOrientation="landscape"/>
     </application>
 </manifest>
