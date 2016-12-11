@@ -23,9 +23,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".game.tutorial.TutorialActivity"
-            android:screenOrientation="landscape"/>
-        <activity
             android:name=".game.sandbox.activity.SandboxActivity"
             android:screenOrientation="landscape"/>
         <activity

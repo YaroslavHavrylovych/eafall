@@ -64,7 +64,9 @@
             <offensive_units_limit>100</offensive_units_limit>
             <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.VeryFirstBot
             </enemy_logic_handler>
+            <star_code_name>sun</star_code_name>
             <star_constellation>sun</star_constellation>
+            <blue_star>false</blue_star>
             <single_way>false</single_way>
             <suppressor>false</suppressor>
             <definition>
@@ -100,7 +102,9 @@
             <offensive_units_limit>50</offensive_units_limit>
             <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.VeryFirstBot
             </enemy_logic_handler>
+            <star_code_name>sun</star_code_name>
             <star_constellation>sun</star_constellation>
+            <blue_star>false</blue_star>
             <single_way>false</single_way>
             <suppressor>true</suppressor>
             <definition>
@@ -135,7 +139,9 @@
             <offensive_units_limit>150</offensive_units_limit>
             <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.VeryFirstBot
             </enemy_logic_handler>
+            <star_code_name>sun</star_code_name>
             <star_constellation>sun</star_constellation>
+            <blue_star>false</blue_star>
             <single_way>false</single_way>
             <suppressor>true</suppressor>
             <definition>
@@ -168,7 +174,9 @@
             <offensive_units_limit>200</offensive_units_limit>
             <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.VeryFirstBot
             </enemy_logic_handler>
+            <star_code_name>sun</star_code_name>
             <star_constellation>sun</star_constellation>
+            <blue_star>false</blue_star>
             <single_way>false</single_way>
             <suppressor>true</suppressor>
             <definition>
@@ -236,7 +244,9 @@
             <offensive_units_limit>200</offensive_units_limit>
             <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.VeryFirstBot
             </enemy_logic_handler>
+            <star_code_name>sun</star_code_name>
             <star_constellation>no_constellation</star_constellation>
+            <blue_star>false</blue_star>
             <single_way>false</single_way>
             <suppressor>true</suppressor>
             <definition>
@@ -269,7 +279,9 @@
             <offensive_units_limit>200</offensive_units_limit>
             <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.VeryFirstBot
             </enemy_logic_handler>
+            <star_code_name>sun</star_code_name>
             <star_constellation>sun</star_constellation>
+            <blue_star>false</blue_star>
             <single_way>false</single_way>
             <suppressor>true</suppressor>
             <definition>
@@ -302,7 +314,9 @@
             <offensive_units_limit>200</offensive_units_limit>
             <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.VeryFirstBot
             </enemy_logic_handler>
+            <star_code_name>sun</star_code_name>
             <star_constellation>sun</star_constellation>
+            <blue_star>false</blue_star>
             <single_way>false</single_way>
             <suppressor>true</suppressor>
             <definition>
@@ -336,7 +350,9 @@
             <offensive_units_limit>200</offensive_units_limit>
             <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.VeryFirstBot
             </enemy_logic_handler>
+            <star_code_name>sun</star_code_name>
             <star_constellation>sun</star_constellation>
+            <blue_star>false</blue_star>
             <single_way>false</single_way>
             <suppressor>true</suppressor>
             <definition>

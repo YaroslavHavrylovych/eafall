@@ -34,13 +34,11 @@ public class ThirdMissionActivity extends BaseTutorialActivity {
             if (mFirstIncome) {
                 ClientIncomeHandler.getIncomeHandler().unregisterIncomeListener(this);
                 mFirstIncome = false;
-                hud.blockInput(true);
                 mSceneManager.getWorkingScene().registerUpdateHandler(new TimerHandler(.5f,
                         new ITimerCallback() {
                             @Override
                             public void onTimePassed(final TimerHandler pTimerHandler) {
                                 mSceneManager.getWorkingScene().unregisterUpdateHandler(pTimerHandler);
-                                pause(true);
                                 hud.blockInput(false);
                                 mClickOnPointPopup.resetTouchToDefault();
                                 mClickOnPointPopup.initText1(SizeConstants.HALF_FIELD_WIDTH,

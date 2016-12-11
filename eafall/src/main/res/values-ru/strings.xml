@@ -217,6 +217,7 @@
     <string name="wrong_planet_suppressor">Использовать Подавитель можно только на собственной базе</string>
     <!-- Stars -->
     <string name="sun">Гелиос</string>
+    <string name="new_sun">Аматерасу</string>
     <!-- / Stars -->
     <!-- Planets -->
     <string name="earth">Земля</string>

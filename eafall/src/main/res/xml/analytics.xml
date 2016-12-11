@@ -12,10 +12,6 @@
     <!-- activity tracking -->
     <bool name="ga_autoActivityTracking">true</bool>
     <string
-        name="com.yaroslavlancelot.eafall.game.tutorial.TutorialActivity">
-        Tutorial
-    </string>
-    <string
         name="com.yaroslavlancelot.eafall.game.sandbox.activity.SandboxActivity">
         Sandbox
     </string>

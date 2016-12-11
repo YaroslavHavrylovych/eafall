@@ -217,6 +217,7 @@
     <string name="wrong_planet_suppressor">Лише на власній базі можна використати Заглушувач</string>
     <!-- stars -->
     <string name="sun">Геліос</string>
+    <string name="new_sun">Аматерасу</string>
     <!-- /stars -->
     <!-- planets -->
     <string name="earth">Земля</string>

@@ -217,6 +217,7 @@
     <string name="wrong_planet_suppressor">You can use the Suppressor only on your base</string>
     <!-- stars -->
     <string name="sun">Helios</string>
+    <string name="new_sun">Amaterasu</string>
     <!-- /stars -->
     <!-- planets -->
     <string name="earth">Earth</string>
