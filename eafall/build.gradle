@@ -27,8 +27,8 @@ dependencies {
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
     compile 'de.greenrobot:eventbus:2.4.0'
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile "com.android.support:appcompat-v7:24.2.1"
-    compile 'com.google.android.gms:play-services-analytics:9.6.1'
+    compile "com.android.support:appcompat-v7:25.0.0"
+    compile 'com.google.android.gms:play-services-analytics:9.8.0'
     compile 'com.jakewharton.timber:timber:4.3.0'
     compile 'com.android.support:multidex:1.0.1'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -36,7 +36,7 @@ dependencies {
     testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     androidTestCompile 'com.android.support.test:runner:0.5'
     androidTestCompile 'com.android.support.test:rules:0.5'
-    androidTestCompile 'com.android.support:support-annotations:24.2.1'
+    androidTestCompile 'com.android.support:support-annotations:25.0.0'
 }
 
 android {
@@ -62,13 +62,11 @@ android {
         demo {
             exclude_java.clear()
             buildConfigField("Boolean", "DEMO_VERSION", "true")
-            //network
+            //we don't have a network game in demo
             exclude_java << "com/yaroslavlancelot/eafall/network/**"
             exclude_java << "com/yaroslavlancelot/eafall/android/activities/multiplayer/**"
             exclude_java << "com/yaroslavlancelot/eafall/game/client/thick/server/**"
             exclude_java << "com/yaroslavlancelot/eafall/game/client/thin/**"
-            //campaign
-            exclude_java << "com/yaroslavlancelot/eafall/game/campaign/**"
         }
         dev {
             exclude_java.clear()
@@ -118,7 +116,6 @@ android {
         if (variant.name.contains('demo')) {
             def excludeAssetsFromDemo = task("excludeAssetsFrom${variant.name}", type: Delete) {
                 def assetsPath = "${buildDir}/intermediates/assets/${variant.dirName}"
-                delete "${assetsPath}/campaign"
                 delete "${assetsPath}/graphics/sprites/alliance/imperials"
                 delete "${assetsPath}/graphics/sprites/alliance/rebels"
                 delete "${assetsPath}/graphics/images/alliance/imperials"
@@ -176,6 +173,7 @@ def String readStringInDialog(title, hint) {
 //            }
 //        }
 //    }
+    return ""
 }
 
 //doesn't work if it's at the top of the file

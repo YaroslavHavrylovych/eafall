@@ -1,4 +1,4 @@
-package com.yaroslavlancelot.eafall.game.tutorial;
+package com.yaroslavlancelot.eafall.game.campaign.missions;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -34,11 +34,11 @@ import org.andengine.util.math.MathUtils;
  *
  * @author Yaroslav Havrylovych
  */
-public class TutorialPopup extends PopupScene {
+public class ClickOnPointPopup extends PopupScene {
     // ===========================================================
     // Constants
     // ===========================================================
-    public final static String sFontKey = "tutorial_text_font_key";
+    public final static String sFontKey = "popup_clik_on_point_text_font_key";
     public final static int MAXIMUM_HUD_TEXT_CHARACTERS = 100;
 
     // ===========================================================
@@ -51,7 +51,7 @@ public class TutorialPopup extends PopupScene {
     // ===========================================================
     // Constructors
     // ===========================================================
-    public TutorialPopup(Scene scene, Camera camera, VertexBufferObjectManager vboManager) {
+    public ClickOnPointPopup(Scene scene, Camera camera, VertexBufferObjectManager vboManager) {
         super(scene, camera);
         mText1 = new Text(SizeConstants.HALF_FIELD_WIDTH, SizeConstants.HALF_FIELD_HEIGHT / 3,
                 FontHolder.getInstance().getElement(sFontKey), "",

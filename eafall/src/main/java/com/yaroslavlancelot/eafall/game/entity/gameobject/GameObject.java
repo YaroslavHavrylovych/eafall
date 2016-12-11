@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public abstract class GameObject extends BodiedSprite {
     protected static final int sInvincibleObjectKey = Integer.MIN_VALUE;
-    /** used for generation new id's */
+    /** used for generation new screen's */
     private static final AtomicLong sGameObjectsTracker = new AtomicLong(0);
     /** maximum object health */
     protected int mObjectMaximumHealth = sInvincibleObjectKey;
@@ -41,11 +41,11 @@ public abstract class GameObject extends BodiedSprite {
     protected Armor mObjectArmor;
     /** callback to send message about death */
     protected volatile List<IDestroyListener> mObjectDestroyedListener = new ArrayList<>(2);
-    /** id of the string in the string files to represent object */
+    /** screen of the string in the string files to represent object */
     private int mObjectStringId;
     /** will trigger if object health changed */
     private IHealthListener mGameObjectHealthChangedListener;
-    /** unique unit id */
+    /** unique unit screen */
     private long mUniqueId;
 
     protected GameObject(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {

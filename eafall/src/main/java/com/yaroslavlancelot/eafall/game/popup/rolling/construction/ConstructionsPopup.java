@@ -64,7 +64,7 @@ public class ConstructionsPopup extends RollingPopup {
 
     private void initBuildingPopupForPlayer(String playerName) {
         IPlayer player = PlayersHolder.getPlayer(playerName);
-        mItems = new SparseArray<>(player.getAlliance().getBuildingsAmount());
+        mItems = new SparseArray<>(player.getBuildingsIds().length);
 
         syncBuildingsWithPlayer(playerName);
     }

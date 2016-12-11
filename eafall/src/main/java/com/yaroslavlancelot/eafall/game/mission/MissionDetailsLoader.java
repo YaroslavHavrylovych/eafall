@@ -19,6 +19,9 @@ public class MissionDetailsLoader {
     @Element(name = "player_alliance")
     public String player_alliance;
 
+    @Element(name = "player_available_buildings", required = false)
+    public Integer player_available_buildings;
+
     @Element(name = "player_planet")
     public String player_planet;
 
@@ -27,6 +30,9 @@ public class MissionDetailsLoader {
 
     @Element(name = "opponent_alliance")
     public String opponent_alliance;
+
+    @Element(name = "opponent_available_buildings", required = false)
+    public Integer opponent_available_buildings;
 
     @Element(name = "opponent_planet")
     public String opponent_planet;
@@ -51,6 +57,9 @@ public class MissionDetailsLoader {
 
     @Element(name = "star_constellation", required = false)
     public String star_constellation;
+
+    @Element(name = "blue_star", required = false)
+    public Boolean blue_star;
 
     @Element(name = "single_way", required = false)
     public Boolean single_way;

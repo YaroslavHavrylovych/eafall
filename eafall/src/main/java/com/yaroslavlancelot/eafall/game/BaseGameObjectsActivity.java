@@ -204,11 +204,14 @@ public abstract class BaseGameObjectsActivity extends EaFallActivity implements 
         IAlliance alliance = AllianceHolder.getInstance().getElement(
                 intent.getStringExtra(StringConstants.FIRST_PLAYER_ALLIANCE));
         mFirstPlayer = createPlayer(StringConstants.FIRST_PLAYER_CONTROL_BEHAVIOUR_TYPE, alliance,
-                mMissionConfig.getPlayerStartMoney());
+                mMissionConfig.getPlayerStartMoney(),
+                mMissionConfig.getPlayerBuildingsLimit());
+        //TODO check buildings limit 0 in row 206
         alliance = AllianceHolder.getInstance().getElement(
                 intent.getStringExtra(StringConstants.SECOND_PLAYER_ALLIANCE));
         mSecondPlayer = createPlayer(StringConstants.SECOND_PLAYER_CONTROL_BEHAVIOUR_TYPE, alliance,
-                mMissionConfig.getOpponentStartMoney());
+                mMissionConfig.getOpponentStartMoney(),
+                mMissionConfig.getOpponentBuildingsLimit());
         //units map
         mFirstPlayer.createUnitsMap(true);
         mSecondPlayer.createUnitsMap(false);
@@ -249,10 +252,11 @@ public abstract class BaseGameObjectsActivity extends EaFallActivity implements 
     }
 
     /** create new player depending on player control type which stored in extra */
-    protected IPlayer createPlayer(String playerNameInExtra, IAlliance alliance, int startMoney) {
+    protected IPlayer createPlayer(String playerNameInExtra, IAlliance alliance, int startMoney, int buildingsLimit) {
         Intent intent = getIntent();
         IPlayer.ControlType playerType = IPlayer.ControlType.valueOf(intent.getStringExtra(playerNameInExtra));
-        IPlayer player = createPlayer(playerNameInExtra, alliance, playerType, startMoney, mMissionConfig);
+        IPlayer player = createPlayer(playerNameInExtra, alliance, playerType, startMoney,
+                buildingsLimit, mMissionConfig);
         mGamePeriodic.add(new UnitPositionUpdater(player));
         return player;
     }
@@ -263,7 +267,7 @@ public abstract class BaseGameObjectsActivity extends EaFallActivity implements 
      */
     protected abstract IPlayer createPlayer(String name, IAlliance alliance,
                                             IPlayer.ControlType playerType,
-                                            int startMoney,
+                                            int startMoney, int buildingsLimit,
                                             MissionConfig missionConfig);
 
     @SuppressWarnings("unused")
@@ -364,7 +368,7 @@ public abstract class BaseGameObjectsActivity extends EaFallActivity implements 
                 unitEvent.getX(), unitEvent.getY());
     }
 
-    /** return unit if it exist (live) by using unit unique id */
+    /** return unit if it exist (live) by using unit unique screen */
     protected GameObject getGameObjectById(long id) {
         return mGameObjectsMap.get(id);
     }

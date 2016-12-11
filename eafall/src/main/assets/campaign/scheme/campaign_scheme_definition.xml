@@ -33,10 +33,16 @@
                                         <xs:element name="game_handler" maxOccurs="1"
                                                     minOccurs="0" type="xs:string"/>
                                         <xs:element name="player_alliance" type="xs:string"/>
+                                        <xs:element name="player_available_buildings"
+                                                    minOccurs="0"
+                                                    type="xs:integer"/>
                                         <xs:element name="player_planet" type="xs:string"/>
                                         <xs:element name="player_start_money" minOccurs="0"
                                                     type="xs:integer"/>
                                         <xs:element name="opponent_alliance" type="xs:string"/>
+                                        <xs:element name="opponent_available_buildings"
+                                                    minOccurs="0"
+                                                    type="xs:integer"/>
                                         <xs:element name="opponent_planet" type="xs:string"/>
                                         <xs:element name="opponent_start_money" minOccurs="0"
                                                     type="xs:integer"/>
@@ -52,6 +58,8 @@
                                                     type="xs:string"/>
                                         <xs:element name="star_constellation" minOccurs="0"
                                                     type="xs:string"/>
+                                        <xs:element name="blue_star" minOccurs="0"
+                                                    type="xs:boolean"/>
                                         <xs:element name="single_way" minOccurs="0"
                                                     type="xs:boolean"/>
                                         <xs:element name="suppressor" maxOccurs="1" minOccurs="0"
@@ -85,13 +93,14 @@
                                 </xs:complexType>
                             </xs:element>
                         </xs:sequence>
-                        <xs:attribute name="id" type="xs:nonNegativeInteger" use="required"/>
+                        <xs:attribute name="screen" type="xs:nonNegativeInteger" use="required"/>
                     </xs:complexType>
                 </xs:element>
 
                 <xs:element name="object" maxOccurs="unbounded" minOccurs="0">
                     <xs:complexType>
                         <xs:sequence>
+                            <xs:element name="screen" type="xs:integer"/>
                             <xs:element name="picture" type="xs:string"/>
                             <xs:element name="width" type="xs:integer"/>
                             <xs:element name="height" type="xs:integer"/>

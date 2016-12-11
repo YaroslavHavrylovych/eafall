@@ -11,6 +11,9 @@ import org.simpleframework.xml.Root;
  */
 @Root(name = "object")
 public class ObjectDataLoader {
+    @Element(name = "screen")
+    public Integer screen;
+
     @Element(name = "picture")
     public String picture;
 

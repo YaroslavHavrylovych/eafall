@@ -6,6 +6,7 @@ import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.R;
 import com.yaroslavlancelot.eafall.android.StartableIntent;
 import com.yaroslavlancelot.eafall.game.EaFallActivity;
+import com.yaroslavlancelot.eafall.game.ai.IBot;
 import com.yaroslavlancelot.eafall.game.campaign.intents.CampaignIntent;
 import com.yaroslavlancelot.eafall.game.campaign.loader.CampaignDataLoader;
 import com.yaroslavlancelot.eafall.game.campaign.loader.CampaignFileLoader;
@@ -13,6 +14,7 @@ import com.yaroslavlancelot.eafall.game.campaign.loader.ObjectDataLoader;
 import com.yaroslavlancelot.eafall.game.campaign.loader.PositionLoader;
 import com.yaroslavlancelot.eafall.game.campaign.pass.CampaignPassage;
 import com.yaroslavlancelot.eafall.game.campaign.pass.CampaignPassageFactory;
+import com.yaroslavlancelot.eafall.game.campaign.plot.PlotPresenter;
 import com.yaroslavlancelot.eafall.game.campaign.visual.CampaignTitleText;
 import com.yaroslavlancelot.eafall.game.campaign.visual.NextButton;
 import com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity;
@@ -245,7 +247,8 @@ public class CampaignActivity extends EaFallActivity {
         List<Sprite> elementsList = new ArrayList<>(size);
         for (ObjectDataLoader dataLoader : mCampaignFileLoader.getObjectsList()) {
             PositionLoader position = dataLoader.position;
-            Sprite sprite = new Sprite(position.x, position.y,
+            Sprite sprite = new Sprite(
+                    position.x + dataLoader.screen * SizeConstants.GAME_FIELD_WIDTH, position.y,
                     TextureRegionHolder.getRegion(dataLoader.picture), vertexManager);
             if (dataLoader.rotation != null) {
                 sprite.registerEntityModifier(new InstantRotationModifier(dataLoader.rotation));
@@ -265,9 +268,10 @@ public class CampaignActivity extends EaFallActivity {
         List<Sprite> elementsList = new ArrayList<>(mCampaignFileLoader.getCampaignsList().size());
         for (CampaignDataLoader dataLoader : mCampaignFileLoader.getCampaignsList()) {
             PositionLoader position = dataLoader.position;
-            Sprite sprite = new Sprite(position.x, position.y,
+            Sprite sprite = new Sprite(
+                    position.x + dataLoader.screen * SizeConstants.GAME_FIELD_WIDTH, position.y,
                     TextureRegionHolder.getRegion(dataLoader.picture), vertexManager);
-            sprite.setTag(dataLoader.id);
+            sprite.setTag(dataLoader.screen);
             if (dataLoader.rotation != null) {
                 sprite.registerEntityModifier(new BackwardInstantRotationModifier(dataLoader.rotation));
             }
@@ -282,8 +286,30 @@ public class CampaignActivity extends EaFallActivity {
         mHud.attachChild(mStartButton);
         mStartButton.setOnClickListener(new ButtonSprite.OnClickListener() {
             @Override
-            public void onClick(final ButtonSprite pButtonSprite, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-                startMission(getCampaign(mScreenId).mission);
+            public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX,
+                                float pTouchAreaLocalY) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        int plot = getResources().getIdentifier(
+                                "campaign_demo_plot" + (mScreenId + 1), "string",
+                                getApplicationInfo().packageName);
+                        PlotPresenter plotPresenter = new PlotPresenter(plot, CampaignActivity.this,
+                                new PlotPresenter.PlotPresentedCallback() {
+                                    @Override
+                                    public void onPresentationDone() {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                startMission(getCampaign(mScreenId).mission);
+                                                finish();
+                                            }
+                                        });
+                                    }
+                                });
+                        plotPresenter.startPresentation();
+                    }
+                });
             }
         });
         mHud.registerTouchArea(mStartButton);
@@ -309,15 +335,15 @@ public class CampaignActivity extends EaFallActivity {
     }
 
     /**
-     * search for campaign with given id
+     * search for campaign with given screen
      *
-     * @param id given campaign id
+     * @param id given campaign screen
      * @return {@link CampaignDataLoader} instance or null if no such campaign loaded
      */
     private CampaignDataLoader getCampaign(int id) {
         CampaignDataLoader campaignDataLoader = null;
         for (CampaignDataLoader data : mCampaignFileLoader.getCampaignsList()) {
-            if (data.id == id) {
+            if (data.screen == id) {
                 campaignDataLoader = data;
                 break;
             }

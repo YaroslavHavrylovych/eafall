@@ -60,10 +60,10 @@ abstract class UnitTest : EaFallTestCase() {
         val vBom = VertexBufferObjectManager()
         val imperials = Imperials(vBom)
         var player = Player(mPlayerName, imperials, IPlayer.ControlType.USER_CONTROL_ON_SERVER_SIDE,
-                1000, -1, MissionConfig())
+                1000, -1, -1, MissionConfig())
         PlayersHolder.getInstance().addElement(mPlayerName, player)
         player = Player(mEnemyPlayerName, imperials, IPlayer.ControlType.BOT_CONTROL_ON_SERVER_SIDE,
-                1000, 5, MissionConfig())
+                1000, 5, -1, MissionConfig())
         PlayersHolder.getInstance().addElement(mEnemyPlayerName, player)
         PlayersHolder.getPlayer(mPlayerName).enemyPlayer = player
         //used for bullets, health and units

@@ -4,7 +4,7 @@ import android.view.MotionEvent;
 
 import com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity;
 import com.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
-import com.yaroslavlancelot.eafall.game.tutorial.TutorialPopup;
+import com.yaroslavlancelot.eafall.game.campaign.missions.ClickOnPointPopup;
 
 import org.andengine.entity.IEntity;
 import org.andengine.input.touch.TouchEvent;
@@ -23,7 +23,7 @@ public class BaseTutorialActivity extends SinglePlayerGameActivity {
     // Fields
     // ===========================================================
     /** used to show hints */
-    protected TutorialPopup mTutorialPopup;
+    protected ClickOnPointPopup mClickOnPointPopup;
 
     // ===========================================================
     // Constructors
@@ -41,14 +41,14 @@ public class BaseTutorialActivity extends SinglePlayerGameActivity {
     @Override
     protected void startAsyncResourceLoading() {
         super.startAsyncResourceLoading();
-        TutorialPopup.loadResources(this, getTextureManager());
-        TutorialPopup.loadFonts(getFontManager(), getTextureManager());
+        ClickOnPointPopup.loadResources(this, getTextureManager());
+        ClickOnPointPopup.loadFonts(getFontManager(), getTextureManager());
     }
 
     @Override
     protected void onPopulateWorkingScene(final EaFallScene scene) {
         super.onPopulateWorkingScene(scene);
-        mTutorialPopup = new TutorialPopup(mHud, mCamera, getVertexBufferObjectManager());
+        mClickOnPointPopup = new ClickOnPointPopup(mHud, mCamera, getVertexBufferObjectManager());
     }
 
 

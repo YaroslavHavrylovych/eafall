@@ -207,7 +207,7 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
      * (it's on the server side or it's single player and not an client which just is showing)
      * then player money will be reduced.
      *
-     * @param buildingId id of the building you want to create
+     * @param buildingId screen of the building you want to create
      * @return true if building amount was increased and false in other case
      */
     public boolean createBuilding(BuildingId buildingId) {
@@ -216,7 +216,7 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
             final BuildingDummy buildingDummy = PlayersHolder.getPlayer(mPlayerName).getAlliance()
                     .getBuildingDummy(buildingId);
             if (buildingDummy == null) {
-                throw new IllegalArgumentException("no building with id " + buildingId);
+                throw new IllegalArgumentException("no building with screen " + buildingId);
             }
 
             switch (buildingDummy.getBuildingType()) {
