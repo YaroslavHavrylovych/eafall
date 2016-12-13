@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
-
-int target_v = 24
 
 buildscript {
     ext.kotlin_version = '1.0.4'
@@ -10,16 +9,19 @@ buildscript {
     repositories {
         jcenter()
         mavenCentral()
+        maven { url 'https://maven.fabric.io/public' }
     }
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'io.fabric.tools:gradle:1.22.0'
     }
 }
 
 repositories {
     jcenter()
     mavenCentral()
+    maven { url 'https://maven.fabric.io/public' }
 }
 
 dependencies {
@@ -27,8 +29,8 @@ dependencies {
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
     compile 'de.greenrobot:eventbus:2.4.0'
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile "com.android.support:appcompat-v7:25.0.0"
-    compile 'com.google.android.gms:play-services-analytics:9.8.0'
+    compile 'com.android.support:appcompat-v7:25.0.1'
+    compile 'com.google.android.gms:play-services-analytics:10.0.1'
     compile 'com.jakewharton.timber:timber:4.3.0'
     compile 'com.android.support:multidex:1.0.1'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -36,7 +38,10 @@ dependencies {
     testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     androidTestCompile 'com.android.support.test:runner:0.5'
     androidTestCompile 'com.android.support.test:rules:0.5'
-    androidTestCompile 'com.android.support:support-annotations:25.0.0'
+    androidTestCompile 'com.android.support:support-annotations:25.0.1'
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
+        transitive = true;
+    }
 }
 
 android {
@@ -113,7 +118,7 @@ android {
 
     applicationVariants.all { variant ->
         //remove unneeded resources from demo build
-        if (variant.name.contains('demo')) {
+        if (variant.name.contains('demo') || variant.name.contains('dev')) {
             def excludeAssetsFromDemo = task("excludeAssetsFrom${variant.name}", type: Delete) {
                 def assetsPath = "${buildDir}/intermediates/assets/${variant.dirName}"
                 delete "${assetsPath}/graphics/sprites/alliance/imperials"

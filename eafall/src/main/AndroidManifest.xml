@@ -64,5 +64,8 @@
         <activity
             android:name=".game.campaign.missions.ThirdMissionActivity"
             android:screenOrientation="landscape"/>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="0ed30a5fecc78c7e054492956f6f54f67339fd35" />
     </application>
 </manifest>

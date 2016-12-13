@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.ExceptionReporter;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
@@ -13,6 +14,7 @@ import com.yaroslavlancelot.eafall.game.configuration.Config;
 import com.yaroslavlancelot.eafall.game.configuration.IConfig;
 import com.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 
+import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
 /** Custom multi-dex application */
@@ -55,6 +57,7 @@ public class EaFallApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         sContext = getApplicationContext();
         sConfig = Config.createConfig(this);
         LocaleImpl.init(this);
