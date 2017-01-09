@@ -2,6 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
 
+int target_v = 25
+
 buildscript {
     ext.kotlin_version = '1.0.4'
     ext.exclude_java = []
@@ -46,7 +48,7 @@ dependencies {
 
 android {
     compileSdkVersion target_v
-    buildToolsVersion "24.0.3"
+    buildToolsVersion "25.0.0"
 
     packagingOptions {
         pickFirst 'META-INF/LICENSE.txt'
