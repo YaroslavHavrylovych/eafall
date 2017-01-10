@@ -6,9 +6,9 @@
 
     <campaign screen="0">
         <name>campaign_demo_tutorial1</name>
-        <picture>graphics/images/campaign/mars.png</picture>
-        <width>128</width>
-        <height>128</height>
+        <picture>graphics/images/campaign/missions/screen0.png</picture>
+        <width>650</width>
+        <height>654</height>
         <rotation>30</rotation>
         <position>
             <x>1019</x>
@@ -28,7 +28,7 @@
             <max_oxygen>1500</max_oxygen>
             <planet_health>3000</planet_health>
             <offensive_units_limit>30</offensive_units_limit>
-            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.SingleWayBot
+            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.SingleWayEasyBot
             </enemy_logic_handler>
             <single_way>true</single_way>
             <suppressor>false</suppressor>
@@ -40,10 +40,10 @@
 
     <campaign screen="1">
         <name>campaign_demo_tutorial2</name>
-        <picture>graphics/images/campaign/mars.png</picture>
-        <width>128</width>
-        <height>128</height>
-        <rotation>30</rotation>
+        <picture>graphics/images/campaign/missions/screen1.png</picture>
+        <width>650</width>
+        <height>654</height>
+        <rotation>60</rotation>
         <position>
             <x>1019</x>
             <y>540</y>
@@ -62,10 +62,10 @@
             <max_oxygen>5000</max_oxygen>
             <planet_health>5000</planet_health>
             <offensive_units_limit>100</offensive_units_limit>
-            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.VeryFirstBot
+            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.TwoWaysEasyBot
             </enemy_logic_handler>
             <star_code_name>sun</star_code_name>
-            <star_constellation>sun</star_constellation>
+            <star_constellation>no_constellation</star_constellation>
             <blue_star>false</blue_star>
             <single_way>false</single_way>
             <suppressor>false</suppressor>
@@ -78,10 +78,10 @@
 
     <campaign screen="2">
         <name>campaign_demo_tutorial3</name>
-        <picture>graphics/images/campaign/mars.png</picture>
-        <width>128</width>
-        <height>128</height>
-        <rotation>30</rotation>
+        <picture>graphics/images/campaign/missions/screen2.png</picture>
+        <width>650</width>
+        <height>654</height>
+        <rotation>25</rotation>
         <position>
             <x>1019</x>
             <y>540</y>
@@ -100,10 +100,10 @@
             <max_oxygen>5000</max_oxygen>
             <planet_health>5000</planet_health>
             <offensive_units_limit>50</offensive_units_limit>
-            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.VeryFirstBot
+            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.TwoWaysEasyBot
             </enemy_logic_handler>
             <star_code_name>sun</star_code_name>
-            <star_constellation>sun</star_constellation>
+            <star_constellation>no_constellation</star_constellation>
             <blue_star>false</blue_star>
             <single_way>false</single_way>
             <suppressor>true</suppressor>
@@ -117,10 +117,10 @@
 
     <campaign screen="3">
         <name>campaign_demo_tutorial4</name>
-        <picture>graphics/images/campaign/mars.png</picture>
-        <width>128</width>
-        <height>128</height>
-        <rotation>30</rotation>
+        <picture>graphics/images/campaign/missions/screen3.png</picture>
+        <width>650</width>
+        <height>654</height>
+        <rotation>40</rotation>
         <position>
             <x>1019</x>
             <y>540</y>
@@ -137,11 +137,11 @@
             <max_oxygen>1500</max_oxygen>
             <planet_health>5000</planet_health>
             <offensive_units_limit>150</offensive_units_limit>
-            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.VeryFirstBot
+            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.TwoWaysEasyBot
             </enemy_logic_handler>
-            <star_code_name>sun</star_code_name>
-            <star_constellation>sun</star_constellation>
-            <blue_star>false</blue_star>
+            <star_code_name>new_sun</star_code_name>
+            <star_constellation>no_constellation</star_constellation>
+            <blue_star>true</blue_star>
             <single_way>false</single_way>
             <suppressor>true</suppressor>
             <definition>
@@ -152,10 +152,10 @@
 
     <campaign screen="4">
         <name>campaign_demo_tutorial5</name>
-        <picture>graphics/images/campaign/mars.png</picture>
-        <width>128</width>
-        <height>128</height>
-        <rotation>30</rotation>
+        <picture>graphics/images/campaign/missions/screen4.png</picture>
+        <width>650</width>
+        <height>654</height>
+        <rotation>25</rotation>
         <position>
             <x>1019</x>
             <y>540</y>
@@ -172,11 +172,11 @@
             <max_oxygen>3000</max_oxygen>
             <planet_health>5000</planet_health>
             <offensive_units_limit>200</offensive_units_limit>
-            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.VeryFirstBot
+            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.TwoWaysEasyBot
             </enemy_logic_handler>
-            <star_code_name>sun</star_code_name>
-            <star_constellation>sun</star_constellation>
-            <blue_star>false</blue_star>
+            <star_code_name>new_sun</star_code_name>
+            <star_constellation>no_constellation</star_constellation>
+            <blue_star>true</blue_star>
             <single_way>false</single_way>
             <suppressor>true</suppressor>
             <definition>
@@ -188,10 +188,10 @@
 
     <campaign screen="5">
         <name>campaign_demo_tutorial6</name>
-        <picture>graphics/images/campaign/mars.png</picture>
-        <width>128</width>
-        <height>128</height>
-        <rotation>30</rotation>
+        <picture>graphics/images/campaign/missions/screen5.png</picture>
+        <width>650</width>
+        <height>654</height>
+        <rotation>50</rotation>
         <position>
             <x>1019</x>
             <y>540</y>
@@ -208,7 +208,7 @@
             <max_oxygen>1500</max_oxygen>
             <planet_health>5000</planet_health>
             <offensive_units_limit>100</offensive_units_limit>
-            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.SingleWayBot
+            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.SingleWayEasyBot
             </enemy_logic_handler>
             <star_constellation>no_constellation</star_constellation>
             <single_way>true</single_way>
@@ -222,9 +222,9 @@
 
     <campaign screen="6">
         <name>campaign_demo_tutorial7</name>
-        <picture>graphics/images/campaign/mars.png</picture>
-        <width>128</width>
-        <height>128</height>
+        <picture>graphics/images/campaign/missions/screen6.png</picture>
+        <width>650</width>
+        <height>654</height>
         <rotation>30</rotation>
         <position>
             <x>1019</x>
@@ -242,11 +242,11 @@
             <max_oxygen>1500</max_oxygen>
             <planet_health>5000</planet_health>
             <offensive_units_limit>200</offensive_units_limit>
-            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.VeryFirstBot
+            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.TwoWaysEasyBot
             </enemy_logic_handler>
-            <star_code_name>sun</star_code_name>
+            <star_code_name>new_sun</star_code_name>
             <star_constellation>no_constellation</star_constellation>
-            <blue_star>false</blue_star>
+            <blue_star>true</blue_star>
             <single_way>false</single_way>
             <suppressor>true</suppressor>
             <definition>
@@ -257,10 +257,10 @@
 
     <campaign screen="7">
         <name>campaign_demo_tutorial8</name>
-        <picture>graphics/images/campaign/mars.png</picture>
-        <width>128</width>
-        <height>128</height>
-        <rotation>30</rotation>
+        <picture>graphics/images/campaign/missions/screen7.png</picture>
+        <width>650</width>
+        <height>654</height>
+        <rotation>45</rotation>
         <position>
             <x>1019</x>
             <y>540</y>
@@ -277,10 +277,10 @@
             <max_oxygen>1500</max_oxygen>
             <planet_health>5000</planet_health>
             <offensive_units_limit>200</offensive_units_limit>
-            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.VeryFirstBot
+            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.TwoWaysEasyBot
             </enemy_logic_handler>
             <star_code_name>sun</star_code_name>
-            <star_constellation>sun</star_constellation>
+            <star_constellation>no_constellation</star_constellation>
             <blue_star>false</blue_star>
             <single_way>false</single_way>
             <suppressor>true</suppressor>
@@ -292,10 +292,10 @@
 
     <campaign screen="8">
         <name>campaign_demo_tutorial9</name>
-        <picture>graphics/images/campaign/mars.png</picture>
-        <width>128</width>
-        <height>128</height>
-        <rotation>30</rotation>
+        <picture>graphics/images/campaign/missions/screen8.png</picture>
+        <width>650</width>
+        <height>654</height>
+        <rotation>40</rotation>
         <position>
             <x>1019</x>
             <y>540</y>
@@ -312,11 +312,11 @@
             <max_oxygen>1500</max_oxygen>
             <planet_health>5000</planet_health>
             <offensive_units_limit>200</offensive_units_limit>
-            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.VeryFirstBot
+            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.TwoWaysEasyBot
             </enemy_logic_handler>
-            <star_code_name>sun</star_code_name>
-            <star_constellation>sun</star_constellation>
-            <blue_star>false</blue_star>
+            <star_code_name>new_sun</star_code_name>
+            <star_constellation>no_constellation</star_constellation>
+            <blue_star>true</blue_star>
             <single_way>false</single_way>
             <suppressor>true</suppressor>
             <definition>
@@ -328,10 +328,10 @@
 
     <campaign screen="9">
         <name>campaign_demo_tutorial10</name>
-        <picture>graphics/images/campaign/mars.png</picture>
-        <width>128</width>
-        <height>128</height>
-        <rotation>30</rotation>
+        <picture>graphics/images/campaign/missions/screen9.png</picture>
+        <width>650</width>
+        <height>654</height>
+        <rotation>25</rotation>
         <position>
             <x>1019</x>
             <y>540</y>
@@ -348,10 +348,10 @@
             <max_oxygen>1500</max_oxygen>
             <planet_health>5000</planet_health>
             <offensive_units_limit>200</offensive_units_limit>
-            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.VeryFirstBot
+            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.TwoWaysHardBot
             </enemy_logic_handler>
             <star_code_name>sun</star_code_name>
-            <star_constellation>sun</star_constellation>
+            <star_constellation>no_constellation</star_constellation>
             <blue_star>false</blue_star>
             <single_way>false</single_way>
             <suppressor>true</suppressor>
@@ -363,17 +363,7 @@
 
     <!-- additional screen elements -->
     <object>
-        <screen>0</screen>
-        <picture>graphics/images/campaign/planet_shadow.png</picture>
-        <width>661</width>
-        <height>651</height>
-        <position>
-            <x>1019</x>
-            <y>540</y>
-        </position>
-    </object>
-    <object>
-        <screen>0</screen>
+        <screen>9</screen>
         <picture>graphics/sprites/object/meteor.png</picture>
         <width>40</width>
         <height>51</height>
@@ -387,7 +377,21 @@
     </object>
 
     <object>
-        <screen>1</screen>
+        <screen>8</screen>
+        <picture>graphics/sprites/object/meteor.png</picture>
+        <width>40</width>
+        <height>51</height>
+        <rotation>5</rotation>
+        <radius>400</radius>
+        <duration>10</duration>
+        <position>
+            <x>1019</x>
+            <y>540</y>
+        </position>
+    </object>
+
+    <object>
+        <screen>7</screen>
         <picture>graphics/sprites/object/meteor.png</picture>
         <width>40</width>
         <height>51</height>

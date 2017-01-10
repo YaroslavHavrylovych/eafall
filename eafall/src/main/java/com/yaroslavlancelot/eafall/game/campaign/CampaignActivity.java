@@ -220,7 +220,8 @@ public class CampaignActivity extends EaFallActivity {
         mCamera.setCenter(SizeConstants.HALF_FIELD_WIDTH + mScreenId * SizeConstants.GAME_FIELD_WIDTH,
                 SizeConstants.HALF_FIELD_HEIGHT);
         mPreviousScreenButton.setEnabled(mScreenId > 0);
-        mNextScreenButton.setEnabled(mScreenId < mCampaignFileLoader.getCampaignsList().size() - 1);
+        mNextScreenButton.setEnabled(mScreenId < mCampaignFileLoader.getCampaignsList().size() - 1
+                && mScreenId < mCampaignPassage.getPassedCampaignsAmount());
         mStartButton.setVisible(mScreenId <= mCampaignPassage.getPassedCampaignsAmount());
         String title = getString(getResources().getIdentifier(
                 mCampaignFileLoader.getCampaignsList().get(mScreenId).name, "string",

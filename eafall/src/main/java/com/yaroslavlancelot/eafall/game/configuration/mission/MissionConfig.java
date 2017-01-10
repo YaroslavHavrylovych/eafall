@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.R;
-import com.yaroslavlancelot.eafall.game.ai.VeryFirstBot;
+import com.yaroslavlancelot.eafall.game.ai.TwoWaysEasyBot;
 import com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity;
 import com.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.yaroslavlancelot.eafall.game.mission.DefinitionLoader;
@@ -243,7 +243,7 @@ public class MissionConfig implements Parcelable {
         mOpponentBuildingsLimit = NO_VALUE;
         mSingleWay = false;
         mSuppressor = true;
-        mBotLogic = VeryFirstBot.class.getName();
+        mBotLogic = TwoWaysEasyBot.class.getName();
         mGameHandler = SinglePlayerGameActivity.class.getName();
     }
 
@@ -253,11 +253,11 @@ public class MissionConfig implements Parcelable {
         if (loadedData.single_way != null) mSingleWay = loadedData.single_way;
         if (loadedData.suppressor != null) mSuppressor = loadedData.suppressor;
         if (loadedData.blue_star != null && loadedData.blue_star) {
-            mSunPath = StringConstants.FILE_SUN;
-            mSunHazePath = StringConstants.FILE_SUN_HAZE;
-        } else {
             mSunPath = StringConstants.FILE_BLUE_SUN;
             mSunHazePath = StringConstants.FILE_BLUE_SUN_HAZE;
+        } else {
+            mSunPath = StringConstants.FILE_SUN;
+            mSunHazePath = StringConstants.FILE_SUN_HAZE;
         }
         if (loadedData.max_oxygen != null) mMaxOxygenAmount = loadedData.max_oxygen;
         if (loadedData.player_start_money != null)
@@ -285,7 +285,7 @@ public class MissionConfig implements Parcelable {
             mStarConstellation = getStringResourceByName(loadedData.star_constellation);
         if (loadedData.offensive_units_limit != null)
             mMovableUnitsLimit = loadedData.offensive_units_limit;
-        mBotLogic = loadedData.enemy_logic_handler == null ? VeryFirstBot.class.getName() : loadedData.enemy_logic_handler;
+        mBotLogic = loadedData.enemy_logic_handler == null ? TwoWaysEasyBot.class.getName() : loadedData.enemy_logic_handler;
         mGameHandler = loadedData.game_handler == null ? SinglePlayerGameActivity.class.getName() : loadedData.game_handler;
     }
 

@@ -29,8 +29,8 @@ import timber.log.Timber;
  *
  * @author Yaroslav Havrylovych
  */
-public class SingleWayBot implements IBot {
-    public static final String TAG = SingleWayBot.class.getCanonicalName();
+public class SingleWayEasyBot implements IBot {
+    public static final String TAG = SingleWayEasyBot.class.getCanonicalName();
     public static final int DELAY_BETWEEN_ITERATIONS = 300;
     private IPlayer mBotPlayer;
 
@@ -45,12 +45,12 @@ public class SingleWayBot implements IBot {
         PlanetStaticObject planet;
         int amountOnPlanet;
         //planet not initialized yet
-        while (mBotPlayer.getPlanet() == null) {
+        while (mBotPlayer.getPlanet() == null && mBotPlayer.getEnemyPlayer().getPlanet() == null) {
             delay();
         }
         try {
             //start the bot logic
-            while (mBotPlayer.getPlanet() != null) {
+            while (mBotPlayer.getPlanet() != null && mBotPlayer.getEnemyPlayer().getPlanet() != null) {
                 if (GameState.isPaused()) {
                     delay();
                     continue;
