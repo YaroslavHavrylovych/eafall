@@ -363,7 +363,21 @@
 
     <!-- additional screen elements -->
     <object>
-        <screen>9</screen>
+        <screen>0</screen>
+        <picture>graphics/sprites/object/meteor.png</picture>
+        <width>40</width>
+        <height>51</height>
+        <rotation>5</rotation>
+        <radius>400</radius>
+        <duration>15</duration>
+        <position>
+            <x>1019</x>
+            <y>540</y>
+        </position>
+    </object>
+
+    <object>
+        <screen>1</screen>
         <picture>graphics/sprites/object/meteor.png</picture>
         <width>40</width>
         <height>51</height>
@@ -377,13 +391,41 @@
     </object>
 
     <object>
-        <screen>8</screen>
+        <screen>2</screen>
         <picture>graphics/sprites/object/meteor.png</picture>
         <width>40</width>
         <height>51</height>
         <rotation>5</rotation>
         <radius>400</radius>
-        <duration>10</duration>
+        <duration>15</duration>
+        <position>
+            <x>1019</x>
+            <y>540</y>
+        </position>
+    </object>
+
+    <object>
+        <screen>3</screen>
+        <picture>graphics/sprites/object/meteor.png</picture>
+        <width>40</width>
+        <height>51</height>
+        <rotation>5</rotation>
+        <radius>400</radius>
+        <duration>20</duration>
+        <position>
+            <x>1019</x>
+            <y>540</y>
+        </position>
+    </object>
+
+    <object>
+        <screen>5</screen>
+        <picture>graphics/sprites/object/meteor.png</picture>
+        <width>40</width>
+        <height>51</height>
+        <rotation>5</rotation>
+        <radius>400</radius>
+        <duration>7</duration>
         <position>
             <x>1019</x>
             <y>540</y>
@@ -398,6 +440,20 @@
         <rotation>5</rotation>
         <radius>400</radius>
         <duration>10</duration>
+        <position>
+            <x>1019</x>
+            <y>540</y>
+        </position>
+    </object>
+
+    <object>
+        <screen>9</screen>
+        <picture>graphics/sprites/object/meteor.png</picture>
+        <width>40</width>
+        <height>51</height>
+        <rotation>5</rotation>
+        <radius>400</radius>
+        <duration>4</duration>
         <position>
             <x>1019</x>
             <y>540</y>
