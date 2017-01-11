@@ -5,7 +5,7 @@ pipelines:
     - step:
         script: 
             # Grab the Android Support Repo which isn't included in the container
-          - echo y | android update sdk --all --no-ui --filter "build-tools-25, extra-android-support, extra-android-m2repository, extra-google-google_play_services, extra-google-m2repository"
+          - echo y | android update sdk --all --no-ui --filter "build-tools-24.0.3, extra-android-support, extra-android-m2repository, extra-google-google_play_services, extra-google-m2repository"
           - pwd
           - ls ./
             # update submodules (libraries)
