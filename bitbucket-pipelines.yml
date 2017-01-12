@@ -1,4 +1,4 @@
-image: uber/android-build-environment:latest
+image: yaroslavhavrylovych/android:latest
 
 pipelines:
   default:

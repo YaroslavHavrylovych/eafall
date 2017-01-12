@@ -2,7 +2,7 @@ package com.yaroslavlancelot.eafall.game.client.thick.single;
 
 import com.yaroslavlancelot.eafall.android.StartableIntent;
 import com.yaroslavlancelot.eafall.game.ai.IBot;
-import com.yaroslavlancelot.eafall.game.ai.VeryFirstBot;
+import com.yaroslavlancelot.eafall.game.ai.TwoWaysEasyBot;
 import com.yaroslavlancelot.eafall.game.campaign.intents.CampaignIntent;
 import com.yaroslavlancelot.eafall.game.client.thick.ThickClientGameActivity;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
@@ -53,7 +53,7 @@ public class SinglePlayerGameActivity extends ThickClientGameActivity {
             Timber.e(e, "can't get access to the bot class");
         }
         if (bot == null) {
-            bot = new VeryFirstBot();
+            bot = new TwoWaysEasyBot();
         }
         bot.init(initializingPlayer);
         Thread thread = new Thread(bot);

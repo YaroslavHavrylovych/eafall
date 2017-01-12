@@ -33,8 +33,8 @@ import timber.log.Timber;
  */
 //TODO FYI : bot works in another thread and it has to do some actions in the update thread
 //TODO stop bot when game finished
-public class VeryFirstBot implements IBot {
-    public static final String TAG = VeryFirstBot.class.getCanonicalName();
+public class TwoWaysHardBot implements IBot {
+    public static final String TAG = TwoWaysHardBot.class.getCanonicalName();
     public static final int DELAY_BETWEEN_ITERATIONS = 300;
     private IPlayer mBotPlayer;
 
@@ -49,12 +49,12 @@ public class VeryFirstBot implements IBot {
         PlanetStaticObject planet;
         int amountOnPlanet;
         //planet not initialized yet
-        while (mBotPlayer.getPlanet() == null) {
+        while (mBotPlayer.getPlanet() == null && mBotPlayer.getEnemyPlayer().getPlanet() == null) {
             delay();
         }
         try {
             //start the bot logic
-            while (mBotPlayer.getPlanet() != null) {
+            while (mBotPlayer.getPlanet() != null && mBotPlayer.getEnemyPlayer().getPlanet() != null) {
                 if (GameState.isPaused()) {
                     delay();
                     continue;
