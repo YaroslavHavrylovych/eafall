@@ -2,7 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
 
-int target_v = 25
+int target_v = 22
+int compiled_v = 25
 
 buildscript {
     ext.kotlin_version = '1.0.4'
@@ -47,7 +48,7 @@ dependencies {
 }
 
 android {
-    compileSdkVersion target_v
+    compileSdkVersion compiled_v 
     buildToolsVersion "25"
 
     packagingOptions {
