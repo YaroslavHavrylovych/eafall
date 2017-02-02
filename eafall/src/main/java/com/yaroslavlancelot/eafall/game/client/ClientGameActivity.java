@@ -26,6 +26,8 @@ import com.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.yaroslavlancelot.eafall.game.popup.BuildingSettingsDialog;
 import com.yaroslavlancelot.eafall.game.popup.GameOverPopup;
 import com.yaroslavlancelot.eafall.game.popup.IPopup;
+import com.yaroslavlancelot.eafall.game.popup.rolling.RollingPopupManager;
+import com.yaroslavlancelot.eafall.game.popup.rolling.description.DescriptionPopup;
 import com.yaroslavlancelot.eafall.game.resources.loaders.game.ClientResourcesLoader;
 import com.yaroslavlancelot.eafall.game.rule.IRuler;
 import com.yaroslavlancelot.eafall.game.rule.RulesFactory;
@@ -70,6 +72,8 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
         initFirstPlanet();
         initSecondPlanet();
         super.onPopulateWorkingScene(scene);
+        ((DescriptionPopup) RollingPopupManager.getInstance().getPopup(DescriptionPopup.KEY))
+                .setShowBuildingSettingsButton(!mMissionConfig.isSingleWay());
         for (IPlayer player : PlayersHolder.getInstance().getElements()) {
             if (player.getControlType().user()) {
                 ClientIncomeHandler.init(player, mSceneManager.getWorkingScene(),

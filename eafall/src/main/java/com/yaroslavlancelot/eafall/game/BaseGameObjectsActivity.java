@@ -162,8 +162,6 @@ public abstract class BaseGameObjectsActivity extends EaFallActivity implements 
         SpriteGroupHolder.attachSpriteGroups(scene, BatchingKeys.BatchTag.GAME_SCENE.value());
         //hud
         mHud.initHudElements(mCamera, getVertexBufferObjectManager(), mMissionConfig);
-        ((DescriptionPopup) RollingPopupManager.getInstance().getPopup(DescriptionPopup.KEY))
-                .setShowBuildingSettingsButton(!mMissionConfig.isSingleWay());
         //pools
         BulletsPool.init(getVertexBufferObjectManager());
         UnitExplosionPool.init(getVertexBufferObjectManager());
