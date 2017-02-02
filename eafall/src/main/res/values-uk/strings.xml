@@ -49,68 +49,6 @@
     <!-- /pre game customizations -->
 
     <!-- unions -->
-    <!-- imperials -->
-    <!-- buildings -->
-    <string name="camp">Табір</string>
-    <string name="tent">Намет</string>
-    <string name="barracks">Бараки</string>
-    <string name="shooters_hall">Стрілецький Зал</string>
-    <string name="training_center">Тренувальний Центр</string>
-    <string name="workshop">Майстерня</string>
-    <string name="laboratory">Лабораторія</string>
-    <string name="bunker">Бункер</string>
-    <string name="defender">Захисник</string>
-    <string name="municipality">Муніципалітет</string>
-    <string name="earth_artifact">Артифакт з Землі</string>
-    <!-- /buildings -->
-    <!-- units -->
-    <string name="conscript">Призовник</string>
-    <string name="grant">Боєць</string>
-    <string name="sergeant">Сержант</string>
-    <string name="boy_scout">Пластун</string>
-    <string name="scout">Опікун</string>
-    <string name="infantrymen">Піхотинець</string>
-    <string name="SF">СВ</string>
-    <string name="sniper">Снайпер</string>
-    <string name="killer">Вбивця</string>
-    <string name="agent">Агент</string>
-    <string name="spy">Шпигун</string>
-    <string name="robot">Робот</string>
-    <string name="metal_killer">Залізячник</string>
-    <string name="demolisher">Підривник</string>
-    <string name="superman">Супермен</string>
-    <!-- /units -->
-
-    <!-- rebels -->
-    <!-- buildings -->
-    <string name="underground">Сховище</string>
-    <string name="factory">Фабрика</string>
-    <string name="bomos">Алтар</string>
-    <string name="hospital">Шпиталь</string>
-    <string name="minery">Шахта</string>
-    <string name="artillery">Артилерія</string>
-    <string name="sabotage_center">Диверсійний центр</string>
-    <string name="fort">Форт</string>
-    <string name="caches">Криївка</string>
-    <string name="space_material">Космічна матерія</string>
-    <!-- /buildings -->
-    <!-- units -->
-    <string name="machine_gunner">Механічний стрілок</string>
-    <string name="mechanical_soldier">Механічний солдат</string>
-    <string name="oplot_u">Оплот У</string>
-    <string name="oplot_m">Оплот М</string>
-    <string name="suicide">Смертник</string>
-    <string name="priest">Священник</string>
-    <string name="doctor">Лікар</string>
-    <string name="shaman">Шаман</string>
-    <string name="engineer">Інженер</string>
-    <string name="exploder">Підривник</string>
-    <string name="ballista">Баліста</string>
-    <string name="thor">Тор</string>
-    <string name="recruiter">Вербувальник</string>
-    <string name="saboteur">Диверсант</string>
-    <!-- /units -->
-
     <!-- mutants -->
     <!-- buildings -->
     <string name="water_cave">Водна Печера</string>

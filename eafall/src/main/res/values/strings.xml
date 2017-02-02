@@ -49,68 +49,6 @@
     <!-- /pre game customizations -->
 
     <!-- unions -->
-    <!-- imperials -->
-    <!-- buildings -->
-    <string name="camp">Camp</string>
-    <string name="tent">Tent</string>
-    <string name="barracks">Barracks</string>
-    <string name="shooters_hall">ShootersHall</string>
-    <string name="training_center">TrainingCenter</string>
-    <string name="workshop">Workshop</string>
-    <string name="laboratory">Laboratory</string>
-    <string name="bunker">Bunker</string>
-    <string name="defender">Defender</string>
-    <string name="municipality">Municipality</string>
-    <string name="earth_artifact">Earth Artifact</string>
-    <!-- /buildings -->
-    <!-- units -->
-    <string name="conscript">Conscript</string>
-    <string name="grant">Grant</string>
-    <string name="sergeant">Sergeant</string>
-    <string name="boy_scout">Boy Scout</string>
-    <string name="scout">Scout</string>
-    <string name="infantrymen">Infantrymen</string>
-    <string name="SF">SF</string>
-    <string name="sniper">Sniper</string>
-    <string name="killer">Killer</string>
-    <string name="agent">Agent</string>
-    <string name="spy">Spy</string>
-    <string name="robot">Robot</string>
-    <string name="metal_killer">Metal Killer</string>
-    <string name="demolisher">Demolisher</string>
-    <string name="superman">Superman</string>
-    <!-- /units -->
-
-    <!-- rebels -->
-    <!-- buildings -->
-    <string name="underground">Underground</string>
-    <string name="factory">Factory</string>
-    <string name="bomos">Bomos</string>
-    <string name="hospital">Hospital</string>
-    <string name="minery">Minery</string>
-    <string name="artillery">Artillery</string>
-    <string name="sabotage_center">Sabotage Center</string>
-    <string name="fort">fort</string>
-    <string name="caches">Caches</string>
-    <string name="space_material">Space Material</string>
-    <!-- /buildings -->
-    <!-- units -->
-    <string name="machine_gunner">Machine Gunner</string>
-    <string name="mechanical_soldier">Mechanical Soldier</string>
-    <string name="oplot_u">Oplot U</string>
-    <string name="oplot_m">Oplot M</string>
-    <string name="suicide">Suicide</string>
-    <string name="priest">Priest</string>
-    <string name="doctor">Doctor</string>
-    <string name="shaman">Shaman</string>
-    <string name="engineer">Engineer</string>
-    <string name="exploder">Exploder</string>
-    <string name="ballista">Ballista</string>
-    <string name="thor">Thor</string>
-    <string name="recruiter">Recruiter</string>
-    <string name="saboteur">Saboteur</string>
-    <!-- /units -->
-
     <!-- mutants -->
     <!-- buildings -->
     <string name="water_cave">Water Cave</string>

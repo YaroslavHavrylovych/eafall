@@ -6,7 +6,7 @@ import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef
 import com.badlogic.gdx.physics.box2d.FixtureDef
 import com.yaroslavlancelot.eafall.EaFallApplication
-import com.yaroslavlancelot.eafall.game.alliance.imperials.Imperials
+import com.yaroslavlancelot.eafall.game.alliance.mutants.Mutants
 import com.yaroslavlancelot.eafall.game.batching.BatchingKeys
 import com.yaroslavlancelot.eafall.game.batching.SpriteGroupHolder
 import com.yaroslavlancelot.eafall.game.client.IPhysicCreator
@@ -58,7 +58,7 @@ abstract class UnitTest : EaFallTestCase() {
     override fun setUp() {
         super.setUp()
         val vBom = VertexBufferObjectManager()
-        val imperials = Imperials(vBom)
+        val imperials = Mutants(vBom)
         var player = Player(mPlayerName, imperials, IPlayer.ControlType.USER_CONTROL_ON_SERVER_SIDE,
                 1000, -1, -1, MissionConfig())
         PlayersHolder.getInstance().addElement(mPlayerName, player)

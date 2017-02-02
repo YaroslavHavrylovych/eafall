@@ -2,6 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
 
+import groovy.swing.SwingBuilder
+
 int target_v = 22
 int compiled_v = 25
 
@@ -32,7 +34,7 @@ dependencies {
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
     compile 'de.greenrobot:eventbus:2.4.0'
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:25.0.1'
+    compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.google.android.gms:play-services-analytics:10.0.1'
     compile 'com.jakewharton.timber:timber:4.3.0'
     compile 'com.android.support:multidex:1.0.1'
@@ -41,7 +43,7 @@ dependencies {
     testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     androidTestCompile 'com.android.support.test:runner:0.5'
     androidTestCompile 'com.android.support.test:rules:0.5'
-    androidTestCompile 'com.android.support:support-annotations:25.0.1'
+    androidTestCompile 'com.android.support:support-annotations:25.1.0'
     compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
         transitive = true;
     }
@@ -64,22 +66,6 @@ android {
         testInstrumentationRunner "com.yaroslavlancelot.eafall.test.DefaultInstrumentationTestRunner"
         testApplicationId "com.yaroslavlancelot.eafall.test"
         applicationId "com.yaroslavlancelot.eafall"
-    }
-
-    productFlavors {
-        demo {
-            exclude_java.clear()
-            buildConfigField("Boolean", "DEMO_VERSION", "true")
-            //we don't have a network game in demo
-            exclude_java << "com/yaroslavlancelot/eafall/network/**"
-            exclude_java << "com/yaroslavlancelot/eafall/android/activities/multiplayer/**"
-            exclude_java << "com/yaroslavlancelot/eafall/game/client/thick/server/**"
-            exclude_java << "com/yaroslavlancelot/eafall/game/client/thin/**"
-        }
-        dev {
-            exclude_java.clear()
-            buildConfigField("Boolean", "DEMO_VERSION", "false")
-        }
     }
 
     sourceSets {
@@ -118,20 +104,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
-
-    applicationVariants.all { variant ->
-        //remove unneeded resources from demo build
-        if (variant.name.contains('demo') || variant.name.contains('dev')) {
-            def excludeAssetsFromDemo = task("excludeAssetsFrom${variant.name}", type: Delete) {
-                def assetsPath = "${buildDir}/intermediates/assets/${variant.dirName}"
-                delete "${assetsPath}/graphics/sprites/alliance/imperials"
-                delete "${assetsPath}/graphics/sprites/alliance/rebels"
-                delete "${assetsPath}/graphics/images/alliance/imperials"
-                delete "${assetsPath}/graphics/images/alliance/rebels"
-            }
-            variant.mergeAssets.finalizedBy excludeAssetsFromDemo
-        }
-    }
 }
 
 task askForPasswords << {
@@ -161,26 +133,26 @@ tasks.whenTaskAdded { theTask ->
 }
 
 def String readStringInDialog(title, hint) {
-//    new SwingBuilder().edt {
-//        dialog(modal: true, // Otherwise the build will continue running before you closed the dialog
-//                title: title, // Dialog title
-//                alwaysOnTop: true, // pretty much what the name says
-//                resizable: false, // Don't allow the user to resize the dialog
-//                locationRelativeTo: null, // Place dialog in center of the screen
-//                pack: true, // We need to pack the dialog (so it will take the size of it's children)
-//                show: true // Let's show it
-//        ) {
-//            vbox {
-//                label(text: hint)
-//                input = passwordField()
-//                button(defaultButton: true, text: 'OK', actionPerformed: {
-//                    def pass = input.password
-//                    dispose()
-//                    return pass
-//                })
-//            }
-//        }
-//    }
+    new SwingBuilder().edt {
+        dialog(modal: true, // Otherwise the build will continue running before you closed the dialog
+                title: title, // Dialog title
+                alwaysOnTop: true, // pretty much what the name says
+                resizable: false, // Don't allow the user to resize the dialog
+                locationRelativeTo: null, // Place dialog in center of the screen
+                pack: true, // We need to pack the dialog (so it will take the size of it's children)
+                show: true // Let's show it
+        ) {
+            vbox {
+                label(text: hint)
+                input = passwordField()
+                button(defaultButton: true, text: 'OK', actionPerformed: {
+                    def pass = input.password
+                    dispose()
+                    return pass
+                })
+            }
+        }
+    }
     return ""
 }
 

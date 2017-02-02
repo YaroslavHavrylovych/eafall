@@ -1,8 +1,6 @@
 package com.yaroslavlancelot.eafall.game.alliance;
 
-import com.yaroslavlancelot.eafall.game.alliance.imperials.Imperials;
 import com.yaroslavlancelot.eafall.game.alliance.mutants.Mutants;
-import com.yaroslavlancelot.eafall.game.alliance.rebels.Rebels;
 import com.yaroslavlancelot.eafall.general.Holder;
 
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -38,11 +36,7 @@ public class AllianceHolder extends Holder<IAlliance> {
         if (alliance != null) {
             return;
         }
-        if (name.equals(Imperials.ALLIANCE_NAME)) {
-            alliance = new Imperials(objectManager);
-        } else if (name.equals(Rebels.ALLIANCE_NAME)) {
-            alliance = new Rebels(objectManager);
-        } else if (name.equals(Mutants.ALLIANCE_NAME)) {
+        if (name.equals(Mutants.ALLIANCE_NAME)) {
             alliance = new Mutants(objectManager);
         } else {
             throw new IllegalArgumentException("unknown alliance wants to rule the world (sent as param)");

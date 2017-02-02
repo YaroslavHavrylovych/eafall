@@ -29,22 +29,7 @@
             android:name=".game.client.thick.single.SinglePlayerGameActivity"
             android:screenOrientation="landscape"/>
         <activity
-            android:name=".game.client.thin.ThinClientGameActivity"
-            android:screenOrientation="landscape"/>
-        <activity
             android:name=".android.activities.singleplayer.PreGameCustomizationActivity"
-            android:screenOrientation="landscape"/>
-        <activity
-            android:name=".game.client.thick.server.ServerGameActivity"
-            android:screenOrientation="landscape"/>
-        <activity
-            android:name=".android.activities.multiplayer.GameServersListActivity"
-            android:screenOrientation="landscape"/>
-        <activity
-            android:name=".android.activities.multiplayer.ServerGameCreationActivity"
-            android:screenOrientation="landscape"/>
-        <activity
-            android:name=".android.activities.multiplayer.ClientWaitForGameActivity"
             android:screenOrientation="landscape"/>
         <activity
             android:name=".game.campaign.CampaignActivity"
@@ -64,8 +49,9 @@
         <activity
             android:name=".game.campaign.missions.ThirdMissionActivity"
             android:screenOrientation="landscape"/>
+
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="0ed30a5fecc78c7e054492956f6f54f67339fd35" />
+            android:value="0ed30a5fecc78c7e054492956f6f54f67339fd35"/>
     </application>
 </manifest>
