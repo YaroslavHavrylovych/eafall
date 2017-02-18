@@ -154,6 +154,15 @@ public interface IPlayer {
      */
     void changeMoney(int delta);
 
+    /**
+     * Detect whether the next income is the first one.
+     * <br/>
+     * Usually first income has different value than other and can be handled in different way.
+     *
+     * @return true if the next income is first income and false in other case
+     */
+    boolean isFirstIncome();
+
     /** player get income from all it's income objects (e.g. buildings on the planet) */
     void incomeTime();
 

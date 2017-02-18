@@ -153,7 +153,7 @@ public abstract class Unit extends GameObject implements
     public void destroy() {
         PlayersHolder.getPlayer(mPlayerName)
                 .getEnemyPlayer()
-                .changeMoney(mObjectMaximumHealth / 100);
+                .changeMoney(mObjectMaximumHealth >> 5);
         clearUpdateHandlers();
         clearEntityModifiers();
         PlayersHolder.getPlayer(mPlayerName).removeObjectFromPlayer(this);

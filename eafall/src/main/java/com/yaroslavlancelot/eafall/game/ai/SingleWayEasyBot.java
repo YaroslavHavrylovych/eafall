@@ -113,7 +113,7 @@ public class SingleWayEasyBot implements IBot {
                 }
             }
         } catch (Exception ex) {
-            //TODO this has to be marked somewhere to find why does this happen
+            Timber.w(ex, "exception in bot working logic");
         }
     }
 

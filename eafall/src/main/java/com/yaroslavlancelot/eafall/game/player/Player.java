@@ -41,6 +41,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /** Player player implementation */
+
 public class Player implements IPlayer {
     private static final String TAG = Player.class.getCanonicalName();
     /** chance to produce income to an enemy after the death of the unit */
@@ -280,6 +281,11 @@ public class Player implements IPlayer {
     @Override
     public void changeMoney(final int delta) {
         setMoney(mOxygenAmount + delta);
+    }
+
+    @Override
+    public boolean isFirstIncome() {
+        return mIsFirstIncome.get();
     }
 
     @Override

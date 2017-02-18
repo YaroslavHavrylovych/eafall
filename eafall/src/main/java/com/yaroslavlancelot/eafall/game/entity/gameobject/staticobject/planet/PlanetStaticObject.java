@@ -56,6 +56,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.greenrobot.event.EventBus;
+import timber.log.Timber;
 
 /** represent player planet */
 public abstract class PlanetStaticObject extends StaticObject implements IPlayerObject, Selectable {
@@ -103,7 +104,7 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
     }
 
     /** @return true if suppressor was used and false in other case */
-    public boolean isSuppressorUsed() {
+    public synchronized boolean isSuppressorUsed() {
         return mIsSuppressorUsed;
     }
 
@@ -178,6 +179,10 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
     protected IHealthBar createHealthBar() {
         return new PlayerHealthBar(mPlayerName, getVertexBufferObjectManager(),
                 PathHelper.isLtrPath(getX()));
+    }
+
+    public int getBuildingsAmount() {
+        return mBuildings.values().size();
     }
 
     public abstract void registerTouch(IEntity entity);
@@ -265,6 +270,7 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
             mBuildings.put(buildingId.getId(), building);
         }
         boolean result = building.buyBuilding();
+        Timber.v("BuildingId %d, amount %s, created", buildingId.getId(), building.getAmount());
         if (result && building.getAmount() == 1) {
             StaticObject stObj = building.getEntity();
             stObj.attachSelf();
@@ -318,13 +324,13 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
     }
 
     /** get buildings amount for passed building type */
-    public int getBuildingsAmount(int buildingId) {
+    public synchronized int getBuildingsAmount(int buildingId) {
         IBuilding building = mBuildings.get(buildingId);
         return building == null ? 0 : building.getAmount();
     }
 
     /** force planet to use the suppressor */
-    public void useSuppressor() {
+    public synchronized void useSuppressor() {
         if (!mIsSuppressorUsed) {
             mIsSuppressorUsed = true;
             IPlayer yourPlayer = PlayersHolder.getPlayer(mPlayerName);
