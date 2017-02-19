@@ -1,6 +1,6 @@
 #!/bin/bash
 
-result=":eafall:assembleDebug"
+result=":eafall:assembleDebug --stacktrace"
 
 toEvalStr="./gradlew :eafall:clean"
 

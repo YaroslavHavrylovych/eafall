@@ -239,6 +239,9 @@
     <!-- /menu popup -->
 
     <!-- campaign -->
+    <string name="manual_next_enable_plural">Click %d more times to enable</string>
+    <string name="manual_next_enable_single">Click %d more time to enable</string>
+    <string name="manual_next_mission_enabled">You\'ve enable next mission</string>
     <!-- guide campaign -->
     <string name="campaign_guide_start">Start</string>
     <string name="campaign_guide_enter">Enter</string>

@@ -110,7 +110,7 @@
             <definition>
                 <time_limit>180</time_limit>
                 <type>collect</type>
-                <value>2000</value>
+                <value>1700</value>
             </definition>
         </mission_details>
     </campaign>
@@ -180,7 +180,7 @@
             <single_way>false</single_way>
             <suppressor>true</suppressor>
             <definition>
-                <time_limit>300</time_limit>
+                <time_limit>180</time_limit>
                 <type>win</type>
             </definition>
         </mission_details>
@@ -214,7 +214,7 @@
             <single_way>true</single_way>
             <suppressor>true</suppressor>
             <definition>
-                <time_limit>300</time_limit>
+                <time_limit>200</time_limit>
                 <type>win</type>
             </definition>
         </mission_details>
@@ -290,6 +290,7 @@
         </mission_details>
     </campaign>
 
+    <!-- TODO create waves, few, to be harder to resist -->
     <campaign screen="8">
         <name>campaign_demo_tutorial9</name>
         <picture>graphics/images/campaign/missions/screen8.png</picture>
@@ -312,7 +313,7 @@
             <max_oxygen>1500</max_oxygen>
             <planet_health>5000</planet_health>
             <offensive_units_limit>200</offensive_units_limit>
-            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.TwoWaysHardBot
+            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.TwoWaysEasyBot
             </enemy_logic_handler>
             <star_code_name>new_sun</star_code_name>
             <star_constellation>no_constellation</star_constellation>

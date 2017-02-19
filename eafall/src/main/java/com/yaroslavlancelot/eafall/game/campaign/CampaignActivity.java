@@ -1,12 +1,12 @@
 package com.yaroslavlancelot.eafall.game.campaign;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.R;
 import com.yaroslavlancelot.eafall.android.StartableIntent;
 import com.yaroslavlancelot.eafall.game.EaFallActivity;
-import com.yaroslavlancelot.eafall.game.ai.IBot;
 import com.yaroslavlancelot.eafall.game.campaign.intents.CampaignIntent;
 import com.yaroslavlancelot.eafall.game.campaign.loader.CampaignDataLoader;
 import com.yaroslavlancelot.eafall.game.campaign.loader.CampaignFileLoader;
@@ -38,6 +38,7 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
+import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.simpleframework.xml.core.Persister;
 
@@ -179,7 +180,13 @@ public class CampaignActivity extends EaFallActivity {
         mMissionLogo = new Sprite(153, 945, TextureRegionHolder.getRegion(StringConstants.FILE_LOGO), getVertexBufferObjectManager());
         mHud.attachChild(mMissionLogo);
         mNextScreenButton = new NextButton(SizeConstants.CAMPAIGN_NEXT_RIGHT_BUTTON_X, SizeConstants.CAMPAIGN_NEXT_BUTTON_Y,
-                getVertexBufferObjectManager(), true);
+                getVertexBufferObjectManager(), true) {
+            @Override
+            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                return onNextAdditionalTouch(mNextScreenButton, pSceneTouchEvent)
+                        || super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+            }
+        };
         mPreviousScreenButton = new NextButton(SizeConstants.CAMPAIGN_NEXT_LEFT_BUTTON_X, SizeConstants.CAMPAIGN_NEXT_BUTTON_Y,
                 getVertexBufferObjectManager(), false);
         mHud.attachChild(mNextScreenButton);
@@ -362,5 +369,44 @@ public class CampaignActivity extends EaFallActivity {
             Timber.e(e, "can't load objects in campaign");
         }
         return ret;
+    }
+
+    private long mDisabledNextButtonLastTouch;
+    private int mDisabledNextButtonClicksAmount;
+    private final static int sDisabledButtonToNextDelay = 1500;
+    private final static int sDisabledButtonToNextClicks = 6;
+
+    private boolean onNextAdditionalTouch(NextButton button, TouchEvent pSceneTouchEvent) {
+        if (button == null || button.isEnabled()) {
+            mDisabledNextButtonClicksAmount = 0;
+            mDisabledNextButtonLastTouch = 0;
+            return false;
+        }
+        if (!button.isEnabled() && pSceneTouchEvent.isActionUp()) {
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - mDisabledNextButtonLastTouch < sDisabledButtonToNextDelay) {
+                mDisabledNextButtonClicksAmount++;
+                if (mDisabledNextButtonClicksAmount >= sDisabledButtonToNextClicks) {
+                    Toast.makeText(this, getString(R.string.manual_next_mission_enabled),
+                            Toast.LENGTH_SHORT).show();
+                    mDisabledNextButtonClicksAmount = 0;
+                    mDisabledNextButtonLastTouch = 0;
+                    mCampaignPassage.markNewCampaignPassed();
+                } else if (mDisabledNextButtonClicksAmount == 5) {
+                    Toast.makeText(this, getString(R.string.manual_next_enable_single, 1),
+                            Toast.LENGTH_SHORT).show();
+                } else if (mDisabledNextButtonClicksAmount >= 2) {
+                    Toast.makeText(this, getString(R.string.manual_next_enable_plural,
+                            sDisabledButtonToNextClicks - mDisabledNextButtonClicksAmount),
+                            Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                mDisabledNextButtonClicksAmount = 0;
+            }
+            mNextScreenButton.setEnabled(mCampaignPassage.checkCampaignPassed(mScreenId));
+            mDisabledNextButtonLastTouch = currentTime;
+            return true;
+        }
+        return false;
     }
 }

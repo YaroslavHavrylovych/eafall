@@ -18,4 +18,5 @@ pipelines:
             # copy android licenses
           - cp -r ./android_licenses /usr/local/android-sdk/licenses
             # Building a dev build variant
-          - ./gradlew clean assembleDevDebug --stacktrace
+          - chmod +x clean_and_build.sh
+          - ./clean_and_build.sh

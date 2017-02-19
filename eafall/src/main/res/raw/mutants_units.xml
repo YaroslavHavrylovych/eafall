@@ -123,7 +123,7 @@
         <damage_value>100</damage_value>
         <attack_radius>144</attack_radius>
         <view_radius>158</view_radius>
-        <speed>160</speed>
+        <speed>200</speed>
         <reload_time>1.5</reload_time>
     </unit>
     <unit name="spider2">
@@ -135,7 +135,7 @@
         <damage_value>110</damage_value>
         <attack_radius>172</attack_radius>
         <view_radius>187</view_radius>
-        <speed>140</speed>
+        <speed>180</speed>
         <reload_time>1.4</reload_time>
     </unit>
     <!-- mountain cave -->
