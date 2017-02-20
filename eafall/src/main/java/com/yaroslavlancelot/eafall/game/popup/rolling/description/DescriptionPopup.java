@@ -22,6 +22,8 @@ import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
+import timber.log.Timber;
+
 /**
  * Handle logic of redrawing and showing/hiding description popup.
  * Appears in the bottom of the screen when you want to create a building
@@ -74,9 +76,12 @@ public class DescriptionPopup extends BuildingLessDescriptionPopup {
     @SuppressWarnings("unused")
     /** really used by {@link de.greenrobot.event.EventBus} */
     public void onEvent(final BuildingDescriptionShowEvent buildingDescriptionShowEvent) {
+        IPlayer player = PlayersHolder.getPlayer(buildingDescriptionShowEvent.getPlayerName());
+        if (player.getControlType() == IPlayer.ControlType.BOT_CONTROL_ON_SERVER_SIDE) {
+            return;
+        }
         onEvent();
         BuildingId buildingId = buildingDescriptionShowEvent.getObjectId();
-        IPlayer player = PlayersHolder.getPlayer(buildingDescriptionShowEvent.getPlayerName());
         BuildingDummy buildingDummy = player.getAlliance().getBuildingDummy(buildingId);
         IPopupUpdater popupUpdater;
         boolean leftBlockVisibility = true;
@@ -106,6 +111,7 @@ public class DescriptionPopup extends BuildingLessDescriptionPopup {
         mDescriptionPopupBackground.setLeftBlockVisibility(leftBlockVisibility);
         mDescriptionPopupBackground.updateDescription(popupUpdater, buildingId,
                 player.getAlliance().getAllianceName(), player.getName());
+        //TODO is this triggered by the bot ?
         showPopup();
     }
 
