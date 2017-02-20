@@ -375,6 +375,7 @@ public class CampaignActivity extends EaFallActivity {
     private int mDisabledNextButtonClicksAmount;
     private final static int sDisabledButtonToNextDelay = 1500;
     private final static int sDisabledButtonToNextClicks = 6;
+    private Toast mPreviousToast;
 
     private boolean onNextAdditionalTouch(NextButton button, TouchEvent pSceneTouchEvent) {
         if (button == null || button.isEnabled()) {
@@ -387,26 +388,39 @@ public class CampaignActivity extends EaFallActivity {
             if (currentTime - mDisabledNextButtonLastTouch < sDisabledButtonToNextDelay) {
                 mDisabledNextButtonClicksAmount++;
                 if (mDisabledNextButtonClicksAmount >= sDisabledButtonToNextClicks) {
-                    Toast.makeText(this, getString(R.string.manual_next_mission_enabled),
-                            Toast.LENGTH_SHORT).show();
+                    showClickToast(getString(R.string.manual_next_mission_enabled));
                     mDisabledNextButtonClicksAmount = 0;
                     mDisabledNextButtonLastTouch = 0;
                     mCampaignPassage.markNewCampaignPassed();
                 } else if (mDisabledNextButtonClicksAmount == 5) {
-                    Toast.makeText(this, getString(R.string.manual_next_enable_single, 1),
-                            Toast.LENGTH_SHORT).show();
+                    showClickToast(getString(R.string.manual_next_enable_single, 1));
                 } else if (mDisabledNextButtonClicksAmount >= 2) {
-                    Toast.makeText(this, getString(R.string.manual_next_enable_plural,
-                            sDisabledButtonToNextClicks - mDisabledNextButtonClicksAmount),
-                            Toast.LENGTH_SHORT).show();
+                    showClickToast(getString(R.string.manual_next_enable_plural,
+                            sDisabledButtonToNextClicks - mDisabledNextButtonClicksAmount));
                 }
             } else {
                 mDisabledNextButtonClicksAmount = 0;
+                mPreviousToast = null;
             }
             mNextScreenButton.setEnabled(mCampaignPassage.checkCampaignPassed(mScreenId));
             mDisabledNextButtonLastTouch = currentTime;
             return true;
         }
         return false;
+    }
+
+
+    private void showClickToast(final String str) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (mPreviousToast != null) {
+                    mPreviousToast.cancel();
+                }
+                mPreviousToast = Toast.makeText(CampaignActivity.this, str,
+                        Toast.LENGTH_SHORT);
+                mPreviousToast.show();
+            }
+        });
     }
 }

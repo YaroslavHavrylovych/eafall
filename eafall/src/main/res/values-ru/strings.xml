@@ -239,6 +239,9 @@
     <!-- / Menu popup -->
 
     <!-- Campaign -->
+    <string name="manual_next_enable_plural">Нажмите еще %d раз, шоб було добре</string>
+    <string name="manual_next_enable_single">Нажмите еще %d раз, шоб було добре</string>
+    <string name="manual_next_mission_enabled">Миссия пройдена</string>
     <!-- Guide campaign -->
     <string name="campaign_guide_start">Начать</string>
     <string name="campaign_guide_enter">Осмотреть</string>

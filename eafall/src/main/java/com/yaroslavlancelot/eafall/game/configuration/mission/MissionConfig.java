@@ -233,7 +233,7 @@ public class MissionConfig implements Parcelable {
         mSunPath = StringConstants.FILE_SUN;
         mValue = NO_VALUE;
         mTime = NO_VALUE;
-        mStarCodeName = NO_VALUE;
+        mStarCodeName = R.string.sun;
         mStarConstellation = R.string.no_constellation;
         mPlayerPlanet = R.string.earth;
         mPlayerStartMoney = 1000;
