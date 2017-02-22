@@ -252,12 +252,18 @@ public class MissionConfig implements Parcelable {
         if (loadedData.definition.time_limit != null) mTime = loadedData.definition.time_limit;
         if (loadedData.single_way != null) mSingleWay = loadedData.single_way;
         if (loadedData.suppressor != null) mSuppressor = loadedData.suppressor;
-        if (loadedData.blue_star != null && loadedData.blue_star) {
-            mSunPath = StringConstants.FILE_BLUE_SUN;
-            mSunHazePath = StringConstants.FILE_BLUE_SUN_HAZE;
+        if (mSingleWay) {
+            mSunPath = null;
+            mSunHazePath = null;
+            mStarCodeName = NO_VALUE;
         } else {
-            mSunPath = StringConstants.FILE_SUN;
-            mSunHazePath = StringConstants.FILE_SUN_HAZE;
+            if (loadedData.blue_star != null && loadedData.blue_star) {
+                mSunPath = StringConstants.FILE_BLUE_SUN;
+                mSunHazePath = StringConstants.FILE_BLUE_SUN_HAZE;
+            } else {
+                mSunPath = StringConstants.FILE_SUN;
+                mSunHazePath = StringConstants.FILE_SUN_HAZE;
+            }
         }
         if (loadedData.max_oxygen != null) mMaxOxygenAmount = loadedData.max_oxygen;
         if (loadedData.player_start_money != null)

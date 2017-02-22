@@ -15,13 +15,13 @@
             </upgrade>
             <upgrade id="1">
                 <image_name>water_cave.png</image_name>
-                <cost>514</cost>
+                <cost>330</cost>
                 <unit_id>11</unit_id>
                 <building_time>14</building_time>
             </upgrade>
             <upgrade id="2">
                 <image_name>water_cave.png</image_name>
-                <cost>600</cost>
+                <cost>430</cost>
                 <unit_id>12</unit_id>
                 <building_time>15</building_time>
             </upgrade>
@@ -35,13 +35,13 @@
         <upgrades>
             <upgrade id="0">
                 <image_name>invisible_plain.png</image_name>
-                <cost>315</cost>
+                <cost>270</cost>
                 <unit_id>20</unit_id>
                 <building_time>8</building_time>
             </upgrade>
             <upgrade id="1">
                 <image_name>invisible_plain.png</image_name>
-                <cost>491</cost>
+                <cost>350</cost>
                 <unit_id>21</unit_id>
                 <building_time>10</building_time>
             </upgrade>
@@ -61,7 +61,7 @@
             </upgrade>
             <upgrade id="1">
                 <image_name>hydra_pond.png</image_name>
-                <cost>559</cost>
+                <cost>530</cost>
                 <unit_id>31</unit_id>
                 <building_time>10</building_time>
             </upgrade>
@@ -101,7 +101,7 @@
             </upgrade>
             <upgrade id="1">
                 <image_name>web.png</image_name>
-                <cost>505</cost>
+                <cost>535</cost>
                 <unit_id>51</unit_id>
                 <building_time>9</building_time>
             </upgrade>
@@ -121,7 +121,7 @@
             </upgrade>
             <upgrade id="1">
                 <image_name>mountain_cave.png</image_name>
-                <cost>675</cost>
+                <cost>650</cost>
                 <unit_id>61</unit_id>
                 <building_time>12</building_time>
             </upgrade>
@@ -156,8 +156,8 @@
         <building_time>20</building_time>
     </defence_building>
     <wealth_building name="reptile_city">
-        <first_build_income>20</first_build_income>
-        <next_buildings_income>2</next_buildings_income>
+        <first_build_income>40</first_build_income>
+        <next_buildings_income>5</next_buildings_income>
         <cost>500</cost>
         <position_x>9</position_x>
         <position_y>123</position_y>
@@ -165,7 +165,7 @@
     </wealth_building>
     <special_building name="king_of_snakes">
         <characteristic>attack</characteristic>
-        <value>10</value>
+        <value>30</value>
         <percentage>true</percentage>
         <cost>500</cost>
         <position_x>59</position_x>

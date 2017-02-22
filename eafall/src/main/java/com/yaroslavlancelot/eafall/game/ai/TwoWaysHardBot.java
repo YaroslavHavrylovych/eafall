@@ -1,120 +1,55 @@
 package com.yaroslavlancelot.eafall.game.ai;
 
-import com.yaroslavlancelot.eafall.game.GameState;
 import com.yaroslavlancelot.eafall.game.alliance.IAlliance;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingType;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.building.IBuilding;
+import com.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.IUnitBuilding;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.building.buildings.UnitBuilding;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.building.dummy.BuildingDummy;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetStaticObject;
-import com.yaroslavlancelot.eafall.game.player.IPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import timber.log.Timber;
 
 /**
- * Still easy but probably changed soon bot.
+ * Easy to win bot.
  *
  * @author Yaroslav Havrylovych
  */
-public class TwoWaysHardBot implements IBot {
-    public static final String TAG = TwoWaysEasyBot.class.getCanonicalName();
-    public static final int DELAY_BETWEEN_ITERATIONS = 300;
-    private IPlayer mBotPlayer;
+public class TwoWaysHardBot extends Bot {
     private List<BuildingId> mNewBuildingsToBuild = new ArrayList<>(10);
     private List<BuildingId> mUpgradedBuildingsToBuild = new ArrayList<>(5);
     private List<BuildingId> mBuildingsToUpgrade = new ArrayList<>(5);
 
     @Override
-    public void run() {
-        Timber.v("bot [%s] started", this.getClass().getName());
-        android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
-        IAlliance alliance = mBotPlayer.getAlliance();
-        PlanetStaticObject planet;
-        //planet not initialized yet
-        while (mBotPlayer.getPlanet() == null || mBotPlayer.getEnemyPlayer().getPlanet() == null) {
-            delay();
+    void onChangePathForExistingBuilding(PlanetStaticObject planetStaticObject) {
+        int buildingsAmount = planetStaticObject.getExistingBuildingsTypesAmount();
+        if (buildingsAmount <= 0) {
+            return;
         }
-        GoalBuilding goalBuilding = null;
-        try {
-            //start the bot logic
-            while (mBotPlayer.getPlanet() != null && mBotPlayer.getEnemyPlayer().getPlanet() != null) {
-                try {
-                    delay();
-                    if (GameState.isPaused()) {
-                        continue;
-                    }
-                    planet = mBotPlayer.getPlanet();
-                    if (planet == null) {
-                        return;
-                    }
-
-                    //suppressor
-                    if (planet.getObjectCurrentHealth() < planet.getMaximumObjectHealth() / 2
-                            && !planet.isSuppressorUsed()) {
-                        planet.useSuppressor();
-                    }
-
-                    //find to build or try to build
-                    // (== 0 is needed, as we could have bigger first income, which cold destroy the logic)
-                    if (goalBuilding == null) {
-                        goalBuilding = findTheGoalBuilding(alliance, planet);
-                    } else {
-                        Timber.v("goal building exists, checking build");
-                        boolean result;
-                        BuildingId buildingId = goalBuilding.getBuildingId();
-                        int neededMoneyAmount = goalBuilding.isUpdate()
-                                ? mBotPlayer.getAlliance().getUpgradeCost(buildingId, planet.getBuildingsAmount(buildingId.getId()))
-                                : alliance.getBuildingCost(buildingId);
-                        if (mBotPlayer.getMoney() < neededMoneyAmount) {
-                            continue;
-                        }
-                        if (goalBuilding.isUpdate()) {
-                            Timber.v("updating %s", goalBuilding.getBuildingId().toString());
-                            result = planet.getBuilding(goalBuilding.getBuildingId().getId())
-                                    .upgradeBuilding();
-                        } else {
-                            //TODO why 2 buildings created sometimes? Check it's true
-                            //probably need to play with debugging. I saw when it's 2 buildings created and both not upgraded
-                            Timber.v("building %s", goalBuilding.getBuildingId().toString());
-                            result = planet.createBuilding(goalBuilding.getBuildingId());
-                        }
-                        if (result) {
-                            Timber.v("building operation success result %s", goalBuilding.getBuildingId().toString());
-                            randomizeUnitPath(planet.getBuilding(goalBuilding.getBuildingId().getId()));
-                            goalBuilding = null;
-                        }
-                    }
-                } catch (Exception ex) {
-                    Timber.w(ex, "exception in cyclic bot working logic");
-                    goalBuilding = null;
-                }
+        int position = new Random().nextInt(buildingsAmount);
+        int i = 0;
+        Set<Integer> indexes = planetStaticObject.getExistingBuildingsTypes();
+        for (int id : indexes) {
+            if (i < position) {
+                i += 1;
+                continue;
             }
-        } catch (Exception ex) {
-            Timber.w(ex, "exception in bot working logic");
+            IBuilding building = planetStaticObject.getBuilding(id);
+            if (building instanceof IUnitBuilding) {
+                onBuildingChanged(building, true);
+            }
+            return;
         }
     }
 
-    private boolean mediumWaitTimeToBuild(IAlliance alliance, BuildingId buildingId,
-                                          int currentMoney, int income) {
-        return alliance.getBuildingCost(buildingId) < currentMoney + 7 * income;
-    }
-
-    private boolean mediumWaitTimeToUpgrade(IAlliance alliance, BuildingId buildingId,
-                                            int amount, int currentMoney, int income) {
-        return alliance.getUpgradeCost(buildingId, amount) < currentMoney + 3 * income;
-    }
-
-    private boolean shortWaitTimeToBuild(IAlliance alliance, BuildingId buildingId,
-                                         int currentMoney, int income) {
-        return alliance.getBuildingCost(buildingId) < currentMoney + 2 * income;
-    }
-
-    private GoalBuilding findTheGoalBuilding(IAlliance alliance, PlanetStaticObject planet) {
+    @Override
+    GoalBuilding findTheGoalBuilding(IAlliance alliance, PlanetStaticObject planet) {
         Timber.v("findTheGoalBuilding");
         int amountOnPlanet;
         BuildingDummy buildingDummy;
@@ -137,7 +72,7 @@ public class TwoWaysHardBot implements IBot {
                     if ((buildingDummy.getBuildingType() == BuildingType.SPECIAL_BUILDING
                             || buildingDummy.getBuildingType() == BuildingType.WEALTH_BUILDING
                             || buildingDummy.getBuildingType() == BuildingType.DEFENCE_BUILDING)
-                            && planet.getBuildingsAmount() < 12) {
+                            && planet.getBuildingsAmount() < 10) {
                         continue;
                     }
                     if (amountOnPlanet == 0
@@ -203,19 +138,7 @@ public class TwoWaysHardBot implements IBot {
     }
 
     @Override
-    public synchronized void init(final IPlayer botPlayer) {
-        mBotPlayer = botPlayer;
-    }
-
-    private void delay() {
-        try {
-            Thread.sleep(DELAY_BETWEEN_ITERATIONS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void randomizeUnitPath(IBuilding building) {
+    void onBuildingChanged(IBuilding building, boolean upgrade) {
         if (building == null) {
             return;
         }

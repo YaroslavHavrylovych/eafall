@@ -110,7 +110,7 @@
             <definition>
                 <time_limit>180</time_limit>
                 <type>collect</type>
-                <value>1700</value>
+                <value>1500</value>
             </definition>
         </mission_details>
     </campaign>

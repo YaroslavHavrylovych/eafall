@@ -107,15 +107,17 @@ public class ClientResourcesLoader extends BaseGameObjectsLoader {
                         + SizeConstants.FILE_PLANET_DIAMETER,
                 TextureOptions.BILINEAR);
         //sun
-        TextureRegionHolder.getInstance().addElement(StringConstants.KEY_SUN,
-                BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-                        atlas, EaFallApplication.getContext(),
-                        mSunPath, 0, 0));
-        TextureRegionHolder.getInstance().addElement(StringConstants.KEY_SUN_HAZE,
-                BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-                        atlas, EaFallApplication.getContext(),
-                        mSunHazePath,
-                        SizeConstants.FILE_SUN_DIAMETER + padding, 0));
+        if(mSunPath != null) {
+            TextureRegionHolder.getInstance().addElement(StringConstants.KEY_SUN,
+                    BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+                            atlas, EaFallApplication.getContext(),
+                            mSunPath, 0, 0));
+            TextureRegionHolder.getInstance().addElement(StringConstants.KEY_SUN_HAZE,
+                    BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+                            atlas, EaFallApplication.getContext(),
+                            mSunHazePath,
+                            SizeConstants.FILE_SUN_DIAMETER + padding, 0));
+        }
         //planets
         TextureRegionHolder.getInstance().addElement(StringConstants.KEY_FIRST_PLANET,
                 BitmapTextureAtlasTextureRegionFactory.createFromAsset(

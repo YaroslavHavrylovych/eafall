@@ -224,7 +224,7 @@ public abstract class Building implements IBuilding {
                 PlanetStaticObject planet = PlayersHolder.getPlayer(mPlayerName).getPlanet();
                 setFlippedHorizontal(planet.isFlippedHorizontal());
                 setCost(buildingDummy.getCost(upgrade));
-                setIncome((int) (getCost() * 0.03));
+                setIncome((int) (getCost() * 0.05));
                 setWidth(buildingDummy.getWidth());
                 setHeight(buildingDummy.getWidth());
                 setObjectStringId(buildingDummy.getStringId());

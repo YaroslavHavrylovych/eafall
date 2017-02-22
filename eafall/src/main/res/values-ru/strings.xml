@@ -222,10 +222,10 @@
     <!-- Descriptions -->
     <string name="earth_artifact_description">Священный артефакт Повстанцев\nнайденный в недрах Земли.\nДобавляет 10\u0025 к здоровью юнита.</string>
     <string name="space_material_description">Мощный артефакт Имперцев, изобретенный их учеными.\nДает 10\u0025 шанс избежать повреждений.</string>
-    <string name="king_of_snakes_description">Ценный артефакт Мутантов,\nбыл найден в открытом космосе.\n10\u0025 увеличение повреждений от юнита.</string>
-    <string name="municipality_description">20\u0025 увеличение дохода от первого строения. \nКаждое следующее строение увеличивает доход на 1\u0025.</string>
-    <string name="caches_description">20\u0025 увеличение дохода от первого строения. \nКаждое следующее строение увеличивает доход на 1\u0025.</string>
-    <string name="reptile_city_description">20\u0025 увеличение дохода от первого строения. \nКаждое следующее строение увеличивает доход на 1\u0025.</string>
+    <string name="king_of_snakes_description">Ценный артефакт Мутантов,\nбыл найден в открытом космосе.\n30\u0025 увеличение повреждений от юнита.</string>
+    <string name="municipality_description">40\u0025 увеличение дохода от первого строения. \nКаждое следующее строение увеличивает доход на 1\u0025.</string>
+    <string name="caches_description">40\u0025 увеличение дохода от первого строения. \nКаждое следующее строение увеличивает доход на 1\u0025.</string>
+    <string name="reptile_city_description">40\u0025 увеличение дохода от первого строения. \nКаждое следующее строение увеличивает доход на 1\u0025.</string>
     <!-- / Descriptions -->
     <!-- / Description popup -->
 

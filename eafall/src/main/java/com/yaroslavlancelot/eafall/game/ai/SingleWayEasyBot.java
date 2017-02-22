@@ -1,6 +1,5 @@
 package com.yaroslavlancelot.eafall.game.ai;
 
-import com.yaroslavlancelot.eafall.game.GameState;
 import com.yaroslavlancelot.eafall.game.alliance.IAlliance;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingType;
@@ -29,92 +28,102 @@ import timber.log.Timber;
  *
  * @author Yaroslav Havrylovych
  */
-public class SingleWayEasyBot implements IBot {
-    public static final String TAG = SingleWayEasyBot.class.getCanonicalName();
-    public static final int DELAY_BETWEEN_ITERATIONS = 300;
-    private IPlayer mBotPlayer;
+public class SingleWayEasyBot extends Bot {
+    private List<BuildingId> mNewBuildingsToBuild = new ArrayList<>(10);
+    private List<BuildingId> mUpgradedBuildingsToBuild = new ArrayList<>(5);
+    private List<BuildingId> mBuildingsToUpgrade = new ArrayList<>(5);
 
     @Override
-    public void run() {
-        Timber.v("bot [%s] started", this.getClass().getName());
-        android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
-        List<BuildingId> buildingsToBuild = new ArrayList<>(10);
-        List<BuildingId> buildingsToUpgrade = new ArrayList<>(10);
-        IAlliance alliance = mBotPlayer.getAlliance();
-        BuildingDummy buildingDummy;
-        PlanetStaticObject planet;
+    GoalBuilding findTheGoalBuilding(IAlliance alliance, PlanetStaticObject planet) {
+        Timber.v("findTheGoalBuilding");
         int amountOnPlanet;
-        //planet not initialized yet
-        while (mBotPlayer.getPlanet() == null && mBotPlayer.getEnemyPlayer().getPlanet() == null) {
-            delay();
-        }
-        try {
-            //start the bot logic
-            while (mBotPlayer.getPlanet() != null && mBotPlayer.getEnemyPlayer().getPlanet() != null) {
-                if (GameState.isPaused()) {
-                    delay();
-                    continue;
-                }
-                delay();
-                planet = mBotPlayer.getPlanet();
-                // win
-                if (planet == null) {
-                    return;
-                }
+        BuildingDummy buildingDummy;
+        mNewBuildingsToBuild.clear();
+        mBuildingsToUpgrade.clear();
+        mUpgradedBuildingsToBuild.clear();
+        int currentMoney = mBotPlayer.getMoney();
+        int incomeValue = planet.getIncome();
 
-                //suppressor
-                if (planet.getObjectCurrentHealth() < planet.getMaximumObjectHealth() / 2 && !planet.isSuppressorUsed()) {
-                    planet.useSuppressor();
-                }
-
-                int money = mBotPlayer.getMoney();
-                buildingsToBuild.clear();
-                buildingsToUpgrade.clear();
-
-                BuildingId[] buildingIds = mBotPlayer.getBuildingsIds();
-                //1. Calculate list of buildings you can build this or next income.
-                //2. Calculate list of buildings, with not less than 3 (three) building ready,
-                //you can upgrade this or next income.
-                for (BuildingId buildingId : buildingIds) {
-                    buildingDummy = alliance.getBuildingDummy(buildingId);
-                    amountOnPlanet = planet.getBuildingsAmount(buildingId.getId());
-                    if (amountOnPlanet < buildingDummy.getAmountLimit()) {
-                        if (buildingDummy.getBuildingType() == BuildingType.DEFENCE_BUILDING) {
-                            continue;
-                        }
-                        if (money >= buildingDummy.getCost(buildingId.getUpgrade())) {
-                            buildingsToBuild.add(buildingId);
-                        }
-                    }
-                    //more than 3
-                    if (amountOnPlanet >= 3 && alliance.isUpgradeAvailable(buildingId)
-                            && (amountOnPlanet * buildingDummy.getCost(buildingId.getUpgrade()) >= money)) {
-                        buildingsToUpgrade.add(buildingId);
-                    }
-                }
-
-                //3. Pick the cost most building you can (to build).
-                //If you can upgrade it this or next move that do that in other case - build
-                if (!buildingsToBuild.isEmpty()) {
-                    final BuildingId buildingId = buildingsToBuild.get(
-                            new Random().nextInt(buildingsToBuild.size()));
-                    final IBuilding building;
-                    if (buildingsToUpgrade.contains(buildingId)) {
-                        building = planet.getBuilding(buildingId.getId());
-                        building.upgradeBuilding();
+        BuildingId[] buildingIds = mBotPlayer.getBuildingsIds();
+        //1. Calculate list of buildings you could build (not upgraded)
+        //2. Calculate list of buildings, with not less than 1 (one) building ready for upgrade
+        for (BuildingId buildingId : buildingIds) {
+            buildingDummy = alliance.getBuildingDummy(buildingId);
+            amountOnPlanet = planet.getBuildingsAmount(buildingId.getId());
+            if (planet.getExistingBuildingsTypesAmount() > 0) {
+                Timber.v("One building already build");
+                if (amountOnPlanet < buildingDummy.getAmountLimit()) {
+                    //we could build special building only if there is a lot of other buildings
+                    if ((buildingDummy.getBuildingType() == BuildingType.SPECIAL_BUILDING
+                            || buildingDummy.getBuildingType() == BuildingType.WEALTH_BUILDING
+                            || buildingDummy.getBuildingType() == BuildingType.DEFENCE_BUILDING)
+                            && planet.getBuildingsAmount() < 10) {
                         continue;
                     }
-                    planet.createBuilding(buildingId);
-                } else if (!buildingsToUpgrade.isEmpty()) {
-                    BuildingId buildingId = buildingsToUpgrade.get(
-                            new Random().nextInt(buildingsToUpgrade.size()));
-                    final IBuilding building = planet.getBuilding(buildingId.getId());
-                    building.upgradeBuilding();
+                    if (amountOnPlanet == 0
+                            && mediumWaitTimeToBuild(alliance, buildingId, currentMoney, incomeValue)) {
+                        Timber.v("mNewBuildingsToBuild %s", buildingId.toString());
+                        mNewBuildingsToBuild.add(buildingId);
+                    }
+                }
+                //more than 1
+                if (amountOnPlanet >= 1) {
+                    if (alliance.isUpgradeAvailable(buildingId)) {
+                        if (mediumWaitTimeToUpgrade(alliance, buildingId,
+                                amountOnPlanet, currentMoney, incomeValue)) {
+                            Timber.v("mBuildingsToUpgrade %s", buildingId.toString());
+                            mBuildingsToUpgrade.add(buildingId);
+                        }
+                    } else {
+                        if (amountOnPlanet < buildingDummy.getAmountLimit() &&
+                                mediumWaitTimeToBuild(alliance, buildingId,
+                                        currentMoney, incomeValue)) {
+                            Timber.v("mUpgradedBuildingsToBuild %s", buildingId.toString());
+                            mUpgradedBuildingsToBuild.add(buildingId);
+                        }
+                    }
+                }
+            } else {
+                Timber.v("No buildings built before");
+                if (buildingDummy.getBuildingType() == BuildingType.DEFENCE_BUILDING
+                        || buildingDummy.getBuildingType() == BuildingType.SPECIAL_BUILDING
+                        || buildingDummy.getBuildingType() == BuildingType.WEALTH_BUILDING) {
+                    continue;
+                }
+                if (shortWaitTimeToBuild(alliance, buildingId, currentMoney, incomeValue)) {
+                    mNewBuildingsToBuild.add(buildingId);
                 }
             }
-        } catch (Exception ex) {
-            Timber.w(ex, "exception in bot working logic");
         }
+
+        //next we would try (with chance) to build upgraded most building,
+        // or upgrade existing building
+        // or create a new building
+        if (!mUpgradedBuildingsToBuild.isEmpty()) {
+            if ((System.currentTimeMillis() & 3) != 3) {
+                return new GoalBuilding(
+                        mUpgradedBuildingsToBuild.get(new Random()
+                                .nextInt(mUpgradedBuildingsToBuild.size())),
+                        false);
+            }
+        }
+        if (!mBuildingsToUpgrade.isEmpty()) {
+            if ((System.currentTimeMillis() & 1) == 1) {
+                return new GoalBuilding(
+                        mBuildingsToUpgrade.get(new Random().nextInt(mBuildingsToUpgrade.size())),
+                        true);
+            }
+        }
+        if (!mNewBuildingsToBuild.isEmpty()) {
+            return new GoalBuilding(
+                    mNewBuildingsToBuild.get(new Random().nextInt(mNewBuildingsToBuild.size())),
+                    false);
+        }
+        return null;
+    }
+
+    @Override
+    void onBuildingChanged(IBuilding building, boolean upgrade) {
     }
 
     @Override
@@ -122,11 +131,7 @@ public class SingleWayEasyBot implements IBot {
         mBotPlayer = botPlayer;
     }
 
-    private void delay() {
-        try {
-            Thread.sleep(DELAY_BETWEEN_ITERATIONS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    @Override
+    void onChangePathForExistingBuilding(PlanetStaticObject planetStaticObject) {
     }
 }

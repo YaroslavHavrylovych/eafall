@@ -56,8 +56,10 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
 
     @Override
     protected void loadResources() {
-        ((ClientResourcesLoader) mResourcesLoader).setSunPath(
-                mMissionConfig.getSunPath(), mMissionConfig.getSunHazePath());
+        if (mMissionConfig.isSunPresent()) {
+            ((ClientResourcesLoader) mResourcesLoader).setSunPath(
+                    mMissionConfig.getSunPath(), mMissionConfig.getSunHazePath());
+        }
         super.loadResources();
         //whether or not the mission is bounded (timing)
         if (mMissionConfig.isTimerEnabled()) {

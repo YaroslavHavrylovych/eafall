@@ -222,10 +222,10 @@
     <!-- descriptions -->
     <string name="earth_artifact_description">Sacred Mutants artifact located in Earth subsoil.\nAdds 10\u0025 to unit health.</string>
     <string name="space_material_description">Powerful Imperials artifact invented by their scientists.\nGives 10\u0025 chance to avoid any damage.</string>
-    <string name="king_of_snakes_description">Valuable Rebels artifact founded in the open space.\n10\u0025 unit damage increase.</string>
-    <string name="municipality_description">20\u0025 income increase by first created building.\nEach next building gives 1\u0025 to income.</string>
-    <string name="caches_description">20\u0025 income increase by first created building.\nEach next building gives 1\u0025 to income.</string>
-    <string name="reptile_city_description">20\u0025 income increase by first created building.\nEach next building gives 1\u0025 to income.</string>
+    <string name="king_of_snakes_description">Valuable Rebels artifact founded in the open space.\n30\u0025 unit damage increase.</string>
+    <string name="municipality_description">40\u0025 income increase by first created building.\nEach next building gives 1\u0025 to income.</string>
+    <string name="caches_description">40\u0025 income increase by first created building.\nEach next building gives 1\u0025 to income.</string>
+    <string name="reptile_city_description">40\u0025 income increase by first created building.\nEach next building gives 1\u0025 to income.</string>
     <!-- /descriptions -->
     <!-- /description popup -->
 
