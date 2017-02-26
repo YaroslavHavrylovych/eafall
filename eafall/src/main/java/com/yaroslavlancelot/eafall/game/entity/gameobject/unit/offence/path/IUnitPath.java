@@ -9,4 +9,16 @@ public interface IUnitPath {
      * @param nextPoint    two dimensional array with [x,y] next position
      */
     void getNextPathPoint(float[] currentPoint, float[] nextPoint);
+
+    /** returns total amount of checkpoints unit need to pass during current path */
+    int getTotalPathPoints();
+
+    /**
+     * force set of the current path point (starting from 0).
+     * @param n new current path point
+     */
+    void setCurrentPathPoint(int n);
+
+    /** returns the current path point */
+    int getCurrentPathPoint();
 }

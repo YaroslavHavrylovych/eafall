@@ -207,15 +207,22 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
         }));
     }
 
+
+    /** DON'T USE THIS METHOD. IT'S A HACK FOR THE CAMPAIGN */
+    public boolean forceBuildingCreate(BuildingId buildingId) {
+        return createBuilding(buildingId, true);
+    }
+
     /**
-     * Invoke if you want to create new building. If building is doing some real action
-     * (it's on the server side or it's single player and not an client which just is showing)
-     * then player money will be reduced.
+     * Used to create a building
      *
      * @param buildingId screen of the building you want to create
+     * @param force      if true, than building should be created
+     *                   without money usage (hack for the campaign).
+     *                   False - usual building creation process.
      * @return true if building amount was increased and false in other case
      */
-    public boolean createBuilding(BuildingId buildingId) {
+    private boolean createBuilding(BuildingId buildingId, boolean force) {
         IBuilding building = mBuildings.get(buildingId.getId());
         if (building == null) {
             final BuildingDummy buildingDummy = PlayersHolder.getPlayer(mPlayerName).getAlliance()
@@ -269,7 +276,12 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
                     getX() + xOffset, getY() + buildingStatObj.getY());
             mBuildings.put(buildingId.getId(), building);
         }
-        boolean result = building.buyBuilding();
+        boolean result;
+        if (force && building instanceof DefenceBuilding) {
+            result = ((DefenceBuilding) building).forceBuilding();
+        } else {
+            result = building.buyBuilding();
+        }
         Timber.v("BuildingId %d, amount %s, created", buildingId.getId(), building.getAmount());
         if (result && building.getAmount() == 1) {
             StaticObject stObj = building.getEntity();
@@ -277,6 +289,18 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
             registerTouch(stObj);
         }
         return result;
+    }
+
+    /**
+     * Invoke if you want to create new building. If building is doing some real action
+     * (it's on the server side or it's single player and not an client which just is showing)
+     * then player money will be reduced.
+     *
+     * @param buildingId screen of the building you want to create
+     * @return true if building amount was increased and false in other case
+     */
+    public boolean createBuilding(BuildingId buildingId) {
+        return createBuilding(buildingId, false);
     }
 
     /** Suppressor triggered by double click on the planet and kill all enemies on you side of the game field */

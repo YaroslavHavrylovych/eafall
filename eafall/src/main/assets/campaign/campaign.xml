@@ -304,7 +304,7 @@
         <mission_details>
             <name>Jarilo</name>
             <game_handler>
-                com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
+                com.yaroslavlancelot.eafall.game.campaign.missions.NinthMissionActivity
             </game_handler>
             <player_alliance>Mutants</player_alliance>
             <player_planet>earth</player_planet>

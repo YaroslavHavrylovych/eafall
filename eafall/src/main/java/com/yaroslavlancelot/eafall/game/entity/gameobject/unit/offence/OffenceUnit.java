@@ -31,11 +31,11 @@ public class OffenceUnit extends Unit {
     /** Used to prevent multiple arrays creation */
     private static float[] mTwoDimensionFloatArray = new float[2];
     /** current unit bonuses */
-    protected final Map<Bonus, Long> mBonuses = new HashMap<>();
+    private final Map<Bonus, Long> mBonuses = new HashMap<>();
     /** max velocity for this unit */
-    protected float mMaxVelocity;
+    private float mMaxVelocity;
     /** unit moving path */
-    protected IUnitPath mUnitPath;
+    private IUnitPath mUnitPath;
     /** object bonus to the health */
     private int mObjectHealthBonus;
     /** chance to avoid an attack */
@@ -284,5 +284,9 @@ public class OffenceUnit extends Unit {
                 abscissaSpeed = mMaxVelocity * distanceY / maxAbsDistance;
 
         setUnitLinearVelocity(ordinateSpeed, abscissaSpeed);
+    }
+
+    public IUnitPath getUnitPath() {
+        return mUnitPath;
     }
 }

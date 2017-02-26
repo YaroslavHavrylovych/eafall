@@ -20,7 +20,7 @@ public class SingleWayUnitPath implements IUnitPath {
             SizeConstants.GAME_FIELD_WIDTH / 2,
             SizeConstants.GAME_FIELD_WIDTH / 3,
             SizeConstants.PLANET_DIAMETER / 2};
-    protected int mCurrentPointIndex;
+    private int mCurrentPointIndex;
     // array which holds unit check points x
     private float[] mX;
     private int mY;
@@ -66,5 +66,20 @@ public class SingleWayUnitPath implements IUnitPath {
         }
         nextPoint[0] = mX[mCurrentPointIndex];
         nextPoint[1] = mY;
+    }
+
+    @Override
+    public int getTotalPathPoints() {
+        return xArrayBackward.length;
+    }
+
+    @Override
+    public void setCurrentPathPoint(int n) {
+        mCurrentPointIndex = n;
+    }
+
+    @Override
+    public int getCurrentPathPoint() {
+        return mCurrentPointIndex;
     }
 }

@@ -17,7 +17,7 @@ public abstract class BasePath implements IUnitPath {
     // Fields
     // ===========================================================
     /** current check point which unt should to pass */
-    protected int mCurrentPointIndex;
+    private int mCurrentPointIndex;
 
     // ===========================================================
     // Constructors
@@ -30,6 +30,17 @@ public abstract class BasePath implements IUnitPath {
     // ===========================================================
     // Methods for/from SuperClass/Interfaces
     // ===========================================================
+
+    @Override
+    public void setCurrentPathPoint(int n) {
+        mCurrentPointIndex = n;
+    }
+
+    @Override
+    public int getCurrentPathPoint() {
+        return mCurrentPointIndex;
+    }
+
 
     // ===========================================================
     // Methods
@@ -44,7 +55,6 @@ public abstract class BasePath implements IUnitPath {
      * @param yArray       unit check points abscissa array
      */
     protected void getNextPathPoint(float[] currentPoint, float[] nextPoint, final float[] xArray, final float[] yArray) {
-        float x = currentPoint[0], y = currentPoint[1];
         // if we reach last point
         if (mCurrentPointIndex + 1 == xArray.length) {
             nextPoint[0] = xArray[xArray.length - 1];
@@ -52,6 +62,7 @@ public abstract class BasePath implements IUnitPath {
             return;
         }
         // if it's not
+        float x = currentPoint[0], y = currentPoint[1];
         float distanceToNextPoint = PathHelper.getDistanceBetweenPoints(xArray[mCurrentPointIndex], yArray[mCurrentPointIndex], x, y);
         if (distanceToNextPoint < PathHelper.MIN_DISTANCE_TO_SWITCH_TO_ANOTHER_POINT) {
             mCurrentPointIndex++;

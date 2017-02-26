@@ -409,7 +409,6 @@ public class CampaignActivity extends EaFallActivity {
         return false;
     }
 
-
     private void showClickToast(final String str) {
         runOnUiThread(new Runnable() {
             @Override
