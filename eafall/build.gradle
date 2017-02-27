@@ -30,7 +30,7 @@ repositories {
 }
 
 dependencies {
-    compile project(':andenginemultiplayerextension')
+    compile project(':andenginephysicsbox2dextension')
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
     compile 'de.greenrobot:eventbus:2.4.0'
     compile fileTree(dir: 'libs', include: ['*.jar'])
