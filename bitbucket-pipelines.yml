@@ -1,4 +1,4 @@
-image: beevelop/android:latest
+image: runmymind/docker-android-sdk
 
 pipelines:
   default:

@@ -7,6 +7,7 @@ import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.R;
 import com.yaroslavlancelot.eafall.android.StartableIntent;
 import com.yaroslavlancelot.eafall.game.EaFallActivity;
+import com.yaroslavlancelot.eafall.game.camera.EaFallCamera;
 import com.yaroslavlancelot.eafall.game.campaign.intents.CampaignIntent;
 import com.yaroslavlancelot.eafall.game.campaign.loader.CampaignDataLoader;
 import com.yaroslavlancelot.eafall.game.campaign.loader.CampaignFileLoader;
@@ -137,7 +138,7 @@ public class CampaignActivity extends EaFallActivity {
         onPopulateWorkingScene(mSceneManager.getWorkingScene());
         initHud();
         mScreenId = mCampaignPassage.getPassedCampaignsAmount();
-        updateScreen();
+        updateScreen(false);
     }
 
     private void initCampaignData() {
@@ -209,33 +210,55 @@ public class CampaignActivity extends EaFallActivity {
             @Override
             public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
                 mScreenId += 1;
-                updateScreen();
+                updateScreen(true);
             }
         });
         mPreviousScreenButton.setOnClickListener(new ButtonSprite.OnClickListener() {
             @Override
             public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
                 mScreenId -= 1;
-                updateScreen();
+                updateScreen(true);
             }
         });
     }
 
-    private void updateScreen() {
+    private void updateScreen(boolean smooth) {
         int amountOfMissions = mCampaignFileLoader.getCampaignsList().size();
         mScreenId = mScreenId < amountOfMissions ? mScreenId : amountOfMissions - 1;
-        mCamera.setCenter(SizeConstants.HALF_FIELD_WIDTH + mScreenId * SizeConstants.GAME_FIELD_WIDTH,
-                SizeConstants.HALF_FIELD_HEIGHT);
-        mPreviousScreenButton.setVisible(mScreenId > 0);
-        mNextScreenButton.setVisible(mScreenId < mCampaignFileLoader.getCampaignsList().size() - 1);
-        mNextScreenButton.setEnabled(mScreenId < mCampaignFileLoader.getCampaignsList().size() - 1
-                && mScreenId < mCampaignPassage.getPassedCampaignsAmount());
-        mStartButton.setVisible(mScreenId <= mCampaignPassage.getPassedCampaignsAmount());
+        final float x = SizeConstants.HALF_FIELD_WIDTH + mScreenId * SizeConstants.GAME_FIELD_WIDTH;
+        float y = SizeConstants.HALF_FIELD_HEIGHT;
+        if (smooth) {
+            mNextScreenButton.setEnabled(false);
+            mPreviousScreenButton.setEnabled(false);
+            mStartButton.setEnabled(false);
+            mCamera.setCenterChangedCallback(new EaFallCamera.ICameraMoveCallbacks() {
+                @Override
+                public void cameraMove(float deltaX, float deltaY) {
+                    if (mCamera.getCenterX() == x) {
+                        updateMissionButtons();
+                    }
+                }
+            });
+            mCamera.setCenter(x, y);
+        } else {
+            mCamera.setCenterDirect(x, y);
+            updateMissionButtons();
+        }
         String title = getString(getResources().getIdentifier(
                 mCampaignFileLoader.getCampaignsList().get(mScreenId).name, "string",
                 getApplicationInfo().packageName));
         Timber.v("Campaign title is [%s]", title);
         mTitleText.setText(title);
+    }
+
+    private void updateMissionButtons() {
+        mPreviousScreenButton.setVisible(mScreenId > 0);
+        mPreviousScreenButton.setEnabled(true);
+        mNextScreenButton.setVisible(mScreenId < mCampaignFileLoader.getCampaignsList().size() - 1);
+        mNextScreenButton.setEnabled(mScreenId < mCampaignFileLoader.getCampaignsList().size() - 1
+                && mScreenId < mCampaignPassage.getPassedCampaignsAmount());
+        mStartButton.setVisible(mScreenId <= mCampaignPassage.getPassedCampaignsAmount());
+        mStartButton.setEnabled(true);
     }
 
     private void updateHudValues() {
