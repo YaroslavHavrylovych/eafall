@@ -33,6 +33,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -87,6 +88,8 @@ public class Player implements IPlayer {
     private SparseArray<AfterInitializationPool<Unit>> mUnitsPools;
     /** units map to improve positioning operations performance */
     private SquareUnitMap mUnitMap;
+    /** Used to update list of buildings, temporary variable, can easely be empty */
+    private final List<Integer> mTmpPlayerBuildingsIds;
 
     public Player(final String playerName, IAlliance alliance, ControlType playerType,
                   int startMoney,
@@ -99,6 +102,7 @@ public class Player implements IPlayer {
         mPlayerUnits = new ArrayList<>(mUnitsLimit + 10);
         mAlliance = alliance;
         mBuildingsLimit = buildingsLimit;
+        mTmpPlayerBuildingsIds = new ArrayList<>(mAlliance.getBuildingsAmount());
         mControlType = playerType;
         mPlayerFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f, false);
         mUnitDeathIncomeChane = unitDeathIncomeChance;
@@ -366,7 +370,10 @@ public class Player implements IPlayer {
             return;
         }
         Set<Integer> planetBuildings = mPlayerPlanet.getExistingBuildingsTypes();
-        SortedSet<Integer> allBuildings = mAlliance.getBuildingsIds().subSet(0, mBuildingsLimit);
+        mTmpPlayerBuildingsIds.clear();
+        mTmpPlayerBuildingsIds.addAll(mAlliance.getBuildingsIds());
+        Collections.sort(mTmpPlayerBuildingsIds);
+        List<Integer> allBuildings = mTmpPlayerBuildingsIds.subList(0, mBuildingsLimit);
 
         Iterator<Integer> it = allBuildings.iterator();
         int id;
@@ -376,8 +383,7 @@ public class Player implements IPlayer {
             if (!planetBuildings.contains(id)) {
                 continue;
             }
-            //TODO you have to calculate position in other way
-            int position = allBuildings.headSet(id).size();
+            int position = Collections.binarySearch(allBuildings, id);
             BuildingId buildingId = mBuildingsTypesIds[position];
             IBuilding building = mPlayerPlanet.getBuilding(id);
             if (buildingId.getUpgrade() == building.getUpgrade()) {

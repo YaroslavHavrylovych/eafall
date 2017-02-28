@@ -22,6 +22,8 @@ import timber.log.Timber;
  * @author Yaroslav Havrylovych
  */
 public class TwoWaysHardBot extends Bot {
+    private long mLastTickTime;
+    private final static int ADDITION_INCOME_TIME = 20000;
     private List<BuildingId> mNewBuildingsToBuild = new ArrayList<>(10);
     private List<BuildingId> mUpgradedBuildingsToBuild = new ArrayList<>(5);
     private List<BuildingId> mBuildingsToUpgrade = new ArrayList<>(5);
@@ -144,6 +146,16 @@ public class TwoWaysHardBot extends Bot {
         }
         if (building instanceof UnitBuilding) {
             ((UnitBuilding) building).setPath(new Random().nextBoolean());
+        }
+    }
+
+    @Override
+    protected void onTickCallback() {
+        super.onTickCallback();
+        long time = System.currentTimeMillis();
+        if (time - mLastTickTime > ADDITION_INCOME_TIME) {
+            mLastTickTime = time;
+            mBotPlayer.incomeTime();
         }
     }
 }

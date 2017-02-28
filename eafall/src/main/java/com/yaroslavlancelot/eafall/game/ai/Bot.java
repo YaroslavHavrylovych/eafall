@@ -42,6 +42,8 @@ abstract class Bot implements IBot {
                         return;
                     }
 
+                    onTickCallback();
+
                     //suppressor
                     if (planet.getObjectCurrentHealth() < planet.getMaximumObjectHealth() / 2
                             && !planet.isSuppressorUsed()) {
@@ -94,6 +96,10 @@ abstract class Bot implements IBot {
     abstract GoalBuilding findTheGoalBuilding(IAlliance alliance, PlanetStaticObject planet);
 
     abstract void onBuildingChanged(IBuilding building, boolean upgrade);
+
+    /** Triggered each iteration in bot logic before changes (after checking planets exists) */
+    protected void onTickCallback() {
+    }
 
     boolean mediumWaitTimeToBuild(IAlliance alliance, BuildingId buildingId,
                                   int currentMoney, int income) {
