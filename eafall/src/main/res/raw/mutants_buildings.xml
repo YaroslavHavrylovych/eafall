@@ -55,13 +55,13 @@
         <upgrades>
             <upgrade id="0">
                 <image_name>hydra_pond.png</image_name>
-                <cost>445</cost>
+                <cost>400</cost>
                 <unit_id>30</unit_id>
                 <building_time>10</building_time>
             </upgrade>
             <upgrade id="1">
                 <image_name>hydra_pond.png</image_name>
-                <cost>530</cost>
+                <cost>445</cost>
                 <unit_id>31</unit_id>
                 <building_time>10</building_time>
             </upgrade>
@@ -81,7 +81,7 @@
             </upgrade>
             <upgrade id="0">
                 <image_name>poison_cave.png</image_name>
-                <cost>435</cost>
+                <cost>445</cost>
                 <unit_id>41</unit_id>
                 <building_time>11</building_time>
             </upgrade>
