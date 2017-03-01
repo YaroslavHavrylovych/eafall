@@ -137,7 +137,7 @@ public class CampaignActivity extends EaFallActivity {
         mSceneManager.initWorkingScene(mCamera, mCampaignFileLoader.parallax_background);
         onPopulateWorkingScene(mSceneManager.getWorkingScene());
         initHud();
-        mScreenId = mCampaignPassage.getPassedCampaignsAmount();
+        mScreenId = mCampaignPassage.getLastPlayedMission();
         updateScreen(false);
     }
 
@@ -350,6 +350,7 @@ public class CampaignActivity extends EaFallActivity {
     private void startMission(final MissionDetailsLoader missionData) {
         mResourcesLoader.unloadImages(getTextureManager());
         SelfCleanable.clearMemory();
+        mCampaignPassage.setLastPlayedMission(mScreenId);
         StartableIntent campaignIntent = new CampaignMissionIntent(getMissionActivity(missionData),
                 missionData, mCampaignFileName, mScreenId);
         campaignIntent.start(this);

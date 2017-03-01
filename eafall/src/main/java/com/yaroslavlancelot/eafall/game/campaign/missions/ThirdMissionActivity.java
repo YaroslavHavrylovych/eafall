@@ -4,6 +4,8 @@ import com.yaroslavlancelot.eafall.R;
 import com.yaroslavlancelot.eafall.game.BaseTutorialActivity;
 import com.yaroslavlancelot.eafall.game.client.thick.income.ClientIncomeHandler;
 import com.yaroslavlancelot.eafall.game.constant.SizeConstants;
+import com.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetStaticObject;
+import com.yaroslavlancelot.eafall.game.popup.IPopup;
 import com.yaroslavlancelot.eafall.game.scene.hud.ClientGameHud;
 import com.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 
@@ -34,16 +36,46 @@ public class ThirdMissionActivity extends BaseTutorialActivity {
             if (mFirstIncome) {
                 ClientIncomeHandler.getIncomeHandler().unregisterIncomeListener(this);
                 mFirstIncome = false;
+                hud.blockInput(true);
                 mSceneManager.getWorkingScene().registerUpdateHandler(new TimerHandler(.5f,
                         new ITimerCallback() {
                             @Override
                             public void onTimePassed(final TimerHandler pTimerHandler) {
                                 mSceneManager.getWorkingScene().unregisterUpdateHandler(pTimerHandler);
-                                hud.blockInput(false);
-                                mClickOnPointPopup.resetTouchToDefault();
+                                PlanetStaticObject planet = mFirstPlayer.getPlanet();
                                 mClickOnPointPopup.initText1(SizeConstants.HALF_FIELD_WIDTH,
-                                        SizeConstants.HALF_FIELD_HEIGHT,
+                                        150,
                                         R.string.tutorial_description_suppressor_usage);
+                                pause(true);
+                                mClickOnPointPopup.initPointer1(planet.getX() + 200, planet.getY(), 180);
+                                mClickOnPointPopup.resetTouchToDefault();
+                                mClickOnPointPopup.setStateChangeListener(new IPopup.StateChangingListener() {
+                                    @Override
+                                    public void onShowed() {
+                                    }
+
+                                    @Override
+                                    public void onHided() {
+                                        mClickOnPointPopup.initText1(SizeConstants.HALF_FIELD_WIDTH,
+                                                150,
+                                                R.string.tutorial_description_do_not_forget);
+                                        mClickOnPointPopup.setStateChangeListener(new IPopup.StateChangingListener() {
+                                            @Override
+                                            public void onShowed() {
+                                            }
+
+                                            @Override
+                                            public void onHided() {
+                                                pause(false);
+                                                mClickOnPointPopup.removeStateChangeListener();
+                                                hud.blockInput(false);
+                                                pause(false);
+                                            }
+                                        });
+                                        mClickOnPointPopup.showPopup();
+                                    }
+                                });
+                                mClickOnPointPopup.showPopup();
                             }
                         }));
             }

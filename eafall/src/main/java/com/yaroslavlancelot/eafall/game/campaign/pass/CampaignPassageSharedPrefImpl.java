@@ -19,7 +19,8 @@ class CampaignPassageSharedPrefImpl implements CampaignPassage {
     /** passage campaign file name */
     private String mFileName;
     private static final int PREFERENCES_MODE = Context.MODE_PRIVATE;
-    private static final String CAMPAIGN_KEY = "";
+    private static final String CAMPAIGN_KEY = "campaign_key";
+    private static final String LAST_PLAYED_MISSION = "last_played_mission_key";
     private Context mContext;
 
     /**
@@ -50,6 +51,20 @@ class CampaignPassageSharedPrefImpl implements CampaignPassage {
         SharedPreferences.Editor editor = mContext
                 .getSharedPreferences(mFileName, PREFERENCES_MODE).edit();
         editor.putInt(CAMPAIGN_KEY, getPassedCampaignsAmount() + 1);
+        editor.apply();
+    }
+
+    @Override
+    public int getLastPlayedMission() {
+        return mContext.getSharedPreferences(mFileName, PREFERENCES_MODE)
+                .getInt(LAST_PLAYED_MISSION, 0);
+    }
+
+    @Override
+    public void setLastPlayedMission(int id) {
+        SharedPreferences.Editor editor = mContext
+                .getSharedPreferences(mFileName, PREFERENCES_MODE).edit();
+        editor.putInt(LAST_PLAYED_MISSION, id);
         editor.apply();
     }
 
