@@ -290,7 +290,6 @@
         </mission_details>
     </campaign>
 
-    <!-- TODO create waves, few, to be harder to resist -->
     <campaign screen="8">
         <name>campaign_demo_tutorial9</name>
         <picture>graphics/images/campaign/missions/screen8.png</picture>

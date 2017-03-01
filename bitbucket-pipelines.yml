@@ -1,4 +1,4 @@
-image: runmymind/docker-android-sdk
+image: runmymind/docker-android-sdk:latest
 
 pipelines:
   default:

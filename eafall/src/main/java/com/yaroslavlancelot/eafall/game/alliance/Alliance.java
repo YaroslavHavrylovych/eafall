@@ -26,6 +26,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.simpleframework.xml.core.Persister;
 
+import java.util.HashSet;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -71,6 +72,11 @@ public abstract class Alliance implements IAlliance {
     @Override
     public SortedSet<Integer> getBuildingsIds() {
         return mBuildingsIds;
+    }
+
+    @Override
+    public SortedSet<Integer> getMovableUnitsIds() {
+        return mUnitsIds.headSet(mUnitsIds.last());
     }
 
     @Override
