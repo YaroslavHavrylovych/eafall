@@ -26,7 +26,8 @@
     <string name="tutorial_description_create_building_2">Сейчас время создать другое строение</string>
     <string name="tutorial_description_building_settings">Нажмите на кнопку, чтобы открыть настройки строения</string>
     <string name="tutorial_description_hide">Нажмите на свободное место, чтобы скрыть попап</string>
-    <string name="tutorial_description_suppressor_usage">Если Вы проигрываете,\nто сделайте затяжной клик на Вашу планету,\nэто вызовет подавитель</string>
+    <string name="tutorial_description_suppressor_usage">Ксли сделаете затяжной-клик на Вашу планету,\nэто вызовет Подавитель</string>
+    <string name="tutorial_description_do_not_forget">Не забудьте про эту возможность!</string>
     <string name="tutorial_description_suppressor_description">Подавитель уничтожит всех противников\nна вашей стороне игрового поля</string>
     <string name="tutorial_task">Ваша задача выжить оставшееся время\nУдачи!</string>
     <!-- / Tutorial -->

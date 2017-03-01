@@ -26,7 +26,8 @@
     <string name="tutorial_description_create_building_2">Зараз час створити інший будинок</string>
     <string name="tutorial_description_building_settings">Натисніть кнопку, щоб відкрити налаштування будинку</string>
     <string name="tutorial_description_hide">Натисніть на вільне місце, щоб сховати попап</string>
-    <string name="tutorial_description_suppressor_usage">Якщо Ви програєте, то зробіть затяжний клік на Вашу планету\nце викличе заглучувач</string>
+    <string name="tutorial_description_suppressor_usage">Якщо зробити затяжний-клік на Вашу планету,\nто це викличе Заглушувач</string>
+    <string name="tutorial_description_do_not_forget">Не забудьте про це!</string>
     <string name="tutorial_description_suppressor_description">Заглучувач знищить всіх супротивників\nна ваші частині ігрового поля</string>
     <string name="tutorial_task">Ваша задача вижити решту часу\nЩасти!</string>
     <!-- /tutorial -->

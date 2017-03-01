@@ -26,7 +26,8 @@
     <string name="tutorial_description_create_building_2">Now it\'s a time to create another building</string>
     <string name="tutorial_description_building_settings">Click on the button to check the building settings</string>
     <string name="tutorial_description_hide">Click on an empty area to hide the popup</string>
-    <string name="tutorial_description_suppressor_usage">If you\'re losing you can long-click on you planet\nto trigger the suppressor</string>
+    <string name="tutorial_description_suppressor_usage">If you would long-click on you planet\n, it would trigger Suppressor</string>
+    <string name="tutorial_description_do_not_forget">Don\'t forget about this!</string>
     <string name="tutorial_description_suppressor_description">Suppressor destroys all enemy units\non your side of the game field</string>
     <string name="tutorial_task">Your task is to survive during the rest of the time\nGood luck!</string>
     <!-- /tutorial -->
