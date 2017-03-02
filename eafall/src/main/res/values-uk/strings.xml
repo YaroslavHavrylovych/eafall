@@ -97,11 +97,9 @@
     <string name="game_sounds">Звуки гри</string>
     <string name="game_sounds_on">Увімкнені</string>
     <string name="game_sounds_off">Вимкнені</string>
-    <string name="game_sounds_volume">Гучність</string>
     <string name="music">Музика</string>
     <string name="music_on">Увімкнена</string>
     <string name="music_off">Вимкена</string>
-    <string name="music_volume">Гучність</string>
     <string name="category_sounds">Звук</string>
     <string name="category_other">Інше</string>
 

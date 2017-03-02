@@ -97,11 +97,9 @@
     <string name="game_sounds">Звуки игры</string>
     <string name="game_sounds_on">Включенные</string>
     <string name="game_sounds_off">Отключены</string>
-    <string name="game_sounds_volume">Громкость</string>
     <string name="music">Музыка</string>
     <string name="music_on">Включена</string>
     <string name="music_off">Вимкена</string>
-    <string name="music_volume">Громкость</string>
     <string name="category_sounds">Звук</string>
     <string name="category_other">Другое</string>
 
