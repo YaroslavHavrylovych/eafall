@@ -10,6 +10,7 @@ import com.google.android.gms.analytics.ExceptionReporter;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.yaroslavlancelot.eafall.android.analytics.FullStacktraceExceptionParser;
+import com.yaroslavlancelot.eafall.android.logger.CrashReportingTree;
 import com.yaroslavlancelot.eafall.game.configuration.Config;
 import com.yaroslavlancelot.eafall.game.configuration.IConfig;
 import com.yaroslavlancelot.eafall.general.locale.LocaleImpl;
@@ -71,6 +72,8 @@ public class EaFallApplication extends MultiDexApplication {
         Thread.setDefaultUncaughtExceptionHandler(customReporter);
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
+        } else {
+            Timber.plant(new CrashReportingTree());
         }
     }
 }
