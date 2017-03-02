@@ -42,11 +42,11 @@ public class NinthMissionActivity extends BaseTutorialActivity {
                         break;
                     }
                     case 140: {
-                        wave(10);
+                        wave(5);
                         break;
                     }
                     case 80: {
-                        wave(20);
+                        wave(13);
                         break;
                     }
                     case 30: {

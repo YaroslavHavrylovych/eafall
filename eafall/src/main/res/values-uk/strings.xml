@@ -222,9 +222,9 @@
     <string name="earth_artifact_description">Священий артефакт Мутантів знайдений в надрах Землі.\nДодає 10\u0025 до здоров’я юніта.</string>
     <string name="space_material_description">Могутній артефакт Імперців, винайдений їх вченими.\nДає 10\u0025 шанс уникнути пошкоджень.</string>
     <string name="king_of_snakes_description">Цінний артефакт Повстанців,\nбув знайдений у відкритому космосі.\n30\u0025 збільшення пошкодження від юніта.</string>
-    <string name="municipality_description">На 40\u0025 збільшення доходу від першого будинку.\nКожен наступний будинок додає 1\u0025 до доходу.</string>
-    <string name="caches_description">На 40\u0025 збільшення доходу від першого будинку.\nКожен наступний будинок додає 1\u0025 до доходу.</string>
-    <string name="reptile_city_description">На 40\u0025 збільшення доходу від першого будинку.\nКожен наступний будинок додає 1\u0025 до доходу.</string>
+    <string name="municipality_description">На 40\u0025 збільшення доходу від першого будинку.\nКожен наступний будинок додає 5\u0025 до доходу.</string>
+    <string name="caches_description">На 40\u0025 збільшення доходу від першого будинку.\nКожен наступний будинок додає 5\u0025 до доходу.</string>
+    <string name="reptile_city_description">На 40\u0025 збільшення доходу від першого будинку.\nКожен наступний будинок додає 5\u0025 до доходу.</string>
     <!-- /descriptions -->
     <!-- /description popup -->
 

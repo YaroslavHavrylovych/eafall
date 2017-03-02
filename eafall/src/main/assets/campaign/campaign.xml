@@ -70,7 +70,7 @@
             <single_way>false</single_way>
             <suppressor>false</suppressor>
             <definition>
-                <time_limit>300</time_limit>
+                <time_limit>180</time_limit>
                 <type>win</type>
             </definition>
         </mission_details>
@@ -180,7 +180,7 @@
             <single_way>false</single_way>
             <suppressor>true</suppressor>
             <definition>
-                <time_limit>180</time_limit>
+                <time_limit>220</time_limit>
                 <type>win</type>
             </definition>
         </mission_details>
@@ -214,7 +214,7 @@
             <single_way>true</single_way>
             <suppressor>true</suppressor>
             <definition>
-                <time_limit>200</time_limit>
+                <time_limit>400</time_limit>
                 <type>win</type>
             </definition>
         </mission_details>
@@ -285,6 +285,7 @@
             <single_way>false</single_way>
             <suppressor>true</suppressor>
             <definition>
+                <time_limit>210</time_limit>
                 <type>win</type>
             </definition>
         </mission_details>

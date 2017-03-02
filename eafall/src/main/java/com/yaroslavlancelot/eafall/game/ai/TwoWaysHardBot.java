@@ -72,8 +72,23 @@ public class TwoWaysHardBot extends Bot {
                 if (amountOnPlanet < buildingDummy.getAmountLimit()) {
                     //we could build special building only if there is a lot of other buildings
                     if ((buildingDummy.getBuildingType() == BuildingType.SPECIAL_BUILDING
-                            || buildingDummy.getBuildingType() == BuildingType.WEALTH_BUILDING
-                            || buildingDummy.getBuildingType() == BuildingType.DEFENCE_BUILDING)
+                            || buildingDummy.getBuildingType() == BuildingType.WEALTH_BUILDING)) {
+                        if (planet.getBuildingsAmount() <= 3) {
+                            continue;
+                        } else {
+                            if (amountOnPlanet < 1
+                                    && buildingDummy.getBuildingType() == BuildingType.WEALTH_BUILDING
+                                    && planet.getBuildingsAmount() >= 10) {
+                                return new GoalBuilding(buildingId, false);
+                            }
+                            if (amountOnPlanet < 1
+                                    && buildingDummy.getBuildingType() == BuildingType.SPECIAL_BUILDING
+                                    && planet.getBuildingsAmount() >= 7) {
+                                return new GoalBuilding(buildingId, false);
+                            }
+                        }
+                    }
+                    if (buildingDummy.getBuildingType() == BuildingType.DEFENCE_BUILDING
                             && planet.getBuildingsAmount() < 10) {
                         continue;
                     }
