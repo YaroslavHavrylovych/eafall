@@ -36,12 +36,16 @@
             <com.yaroslavlancelot.eafall.android.view.MagicTextView
                 android:id="@+id/volume_text"
                 style="@style/SettingsCheckboxTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="@string/game_sounds"/>
 
             <TextView
                 android:id="@+id/volume_description"
                 style="@style/SettingsCheckboxDescription"
-                android:text="@string/developers_mode_off"/>
+                android:text="@string/developers_mode_off"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
 
         <FrameLayout

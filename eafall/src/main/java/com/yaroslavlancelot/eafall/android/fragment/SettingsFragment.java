@@ -12,6 +12,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.R;
@@ -103,19 +104,20 @@ public class SettingsFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                String val = mSharedPreferences.getString(KEY_HEALTH_BAR,
-                        ApplicationSettings.UnitHealthBarBehavior.DEFAULT.name());
-                ApplicationSettings.UnitHealthBarBehavior behavior =
-                        ApplicationSettings.UnitHealthBarBehavior.valueOf(val);
-                HealthBarDialog dialogFragment = new HealthBarDialog();
-                dialogFragment.init(new HealthBarDialog.HealthBarTypeSet() {
-                    @Override
-                    public void onTypeSet(final ApplicationSettings.UnitHealthBarBehavior healthBarBehavior) {
-                        mSharedPreferences.edit().putString(KEY_HEALTH_BAR,
-                                healthBarBehavior.name()).apply();
-                    }
-                }, behavior);
-                dialogFragment.show(getFragmentManager(), HealthBarDialog.KEY);
+                Toast.makeText(getContext(), R.string.not_implemented, Toast.LENGTH_SHORT).show();
+//                String val = mSharedPreferences.getString(KEY_HEALTH_BAR,
+//                        ApplicationSettings.UnitHealthBarBehavior.DEFAULT.name());
+//                ApplicationSettings.UnitHealthBarBehavior behavior =
+//                        ApplicationSettings.UnitHealthBarBehavior.valueOf(val);
+//                HealthBarDialog dialogFragment = new HealthBarDialog();
+//                dialogFragment.init(new HealthBarDialog.HealthBarTypeSet() {
+//                    @Override
+//                    public void onTypeSet(final ApplicationSettings.UnitHealthBarBehavior healthBarBehavior) {
+//                        mSharedPreferences.edit().putString(KEY_HEALTH_BAR,
+//                                healthBarBehavior.name()).apply();
+//                    }
+//                }, behavior);
+//                dialogFragment.show(getFragmentManager(), HealthBarDialog.KEY);
             }
         });
     }

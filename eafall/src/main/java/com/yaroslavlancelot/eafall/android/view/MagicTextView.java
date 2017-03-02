@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.WeakHashMap;
 
 /**
- * Downlo
+ * Downloaded from github
  * <br/>
  * Copied from https://github.com/m5/MagicTextView
  */

@@ -59,6 +59,12 @@
 -keep public class com.yaroslavlancelot.eafall.game.campaign.loader.** {
     public private <fields>;
 }
+-keep public class com.yaroslavlancelot.eafall.game.campaign.intents.** {
+    public private <fields>;
+}
+-keep public class com.yaroslavlancelot.eafall.game.sandbox.intents.** {
+    public private <fields>;
+}
 
 #############
 ## Logging ##
