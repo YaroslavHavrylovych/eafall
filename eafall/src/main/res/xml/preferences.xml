@@ -10,7 +10,7 @@
         <com.yaroslavlancelot.eafall.general.settings.SeekBarPreference
             android:dependency="@string/pref_sounds_enabled"
             android:key="@string/pref_sounds_volume"
-            android:title="@string/game_sounds_volume"
+            android:title="@string/game_sounds"
             android:max="99"
             android:defaultValue="0.5"/>
         <CheckBoxPreference
@@ -22,7 +22,7 @@
         <com.yaroslavlancelot.eafall.general.settings.SeekBarPreference
             android:dependency="@string/pref_music_enabled"
             android:key="@string/pref_music_volume"
-            android:title="@string/music_volume"
+            android:title="@string/music"
             android:max="99"
             android:defaultValue="0.9"/>
     </PreferenceCategory>

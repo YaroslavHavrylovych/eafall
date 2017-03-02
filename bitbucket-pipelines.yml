@@ -1,4 +1,4 @@
-image: uber/android-build-environment:latest
+image: snowdream/android:latest
 
 pipelines:
   default:
@@ -13,10 +13,8 @@ pipelines:
           - ls ./andengine
           - git clone https://yaroslav_havrylovych@bitbucket.org/yaroslav_havrylovych/andenginephysicsbox2dextension.git
           - ls ./andenginephysicsbox2dextension
-          - git clone https://yaroslav_havrylovych@bitbucket.org/yaroslav_havrylovych/andenginemultiplayerextension.git
-          - ls ./andenginemultiplayerextension
             # copy android licenses
-          - cp -r ./android_licenses /usr/local/android-sdk/licenses
+          - cp -r ./android_licenses $ANDROID_HOME/licenses
             # Building a dev build variant
           - chmod +x clean_and_build.sh
           - ./clean_and_build.sh

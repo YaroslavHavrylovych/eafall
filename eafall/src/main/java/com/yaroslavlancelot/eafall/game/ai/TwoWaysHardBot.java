@@ -22,6 +22,8 @@ import timber.log.Timber;
  * @author Yaroslav Havrylovych
  */
 public class TwoWaysHardBot extends Bot {
+    private long mLastTickTime;
+    private final static int ADDITION_INCOME_TIME = 20000;
     private List<BuildingId> mNewBuildingsToBuild = new ArrayList<>(10);
     private List<BuildingId> mUpgradedBuildingsToBuild = new ArrayList<>(5);
     private List<BuildingId> mBuildingsToUpgrade = new ArrayList<>(5);
@@ -70,8 +72,23 @@ public class TwoWaysHardBot extends Bot {
                 if (amountOnPlanet < buildingDummy.getAmountLimit()) {
                     //we could build special building only if there is a lot of other buildings
                     if ((buildingDummy.getBuildingType() == BuildingType.SPECIAL_BUILDING
-                            || buildingDummy.getBuildingType() == BuildingType.WEALTH_BUILDING
-                            || buildingDummy.getBuildingType() == BuildingType.DEFENCE_BUILDING)
+                            || buildingDummy.getBuildingType() == BuildingType.WEALTH_BUILDING)) {
+                        if (planet.getBuildingsAmount() <= 3) {
+                            continue;
+                        } else {
+                            if (amountOnPlanet < 1
+                                    && buildingDummy.getBuildingType() == BuildingType.WEALTH_BUILDING
+                                    && planet.getBuildingsAmount() >= 10) {
+                                return new GoalBuilding(buildingId, false);
+                            }
+                            if (amountOnPlanet < 1
+                                    && buildingDummy.getBuildingType() == BuildingType.SPECIAL_BUILDING
+                                    && planet.getBuildingsAmount() >= 7) {
+                                return new GoalBuilding(buildingId, false);
+                            }
+                        }
+                    }
+                    if (buildingDummy.getBuildingType() == BuildingType.DEFENCE_BUILDING
                             && planet.getBuildingsAmount() < 10) {
                         continue;
                     }
@@ -144,6 +161,16 @@ public class TwoWaysHardBot extends Bot {
         }
         if (building instanceof UnitBuilding) {
             ((UnitBuilding) building).setPath(new Random().nextBoolean());
+        }
+    }
+
+    @Override
+    protected void onTickCallback() {
+        super.onTickCallback();
+        long time = System.currentTimeMillis();
+        if (time - mLastTickTime > ADDITION_INCOME_TIME) {
+            mLastTickTime = time;
+            mBotPlayer.incomeTime();
         }
     }
 }

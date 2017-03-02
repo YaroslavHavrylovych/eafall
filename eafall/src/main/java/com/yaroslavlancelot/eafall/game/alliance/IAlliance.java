@@ -28,8 +28,11 @@ public interface IAlliance {
     /** returns all buildings ids without upgrades */
     SortedSet<Integer> getBuildingsIds();
 
-    /** returns all buildings ids without upgrades */
+    /** returns all units ids without upgrades */
     SortedSet<Integer> getUnitsIds();
+
+    /** returns all movable only units ids without upgrades */
+    SortedSet<Integer> getMovableUnitsIds();
 
     int getBuildingCost(BuildingId buildingId);
 

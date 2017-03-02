@@ -26,7 +26,8 @@
     <string name="tutorial_description_create_building_2">Сейчас время создать другое строение</string>
     <string name="tutorial_description_building_settings">Нажмите на кнопку, чтобы открыть настройки строения</string>
     <string name="tutorial_description_hide">Нажмите на свободное место, чтобы скрыть попап</string>
-    <string name="tutorial_description_suppressor_usage">Если Вы проигрываете,\nто сделайте затяжной клик на Вашу планету,\nэто вызовет подавитель</string>
+    <string name="tutorial_description_suppressor_usage">Ксли сделаете затяжной-клик на Вашу планету,\nэто вызовет Подавитель</string>
+    <string name="tutorial_description_do_not_forget">Не забудьте про эту возможность!</string>
     <string name="tutorial_description_suppressor_description">Подавитель уничтожит всех противников\nна вашей стороне игрового поля</string>
     <string name="tutorial_task">Ваша задача выжить оставшееся время\nУдачи!</string>
     <!-- / Tutorial -->
@@ -96,11 +97,9 @@
     <string name="game_sounds">Звуки игры</string>
     <string name="game_sounds_on">Включенные</string>
     <string name="game_sounds_off">Отключены</string>
-    <string name="game_sounds_volume">Громкость</string>
     <string name="music">Музыка</string>
     <string name="music_on">Включена</string>
     <string name="music_off">Вимкена</string>
-    <string name="music_volume">Громкость</string>
     <string name="category_sounds">Звук</string>
     <string name="category_other">Другое</string>
 
@@ -223,9 +222,9 @@
     <string name="earth_artifact_description">Священный артефакт Повстанцев\nнайденный в недрах Земли.\nДобавляет 10\u0025 к здоровью юнита.</string>
     <string name="space_material_description">Мощный артефакт Имперцев, изобретенный их учеными.\nДает 10\u0025 шанс избежать повреждений.</string>
     <string name="king_of_snakes_description">Ценный артефакт Мутантов,\nбыл найден в открытом космосе.\n30\u0025 увеличение повреждений от юнита.</string>
-    <string name="municipality_description">40\u0025 увеличение дохода от первого строения. \nКаждое следующее строение увеличивает доход на 1\u0025.</string>
-    <string name="caches_description">40\u0025 увеличение дохода от первого строения. \nКаждое следующее строение увеличивает доход на 1\u0025.</string>
-    <string name="reptile_city_description">40\u0025 увеличение дохода от первого строения. \nКаждое следующее строение увеличивает доход на 1\u0025.</string>
+    <string name="municipality_description">40\u0025 увеличение дохода от первого строения. \nКаждое следующее строение увеличивает доход на 5\u0025.</string>
+    <string name="caches_description">40\u0025 увеличение дохода от первого строения. \nКаждое следующее строение увеличивает доход на 5\u0025.</string>
+    <string name="reptile_city_description">40\u0025 увеличение дохода от первого строения. \nКаждое следующее строение увеличивает доход на 5\u0025.</string>
     <!-- / Descriptions -->
     <!-- / Description popup -->
 
@@ -258,16 +257,16 @@
     <!-- / Guide campaign -->
 
     <!-- plot -->
-    <string name="campaign_demo_plot1">20 лютого… як сніг на голову./:Макож оголосив війну і напав одразу ж. Вимог не було./:Ми будемо захищатись…</string>
-    <string name="campaign_demo_plot2">27 лютого, зявляється підкріплення, Дажбог./:Атакуються наша кораблі. Додаткової інформації немає…</string>
-    <string name="campaign_demo_plot3">16 березня, Чорнобого ще один ворог./:Оголошуємо мобілізацію, ситуація невідома і, здається, неконтрольована./:Потрібно підрахувати резерв і приготуватись до затяжної кампанії.</string>
-    <string name="campaign_demo_plot4">18 березня, почувши про напади на Ладу, одразу було вислано підкріплення./:Навіть якщо весь всесвіт стане проти нас, ми невідступимо./:В корінь потрібно підсікати таки напади і відразу.</string>
-    <string name="campaign_demo_plot5">24 березня, отримали напад одразу від двох: Сімаргл і Велес/:Лада відтягла Велеса на себе, що ж, в бій</string>
-    <string name="campaign_demo_plot6">24 березня, Сварога було атаковано вдвох, як низько./: Відтягли велеса, тепер наш час повренути борг.</string>
-    <string name="campaign_demo_plot7">27 березня, атака збоку Стрибога./:В цей же час на терени Лади вторгся Марог.</string>
-    <string name="campaign_demo_plot8">27 березня, Марог/:Сили вже закінчують, але ми зможемо./:По нашим даним Сварог перемагає і Марог останній союзник агресії./:Здається це кінець війні.</string>
-    <string name="campaign_demo_plot9">2 квітня, день зміни порядків./:Єдиний невтягнути у війну Ярило, вторгся на нашу територію./:Це наймогутніший військовий обєкт наразі, ми не встоємо.:/Займаємо глуху оборну і сподіваємось, що Лада прийде вчасно… або помститься за нас.</string>
-    <string name="campaign_demo_plot10">11 квітня, Сварог пав./:Ми не маємо морального права зупинитись, якщо не нападемо ми, то нападуть на нас./:Світ вже ніколи не відновиться.</string>
+    <string name="campaign_demo_plot1">20 февраля.\nНачало./:Ваша задача уничтожить противника.</string>
+    <string name="campaign_demo_plot2">27 февраля.\nапас./:Ваша задача выиграть в ограниченное время.</string>
+    <string name="campaign_demo_plot3">16 марта.\nСхроны ./: Ваша задача собрать 1500 тонн кислорода.</string>
+    <string name="campaign_demo_plot4">18 марта.\nСоюзник./:Ваша задача выиграть противника.</string>
+    <string name="campaign_demo_plot5">24 марта.\nВозобновление./:Ваша задача выиграть в ограниченное время.</string>
+    <string name="campaign_demo_plot6">24 марта.\nОбучение./:Ваша задача выиграть в ограниченное время.</string>
+    <string name="campaign_demo_plot7">27 марта.\nГорнило боя./: Ваша задача уничтожить противника.</string>
+    <string name="campaign_demo_plot8">27 марта.\nПовстанец./: Ваша задача уничтожить противника.</string>
+    <string name="campaign_demo_plot9">2 апреля.\nЛицо войны./:Ваша задача продержаться определенное время.</string>
+    <string name="campaign_demo_plot10">11 апреля.\nКульминация./:Ваша задача выиграть противника.</string>
     <!-- /plot -->
     <!-- info -->
     <string name="ninth_mission_defence_building">Противником создано защитное сооружение!</string>

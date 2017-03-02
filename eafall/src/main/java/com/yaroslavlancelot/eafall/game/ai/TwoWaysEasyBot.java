@@ -70,8 +70,11 @@ public class TwoWaysEasyBot extends Bot {
                 if (amountOnPlanet < buildingDummy.getAmountLimit()) {
                     //we could build special building only if there is a lot of other buildings
                     if ((buildingDummy.getBuildingType() == BuildingType.SPECIAL_BUILDING
-                            || buildingDummy.getBuildingType() == BuildingType.WEALTH_BUILDING
-                            || buildingDummy.getBuildingType() == BuildingType.DEFENCE_BUILDING)
+                            || buildingDummy.getBuildingType() == BuildingType.WEALTH_BUILDING)
+                            && planet.getBuildingsAmount() <= 3) {
+                        continue;
+                    }
+                    if (buildingDummy.getBuildingType() == BuildingType.DEFENCE_BUILDING
                             && planet.getBuildingsAmount() < 10) {
                         continue;
                     }

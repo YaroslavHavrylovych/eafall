@@ -17,7 +17,7 @@ import de.greenrobot.event.EventBus;
 public class SecondMissionActivity extends BaseTutorialActivity {
     private int mCreatedBuildingsAmount;
 
-    @SuppressWarnings("Unused")
+    @SuppressWarnings("unused")
     public void onEvent(final BuildingsAmountChangedEvent event) {
         if (PlayersHolder.getPlayer(event.getPlayerName()).getControlType().bot()) {
             return;

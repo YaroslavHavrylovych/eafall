@@ -61,12 +61,12 @@ public class SettingsFragment extends Fragment {
                 (int) getResources().getDimension(R.dimen.settings_title_text)));
         //background music volume
         mMusicVolume = (SettingsVolume) view.findViewById(R.id.music_volume);
-        mMusicVolume.setTitle(R.string.music_volume);
+        mMusicVolume.setTitle(R.string.music);
         mMusicVolume.initSettingsVolume(KEY_MUSIC, KEY_MUSIC_VOLUME,
                 R.string.music_on, R.string.music_off);
         //game sound volume
         mSoundVolume = (SettingsVolume) view.findViewById(R.id.sound_volume);
-        mSoundVolume.setTitle(R.string.game_sounds_volume);
+        mSoundVolume.setTitle(R.string.game_sounds);
         mSoundVolume.initSettingsVolume(KEY_SOUND, KEY_SOUND_VOLUME,
                 R.string.game_sounds_on, R.string.game_sounds_off);
         //dev mode

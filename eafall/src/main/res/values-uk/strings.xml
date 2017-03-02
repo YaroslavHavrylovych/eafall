@@ -26,7 +26,8 @@
     <string name="tutorial_description_create_building_2">Зараз час створити інший будинок</string>
     <string name="tutorial_description_building_settings">Натисніть кнопку, щоб відкрити налаштування будинку</string>
     <string name="tutorial_description_hide">Натисніть на вільне місце, щоб сховати попап</string>
-    <string name="tutorial_description_suppressor_usage">Якщо Ви програєте, то зробіть затяжний клік на Вашу планету\nце викличе заглучувач</string>
+    <string name="tutorial_description_suppressor_usage">Якщо зробити затяжний-клік на Вашу планету,\nто це викличе Заглушувач</string>
+    <string name="tutorial_description_do_not_forget">Не забудьте про це!</string>
     <string name="tutorial_description_suppressor_description">Заглучувач знищить всіх супротивників\nна ваші частині ігрового поля</string>
     <string name="tutorial_task">Ваша задача вижити решту часу\nЩасти!</string>
     <!-- /tutorial -->
@@ -96,11 +97,9 @@
     <string name="game_sounds">Звуки гри</string>
     <string name="game_sounds_on">Увімкнені</string>
     <string name="game_sounds_off">Вимкнені</string>
-    <string name="game_sounds_volume">Гучність</string>
     <string name="music">Музика</string>
     <string name="music_on">Увімкнена</string>
     <string name="music_off">Вимкена</string>
-    <string name="music_volume">Гучність</string>
     <string name="category_sounds">Звук</string>
     <string name="category_other">Інше</string>
 
@@ -223,9 +222,9 @@
     <string name="earth_artifact_description">Священий артефакт Мутантів знайдений в надрах Землі.\nДодає 10\u0025 до здоров’я юніта.</string>
     <string name="space_material_description">Могутній артефакт Імперців, винайдений їх вченими.\nДає 10\u0025 шанс уникнути пошкоджень.</string>
     <string name="king_of_snakes_description">Цінний артефакт Повстанців,\nбув знайдений у відкритому космосі.\n30\u0025 збільшення пошкодження від юніта.</string>
-    <string name="municipality_description">На 40\u0025 збільшення доходу від першого будинку.\nКожен наступний будинок додає 1\u0025 до доходу.</string>
-    <string name="caches_description">На 40\u0025 збільшення доходу від першого будинку.\nКожен наступний будинок додає 1\u0025 до доходу.</string>
-    <string name="reptile_city_description">На 40\u0025 збільшення доходу від першого будинку.\nКожен наступний будинок додає 1\u0025 до доходу.</string>
+    <string name="municipality_description">На 40\u0025 збільшення доходу від першого будинку.\nКожен наступний будинок додає 5\u0025 до доходу.</string>
+    <string name="caches_description">На 40\u0025 збільшення доходу від першого будинку.\nКожен наступний будинок додає 5\u0025 до доходу.</string>
+    <string name="reptile_city_description">На 40\u0025 збільшення доходу від першого будинку.\nКожен наступний будинок додає 5\u0025 до доходу.</string>
     <!-- /descriptions -->
     <!-- /description popup -->
 
@@ -258,16 +257,16 @@
     <!-- /guide campaign -->
 
     <!-- plot -->
-    <string name="campaign_demo_plot1">20 лютого… як сніг на голову./:Макож оголосив війну і напав одразу ж. Вимог не було./:Ми будемо захищатись…</string>
-    <string name="campaign_demo_plot2">27 лютого, з\'являється підкріплення, Дажбог./:Атакуються наша кораблі. Додаткової інформації немає…</string>
-    <string name="campaign_demo_plot3">16 березня, Чорнобого ще один ворог./:Оголошуємо мобілізацію, ситуація невідома і, здається, неконтрольована./:Потрібно підрахувати резерв і приготуватись до затяжної кампанії.</string>
-    <string name="campaign_demo_plot4">18 березня, почувши про напади на Ладу, одразу було вислано підкріплення./:Навіть якщо весь всесвіт стане проти нас, ми невідступимо./:В корінь потрібно підсікати таки напади і відразу.</string>
-    <string name="campaign_demo_plot5">24 березня, отримали напад одразу від двох: Сімаргл і Велес/:Лада відтягла Велеса на себе, що ж, в бій</string>
-    <string name="campaign_demo_plot6">24 березня, Сварога було атаковано вдвох, як низько./: Відтягли велеса, тепер наш час повренути борг.</string>
-    <string name="campaign_demo_plot7">27 березня, атака збоку Стрибога./:В цей же час на терени Лади вторгся Марог.</string>
-    <string name="campaign_demo_plot8">27 березня, Марог/:Сили вже закінчують, але ми зможемо./:По нашим даним Сварог перемагає і Марог останній союзник агресії./:Здається це кінець війні.</string>
-    <string name="campaign_demo_plot9">2 квітня, день зміни порядків./:Єдиний невтягнути у війну Ярило, вторгся на нашу територію./:Це наймогутніший військовий об\'єкт наразі, ми не встоємо.:/Займаємо глуху оборну і сподіваємось, що Лада прийде вчасно… або помститься за нас.</string>
-    <string name="campaign_demo_plot10">11 квітня, Сварог пав./:Ми не маємо морального права зупинитись, якщо не нападемо ми, то нападуть на нас./:Світ вже ніколи не відновиться.</string>
+    <string name="campaign_demo_plot1">20 лютого.\nПочаток./:Ваша задача знищити супротивника.</string>
+    <string name="campaign_demo_plot2">27 лютого.\nЗапас./:Ваша задача виграти в обмежений час.</string>
+    <string name="campaign_demo_plot3">16 березня.\nСхрони./:Ваша задача зібрати 1500 тон кисню.</string>
+    <string name="campaign_demo_plot4">18 березня.\nСоюзник/:Ваша задача виграти супротивника.</string>
+    <string name="campaign_demo_plot5">24 березня.\nОговтання./:Ваша задача виграти в обмежений час.</string>
+    <string name="campaign_demo_plot6">24 березня.\nВишкіл./:Ваша задача виграти в обмежений час.</string>
+    <string name="campaign_demo_plot7">27 березня.\nГорнило бою./:Ваша задача знищити супротивника.</string>
+    <string name="campaign_demo_plot8">27 березня.\nПовстанець./:Ваша задача знищити супротивника.</string>
+    <string name="campaign_demo_plot9">2 квітня.\nОбличчя війни./:Ваша задача протриматись зазначений час.</string>
+    <string name="campaign_demo_plot10">11 квітня.\nКульмінація./:Ваша задача виграти супротивника.</string>
     <!-- /plot -->
     <!-- info -->
     <string name="ninth_mission_defence_building">Супротивником створена захисна споруда!</string>

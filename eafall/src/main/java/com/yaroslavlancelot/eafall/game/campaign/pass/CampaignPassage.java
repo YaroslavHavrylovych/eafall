@@ -13,6 +13,12 @@ public interface CampaignPassage {
     /** mark that one more mission/campaign has been passed */
     void markNewCampaignPassed();
 
+    /** return the last played mission */
+    int getLastPlayedMission();
+
+    /** save the last played mission id */
+    void setLastPlayedMission(int id);
+
     /**
      * checks if campaign was passed
      *

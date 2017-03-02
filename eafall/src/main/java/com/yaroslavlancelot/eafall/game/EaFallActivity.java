@@ -26,6 +26,7 @@ import com.yaroslavlancelot.eafall.general.EbSubscribersHolder;
 import com.yaroslavlancelot.eafall.general.SelfCleanable;
 import com.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 
+import org.andengine.audio.music.exception.MusicReleasedException;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.AudioOptions;
@@ -37,6 +38,8 @@ import org.andengine.entity.text.Text;
 import org.andengine.entity.util.FPSLogger;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.adt.color.Color;
+
+import timber.log.Timber;
 
 /**
  * Base activity for all activities which has to use AndEngine.
@@ -370,7 +373,11 @@ public abstract class EaFallActivity extends BaseGameActivity {
         mSceneManager.hideSplash();
         mSceneManager.clearSplashScene();
         mResourcesLoader.unloadSplashImages();
-        mBackgroundMusic.playBackgroundMusic();
+        try {
+            mBackgroundMusic.playBackgroundMusic();
+        } catch (MusicReleasedException ex) {
+            Timber.i(ex, "can't release music, it's not good");
+        }
         onShowWorkingScene();
         GameState.setState(GameState.State.RESUMED);
     }

@@ -214,6 +214,9 @@ public class OffenceUnit extends Unit {
     /** remove bonuses which are supposed to die because of passes time */
     private void updateBonuses() {
         synchronized (mBonuses) {
+            if (mBonuses.isEmpty()) {
+                return;
+            }
             Map.Entry<Bonus, Long> entry;
             long currentTime = System.currentTimeMillis();
             for (Iterator<Map.Entry<Bonus, Long>> it = mBonuses.entrySet().iterator(); it.hasNext(); ) {

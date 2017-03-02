@@ -17,6 +17,8 @@ import com.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.SortedSet;
 
@@ -35,16 +37,20 @@ public class NinthMissionActivity extends BaseTutorialActivity {
                         defenceWave();
                         break;
                     }
-                    case 100: {
+                    case 150: {
                         showInfoToast(R.string.ninth_mission_pre_support);
                         break;
                     }
-                    case 60: {
+                    case 140: {
                         wave(5);
                         break;
                     }
-                    case 10: {
-                        wave(10);
+                    case 80: {
+                        wave(13);
+                        break;
+                    }
+                    case 30: {
+                        wave(30);
                         break;
                     }
                 }
@@ -78,23 +84,26 @@ public class NinthMissionActivity extends BaseTutorialActivity {
 
     private void wave(int amountOfUnitPerPath) {
         IPlayer player = getBotPlayer();
-        SortedSet<Integer> unitIds = player.getAlliance().getUnitsIds();
+        List<Integer> unitsIds = new ArrayList<>(player.getAlliance().getMovableUnitsIds());
+        unitsIds.remove(unitsIds.size() - 1);// removing defence unit
         Random random = new Random();
         //top support
         for (int i = 0; i < amountOfUnitPerPath; i++) {
-            int id = unitIds.tailSet(random.nextInt(unitIds.size())).first();
+            int id = unitsIds.get(random.nextInt(unitsIds.size()));
             OffenceUnit unit = createMovableUnit(player, id,
-                    SizeConstants.GAME_FIELD_WIDTH / 2 + ((i - 2) * SizeConstants.UNIT_SIZE + 5),
-                    SizeConstants.GAME_FIELD_HEIGHT * 9 / 10, new TwoWaysUnitPath(false, true));
+                    SizeConstants.GAME_FIELD_WIDTH / 2 + (((i % 10) - 2) * SizeConstants.UNIT_SIZE + 5),
+                    SizeConstants.GAME_FIELD_HEIGHT * 9 / 10 + i / 10 * SizeConstants.UNIT_SIZE,
+                    new TwoWaysUnitPath(false, true));
             IUnitPath path = unit.getUnitPath();
             path.setCurrentPathPoint(path.getTotalPathPoints() - 1);
         }
         //bottom support
         for (int i = 0; i < amountOfUnitPerPath; i++) {
-            int id = unitIds.tailSet(random.nextInt(unitIds.size())).first();
+            int id = unitsIds.get(random.nextInt(unitsIds.size()));
             OffenceUnit unit = createMovableUnit(player, id,
-                    SizeConstants.GAME_FIELD_WIDTH / 2 + ((i - 2) * SizeConstants.UNIT_SIZE + 5),
-                    SizeConstants.GAME_FIELD_HEIGHT / 10, new TwoWaysUnitPath(false, false));
+                    SizeConstants.GAME_FIELD_WIDTH / 2 + (((i % 10) - 2) * SizeConstants.UNIT_SIZE + 5),
+                    SizeConstants.GAME_FIELD_HEIGHT / 10 + i / 10 * SizeConstants.UNIT_SIZE,
+                    new TwoWaysUnitPath(false, false));
             IUnitPath path = unit.getUnitPath();
             path.setCurrentPathPoint(path.getTotalPathPoints() - 1);
         }
