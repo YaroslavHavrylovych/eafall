@@ -12,7 +12,7 @@ import com.yaroslavlancelot.eafall.game.resources.ResourceFactory;
  */
 public class CampaignIntent extends StartableIntent {
     public static final String CAMPAIGN_FILE_NAME_KEY = "campaign_file_name";
-    private static final String DEFAULT_CAMPAIGN = "campaign";
+    public static final String DEFAULT_CAMPAIGN = "campaign";
     public static final String GAME_RESULT_SUCCESS_KEY = "single_player_game_result_key";
     public static final String CAMPAIGN_MISSION_ID_KEY = "campaign_mission_key";
 
