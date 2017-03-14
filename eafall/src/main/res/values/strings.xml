@@ -3,6 +3,7 @@
     <!-- versions -->
     <string name="not_int_demo">Doesn\'t exist in demo version</string>
     <string name="not_implemented">Not implemented</string>
+    <string name="pass_campaign">You need to pass first 4 campaign missions first</string>
     <!-- /versions -->
 
     <!-- game types -->

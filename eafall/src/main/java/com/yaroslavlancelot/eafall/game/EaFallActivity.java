@@ -74,6 +74,10 @@ public abstract class EaFallActivity extends BaseGameActivity {
 
     @Override
     public void onResumeGame() {
+        if (mEngine == null) {
+            finish();
+            return;
+        }
         super.onResumeGame();
         if (mSceneManager.getWorkingScene() != null) {
             mBackgroundMusic.playBackgroundMusic();
@@ -82,6 +86,7 @@ public abstract class EaFallActivity extends BaseGameActivity {
 
     @Override
     public void onPauseGame() {
+        setState(GameState.State.PAUSED);
         super.onPauseGame();
         mBackgroundMusic.pauseBackgroundMusic();
     }

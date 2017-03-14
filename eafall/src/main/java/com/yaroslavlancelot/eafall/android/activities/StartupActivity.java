@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.R;
@@ -14,6 +15,9 @@ import com.yaroslavlancelot.eafall.android.StartableIntent;
 import com.yaroslavlancelot.eafall.android.activities.settings.SettingsActivity;
 import com.yaroslavlancelot.eafall.android.activities.singleplayer.PreGameCustomizationActivity;
 import com.yaroslavlancelot.eafall.game.alliance.mutants.Mutants;
+import com.yaroslavlancelot.eafall.game.campaign.intents.CampaignIntent;
+import com.yaroslavlancelot.eafall.game.campaign.pass.CampaignPassage;
+import com.yaroslavlancelot.eafall.game.campaign.pass.CampaignPassageFactory;
 import com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity;
 import com.yaroslavlancelot.eafall.game.player.IPlayer;
 
@@ -21,6 +25,8 @@ import com.yaroslavlancelot.eafall.game.player.IPlayer;
  * first game activity with menu etc.
  */
 public class StartupActivity extends BaseNonGameActivity {
+    private CampaignPassage mCampaignPassage;
+
     @Override
     public void onBackPressed() {
         StartupActivity.this.finish();
@@ -34,6 +40,9 @@ public class StartupActivity extends BaseNonGameActivity {
         initMultiplayerGameButton(findViewById(R.id.multiplayer_game));
         initSettingsButton(findViewById(R.id.settings));
         initExitButton(findViewById(R.id.exit));
+
+        mCampaignPassage = CampaignPassageFactory.getInstance().getCampaignPassage(
+                CampaignIntent.getPathToCampaign(CampaignIntent.DEFAULT_CAMPAIGN), this);
 
         PreferenceManager.setDefaultValues(EaFallApplication.getContext(), R.xml.preferences, false);
     }
@@ -73,12 +82,17 @@ public class StartupActivity extends BaseNonGameActivity {
         singleGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                Intent intent = PreGameCustomizationActivity.getSinglePlayerIntent(
-                        SinglePlayerGameActivity.class,
-                        Mutants.ALLIANCE_NAME, Mutants.ALLIANCE_NAME,
-                        IPlayer.ControlType.USER_CONTROL_ON_SERVER_SIDE,
-                        IPlayer.ControlType.BOT_CONTROL_ON_SERVER_SIDE);
-                startActivity(intent);
+                if (mCampaignPassage.getPassedCampaignsAmount() < 4) {
+                    Toast.makeText(StartupActivity.this, R.string.pass_campaign, Toast.LENGTH_SHORT)
+                            .show();
+                } else {
+                    Intent intent = PreGameCustomizationActivity.getSinglePlayerIntent(
+                            SinglePlayerGameActivity.class,
+                            Mutants.ALLIANCE_NAME, Mutants.ALLIANCE_NAME,
+                            IPlayer.ControlType.USER_CONTROL_ON_SERVER_SIDE,
+                            IPlayer.ControlType.BOT_CONTROL_ON_SERVER_SIDE);
+                    startActivity(intent);
+                }
             }
         });
     }

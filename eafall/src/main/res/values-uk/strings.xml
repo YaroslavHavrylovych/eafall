@@ -3,7 +3,8 @@
     <!-- versions -->
     <string name="not_int_demo">Не включено в демо версію</string>
     <string name="not_implemented">Не реалізовано</string>
-    <!-- /versions -->
+    <string name="pass_campaign">Спочатку пройдіть перші 4 місії кампанії</string>
+   <!-- /versions -->
 
     <!-- game types -->
     <string name="campaign">КАМПАНІЯ</string>

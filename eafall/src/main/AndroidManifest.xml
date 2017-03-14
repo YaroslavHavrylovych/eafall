@@ -24,33 +24,42 @@
         </activity>
         <activity
             android:name=".game.sandbox.activity.SandboxActivity"
+            android:configChanges="screenSize"
             android:screenOrientation="landscape"/>
         <activity
             android:name=".game.client.thick.single.SinglePlayerGameActivity"
+            android:configChanges="screenSize"
             android:screenOrientation="landscape"/>
         <activity
             android:name=".android.activities.singleplayer.PreGameCustomizationActivity"
+            android:configChanges="screenSize"
             android:screenOrientation="landscape"/>
         <activity
             android:name=".game.campaign.CampaignActivity"
+            android:configChanges="screenSize"
             android:screenOrientation="landscape"/>
         <activity
             android:name=".android.activities.settings.SettingsActivity"
+            android:configChanges="screenSize"
             android:label="@string/settings"
             android:screenOrientation="landscape"/>
 
         <!-- missions -->
         <activity
             android:name=".game.campaign.missions.FirstMissionActivity"
+            android:configChanges="screenSize"
             android:screenOrientation="landscape"/>
         <activity
             android:name=".game.campaign.missions.SecondMissionActivity"
+            android:configChanges="screenSize"
             android:screenOrientation="landscape"/>
         <activity
             android:name=".game.campaign.missions.ThirdMissionActivity"
+            android:configChanges="screenSize"
             android:screenOrientation="landscape"/>
         <activity
             android:name=".game.campaign.missions.NinthMissionActivity"
+            android:configChanges="screenSize"
             android:screenOrientation="landscape"/>
 
         <meta-data

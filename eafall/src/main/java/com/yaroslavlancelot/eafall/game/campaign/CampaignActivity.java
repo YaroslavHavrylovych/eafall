@@ -30,6 +30,7 @@ import com.yaroslavlancelot.eafall.game.mission.CampaignMissionIntent;
 import com.yaroslavlancelot.eafall.game.mission.MissionDetailsLoader;
 import com.yaroslavlancelot.eafall.game.scene.hud.BaseGameHud;
 import com.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
+import com.yaroslavlancelot.eafall.game.touch.TouchHelper;
 import com.yaroslavlancelot.eafall.game.visual.buttons.BackButton;
 import com.yaroslavlancelot.eafall.game.visual.buttons.TextButton;
 import com.yaroslavlancelot.eafall.general.SelfCleanable;
@@ -139,6 +140,8 @@ public class CampaignActivity extends EaFallActivity {
         initHud();
         mScreenId = mCampaignPassage.getLastPlayedMission();
         updateScreen(false);
+        mSceneManager.getWorkingScene().setOnSceneTouchListener(
+                new TouchHelper.SceneTouchListener());
     }
 
     private void initCampaignData() {
