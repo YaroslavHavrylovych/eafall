@@ -22,7 +22,9 @@ public class BaseTutorialActivity extends SinglePlayerGameActivity {
     // ===========================================================
     // Fields
     // ===========================================================
-    /** used to show hints */
+    /**
+     * used to show hints
+     */
     protected ClickOnPointPopup mClickOnPointPopup;
 
     // ===========================================================
@@ -47,6 +49,10 @@ public class BaseTutorialActivity extends SinglePlayerGameActivity {
 
     @Override
     protected void onPopulateWorkingScene(final EaFallScene scene) {
+        if (mEngine == null) {
+            finish();
+            return;
+        }
         super.onPopulateWorkingScene(scene);
         mClickOnPointPopup = new ClickOnPointPopup(mHud, mCamera, getVertexBufferObjectManager());
     }
