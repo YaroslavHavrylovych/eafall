@@ -50,7 +50,7 @@ dependencies {
 }
 
 android {
-    compileSdkVersion compiled_v 
+    compileSdkVersion compiled_v
     buildToolsVersion "25.0.2"
 
     packagingOptions {
@@ -60,6 +60,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion target_v
+        versionCode 102
+        versionName "1.0.2"
         multiDexEnabled true
         testInstrumentationRunner "com.yaroslavlancelot.eafall.test.DefaultInstrumentationTestRunner"
         testApplicationId "com.yaroslavlancelot.eafall.test"
@@ -81,13 +83,10 @@ android {
 
     signingConfigs {
         release {
-            def console = System.console()
-            if (console != null) {
-                storeFile file("keystore/eafall_demo.keystore")
-                storePassword ""
-                keyPassword ""
-                keyAlias ""
-            }
+            storePassword ""
+            keyPassword ""
+            keyAlias ""
+            storeFile file("keystore/eafall_demo.keystore")
         }
     }
 
