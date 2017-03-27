@@ -128,7 +128,7 @@
         <mission_details>
             <name>Svarog</name>
             <game_handler>
-                com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
+                com.yaroslavlancelot.eafall.game.campaign.missions.FourthMissionActivity
             </game_handler>
             <player_alliance>Mutants</player_alliance>
             <player_planet>earth</player_planet>
@@ -150,6 +150,7 @@
         </mission_details>
     </campaign>
 
+    <!-- here we need to hold an attack -->
     <campaign screen="4">
         <name>campaign_demo_tutorial5</name>
         <picture>graphics/images/campaign/missions/screen4.png</picture>
@@ -186,6 +187,7 @@
         </mission_details>
     </campaign>
 
+    <!-- here the way back -->
     <campaign screen="5">
         <name>campaign_demo_tutorial6</name>
         <picture>graphics/images/campaign/missions/screen5.png</picture>

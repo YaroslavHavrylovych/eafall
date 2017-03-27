@@ -17,7 +17,7 @@ import org.andengine.engine.handler.timer.TimerHandler;
  *
  * @author Yaroslav Havrylovych
  */
-public abstract class GameStartCooldown {
+public abstract class TwoPlanetsGameStartCooldown {
     // ===========================================================
     // Constants
     // ===========================================================
@@ -42,7 +42,7 @@ public abstract class GameStartCooldown {
      * @param scene         used to bound maximum zoom
      * @param camera        used for start zoom-in the game
      */
-    public GameStartCooldown(ClientGameHud clientGameHud, EaFallScene scene, EaFallCamera camera) {
+    public TwoPlanetsGameStartCooldown(ClientGameHud clientGameHud, EaFallScene scene, EaFallCamera camera) {
         mClientGameHud = clientGameHud;
         mScene = scene;
         mCamera = camera;

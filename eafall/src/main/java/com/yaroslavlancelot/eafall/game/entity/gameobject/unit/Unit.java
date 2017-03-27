@@ -174,7 +174,6 @@ public abstract class Unit extends GameObject implements
      * WARNING: unit player name have to be assigned before init() triggers
      */
     public void init(float x, float y, IPhysicCreator physicCreator) {
-        //TODO logger was here
         setTag(0);
         IPlayer player = PlayersHolder.getPlayer(mPlayerName);
         mObjectCurrentHealth = mObjectMaximumHealth;
