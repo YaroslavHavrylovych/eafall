@@ -47,8 +47,9 @@ public class FindPathResourcesLoader extends BaseGameObjectsLoader {
         //hud
         SandboxGameHud.loadResource(EaFallApplication.getContext(), textureManager);
         BuildingLessDescriptionPopup.loadResources(EaFallApplication.getContext(), textureManager);
-        //endpoint
+        //sprites
         loadEndPoint(textureManager);
+        loadVisibleArea(textureManager);
     }
 
     @Override
@@ -85,6 +86,14 @@ public class FindPathResourcesLoader extends BaseGameObjectsLoader {
                 StringConstants.KEY_ENDPOINT,
                 textureAtlas, EaFallApplication.getContext(),
                 0, 0, 3, 1);
+        textureAtlas.load();
+    }
+
+    private void loadVisibleArea(TextureManager textureManager) {
+        BitmapTextureAtlas textureAtlas = new BitmapTextureAtlas(textureManager, 150, 150);
+        TextureRegionHolder.addElementFromAssets(
+                StringConstants.KEY_VISIBLE_AREA,
+                textureAtlas, EaFallApplication.getContext(), 0, 0);
         textureAtlas.load();
     }
 

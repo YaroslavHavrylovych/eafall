@@ -45,6 +45,7 @@ public class OffenceUnit extends Unit {
     /** to track health bar visibility, last time unit took damage */
     private volatile long mLastHitTime;
     private long mLastBonusUpdateTime = System.currentTimeMillis();
+    private boolean mUnitCanNotAttack;
 
     /** create unit from appropriate builder */
     public OffenceUnit(OffenceUnitBuilder unitBuilder) {
@@ -67,6 +68,10 @@ public class OffenceUnit extends Unit {
 
     public void setUnitPath(IUnitPath unitPath) {
         mUnitPath = unitPath;
+    }
+
+    public void setUnitCanNotAttack(boolean unitCanAttack) {
+        this.mUnitCanNotAttack = unitCanAttack;
     }
 
     @Override
@@ -254,6 +259,9 @@ public class OffenceUnit extends Unit {
      * false - if the enemy unit not in the range.
      */
     private boolean attackOrMoveIfInRange(GameObject enemy) {
+        if (mUnitCanNotAttack) {
+            return false;
+        }
         // check if we already can attack
         float distanceToTarget = PathHelper.getDistanceBetweenPoints(getX(), getY(),
                 enemy.getX(), enemy.getY())

@@ -13,8 +13,11 @@ import com.yaroslavlancelot.eafall.game.constant.SizeConstants;
 import com.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.EndPointAnimatedSprite;
+import com.yaroslavlancelot.eafall.game.entity.gameobject.VisibleAreaSprite;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.setlectable.selector.SelectorFactory;
+import com.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.OffenceUnit;
+import com.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.MoveBetweenPointsPath;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.implementation.MoveByClickUnitPath;
 import com.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.yaroslavlancelot.eafall.game.player.Player;
@@ -26,12 +29,12 @@ import com.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
-import org.andengine.entity.Entity;
-import org.andengine.entity.IEntity;
 import org.andengine.entity.scene.Scene;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.input.touch.detector.ClickDetector;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
+
+import static com.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.MoveBetweenPointsPath.Point;
 
 /** basic activity to create obstacles for the unit, which has to go from point A to point B */
 public abstract class FindPathMissionActivity extends BaseGameObjectsActivity {
@@ -76,6 +79,8 @@ public abstract class FindPathMissionActivity extends BaseGameObjectsActivity {
 
     protected abstract int getMainUnitId();
 
+    protected abstract void onPopulateEnemies();
+
     @Override
     protected void initWorkingScene() {
         super.initWorkingScene();
@@ -83,6 +88,7 @@ public abstract class FindPathMissionActivity extends BaseGameObjectsActivity {
         initMainUnit(scene);
         initEndpoint(scene);
         initEndConditions(scene);
+        onPopulateEnemies();
     }
 
     @Override
@@ -113,6 +119,21 @@ public abstract class FindPathMissionActivity extends BaseGameObjectsActivity {
     // ===========================================================
     // Methods
     // ===========================================================
+    protected void createEnemy(int key, int[] startPosition, int[] endPosition) {
+        //unit
+        MoveBetweenPointsPath moveBetweenPointsPath =
+                new MoveBetweenPointsPath(new Point(startPosition), new Point(endPosition));
+        Unit unit = createMovableUnit(mSecondPlayer, key,
+                startPosition[0], startPosition[1], moveBetweenPointsPath);
+        //radius
+        VisibleAreaSprite visibleAreaSprite = new VisibleAreaSprite(0, 0,
+                TextureRegionHolder.getRegion(StringConstants.KEY_VISIBLE_AREA), unit,
+                getVertexBufferObjectManager());
+        int size = unit.getViewRadius() * 2;
+        visibleAreaSprite.setSize(size, size);
+        mSceneManager.getWorkingScene().attachChild(visibleAreaSprite);
+    }
+
     private void initEndConditions(final Scene scene) {
         scene.registerUpdateHandler(new TimerHandler(.2f, true, new ITimerCallback() {
             @Override
@@ -162,6 +183,8 @@ public abstract class FindPathMissionActivity extends BaseGameObjectsActivity {
         mMainUnitPath = new MoveByClickUnitPath(position[0], position[1]);
         mMainUnit = createMovableUnit(mFirstPlayer, getMainUnitId(),
                 position[0], position[1], mMainUnitPath);
+        mMainUnit.setUnitCanNotAttack(true);
+        mMainUnit.setHealth(1);
         scene.setClickListener(new ClickDetector.IClickDetectorListener() {
             @Override
             public void onClick(final ClickDetector pClickDetector, final int pPointerID,
