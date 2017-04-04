@@ -68,6 +68,8 @@ public final class StringConstants {
     public static final String KEY_PLANET_EXPLOSION = "graphics/sprites/explosion/explosion_planet.png";
     /** unit explosion animation */
     public static final String KEY_UNIT_EXPLOSION = "graphics/sprites/explosion/explosion_unit.png";
+    /** planet explosion animation */
+    public static final String KEY_ENDPOINT = "graphics/images/end_point.png";
     /** used like key for sun static object */
     public static final String KEY_SUN_HAZE = "sun_key_top";
     /** used like key for sun static object */

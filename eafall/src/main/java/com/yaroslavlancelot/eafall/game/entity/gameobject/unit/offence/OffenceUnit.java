@@ -283,9 +283,12 @@ public class OffenceUnit extends Unit {
         float absDistanceX = Math.abs(distanceX),
                 absDistanceY = Math.abs(distanceY),
                 maxAbsDistance = absDistanceX > absDistanceY ? absDistanceX : absDistanceY;
+        if (maxAbsDistance < getWidth() || maxAbsDistance < getHeight()) {
+            setUnitLinearVelocity(0, 0);
+            return;
+        }
         float ordinateSpeed = mMaxVelocity * distanceX / maxAbsDistance,
                 abscissaSpeed = mMaxVelocity * distanceY / maxAbsDistance;
-
         setUnitLinearVelocity(ordinateSpeed, abscissaSpeed);
     }
 

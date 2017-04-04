@@ -3,14 +3,17 @@ package com.yaroslavlancelot.eafall.game.resources.loaders.game;
 import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.yaroslavlancelot.eafall.game.alliance.IAlliance;
+import com.yaroslavlancelot.eafall.game.constant.StringConstants;
+import com.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.yaroslavlancelot.eafall.game.player.PlayersHolder;
+import com.yaroslavlancelot.eafall.game.popup.GameOverPopup;
 import com.yaroslavlancelot.eafall.game.popup.rolling.description.BuildingLessDescriptionPopup;
-import com.yaroslavlancelot.eafall.game.resources.loaders.game.BaseGameObjectsLoader;
 import com.yaroslavlancelot.eafall.game.scene.hud.SandboxGameHud;
 
 import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.texture.TextureManager;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /**
@@ -44,6 +47,8 @@ public class FindPathResourcesLoader extends BaseGameObjectsLoader {
         //hud
         SandboxGameHud.loadResource(EaFallApplication.getContext(), textureManager);
         BuildingLessDescriptionPopup.loadResources(EaFallApplication.getContext(), textureManager);
+        //endpoint
+        loadEndPoint(textureManager);
     }
 
     @Override
@@ -52,6 +57,7 @@ public class FindPathResourcesLoader extends BaseGameObjectsLoader {
         //hud
         SandboxGameHud.loadFonts(fontManager, textureManager);
         BuildingLessDescriptionPopup.loadFonts(fontManager, textureManager);
+        GameOverPopup.loadFonts(fontManager, textureManager);
     }
 
     @Override
@@ -73,6 +79,14 @@ public class FindPathResourcesLoader extends BaseGameObjectsLoader {
     // ===========================================================
     // Methods
     // ===========================================================
+    private void loadEndPoint(TextureManager textureManager) {
+        BitmapTextureAtlas textureAtlas = new BitmapTextureAtlas(textureManager, 750, 250);
+        TextureRegionHolder.addTiledElementFromAssets(
+                StringConstants.KEY_ENDPOINT,
+                textureAtlas, EaFallApplication.getContext(),
+                0, 0, 3, 1);
+        textureAtlas.load();
+    }
 
     // ===========================================================
     // Inner and Anonymous Classes
