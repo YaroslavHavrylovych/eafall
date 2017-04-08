@@ -222,15 +222,15 @@ public abstract class EaFallActivity extends BaseGameActivity {
         Toast toast =
                 Toast.makeText(EaFallActivity.this, result, showToastEvent.isLongShowedToast()
                         ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT);
-//        if (showToastEvent.isWithoutBackground()) {
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//                toast.getView().setBackgroundColor(getResources()
-//                        .getColor(android.R.color.transparent, getTheme()));
-//            } else {
+        //        if (showToastEvent.isWithoutBackground()) {
+        //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        //                toast.getView().setBackgroundColor(getResources()
+        //                        .getColor(android.R.color.transparent, getTheme()));
+        //            } else {
         toast.getView().setBackgroundColor(getResources()
                 .getColor(android.R.color.transparent));
-//            }
-//        }
+        //            }
+        //        }
         toast.show();
     }
 
@@ -309,6 +309,15 @@ public abstract class EaFallActivity extends BaseGameActivity {
             public void run() {
                 if (runnable != null) {
                     runnable.run();
+                }
+                if (mEngine == null) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            EaFallActivity.this.finish();
+                        }
+                    });
+                    return;
                 }
                 preResourcesLoading();
                 loadResources();

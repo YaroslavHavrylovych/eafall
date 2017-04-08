@@ -107,7 +107,7 @@ public class OffenceUnit extends Unit {
             }
         }
 
-        if (mObjectToAttack == null) {
+        if (mObjectToAttack == null && !mUnitCanNotAttack) {
             mObjectToAttack = enemiesMap.getClosestUnit(mX, mY, mAttackRadius);
             //attack founded enemy
             if (mObjectToAttack != null) {
@@ -259,9 +259,6 @@ public class OffenceUnit extends Unit {
      * false - if the enemy unit not in the range.
      */
     private boolean attackOrMoveIfInRange(GameObject enemy) {
-        if (mUnitCanNotAttack) {
-            return false;
-        }
         // check if we already can attack
         float distanceToTarget = PathHelper.getDistanceBetweenPoints(getX(), getY(),
                 enemy.getX(), enemy.getY())

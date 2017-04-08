@@ -129,7 +129,7 @@ public abstract class FindPathMissionActivity extends BaseGameObjectsActivity {
         VisibleAreaSprite visibleAreaSprite = new VisibleAreaSprite(0, 0,
                 TextureRegionHolder.getRegion(StringConstants.KEY_VISIBLE_AREA), unit,
                 getVertexBufferObjectManager());
-        int size = unit.getViewRadius() * 2;
+        int size = (int) (unit.getViewRadius() * 2.1f);
         visibleAreaSprite.setSize(size, size);
         mSceneManager.getWorkingScene().attachChild(visibleAreaSprite);
     }
