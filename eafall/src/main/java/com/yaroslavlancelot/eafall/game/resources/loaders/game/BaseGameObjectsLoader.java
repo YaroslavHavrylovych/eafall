@@ -54,8 +54,18 @@ public abstract class BaseGameObjectsLoader extends BaseResourceLoader {
                 SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT);
     }
 
+    /**
+     * sets initial units limit. If value less than units buffer (30),
+     * than units buffer (30) would be used instead.
+     *
+     * @param movableUnitsLimit movable units sprites amount.
+     */
     public void setMovableUnitsLimit(int movableUnitsLimit) {
-        mMovableUnitsLimit = movableUnitsLimit;
+        if(movableUnitsLimit > mMovableUnitsBuffer) {
+            mMovableUnitsLimit = movableUnitsLimit;
+        } else {
+            mMovableUnitsLimit = mMovableUnitsBuffer;
+        }
     }
 
     @Override
