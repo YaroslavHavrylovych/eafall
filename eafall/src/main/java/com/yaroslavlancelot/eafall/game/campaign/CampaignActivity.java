@@ -26,6 +26,7 @@ import com.yaroslavlancelot.eafall.game.engine.InstantRotationModifier;
 import com.yaroslavlancelot.eafall.game.engine.MoveByCircleModifier;
 import com.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.setlectable.selector.SelectorFactory;
+import com.yaroslavlancelot.eafall.game.mission.CampaignFindPathMissionIntent;
 import com.yaroslavlancelot.eafall.game.mission.CampaignMissionIntent;
 import com.yaroslavlancelot.eafall.game.mission.MissionDetailsLoader;
 import com.yaroslavlancelot.eafall.game.scene.hud.BaseGameHud;
@@ -354,8 +355,14 @@ public class CampaignActivity extends EaFallActivity {
         mResourcesLoader.unloadImages(getTextureManager());
         SelfCleanable.clearMemory();
         mCampaignPassage.setLastPlayedMission(mScreenId);
-        StartableIntent campaignIntent = new CampaignMissionIntent(getMissionActivity(missionData),
-                missionData, mCampaignFileName, mScreenId);
+        StartableIntent campaignIntent;
+        if (mScreenId == 3 || mScreenId == 5) { //those are not usual missions
+            campaignIntent = new CampaignFindPathMissionIntent(getMissionActivity(missionData),
+                    missionData, mCampaignFileName, mScreenId);
+        } else {
+            campaignIntent = new CampaignMissionIntent(getMissionActivity(missionData),
+                    missionData, mCampaignFileName, mScreenId);
+        }
         campaignIntent.start(this);
     }
 

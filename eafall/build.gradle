@@ -4,7 +4,7 @@ apply plugin: 'kotlin-android'
 
 import groovy.swing.SwingBuilder
 
-int target_v = 22
+int target_v = 25
 int compiled_v = 25
 
 buildscript {
@@ -103,27 +103,29 @@ android {
     }
 }
 
-task askForPasswords << {
-    def cons = System.console()
-    def storePass, keyPass, alias
-    if (cons == null) {
-        keyPass = readStringInDialog("Enter a key password", "Please enter it here")
-        alias = readStringInDialog("Enter your alias", "Please enter it here")
-        storePass = readStringInDialog("Enter a keystore password", "Please enter it here")
-    } else {
-        keyPass = new String(cons.readPassword("\n\$ Enter key password: "))
-        alias = cons.readLine("\n\$ Enter alias name: ")
-        storePass = new String(cons.readPassword("\n\$ Enter keystore password: "))
-    }
+task askForPasswords {
+    doLast {
+        def cons = System.console()
+        def storePass, keyPass, alias
+        if (cons == null) {
+            keyPass = readStringInDialog("Enter a key password", "Please enter it here")
+            alias = readStringInDialog("Enter your alias", "Please enter it here")
+            storePass = readStringInDialog("Enter a keystore password", "Please enter it here")
+        } else {
+            keyPass = new String(cons.readPassword("\n\$ Enter key password: "))
+            alias = cons.readLine("\n\$ Enter alias name: ")
+            storePass = new String(cons.readPassword("\n\$ Enter keystore password: "))
+        }
 
-    if (keyPass == null || alias == null || storePass == null ||
-            keyPass.isEmpty() || alias.isEmpty() || storePass.isEmpty()) {
-        throw new InvalidUserDataException("You must enter both passwords and an alias to proceed")
-    }
+        if (keyPass == null || alias == null || storePass == null ||
+                keyPass.isEmpty() || alias.isEmpty() || storePass.isEmpty()) {
+            throw new InvalidUserDataException("You must enter both passwords and an alias to proceed")
+        }
 
-    android.signingConfigs.release.storePassword = storePass
-    android.signingConfigs.release.keyPassword = keyPass
-    android.signingConfigs.release.keyAlias = alias
+        android.signingConfigs.release.storePassword = storePass
+        android.signingConfigs.release.keyPassword = keyPass
+        android.signingConfigs.release.keyAlias = alias
+    }
 }
 
 tasks.whenTaskAdded { theTask ->

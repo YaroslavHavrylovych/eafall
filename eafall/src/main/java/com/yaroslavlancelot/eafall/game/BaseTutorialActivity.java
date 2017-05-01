@@ -4,7 +4,7 @@ import android.view.MotionEvent;
 
 import com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity;
 import com.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
-import com.yaroslavlancelot.eafall.game.campaign.missions.ClickOnPointPopup;
+import com.yaroslavlancelot.eafall.game.campaign.missions.utils.ClickOnPointPopup;
 
 import org.andengine.entity.IEntity;
 import org.andengine.input.touch.TouchEvent;

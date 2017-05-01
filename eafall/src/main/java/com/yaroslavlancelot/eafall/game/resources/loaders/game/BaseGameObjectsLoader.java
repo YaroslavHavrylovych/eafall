@@ -36,6 +36,8 @@ import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtla
 import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
+import timber.log.Timber;
+
 /**
  * Loads game resources excluding buildings, the star and planets.
  *
@@ -161,8 +163,7 @@ public abstract class BaseGameObjectsLoader extends BaseResourceLoader {
                         BitmapTextureAtlas>(1, 1, 1));
                 build = true;
             } catch (ITextureAtlasBuilder.TextureAtlasBuilderException e) {
-                //TODO is it possible?
-                //TODO logger was here
+                Timber.e(e, "can't load base game object assets (buildable)");
             }
         } while (!build);
         buildableTextureAtlas.load();

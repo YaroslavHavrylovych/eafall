@@ -45,6 +45,7 @@ public class OffenceUnit extends Unit {
     /** to track health bar visibility, last time unit took damage */
     private volatile long mLastHitTime;
     private long mLastBonusUpdateTime = System.currentTimeMillis();
+    private boolean mUnitCanNotAttack;
 
     /** create unit from appropriate builder */
     public OffenceUnit(OffenceUnitBuilder unitBuilder) {
@@ -67,6 +68,10 @@ public class OffenceUnit extends Unit {
 
     public void setUnitPath(IUnitPath unitPath) {
         mUnitPath = unitPath;
+    }
+
+    public void setUnitCanNotAttack(boolean unitCanAttack) {
+        this.mUnitCanNotAttack = unitCanAttack;
     }
 
     @Override
@@ -102,7 +107,7 @@ public class OffenceUnit extends Unit {
             }
         }
 
-        if (mObjectToAttack == null) {
+        if (mObjectToAttack == null && !mUnitCanNotAttack) {
             mObjectToAttack = enemiesMap.getClosestUnit(mX, mY, mAttackRadius);
             //attack founded enemy
             if (mObjectToAttack != null) {
@@ -283,9 +288,12 @@ public class OffenceUnit extends Unit {
         float absDistanceX = Math.abs(distanceX),
                 absDistanceY = Math.abs(distanceY),
                 maxAbsDistance = absDistanceX > absDistanceY ? absDistanceX : absDistanceY;
+        if (maxAbsDistance < getWidth() || maxAbsDistance < getHeight()) {
+            setUnitLinearVelocity(0, 0);
+            return;
+        }
         float ordinateSpeed = mMaxVelocity * distanceX / maxAbsDistance,
                 abscissaSpeed = mMaxVelocity * distanceY / maxAbsDistance;
-
         setUnitLinearVelocity(ordinateSpeed, abscissaSpeed);
     }
 

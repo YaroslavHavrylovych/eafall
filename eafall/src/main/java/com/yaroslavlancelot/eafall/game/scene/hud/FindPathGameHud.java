@@ -37,7 +37,7 @@ import java.util.List;
 import de.greenrobot.event.EventBus;
 
 /**
- * Custom Sandbox HUD.
+ * Custom HUD for games, where your unit have to reach the end-point to win.
  * <br/>
  * Customized to handle some not {@link HUD} operations:
  * <ul>
@@ -48,11 +48,10 @@ import de.greenrobot.event.EventBus;
  *
  * @author Yaroslav Havrylovych
  */
-public abstract class SandboxGameHud extends BaseGameHud {
+public class FindPathGameHud extends BaseGameHud {
     // ===========================================================
     // Constants
     // ===========================================================
-    private static final String TAG = SandboxGameHud.class.getCanonicalName();
 
     // ===========================================================
     // Fields
@@ -71,7 +70,6 @@ public abstract class SandboxGameHud extends BaseGameHud {
     // ===========================================================
     // Methods
     // ===========================================================
-    protected abstract int getCurrentUnitId();
 
     @Override
     public void attachChild(final IEntity pEntity) throws IllegalStateException {
@@ -87,8 +85,6 @@ public abstract class SandboxGameHud extends BaseGameHud {
     public void initHudElements(Camera camera, VertexBufferObjectManager vboManager,
                                 MissionConfig missionConfig) {
         SpriteGroupHolder.attachSpriteGroups(this, BatchingKeys.BatchTag.GAME_HUD.value());
-        //menu
-        initMainMenu(vboManager);
         //game values (oxygen, offence units limit, time)
         for (final IPlayer player : PlayersHolder.getInstance().getElements()) {
             boolean left = player.getName().equals(SandboxIntent.FIRST_PLAYER_NAME);
@@ -101,22 +97,6 @@ public abstract class SandboxGameHud extends BaseGameHud {
 
     private void initPopups(Camera camera, VertexBufferObjectManager vboManager) {
         RollingPopupManager.init(this, camera, vboManager);
-        //description
-        IRollingPopup popup = new SandboxDescriptionPopup(this, camera, vboManager);
-        RollingPopupManager.getInstance().addPopup(SandboxDescriptionPopup.KEY, popup);
-        //constructions button
-        ConstructionPopupButton button = new ConstructionPopupButton(vboManager);
-        button.setOnClickListener(new ButtonSprite.OnClickListener() {
-            @Override
-            public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                EventBus.getDefault().post(new UnitByBuildingDescriptionShowEvent(
-                        BuildingId.makeId((getCurrentUnitId() / 10) * 10, getCurrentUnitId() % 10),
-                        SandboxIntent.FIRST_PLAYER_NAME));
-                RollingPopupManager.getInstance().getPopup(SandboxDescriptionPopup.KEY).triggerPopup();
-            }
-        });
-        attachChild(button);
-        registerTouchArea(button);
     }
 
     private void initMovableUnitsLimit(IPlayer player, List<HudGameValue> list, float x,
@@ -138,20 +118,6 @@ public abstract class SandboxGameHud extends BaseGameHud {
         list.add(gameValue);
     }
 
-    /** attaches main menu buttons to the scene and init`s click listener */
-    private void initMainMenu(VertexBufferObjectManager objectManager) {
-        MenuPopupButton menuButton = new MenuPopupButton(objectManager);
-        attachChild(menuButton);
-        menuButton.setOnClickListener(new ButtonSprite.OnClickListener() {
-            @Override
-            public void onClick(final ButtonSprite pButtonSprite, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-                RollingPopupManager.getInstance().getPopup(MenuPopup.KEY).showPopup();
-            }
-        });
-        registerTouchArea(menuButton);
-    }
-
-    //we could remove everything but units amount labels from here
     public static void loadResource(Context context, TextureManager textureManager) {
         int padding = SizeConstants.BETWEEN_TEXTURES_PADDING;
         int biggestSide = 112;

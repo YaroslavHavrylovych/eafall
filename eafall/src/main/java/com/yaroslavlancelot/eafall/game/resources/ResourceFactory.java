@@ -2,6 +2,7 @@ package com.yaroslavlancelot.eafall.game.resources;
 
 import com.yaroslavlancelot.eafall.game.resources.loaders.campaign.CampaignResourceLoader;
 import com.yaroslavlancelot.eafall.game.resources.loaders.game.ClientResourcesLoader;
+import com.yaroslavlancelot.eafall.game.resources.loaders.game.FindPathResourcesLoader;
 import com.yaroslavlancelot.eafall.game.sandbox.resources.SandboxResourcesLoader;
 
 /** return game resources loader instance */
@@ -16,11 +17,13 @@ public class ResourceFactory {
             return new CampaignResourceLoader();
         } else if (typeResourceLoader == TypeResourceLoader.SANDBOX) {
             return new SandboxResourcesLoader();
+        } else if(typeResourceLoader == TypeResourceLoader.FIND_PATH) {
+            return new FindPathResourcesLoader();
         }
         return new ClientResourcesLoader();
     }
 
     public enum TypeResourceLoader {
-        CLIENT, CAMPAIGN, SANDBOX
+        CLIENT, CAMPAIGN, SANDBOX, FIND_PATH
     }
 }

@@ -1,4 +1,4 @@
-package com.yaroslavlancelot.eafall.game.campaign.missions;
+package com.yaroslavlancelot.eafall.game.campaign.missions.utils;
 
 import android.content.Context;
 import android.graphics.Color;
