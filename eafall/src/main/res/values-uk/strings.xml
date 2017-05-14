@@ -270,6 +270,7 @@
     <string name="campaign_demo_plot10">11 квітня.\nКульмінація./:Ваша задача виграти супротивника.</string>
     <!-- /plot -->
     <!-- info -->
+    <string name="find_path_mission_hint">Вам потрібно дістатись точки відправлення.\nНатисніть на екран для початку руху.</string>
     <string name="ninth_mission_defence_building">Супротивником створена захисна споруда!</string>
     <string name="ninth_mission_pre_support">Отримані дані про можливе підсилення ворога…</string>
     <string name="ninth_mission_support">Підмога прибула до ворога!</string>

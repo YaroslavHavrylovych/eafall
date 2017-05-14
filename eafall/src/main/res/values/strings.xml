@@ -270,6 +270,7 @@
     <string name="campaign_demo_plot10">April 11.\nThe culmination./:Your task is to destroy the enemy.</string>
     <!-- /plot -->
     <!-- info -->
+    <string name="find_path_mission_hint">You need to reach an end point.\nClick on the screen on to move.</string>
     <string name="ninth_mission_defence_building">The defence building has been created by your opponent!</string>
     <string name="ninth_mission_pre_support">Your opponent can get a support very soon…</string>
     <string name="ninth_mission_support">Your opponent support is here!</string>

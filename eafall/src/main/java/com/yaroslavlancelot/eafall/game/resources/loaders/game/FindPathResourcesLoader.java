@@ -90,10 +90,13 @@ public class FindPathResourcesLoader extends BaseGameObjectsLoader {
     }
 
     private void loadVisibleArea(TextureManager textureManager) {
-        BitmapTextureAtlas textureAtlas = new BitmapTextureAtlas(textureManager, 150, 150);
+        BitmapTextureAtlas textureAtlas = new BitmapTextureAtlas(textureManager, 300, 450);
         TextureRegionHolder.addElementFromAssets(
                 StringConstants.KEY_VISIBLE_AREA,
                 textureAtlas, EaFallApplication.getContext(), 0, 0);
+        TextureRegionHolder.addElementFromAssets(
+                StringConstants.KEY_BIGGER_VISIBLE_AREA,
+                textureAtlas, EaFallApplication.getContext(), 0, 150);
         textureAtlas.load();
     }
 

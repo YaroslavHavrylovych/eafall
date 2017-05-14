@@ -270,6 +270,7 @@
     <string name="campaign_demo_plot10">11 апреля.\nКульминация./:Ваша задача выиграть противника.</string>
     <!-- /plot -->
     <!-- info -->
+    <string name="find_path_mission_hint">Вам нужно добраться до точки отправления.\nНажмите на экран для начала движения.</string>
     <string name="ninth_mission_defence_building">Противником создано защитное сооружение!</string>
     <string name="ninth_mission_pre_support">Полученные данные о возможном усиления врага…</string>
     <string name="ninth_mission_support">Подспорье прибыло к врагу!</string>

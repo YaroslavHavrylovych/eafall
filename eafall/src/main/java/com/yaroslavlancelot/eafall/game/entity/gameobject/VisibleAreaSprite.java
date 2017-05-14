@@ -26,10 +26,11 @@ public class VisibleAreaSprite extends Sprite {
     // Constructors
     // ===========================================================
     public VisibleAreaSprite(int x, int y,
+                             int width, int height,
                              ITextureRegion textureRegion,
                              IEntity unit,
                              VertexBufferObjectManager vboManager) {
-        super(x, y, textureRegion, vboManager);
+        super(x, y, width, height, textureRegion, vboManager);
         registerEntityModifier(new InstantRotationModifier(15));
         mUnit = unit;
     }

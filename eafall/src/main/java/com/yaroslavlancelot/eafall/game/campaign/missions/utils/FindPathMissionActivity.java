@@ -149,11 +149,17 @@ public abstract class FindPathMissionActivity extends BaseGameObjectsActivity {
         Unit unit = createMovableUnit(mSecondPlayer, key,
                 initPosition[0], initPosition[1], moveBetweenPointsPath);
         //radius
-        VisibleAreaSprite visibleAreaSprite = new VisibleAreaSprite(0, 0,
-                TextureRegionHolder.getRegion(StringConstants.KEY_VISIBLE_AREA), unit,
-                getVertexBufferObjectManager());
         int size = (int) (unit.getViewRadius() * 2.1f);
-        visibleAreaSprite.setSize(size, size);
+        VisibleAreaSprite visibleAreaSprite;
+        if(size > 400) {
+            visibleAreaSprite = new VisibleAreaSprite(0, 0, size, size,
+                    TextureRegionHolder.getRegion(StringConstants.KEY_BIGGER_VISIBLE_AREA), unit,
+                    getVertexBufferObjectManager());
+        } else {
+            visibleAreaSprite = new VisibleAreaSprite(0, 0, size, size,
+                    TextureRegionHolder.getRegion(StringConstants.KEY_VISIBLE_AREA), unit,
+                    getVertexBufferObjectManager());
+        }
         mSceneManager.getWorkingScene().attachChild(visibleAreaSprite);
     }
 
