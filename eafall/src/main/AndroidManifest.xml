@@ -64,6 +64,10 @@
             android:configChanges="screenSize"
             android:screenOrientation="landscape"/>
         <activity
+            android:name=".game.campaign.missions.SixthMissionActivity"
+            android:configChanges="screenSize"
+            android:screenOrientation="landscape"/>
+        <activity
             android:name=".game.campaign.missions.NinthMissionActivity"
             android:configChanges="screenSize"
             android:screenOrientation="landscape"/>

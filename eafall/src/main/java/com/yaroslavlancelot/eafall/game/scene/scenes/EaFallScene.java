@@ -7,6 +7,7 @@ import com.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.yaroslavlancelot.eafall.game.touch.GameSceneHandler;
 import com.yaroslavlancelot.eafall.game.touch.ICameraHandler;
 
+import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.AutoParallaxBackground;
 import org.andengine.entity.scene.background.ParallaxBackground;
@@ -26,7 +27,6 @@ import java.util.Random;
  * @author Yaroslav Havrylovych
  */
 public class EaFallScene extends Scene {
-    private static final String TAG = EaFallScene.class.getCanonicalName();
     private GameSceneHandler mGameSceneHandler;
     private boolean mParallax;
     private Sprite mBackgroundSprite;
@@ -46,6 +46,10 @@ public class EaFallScene extends Scene {
 
     public void setMinZoomFactor(float zoomFactor) {
         mGameSceneHandler.setMinZoomFactor(zoomFactor);
+    }
+
+    public void setSceneTouchSilentListener(IOnSceneTouchListener sceneTouchSilentListener) {
+        mGameSceneHandler.setSceneTouchSilentListener(sceneTouchSilentListener);
     }
 
     public void setClickListener(ClickDetector.IClickDetectorListener clickListener) {

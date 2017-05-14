@@ -115,6 +115,7 @@
         </mission_details>
     </campaign>
 
+    <!-- trying to find our ally -->
     <campaign screen="3">
         <name>campaign_demo_tutorial4</name>
         <picture>graphics/images/campaign/missions/screen3.png</picture>
@@ -198,7 +199,7 @@
         <mission_details>
             <name>Veles</name>
             <game_handler>
-                com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
+                com.yaroslavlancelot.eafall.game.campaign.missions.SixthMissionActivity
             </game_handler>
             <player_alliance>Mutants</player_alliance>
             <player_planet>earth</player_planet>

@@ -2,7 +2,7 @@ package com.yaroslavlancelot.eafall.game.campaign.missions;
 
 import com.yaroslavlancelot.eafall.game.campaign.missions.utils.FindPathMissionActivity;
 
-/** Fourth missin to reach your friends */
+/** Fourth mission to reach your friends */
 public class FourthMissionActivity extends FindPathMissionActivity {
     private final int[] mUnitPos = new int[]{100, 540};
     private final int[] mEndpointPos = new int[]{1680, 540};

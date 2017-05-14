@@ -27,11 +27,14 @@ import com.yaroslavlancelot.eafall.game.scene.hud.BaseGameHud;
 import com.yaroslavlancelot.eafall.game.scene.hud.FindPathGameHud;
 import com.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 
+import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
+import org.andengine.entity.primitive.Line;
+import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
-import org.andengine.input.touch.detector.ClickDetector;
+import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 
 import static com.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.MoveBetweenPointsPath.Point;
@@ -49,6 +52,21 @@ public abstract class FindPathMissionActivity extends BaseGameObjectsActivity {
     private MoveByClickUnitPath mMainUnitPath;
     /** left, top, right, bottom */
     private int[] mEndpointCircleBounds = new int[4];
+    private Line mMovingLine;
+    private IUpdateHandler mUnitUpdateHandler = new IUpdateHandler() {
+        @Override
+        public void onUpdate(float pSecondsElapsed) {
+            if (mMainUnit == null || !mMainUnit.isObjectAlive()) {
+                return;
+            }
+            mMovingLine.setPosition(mMovingLine.getX1(), mMovingLine.getY1(),
+                    mMainUnit.getX(), mMainUnit.getY());
+        }
+
+        @Override
+        public void reset() {
+        }
+    };
 
     // ===========================================================
     // Constructors
@@ -89,6 +107,7 @@ public abstract class FindPathMissionActivity extends BaseGameObjectsActivity {
         initEndpoint(scene);
         initEndConditions(scene);
         onPopulateEnemies();
+        initMovingLine(scene);
     }
 
     @Override
@@ -120,11 +139,15 @@ public abstract class FindPathMissionActivity extends BaseGameObjectsActivity {
     // Methods
     // ===========================================================
     protected void createEnemy(int key, int[] startPosition, int[] endPosition) {
+        createEnemy(key, startPosition, endPosition, startPosition);
+    }
+
+    protected void createEnemy(int key, int[] startPosition, int[] endPosition, int initPosition[]) {
         //unit
         MoveBetweenPointsPath moveBetweenPointsPath =
                 new MoveBetweenPointsPath(new Point(startPosition), new Point(endPosition));
         Unit unit = createMovableUnit(mSecondPlayer, key,
-                startPosition[0], startPosition[1], moveBetweenPointsPath);
+                initPosition[0], initPosition[1], moveBetweenPointsPath);
         //radius
         VisibleAreaSprite visibleAreaSprite = new VisibleAreaSprite(0, 0,
                 TextureRegionHolder.getRegion(StringConstants.KEY_VISIBLE_AREA), unit,
@@ -147,6 +170,13 @@ public abstract class FindPathMissionActivity extends BaseGameObjectsActivity {
                 }
             }
         }));
+    }
+
+    private void initMovingLine(Scene scene) {
+        mMovingLine = new Line(0, 0, 0, 0, 3, getVertexBufferObjectManager());
+        mMovingLine.setColor(0.24f, 0.24f, 0.455f, 0.7f);
+        mMovingLine.setVisible(false);
+        scene.attachChild(mMovingLine);
     }
 
     private boolean endpointCondition() {
@@ -185,11 +215,26 @@ public abstract class FindPathMissionActivity extends BaseGameObjectsActivity {
                 position[0], position[1], mMainUnitPath);
         mMainUnit.setUnitCanNotAttack(true);
         mMainUnit.setHealth(1);
-        scene.setClickListener(new ClickDetector.IClickDetectorListener() {
+        scene.setSceneTouchSilentListener(new IOnSceneTouchListener() {
             @Override
-            public void onClick(final ClickDetector pClickDetector, final int pPointerID,
-                                final float pSceneX, final float pSceneY) {
-                mMainUnitPath.setNewPoint(pSceneX, pSceneY);
+            public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
+                if (mMainUnit == null || !mMainUnit.isObjectAlive()) {
+                    mMovingLine.setVisible(false);
+                    return false;
+                }
+                if (pSceneTouchEvent.isActionDown() || pSceneTouchEvent.isActionMove()) {
+                    mMainUnit.registerUpdateHandler(mUnitUpdateHandler);
+                    mMovingLine.setPosition(pSceneTouchEvent.getX(), pSceneTouchEvent.getY(),
+                            mMainUnit.getX(), mMainUnit.getY());
+                    mMovingLine.setVisible(true);
+                    mMainUnitPath.setNewPoint(pSceneTouchEvent.getX(), pSceneTouchEvent.getY());
+                }
+                if(pSceneTouchEvent.isActionUp()) {
+                    mMainUnit.unregisterUpdateHandler(mUnitUpdateHandler);
+                    mMovingLine.setVisible(false);
+                    mMovingLine.setPosition(0, 0, 0, 0);
+                }
+                return false;
             }
         });
     }
