@@ -6,6 +6,7 @@ import android.widget.Toast;
 import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.R;
 import com.yaroslavlancelot.eafall.android.StartableIntent;
+import com.yaroslavlancelot.eafall.android.utils.music.Music;
 import com.yaroslavlancelot.eafall.game.EaFallActivity;
 import com.yaroslavlancelot.eafall.game.camera.EaFallCamera;
 import com.yaroslavlancelot.eafall.game.campaign.intents.CampaignIntent;
@@ -126,6 +127,18 @@ public class CampaignActivity extends EaFallActivity {
         mResourcesLoader.loadImages(getTextureManager(), getVertexBufferObjectManager());
         mResourcesLoader.loadFonts(getTextureManager(), getFontManager());
         SelectorFactory.getSelector().block(); //we  don't need selector in the campaign
+    }
+
+    @Override
+    public void onPauseGame() {
+        super.onPauseGame();
+        mBackgroundMusic.stopPlaying();
+    }
+
+    @Override
+    public void onResumeGame() {
+        super.onResumeGame();
+        mBackgroundMusic.startPlaying(Music.MusicType.CAMPAIGN);
     }
 
     @Override

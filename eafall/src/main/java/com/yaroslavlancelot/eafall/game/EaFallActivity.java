@@ -6,6 +6,8 @@ import android.widget.Toast;
 import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.R;
 import com.yaroslavlancelot.eafall.android.dialog.ExitConfirmationDialog;
+import com.yaroslavlancelot.eafall.android.utils.music.Music;
+import com.yaroslavlancelot.eafall.android.utils.music.MusicFactory;
 import com.yaroslavlancelot.eafall.game.audio.BackgroundMusic;
 import com.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.yaroslavlancelot.eafall.game.camera.EaFallCamera;
@@ -62,7 +64,7 @@ public abstract class EaFallActivity extends BaseGameActivity {
     /** game camera */
     protected EaFallCamera mCamera;
     /** background music */
-    protected BackgroundMusic mBackgroundMusic;
+    protected Music mBackgroundMusic;
     /** scene manager */
     protected volatile SceneManager mSceneManager;
     /** resource loader */
@@ -79,16 +81,12 @@ public abstract class EaFallActivity extends BaseGameActivity {
             return;
         }
         super.onResumeGame();
-        if (mSceneManager.getWorkingScene() != null) {
-            mBackgroundMusic.playBackgroundMusic();
-        }
     }
 
     @Override
     public void onPauseGame() {
         setState(GameState.State.PAUSED);
         super.onPauseGame();
-        mBackgroundMusic.pauseBackgroundMusic();
     }
 
     @Override
@@ -140,7 +138,7 @@ public abstract class EaFallActivity extends BaseGameActivity {
         //sound && music
         SoundFactory.init(getSoundManager());
         mResourcesLoader.loadSounds(SoundFactory.getInstance());
-        mBackgroundMusic = new BackgroundMusic(createMusicPath(), getMusicManager(), this);
+        mBackgroundMusic = MusicFactory.getMusic();
         onCreateResourcesCallback.onCreateResourcesFinished();
     }
 
@@ -387,11 +385,6 @@ public abstract class EaFallActivity extends BaseGameActivity {
         mSceneManager.hideSplash();
         mSceneManager.clearSplashScene();
         mResourcesLoader.unloadSplashImages();
-        try {
-            mBackgroundMusic.playBackgroundMusic();
-        } catch (MusicReleasedException ex) {
-            Timber.i(ex, "can't release music, it's not good");
-        }
         onShowWorkingScene();
         GameState.setState(GameState.State.RESUMED);
     }
