@@ -60,16 +60,18 @@ public class SettingsFragment extends Fragment {
         TextView textView = (TextView) view.findViewById(R.id.title_text);
         textView.getPaint().setShader(StartupActivity.getTextGradient(
                 (int) getResources().getDimension(R.dimen.settings_title_text)));
+        ApplicationSettings applicationSettings = EaFallApplication.getConfig().getSettings();
         //background music volume
         mMusicVolume = (SettingsVolume) view.findViewById(R.id.music_volume);
         mMusicVolume.setTitle(R.string.music);
         mMusicVolume.initSettingsVolume(KEY_MUSIC, KEY_MUSIC_VOLUME,
-                R.string.music_on, R.string.music_off);
+                R.string.music_on, R.string.music_off, applicationSettings.getMusicVolumeMax());
         //game sound volume
         mSoundVolume = (SettingsVolume) view.findViewById(R.id.sound_volume);
         mSoundVolume.setTitle(R.string.game_sounds);
         mSoundVolume.initSettingsVolume(KEY_SOUND, KEY_SOUND_VOLUME,
-                R.string.game_sounds_on, R.string.game_sounds_off);
+                R.string.game_sounds_on, R.string.game_sounds_off,
+                applicationSettings.getSoundVolumeMax());
         //dev mode
         mDevelopersModeCheckBox = (CheckBox) view.findViewById(R.id.developers_mode_checkbox);
         initDeveloperModeSettings(mDevelopersModeCheckBox,

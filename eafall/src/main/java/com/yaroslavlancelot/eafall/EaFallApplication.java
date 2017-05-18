@@ -76,6 +76,6 @@ public class EaFallApplication extends MultiDexApplication {
         } else {
             Timber.plant(new CrashReportingTree());
         }
-        MusicFactory.init(this);
+        MusicFactory.init(this, sConfig.getSettings());
     }
 }

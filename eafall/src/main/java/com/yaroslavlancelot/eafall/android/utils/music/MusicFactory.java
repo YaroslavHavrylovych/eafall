@@ -2,6 +2,8 @@ package com.yaroslavlancelot.eafall.android.utils.music;
 
 import android.content.Context;
 
+import com.yaroslavlancelot.eafall.game.configuration.game.ApplicationSettings;
+
 /** Creates music instance. */
 public class MusicFactory {
     private static MusicFactory sMusicFactory = new MusicFactory();
@@ -11,7 +13,7 @@ public class MusicFactory {
         return sMusicFactory.mMusic;
     }
 
-    public static void init(Context context) {
-        sMusicFactory.mMusic = new MusicManagerImpl(context);
+    public static void init(Context context, ApplicationSettings settings) {
+        sMusicFactory.mMusic = new MusicManagerImpl(context, settings);
     }
 }

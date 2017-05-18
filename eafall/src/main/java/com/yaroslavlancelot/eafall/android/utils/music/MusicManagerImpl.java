@@ -5,7 +5,6 @@ import android.media.MediaPlayer;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 
-import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.R;
 import com.yaroslavlancelot.eafall.game.configuration.game.ApplicationSettings;
 
@@ -23,42 +22,32 @@ class MusicManagerImpl implements Music {
     private Map<MusicType, StopRunnable> mMusicStopCallbacks
             = new HashMap<>(MusicType.values().length);
     private Map<MusicType, Handler> mMusicStopHandler = new HashMap<>(MusicType.values().length);
+    private MusicStatusChangedCallback mMusicStatusChangedCallback =
+            new MusicStatusChangedCallback();
+    private MusicVolumeCahngedCallback mMusicVolumeChangedCallback =
+            new MusicVolumeCahngedCallback();
     private MusicType mCurrentlyPlaying = MusicType.NONE;
     private int mDelayToStopMusicMillis = 1000;
+    private ApplicationSettings mApplicationSettings;
     private boolean mMusicEnabled;
     private float mMaxVolume;
 
-    MusicManagerImpl(Context context) {
+    MusicManagerImpl(Context context, ApplicationSettings settings) {
         mContext = context;
-        initSettingsCallbacks();
+        mApplicationSettings = settings;
+        checkSettingsCallbacks(settings);
     }
 
     @Override
     public void startPlaying(@NonNull MusicType music) {
-        if (!mMusicEnabled) {
-            Timber.v("music is disabled");
-            mCurrentlyPlaying = music;
-            return;
-        }
-
-        Handler stopHandler = mMusicStopHandler.get(music);
-        if (stopHandler != null) {
-            StopRunnable stopRunnable = mMusicStopCallbacks.get(music);
-            if (stopRunnable != null) {
-                stopHandler.removeCallbacks(mMusicStopCallbacks.get(music));
-            }
-        }
-        if (mCurrentlyPlaying != music) {
-            Timber.v("start playing %s", music.toString());
-            MediaPlayer mediaPlayer = initPlayer(music);
-            mediaPlayer.setLooping(true);
-            mediaPlayer.setVolume(mMaxVolume, mMaxVolume);
-            mediaPlayer.start();
-        }
+        startPlaying(music, false);
     }
 
     @Override
     public void stopPlaying() {
+        if(!mMusicEnabled) {
+            return;
+        }
         for (MusicType musicType : mPlayers.keySet()) {
             Timber.v("stop playing");
             StopRunnable stopRunnable = mMusicStopCallbacks.get(musicType);
@@ -76,33 +65,49 @@ class MusicManagerImpl implements Music {
         }
     }
 
-    private void initSettingsCallbacks() {
-        final ApplicationSettings settings
-                = EaFallApplication.getConfig().getSettings();
+    private void startPlaying(MusicType music, boolean force) {
+        checkSettingsCallbacks(mApplicationSettings);
+        if (!force && !mMusicEnabled) {
+            Timber.v("music is disabled");
+            mCurrentlyPlaying = music;
+            return;
+        }
+
+        Handler stopHandler = mMusicStopHandler.get(music);
+        if (stopHandler != null) {
+            StopRunnable stopRunnable = mMusicStopCallbacks.get(music);
+            if (stopRunnable != null) {
+                stopHandler.removeCallbacks(mMusicStopCallbacks.get(music));
+            }
+        }
+        if (force || mCurrentlyPlaying != music) {
+            Timber.v("start playing %s", music.toString());
+            MediaPlayer mediaPlayer = initPlayer(music);
+            mediaPlayer.setLooping(true);
+            mediaPlayer.setVolume(mMaxVolume, mMaxVolume);
+            mediaPlayer.start();
+        }
+    }
+
+    private void stopPlayingEverythingNow() {
+        for(MusicType musicType: mPlayers.keySet()) {
+            MediaPlayer player = mPlayers.get(musicType);
+            if (player.isPlaying()) {
+                player.pause();
+            }
+            player.stop();
+            player.release();
+            mPlayers.remove(musicType);
+        }
+    }
+
+    private void checkSettingsCallbacks(ApplicationSettings settings) {
         mMusicEnabled = settings.isMusicEnabled();
         mMaxVolume = settings.getMusicVolumeMax();
         settings.setOnConfigChangedListener(settings.KEY_PREF_MUSIC,
-                new ApplicationSettings.ISettingsChangedListener() {
-                    @Override
-                    public void configChanged(final Object value) {
-                        mMusicEnabled = (Boolean) value;
-                        if (mMusicEnabled) {
-                            startPlaying(mCurrentlyPlaying);
-                        } else {
-                            stopPlaying();
-                        }
-                    }
-                });
+                mMusicStatusChangedCallback);
         settings.setOnConfigChangedListener(settings.KEY_PREF_MUSIC_VOLUME,
-                new ApplicationSettings.ISettingsChangedListener() {
-                    @Override
-                    public void configChanged(final Object value) {
-                        mMaxVolume = (Float) value;
-                        for (MediaPlayer mediaPlayer : mPlayers.values()) {
-                            mediaPlayer.setVolume(mMaxVolume, mMaxVolume);
-                        }
-                    }
-                });
+                mMusicVolumeChangedCallback);
     }
 
     private MediaPlayer initPlayer(@NonNull MusicType musicType) {
@@ -151,6 +156,32 @@ class MusicManagerImpl implements Music {
             mPlayers.remove(mMusicType);
             if (mPlayers.isEmpty()) {
                 mCurrentlyPlaying = MusicType.NONE;
+            }
+        }
+    }
+
+    private class MusicStatusChangedCallback
+            implements ApplicationSettings.ISettingsChangedListener {
+
+        @Override
+        public void configChanged(Object value) {
+            mMusicEnabled = (Boolean) value;
+            if (mMusicEnabled) {
+                startPlaying(mCurrentlyPlaying, true);
+            } else {
+                stopPlayingEverythingNow();
+            }
+        }
+    }
+
+    private class MusicVolumeCahngedCallback
+            implements ApplicationSettings.ISettingsChangedListener {
+
+        @Override
+        public void configChanged(Object value) {
+            mMaxVolume = (Float) value;
+            for (MediaPlayer mediaPlayer : mPlayers.values()) {
+                mediaPlayer.setVolume(mMaxVolume, mMaxVolume);
             }
         }
     }

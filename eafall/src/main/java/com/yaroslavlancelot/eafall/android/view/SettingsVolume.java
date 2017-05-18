@@ -93,17 +93,18 @@ public class SettingsVolume extends LinearLayout {
     /**
      * init current settings
      *
-     * @param keyEnabled  {@link SharedPreferences} switcher key (used to disable volume)
-     * @param keyValue    {@link SharedPreferences} key used to store setting value
-     * @param resEnabled  if keyEnabled then this resource will be used as status description
-     * @param resDisabled if not keyEnabled then this resource will be used as status description
+     * @param keyEnabled   {@link SharedPreferences} switcher key (used to disable volume)
+     * @param keyValue     {@link SharedPreferences} key used to store setting value
+     * @param resEnabled   if keyEnabled then this resource will be used as status description
+     * @param resDisabled  if not keyEnabled then this resource will be used as status description
+     * @param defaultValue value if there is no previously set
      */
     public void initSettingsVolume(String keyEnabled, String keyValue,
-                                   int resEnabled, int resDisabled) {
+                                   int resEnabled, int resDisabled, float defaultValue) {
         mSharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(EaFallApplication.getContext());
         mVolumeEnabledPreferencesKey = keyEnabled;
-        mLight.init(keyValue);
+        mLight.init(keyValue, defaultValue);
         mResEnabled = resEnabled;
         mResDisabled = resDisabled;
         initVolumeCheckbox();

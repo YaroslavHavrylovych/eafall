@@ -8,7 +8,6 @@ import com.yaroslavlancelot.eafall.R;
 import com.yaroslavlancelot.eafall.android.dialog.ExitConfirmationDialog;
 import com.yaroslavlancelot.eafall.android.utils.music.Music;
 import com.yaroslavlancelot.eafall.android.utils.music.MusicFactory;
-import com.yaroslavlancelot.eafall.game.audio.BackgroundMusic;
 import com.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.yaroslavlancelot.eafall.game.camera.EaFallCamera;
 import com.yaroslavlancelot.eafall.game.configuration.game.ApplicationSettings;
@@ -28,7 +27,6 @@ import com.yaroslavlancelot.eafall.general.EbSubscribersHolder;
 import com.yaroslavlancelot.eafall.general.SelfCleanable;
 import com.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 
-import org.andengine.audio.music.exception.MusicReleasedException;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.AudioOptions;
@@ -40,8 +38,6 @@ import org.andengine.entity.text.Text;
 import org.andengine.entity.util.FPSLogger;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.adt.color.Color;
-
-import timber.log.Timber;
 
 /**
  * Base activity for all activities which has to use AndEngine.
