@@ -34,9 +34,9 @@ public class SettingsVolume extends LinearLayout {
     // Fields
     // ===========================================================
     /** increase seek-bar value preferences */
-    private Button mIncreaseButton;
+    private SoundButton mIncreaseButton;
     /** decrease seek-bar value preferences */
-    private Button mDecreaseButton;
+    private SoundButton mDecreaseButton;
     /** seek-bar cover (used to show progress) */
     private PercentLight mLight;
     /** volume switcher (can disable this settings totally) */
@@ -148,9 +148,9 @@ public class SettingsVolume extends LinearLayout {
     private void _init_() {
         View view = inflate(getContext(), R.layout.settings_volume, this);
         mLight = (PercentLight) view.findViewById(R.id.light);
-        mIncreaseButton = (Button) view.findViewById(R.id.increase);
+        mIncreaseButton = (SoundButton) view.findViewById(R.id.increase);
         initIncButton(mIncreaseButton);
-        mDecreaseButton = (Button) view.findViewById(R.id.decrease);
+        mDecreaseButton = (SoundButton) view.findViewById(R.id.decrease);
         initDecButton(mDecreaseButton);
         mVolumeCheckbox = (CheckBox) view.findViewById(R.id.volume_checkbox);
         mTitle = (TextView) view.findViewById(R.id.volume_text);

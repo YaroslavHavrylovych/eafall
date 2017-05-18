@@ -178,8 +178,6 @@ public abstract class EaFallActivity extends BaseGameActivity {
 
     protected abstract BaseGameHud createHud();
 
-    protected abstract String createMusicPath();
-
     private void initExitHint() {
         mExitHintHandler = new TimerHandler(TouchHelper.mMultipleClickHintTime,
                 new ITimerCallback() {

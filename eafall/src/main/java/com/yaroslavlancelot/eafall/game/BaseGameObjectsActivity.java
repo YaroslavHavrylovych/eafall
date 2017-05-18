@@ -141,11 +141,6 @@ public abstract class BaseGameObjectsActivity extends EaFallActivity implements 
     }
 
     @Override
-    protected String createMusicPath() {
-        return StringConstants.getMusicPath() + "background_1.ogg";
-    }
-
-    @Override
     protected void preResourcesLoading() {
         //alliance and player
         createAlliances();

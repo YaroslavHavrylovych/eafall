@@ -68,10 +68,6 @@ class GameStateTest : EaFallTestCase() {
         override fun preResourcesLoading() {
         }
 
-        override fun createMusicPath(): String? {
-            return StringConstants.getMusicPath() + "background_1.ogg";
-        }
-
         constructor() {
             mSceneManager = DummySceneManager(this)
         }

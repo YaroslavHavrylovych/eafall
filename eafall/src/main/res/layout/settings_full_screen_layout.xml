@@ -28,7 +28,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="44"/>
 
-            <ImageButton
+            <com.yaroslavlancelot.eafall.android.view.SoundImageButton
                 android:id="@+id/back_button"
                 android:layout_height="match_parent"
                 android:src="@drawable/campaign_back_button_selector"
@@ -158,7 +158,7 @@
                             android:weightSum="183"
                             android:orientation="vertical">
 
-                            <Button
+                            <com.yaroslavlancelot.eafall.android.view.SoundButton
                                 android:id="@+id/health_bar_behaviour"
                                 android:layout_width="match_parent"
                                 android:layout_weight="124"

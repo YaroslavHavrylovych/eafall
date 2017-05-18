@@ -98,11 +98,6 @@ public class CampaignActivity extends EaFallActivity {
     }
 
     @Override
-    protected String createMusicPath() {
-        return StringConstants.getMusicPath() + "background_1.ogg";
-    }
-
-    @Override
     protected void preResourcesLoading() {
     }
 
