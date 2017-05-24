@@ -338,7 +338,9 @@ public class CampaignActivity extends EaFallActivity {
                         int plot = getResources().getIdentifier(
                                 "campaign_demo_plot" + (mScreenId + 1), "string",
                                 getApplicationInfo().packageName);
-                        PlotPresenter plotPresenter = new PlotPresenter(plot, CampaignActivity.this,
+                        PlotPresenter plotPresenter = new PlotPresenter(plot,
+                                mTitleText.getText().toString(),
+                                CampaignActivity.this,
                                 new PlotPresenter.PlotPresentedCallback() {
                                     @Override
                                     public void onPresentationDone() {
@@ -434,9 +436,9 @@ public class CampaignActivity extends EaFallActivity {
                     mDisabledNextButtonClicksAmount = 0;
                     mDisabledNextButtonLastTouch = 0;
                     mCampaignPassage.markNewCampaignPassed();
-                } else if (mDisabledNextButtonClicksAmount == 5) {
+                } else if (mDisabledNextButtonClicksAmount == 7) {
                     showClickToast(getString(R.string.manual_next_enable_single, 1));
-                } else if (mDisabledNextButtonClicksAmount >= 2) {
+                } else if (mDisabledNextButtonClicksAmount >= 4) {
                     showClickToast(getString(R.string.manual_next_enable_plural,
                             sDisabledButtonToNextClicks - mDisabledNextButtonClicksAmount));
                 }

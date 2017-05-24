@@ -245,29 +245,29 @@
     <!-- guide campaign -->
     <string name="campaign_guide_start">Почати</string>
     <string name="campaign_guide_enter">Оглянути</string>
-    <string name="campaign_demo_tutorial1">Макож</string>
-    <string name="campaign_demo_tutorial2">Дажбог</string>
-    <string name="campaign_demo_tutorial3">Чорнобог</string>
-    <string name="campaign_demo_tutorial4">Сварог</string>
-    <string name="campaign_demo_tutorial5">Сімаргл</string>
-    <string name="campaign_demo_tutorial6">Велес</string>
-    <string name="campaign_demo_tutorial7">Стрибог</string>
-    <string name="campaign_demo_tutorial8">Марог</string>
-    <string name="campaign_demo_tutorial9">Ярило</string>
-    <string name="campaign_demo_tutorial10">Лада</string>
+    <string name="campaign_demo_tutorial1">Блуд</string>
+    <string name="campaign_demo_tutorial2">Вихор</string>
+    <string name="campaign_demo_tutorial3">Вій</string>
+    <string name="campaign_demo_tutorial4">Дідо</string>
+    <string name="campaign_demo_tutorial5">Мавка</string>
+    <string name="campaign_demo_tutorial6">Мара</string>
+    <string name="campaign_demo_tutorial7">Морок</string>
+    <string name="campaign_demo_tutorial8">Русалка</string>
+    <string name="campaign_demo_tutorial9">Упир</string>
+    <string name="campaign_demo_tutorial10">Чугайстер</string>
     <!-- /guide campaign -->
 
     <!-- plot -->
-    <string name="campaign_demo_plot1">20 лютого.\nПочаток./:Ваша задача знищити супротивника.</string>
-    <string name="campaign_demo_plot2">27 лютого.\nЗапас./:Ваша задача виграти в обмежений час.</string>
-    <string name="campaign_demo_plot3">16 березня.\nСхрони./:Ваша задача зібрати 1500 тон кисню.</string>
-    <string name="campaign_demo_plot4">18 березня.\nСоюзник/:Ваша задача виграти супротивника.</string>
-    <string name="campaign_demo_plot5">24 березня.\nОговтання./:Ваша задача виграти в обмежений час.</string>
-    <string name="campaign_demo_plot6">24 березня.\nВишкіл./:Ваша задача виграти в обмежений час.</string>
-    <string name="campaign_demo_plot7">27 березня.\nГорнило бою./:Ваша задача знищити супротивника.</string>
-    <string name="campaign_demo_plot8">27 березня.\nПовстанець./:Ваша задача знищити супротивника.</string>
-    <string name="campaign_demo_plot9">2 квітня.\nОбличчя війни./:Ваша задача протриматись зазначений час.</string>
-    <string name="campaign_demo_plot10">11 квітня.\nКульмінація./:Ваша задача виграти супротивника.</string>
+    <string name="campaign_demo_plot1">20 лютого 3014 року.\n%s./:Ваша задача знищити супротивника.</string>
+    <string name="campaign_demo_plot2">27 лютого.\n%s./:Ваша задача виграти в обмежений час.</string>
+    <string name="campaign_demo_plot3">16 березня.\n%s./:Ваша задача зібрати 1500 тон кисню.</string>
+    <string name="campaign_demo_plot4">18 березня.\n%s/:Ваша задача прибути до місця призначення.</string>
+    <string name="campaign_demo_plot5">24 березня.\n%s./:Ваша задача протриматись зазначений час.</string>
+    <string name="campaign_demo_plot6">24 березня.\n%s./:Ваша задача прибути до місця призначення.</string>
+    <string name="campaign_demo_plot7">27 березня.\n%s./:Ваша задача знищити супротивника.</string>
+    <string name="campaign_demo_plot8">27 березня.\n%s./:Ваша задача знищити супротивника.</string>
+    <string name="campaign_demo_plot9">2 квітня.\n%s./:Ваша задача протриматись зазначений час.</string>
+    <string name="campaign_demo_plot10">11 квітня.\n%s./:Ваша задача виграти супротивника.</string>
     <!-- /plot -->
     <!-- info -->
     <string name="find_path_mission_hint">Вам потрібно дістатись точки відправлення.\nНатисніть на екран для початку руху.</string>

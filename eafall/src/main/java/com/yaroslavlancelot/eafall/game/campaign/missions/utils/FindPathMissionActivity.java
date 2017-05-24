@@ -122,7 +122,7 @@ public abstract class FindPathMissionActivity extends BaseGameObjectsActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(FindPathMissionActivity.this, R.string.sandbox_hint,
+                Toast.makeText(FindPathMissionActivity.this, R.string.find_path_mission_hint,
                         Toast.LENGTH_LONG)
                         .show();
             }

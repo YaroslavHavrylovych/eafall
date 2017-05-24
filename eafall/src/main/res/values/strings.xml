@@ -245,29 +245,29 @@
     <!-- guide campaign -->
     <string name="campaign_guide_start">Start</string>
     <string name="campaign_guide_enter">Enter</string>
-    <string name="campaign_demo_tutorial1">Makosh</string>
-    <string name="campaign_demo_tutorial2">Dazbog</string>
-    <string name="campaign_demo_tutorial3">Chernobog</string>
-    <string name="campaign_demo_tutorial4">Svarog</string>
-    <string name="campaign_demo_tutorial5">Simargl</string>
-    <string name="campaign_demo_tutorial6">Veles</string>
-    <string name="campaign_demo_tutorial7">Stribog</string>
-    <string name="campaign_demo_tutorial8">Morana</string>
-    <string name="campaign_demo_tutorial9">Jarilo</string>
-    <string name="campaign_demo_tutorial10">Lada</string>
+    <string name="campaign_demo_tutorial1">Blud</string>
+    <string name="campaign_demo_tutorial2">Vyhor</string>
+    <string name="campaign_demo_tutorial3">Vij</string>
+    <string name="campaign_demo_tutorial4">Dido</string>
+    <string name="campaign_demo_tutorial5">Mavka</string>
+    <string name="campaign_demo_tutorial6">Mara</string>
+    <string name="campaign_demo_tutorial7">Mermaid</string>
+    <string name="campaign_demo_tutorial8">Morok</string>
+    <string name="campaign_demo_tutorial9">Vampire</string>
+    <string name="campaign_demo_tutorial10">Chugaister</string>
     <!-- /guide campaign -->
 
     <!-- plot -->
-    <string name="campaign_demo_plot1">20 February.\nGetting./:Your task is to destroy the enemy.</string>
-    <string name="campaign_demo_plot2">February 27.\nStock./:Your task is to win within a limited time.</string>
-    <string name="campaign_demo_plot3">March 16.\nCaches./:Your task is to collect 1,500 tons of oxygen.</string>
-    <string name="campaign_demo_plot4">March 18.\nAlly./:Your task is to destroy the enemy.</string>
-    <string name="campaign_demo_plot5">March 24.\nRecovering./:Your task is to win within a limited time.</string>
-    <string name="campaign_demo_plot6">March 24.\nThe training./:Your task is to win within a limited time.</string>
-    <string name="campaign_demo_plot7">27 March.\nCrucible of battle./:Your task is to destroy the enemy.</string>
-    <string name="campaign_demo_plot8">27 March.\nRebel./:Your task is to destroy the enemy.</string>
-    <string name="campaign_demo_plot9">2 April.\nFace of war./:Your task is to be alive during the specified time.</string>
-    <string name="campaign_demo_plot10">April 11.\nThe culmination./:Your task is to destroy the enemy.</string>
+    <string name="campaign_demo_plot1">20 February.\n%s./:Your task is to destroy the enemy.</string>
+    <string name="campaign_demo_plot2">February 27.\n%s./:Your task is to win within a limited time.</string>
+    <string name="campaign_demo_plot3">March 16.\n%s./:Your task is to collect 1,500 tons of oxygen.</string>
+    <string name="campaign_demo_plot4">March 18.\n%s./:Your task is to reach the destination point.</string>
+    <string name="campaign_demo_plot5">March 24.\n%s./:Your task is to be alive during the specified time.</string>
+    <string name="campaign_demo_plot6">March 24.\n%s./:Your task is to reach the destination point.</string>
+    <string name="campaign_demo_plot7">27 March.\n%s./:Your task is to destroy the enemy.</string>
+    <string name="campaign_demo_plot8">27 March.\n%s./:Your task is to destroy the enemy.</string>
+    <string name="campaign_demo_plot9">2 April.\n%s./:Your task is to be alive during the specified time.</string>
+    <string name="campaign_demo_plot10">April 11.\n%s./:Your task is to destroy the enemy.</string>
     <!-- /plot -->
     <!-- info -->
     <string name="find_path_mission_hint">You need to reach an end point.\nClick on the screen on to move.</string>

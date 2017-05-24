@@ -1,6 +1,7 @@
 package com.yaroslavlancelot.eafall.game.campaign.plot;
 
 import android.app.Activity;
+import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.view.View;
 
@@ -19,11 +20,12 @@ public class PlotPresenter {
     private final PlotPresentedCallback mPlotPresentedCallback;
     private final PlotTellerDialog mPlotTellerDialog;
 
-    public PlotPresenter(@StringRes int plotId, Activity activity,
+    public PlotPresenter(@StringRes int plotId, @NonNull String missionName,
+                         Activity activity,
                          PlotPresentedCallback plotPresentedCallback) {
         mActivity = activity;
         mPlotPresentedCallback = plotPresentedCallback;
-        mPlot = activity.getString(plotId).split(PLOT_TEXT_SEPARATOR);
+        mPlot = activity.getString(plotId, missionName).split(PLOT_TEXT_SEPARATOR);
         mPlotTellerDialog = new PlotTellerDialog(activity);
     }
 
