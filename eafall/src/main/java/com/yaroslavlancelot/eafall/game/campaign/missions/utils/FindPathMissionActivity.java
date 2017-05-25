@@ -228,18 +228,19 @@ public abstract class FindPathMissionActivity extends BaseGameObjectsActivity {
                     mMovingLine.setVisible(false);
                     return false;
                 }
-                if (pSceneTouchEvent.isActionDown() || pSceneTouchEvent.isActionMove()) {
+                if(pSceneTouchEvent.getMotionEvent().getPointerCount() > 1 ||
+                        pSceneTouchEvent.isActionUp()) {
+                    mMainUnit.unregisterUpdateHandler(mUnitUpdateHandler);
+                    mMovingLine.setVisible(false);
+                    mMovingLine.setPosition(0, 0, 0, 0);
+                } else if (pSceneTouchEvent.isActionDown() || pSceneTouchEvent.isActionMove()) {
                     mMainUnit.registerUpdateHandler(mUnitUpdateHandler);
                     mMovingLine.setPosition(pSceneTouchEvent.getX(), pSceneTouchEvent.getY(),
                             mMainUnit.getX(), mMainUnit.getY());
                     mMovingLine.setVisible(true);
                     mMainUnitPath.setNewPoint(pSceneTouchEvent.getX(), pSceneTouchEvent.getY());
                 }
-                if(pSceneTouchEvent.isActionUp()) {
-                    mMainUnit.unregisterUpdateHandler(mUnitUpdateHandler);
-                    mMovingLine.setVisible(false);
-                    mMovingLine.setPosition(0, 0, 0, 0);
-                }
+
                 return false;
             }
         });

@@ -124,6 +124,8 @@ public final class StringConstants {
     public static String SOUND_SHOT_PATH = "audio/sound/shot/";
     /** clock tick sound path */
     public static String SOUND_CLOCK_TICK_PATH = "audio/sound/clock_tick.ogg";
+    /** tap on empty part of the screen sound path */
+    public static String SOUND_TAP_ON_SCREEN_PATH = "audio/sound/general/tap.ogg";
 
     /**
      * private constructor
