@@ -1,5 +1,7 @@
 package com.yaroslavlancelot.eafall.game.campaign.missions.utils;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Toast;
 
 import com.yaroslavlancelot.eafall.R;
@@ -14,6 +16,7 @@ import com.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.EndPointAnimatedSprite;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.VisibleAreaSprite;
+import com.yaroslavlancelot.eafall.game.entity.gameobject.setlectable.Selectable;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.setlectable.selector.SelectorFactory;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.unit.Unit;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.OffenceUnit;
@@ -53,6 +56,7 @@ public abstract class FindPathMissionActivity extends BaseGameObjectsActivity {
     /** left, top, right, bottom */
     private int[] mEndpointCircleBounds = new int[4];
     private Line mMovingLine;
+    private MainUnitHighlight mMainUnitHighlight = new MainUnitHighlight();
     private IUpdateHandler mUnitUpdateHandler = new IUpdateHandler() {
         @Override
         public void onUpdate(float pSecondsElapsed) {
@@ -125,6 +129,12 @@ public abstract class FindPathMissionActivity extends BaseGameObjectsActivity {
                 Toast.makeText(FindPathMissionActivity.this, R.string.find_path_mission_hint,
                         Toast.LENGTH_LONG)
                         .show();
+                runOnUpdateThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        highlightMainUnit();
+                    }
+                });
             }
         });
     }
@@ -151,7 +161,7 @@ public abstract class FindPathMissionActivity extends BaseGameObjectsActivity {
         //radius
         int size = (int) (unit.getViewRadius() * 2.1f);
         VisibleAreaSprite visibleAreaSprite;
-        if(size > 400) {
+        if (size > 400) {
             visibleAreaSprite = new VisibleAreaSprite(0, 0, size, size,
                     TextureRegionHolder.getRegion(StringConstants.KEY_BIGGER_VISIBLE_AREA), unit,
                     getVertexBufferObjectManager());
@@ -228,7 +238,7 @@ public abstract class FindPathMissionActivity extends BaseGameObjectsActivity {
                     mMovingLine.setVisible(false);
                     return false;
                 }
-                if(pSceneTouchEvent.getMotionEvent().getPointerCount() > 1 ||
+                if (pSceneTouchEvent.getMotionEvent().getPointerCount() > 1 ||
                         pSceneTouchEvent.isActionUp()) {
                     mMainUnit.unregisterUpdateHandler(mUnitUpdateHandler);
                     mMovingLine.setVisible(false);
@@ -275,7 +285,39 @@ public abstract class FindPathMissionActivity extends BaseGameObjectsActivity {
                 CollisionCategories.STATIC_BODY_FIXTURE_DEF);
     }
 
+    private void highlightMainUnit() {
+        SelectorFactory.getSelector().select(mMainUnitHighlight);
+        mMainUnit.registerUpdateHandler(new TimerHandler(10, new ITimerCallback() {
+            @Override
+            public void onTimePassed(TimerHandler pTimerHandler) {
+                mMainUnit.unregisterUpdateHandler(pTimerHandler);
+                SelectorFactory.getSelector().deselect();
+            }
+        }));
+    }
+
     // ===========================================================
     // Inner and Anonymous Classes
     // ===========================================================
+    private class MainUnitHighlight implements Selectable {
+        @Override
+        public float getX() {
+            return mMainUnit.getX();
+        }
+
+        @Override
+        public float getY() {
+            return mMainUnit.getY();
+        }
+
+        @Override
+        public float getWidth() {
+            return mMainUnit.getHeight() * 2;
+        }
+
+        @Override
+        public float getHeight() {
+            return mMainUnit.getHeight() * 2;
+        }
+    }
 }
