@@ -3,7 +3,8 @@
     <!-- versions -->
     <string name="not_int_demo">Не включено в демо версію</string>
     <string name="not_implemented">Не реалізовано</string>
-    <!-- /versions -->
+    <string name="pass_campaign">Спочатку пройдіть перші 4 місії кампанії</string>
+   <!-- /versions -->
 
     <!-- game types -->
     <string name="campaign">КАМПАНІЯ</string>
@@ -26,7 +27,8 @@
     <string name="tutorial_description_create_building_2">Зараз час створити інший будинок</string>
     <string name="tutorial_description_building_settings">Натисніть кнопку, щоб відкрити налаштування будинку</string>
     <string name="tutorial_description_hide">Натисніть на вільне місце, щоб сховати попап</string>
-    <string name="tutorial_description_suppressor_usage">Якщо Ви програєте, то зробіть затяжний клік на Вашу планету\nце викличе заглучувач</string>
+    <string name="tutorial_description_suppressor_usage">Якщо зробити затяжний-клік на Вашу планету,\nто це викличе Заглушувач</string>
+    <string name="tutorial_description_do_not_forget">Не забудьте про це!</string>
     <string name="tutorial_description_suppressor_description">Заглучувач знищить всіх супротивників\nна ваші частині ігрового поля</string>
     <string name="tutorial_task">Ваша задача вижити решту часу\nЩасти!</string>
     <!-- /tutorial -->
@@ -49,68 +51,6 @@
     <!-- /pre game customizations -->
 
     <!-- unions -->
-    <!-- imperials -->
-    <!-- buildings -->
-    <string name="camp">Табір</string>
-    <string name="tent">Намет</string>
-    <string name="barracks">Бараки</string>
-    <string name="shooters_hall">Стрілецький Зал</string>
-    <string name="training_center">Тренувальний Центр</string>
-    <string name="workshop">Майстерня</string>
-    <string name="laboratory">Лабораторія</string>
-    <string name="bunker">Бункер</string>
-    <string name="defender">Захисник</string>
-    <string name="municipality">Муніципалітет</string>
-    <string name="earth_artifact">Артифакт з Землі</string>
-    <!-- /buildings -->
-    <!-- units -->
-    <string name="conscript">Призовник</string>
-    <string name="grant">Боєць</string>
-    <string name="sergeant">Сержант</string>
-    <string name="boy_scout">Пластун</string>
-    <string name="scout">Опікун</string>
-    <string name="infantrymen">Піхотинець</string>
-    <string name="SF">СВ</string>
-    <string name="sniper">Снайпер</string>
-    <string name="killer">Вбивця</string>
-    <string name="agent">Агент</string>
-    <string name="spy">Шпигун</string>
-    <string name="robot">Робот</string>
-    <string name="metal_killer">Залізячник</string>
-    <string name="demolisher">Підривник</string>
-    <string name="superman">Супермен</string>
-    <!-- /units -->
-
-    <!-- rebels -->
-    <!-- buildings -->
-    <string name="underground">Сховище</string>
-    <string name="factory">Фабрика</string>
-    <string name="bomos">Алтар</string>
-    <string name="hospital">Шпиталь</string>
-    <string name="minery">Шахта</string>
-    <string name="artillery">Артилерія</string>
-    <string name="sabotage_center">Диверсійний центр</string>
-    <string name="fort">Форт</string>
-    <string name="caches">Криївка</string>
-    <string name="space_material">Космічна матерія</string>
-    <!-- /buildings -->
-    <!-- units -->
-    <string name="machine_gunner">Механічний стрілок</string>
-    <string name="mechanical_soldier">Механічний солдат</string>
-    <string name="oplot_u">Оплот У</string>
-    <string name="oplot_m">Оплот М</string>
-    <string name="suicide">Смертник</string>
-    <string name="priest">Священник</string>
-    <string name="doctor">Лікар</string>
-    <string name="shaman">Шаман</string>
-    <string name="engineer">Інженер</string>
-    <string name="exploder">Підривник</string>
-    <string name="ballista">Баліста</string>
-    <string name="thor">Тор</string>
-    <string name="recruiter">Вербувальник</string>
-    <string name="saboteur">Диверсант</string>
-    <!-- /units -->
-
     <!-- mutants -->
     <!-- buildings -->
     <string name="water_cave">Водна Печера</string>
@@ -158,11 +98,9 @@
     <string name="game_sounds">Звуки гри</string>
     <string name="game_sounds_on">Увімкнені</string>
     <string name="game_sounds_off">Вимкнені</string>
-    <string name="game_sounds_volume">Гучність</string>
     <string name="music">Музика</string>
     <string name="music_on">Увімкнена</string>
     <string name="music_off">Вимкена</string>
-    <string name="music_volume">Гучність</string>
     <string name="category_sounds">Звук</string>
     <string name="category_other">Інше</string>
 
@@ -172,6 +110,7 @@
     <string name="back">Назад</string>
     <string name="yes">Так</string>
     <string name="no">Ні</string>
+    <string name="next">Далі</string>
     <string name="done">Готово</string>
     <string name="exit_click">Подвійний клік, щоб вийти</string>
     <string name="exit_loading">Не можна вийти під час завантаження</string>
@@ -216,6 +155,7 @@
     <string name="wrong_planet_suppressor">Лише на власній базі можна використати Заглушувач</string>
     <!-- stars -->
     <string name="sun">Геліос</string>
+    <string name="new_sun">Аматерасу</string>
     <!-- /stars -->
     <!-- planets -->
     <string name="earth">Земля</string>
@@ -282,10 +222,10 @@
     <!-- descriptions -->
     <string name="earth_artifact_description">Священий артефакт Мутантів знайдений в надрах Землі.\nДодає 10\u0025 до здоров’я юніта.</string>
     <string name="space_material_description">Могутній артефакт Імперців, винайдений їх вченими.\nДає 10\u0025 шанс уникнути пошкоджень.</string>
-    <string name="king_of_snakes_description">Цінний артефакт Повстанців,\nбув знайдений у відкритому космосі.\n10\u0025 збільшення пошкодження від юніта.</string>
-    <string name="municipality_description">На 20\u0025 збільшення доходу від першого будинку.\nКожен наступний будинок додає 1\u0025 до доходу.</string>
-    <string name="caches_description">На 20\u0025 збільшення доходу від першого будинку.\nКожен наступний будинок додає 1\u0025 до доходу.</string>
-    <string name="reptile_city_description">На 20\u0025 збільшення доходу від першого будинку.\nКожен наступний будинок додає 1\u0025 до доходу.</string>
+    <string name="king_of_snakes_description">Цінний артефакт Повстанців,\nбув знайдений у відкритому космосі.\n30\u0025 збільшення пошкодження від юніта.</string>
+    <string name="municipality_description">На 40\u0025 збільшення доходу від першого будинку.\nКожен наступний будинок додає 5\u0025 до доходу.</string>
+    <string name="caches_description">На 40\u0025 збільшення доходу від першого будинку.\nКожен наступний будинок додає 5\u0025 до доходу.</string>
+    <string name="reptile_city_description">На 40\u0025 збільшення доходу від першого будинку.\nКожен наступний будинок додає 5\u0025 до доходу.</string>
     <!-- /descriptions -->
     <!-- /description popup -->
 
@@ -299,10 +239,42 @@
     <!-- /menu popup -->
 
     <!-- campaign -->
+    <string name="manual_next_enable_plural">Натисніть ще %d разів, щоб було добре</string>
+    <string name="manual_next_enable_single">Натисніть ще %d раз, щоб було добре</string>
+    <string name="manual_next_mission_enabled">Настпуна місія пройдена</string>
     <!-- guide campaign -->
     <string name="campaign_guide_start">Почати</string>
     <string name="campaign_guide_enter">Оглянути</string>
+    <string name="campaign_demo_tutorial1">Блуд</string>
+    <string name="campaign_demo_tutorial2">Вихор</string>
+    <string name="campaign_demo_tutorial3">Вій</string>
+    <string name="campaign_demo_tutorial4">Дідо</string>
+    <string name="campaign_demo_tutorial5">Мавка</string>
+    <string name="campaign_demo_tutorial6">Мара</string>
+    <string name="campaign_demo_tutorial7">Морок</string>
+    <string name="campaign_demo_tutorial8">Русалка</string>
+    <string name="campaign_demo_tutorial9">Упир</string>
+    <string name="campaign_demo_tutorial10">Чугайстер</string>
     <!-- /guide campaign -->
+
+    <!-- plot -->
+    <string name="campaign_demo_plot1">20 лютого 3014 року.\n%s./:Ваша задача знищити супротивника.</string>
+    <string name="campaign_demo_plot2">27 лютого.\n%s./:Ваша задача виграти в обмежений час.</string>
+    <string name="campaign_demo_plot3">16 березня.\n%s./:Ваша задача зібрати 1500 тон кисню.</string>
+    <string name="campaign_demo_plot4">18 березня.\n%s/:Ваша задача прибути до місця призначення.</string>
+    <string name="campaign_demo_plot5">24 березня.\n%s./:Ваша задача протриматись зазначений час.</string>
+    <string name="campaign_demo_plot6">24 березня.\n%s./:Ваша задача прибути до місця призначення.</string>
+    <string name="campaign_demo_plot7">27 березня.\n%s./:Ваша задача знищити супротивника.</string>
+    <string name="campaign_demo_plot8">27 березня.\n%s./:Ваша задача знищити супротивника.</string>
+    <string name="campaign_demo_plot9">2 квітня.\n%s./:Ваша задача протриматись зазначений час.</string>
+    <string name="campaign_demo_plot10">11 квітня.\n%s./:Ваша задача виграти супротивника.</string>
+    <!-- /plot -->
+    <!-- info -->
+    <string name="find_path_mission_hint">Вам потрібно дістатись точки відправлення.\nНатисніть на екран для початку руху.</string>
+    <string name="ninth_mission_defence_building">Супротивником створена захисна споруда!</string>
+    <string name="ninth_mission_pre_support">Отримані дані про можливе підсилення ворога…</string>
+    <string name="ninth_mission_support">Підмога прибула до ворога!</string>
+    <!-- /info -->
     <!-- /campaign -->
 
     <!-- mission -->

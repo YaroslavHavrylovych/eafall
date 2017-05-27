@@ -13,7 +13,7 @@ import com.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.setlectable.selector.SelectorFactory;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.SunStaticObject;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetStaticObject;
-import com.yaroslavlancelot.eafall.game.events.GameStartCooldown;
+import com.yaroslavlancelot.eafall.game.events.TwoPlanetsGameStartCooldown;
 import com.yaroslavlancelot.eafall.game.events.aperiodic.ShowHudTextEvent;
 import com.yaroslavlancelot.eafall.game.events.aperiodic.endgame.GameOverEvent;
 import com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.CreateBuildingEvent;
@@ -26,6 +26,9 @@ import com.yaroslavlancelot.eafall.game.player.PlayersHolder;
 import com.yaroslavlancelot.eafall.game.popup.BuildingSettingsDialog;
 import com.yaroslavlancelot.eafall.game.popup.GameOverPopup;
 import com.yaroslavlancelot.eafall.game.popup.IPopup;
+import com.yaroslavlancelot.eafall.game.popup.rolling.RollingPopupManager;
+import com.yaroslavlancelot.eafall.game.popup.rolling.description.DescriptionPopup;
+import com.yaroslavlancelot.eafall.game.resources.loaders.game.ClientResourcesLoader;
 import com.yaroslavlancelot.eafall.game.rule.IRuler;
 import com.yaroslavlancelot.eafall.game.rule.RulesFactory;
 import com.yaroslavlancelot.eafall.game.scene.hud.BaseGameHud;
@@ -53,6 +56,10 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
 
     @Override
     protected void loadResources() {
+        if (mMissionConfig.isSunPresent()) {
+            ((ClientResourcesLoader) mResourcesLoader).setSunPath(
+                    mMissionConfig.getSunPath(), mMissionConfig.getSunHazePath());
+        }
         super.loadResources();
         //whether or not the mission is bounded (timing)
         if (mMissionConfig.isTimerEnabled()) {
@@ -62,12 +69,13 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
 
     @Override
     protected void onPopulateWorkingScene(final EaFallScene scene) {
-        //initSun
         createSun();
         //planets
         initFirstPlanet();
         initSecondPlanet();
         super.onPopulateWorkingScene(scene);
+        ((DescriptionPopup) RollingPopupManager.getInstance().getPopup(DescriptionPopup.KEY))
+                .setShowBuildingSettingsButton(!mMissionConfig.isSingleWay());
         for (IPlayer player : PlayersHolder.getInstance().getElements()) {
             if (player.getControlType().user()) {
                 ClientIncomeHandler.init(player, mSceneManager.getWorkingScene(),
@@ -81,25 +89,27 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
         super.onShowWorkingScene();
         mSceneManager.getWorkingScene().setIgnoreUpdate(true);
         ((ClientGameHud) mHud).blockInput(true);
-        final GameStartCooldown timerHandler = new GameStartCooldown((ClientGameHud) mHud,
-                mSceneManager.getWorkingScene(), mCamera) {
-            @Override
-            public void timerEnded() {
-                ((ClientGameHud) mHud).blockInput(false);
-                mSceneManager.getWorkingScene().setIgnoreUpdate(false);
-                mFirstPlayer.incomeTime();
-                mSecondPlayer.incomeTime();
-                startRuler();
-            }
-        };
+        final TwoPlanetsGameStartCooldown timerHandler =
+                new TwoPlanetsGameStartCooldown((ClientGameHud) mHud,
+                        mSceneManager.getWorkingScene(), mCamera) {
+                    @Override
+                    public void timerEnded() {
+                        ((ClientGameHud) mHud).blockInput(false);
+                        mSceneManager.getWorkingScene().setIgnoreUpdate(false);
+                        mFirstPlayer.incomeTime();
+                        mSecondPlayer.incomeTime();
+                        startRuler();
+                    }
+                };
         timerHandler.start();
     }
 
     @Override
     protected IPlayer createPlayer(String name, IAlliance alliance, IPlayer.ControlType playerType,
-                                   int startMoney,
+                                   int startMoney, int buildingsLimit,
                                    final MissionConfig missionConfig) {
-        return new Player(name, alliance, playerType, startMoney, 10, missionConfig);
+        return new Player(name, alliance, playerType, startMoney,
+                IPlayer.DEFAULT_CHANCE_INCOME_UNIT_DEATH, buildingsLimit, missionConfig);
     }
 
     /** start tracker which tracks game rules */
@@ -128,8 +138,8 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
                                               String key,
                                               IPlayer player,
                                               long... unitUniqueId) {
-        PlanetStaticObject planet = new PlanetStaticObject(x, y, textureRegion,
-                getVertexBufferObjectManager()) {
+        PlanetStaticObject planet = new PlanetStaticObject(x, y, mMissionConfig.isSuppressorEnabled(),
+                textureRegion, getVertexBufferObjectManager()) {
             @Override
             public void registerTouch(final IEntity entity) {
                 mSceneManager.getWorkingScene().registerTouchArea(entity);
@@ -162,8 +172,15 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
         mFirstPlayer.setPlanet(planet);
     }
 
-    /** create sun */
+    /**
+     * create game field star (sun) if needed
+     *
+     * @return {@link SunStaticObject} or null if the game-field doesn't need star
+     */
     protected SunStaticObject createSun() {
+        if (!mMissionConfig.isSunPresent()) {
+            return null;
+        }
         SunStaticObject sunStaticObject = new SunStaticObject(
                 SizeConstants.HALF_FIELD_WIDTH, SizeConstants.HALF_FIELD_HEIGHT,
                 mEngine.getVertexBufferObjectManager());
@@ -178,6 +195,9 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
     @SuppressWarnings("unused")
     /** really used by {@link de.greenrobot.event.EventBus} */
     public void onEvent(final BuildingSettingsPopupShowEvent event) {
+        if (mMissionConfig.isSingleWay()) {
+            return;
+        }
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -229,10 +249,14 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
 
             @Override
             public void onHided() {
-                ClientGameActivity.this.finish();
+                onGameOver();
             }
         });
         popup.showPopup();
+    }
+
+    protected void onGameOver() {
+        ClientGameActivity.this.finish();
     }
 
     @SuppressWarnings("unused")

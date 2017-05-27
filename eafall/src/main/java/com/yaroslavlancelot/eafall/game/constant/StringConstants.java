@@ -18,8 +18,14 @@ public final class StringConstants {
     public static final String IMAGES_PATH = "graphics/images" + SEPARATOR;
     /** sun file name (top image) */
     public static final String FILE_SUN = "graphics/sprites/sun/sun.png";
+    /** blue sun file name (top image) */
+    public static final String FILE_BLUE_SUN = "graphics/sprites/sun/blue_sun.png";
+    /** the only available for now logo path */
+    public static final String FILE_LOGO = "graphics/images/alliance/mutants/mutants_logo.png";
     /** sun file name (bottom image) */
     public static final String FILE_SUN_HAZE = "graphics/sprites/sun/sun_haze.png";
+    /** blue sun file name (bottom image) */
+    public static final String FILE_BLUE_SUN_HAZE = "graphics/sprites/sun/sun_haze.png";
     /** splash screen file name */
     public static final String FILE_SPLASH_SCREEN = "graphics/images/splash_screen.png";
     /** annihilator bullet image */
@@ -54,12 +60,20 @@ public final class StringConstants {
     public static final String FILE_HEALTH_BAR_UNIT = "graphics/sprites/health/unit_health_bar.png";
     /** file name for blue planet */
     public static final String PLANET = "graphics/sprites/earth.png";
+    /** campaign foreground */
+    public static final String FILE_CAMPAIGN_HUD_FOREGROUND = "graphics/images/campaign/foreground.png";
     /** selector image */
     public static final String FILE_SELECTOR = "graphics/sprites/select/selector.png";
     /** planet explosion animation */
     public static final String KEY_PLANET_EXPLOSION = "graphics/sprites/explosion/explosion_planet.png";
     /** unit explosion animation */
     public static final String KEY_UNIT_EXPLOSION = "graphics/sprites/explosion/explosion_unit.png";
+    /** andpoint animated sprite */
+    public static final String KEY_ENDPOINT = "graphics/images/end_point.png";
+    /** unit visible area sprite */
+    public static final String KEY_VISIBLE_AREA = "graphics/images/visible_area.png";
+    /** unit (big) visible area sprite */
+    public static final String KEY_BIGGER_VISIBLE_AREA = "graphics/images/bigger_visible_area.png";
     /** used like key for sun static object */
     public static final String KEY_SUN_HAZE = "sun_key_top";
     /** used like key for sun static object */
@@ -82,6 +96,10 @@ public final class StringConstants {
     public static final String FILE_BUILDINGS_POPUP_UP_BUTTON = "graphics/icons/up_button.png";
     /** income image */
     public static final String FILE_INCOME = "graphics/icons/income.png";
+    /** campaign back button */
+    public static final String FILE_CAMPAIGN_BACK_BUTTON = "graphics/sprites/buttons/campaign_back_button.png";
+    /** campaign next button */
+    public static final String FILE_CAMPAIGN_NEXT_BUTTON = "graphics/images/campaign/next_button.png";
     /** tutorial pointer image */
     public static final String FILE_TUTORIAL_POINTER = "graphics/icons/pointer.png";
     /** game menu button */
@@ -106,6 +124,8 @@ public final class StringConstants {
     public static String SOUND_SHOT_PATH = "audio/sound/shot/";
     /** clock tick sound path */
     public static String SOUND_CLOCK_TICK_PATH = "audio/sound/clock_tick.ogg";
+    /** tap on empty part of the screen sound path */
+    public static String SOUND_TAP_ON_SCREEN_PATH = "audio/sound/general/tap.ogg";
 
     /**
      * private constructor

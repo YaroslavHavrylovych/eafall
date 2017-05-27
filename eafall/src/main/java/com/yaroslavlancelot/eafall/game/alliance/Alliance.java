@@ -26,8 +26,11 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.simpleframework.xml.core.Persister;
 
+import java.util.HashSet;
 import java.util.SortedSet;
 import java.util.TreeSet;
+
+import timber.log.Timber;
 
 /** Each alliance common functionality */
 public abstract class Alliance implements IAlliance {
@@ -69,6 +72,11 @@ public abstract class Alliance implements IAlliance {
     @Override
     public SortedSet<Integer> getBuildingsIds() {
         return mBuildingsIds;
+    }
+
+    @Override
+    public SortedSet<Integer> getMovableUnitsIds() {
+        return mUnitsIds.headSet(mUnitsIds.last());
     }
 
     @Override
@@ -203,7 +211,7 @@ public abstract class Alliance implements IAlliance {
         try {
             ret = new Persister().read(cls, context.getResources().openRawResource(rawId));
         } catch (Exception e) {
-            //TODO logger was here
+            Timber.e(e, "can't parse objects from xml");
         }
         return ret;
     }

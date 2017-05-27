@@ -5,9 +5,9 @@
     <background>graphics/images/background.png</background>
     <parallax_background>false</parallax_background>
 
-    <campaign id="0">
+    <campaign screen="0">
         <name>imperials_campaign</name>
-        <picture>graphics/sprites/planet_1.png</picture>
+        <picture>graphics/sprites/earth.png</picture>
         <width>128</width>
         <height>128</height>
         <position>
@@ -15,9 +15,9 @@
             <y>540</y>
         </position>
     </campaign>
-    <campaign id="1">
+    <campaign screen="1">
         <name>rebels_campaign</name>
-        <picture>graphics/sprites/planet_2.png</picture>
+        <picture>graphics/sprites/earth.png</picture>
         <width>128</width>
         <height>128</height>
         <position>

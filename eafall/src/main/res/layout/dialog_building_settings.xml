@@ -26,21 +26,21 @@
         android:paddingLeft="@dimen/dialog_building_settings_elements_padding_left"
         android:orientation="vertical">
 
-        <RadioButton
+        <com.yaroslavlancelot.eafall.android.view.SoundRadioButton
             android:id="@+id/building_settings_top"
             style="@style/DialogRadioButtonDefault"
             android:layout_margin="@dimen/dialog_building_settings_checkbox_margin"
             android:button="@drawable/path_top_checkbox_selector"
             android:text="@string/building_settings_top"/>
 
-        <RadioButton
+        <com.yaroslavlancelot.eafall.android.view.SoundRadioButton
             android:id="@+id/building_settings_bottom"
             style="@style/DialogRadioButtonDefault"
             android:layout_margin="@dimen/dialog_building_settings_checkbox_margin"
             android:button="@drawable/path_bottom_checkbox_selector"
             android:text="@string/building_settings_bottom"/>
 
-        <RadioButton
+        <com.yaroslavlancelot.eafall.android.view.SoundRadioButton
             android:id="@+id/building_settings_pause"
             style="@style/DialogRadioButtonDefault"
             android:layout_margin="@dimen/dialog_building_settings_checkbox_margin"
@@ -48,7 +48,7 @@
             android:text="@string/building_settings_pause"/>
     </RadioGroup>
 
-    <Button
+    <com.yaroslavlancelot.eafall.android.view.SoundButton
         android:id="@+id/done_button"
         android:layout_below="@id/title_container"
         android:layout_marginTop="@dimen/dialog_building_settings_done_btn_margin_top"

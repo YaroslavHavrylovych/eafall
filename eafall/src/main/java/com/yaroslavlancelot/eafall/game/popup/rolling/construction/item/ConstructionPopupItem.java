@@ -39,7 +39,7 @@ public class ConstructionPopupItem extends ButtonSprite implements Constructions
     /** popup text font */
     private static String FONT = DescriptionText.sFontKey;
 
-    /** displayed object id */
+    /** displayed object screen */
     private BuildingId mBuildingId;
 
     /* popup elements */
@@ -78,7 +78,7 @@ public class ConstructionPopupItem extends ButtonSprite implements Constructions
 
     @Override
     public void setBuildingId(BuildingId buildingId, String allianceName) {
-        // object id
+        // object screen
         if (mBuildingId != null && mBuildingId.equals(buildingId)) {
             return;
         }

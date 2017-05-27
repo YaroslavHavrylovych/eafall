@@ -8,9 +8,7 @@ import android.widget.Spinner;
 
 import com.yaroslavlancelot.eafall.R;
 import com.yaroslavlancelot.eafall.android.StartableIntent;
-import com.yaroslavlancelot.eafall.game.alliance.imperials.Imperials;
 import com.yaroslavlancelot.eafall.game.alliance.mutants.Mutants;
-import com.yaroslavlancelot.eafall.game.alliance.rebels.Rebels;
 import com.yaroslavlancelot.eafall.game.configuration.mission.MissionConfig;
 import com.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.yaroslavlancelot.eafall.game.mission.MissionIntent;
@@ -60,7 +58,7 @@ public abstract class PreGameCustomizationBaseActivity extends BaseNonGameActivi
 
     /**
      * Return alliance name (as English version in R.string.choose_alliance) based
-     * on current selected id in spinner passed in params.
+     * on current selected screen in spinner passed in params.
      *
      * @param spinner spinner to search for alliance in
      * @return Selected alliance name in English.
@@ -70,9 +68,8 @@ public abstract class PreGameCustomizationBaseActivity extends BaseNonGameActivi
         switch ((int) selectedId) {
             default:
             case 0:
-                return Imperials.ALLIANCE_NAME;
             case 1:
-                return Rebels.ALLIANCE_NAME;
+                throw new IllegalStateException("There is no other races than mutants");
             case 2:
                 return Mutants.ALLIANCE_NAME;
         }

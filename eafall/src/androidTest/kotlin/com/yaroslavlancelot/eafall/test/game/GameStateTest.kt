@@ -1,22 +1,19 @@
 package com.yaroslavlancelot.eafall.test.game
 
-import android.test.AndroidTestCase
 import com.yaroslavlancelot.eafall.game.EaFallActivity
 import com.yaroslavlancelot.eafall.game.GameState
 import com.yaroslavlancelot.eafall.game.constant.StringConstants
 import com.yaroslavlancelot.eafall.game.scene.SceneManager
 import com.yaroslavlancelot.eafall.game.scene.hud.BaseGameHud
 import com.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 /**
  * Test possible game sates and transitions between them.
  *
  * @author Yaroslav Havrylovych
  */
-class GameStateTest : AndroidTestCase() {
-    protected val testGameActivity = TestActivity();
+class GameStateTest : EaFallTestCase() {
+    private val testGameActivity = TestActivity()
 
     //#1
     fun testReset() {
@@ -63,16 +60,12 @@ class GameStateTest : AndroidTestCase() {
                 "GameState.isResourcesLoaded() doesn't work as it should")
     }
 
-    protected class TestActivity : EaFallActivity {
+    private class TestActivity : EaFallActivity {
         override fun createHud(): BaseGameHud? {
             return BaseGameHud()
         }
 
         override fun preResourcesLoading() {
-        }
-
-        override fun createMusicPath(): String? {
-            return StringConstants.getMusicPath() + "background_1.ogg";
         }
 
         constructor() {
@@ -84,7 +77,7 @@ class GameStateTest : AndroidTestCase() {
         }
 
         public override fun startAsyncResourceLoading() {
-            super.startAsyncResourceLoading();
+            super.startAsyncResourceLoading()
         }
 
         override fun loadResources() {

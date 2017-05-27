@@ -14,7 +14,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 
 /** dummy for special building */
 public class SpecialBuildingDummy extends BuildingDummy {
-    /** building id */
+    /** building screen */
     public static final int BUILDING_ID = 54321;
     private SpecialBuildingLoader mBuildingLoader;
     private int mDescriptionStringId;

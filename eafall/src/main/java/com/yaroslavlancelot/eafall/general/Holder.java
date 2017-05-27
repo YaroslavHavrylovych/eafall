@@ -44,7 +44,7 @@ public abstract class Holder<T> extends SelfCleanable {
     /**
      * check is element has been already added
      *
-     * @param id element id
+     * @param id element screen
      * @return true - if element holdered (already added) and false in other way
      */
     public boolean isElementExist(String id) {

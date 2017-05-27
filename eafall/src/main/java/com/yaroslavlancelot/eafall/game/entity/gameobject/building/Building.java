@@ -144,8 +144,19 @@ public abstract class Building implements IBuilding {
         return mBuildingStaticObject.getY();
     }
 
-    @Override
-    public boolean buyBuilding() {
+    /**
+     * Buying the building for the player.
+     * <br/>
+     * Operation can fail
+     * if not enough amount of money or building limit exceed.
+     * <br/>
+     * Operation can be forced, in this case buying operation would
+     * perform without money, and can't fail if not enough of money.
+     *
+     * @param force true if it's force operation (read above).
+     * @return true if building bought and false in other case.
+     */
+    protected boolean buyBuilding(boolean force) {
         IPlayer player = PlayersHolder.getPlayer(mPlayerName);
         if (getAmount() >= getAmountLimit()) {
             if (player.getControlType().user()) {
@@ -153,7 +164,7 @@ public abstract class Building implements IBuilding {
             }
             return false;
         }
-        if (!player.getControlType().clientSide()) {
+        if (!force && !player.getControlType().clientSide()) {
             int cost = mDummy.getCost(mUpgrade);
             if (player.getMoney() < cost) {
                 SoundFactory.getInstance().playSound(GeneralSoundKeys.DENIED);
@@ -172,6 +183,11 @@ public abstract class Building implements IBuilding {
             SoundFactory.getInstance().playSound(GeneralSoundKeys.BUTTON_CLICK);
         }
         return true;
+    }
+
+    @Override
+    public boolean buyBuilding() {
+        return buyBuilding(false);
     }
 
     @Override
@@ -224,7 +240,7 @@ public abstract class Building implements IBuilding {
                 PlanetStaticObject planet = PlayersHolder.getPlayer(mPlayerName).getPlanet();
                 setFlippedHorizontal(planet.isFlippedHorizontal());
                 setCost(buildingDummy.getCost(upgrade));
-                setIncome((int) (getCost() * 0.03));
+                setIncome((int) (getCost() * 0.05));
                 setWidth(buildingDummy.getWidth());
                 setHeight(buildingDummy.getWidth());
                 setObjectStringId(buildingDummy.getStringId());

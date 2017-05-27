@@ -31,11 +31,11 @@ public class OffenceUnit extends Unit {
     /** Used to prevent multiple arrays creation */
     private static float[] mTwoDimensionFloatArray = new float[2];
     /** current unit bonuses */
-    protected final Map<Bonus, Long> mBonuses = new HashMap<>();
+    private final Map<Bonus, Long> mBonuses = new HashMap<>();
     /** max velocity for this unit */
-    protected float mMaxVelocity;
+    private float mMaxVelocity;
     /** unit moving path */
-    protected IUnitPath mUnitPath;
+    private IUnitPath mUnitPath;
     /** object bonus to the health */
     private int mObjectHealthBonus;
     /** chance to avoid an attack */
@@ -45,6 +45,7 @@ public class OffenceUnit extends Unit {
     /** to track health bar visibility, last time unit took damage */
     private volatile long mLastHitTime;
     private long mLastBonusUpdateTime = System.currentTimeMillis();
+    private boolean mUnitCanNotAttack;
 
     /** create unit from appropriate builder */
     public OffenceUnit(OffenceUnitBuilder unitBuilder) {
@@ -67,6 +68,10 @@ public class OffenceUnit extends Unit {
 
     public void setUnitPath(IUnitPath unitPath) {
         mUnitPath = unitPath;
+    }
+
+    public void setUnitCanNotAttack(boolean unitCanAttack) {
+        this.mUnitCanNotAttack = unitCanAttack;
     }
 
     @Override
@@ -102,7 +107,7 @@ public class OffenceUnit extends Unit {
             }
         }
 
-        if (mObjectToAttack == null) {
+        if (mObjectToAttack == null && !mUnitCanNotAttack) {
             mObjectToAttack = enemiesMap.getClosestUnit(mX, mY, mAttackRadius);
             //attack founded enemy
             if (mObjectToAttack != null) {
@@ -214,6 +219,9 @@ public class OffenceUnit extends Unit {
     /** remove bonuses which are supposed to die because of passes time */
     private void updateBonuses() {
         synchronized (mBonuses) {
+            if (mBonuses.isEmpty()) {
+                return;
+            }
             Map.Entry<Bonus, Long> entry;
             long currentTime = System.currentTimeMillis();
             for (Iterator<Map.Entry<Bonus, Long>> it = mBonuses.entrySet().iterator(); it.hasNext(); ) {
@@ -280,9 +288,16 @@ public class OffenceUnit extends Unit {
         float absDistanceX = Math.abs(distanceX),
                 absDistanceY = Math.abs(distanceY),
                 maxAbsDistance = absDistanceX > absDistanceY ? absDistanceX : absDistanceY;
+        if (maxAbsDistance < getWidth() || maxAbsDistance < getHeight()) {
+            setUnitLinearVelocity(0, 0);
+            return;
+        }
         float ordinateSpeed = mMaxVelocity * distanceX / maxAbsDistance,
                 abscissaSpeed = mMaxVelocity * distanceY / maxAbsDistance;
-
         setUnitLinearVelocity(ordinateSpeed, abscissaSpeed);
+    }
+
+    public IUnitPath getUnitPath() {
+        return mUnitPath;
     }
 }

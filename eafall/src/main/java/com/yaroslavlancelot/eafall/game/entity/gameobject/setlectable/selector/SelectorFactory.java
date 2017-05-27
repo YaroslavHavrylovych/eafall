@@ -74,6 +74,9 @@ public class SelectorFactory extends SelfCleanable implements Selector {
 
     @Override
     public void deselect() {
+        if (mSpriteSelector == null) {
+            return;
+        }
         mSpriteSelector.unregisterEntityModifier(mLightSelectorModifier);
         mSpriteSelector.unregisterEntityModifier(mShadowSelectorModifier);
         mSpriteSelector.setAlpha(0f);

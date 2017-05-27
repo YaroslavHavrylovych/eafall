@@ -7,23 +7,26 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
-import com.yaroslavlancelot.eafall.BuildConfig;
 import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.R;
 import com.yaroslavlancelot.eafall.android.StartableIntent;
 import com.yaroslavlancelot.eafall.android.activities.settings.SettingsActivity;
 import com.yaroslavlancelot.eafall.android.activities.singleplayer.PreGameCustomizationActivity;
 import com.yaroslavlancelot.eafall.game.alliance.mutants.Mutants;
+import com.yaroslavlancelot.eafall.game.campaign.intents.CampaignIntent;
+import com.yaroslavlancelot.eafall.game.campaign.pass.CampaignPassage;
+import com.yaroslavlancelot.eafall.game.campaign.pass.CampaignPassageFactory;
 import com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity;
-import com.yaroslavlancelot.eafall.game.mission.MissionIntent;
 import com.yaroslavlancelot.eafall.game.player.IPlayer;
-import com.yaroslavlancelot.eafall.game.tutorial.TutorialMissionDataLoader;
 
 /**
  * first game activity with menu etc.
  */
 public class StartupActivity extends BaseNonGameActivity {
+    private CampaignPassage mCampaignPassage;
+
     @Override
     public void onBackPressed() {
         StartupActivity.this.finish();
@@ -38,49 +41,35 @@ public class StartupActivity extends BaseNonGameActivity {
         initSettingsButton(findViewById(R.id.settings));
         initExitButton(findViewById(R.id.exit));
 
+        mCampaignPassage = CampaignPassageFactory.getInstance().getCampaignPassage(
+                CampaignIntent.getPathToCampaign(CampaignIntent.DEFAULT_CAMPAIGN), this);
+
         PreferenceManager.setDefaultValues(EaFallApplication.getContext(), R.xml.preferences, false);
     }
 
     private void initCampaignButton(View campaignButton) {
         Button button = (Button) campaignButton;
         button.getPaint().setShader(getTextGradient(button.getLineHeight()));
-        if (BuildConfig.DEMO_VERSION) {
-            button.setText(R.string.tutorial);
-        } else {
-            button.setText(R.string.campaign);
-        }
+        button.setText(R.string.campaign);
         campaignButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 StartableIntent startableIntent;
-                if (BuildConfig.DEMO_VERSION) {
-                    String activityClassName = "com.yaroslavlancelot.eafall.game.tutorial" +
-                            ".TutorialActivity";
-                    Class cls;
-                    try {
-                        cls = Class.forName(activityClassName);
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                        return;
-                    }
-                    startableIntent = new MissionIntent(cls, new TutorialMissionDataLoader());
-                } else {
-                    String intentClassName = "com.yaroslavlancelot.eafall.game.campaign" +
-                            ".intents.CampaignIntent";
-                    Class cls;
-                    try {
-                        cls = Class.forName(intentClassName);
-                        startableIntent = (StartableIntent) cls.newInstance();
-                    } catch (InstantiationException e) {
-                        e.printStackTrace();
-                        return;
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                        return;
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                        return;
-                    }
+                String intentClassName = "com.yaroslavlancelot.eafall.game.campaign" +
+                        ".intents.CampaignIntent";
+                Class cls;
+                try {
+                    cls = Class.forName(intentClassName);
+                    startableIntent = (StartableIntent) cls.newInstance();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                    return;
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                    return;
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                    return;
                 }
                 startableIntent.start(StartupActivity.this);
             }
@@ -93,17 +82,16 @@ public class StartupActivity extends BaseNonGameActivity {
         singleGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                if (BuildConfig.DEMO_VERSION) {
+                if (mCampaignPassage.getPassedCampaignsAmount() < 4) {
+                    Toast.makeText(StartupActivity.this, R.string.pass_campaign, Toast.LENGTH_SHORT)
+                            .show();
+                } else {
                     Intent intent = PreGameCustomizationActivity.getSinglePlayerIntent(
                             SinglePlayerGameActivity.class,
                             Mutants.ALLIANCE_NAME, Mutants.ALLIANCE_NAME,
                             IPlayer.ControlType.USER_CONTROL_ON_SERVER_SIDE,
                             IPlayer.ControlType.BOT_CONTROL_ON_SERVER_SIDE);
                     startActivity(intent);
-                } else {
-                    Intent singleGameIntent = new Intent(StartupActivity.this,
-                            PreGameCustomizationActivity.class);
-                    startActivity(singleGameIntent);
                 }
             }
         });
@@ -111,43 +99,27 @@ public class StartupActivity extends BaseNonGameActivity {
 
     private void initMultiplayerGameButton(View singleGameButton) {
         Button button = (Button) singleGameButton;
-        if (BuildConfig.DEMO_VERSION) {
-            button.setText(R.string.sandbox);
-        } else {
-            button.setText(R.string.multiplayer_game);
-        }
+        button.setText(R.string.sandbox);
         button.getPaint().setShader(getTextGradient(button.getLineHeight()));
         singleGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 StartableIntent startableIntent;
-                if (BuildConfig.DEMO_VERSION) {
-                    String intentClassName = "com.yaroslavlancelot.eafall.game.sandbox" +
-                            ".intents.SandboxIntent";
-                    Class cls;
-                    try {
-                        cls = Class.forName(intentClassName);
-                        startableIntent = (StartableIntent) cls.newInstance();
-                    } catch (InstantiationException e) {
-                        e.printStackTrace();
-                        return;
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                        return;
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                        return;
-                    }
-                } else {
-                    Class cls;
-                    try {
-                        cls = Class.forName("com.yaroslavlancelot.eafall.android" +
-                                ".activities.multiplayer.GameServersListActivity");
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                        return;
-                    }
-                    startableIntent = new StartableIntent(StartupActivity.this, cls);
+                String intentClassName = "com.yaroslavlancelot.eafall.game.sandbox" +
+                        ".intents.SandboxIntent";
+                Class cls;
+                try {
+                    cls = Class.forName(intentClassName);
+                    startableIntent = (StartableIntent) cls.newInstance();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                    return;
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                    return;
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                    return;
                 }
                 startableIntent.start(StartupActivity.this);
             }

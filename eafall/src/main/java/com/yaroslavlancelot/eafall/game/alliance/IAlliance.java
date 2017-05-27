@@ -28,8 +28,11 @@ public interface IAlliance {
     /** returns all buildings ids without upgrades */
     SortedSet<Integer> getBuildingsIds();
 
-    /** returns all buildings ids without upgrades */
+    /** returns all units ids without upgrades */
     SortedSet<Integer> getUnitsIds();
+
+    /** returns all movable only units ids without upgrades */
+    SortedSet<Integer> getMovableUnitsIds();
 
     int getBuildingCost(BuildingId buildingId);
 
@@ -55,7 +58,7 @@ public interface IAlliance {
     /**
      * get the particular unit dummy
      *
-     * @param unitId id to identify the unit dummy
+     * @param unitId screen to identify the unit dummy
      * @return unit dummy instance
      */
     UnitDummy getUnitDummy(int unitId);
@@ -65,7 +68,7 @@ public interface IAlliance {
     /**
      * calculate the building upgrade cost consuming that only one building needs the upgrade
      *
-     * @param buildingId id of the building which we want upgrade
+     * @param buildingId screen of the building which we want upgrade
      * @return the upgrade cost value
      */
     int getUpgradeCost(BuildingId buildingId);
@@ -73,7 +76,7 @@ public interface IAlliance {
     /**
      * calculate buildings upgrade cost
      *
-     * @param buildingId id of the building which we want upgrade
+     * @param buildingId screen of the building which we want upgrade
      * @param amount     buildings amount
      * @return the upgrade cost value
      */
@@ -82,7 +85,7 @@ public interface IAlliance {
     /**
      * check upgrade possibility of the building with given buildingId
      *
-     * @param buildingId id of the building the upgrade of the which you want to check
+     * @param buildingId screen of the building the upgrade of the which you want to check
      * @return true if you can upgrade current building and false in other case
      */
     boolean isUpgradeAvailable(BuildingId buildingId);

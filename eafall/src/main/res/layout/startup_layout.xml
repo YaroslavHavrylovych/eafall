@@ -28,7 +28,7 @@
         android:gravity="center"
         android:layout_below="@+id/logo">
 
-        <Button
+        <com.yaroslavlancelot.eafall.android.view.SoundButton
             android:id="@+id/campaign"
             android:layout_width="match_parent"
             android:layout_height="@dimen/startup_screen_button_height"
@@ -39,7 +39,7 @@
             android:textStyle="bold"
             android:textColor="@color/startup_screen_button_text_bottom"/>
 
-        <Button
+        <com.yaroslavlancelot.eafall.android.view.SoundButton
             android:id="@+id/single_game"
             android:layout_width="match_parent"
             android:layout_height="@dimen/startup_screen_button_height"
@@ -50,7 +50,7 @@
             android:textStyle="bold"
             android:textColor="@color/startup_screen_button_text_bottom"/>
 
-        <Button
+        <com.yaroslavlancelot.eafall.android.view.SoundButton
             android:id="@+id/multiplayer_game"
             android:layout_width="match_parent"
             android:layout_height="@dimen/startup_screen_button_height"
@@ -61,7 +61,7 @@
             android:textColor="@color/startup_screen_button_text_bottom"/>
     </LinearLayout>
 
-    <Button
+    <com.yaroslavlancelot.eafall.android.view.SoundButton
         android:id="@+id/settings"
         android:layout_width="@dimen/startup_screen_round_button_size"
         android:layout_height="@dimen/startup_screen_round_button_size"
@@ -72,7 +72,7 @@
         android:layout_alignParentStart="true"
         android:contentDescription="@string/settings"/>
 
-    <Button
+    <com.yaroslavlancelot.eafall.android.view.SoundButton
         android:id="@+id/exit"
         android:layout_width="@dimen/startup_screen_round_button_size"
         android:layout_height="@dimen/startup_screen_round_button_size"

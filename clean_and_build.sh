@@ -1,22 +1,12 @@
 #!/bin/bash
-DEMO="Demo";
-DEV="Dev";
 
-build_variant=$1
+result=":eafall:assembleDebug --stacktrace"
 
-if [ "$build_variant" = "" ]; then
-   build_variant=$DEMO 
-else 
-    if [ "$build_variant" = "1" ]; then
-        build_variant=$DEV
-    else 
-        if [ "$build_variant" = "2" ]; then
-            build_variant=$DEMO
-        fi
-    fi
-fi
+toEvalStr="./gradlew :eafall:clean"
 
-result=":eafall:assemble${build_variant}Debug"
+echo ${toEvalStr}
+eval "${toEvalStr}"
 
-eval "./gradlew :eafall:clean"
-eval "./gradlew ${result} --no-rebuild"
+toEvalStr="./gradlew ${result}"
+echo ${toEvalStr}
+eval "${toEvalStr}"

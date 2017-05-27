@@ -45,12 +45,28 @@ public class DefenceBuilding extends Building {
         throw new UnsupportedOperationException("trying to upgrade special building (no upgrades)");
     }
 
-    @Override
-    public boolean buyBuilding() {
+    /** HACK FOR CAMPAIGN ONLY */
+    public boolean forceBuilding() {
+        return buyBuilding(true);
+    }
+
+    /**
+     * Buying the building for the player.
+     * <br/>
+     * Operation can fail
+     * if not enough amount of money or building limit exceed.
+     * <br/>
+     * Operation can be forced, in this case buying operation would
+     * perform without money, and can't fail if not enough of money.
+     *
+     * @param force true if it's force operation (read above).
+     * @return true if building bought and false in other case.
+     */
+    protected boolean buyBuilding(boolean force) {
         if (mBuildingsAmount > 0) {
             return false;
         }
-        boolean buildingBought = super.buyBuilding();
+        boolean buildingBought = super.buyBuilding(force);
         IPlayer player = PlayersHolder.getPlayer(mPlayerName);
         boolean isFakePlanet = player.getControlType().clientSide();
         //building was created
@@ -75,6 +91,11 @@ public class DefenceBuilding extends Building {
                     mPlayerName, x, y));
         }
         return true;
+    }
+
+    @Override
+    public boolean buyBuilding() {
+        return buyBuilding(false);
     }
 
     @Override

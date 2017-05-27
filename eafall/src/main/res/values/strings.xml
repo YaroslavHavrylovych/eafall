@@ -3,6 +3,7 @@
     <!-- versions -->
     <string name="not_int_demo">Doesn\'t exist in demo version</string>
     <string name="not_implemented">Not implemented</string>
+    <string name="pass_campaign">You need to pass first 4 campaign missions first</string>
     <!-- /versions -->
 
     <!-- game types -->
@@ -26,7 +27,8 @@
     <string name="tutorial_description_create_building_2">Now it\'s a time to create another building</string>
     <string name="tutorial_description_building_settings">Click on the button to check the building settings</string>
     <string name="tutorial_description_hide">Click on an empty area to hide the popup</string>
-    <string name="tutorial_description_suppressor_usage">If you\'re losing you can long-click on you planet\nto trigger the suppressor</string>
+    <string name="tutorial_description_suppressor_usage">If you would long-click on you planet\n, it would trigger Suppressor</string>
+    <string name="tutorial_description_do_not_forget">Don\'t forget about this!</string>
     <string name="tutorial_description_suppressor_description">Suppressor destroys all enemy units\non your side of the game field</string>
     <string name="tutorial_task">Your task is to survive during the rest of the time\nGood luck!</string>
     <!-- /tutorial -->
@@ -49,68 +51,6 @@
     <!-- /pre game customizations -->
 
     <!-- unions -->
-    <!-- imperials -->
-    <!-- buildings -->
-    <string name="camp">Camp</string>
-    <string name="tent">Tent</string>
-    <string name="barracks">Barracks</string>
-    <string name="shooters_hall">ShootersHall</string>
-    <string name="training_center">TrainingCenter</string>
-    <string name="workshop">Workshop</string>
-    <string name="laboratory">Laboratory</string>
-    <string name="bunker">Bunker</string>
-    <string name="defender">Defender</string>
-    <string name="municipality">Municipality</string>
-    <string name="earth_artifact">Earth Artifact</string>
-    <!-- /buildings -->
-    <!-- units -->
-    <string name="conscript">Conscript</string>
-    <string name="grant">Grant</string>
-    <string name="sergeant">Sergeant</string>
-    <string name="boy_scout">Boy Scout</string>
-    <string name="scout">Scout</string>
-    <string name="infantrymen">Infantrymen</string>
-    <string name="SF">SF</string>
-    <string name="sniper">Sniper</string>
-    <string name="killer">Killer</string>
-    <string name="agent">Agent</string>
-    <string name="spy">Spy</string>
-    <string name="robot">Robot</string>
-    <string name="metal_killer">Metal Killer</string>
-    <string name="demolisher">Demolisher</string>
-    <string name="superman">Superman</string>
-    <!-- /units -->
-
-    <!-- rebels -->
-    <!-- buildings -->
-    <string name="underground">Underground</string>
-    <string name="factory">Factory</string>
-    <string name="bomos">Bomos</string>
-    <string name="hospital">Hospital</string>
-    <string name="minery">Minery</string>
-    <string name="artillery">Artillery</string>
-    <string name="sabotage_center">Sabotage Center</string>
-    <string name="fort">fort</string>
-    <string name="caches">Caches</string>
-    <string name="space_material">Space Material</string>
-    <!-- /buildings -->
-    <!-- units -->
-    <string name="machine_gunner">Machine Gunner</string>
-    <string name="mechanical_soldier">Mechanical Soldier</string>
-    <string name="oplot_u">Oplot U</string>
-    <string name="oplot_m">Oplot M</string>
-    <string name="suicide">Suicide</string>
-    <string name="priest">Priest</string>
-    <string name="doctor">Doctor</string>
-    <string name="shaman">Shaman</string>
-    <string name="engineer">Engineer</string>
-    <string name="exploder">Exploder</string>
-    <string name="ballista">Ballista</string>
-    <string name="thor">Thor</string>
-    <string name="recruiter">Recruiter</string>
-    <string name="saboteur">Saboteur</string>
-    <!-- /units -->
-
     <!-- mutants -->
     <!-- buildings -->
     <string name="water_cave">Water Cave</string>
@@ -158,11 +98,9 @@
     <string name="game_sounds">Game Sounds</string>
     <string name="game_sounds_on">Game sounds enabled</string>
     <string name="game_sounds_off">Game sounds disabled</string>
-    <string name="game_sounds_volume">Game Sounds</string>
     <string name="music">Music</string>
     <string name="music_on">Music enabled</string>
     <string name="music_off">Music disabled</string>
-    <string name="music_volume">Music</string>
     <string name="category_sounds">Sounds</string>
     <string name="category_other">Other</string>
 
@@ -172,6 +110,7 @@
     <string name="back">Back</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="next">Next</string>
     <string name="done">Done</string>
     <string name="exit_click">Double click to exit</string>
     <string name="exit_loading">You can\'t quite during loading</string>
@@ -216,6 +155,7 @@
     <string name="wrong_planet_suppressor">You can use the Suppressor only on your base</string>
     <!-- stars -->
     <string name="sun">Helios</string>
+    <string name="new_sun">Amaterasu</string>
     <!-- /stars -->
     <!-- planets -->
     <string name="earth">Earth</string>
@@ -282,10 +222,10 @@
     <!-- descriptions -->
     <string name="earth_artifact_description">Sacred Mutants artifact located in Earth subsoil.\nAdds 10\u0025 to unit health.</string>
     <string name="space_material_description">Powerful Imperials artifact invented by their scientists.\nGives 10\u0025 chance to avoid any damage.</string>
-    <string name="king_of_snakes_description">Valuable Rebels artifact founded in the open space.\n10\u0025 unit damage increase.</string>
-    <string name="municipality_description">20\u0025 income increase by first created building.\nEach next building gives 1\u0025 to income.</string>
-    <string name="caches_description">20\u0025 income increase by first created building.\nEach next building gives 1\u0025 to income.</string>
-    <string name="reptile_city_description">20\u0025 income increase by first created building.\nEach next building gives 1\u0025 to income.</string>
+    <string name="king_of_snakes_description">Valuable Rebels artifact founded in the open space.\n30\u0025 unit damage increase.</string>
+    <string name="municipality_description">40\u0025 income increase by first created building.\nEach next building gives 5\u0025 to income.</string>
+    <string name="caches_description">40\u0025 income increase by first created building.\nEach next building gives 5\u0025 to income.</string>
+    <string name="reptile_city_description">40\u0025 income increase by first created building.\nEach next building gives 5\u0025 to income.</string>
     <!-- /descriptions -->
     <!-- /description popup -->
 
@@ -299,10 +239,42 @@
     <!-- /menu popup -->
 
     <!-- campaign -->
+    <string name="manual_next_enable_plural">Click %d more times to enable</string>
+    <string name="manual_next_enable_single">Click %d more time to enable</string>
+    <string name="manual_next_mission_enabled">You\'ve enable next mission</string>
     <!-- guide campaign -->
     <string name="campaign_guide_start">Start</string>
     <string name="campaign_guide_enter">Enter</string>
+    <string name="campaign_demo_tutorial1">Blud</string>
+    <string name="campaign_demo_tutorial2">Vyhor</string>
+    <string name="campaign_demo_tutorial3">Vij</string>
+    <string name="campaign_demo_tutorial4">Dido</string>
+    <string name="campaign_demo_tutorial5">Mavka</string>
+    <string name="campaign_demo_tutorial6">Mara</string>
+    <string name="campaign_demo_tutorial7">Mermaid</string>
+    <string name="campaign_demo_tutorial8">Morok</string>
+    <string name="campaign_demo_tutorial9">Vampire</string>
+    <string name="campaign_demo_tutorial10">Chugaister</string>
     <!-- /guide campaign -->
+
+    <!-- plot -->
+    <string name="campaign_demo_plot1">20 February.\n%s./:Your task is to destroy the enemy.</string>
+    <string name="campaign_demo_plot2">February 27.\n%s./:Your task is to win within a limited time.</string>
+    <string name="campaign_demo_plot3">March 16.\n%s./:Your task is to collect 1,500 tons of oxygen.</string>
+    <string name="campaign_demo_plot4">March 18.\n%s./:Your task is to reach the destination point.</string>
+    <string name="campaign_demo_plot5">March 24.\n%s./:Your task is to be alive during the specified time.</string>
+    <string name="campaign_demo_plot6">March 24.\n%s./:Your task is to reach the destination point.</string>
+    <string name="campaign_demo_plot7">27 March.\n%s./:Your task is to destroy the enemy.</string>
+    <string name="campaign_demo_plot8">27 March.\n%s./:Your task is to destroy the enemy.</string>
+    <string name="campaign_demo_plot9">2 April.\n%s./:Your task is to be alive during the specified time.</string>
+    <string name="campaign_demo_plot10">April 11.\n%s./:Your task is to destroy the enemy.</string>
+    <!-- /plot -->
+    <!-- info -->
+    <string name="find_path_mission_hint">You need to reach an end point.\nClick on the screen on to move.</string>
+    <string name="ninth_mission_defence_building">The defence building has been created by your opponent!</string>
+    <string name="ninth_mission_pre_support">Your opponent can get a support very soon…</string>
+    <string name="ninth_mission_support">Your opponent support is here!</string>
+    <!-- /info -->
     <!-- /campaign -->
 
     <!-- mission -->

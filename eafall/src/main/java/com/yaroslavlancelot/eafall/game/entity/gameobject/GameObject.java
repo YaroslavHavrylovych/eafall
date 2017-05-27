@@ -10,6 +10,7 @@ import com.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IDestroyList
 import com.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IHealthListener;
 import com.yaroslavlancelot.eafall.game.entity.health.IHealthBar;
 
+import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.list.SmartList;
@@ -27,7 +28,7 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public abstract class GameObject extends BodiedSprite {
     protected static final int sInvincibleObjectKey = Integer.MIN_VALUE;
-    /** used for generation new id's */
+    /** used for generation new screen's */
     private static final AtomicLong sGameObjectsTracker = new AtomicLong(0);
     /** maximum object health */
     protected int mObjectMaximumHealth = sInvincibleObjectKey;
@@ -41,11 +42,11 @@ public abstract class GameObject extends BodiedSprite {
     protected Armor mObjectArmor;
     /** callback to send message about death */
     protected volatile List<IDestroyListener> mObjectDestroyedListener = new ArrayList<>(2);
-    /** id of the string in the string files to represent object */
+    /** screen of the string in the string files to represent object */
     private int mObjectStringId;
     /** will trigger if object health changed */
     private IHealthListener mGameObjectHealthChangedListener;
-    /** unique unit id */
+    /** unique unit screen */
     private long mUniqueId;
 
     protected GameObject(float x, float y, ITextureRegion textureRegion, VertexBufferObjectManager vertexBufferObjectManager) {
@@ -122,6 +123,15 @@ public abstract class GameObject extends BodiedSprite {
 
     @Override
     public void setPosition(float pX, float pY) {
+        //TODO wtf? It's NaN only in {@link FindPathMissionActivity}
+        if (Float.isNaN(pX) || Float.isNaN(pY)) {
+            if (mPhysicBody != null) {
+                float posX = getX() / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
+                        posY = getY() / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT;
+                mPhysicBody.setTransform(posX, posY, mPhysicBody.getAngle());
+            }
+            return;
+        }
         super.setPosition(pX, pY);
         updateHealthBarPosition();
     }

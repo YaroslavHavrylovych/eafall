@@ -1,24 +1,22 @@
 package com.yaroslavlancelot.eafall.test.game.popup
 
-import android.test.AndroidTestCase
 import com.yaroslavlancelot.eafall.game.constant.SizeConstants
 import com.yaroslavlancelot.eafall.game.popup.IPopup
 import com.yaroslavlancelot.eafall.game.popup.PopupScene
 import com.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene
+import com.yaroslavlancelot.eafall.test.game.EaFallTestCase
 import org.andengine.engine.camera.VelocityCamera
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 /**
  * Check basic popup scene functionality
  *
  * @author Yaroslav Havrylovych
  */
-class PopupSceneTest : AndroidTestCase() {
+class PopupSceneTest : EaFallTestCase() {
     val mScene = EaFallScene(false)
     val mCamera = VelocityCamera(0f, 0f,
             SizeConstants.GAME_FIELD_WIDTH.toFloat(), SizeConstants.GAME_FIELD_HEIGHT.toFloat(),
-            1f, 1f, 1.5f);
+            1f, 1f, 1.5f)
 
     fun testVisibility() {
         val popupScene = PopupScene(mScene, mCamera)

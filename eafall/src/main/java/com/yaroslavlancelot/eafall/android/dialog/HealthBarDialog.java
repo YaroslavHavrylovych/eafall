@@ -86,7 +86,7 @@ public class HealthBarDialog extends DialogFragment {
         dialogFragment.setSelectedIdByType(mCurrentBehavior);
         dialogFragment.setCallback(mCallback);
         getChildFragmentManager().beginTransaction()
-                .replace(R.id.content, dialogFragment)
+                .add(R.id.content, dialogFragment)
                 .commit();
     }
 

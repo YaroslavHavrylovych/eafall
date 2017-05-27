@@ -58,11 +58,11 @@ public class PercentLight extends View {
         _init_();
     }
 
-    public void init(String settingsValueKey) {
+    public void init(String settingsValueKey, float defaultValue) {
         mSharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(EaFallApplication.getContext());
         mValueKey = settingsValueKey;
-        updateIdByValue(mSharedPreferences.getFloat(mValueKey, .5f));
+        updateIdByValue(mSharedPreferences.getFloat(mValueKey, defaultValue));
     }
 
     /** increment progress */
@@ -75,7 +75,7 @@ public class PercentLight extends View {
         mPartlyDrawable.setId(mPartlyDrawable.mCurrentValueId - 1);
     }
 
-    /** search the id with the closest corresponding value and set it as the current value */
+    /** search the screen with the closest corresponding value and set it as the current value */
     private void updateIdByValue(float value) {
         int currentValueId = mValueToPercentage.indexOfValue(value);
         if (currentValueId == -1) {

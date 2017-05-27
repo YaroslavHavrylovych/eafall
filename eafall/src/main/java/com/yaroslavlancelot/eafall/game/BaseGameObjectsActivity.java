@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.yaroslavlancelot.eafall.android.dialog.SettingsDialog;
+import com.yaroslavlancelot.eafall.android.utils.music.Music;
 import com.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.yaroslavlancelot.eafall.game.alliance.IAlliance;
 import com.yaroslavlancelot.eafall.game.audio.SoundFactory;
@@ -26,6 +27,7 @@ import com.yaroslavlancelot.eafall.game.entity.gameobject.unit.defence.DefenceUn
 import com.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.OffenceUnit;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.IUnitPath;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.PathHelper;
+import com.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.implementation.SingleWayUnitPath;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.implementation.TwoWaysUnitPath;
 import com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.AbstractSpriteEvent;
 import com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.AttachSpriteEvent;
@@ -38,6 +40,8 @@ import com.yaroslavlancelot.eafall.game.events.periodic.unit.UnitPositionUpdater
 import com.yaroslavlancelot.eafall.game.mission.MissionIntent;
 import com.yaroslavlancelot.eafall.game.player.IPlayer;
 import com.yaroslavlancelot.eafall.game.player.PlayersHolder;
+import com.yaroslavlancelot.eafall.game.popup.rolling.RollingPopupManager;
+import com.yaroslavlancelot.eafall.game.popup.rolling.description.DescriptionPopup;
 import com.yaroslavlancelot.eafall.game.resources.loaders.game.BaseGameObjectsLoader;
 import com.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 import com.yaroslavlancelot.eafall.game.touch.ICameraHandler;
@@ -60,6 +64,7 @@ import java.util.Map;
  * <br/>
  * No star, no planets.
  */
+//TODO unit creator can be implemented as separate class ot accept way enum or a constant but not boolean
 public abstract class BaseGameObjectsActivity extends EaFallActivity implements IUnitCreator {
     /** tag, which is used for debugging purpose */
     public static final String TAG = BaseGameObjectsActivity.class.getCanonicalName();
@@ -79,11 +84,18 @@ public abstract class BaseGameObjectsActivity extends EaFallActivity implements 
     @Override
     public OffenceUnit createMovableUnit(IPlayer unitPlayer,
                                          int unitKey, int x, int y, boolean isTopPath) {
-        IUnitPath unitPath = new TwoWaysUnitPath(PathHelper.isLtrPath(x), isTopPath);
+        boolean isLtrPath = PathHelper.isLtrPath(x);
+        IUnitPath unitPath;
+        if (mMissionConfig.isSingleWay()) {
+            unitPath = new SingleWayUnitPath(isLtrPath, y);
+        } else {
+            unitPath = new TwoWaysUnitPath(isLtrPath, isTopPath);
+        }
         return createMovableUnit(unitPlayer, unitKey, x, y, unitPath);
     }
 
 
+    @Override
     public OffenceUnit createMovableUnit(IPlayer unitPlayer, int unitKey, int x, int y, IUnitPath unitPath) {
         OffenceUnit offenceUnit = (OffenceUnit) createUnit(unitKey, unitPlayer, x, y);
         offenceUnit.setUnitPath(unitPath);
@@ -100,6 +112,21 @@ public abstract class BaseGameObjectsActivity extends EaFallActivity implements 
     }
 
     @Override
+    public void onPauseGame() {
+        if (GameState.isResourcesLoaded()) {
+            pause(true);
+        }
+        super.onPauseGame();
+        mBackgroundMusic.stopPlaying();
+    }
+
+    @Override
+    public void onResumeGame() {
+        super.onResumeGame();
+        mBackgroundMusic.startPlaying(Music.MusicType.IN_GAME);
+    }
+
+    @Override
     public EngineOptions onCreateEngineOptions() {
         EngineOptions engineOptions = super.onCreateEngineOptions();
         mMissionConfig = getIntent().getExtras().getParcelable(MissionIntent.MISSION_CONFIG);
@@ -108,22 +135,9 @@ public abstract class BaseGameObjectsActivity extends EaFallActivity implements 
     }
 
     @Override
-    public void onPauseGame() {
-        if (GameState.isResourcesLoaded()) {
-            pause(true);
-        }
-        super.onPauseGame();
-    }
-
-    @Override
     public void finish() {
         pause(true);
         super.finish();
-    }
-
-    @Override
-    protected String createMusicPath() {
-        return StringConstants.getMusicPath() + "background_1.ogg";
     }
 
     @Override
@@ -191,11 +205,14 @@ public abstract class BaseGameObjectsActivity extends EaFallActivity implements 
         IAlliance alliance = AllianceHolder.getInstance().getElement(
                 intent.getStringExtra(StringConstants.FIRST_PLAYER_ALLIANCE));
         mFirstPlayer = createPlayer(StringConstants.FIRST_PLAYER_CONTROL_BEHAVIOUR_TYPE, alliance,
-                mMissionConfig.getPlayerStartMoney());
+                mMissionConfig.getPlayerStartMoney(),
+                mMissionConfig.getPlayerBuildingsLimit());
+        //TODO check buildings limit 0 in row 206
         alliance = AllianceHolder.getInstance().getElement(
                 intent.getStringExtra(StringConstants.SECOND_PLAYER_ALLIANCE));
         mSecondPlayer = createPlayer(StringConstants.SECOND_PLAYER_CONTROL_BEHAVIOUR_TYPE, alliance,
-                mMissionConfig.getOpponentStartMoney());
+                mMissionConfig.getOpponentStartMoney(),
+                mMissionConfig.getOpponentBuildingsLimit());
         //units map
         mFirstPlayer.createUnitsMap(true);
         mSecondPlayer.createUnitsMap(false);
@@ -236,10 +253,11 @@ public abstract class BaseGameObjectsActivity extends EaFallActivity implements 
     }
 
     /** create new player depending on player control type which stored in extra */
-    protected IPlayer createPlayer(String playerNameInExtra, IAlliance alliance, int startMoney) {
+    protected IPlayer createPlayer(String playerNameInExtra, IAlliance alliance, int startMoney, int buildingsLimit) {
         Intent intent = getIntent();
         IPlayer.ControlType playerType = IPlayer.ControlType.valueOf(intent.getStringExtra(playerNameInExtra));
-        IPlayer player = createPlayer(playerNameInExtra, alliance, playerType, startMoney, mMissionConfig);
+        IPlayer player = createPlayer(playerNameInExtra, alliance, playerType, startMoney,
+                buildingsLimit, mMissionConfig);
         mGamePeriodic.add(new UnitPositionUpdater(player));
         return player;
     }
@@ -250,7 +268,7 @@ public abstract class BaseGameObjectsActivity extends EaFallActivity implements 
      */
     protected abstract IPlayer createPlayer(String name, IAlliance alliance,
                                             IPlayer.ControlType playerType,
-                                            int startMoney,
+                                            int startMoney, int buildingsLimit,
                                             MissionConfig missionConfig);
 
     @SuppressWarnings("unused")
@@ -351,7 +369,7 @@ public abstract class BaseGameObjectsActivity extends EaFallActivity implements 
                 unitEvent.getX(), unitEvent.getY());
     }
 
-    /** return unit if it exist (live) by using unit unique id */
+    /** return unit if it exist (live) by using unit unique screen */
     protected GameObject getGameObjectById(long id) {
         return mGameObjectsMap.get(id);
     }

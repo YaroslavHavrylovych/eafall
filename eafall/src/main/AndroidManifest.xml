@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.yaroslavlancelot.eafall"
-    android:versionCode="6"
-    android:versionName="0.1.5">
+    package="com.yaroslavlancelot.eafall">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:name=".EaFallApplication"
-        android:icon="@drawable/icon"
+        android:allowBackup="false"
+        android:icon="@mipmap/icon"
         android:label="@string/app_name"
-        android:theme="@style/Theme.NoTitleBar.Fullscreen.BlackBackground"
-        android:allowBackup="false">
+        android:theme="@style/Theme.NoTitleBar.Fullscreen.BlackBackground">
         <activity
             android:name="com.yaroslavlancelot.eafall.android.activities.StartupActivity"
             android:screenOrientation="landscape">
@@ -23,38 +21,59 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".game.tutorial.TutorialActivity"
-            android:screenOrientation="landscape"/>
-        <activity
             android:name=".game.sandbox.activity.SandboxActivity"
+            android:configChanges="screenSize"
             android:screenOrientation="landscape"/>
         <activity
             android:name=".game.client.thick.single.SinglePlayerGameActivity"
-            android:screenOrientation="landscape"/>
-        <activity
-            android:name=".game.client.thin.ThinClientGameActivity"
+            android:configChanges="screenSize"
             android:screenOrientation="landscape"/>
         <activity
             android:name=".android.activities.singleplayer.PreGameCustomizationActivity"
-            android:screenOrientation="landscape"/>
-        <activity
-            android:name=".game.client.thick.server.ServerGameActivity"
-            android:screenOrientation="landscape"/>
-        <activity
-            android:name=".android.activities.multiplayer.GameServersListActivity"
-            android:screenOrientation="landscape"/>
-        <activity
-            android:name=".android.activities.multiplayer.ServerGameCreationActivity"
-            android:screenOrientation="landscape"/>
-        <activity
-            android:name=".android.activities.multiplayer.ClientWaitForGameActivity"
+            android:configChanges="screenSize"
             android:screenOrientation="landscape"/>
         <activity
             android:name=".game.campaign.CampaignActivity"
+            android:configChanges="screenSize"
             android:screenOrientation="landscape"/>
         <activity
             android:name=".android.activities.settings.SettingsActivity"
+            android:configChanges="screenSize"
             android:label="@string/settings"
             android:screenOrientation="landscape"/>
+
+        <!-- missions -->
+        <activity
+            android:name=".game.campaign.missions.FirstMissionActivity"
+            android:configChanges="screenSize"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".game.campaign.missions.SecondMissionActivity"
+            android:configChanges="screenSize"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".game.campaign.missions.ThirdMissionActivity"
+            android:configChanges="screenSize"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".game.campaign.missions.FourthMissionActivity"
+            android:configChanges="screenSize"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".game.campaign.missions.FifthMissionActivity"
+            android:configChanges="screenSize"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".game.campaign.missions.SixthMissionActivity"
+            android:configChanges="screenSize"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".game.campaign.missions.NinthMissionActivity"
+            android:configChanges="screenSize"
+            android:screenOrientation="landscape"/>
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="0ed30a5fecc78c7e054492956f6f54f67339fd35"/>
     </application>
 </manifest>

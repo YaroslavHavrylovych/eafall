@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-
     <xs:element name="campaigns">
         <xs:complexType>
             <xs:sequence>
@@ -8,6 +7,7 @@
                 <xs:element name="background" type="xs:string"/>
                 <xs:element name="parallax_background" type="xs:boolean"/>
 
+                <!-- is an element which is displayed on screen and cam contain mission inside or be a proxy to another campaigns with missions -->
                 <xs:element name="campaign" maxOccurs="unbounded">
                     <xs:complexType>
                         <xs:sequence>
@@ -15,8 +15,8 @@
                             <xs:element name="picture" type="xs:string"/>
                             <xs:element name="width" type="xs:integer"/>
                             <xs:element name="height" type="xs:integer"/>
-                            <xs:element name="rotation" type="xs:nonNegativeInteger"
-                                        minOccurs="0" maxOccurs="1"/>
+                            <xs:element name="rotation" maxOccurs="1" minOccurs="0"
+                                        type="xs:nonNegativeInteger"/>
                             <xs:element name="position">
                                 <xs:complexType>
                                     <xs:sequence maxOccurs="1" minOccurs="1">
@@ -25,41 +25,51 @@
                                     </xs:sequence>
                                 </xs:complexType>
                             </xs:element>
-                            <!-- missions only -->
-                            <xs:element name="mission" minOccurs="0">
+                            <!-- if campaign have mission element then this is a mission in real (or mission-campaign) what ever -->
+                            <xs:element name="mission_details" maxOccurs="1" minOccurs="0">
                                 <xs:complexType>
                                     <xs:sequence>
                                         <xs:element name="name" type="xs:string"/>
+                                        <xs:element name="game_handler" maxOccurs="1"
+                                                    minOccurs="0" type="xs:string"/>
                                         <xs:element name="player_alliance" type="xs:string"/>
+                                        <xs:element name="player_available_buildings"
+                                                    minOccurs="0"
+                                                    type="xs:integer"/>
                                         <xs:element name="player_planet" type="xs:string"/>
-                                        <xs:element name="player_start_money" type="xs:integer"
-                                                    minOccurs="0"/>
+                                        <xs:element name="player_start_money" minOccurs="0"
+                                                    type="xs:integer"/>
                                         <xs:element name="opponent_alliance" type="xs:string"/>
+                                        <xs:element name="opponent_available_buildings"
+                                                    minOccurs="0"
+                                                    type="xs:integer"/>
                                         <xs:element name="opponent_planet" type="xs:string"/>
-                                        <xs:element name="opponent_start_money" type="xs:integer"
-                                                    minOccurs="0"/>
-                                        <xs:element name="max_oxygen"
-                                                    type="xs:integer"
-                                                    minOccurs="0"/>
-                                        <xs:element name="planet_health"
-                                                    type="xs:integer"
-                                                    minOccurs="0"/>
-                                        <xs:element name="offensive_units_limit"
-                                                    type="xs:integer"
-                                                    minOccurs="0"/>
-                                        <xs:element name="star_code_name"
-                                                    type="xs:string"
-                                                    minOccurs="0"/>
-                                        <xs:element name="star_constellation"
-                                                    type="xs:string"
-                                                    minOccurs="0"/>
+                                        <xs:element name="opponent_start_money" minOccurs="0"
+                                                    type="xs:integer"/>
+                                        <xs:element name="max_oxygen" minOccurs="0"
+                                                    type="xs:integer"/>
+                                        <xs:element name="planet_health" minOccurs="0"
+                                                    type="xs:integer"/>
+                                        <xs:element name="offensive_units_limit" minOccurs="0"
+                                                    type="xs:integer"/>
+                                        <xs:element name="enemy_logic_handler" minOccurs="0"
+                                                    type="xs:string"/>
+                                        <xs:element name="star_code_name" minOccurs="0"
+                                                    type="xs:string"/>
+                                        <xs:element name="star_constellation" minOccurs="0"
+                                                    type="xs:string"/>
+                                        <xs:element name="blue_star" minOccurs="0"
+                                                    type="xs:boolean"/>
+                                        <xs:element name="single_way" minOccurs="0"
+                                                    type="xs:boolean"/>
+                                        <xs:element name="suppressor" maxOccurs="1" minOccurs="0"
+                                                    type="xs:boolean"/>
                                         <!-- mission type, time and all addition params -->
                                         <xs:element name="definition">
                                             <xs:complexType>
                                                 <xs:sequence>
                                                     <!-- mission time limit -->
-                                                    <xs:element name="time_limit"
-                                                                minOccurs="0"
+                                                    <xs:element name="time_limit" minOccurs="0"
                                                                 type="xs:nonNegativeInteger"/>
                                                     <!--
                                                     type: collect 500 gold,
@@ -74,34 +84,32 @@
                                                     E.g. if the goal to win with particular unit type
                                                     then here will be the unit type
                                                     -->
-                                                    <xs:element name="value"
-                                                                minOccurs="0"
+                                                    <xs:element name="value" minOccurs="0"
                                                                 type="xs:integer"/>
                                                 </xs:sequence>
                                             </xs:complexType>
                                         </xs:element>
                                     </xs:sequence>
-                                    <xs:attribute name="id" type="xs:nonNegativeInteger"
-                                                  use="required"/>
                                 </xs:complexType>
                             </xs:element>
                         </xs:sequence>
-                        <xs:attribute name="id" type="xs:nonNegativeInteger" use="required"/>
+                        <xs:attribute name="screen" type="xs:nonNegativeInteger" use="required"/>
                     </xs:complexType>
                 </xs:element>
 
                 <xs:element name="object" maxOccurs="unbounded" minOccurs="0">
                     <xs:complexType>
                         <xs:sequence>
+                            <xs:element name="screen" type="xs:integer"/>
                             <xs:element name="picture" type="xs:string"/>
                             <xs:element name="width" type="xs:integer"/>
                             <xs:element name="height" type="xs:integer"/>
-                            <xs:element name="rotation" type="xs:nonNegativeInteger"
-                                        minOccurs="0" maxOccurs="1"/>
-                            <xs:element name="radius" type="xs:nonNegativeInteger"
-                                        minOccurs="0" maxOccurs="1"/>
-                            <xs:element name="duration" type="xs:nonNegativeInteger"
-                                        minOccurs="0" maxOccurs="1"/>
+                            <xs:element name="rotation" maxOccurs="1" minOccurs="0"
+                                        type="xs:nonNegativeInteger"/>
+                            <xs:element name="radius" maxOccurs="1" minOccurs="0"
+                                        type="xs:nonNegativeInteger"/>
+                            <xs:element name="duration" maxOccurs="1" minOccurs="0"
+                                        type="xs:nonNegativeInteger"/>
                             <xs:element name="position">
                                 <xs:complexType>
                                     <xs:sequence maxOccurs="1" minOccurs="1">

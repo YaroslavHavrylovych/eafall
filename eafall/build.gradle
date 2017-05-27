@@ -1,73 +1,72 @@
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
 
-int target_v = 24
+import groovy.swing.SwingBuilder
+
+int target_v = 25
+int compiled_v = 25
 
 buildscript {
-    ext {
-        kotlin_v = '1.0.3'
-        exclude_java = []
-    }
+    ext.kotlin_version = '1.0.4'
+    ext.exclude_java = []
 
     repositories {
         jcenter()
+        mavenCentral()
+        maven { url 'https://maven.fabric.io/public' }
     }
 
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_v"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'io.fabric.tools:gradle:1.22.0'
     }
 }
 
 repositories {
     jcenter()
+    mavenCentral()
+    maven { url 'https://maven.fabric.io/public' }
 }
 
 dependencies {
-    compile project(':andenginemultiplayerextension')
+    compile project(':andenginephysicsbox2dextension')
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
     compile 'de.greenrobot:eventbus:2.4.0'
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_v"
-    compile "com.android.support:appcompat-v7:24.1.1"
-    compile 'com.google.android.gms:play-services-analytics:8.3.0'
+    compile 'com.android.support:appcompat-v7:25.2.0'
+    compile 'com.google.android.gms:play-services-analytics:10.2.0'
+    compile 'com.jakewharton.timber:timber:4.3.0'
     compile 'com.android.support:multidex:1.0.1'
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    //tests
+    testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile 'com.android.support.test:rules:0.5'
+    androidTestCompile 'com.android.support:support-annotations:25.2.0'
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
+        transitive = true;
+    }
 }
 
 android {
-    compileSdkVersion target_v
-    buildToolsVersion "24.0.1"
+    compileSdkVersion compiled_v
+    buildToolsVersion "25.0.2"
 
     packagingOptions {
         pickFirst 'META-INF/LICENSE.txt'
     }
 
     defaultConfig {
-        minSdkVersion 11
+        minSdkVersion 14
         targetSdkVersion target_v
-
+        versionCode 103
+        versionName "1.0.3"
         multiDexEnabled true
-
         testInstrumentationRunner "com.yaroslavlancelot.eafall.test.DefaultInstrumentationTestRunner"
         testApplicationId "com.yaroslavlancelot.eafall.test"
         applicationId "com.yaroslavlancelot.eafall"
-    }
-
-    productFlavors {
-        demo {
-            exclude_java.clear()
-            buildConfigField("Boolean", "DEMO_VERSION", "true")
-            //network
-            exclude_java << "com/yaroslavlancelot/eafall/network/**"
-            exclude_java << "com/yaroslavlancelot/eafall/android/activities/multiplayer/**"
-            exclude_java << "com/yaroslavlancelot/eafall/game/client/thick/server/**"
-            exclude_java << "com/yaroslavlancelot/eafall/game/client/thin/**"
-            //campaign
-            exclude_java << "com/yaroslavlancelot/eafall/game/campaign/**"
-        }
-        dev {
-            exclude_java.clear()
-            buildConfigField("Boolean", "DEMO_VERSION", "false")
-        }
+        resConfigs "en", "uk", "ru"
     }
 
     sourceSets {
@@ -84,19 +83,15 @@ android {
 
     signingConfigs {
         release {
-            def console = System.console()
-            if (console != null) {
-                storeFile file("keystore/eafall_demo.keystore")
-                storePassword ""
-                keyPassword ""
-                keyAlias ""
-            }
+            storePassword ""
+            keyPassword ""
+            keyAlias ""
+            storeFile file("keystore/eafall_demo.keystore")
         }
     }
 
     buildTypes {
         release {
-            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             signingConfig signingConfigs.release
         }
@@ -106,41 +101,31 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
-
-    applicationVariants.all { variant ->
-        //remove unneeded resources from demo build
-        if (variant.name.contains('demo')) {
-            def excludeAssetsFromDemo = task("excludeAssetsFrom${variant.name}", type: Delete) {
-                def assetsPath = "${buildDir}/intermediates/assets/${variant.dirName}"
-                delete "${assetsPath}/campaign"
-                delete "${assetsPath}/graphics/sprites/alliance/imperials"
-                delete "${assetsPath}/graphics/sprites/alliance/rebels"
-                delete "${assetsPath}/graphics/images/alliance/imperials"
-                delete "${assetsPath}/graphics/images/alliance/rebels"
-            }
-            variant.mergeAssets.finalizedBy excludeAssetsFromDemo
-        }
-    }
 }
 
-task askForPasswords << {
-    def cons = System.console()
-    def pass, alias
-    if (cons != null) {
-        pass = new String(cons.readPassword("\n\$ Enter keystore password: "))
-        alias = cons.readLine("\n\$ Enter alias name: ")
-    } else {
-        pass = readStringInDialog("Enter a keystore password", "Please enter it here")
-        alias = readStringInDialog("Enter your alias", "Please enter it here")
-    }
+task askForPasswords {
+    doLast {
+        def cons = System.console()
+        def storePass, keyPass, alias
+        if (cons == null) {
+            keyPass = readStringInDialog("Enter a key password", "Please enter it here")
+            alias = readStringInDialog("Enter your alias", "Please enter it here")
+            storePass = readStringInDialog("Enter a keystore password", "Please enter it here")
+        } else {
+            keyPass = new String(cons.readPassword("\n\$ Enter key password: "))
+            alias = cons.readLine("\n\$ Enter alias name: ")
+            storePass = new String(cons.readPassword("\n\$ Enter keystore password: "))
+        }
 
-    if (pass == null || alias == null || pass.size() <= 0 || alias.size() <= 0) {
-        throw new InvalidUserDataException("You must enter both a password and an alias to proceed")
-    }
+        if (keyPass == null || alias == null || storePass == null ||
+                keyPass.isEmpty() || alias.isEmpty() || storePass.isEmpty()) {
+            throw new InvalidUserDataException("You must enter both passwords and an alias to proceed")
+        }
 
-    android.signingConfigs.release.storePassword = pass
-    android.signingConfigs.release.keyPassword = pass
-    android.signingConfigs.release.keyAlias = alias
+        android.signingConfigs.release.storePassword = storePass
+        android.signingConfigs.release.keyPassword = keyPass
+        android.signingConfigs.release.keyAlias = alias
+    }
 }
 
 tasks.whenTaskAdded { theTask ->
@@ -150,26 +135,27 @@ tasks.whenTaskAdded { theTask ->
 }
 
 def String readStringInDialog(title, hint) {
-//    new SwingBuilder().edt {
-//        dialog(modal: true, // Otherwise the build will continue running before you closed the dialog
-//                title: title, // Dialog title
-//                alwaysOnTop: true, // pretty much what the name says
-//                resizable: false, // Don't allow the user to resize the dialog
-//                locationRelativeTo: null, // Place dialog in center of the screen
-//                pack: true, // We need to pack the dialog (so it will take the size of it's children)
-//                show: true // Let's show it
-//        ) {
-//            vbox {
-//                label(text: hint)
-//                input = passwordField()
-//                button(defaultButton: true, text: 'OK', actionPerformed: {
-//                    def pass = input.password
-//                    dispose()
-//                    return pass
-//                })
-//            }
-//        }
-//    }
+    def string = ""
+    new SwingBuilder().edt {
+        dialog(modal: true, // Otherwise the build will continue running before you closed the dialog
+                title: title, // Dialog title
+                alwaysOnTop: true, // pretty much what the name says
+                resizable: true, // Don't allow the user to resize the dialog
+                locationRelativeTo: null, // Place dialog in center of the screen
+                pack: true, // We need to pack the dialog (so it will take the size of it's children)
+                show: true // Let's show it
+        ) {
+            vbox {
+                label(text: hint)
+                passwordField(id: 'text')
+                button(defaultButton: true, text: 'OK', actionPerformed: {
+                    dispose();
+                    string = text.text
+                })
+            }
+        }
+    }
+    return string;
 }
 
 //doesn't work if it's at the top of the file

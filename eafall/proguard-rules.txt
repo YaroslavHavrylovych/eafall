@@ -59,7 +59,32 @@
 -keep public class com.yaroslavlancelot.eafall.game.campaign.loader.** {
     public private <fields>;
 }
+-keep public class com.yaroslavlancelot.eafall.game.campaign.intents.** {
+    public private <fields>;
+}
+-keep public class com.yaroslavlancelot.eafall.game.sandbox.intents.** {
+    public private <fields>;
+}
 
+#############
+## Logging ##
+#############
+-assumenosideeffects class android.util.Log {
+    public static boolean isLoggable(java.lang.String, int);
+    public static int v(...);
+    public static int i(...);
+    public static int w(...);
+    public static int d(...);
+    public static int e(...);
+}
+
+##############
+### Fabric ###
+##############
+-keep class com.crashlytics.** { *; }
+-keep class com.crashlytics.android.**
+-keep class io.fabric.** { *; }
+-keepattributes SourceFile,LineNumberTable,*Annotation*
 
 ########################
 ### ignored warnings ###

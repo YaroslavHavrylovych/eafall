@@ -45,6 +45,8 @@ public class GameSceneHandler implements
     protected float mMinZoomFactor = 1;
     /** camera for moving */
     private EaFallCamera mCamera;
+    /** touch listener which can listen for current handler events */
+    private IOnSceneTouchListener mSceneTouchSilentListener;
     /*
      * Pinch Zoom
      */
@@ -101,6 +103,10 @@ public class GameSceneHandler implements
         mMinZoomFactor = minZoomFactor;
     }
 
+    public void setSceneTouchSilentListener(IOnSceneTouchListener sceneTouchSilentListener) {
+        mSceneTouchSilentListener = sceneTouchSilentListener;
+    }
+
     public void setClickListener(ClickDetector.IClickDetectorListener clickListener) {
         mClickListener = clickListener;
     }
@@ -141,6 +147,9 @@ public class GameSceneHandler implements
 
     @Override
     public boolean onSceneTouchEvent(final Scene pScene, final TouchEvent pSceneTouchEvent) {
+        if(mSceneTouchSilentListener != null) {
+            mSceneTouchSilentListener.onSceneTouchEvent(pScene, pSceneTouchEvent);
+        }
         if (pSceneTouchEvent.isActionDown() && !mSceneObjectSelector.isBlocked()) {
             mSceneObjectSelector.unblock();
             mSceneObjectSelector.deselect();

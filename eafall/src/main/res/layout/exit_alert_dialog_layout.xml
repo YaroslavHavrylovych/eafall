@@ -27,12 +27,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <Button
+        <com.yaroslavlancelot.eafall.android.view.SoundButton
             android:id="@+id/yes"
             android:text="@string/yes"
             style="@style/ExitDialogButton"/>
 
-        <Button
+        <com.yaroslavlancelot.eafall.android.view.SoundButton
             android:id="@+id/no"
             android:text="@string/no"
             style="@style/ExitDialogButton"/>

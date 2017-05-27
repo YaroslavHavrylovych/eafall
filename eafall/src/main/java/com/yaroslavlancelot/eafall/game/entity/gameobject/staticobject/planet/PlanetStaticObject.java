@@ -56,6 +56,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.greenrobot.event.EventBus;
+import timber.log.Timber;
 
 /** represent player planet */
 public abstract class PlanetStaticObject extends StaticObject implements IPlayerObject, Selectable {
@@ -74,12 +75,13 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
     /** used to prevent click trigger if double click operation were performed */
     private TimerHandler mClickHandler;
     /** contains true if suppressor was used */
-    private boolean mIsSuppressorUsed = false;
+    private boolean mIsSuppressorUsed;
 
-    public PlanetStaticObject(float x, float y, ITextureRegion textureRegion,
+    public PlanetStaticObject(float x, float y, boolean isSuppressorEnabled, ITextureRegion textureRegion,
                               VertexBufferObjectManager objectManager) {
         super(x, y, SizeConstants.PLANET_DIAMETER, SizeConstants.PLANET_DIAMETER,
                 textureRegion, objectManager);
+        mIsSuppressorUsed = !isSuppressorEnabled;
         mIncomeIncreasingValue = 10;
         mObjectArmor = new Armor(Armor.ArmorType.MIXED.name(), 10);
         mChildren = new SmartList<>(12);
@@ -102,7 +104,7 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
     }
 
     /** @return true if suppressor was used and false in other case */
-    public boolean isSuppressorUsed() {
+    public synchronized boolean isSuppressorUsed() {
         return mIsSuppressorUsed;
     }
 
@@ -179,6 +181,10 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
                 PathHelper.isLtrPath(getX()));
     }
 
+    public int getBuildingsAmount() {
+        return mBuildings.values().size();
+    }
+
     public abstract void registerTouch(IEntity entity);
 
     public abstract void unregisterTouch(IEntity entity);
@@ -201,21 +207,28 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
         }));
     }
 
+
+    /** DON'T USE THIS METHOD. IT'S A HACK FOR THE CAMPAIGN */
+    public boolean forceBuildingCreate(BuildingId buildingId) {
+        return createBuilding(buildingId, true);
+    }
+
     /**
-     * Invoke if you want to create new building. If building is doing some real action
-     * (it's on the server side or it's single player and not an client which just is showing)
-     * then player money will be reduced.
+     * Used to create a building
      *
-     * @param buildingId id of the building you want to create
+     * @param buildingId screen of the building you want to create
+     * @param force      if true, than building should be created
+     *                   without money usage (hack for the campaign).
+     *                   False - usual building creation process.
      * @return true if building amount was increased and false in other case
      */
-    public boolean createBuilding(BuildingId buildingId) {
+    private boolean createBuilding(BuildingId buildingId, boolean force) {
         IBuilding building = mBuildings.get(buildingId.getId());
         if (building == null) {
             final BuildingDummy buildingDummy = PlayersHolder.getPlayer(mPlayerName).getAlliance()
                     .getBuildingDummy(buildingId);
             if (buildingDummy == null) {
-                throw new IllegalArgumentException("no building with id " + buildingId);
+                throw new IllegalArgumentException("no building with screen " + buildingId);
             }
 
             switch (buildingDummy.getBuildingType()) {
@@ -263,13 +276,31 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
                     getX() + xOffset, getY() + buildingStatObj.getY());
             mBuildings.put(buildingId.getId(), building);
         }
-        boolean result = building.buyBuilding();
+        boolean result;
+        if (force && building instanceof DefenceBuilding) {
+            result = ((DefenceBuilding) building).forceBuilding();
+        } else {
+            result = building.buyBuilding();
+        }
+        Timber.v("BuildingId %d, amount %s, created", buildingId.getId(), building.getAmount());
         if (result && building.getAmount() == 1) {
             StaticObject stObj = building.getEntity();
             stObj.attachSelf();
             registerTouch(stObj);
         }
         return result;
+    }
+
+    /**
+     * Invoke if you want to create new building. If building is doing some real action
+     * (it's on the server side or it's single player and not an client which just is showing)
+     * then player money will be reduced.
+     *
+     * @param buildingId screen of the building you want to create
+     * @return true if building amount was increased and false in other case
+     */
+    public boolean createBuilding(BuildingId buildingId) {
+        return createBuilding(buildingId, false);
     }
 
     /** Suppressor triggered by double click on the planet and kill all enemies on you side of the game field */
@@ -317,13 +348,13 @@ public abstract class PlanetStaticObject extends StaticObject implements IPlayer
     }
 
     /** get buildings amount for passed building type */
-    public int getBuildingsAmount(int buildingId) {
+    public synchronized int getBuildingsAmount(int buildingId) {
         IBuilding building = mBuildings.get(buildingId);
         return building == null ? 0 : building.getAmount();
     }
 
     /** force planet to use the suppressor */
-    public void useSuppressor() {
+    public synchronized void useSuppressor() {
         if (!mIsSuppressorUsed) {
             mIsSuppressorUsed = true;
             IPlayer yourPlayer = PlayersHolder.getPlayer(mPlayerName);

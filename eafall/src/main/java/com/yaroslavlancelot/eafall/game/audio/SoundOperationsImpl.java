@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import timber.log.Timber;
+
 /**
  * base SoundOperations implementation
  *
@@ -84,6 +86,9 @@ public class SoundOperationsImpl implements SoundOperations {
 
     @Override
     public void playSound(final String key) {
+        if (mSoundDisabled) {
+            return;
+        }
         mSounds.get(key).play();
     }
 
@@ -120,7 +125,7 @@ public class SoundOperationsImpl implements SoundOperations {
             return new LimitedSoundWrapper(SoundFactory.createSoundFromAsset(soundManager, context,
                     path), delay);
         } catch (IOException e) {
-            //TODO logger was here
+            Timber.w(e, "sounds error");
         }
         return null;
     }

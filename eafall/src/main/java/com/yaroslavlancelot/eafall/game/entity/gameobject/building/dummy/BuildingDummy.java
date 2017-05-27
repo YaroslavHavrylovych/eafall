@@ -19,7 +19,7 @@ public abstract class BuildingDummy {
     protected ITextureRegion[] mSpriteTextureRegionArray;
     /** building image (big one) texture region */
     protected ITextureRegion[] mImageTextureRegionArray;
-    /** you can get building name from the string resources by this id */
+    /** you can get building name from the string resources by this screen */
     protected int mBuildingStringId;
 
     public BuildingDummy(int width, int height, int upgrades) {

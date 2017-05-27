@@ -1,6 +1,6 @@
 package com.yaroslavlancelot.eafall.game.campaign.loader;
 
-import com.yaroslavlancelot.eafall.game.mission.MissionDataLoader;
+import com.yaroslavlancelot.eafall.game.mission.MissionDetailsLoader;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
@@ -13,8 +13,8 @@ import org.simpleframework.xml.Root;
  */
 @Root(name = "campaign")
 public class CampaignDataLoader {
-    @Attribute(name = "id")
-    public Integer id;
+    @Attribute(name = "screen")
+    public Integer screen;
 
     @Element(name = "name")
     public String name;
@@ -34,8 +34,8 @@ public class CampaignDataLoader {
     @Element(name = "position")
     public PositionLoader position;
 
-    @Element(name = "mission", required = false)
-    public MissionDataLoader mission;
+    @Element(name = "mission_details", required = false)
+    public MissionDetailsLoader mission;
 
     public boolean isMission() {
         return mission != null;

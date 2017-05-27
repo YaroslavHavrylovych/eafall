@@ -39,7 +39,7 @@ public abstract class Unit extends GameObject implements
         IPlayerObject {
     /** tag for logger */
     public static final String TAG = Unit.class.getCanonicalName();
-    /** tag for logger */
+    /** unit rotation speed */
     public static final float ROTATION_SPEED = .0044f;
     /** unit Random instance */
     private static volatile Random sRandom = new Random();
@@ -153,7 +153,7 @@ public abstract class Unit extends GameObject implements
     public void destroy() {
         PlayersHolder.getPlayer(mPlayerName)
                 .getEnemyPlayer()
-                .changeMoney(mObjectMaximumHealth / 100);
+                .changeMoney(mObjectMaximumHealth >> 5);
         clearUpdateHandlers();
         clearEntityModifiers();
         PlayersHolder.getPlayer(mPlayerName).removeObjectFromPlayer(this);
@@ -174,7 +174,6 @@ public abstract class Unit extends GameObject implements
      * WARNING: unit player name have to be assigned before init() triggers
      */
     public void init(float x, float y, IPhysicCreator physicCreator) {
-        //TODO logger was here
         setTag(0);
         IPlayer player = PlayersHolder.getPlayer(mPlayerName);
         mObjectCurrentHealth = mObjectMaximumHealth;

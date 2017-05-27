@@ -20,6 +20,8 @@ import java.util.List;
  * @author Yaroslav Havrylovych
  */
 public interface IPlayer {
+    int DEFAULT_CHANCE_INCOME_UNIT_DEATH = 10;
+
     /**
      * returns string key which used in
      * {@link com.yaroslavlancelot.eafall.game.events.SharedEvents}
@@ -112,7 +114,7 @@ public interface IPlayer {
      * <br/>
      * unit will not be added as player object, you have to do it manually
      *
-     * @param unitKey unit id
+     * @param unitKey unit screen
      * @return created unit
      */
     Unit constructUnit(int unitKey);
@@ -152,6 +154,15 @@ public interface IPlayer {
      */
     void changeMoney(int delta);
 
+    /**
+     * Detect whether the next income is the first one.
+     * <br/>
+     * Usually first income has different value than other and can be handled in different way.
+     *
+     * @return true if the next income is first income and false in other case
+     */
+    boolean isFirstIncome();
+
     /** player get income from all it's income objects (e.g. buildings on the planet) */
     void incomeTime();
 
@@ -164,6 +175,8 @@ public interface IPlayer {
      * positions update.
      */
     void updateUnitsPositions();
+
+    int getBuildingsLimit();
 
     /** Constant to define what player control type will be used */
     enum ControlType {

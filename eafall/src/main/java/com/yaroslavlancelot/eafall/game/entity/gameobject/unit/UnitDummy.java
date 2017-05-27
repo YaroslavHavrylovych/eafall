@@ -44,7 +44,7 @@ public abstract class UnitDummy {
     protected ITextureRegion mImageTextureRegion;
     /** unit shout sound */
     protected LimitedSoundWrapper mFireSound;
-    /** you can get unit name from the string resources by this id */
+    /** you can get unit name from the string resources by this screen */
     private int mUnitStringId;
 
     public UnitDummy(UnitLoader unitLoader, String allianceName) {

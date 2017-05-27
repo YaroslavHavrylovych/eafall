@@ -38,6 +38,9 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
  * @author Yaroslav Havrylovych
  */
 public class ClientResourcesLoader extends BaseGameObjectsLoader {
+    private String mSunPath;
+    private String mSunHazePath;
+
     @Override
     public void loadImages(TextureManager textureManager,
                            VertexBufferObjectManager vertexBufferObjectManager) {
@@ -88,6 +91,11 @@ public class ClientResourcesLoader extends BaseGameObjectsLoader {
         soundOperations.loadSound(StringConstants.SOUND_CLOCK_TICK_PATH, 50);
     }
 
+    public void setSunPath(String sunPath, String sunHazePath) {
+        mSunHazePath = sunHazePath;
+        mSunPath = sunPath;
+    }
+
     private void loadSunAndPlanets(TextureManager textureManager,
                                    VertexBufferObjectManager vertexBufferObjectManager) {
         int padding = SizeConstants.BETWEEN_TEXTURES_PADDING;
@@ -99,15 +107,17 @@ public class ClientResourcesLoader extends BaseGameObjectsLoader {
                         + SizeConstants.FILE_PLANET_DIAMETER,
                 TextureOptions.BILINEAR);
         //sun
-        TextureRegionHolder.getInstance().addElement(StringConstants.KEY_SUN,
-                BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-                        atlas, EaFallApplication.getContext(),
-                        StringConstants.FILE_SUN, 0, 0));
-        TextureRegionHolder.getInstance().addElement(StringConstants.KEY_SUN_HAZE,
-                BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-                        atlas, EaFallApplication.getContext(),
-                        StringConstants.FILE_SUN_HAZE,
-                        SizeConstants.FILE_SUN_DIAMETER + padding, 0));
+        if(mSunPath != null) {
+            TextureRegionHolder.getInstance().addElement(StringConstants.KEY_SUN,
+                    BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+                            atlas, EaFallApplication.getContext(),
+                            mSunPath, 0, 0));
+            TextureRegionHolder.getInstance().addElement(StringConstants.KEY_SUN_HAZE,
+                    BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+                            atlas, EaFallApplication.getContext(),
+                            mSunHazePath,
+                            SizeConstants.FILE_SUN_DIAMETER + padding, 0));
+        }
         //planets
         TextureRegionHolder.getInstance().addElement(StringConstants.KEY_FIRST_PLANET,
                 BitmapTextureAtlasTextureRegionFactory.createFromAsset(

@@ -1,14 +1,13 @@
 package com.yaroslavlancelot.eafall.test.game.entity.gameobject.equipment
 
-import android.test.AndroidTestCase
 import com.yaroslavlancelot.eafall.game.entity.gameobject.equipment.armor.Armor
 import com.yaroslavlancelot.eafall.game.entity.gameobject.equipment.damage.Damage
-import kotlin.test.assertEquals
+import com.yaroslavlancelot.eafall.test.game.EaFallTestCase
 
 /**
  * @author Yaroslav Havrylovych
  */
-class DamageArmorTest : AndroidTestCase() {
+class DamageArmorTest : EaFallTestCase() {
     fun testDamageConsumption() {
         var damage = Damage(Damage.DamageType.ANNIHILATOR, 20)
         var armor = Armor(Armor.ArmorType.ELECTROMAGNETIC, 20)
@@ -24,7 +23,7 @@ class DamageArmorTest : AndroidTestCase() {
         damage = Damage(Damage.DamageType.LASER, 20)
         assertEquals(14, armor.getDamage(damage), "miscalculations in damage to armor")
         damage = Damage(Damage.DamageType.QUAKER, 20)
-        assertEquals(12, armor.getDamage(damage), "miscalculations in damage to armor")
+        assertEquals(7, armor.getDamage(damage), "miscalculations in damage to armor")
     }
 
     fun testAdditionalArmorAndDamage() {

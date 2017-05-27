@@ -13,7 +13,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 
 /** dummy for wealth building */
 public class WealthBuildingDummy extends BuildingDummy {
-    /** building id */
+    /** building screen */
     public static final int BUILDING_ID = 12345;
     private WealthBuildingLoader mBuildingLoader;
     private int mDescriptionStringId;

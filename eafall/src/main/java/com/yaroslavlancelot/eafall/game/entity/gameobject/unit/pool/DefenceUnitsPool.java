@@ -18,12 +18,10 @@ public class DefenceUnitsPool extends AfterInitializationPool<DefenceUnit> {
 
     @Override
     protected DefenceUnit allocatePoolItem() {
-        //TODO logger was here
         DefenceUnit defenceUnit = new DefenceUnit(mDefenceUnitBuilder) {
             @Override
             protected void onDestroyed() {
                 super.onDestroyed();
-                //TODO logger was here
                 recycle(this);
             }
         };

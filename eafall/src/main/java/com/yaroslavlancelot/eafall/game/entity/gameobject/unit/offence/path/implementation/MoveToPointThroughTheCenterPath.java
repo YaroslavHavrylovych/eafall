@@ -44,6 +44,11 @@ public class MoveToPointThroughTheCenterPath extends BasePath {
         nextPoint[0] = mPointX;
     }
 
+    @Override
+    public int getTotalPathPoints() {
+        return 1;
+    }
+
     // ===========================================================
     // Methods
     // ===========================================================

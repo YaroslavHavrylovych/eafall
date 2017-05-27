@@ -1,16 +1,20 @@
 package com.yaroslavlancelot.eafall.game.scene.scenes;
 
+import com.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.yaroslavlancelot.eafall.game.audio.SoundOperationsImpl;
 import com.yaroslavlancelot.eafall.game.camera.EaFallCamera;
 import com.yaroslavlancelot.eafall.game.constant.SizeConstants;
+import com.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.yaroslavlancelot.eafall.game.touch.GameSceneHandler;
 import com.yaroslavlancelot.eafall.game.touch.ICameraHandler;
 
+import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.AutoParallaxBackground;
 import org.andengine.entity.scene.background.ParallaxBackground;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.input.touch.TouchEvent;
 import org.andengine.input.touch.detector.ClickDetector;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
@@ -25,15 +29,16 @@ import java.util.Random;
  *
  * @author Yaroslav Havrylovych
  */
-public class EaFallScene extends Scene {
-    private static final String TAG = EaFallScene.class.getCanonicalName();
+public class EaFallScene extends Scene implements ClickDetector.IClickDetectorListener {
     private GameSceneHandler mGameSceneHandler;
     private boolean mParallax;
     private Sprite mBackgroundSprite;
     private AutoParallaxBackground mBackground;
+    private ClickDetector mClickDetector;
 
     public EaFallScene(boolean parallax) {
         mParallax = parallax;
+        mClickDetector = new ClickDetector(this);
     }
 
     public ICameraHandler getCameraHandler() {
@@ -46,6 +51,10 @@ public class EaFallScene extends Scene {
 
     public void setMinZoomFactor(float zoomFactor) {
         mGameSceneHandler.setMinZoomFactor(zoomFactor);
+    }
+
+    public void setSceneTouchSilentListener(IOnSceneTouchListener sceneTouchSilentListener) {
+        mGameSceneHandler.setSceneTouchSilentListener(sceneTouchSilentListener);
     }
 
     public void setClickListener(ClickDetector.IClickDetectorListener clickListener) {
@@ -70,6 +79,12 @@ public class EaFallScene extends Scene {
             background.setParallaxChangePerSecond(20);
         }
         mBackground = background;
+    }
+
+    @Override
+    public boolean onSceneTouchEvent(TouchEvent pSceneTouchEvent) {
+        mClickDetector.onTouchEvent(pSceneTouchEvent);
+        return super.onSceneTouchEvent(pSceneTouchEvent);
     }
 
     /**
@@ -111,5 +126,10 @@ public class EaFallScene extends Scene {
             }
         };
         setOnSceneTouchListener(mGameSceneHandler);
+    }
+
+    @Override
+    public void onClick(ClickDetector pClickDetector, int pPointerID, float pSceneX, float pSceneY) {
+        SoundFactory.getInstance().playSound(StringConstants.SOUND_TAP_ON_SCREEN_PATH);
     }
 }

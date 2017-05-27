@@ -56,7 +56,7 @@ public class TwoWaysUnitPath extends BasePath {
         }
         mX = x;
         mY = y;
-        mCurrentPointIndex = 1;
+        setCurrentPathPoint(1);
     }
 
     /**
@@ -68,5 +68,10 @@ public class TwoWaysUnitPath extends BasePath {
     @Override
     public void getNextPathPoint(float[] currentPoint, float[] nextPoint) {
         getNextPathPoint(currentPoint, nextPoint, mX, mY);
+    }
+
+    @Override
+    public int getTotalPathPoints() {
+        return mX.length;
     }
 }

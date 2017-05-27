@@ -33,6 +33,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -41,6 +42,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /** Player player implementation */
+
 public class Player implements IPlayer {
     private static final String TAG = Player.class.getCanonicalName();
     /** chance to produce income to an enemy after the death of the unit */
@@ -80,14 +82,18 @@ public class Player implements IPlayer {
     private BuildingId[] mBuildingsTypesIds;
     /** bonus which will be applied to each player unit */
     private ArrayList<Bonus> mUnitBonuses = new ArrayList<>(2);
+    /** amount of buildings (ids not the general amount) available to the user */
+    private int mBuildingsLimit;
     /** units pools */
     private SparseArray<AfterInitializationPool<Unit>> mUnitsPools;
     /** units map to improve positioning operations performance */
     private SquareUnitMap mUnitMap;
+    /** Used to update list of buildings, temporary variable, can easely be empty */
+    private final List<Integer> mTmpPlayerBuildingsIds;
 
     public Player(final String playerName, IAlliance alliance, ControlType playerType,
                   int startMoney,
-                  int unitDeathIncomeChance, MissionConfig missionConfig) {
+                  int unitDeathIncomeChance, int buildingsLimit, MissionConfig missionConfig) {
         mPlayerName = playerName;
         MOVABLE_UNITS_AMOUNT_CHANGED_CALLBACK_KEY = "UNIT_CREATED_" + playerName;
         OXYGEN_CHANGED_CALLBACK_KEY = "OXYGEN_CHANGED_" + playerName;
@@ -95,12 +101,14 @@ public class Player implements IPlayer {
         mUnitsLimit = missionConfig.getMovableUnitsLimit();
         mPlayerUnits = new ArrayList<>(mUnitsLimit + 10);
         mAlliance = alliance;
-        initBuildingsTypes(alliance);
+        mBuildingsLimit = buildingsLimit;
+        mTmpPlayerBuildingsIds = new ArrayList<>(mAlliance.getBuildingsAmount());
         mControlType = playerType;
         mPlayerFixtureDef = PhysicsFactory.createFixtureDef(1f, 0f, 0f, false);
         mUnitDeathIncomeChane = unitDeathIncomeChance;
         START_MONEY_VALUE = startMoney;
         initSettingsCallbacks();
+        initBuildingsTypes(alliance);
     }
 
     @Override
@@ -280,6 +288,11 @@ public class Player implements IPlayer {
     }
 
     @Override
+    public boolean isFirstIncome() {
+        return mIsFirstIncome.get();
+    }
+
+    @Override
     public void incomeTime() {
         int value;
         if (mIsFirstIncome.getAndSet(false)) {
@@ -310,6 +323,11 @@ public class Player implements IPlayer {
         }
     }
 
+    @Override
+    public int getBuildingsLimit() {
+        return mBuildingsLimit;
+    }
+
     private void initSettingsCallbacks() {
         final ApplicationSettings settings
                 = EaFallApplication.getConfig().getSettings();
@@ -326,13 +344,20 @@ public class Player implements IPlayer {
     }
 
     private void initBuildingsTypes(IAlliance alliance) {
-        Set<Integer> idSet = alliance.getBuildingsIds();
-        mBuildingsTypesIds = new BuildingId[idSet.size()];
+        SortedSet<Integer> idSet = alliance.getBuildingsIds();
+        if (mBuildingsLimit == -1) {
+            mBuildingsLimit = idSet.size();
+        }
+        mBuildingsTypesIds = new BuildingId[mBuildingsLimit];
         Iterator<Integer> it = idSet.iterator();
         int id, i = 0;
         while (it.hasNext()) {
-            id = it.next();
-            mBuildingsTypesIds[i++] = BuildingId.makeId(id, 0);
+            if (i < mBuildingsTypesIds.length) {
+                id = it.next();
+                mBuildingsTypesIds[i++] = BuildingId.makeId(id, 0);
+            } else {
+                break;
+            }
         }
     }
 
@@ -345,7 +370,10 @@ public class Player implements IPlayer {
             return;
         }
         Set<Integer> planetBuildings = mPlayerPlanet.getExistingBuildingsTypes();
-        SortedSet<Integer> allBuildings = mAlliance.getBuildingsIds();
+        mTmpPlayerBuildingsIds.clear();
+        mTmpPlayerBuildingsIds.addAll(mAlliance.getBuildingsIds());
+        Collections.sort(mTmpPlayerBuildingsIds);
+        List<Integer> allBuildings = mTmpPlayerBuildingsIds.subList(0, mBuildingsLimit);
 
         Iterator<Integer> it = allBuildings.iterator();
         int id;
@@ -355,8 +383,7 @@ public class Player implements IPlayer {
             if (!planetBuildings.contains(id)) {
                 continue;
             }
-            //TODO you have to calculate position in other way
-            int position = allBuildings.headSet(id).size();
+            int position = Collections.binarySearch(allBuildings, id);
             BuildingId buildingId = mBuildingsTypesIds[position];
             IBuilding building = mPlayerPlanet.getBuilding(id);
             if (buildingId.getUpgrade() == building.getUpgrade()) {

@@ -12,13 +12,11 @@ import org.andengine.engine.handler.IUpdateHandler
 import org.andengine.entity.modifier.RotationModifier
 import org.andengine.opengl.texture.region.TextureRegion
 import org.andengine.opengl.vbo.VertexBufferObjectManager
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 /**
  * @author Yaroslav Havrylovych
  */
-public class OffenceUnitTest : UnitTest() {
+class OffenceUnitTest : UnitTest() {
     override fun createUnit(): TestableOffenceUnit {
         val movableUnitBuilder = OffenceUnitBuilder(
                 TextureRegion(mUnitTexture, 0f, 0f, 20f, 20f), null)
@@ -29,13 +27,12 @@ public class OffenceUnitTest : UnitTest() {
                 .setAttackRadius(50)
                 .setViewRadius(150)
                 .setHealth(200)
-                .setFireSound(LimitedSoundWrapper(null))
-                .setReloadTime(1.5)
+                .setFireSound(LimitedSoundWrapper(null)).reloadTime = 1.5
         return TestableOffenceUnit(movableUnitBuilder)
     }
 
     override fun testRotation() {
-        val unit = createUnit();
+        val unit = createUnit()
         assertTrue(unit.needRotation(45), "needRotation for 45 check")
         assertTrue(unit.needRotation(-10), "needRotation for -10 check")
         assertFalse(unit.needRotation(-4), "needRotation for -4 check")
@@ -54,7 +51,7 @@ public class OffenceUnitTest : UnitTest() {
         assertTrue(unit.getAngle(10f, 20f) == -90, "getAngle for -90 check")
     }
 
-    public class TestableOffenceUnit(unitBuilder: OffenceUnitBuilder?) : OffenceUnit(unitBuilder), UnitTest.TestableUnit {
+    class TestableOffenceUnit(unitBuilder: OffenceUnitBuilder?) : OffenceUnit(unitBuilder), UnitTest.TestableUnit {
         var mStr: String = ""
 
         override fun getStr(): String {
@@ -82,7 +79,7 @@ public class OffenceUnitTest : UnitTest() {
         }
 
         override fun getRotationModifier(): RotationModifier {
-            return mUnitRotationModifier;
+            return mUnitRotationModifier
         }
 
         override fun createHealthBar(): IHealthBar? {

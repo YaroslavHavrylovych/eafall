@@ -4,6 +4,3 @@
 [submodule "andenginephysicsbox2dextension"]
 	path = andenginephysicsbox2dextension
 	url = git@bitbucket.org:yaroslav_havrylovych/andenginephysicsbox2dextension.git
-[submodule "andenginemultiplayerextension"]
-	path = andenginemultiplayerextension
-	url = git@bitbucket.org:yaroslav_havrylovych/andenginemultiplayerextension.git

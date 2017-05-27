@@ -1,0 +1,20 @@
+image: snowdream/android:latest
+
+pipelines:
+  default:
+    - step:
+        script: 
+            # Grab the Android Support Repo which isn't included in the container
+          - echo y | android update sdk --all --no-ui --filter "build-tools-25.0.2, extra-android-support, extra-android-m2repository, extra-google-google_play_services, extra-google-m2repository"
+          - pwd
+          - ls ./
+            # update submodules (libraries)
+          - git clone https://yaroslav_havrylovych@bitbucket.org/yaroslav_havrylovych/andengine.git
+          - ls ./andengine
+          - git clone https://yaroslav_havrylovych@bitbucket.org/yaroslav_havrylovych/andenginephysicsbox2dextension.git
+          - ls ./andenginephysicsbox2dextension
+            # copy android licenses
+          - cp -r ./android_licenses $ANDROID_HOME/licenses
+            # Building a dev build variant
+          - chmod +x clean_and_build.sh
+          - ./clean_and_build.sh

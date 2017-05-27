@@ -3,6 +3,7 @@
     <!-- Versions -->
     <string name="not_int_demo">Не включено в демо версию</string>
     <string name="not_implemented">Не реализовано</string>
+    <string name="pass_campaign">Сначала пройдите первые 4 миссии кампании</string>
     <!-- / Versions -->
 
     <!-- Game types -->
@@ -26,7 +27,8 @@
     <string name="tutorial_description_create_building_2">Сейчас время создать другое строение</string>
     <string name="tutorial_description_building_settings">Нажмите на кнопку, чтобы открыть настройки строения</string>
     <string name="tutorial_description_hide">Нажмите на свободное место, чтобы скрыть попап</string>
-    <string name="tutorial_description_suppressor_usage">Если Вы проигрываете,\nто сделайте затяжной клик на Вашу планету,\nэто вызовет подавитель</string>
+    <string name="tutorial_description_suppressor_usage">Ксли сделаете затяжной-клик на Вашу планету,\nэто вызовет Подавитель</string>
+    <string name="tutorial_description_do_not_forget">Не забудьте про эту возможность!</string>
     <string name="tutorial_description_suppressor_description">Подавитель уничтожит всех противников\nна вашей стороне игрового поля</string>
     <string name="tutorial_task">Ваша задача выжить оставшееся время\nУдачи!</string>
     <!-- / Tutorial -->
@@ -38,7 +40,7 @@
         <item>@string/imperials</item>
         <item>@string/rebels</item>
         <item>@string/mutants</item>
-   </string-array>
+    </string-array>
 
     <string name="imperials">Империя</string>
     <string name="rebels">Повстанцы</string>
@@ -49,68 +51,6 @@
     <!-- / Pre game customizations -->
 
     <!-- Unions -->
-    <!-- Imperials -->
-    <!-- Buildings -->
-    <string name="camp">Лагерь</string>
-    <string name="tent">Палатка</string>
-    <string name="barracks">Ангары</string>
-    <string name="shooters_hall">Стрелецкий Зал</string>
-    <string name="training_center">Тренировочный Центр</string>
-    <string name="workshop">Мастерская</string>
-    <string name="laboratory">Лаборатория</string>
-    <string name="bunker">Бункер</string>
-    <string name="defender">Защитник</string>
-    <string name="municipality">Муниципалитет</string>
-    <string name="earth_artifact">Артифакт с Земли</string>
-    <!-- / Buildings -->
-    <!-- Units -->
-    <string name="conscript">Призывник</string>
-    <string name="grant">Боец</string>
-    <string name="sergeant">Сержант</string>
-    <string name="boy_scout">Пластун</string>
-    <string name="scout">Опекун</string>
-    <string name="infantrymen">Пехотинец</string>
-    <string name="SF">СВ</string>
-    <string name="sniper">Снайпер</string>
-    <string name="killer">Убийца</string>
-    <string name="agent">Агент</string>
-    <string name="spy">Шпион</string>
-    <string name="robot">Робот</string>
-    <string name="metal_killer">Зализячник</string>
-    <string name="demolisher">Взрыватель</string>
-    <string name="superman">Супермен</string>
-    <!-- / Units -->
-
-    <!-- Rebels -->
-    <!-- Buildings -->
-    <string name="underground">​​Хранилище</string>
-    <string name="factory">Фабрика</string>
-    <string name="bomos">Алтарь</string>
-    <string name="hospital">Госпиталь</string>
-    <string name="minery">Шахта</string>
-    <string name="artillery">Артиллерия</string>
-    <string name="sabotage_center">Диверсионный центр</string>
-    <string name="fort">Форт</string>
-    <string name="caches">Крыивка</string>
-    <string name="space_material">Космическая материя</string>
-    <!-- / Buildings -->
-    <!-- Units -->
-    <string name="machine_gunner">Механический стрелок</string>
-    <string name="mechanical_soldier">Механический солдат</string>
-    <string name="oplot_u">Оплот В</string>
-    <string name="oplot_m">Оплот М</string>
-    <string name="suicide">Смертник</string>
-    <string name="priest">Священник</string>
-    <string name="doctor">Врач</string>
-    <string name="shaman">Шаман</string>
-    <string name="engineer">Инженер</string>
-    <string name="exploder">Взрыватель</string>
-    <string name="ballista">Баллиста</string>
-    <string name="thor">Тор</string>
-    <string name="recruiter">Вербовщик</string>
-    <string name="saboteur">Диверсант</string>
-    <!-- / Units -->
-
     <!-- Mutants -->
     <!-- Buildings -->
     <string name="water_cave">Водная пещера</string>
@@ -158,20 +98,19 @@
     <string name="game_sounds">Звуки игры</string>
     <string name="game_sounds_on">Включенные</string>
     <string name="game_sounds_off">Отключены</string>
-    <string name="game_sounds_volume">Громкость</string>
     <string name="music">Музыка</string>
     <string name="music_on">Включена</string>
     <string name="music_off">Вимкена</string>
-    <string name="music_volume">Громкость</string>
     <string name="category_sounds">Звук</string>
     <string name="category_other">Другое</string>
 
-    <!-- General -->
+    <!-- general -->
     <string name="app_name">Empires Always Fall</string>
     <string name="exit">Выход</string>
     <string name="back">Назад</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
+    <string name="next">Дальше</string>
     <string name="done">Готово</string>
     <string name="exit_click">Двойной клик, чтобы выйти</string>
     <string name="exit_loading">Нельзя выйти при загрузке</string>
@@ -216,6 +155,7 @@
     <string name="wrong_planet_suppressor">Использовать Подавитель можно только на собственной базе</string>
     <!-- Stars -->
     <string name="sun">Гелиос</string>
+    <string name="new_sun">Аматерасу</string>
     <!-- / Stars -->
     <!-- Planets -->
     <string name="earth">Земля</string>
@@ -282,10 +222,10 @@
     <!-- Descriptions -->
     <string name="earth_artifact_description">Священный артефакт Повстанцев\nнайденный в недрах Земли.\nДобавляет 10\u0025 к здоровью юнита.</string>
     <string name="space_material_description">Мощный артефакт Имперцев, изобретенный их учеными.\nДает 10\u0025 шанс избежать повреждений.</string>
-    <string name="king_of_snakes_description">Ценный артефакт Мутантов,\nбыл найден в открытом космосе.\n10\u0025 увеличение повреждений от юнита.</string>
-    <string name="municipality_description">20\u0025 увеличение дохода от первого строения. \nКаждое следующее строение увеличивает доход на 1\u0025.</string>
-    <string name="caches_description">20\u0025 увеличение дохода от первого строения. \nКаждое следующее строение увеличивает доход на 1\u0025.</string>
-    <string name="reptile_city_description">20\u0025 увеличение дохода от первого строения. \nКаждое следующее строение увеличивает доход на 1\u0025.</string>
+    <string name="king_of_snakes_description">Ценный артефакт Мутантов,\nбыл найден в открытом космосе.\n30\u0025 увеличение повреждений от юнита.</string>
+    <string name="municipality_description">40\u0025 увеличение дохода от первого строения. \nКаждое следующее строение увеличивает доход на 5\u0025.</string>
+    <string name="caches_description">40\u0025 увеличение дохода от первого строения. \nКаждое следующее строение увеличивает доход на 5\u0025.</string>
+    <string name="reptile_city_description">40\u0025 увеличение дохода от первого строения. \nКаждое следующее строение увеличивает доход на 5\u0025.</string>
     <!-- / Descriptions -->
     <!-- / Description popup -->
 
@@ -299,10 +239,42 @@
     <!-- / Menu popup -->
 
     <!-- Campaign -->
+    <string name="manual_next_enable_plural">Нажмите еще %d раз, шоб було добре</string>
+    <string name="manual_next_enable_single">Нажмите еще %d раз, шоб було добре</string>
+    <string name="manual_next_mission_enabled">Миссия пройдена</string>
     <!-- Guide campaign -->
     <string name="campaign_guide_start">Начать</string>
     <string name="campaign_guide_enter">Осмотреть</string>
+    <string name="campaign_demo_tutorial1">Блуд</string>
+    <string name="campaign_demo_tutorial2">Вихорь</string>
+    <string name="campaign_demo_tutorial3">Вий</string>
+    <string name="campaign_demo_tutorial4">Дидо</string>
+    <string name="campaign_demo_tutorial5">Мавка</string>
+    <string name="campaign_demo_tutorial6">Мара</string>
+    <string name="campaign_demo_tutorial7">Морок</string>
+    <string name="campaign_demo_tutorial8">Русалка</string>
+    <string name="campaign_demo_tutorial9">Упырь</string>
+    <string name="campaign_demo_tutorial10">Чугайстер</string>
     <!-- / Guide campaign -->
+
+    <!-- plot -->
+    <string name="campaign_demo_plot1">20 февраля.\n%s./:Ваша задача уничтожить противника.</string>
+    <string name="campaign_demo_plot2">27 февраля.\n%s./:Ваша задача выиграть в ограниченное время.</string>
+    <string name="campaign_demo_plot3">16 марта.\n%s./: Ваша задача собрать 1500 тонн кислорода.</string>
+    <string name="campaign_demo_plot4">18 марта.\n%s./:Ваша задача прибыть к месту назначения.</string>
+    <string name="campaign_demo_plot5">24 марта.\n%s./:Ваша задача продержаться определенное время.</string>
+    <string name="campaign_demo_plot6">24 марта.\n%s./:Ваша задача прибыть к месту назначения.</string>
+    <string name="campaign_demo_plot7">27 марта.\n%s./: Ваша задача уничтожить противника.</string>
+    <string name="campaign_demo_plot8">27 марта.\n%s./: Ваша задача уничтожить противника.</string>
+    <string name="campaign_demo_plot9">2 апреля.\n%s./:Ваша задача продержаться определенное время.</string>
+    <string name="campaign_demo_plot10">11 апреля.\n%s./:Ваша задача выиграть противника.</string>
+    <!-- /plot -->
+    <!-- info -->
+    <string name="find_path_mission_hint">Вам нужно добраться до точки отправления.\nНажмите на экран для начала движения.</string>
+    <string name="ninth_mission_defence_building">Противником создано защитное сооружение!</string>
+    <string name="ninth_mission_pre_support">Полученные данные о возможном усиления врага…</string>
+    <string name="ninth_mission_support">Подспорье прибыло к врагу!</string>
+    <!-- /info -->
     <!-- / Campaign -->
 
     <!-- Mission -->

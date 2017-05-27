@@ -33,26 +33,26 @@
         android:paddingStart="@dimen/dialog_health_bar_elements_padding_left"
         android:orientation="vertical">
 
-        <RadioButton
+        <com.yaroslavlancelot.eafall.android.view.SoundRadioButton
             android:id="@+id/health_bar_default"
             style="@style/DialogRadioButtonDefault"
             android:layout_margin="@dimen/dialog_health_bar_checkbox_layout_margin"
             android:text="@string/health_bar_default"/>
 
-        <RadioButton
+        <com.yaroslavlancelot.eafall.android.view.SoundRadioButton
             android:id="@+id/health_bar_visible"
             style="@style/DialogRadioButtonDefault"
             android:layout_margin="@dimen/dialog_health_bar_checkbox_layout_margin"
             android:text="@string/health_bar_always_visible"/>
 
-        <RadioButton
+        <com.yaroslavlancelot.eafall.android.view.SoundRadioButton
             android:id="@+id/health_bar_invisible"
             style="@style/DialogRadioButtonDefault"
             android:layout_margin="@dimen/dialog_health_bar_checkbox_layout_margin"
             android:text="@string/health_bar_always_hidden"/>
     </RadioGroup>
 
-    <Button
+    <com.yaroslavlancelot.eafall.android.view.SoundButton
         android:id="@+id/done_button"
         android:layout_below="@id/title_container"
         android:layout_marginTop="@dimen/dialog_health_bar_done_button_margin_top"

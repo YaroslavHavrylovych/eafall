@@ -8,7 +8,9 @@ import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.game.audio.GeneralSoundKeys;
 import com.yaroslavlancelot.eafall.game.audio.SoundOperations;
 import com.yaroslavlancelot.eafall.game.constant.SizeConstants;
+import com.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
+import com.yaroslavlancelot.eafall.game.entity.gameobject.setlectable.selector.SelectorFactory;
 import com.yaroslavlancelot.eafall.game.scene.scenes.SplashScene;
 import com.yaroslavlancelot.eafall.game.visual.buttons.TextButton;
 import com.yaroslavlancelot.eafall.game.visual.font.FontHolder;
@@ -40,16 +42,22 @@ import java.util.Set;
  */
 public abstract class BaseResourceLoader implements IResourcesLoader {
     private static final String sProfiling = "profiling";
-    protected Set<String> mBigImages = new HashSet<>(5);
-    protected Set<String> mImagesList = new HashSet<>(5);
+    private Set<BigImageDetails> mBigImages = new HashSet<>(11);
+    private Set<String> mImagesList = new HashSet<>();
 
     @Override
     public void addImage(String path, int width, int height) {
-        if (width > 1024 || height > 1024) {
-            mBigImages.add(path);
+        if (width > SizeConstants.HALF_FIELD_WIDTH || height > SizeConstants.HALF_FIELD_HEIGHT) {
+            mBigImages.add(new BigImageDetails(path, width, height));
         } else {
             mImagesList.add(path);
         }
+    }
+
+    @Override
+    public void loadImages(TextureManager textureManager, VertexBufferObjectManager vertexBufferObjectManager) {
+        //selector
+        SelectorFactory.loadResources(textureManager);
     }
 
     @Override
@@ -80,6 +88,7 @@ public abstract class BaseResourceLoader implements IResourcesLoader {
         soundOperations.loadSound(GeneralSoundKeys.DENIED);
         soundOperations.loadSound(GeneralSoundKeys.PRESS);
         soundOperations.loadSound(GeneralSoundKeys.UNPRESS);
+        soundOperations.loadSound(StringConstants.SOUND_TAP_ON_SCREEN_PATH);
     }
 
     @Override
@@ -104,10 +113,10 @@ public abstract class BaseResourceLoader implements IResourcesLoader {
     protected List<TextureAtlas> loadBigImages(TextureManager textureManager) {
         Context context = EaFallApplication.getContext();
         List<TextureAtlas> textures = new ArrayList<TextureAtlas>(mBigImages.size());
-        for (String path : mBigImages) {
+        for (BigImageDetails details : mBigImages) {
             BitmapTextureAtlas atlas = new BitmapTextureAtlas(textureManager,
-                    SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT, TextureOptions.BILINEAR);
-            TextureRegionHolder.addElementFromAssets(path, atlas, context, 0, 0);
+                    details.mWidth, details.mHeight, TextureOptions.BILINEAR);
+            TextureRegionHolder.addElementFromAssets(details.mPath, atlas, context, 0, 0);
             atlas.load();
         }
         return textures;
@@ -148,6 +157,18 @@ public abstract class BaseResourceLoader implements IResourcesLoader {
             Bitmap bitmap = Bitmap.createBitmap(mTextureWidth, mTextureHeight, Bitmap.Config.ARGB_4444);
             bitmap.eraseColor(mColor.getARGBPackedInt());
             return bitmap;
+        }
+    }
+
+    private class BigImageDetails {
+        private int mWidth;
+        private int mHeight;
+        private String mPath;
+
+        private BigImageDetails(String path, int width, int height) {
+            mWidth = width;
+            mHeight = height;
+            mPath = path;
         }
     }
 }
