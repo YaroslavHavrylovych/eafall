@@ -60,8 +60,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion target_v
-        versionCode 102
-        versionName "1.0.2"
+        versionCode 103
+        versionName "1.0.3"
         multiDexEnabled true
         testInstrumentationRunner "com.yaroslavlancelot.eafall.test.DefaultInstrumentationTestRunner"
         testApplicationId "com.yaroslavlancelot.eafall.test"
