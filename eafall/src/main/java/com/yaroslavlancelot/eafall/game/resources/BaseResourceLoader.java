@@ -8,6 +8,7 @@ import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.game.audio.GeneralSoundKeys;
 import com.yaroslavlancelot.eafall.game.audio.SoundOperations;
 import com.yaroslavlancelot.eafall.game.constant.SizeConstants;
+import com.yaroslavlancelot.eafall.game.constant.StringConstants;
 import com.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.setlectable.selector.SelectorFactory;
 import com.yaroslavlancelot.eafall.game.scene.scenes.SplashScene;
@@ -87,6 +88,7 @@ public abstract class BaseResourceLoader implements IResourcesLoader {
         soundOperations.loadSound(GeneralSoundKeys.DENIED);
         soundOperations.loadSound(GeneralSoundKeys.PRESS);
         soundOperations.loadSound(GeneralSoundKeys.UNPRESS);
+        soundOperations.loadSound(StringConstants.SOUND_TAP_ON_SCREEN_PATH);
     }
 
     @Override

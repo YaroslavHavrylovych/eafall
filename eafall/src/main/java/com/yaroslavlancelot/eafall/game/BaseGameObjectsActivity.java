@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.yaroslavlancelot.eafall.android.dialog.SettingsDialog;
+import com.yaroslavlancelot.eafall.android.utils.music.Music;
 import com.yaroslavlancelot.eafall.game.alliance.AllianceHolder;
 import com.yaroslavlancelot.eafall.game.alliance.IAlliance;
 import com.yaroslavlancelot.eafall.game.audio.SoundFactory;
@@ -116,6 +117,13 @@ public abstract class BaseGameObjectsActivity extends EaFallActivity implements 
             pause(true);
         }
         super.onPauseGame();
+        mBackgroundMusic.stopPlaying();
+    }
+
+    @Override
+    public void onResumeGame() {
+        super.onResumeGame();
+        mBackgroundMusic.startPlaying(Music.MusicType.IN_GAME);
     }
 
     @Override
@@ -130,11 +138,6 @@ public abstract class BaseGameObjectsActivity extends EaFallActivity implements 
     public void finish() {
         pause(true);
         super.finish();
-    }
-
-    @Override
-    protected String createMusicPath() {
-        return StringConstants.getMusicPath() + "background_1.ogg";
     }
 
     @Override

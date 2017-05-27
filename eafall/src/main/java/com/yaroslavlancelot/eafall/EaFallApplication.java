@@ -11,6 +11,7 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.yaroslavlancelot.eafall.android.analytics.FullStacktraceExceptionParser;
 import com.yaroslavlancelot.eafall.android.logger.CrashReportingTree;
+import com.yaroslavlancelot.eafall.android.utils.music.MusicFactory;
 import com.yaroslavlancelot.eafall.game.configuration.Config;
 import com.yaroslavlancelot.eafall.game.configuration.IConfig;
 import com.yaroslavlancelot.eafall.general.locale.LocaleImpl;
@@ -75,5 +76,6 @@ public class EaFallApplication extends MultiDexApplication {
         } else {
             Timber.plant(new CrashReportingTree());
         }
+        MusicFactory.init(this, sConfig.getSettings());
     }
 }

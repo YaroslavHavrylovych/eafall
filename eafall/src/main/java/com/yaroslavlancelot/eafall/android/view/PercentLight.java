@@ -58,11 +58,11 @@ public class PercentLight extends View {
         _init_();
     }
 
-    public void init(String settingsValueKey) {
+    public void init(String settingsValueKey, float defaultValue) {
         mSharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(EaFallApplication.getContext());
         mValueKey = settingsValueKey;
-        updateIdByValue(mSharedPreferences.getFloat(mValueKey, .5f));
+        updateIdByValue(mSharedPreferences.getFloat(mValueKey, defaultValue));
     }
 
     /** increment progress */

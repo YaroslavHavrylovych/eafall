@@ -12,7 +12,7 @@
             android:key="@string/pref_sounds_volume"
             android:title="@string/game_sounds"
             android:max="99"
-            android:defaultValue="0.5"/>
+            android:defaultValue="0.8"/>
         <CheckBoxPreference
             android:key="@string/pref_music_enabled"
             android:title="@string/music"
@@ -24,7 +24,7 @@
             android:key="@string/pref_music_volume"
             android:title="@string/music"
             android:max="99"
-            android:defaultValue="0.9"/>
+            android:defaultValue="0.2"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/category_game">
         <ListPreference

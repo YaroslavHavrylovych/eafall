@@ -36,6 +36,8 @@ import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtla
 import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
+import timber.log.Timber;
+
 /**
  * Loads game resources excluding buildings, the star and planets.
  *
@@ -52,8 +54,18 @@ public abstract class BaseGameObjectsLoader extends BaseResourceLoader {
                 SizeConstants.GAME_FIELD_WIDTH, SizeConstants.GAME_FIELD_HEIGHT);
     }
 
+    /**
+     * sets initial units limit. If value less than units buffer (30),
+     * than units buffer (30) would be used instead.
+     *
+     * @param movableUnitsLimit movable units sprites amount.
+     */
     public void setMovableUnitsLimit(int movableUnitsLimit) {
-        mMovableUnitsLimit = movableUnitsLimit;
+        if(movableUnitsLimit > mMovableUnitsBuffer) {
+            mMovableUnitsLimit = movableUnitsLimit;
+        } else {
+            mMovableUnitsLimit = mMovableUnitsBuffer;
+        }
     }
 
     @Override
@@ -161,8 +173,7 @@ public abstract class BaseGameObjectsLoader extends BaseResourceLoader {
                         BitmapTextureAtlas>(1, 1, 1));
                 build = true;
             } catch (ITextureAtlasBuilder.TextureAtlasBuilderException e) {
-                //TODO is it possible?
-                //TODO logger was here
+                Timber.e(e, "can't load base game object assets (buildable)");
             }
         } while (!build);
         buildableTextureAtlas.load();

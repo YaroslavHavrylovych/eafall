@@ -6,7 +6,8 @@ import android.widget.Toast;
 import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.R;
 import com.yaroslavlancelot.eafall.android.dialog.ExitConfirmationDialog;
-import com.yaroslavlancelot.eafall.game.audio.BackgroundMusic;
+import com.yaroslavlancelot.eafall.android.utils.music.Music;
+import com.yaroslavlancelot.eafall.android.utils.music.MusicFactory;
 import com.yaroslavlancelot.eafall.game.audio.SoundFactory;
 import com.yaroslavlancelot.eafall.game.camera.EaFallCamera;
 import com.yaroslavlancelot.eafall.game.configuration.game.ApplicationSettings;
@@ -26,7 +27,6 @@ import com.yaroslavlancelot.eafall.general.EbSubscribersHolder;
 import com.yaroslavlancelot.eafall.general.SelfCleanable;
 import com.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 
-import org.andengine.audio.music.exception.MusicReleasedException;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.AudioOptions;
@@ -38,8 +38,6 @@ import org.andengine.entity.text.Text;
 import org.andengine.entity.util.FPSLogger;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.adt.color.Color;
-
-import timber.log.Timber;
 
 /**
  * Base activity for all activities which has to use AndEngine.
@@ -62,7 +60,7 @@ public abstract class EaFallActivity extends BaseGameActivity {
     /** game camera */
     protected EaFallCamera mCamera;
     /** background music */
-    protected BackgroundMusic mBackgroundMusic;
+    protected Music mBackgroundMusic;
     /** scene manager */
     protected volatile SceneManager mSceneManager;
     /** resource loader */
@@ -79,16 +77,12 @@ public abstract class EaFallActivity extends BaseGameActivity {
             return;
         }
         super.onResumeGame();
-        if (mSceneManager.getWorkingScene() != null) {
-            mBackgroundMusic.playBackgroundMusic();
-        }
     }
 
     @Override
     public void onPauseGame() {
         setState(GameState.State.PAUSED);
         super.onPauseGame();
-        mBackgroundMusic.pauseBackgroundMusic();
     }
 
     @Override
@@ -140,7 +134,7 @@ public abstract class EaFallActivity extends BaseGameActivity {
         //sound && music
         SoundFactory.init(getSoundManager());
         mResourcesLoader.loadSounds(SoundFactory.getInstance());
-        mBackgroundMusic = new BackgroundMusic(createMusicPath(), getMusicManager(), this);
+        mBackgroundMusic = MusicFactory.getMusic();
         onCreateResourcesCallback.onCreateResourcesFinished();
     }
 
@@ -184,8 +178,6 @@ public abstract class EaFallActivity extends BaseGameActivity {
 
     protected abstract BaseGameHud createHud();
 
-    protected abstract String createMusicPath();
-
     private void initExitHint() {
         mExitHintHandler = new TimerHandler(TouchHelper.mMultipleClickHintTime,
                 new ITimerCallback() {
@@ -222,15 +214,15 @@ public abstract class EaFallActivity extends BaseGameActivity {
         Toast toast =
                 Toast.makeText(EaFallActivity.this, result, showToastEvent.isLongShowedToast()
                         ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT);
-//        if (showToastEvent.isWithoutBackground()) {
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//                toast.getView().setBackgroundColor(getResources()
-//                        .getColor(android.R.color.transparent, getTheme()));
-//            } else {
+        //        if (showToastEvent.isWithoutBackground()) {
+        //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        //                toast.getView().setBackgroundColor(getResources()
+        //                        .getColor(android.R.color.transparent, getTheme()));
+        //            } else {
         toast.getView().setBackgroundColor(getResources()
                 .getColor(android.R.color.transparent));
-//            }
-//        }
+        //            }
+        //        }
         toast.show();
     }
 
@@ -310,6 +302,15 @@ public abstract class EaFallActivity extends BaseGameActivity {
                 if (runnable != null) {
                     runnable.run();
                 }
+                if (mEngine == null) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            EaFallActivity.this.finish();
+                        }
+                    });
+                    return;
+                }
                 preResourcesLoading();
                 loadResources();
                 onResourcesLoaded();
@@ -378,11 +379,6 @@ public abstract class EaFallActivity extends BaseGameActivity {
         mSceneManager.hideSplash();
         mSceneManager.clearSplashScene();
         mResourcesLoader.unloadSplashImages();
-        try {
-            mBackgroundMusic.playBackgroundMusic();
-        } catch (MusicReleasedException ex) {
-            Timber.i(ex, "can't release music, it's not good");
-        }
         onShowWorkingScene();
         GameState.setState(GameState.State.RESUMED);
     }

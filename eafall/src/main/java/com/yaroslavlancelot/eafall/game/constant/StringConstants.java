@@ -68,6 +68,12 @@ public final class StringConstants {
     public static final String KEY_PLANET_EXPLOSION = "graphics/sprites/explosion/explosion_planet.png";
     /** unit explosion animation */
     public static final String KEY_UNIT_EXPLOSION = "graphics/sprites/explosion/explosion_unit.png";
+    /** andpoint animated sprite */
+    public static final String KEY_ENDPOINT = "graphics/images/end_point.png";
+    /** unit visible area sprite */
+    public static final String KEY_VISIBLE_AREA = "graphics/images/visible_area.png";
+    /** unit (big) visible area sprite */
+    public static final String KEY_BIGGER_VISIBLE_AREA = "graphics/images/bigger_visible_area.png";
     /** used like key for sun static object */
     public static final String KEY_SUN_HAZE = "sun_key_top";
     /** used like key for sun static object */
@@ -118,6 +124,8 @@ public final class StringConstants {
     public static String SOUND_SHOT_PATH = "audio/sound/shot/";
     /** clock tick sound path */
     public static String SOUND_CLOCK_TICK_PATH = "audio/sound/clock_tick.ogg";
+    /** tap on empty part of the screen sound path */
+    public static String SOUND_TAP_ON_SCREEN_PATH = "audio/sound/general/tap.ogg";
 
     /**
      * private constructor

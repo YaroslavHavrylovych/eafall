@@ -13,7 +13,7 @@ import com.yaroslavlancelot.eafall.game.entity.gameobject.building.BuildingId;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.setlectable.selector.SelectorFactory;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.SunStaticObject;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.staticobject.planet.PlanetStaticObject;
-import com.yaroslavlancelot.eafall.game.events.GameStartCooldown;
+import com.yaroslavlancelot.eafall.game.events.TwoPlanetsGameStartCooldown;
 import com.yaroslavlancelot.eafall.game.events.aperiodic.ShowHudTextEvent;
 import com.yaroslavlancelot.eafall.game.events.aperiodic.endgame.GameOverEvent;
 import com.yaroslavlancelot.eafall.game.events.aperiodic.ingame.building.CreateBuildingEvent;
@@ -89,17 +89,18 @@ public abstract class ClientGameActivity extends BaseGameObjectsActivity {
         super.onShowWorkingScene();
         mSceneManager.getWorkingScene().setIgnoreUpdate(true);
         ((ClientGameHud) mHud).blockInput(true);
-        final GameStartCooldown timerHandler = new GameStartCooldown((ClientGameHud) mHud,
-                mSceneManager.getWorkingScene(), mCamera) {
-            @Override
-            public void timerEnded() {
-                ((ClientGameHud) mHud).blockInput(false);
-                mSceneManager.getWorkingScene().setIgnoreUpdate(false);
-                mFirstPlayer.incomeTime();
-                mSecondPlayer.incomeTime();
-                startRuler();
-            }
-        };
+        final TwoPlanetsGameStartCooldown timerHandler =
+                new TwoPlanetsGameStartCooldown((ClientGameHud) mHud,
+                        mSceneManager.getWorkingScene(), mCamera) {
+                    @Override
+                    public void timerEnded() {
+                        ((ClientGameHud) mHud).blockInput(false);
+                        mSceneManager.getWorkingScene().setIgnoreUpdate(false);
+                        mFirstPlayer.incomeTime();
+                        mSecondPlayer.incomeTime();
+                        startRuler();
+                    }
+                };
         timerHandler.start();
     }
 

@@ -64,9 +64,9 @@
             <offensive_units_limit>100</offensive_units_limit>
             <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.TwoWaysEasyBot
             </enemy_logic_handler>
-            <star_code_name>sun</star_code_name>
+            <star_code_name>new_sun</star_code_name>
             <star_constellation>no_constellation</star_constellation>
-            <blue_star>false</blue_star>
+            <blue_star>true</blue_star>
             <single_way>false</single_way>
             <suppressor>false</suppressor>
             <definition>
@@ -115,6 +115,7 @@
         </mission_details>
     </campaign>
 
+    <!-- trying to find our ally -->
     <campaign screen="3">
         <name>campaign_demo_tutorial4</name>
         <picture>graphics/images/campaign/missions/screen3.png</picture>
@@ -128,7 +129,7 @@
         <mission_details>
             <name>Svarog</name>
             <game_handler>
-                com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
+                com.yaroslavlancelot.eafall.game.campaign.missions.FourthMissionActivity
             </game_handler>
             <player_alliance>Mutants</player_alliance>
             <player_planet>earth</player_planet>
@@ -150,6 +151,7 @@
         </mission_details>
     </campaign>
 
+    <!-- here we need to hold an attack -->
     <campaign screen="4">
         <name>campaign_demo_tutorial5</name>
         <picture>graphics/images/campaign/missions/screen4.png</picture>
@@ -163,29 +165,27 @@
         <mission_details>
             <name>Simargl</name>
             <game_handler>
-                com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
+                com.yaroslavlancelot.eafall.game.campaign.missions.FifthMissionActivity
             </game_handler>
             <player_alliance>Mutants</player_alliance>
             <player_planet>earth</player_planet>
             <opponent_alliance>Mutants</opponent_alliance>
             <opponent_planet>earth</opponent_planet>
             <max_oxygen>3000</max_oxygen>
-            <planet_health>5000</planet_health>
-            <offensive_units_limit>200</offensive_units_limit>
-            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.TwoWaysEasyBot
+            <planet_health>2000</planet_health>
+            <offensive_units_limit>7</offensive_units_limit>
+            <enemy_logic_handler>com.yaroslavlancelot.eafall.game.ai.SingleWayHardBot
             </enemy_logic_handler>
-            <star_code_name>new_sun</star_code_name>
-            <star_constellation>no_constellation</star_constellation>
-            <blue_star>true</blue_star>
-            <single_way>false</single_way>
+            <single_way>true</single_way>
             <suppressor>true</suppressor>
             <definition>
                 <time_limit>220</time_limit>
-                <type>win</type>
+                <type>survive</type>
             </definition>
         </mission_details>
     </campaign>
 
+    <!-- here the way back -->
     <campaign screen="5">
         <name>campaign_demo_tutorial6</name>
         <picture>graphics/images/campaign/missions/screen5.png</picture>
@@ -199,7 +199,7 @@
         <mission_details>
             <name>Veles</name>
             <game_handler>
-                com.yaroslavlancelot.eafall.game.client.thick.single.SinglePlayerGameActivity
+                com.yaroslavlancelot.eafall.game.campaign.missions.SixthMissionActivity
             </game_handler>
             <player_alliance>Mutants</player_alliance>
             <player_planet>earth</player_planet>

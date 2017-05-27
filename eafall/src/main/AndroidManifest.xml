@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.yaroslavlancelot.eafall"
-    android:versionCode="100"
-    android:versionName="1.0.0">
+    package="com.yaroslavlancelot.eafall">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -55,6 +53,18 @@
             android:screenOrientation="landscape"/>
         <activity
             android:name=".game.campaign.missions.ThirdMissionActivity"
+            android:configChanges="screenSize"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".game.campaign.missions.FourthMissionActivity"
+            android:configChanges="screenSize"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".game.campaign.missions.FifthMissionActivity"
+            android:configChanges="screenSize"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".game.campaign.missions.SixthMissionActivity"
             android:configChanges="screenSize"
             android:screenOrientation="landscape"/>
         <activity

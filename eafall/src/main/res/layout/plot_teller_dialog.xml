@@ -30,7 +30,7 @@
         android:layout_marginBottom="@dimen/dialog_exit_buttons_margin_bottom"
         android:orientation="horizontal">
 
-        <Button
+        <com.yaroslavlancelot.eafall.android.view.SoundButton
             android:id="@+id/confirm"
             style="@style/ExitDialogButton"
             android:text="@string/next"/>

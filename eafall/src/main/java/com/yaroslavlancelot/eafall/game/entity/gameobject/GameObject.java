@@ -10,6 +10,7 @@ import com.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IDestroyList
 import com.yaroslavlancelot.eafall.game.entity.gameobject.listeners.IHealthListener;
 import com.yaroslavlancelot.eafall.game.entity.health.IHealthBar;
 
+import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.list.SmartList;
@@ -122,6 +123,15 @@ public abstract class GameObject extends BodiedSprite {
 
     @Override
     public void setPosition(float pX, float pY) {
+        //TODO wtf? It's NaN only in {@link FindPathMissionActivity}
+        if (Float.isNaN(pX) || Float.isNaN(pY)) {
+            if (mPhysicBody != null) {
+                float posX = getX() / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT,
+                        posY = getY() / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT;
+                mPhysicBody.setTransform(posX, posY, mPhysicBody.getAngle());
+            }
+            return;
+        }
         super.setPosition(pX, pY);
         updateHealthBarPosition();
     }

@@ -13,7 +13,7 @@ import com.yaroslavlancelot.eafall.game.popup.rolling.description.DescriptionPop
 
 import de.greenrobot.event.EventBus;
 
-/** First mission. Limited units amount and no supressor. Only few hints to build. */
+/** Mission with two ways and settings for buildings */
 public class SecondMissionActivity extends BaseTutorialActivity {
     private int mCreatedBuildingsAmount;
 

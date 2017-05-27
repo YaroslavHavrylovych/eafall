@@ -86,7 +86,6 @@ public abstract class SandboxGameHud extends BaseGameHud {
     @Override
     public void initHudElements(Camera camera, VertexBufferObjectManager vboManager,
                                 MissionConfig missionConfig) {
-        //TODO logger was here
         SpriteGroupHolder.attachSpriteGroups(this, BatchingKeys.BatchTag.GAME_HUD.value());
         //menu
         initMainMenu(vboManager);
@@ -152,7 +151,7 @@ public abstract class SandboxGameHud extends BaseGameHud {
         registerTouchArea(menuButton);
     }
 
-    //TODO remove everything but units limit
+    //we could remove everything but units amount labels from here
     public static void loadResource(Context context, TextureManager textureManager) {
         int padding = SizeConstants.BETWEEN_TEXTURES_PADDING;
         int biggestSide = 112;

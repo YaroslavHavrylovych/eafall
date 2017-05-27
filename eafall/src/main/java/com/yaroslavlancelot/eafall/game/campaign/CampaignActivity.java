@@ -6,6 +6,7 @@ import android.widget.Toast;
 import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.R;
 import com.yaroslavlancelot.eafall.android.StartableIntent;
+import com.yaroslavlancelot.eafall.android.utils.music.Music;
 import com.yaroslavlancelot.eafall.game.EaFallActivity;
 import com.yaroslavlancelot.eafall.game.camera.EaFallCamera;
 import com.yaroslavlancelot.eafall.game.campaign.intents.CampaignIntent;
@@ -26,6 +27,7 @@ import com.yaroslavlancelot.eafall.game.engine.InstantRotationModifier;
 import com.yaroslavlancelot.eafall.game.engine.MoveByCircleModifier;
 import com.yaroslavlancelot.eafall.game.entity.TextureRegionHolder;
 import com.yaroslavlancelot.eafall.game.entity.gameobject.setlectable.selector.SelectorFactory;
+import com.yaroslavlancelot.eafall.game.mission.CampaignFindPathMissionIntent;
 import com.yaroslavlancelot.eafall.game.mission.CampaignMissionIntent;
 import com.yaroslavlancelot.eafall.game.mission.MissionDetailsLoader;
 import com.yaroslavlancelot.eafall.game.scene.hud.BaseGameHud;
@@ -96,11 +98,6 @@ public class CampaignActivity extends EaFallActivity {
     }
 
     @Override
-    protected String createMusicPath() {
-        return StringConstants.getMusicPath() + "background_1.ogg";
-    }
-
-    @Override
     protected void preResourcesLoading() {
     }
 
@@ -125,6 +122,18 @@ public class CampaignActivity extends EaFallActivity {
         mResourcesLoader.loadImages(getTextureManager(), getVertexBufferObjectManager());
         mResourcesLoader.loadFonts(getTextureManager(), getFontManager());
         SelectorFactory.getSelector().block(); //we  don't need selector in the campaign
+    }
+
+    @Override
+    public void onPauseGame() {
+        super.onPauseGame();
+        mBackgroundMusic.stopPlaying();
+    }
+
+    @Override
+    public void onResumeGame() {
+        super.onResumeGame();
+        mBackgroundMusic.startPlaying(Music.MusicType.CAMPAIGN);
     }
 
     @Override
@@ -329,7 +338,9 @@ public class CampaignActivity extends EaFallActivity {
                         int plot = getResources().getIdentifier(
                                 "campaign_demo_plot" + (mScreenId + 1), "string",
                                 getApplicationInfo().packageName);
-                        PlotPresenter plotPresenter = new PlotPresenter(plot, CampaignActivity.this,
+                        PlotPresenter plotPresenter = new PlotPresenter(plot,
+                                mTitleText.getText().toString(),
+                                CampaignActivity.this,
                                 new PlotPresenter.PlotPresentedCallback() {
                                     @Override
                                     public void onPresentationDone() {
@@ -354,8 +365,14 @@ public class CampaignActivity extends EaFallActivity {
         mResourcesLoader.unloadImages(getTextureManager());
         SelfCleanable.clearMemory();
         mCampaignPassage.setLastPlayedMission(mScreenId);
-        StartableIntent campaignIntent = new CampaignMissionIntent(getMissionActivity(missionData),
-                missionData, mCampaignFileName, mScreenId);
+        StartableIntent campaignIntent;
+        if (mScreenId == 3 || mScreenId == 5) { //those are not usual missions
+            campaignIntent = new CampaignFindPathMissionIntent(getMissionActivity(missionData),
+                    missionData, mCampaignFileName, mScreenId);
+        } else {
+            campaignIntent = new CampaignMissionIntent(getMissionActivity(missionData),
+                    missionData, mCampaignFileName, mScreenId);
+        }
         campaignIntent.start(this);
     }
 
@@ -419,9 +436,9 @@ public class CampaignActivity extends EaFallActivity {
                     mDisabledNextButtonClicksAmount = 0;
                     mDisabledNextButtonLastTouch = 0;
                     mCampaignPassage.markNewCampaignPassed();
-                } else if (mDisabledNextButtonClicksAmount == 5) {
+                } else if (mDisabledNextButtonClicksAmount == 7) {
                     showClickToast(getString(R.string.manual_next_enable_single, 1));
-                } else if (mDisabledNextButtonClicksAmount >= 2) {
+                } else if (mDisabledNextButtonClicksAmount >= 4) {
                     showClickToast(getString(R.string.manual_next_enable_plural,
                             sDisabledButtonToNextClicks - mDisabledNextButtonClicksAmount));
                 }

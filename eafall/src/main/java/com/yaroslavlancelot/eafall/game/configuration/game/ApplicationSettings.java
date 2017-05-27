@@ -38,8 +38,8 @@ public class ApplicationSettings extends SelfCleanable
      */
     private volatile boolean mSoundsEnabled = true;
     private volatile boolean mMusicEnabled = true;
-    private volatile float mMusicVolumeMax = 0.8f;
-    private volatile float mSoundVolumeMax = 0.4f;
+    private volatile float mMusicVolumeMax = 0.2f;
+    private volatile float mSoundVolumeMax = 0.8f;
     /*
      * Graphic
      */
@@ -49,7 +49,7 @@ public class ApplicationSettings extends SelfCleanable
     // Fields
     // ===========================================================
     /** application settings value changed */
-    private Map<String, ISettingsChangedListener> mSettingsChangedListeners = new HashMap<>(5);
+    private final Map<String, ISettingsChangedListener> mSettingsChangedListeners = new HashMap<>(5);
 
     // ===========================================================
     // Constructors
@@ -64,11 +64,11 @@ public class ApplicationSettings extends SelfCleanable
         KEY_PREF_MUSIC = context.getString(R.string.pref_music_enabled);
         mMusicEnabled = preferences.getBoolean(KEY_PREF_MUSIC, true);
         KEY_PREF_MUSIC_VOLUME = context.getString(R.string.pref_music_volume);
-        mMusicVolumeMax = preferences.getFloat(KEY_PREF_MUSIC_VOLUME, .9f);
+        mMusicVolumeMax = preferences.getFloat(KEY_PREF_MUSIC_VOLUME, mMusicVolumeMax);
         KEY_PREF_SOUNDS = context.getString(R.string.pref_sounds_enabled);
         mSoundsEnabled = preferences.getBoolean(KEY_PREF_SOUNDS, true);
         KEY_PREF_SOUNDS_VOLUME = context.getString(R.string.pref_sounds_volume);
-        mSoundVolumeMax = preferences.getFloat(KEY_PREF_SOUNDS_VOLUME, .5f);
+        mSoundVolumeMax = preferences.getFloat(KEY_PREF_SOUNDS_VOLUME, mSoundVolumeMax);
         KEY_PREF_UNIT_HEALTH_BAR_BEHAVIOR = context.getString(R.string.pref_health_bar_behaviour);
         String val = preferences.getString(KEY_PREF_UNIT_HEALTH_BAR_BEHAVIOR,
                 UnitHealthBarBehavior.DEFAULT.name());

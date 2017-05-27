@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 
 import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.R;
+import com.yaroslavlancelot.eafall.android.utils.music.Music;
+import com.yaroslavlancelot.eafall.android.utils.music.MusicFactory;
 import com.yaroslavlancelot.eafall.game.configuration.IConfig;
 import com.yaroslavlancelot.eafall.general.Holder;
 
@@ -30,6 +32,13 @@ public abstract class BaseNonGameActivity extends FragmentActivity {
     protected void onResume() {
         super.onResume();
         Holder.clearMemory();
+        MusicFactory.getMusic().startPlaying(Music.MusicType.START_MENU);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MusicFactory.getMusic().stopPlaying();
     }
 
     /**

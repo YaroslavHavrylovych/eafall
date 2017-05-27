@@ -13,7 +13,7 @@ import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.sprite.ButtonSprite;
 
-/** First mission. Limited units amount and no supressor. Only few hints to build. */
+/** First suppressor usage mission */
 public class ThirdMissionActivity extends BaseTutorialActivity {
     @Override
     protected void onPopulateWorkingScene(final EaFallScene scene) {
