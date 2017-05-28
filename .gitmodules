@@ -1,6 +1,6 @@
 [submodule "andengine"]
 	path = andengine
-	url = git@github.com:YaroslavHavrylovych/andengine.git
+	url = https://github.com/YaroslavHavrylovych/andengine.git
 [submodule "andenginephysicsbox2dextension"]
 	path = andenginephysicsbox2dextension
-	url = git@github.com:YaroslavHavrylovych/andenginephysicsbox2dextension.git
+	url = https://github.com/YaroslavHavrylovych/andenginephysicsbox2dextension.git
