@@ -1,6 +1,8 @@
 [![EAFall](./readme_files/eafall_big_logo.jpg)](https://www.facebook.com/eafallgame)
 
-EAFall - android game project started in mid 2014 with an idea to bring WarCraft 3 
+[![Build Status](https://travis-ci.org/YaroslavHavrylovych/eafall.svg?branch=master)](https://travis-ci.org/YaroslavHavrylovych/eafall)
+
+**EAFall** - android game project started in mid 2014 with an idea to bring WarCraft 3 
 [enfos](https://www.epicwar.com/maps/188675/) map to mobile. As there were no day I could leave
 without this game. As development started I changed a lot of things: started to create the
 campaign, other game mechanics and finally switched from WarCraft setting to space (as idea from another
