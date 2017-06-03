@@ -15,6 +15,8 @@ Play market page is [here](https://play.google.com/store/apps/details?id=com.yar
 *Note* :
 The project uses [AndEngine](https://github.com/nicolasgramlich/AndEngine) graphics, physics.
 
+List of project [contributors](https://github.com/YaroslavHavrylovych/eafall/wiki#contributors).
+
 
 Everything is under [Apache version 2 license](license.txt)
 
