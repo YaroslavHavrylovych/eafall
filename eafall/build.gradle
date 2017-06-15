@@ -8,7 +8,7 @@ int target_v = 25
 int compiled_v = 25
 
 buildscript {
-    ext.kotlin_version = '1.0.4'
+    ext.kotlin_version = '1.1.2-5'
     ext.exclude_java = []
 
     repositories {
