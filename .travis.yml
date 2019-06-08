@@ -3,13 +3,13 @@ jdk: oraclejdk8
 android:
   components:
     - tools
-    - build-tools-25.0.3
+    - build-tools-28.0.3
     - platform-tools
     - extra-android-support
     - extra-android-m2repository
     - extra-google-google_play_services
     - extra-google-m2repository
-    - android-25
+    - android-28
 
 script:
     - ./gradlew clean assembleDebug

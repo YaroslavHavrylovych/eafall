@@ -1,14 +1,18 @@
 buildscript {
     repositories {
+        google()
         jcenter()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
-        classpath 'com.google.gms:google-services:3.0.0'
+        classpath 'com.android.tools.build:gradle:3.4.1'
+        classpath 'com.google.gms:google-services:4.2.0'
     }
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.10'
+allprojects {
+    repositories {
+        jcenter()
+        google()
+    }
 }
