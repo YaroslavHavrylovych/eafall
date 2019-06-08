@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
 
 import groovy.swing.SwingBuilder
@@ -14,19 +13,16 @@ buildscript {
     repositories {
         google()
         jcenter()
-        maven { url 'https://maven.fabric.io/public' }
     }
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'io.fabric.tools:gradle:1.28.0'
     }
 }
 
 repositories {
     jcenter()
     mavenCentral()
-    maven { url 'https://maven.fabric.io/public' }
     google()
 }
 
@@ -34,15 +30,11 @@ dependencies {
     implementation project(':andenginephysicsbox2dextension')
     implementation 'org.apache.commons:commons-lang3:3.6'
     implementation 'de.greenrobot:eventbus:2.4.0'
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'org.simpleframework:simple-xml:2.7.1'
     implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.google.android.gms:play-services-analytics:16.0.8'
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.android.support:multidex:1.0.3'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
-        transitive = true
-    }
     //tests
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
@@ -164,6 +156,3 @@ def String readStringInDialog(title, hint) {
     }
     return string;
 }
-
-//doesn't work if it's at the top of the file
-apply plugin: 'com.google.gms.google-services'

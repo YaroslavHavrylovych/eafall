@@ -44,3 +44,7 @@ local.properties
 
 # Crashlytics
 res/values/com_crashlytics_export_strings.xml
+
+# ignore private
+eafall/fabric.properties
+eafall/google-services.json
