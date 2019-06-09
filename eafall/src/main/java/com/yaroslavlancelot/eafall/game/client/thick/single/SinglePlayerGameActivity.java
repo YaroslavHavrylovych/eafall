@@ -24,6 +24,11 @@ public class SinglePlayerGameActivity extends ThickClientGameActivity {
     }
 
     @Override
+    protected String getScreenName() {
+        return "SinglePlayer Screen";
+    }
+
+    @Override
     protected void initPlayer(final IPlayer player) {
         super.initPlayer(player);
 

@@ -38,47 +38,49 @@ public class ThirdMissionActivity extends BaseTutorialActivity {
                 mFirstIncome = false;
                 hud.blockInput(true);
                 mSceneManager.getWorkingScene().registerUpdateHandler(new TimerHandler(.5f,
-                        new ITimerCallback() {
-                            @Override
-                            public void onTimePassed(final TimerHandler pTimerHandler) {
-                                mSceneManager.getWorkingScene().unregisterUpdateHandler(pTimerHandler);
-                                PlanetStaticObject planet = mFirstPlayer.getPlanet();
-                                mClickOnPointPopup.initText1(SizeConstants.HALF_FIELD_WIDTH,
-                                        150,
-                                        R.string.tutorial_description_suppressor_usage);
-                                pause(true);
-                                mClickOnPointPopup.initPointer1(planet.getX() + 200, planet.getY(), 180);
-                                mClickOnPointPopup.resetTouchToDefault();
-                                mClickOnPointPopup.setStateChangeListener(new IPopup.StateChangingListener() {
-                                    @Override
-                                    public void onShowed() {
-                                    }
+                        pTimerHandler -> {
+                            mSceneManager.getWorkingScene().unregisterUpdateHandler(pTimerHandler);
+                            PlanetStaticObject planet = mFirstPlayer.getPlanet();
+                            mClickOnPointPopup.initText1(SizeConstants.HALF_FIELD_WIDTH,
+                                    150,
+                                    R.string.tutorial_description_suppressor_usage);
+                            pause(true);
+                            mClickOnPointPopup.initPointer1(planet.getX() + 200, planet.getY(), 180);
+                            mClickOnPointPopup.resetTouchToDefault();
+                            mClickOnPointPopup.setStateChangeListener(new IPopup.StateChangingListener() {
+                                @Override
+                                public void onShowed() {
+                                }
 
-                                    @Override
-                                    public void onHided() {
-                                        mClickOnPointPopup.initText1(SizeConstants.HALF_FIELD_WIDTH,
-                                                150,
-                                                R.string.tutorial_description_do_not_forget);
-                                        mClickOnPointPopup.setStateChangeListener(new IPopup.StateChangingListener() {
-                                            @Override
-                                            public void onShowed() {
-                                            }
+                                @Override
+                                public void onHided() {
+                                    mClickOnPointPopup.initText1(SizeConstants.HALF_FIELD_WIDTH,
+                                            150,
+                                            R.string.tutorial_description_do_not_forget);
+                                    mClickOnPointPopup.setStateChangeListener(new IPopup.StateChangingListener() {
+                                        @Override
+                                        public void onShowed() {
+                                        }
 
-                                            @Override
-                                            public void onHided() {
-                                                pause(false);
-                                                mClickOnPointPopup.removeStateChangeListener();
-                                                hud.blockInput(false);
-                                                pause(false);
-                                            }
-                                        });
-                                        mClickOnPointPopup.showPopup();
-                                    }
-                                });
-                                mClickOnPointPopup.showPopup();
-                            }
+                                        @Override
+                                        public void onHided() {
+                                            pause(false);
+                                            mClickOnPointPopup.removeStateChangeListener();
+                                            hud.blockInput(false);
+                                            pause(false);
+                                        }
+                                    });
+                                    mClickOnPointPopup.showPopup();
+                                }
+                            });
+                            mClickOnPointPopup.showPopup();
                         }));
             }
         }
+    }
+
+    @Override
+    protected String getScreenName() {
+        return "Mission 3 Screen";
     }
 }

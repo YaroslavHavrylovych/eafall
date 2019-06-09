@@ -7,12 +7,15 @@ import android.view.ViewGroup;
 
 import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.R;
+import com.yaroslavlancelot.eafall.android.analytics.AnalyticsFactory;
 import com.yaroslavlancelot.eafall.android.utils.music.Music;
 import com.yaroslavlancelot.eafall.android.utils.music.MusicFactory;
 import com.yaroslavlancelot.eafall.game.configuration.IConfig;
 import com.yaroslavlancelot.eafall.general.Holder;
 
-/** base/parent (general actions) for all non in-game activities */
+/**
+ * base/parent (general actions) for all non in-game activities
+ */
 public abstract class BaseNonGameActivity extends FragmentActivity {
 
     /**
@@ -31,6 +34,7 @@ public abstract class BaseNonGameActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        AnalyticsFactory.getInstance().screenViewEvent(getScreenName());
         Holder.clearMemory();
         MusicFactory.getMusic().startPlaying(Music.MusicType.START_MENU);
     }
@@ -69,4 +73,6 @@ public abstract class BaseNonGameActivity extends FragmentActivity {
         params.width = baseViewWidth;
         view.setLayoutParams(params);
     }
+
+    protected abstract String getScreenName();
 }

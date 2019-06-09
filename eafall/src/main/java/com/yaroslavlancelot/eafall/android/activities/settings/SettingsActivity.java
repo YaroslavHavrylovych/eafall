@@ -17,14 +17,14 @@ public class SettingsActivity extends BaseNonGameActivity {
         initSettingsFragment();
     }
 
+    @Override
+    protected String getScreenName() {
+        return "Settings Screen";
+    }
+
     private void initSettingsFragment() {
         SettingsFragment fragment = new SettingsFragment();
-        fragment.addBackButtonOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                SettingsActivity.this.finish();
-            }
-        });
+        fragment.addBackButtonOnClickListener(v -> SettingsActivity.this.finish());
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content, fragment)
                 .commit();

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
+import com.yaroslavlancelot.eafall.android.analytics.AnalyticsFactory;
 import com.yaroslavlancelot.eafall.android.logger.CrashReportingTree;
 import com.yaroslavlancelot.eafall.android.utils.music.MusicFactory;
 import com.yaroslavlancelot.eafall.game.configuration.Config;
@@ -12,11 +13,17 @@ import com.yaroslavlancelot.eafall.general.locale.LocaleImpl;
 
 import timber.log.Timber;
 
-/** Custom multi-dex application */
+/**
+ * Custom multi-dex application
+ */
 public class EaFallApplication extends MultiDexApplication {
-    /** application context */
+    /**
+     * application context
+     */
     private static volatile Context sContext;
-    /** application config */
+    /**
+     * application config
+     */
     private static volatile IConfig sConfig;
 
     public static Context getContext() {
@@ -43,6 +50,7 @@ public class EaFallApplication extends MultiDexApplication {
         super.onCreate();
         sContext = getApplicationContext();
         sConfig = Config.createConfig(this);
+        AnalyticsFactory.init();
         LocaleImpl.init(this);
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());

@@ -127,6 +127,11 @@ public class SandboxActivity extends BaseGameObjectsActivity {
     }
 
     @Override
+    protected String getScreenName() {
+        return "Sandbox Screen";
+    }
+
+    @Override
     protected IPlayer createPlayer(String name, IAlliance alliance, IPlayer.ControlType playerType,
                                    int startMoney, int buildingsLimit, MissionConfig missionConfig) {
         return new Player(name, alliance, playerType, 0, -1, buildingsLimit, missionConfig);

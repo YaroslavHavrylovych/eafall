@@ -86,11 +86,11 @@ public class FifthMissionActivity extends BaseTutorialActivity {
     }
 
     private void showInfoToast(final int strId) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(FifthMissionActivity.this, strId, Toast.LENGTH_SHORT).show();
-            }
-        });
+        runOnUiThread(() -> Toast.makeText(FifthMissionActivity.this, strId, Toast.LENGTH_SHORT).show());
+    }
+
+    @Override
+    protected String getScreenName() {
+        return "Mission 5 Screen";
     }
 }

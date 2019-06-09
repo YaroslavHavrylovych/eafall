@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.R;
+import com.yaroslavlancelot.eafall.android.analytics.AnalyticsFactory;
 import com.yaroslavlancelot.eafall.android.dialog.ExitConfirmationDialog;
 import com.yaroslavlancelot.eafall.android.utils.music.Music;
 import com.yaroslavlancelot.eafall.android.utils.music.MusicFactory;
@@ -53,21 +54,37 @@ import org.andengine.util.adt.color.Color;
  * @author Yaroslav Havrylovych
  */
 public abstract class EaFallActivity extends BaseGameActivity {
-    /** tag, which is used for debugging purpose */
+    /**
+     * tag, which is used for debugging purpose
+     */
     public static final String TAG = EaFallActivity.class.getCanonicalName();
-    /** user static area */
+    /**
+     * user static area
+     */
     protected BaseGameHud mHud;
-    /** game camera */
+    /**
+     * game camera
+     */
     protected EaFallCamera mCamera;
-    /** background music */
+    /**
+     * background music
+     */
     protected Music mBackgroundMusic;
-    /** scene manager */
+    /**
+     * scene manager
+     */
     protected volatile SceneManager mSceneManager;
-    /** resource loader */
+    /**
+     * resource loader
+     */
     protected IResourcesLoader mResourcesLoader;
-    /** exit with double click */
+    /**
+     * exit with double click
+     */
     private long mBackButtonLastClick = 0;
-    /** back button single click hint */
+    /**
+     * back button single click hint
+     */
     private TimerHandler mExitHintHandler;
 
     @Override
@@ -77,6 +94,7 @@ public abstract class EaFallActivity extends BaseGameActivity {
             return;
         }
         super.onResumeGame();
+        AnalyticsFactory.getInstance().screenViewEvent(getScreenName());
     }
 
     @Override
@@ -214,15 +232,8 @@ public abstract class EaFallActivity extends BaseGameActivity {
         Toast toast =
                 Toast.makeText(EaFallActivity.this, result, showToastEvent.isLongShowedToast()
                         ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT);
-        //        if (showToastEvent.isWithoutBackground()) {
-        //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        //                toast.getView().setBackgroundColor(getResources()
-        //                        .getColor(android.R.color.transparent, getTheme()));
-        //            } else {
         toast.getView().setBackgroundColor(getResources()
                 .getColor(android.R.color.transparent));
-        //            }
-        //        }
         toast.show();
     }
 
@@ -245,17 +256,16 @@ public abstract class EaFallActivity extends BaseGameActivity {
                     LocaleImpl.getInstance().getStringById(R.string.exit_loading),
                     Toast.LENGTH_LONG).show();
         } else {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Dialog dialog = new ExitConfirmationDialog(EaFallActivity.this);
-                    dialog.show();
-                }
+            runOnUiThread(() -> {
+                Dialog dialog = new ExitConfirmationDialog(EaFallActivity.this);
+                dialog.show();
             });
         }
     }
 
-    /** sets current game state using {@link GameState#setState(GameState.State)} */
+    /**
+     * sets current game state using {@link GameState#setState(GameState.State)}
+     */
     protected boolean setState(GameState.State state) {
         GameState.State currentState = GameState.getState();
         if (state == currentState) {
@@ -283,7 +293,9 @@ public abstract class EaFallActivity extends BaseGameActivity {
         return true;
     }
 
-    /** triggers {@link #startAsyncResourceLoading(Runnable)} with null argument */
+    /**
+     * triggers {@link #startAsyncResourceLoading(Runnable)} with null argument
+     */
     protected void startAsyncResourceLoading() {
         startAsyncResourceLoading(null);
     }
@@ -296,25 +308,17 @@ public abstract class EaFallActivity extends BaseGameActivity {
      */
     protected void startAsyncResourceLoading(final Runnable runnable) {
         GameState.resourceLoading();
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (runnable != null) {
-                    runnable.run();
-                }
-                if (mEngine == null) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            EaFallActivity.this.finish();
-                        }
-                    });
-                    return;
-                }
-                preResourcesLoading();
-                loadResources();
-                onResourcesLoaded();
+        Thread thread = new Thread(() -> {
+            if (runnable != null) {
+                runnable.run();
             }
+            if (mEngine == null) {
+                runOnUiThread(EaFallActivity.this::finish);
+                return;
+            }
+            preResourcesLoading();
+            loadResources();
+            onResourcesLoaded();
         });
         thread.setDaemon(true);
         thread.start();
@@ -322,7 +326,9 @@ public abstract class EaFallActivity extends BaseGameActivity {
 
     protected abstract void preResourcesLoading();
 
-    /** show profiling information on screen (using FPS logger) */
+    /**
+     * show profiling information on screen (using FPS logger)
+     */
     protected void profile() {
         final Text fpsText = new Text(
                 SizeConstants.GAME_FIELD_WIDTH / 2, SizeConstants.GAME_FIELD_HEIGHT - 150,
@@ -358,10 +364,14 @@ public abstract class EaFallActivity extends BaseGameActivity {
         }
     }
 
-    /** triggers when all initialized, splash showed and you can load resources */
+    /**
+     * triggers when all initialized, splash showed and you can load resources
+     */
     protected abstract void loadResources();
 
-    /** have to be triggered after resources will be loaded */
+    /**
+     * have to be triggered after resources will be loaded
+     */
     public void onResourcesLoaded() {
         initWorkingScene();
     }
@@ -374,7 +384,9 @@ public abstract class EaFallActivity extends BaseGameActivity {
 
     protected abstract void onPopulateWorkingScene(EaFallScene scene);
 
-    /** Hide splash scene and shows working scene */
+    /**
+     * Hide splash scene and shows working scene
+     */
     protected void hideSplash() {
         mSceneManager.hideSplash();
         mSceneManager.clearSplashScene();
@@ -383,6 +395,10 @@ public abstract class EaFallActivity extends BaseGameActivity {
         GameState.setState(GameState.State.RESUMED);
     }
 
-    /** triggers in the main engine thread after the splash had already being hidden */
+    /**
+     * triggers in the main engine thread after the splash had already being hidden
+     */
     protected abstract void onShowWorkingScene();
+
+    protected abstract String getScreenName();
 }

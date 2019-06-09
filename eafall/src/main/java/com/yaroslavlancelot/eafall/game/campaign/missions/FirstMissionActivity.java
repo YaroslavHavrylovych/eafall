@@ -38,59 +38,56 @@ public class FirstMissionActivity extends BaseTutorialActivity {
                 mFirstIncome = false;
                 hud.blockInput(true);
                 mSceneManager.getWorkingScene().registerUpdateHandler(new TimerHandler(.5f,
-                        new ITimerCallback() {
-                            @Override
-                            public void onTimePassed(final TimerHandler pTimerHandler) {
-                                //shows click on + hint
-                                mSceneManager.getWorkingScene().unregisterUpdateHandler(pTimerHandler);
-                                pause(true);
-                                hud.blockInput(false);
-                                PlanetStaticObject planet = mFirstPlayer.getPlanet();
-                                mClickOnPointPopup.initText1(1040, 910, R.string.tutorial_click_plus);
-                                mClickOnPointPopup.initPointer1(525, 805, 160);
-                                float x = ClientIncomeHandler.getPlanetIncomeX(planet.getX(), planet.getWidth());
-                                float y = ClientIncomeHandler.getPlanetIncomeY(planet.getY(), planet.getHeight());
-                                float[] res = mCamera.getCameraSceneCoordinatesFromSceneCoordinates(x, y);
-                                mClickOnPointPopup.setClickableArea(res[0], res[1],
-                                        SizeConstants.INCOME_IMAGE_SIZE, SizeConstants.INCOME_IMAGE_SIZE);
-                                mClickOnPointPopup.setStateChangeListener(new IPopup.StateChangingListener() {
-                                    @Override
-                                    public void onShowed() {
-                                    }
+                        pTimerHandler -> {
+                            //shows click on + hint
+                            mSceneManager.getWorkingScene().unregisterUpdateHandler(pTimerHandler);
+                            pause(true);
+                            hud.blockInput(false);
+                            PlanetStaticObject planet = mFirstPlayer.getPlanet();
+                            mClickOnPointPopup.initText1(1040, 910, R.string.tutorial_click_plus);
+                            mClickOnPointPopup.initPointer1(525, 805, 160);
+                            float x = ClientIncomeHandler.getPlanetIncomeX(planet.getX(), planet.getWidth());
+                            float y = ClientIncomeHandler.getPlanetIncomeY(planet.getY(), planet.getHeight());
+                            float[] res = mCamera.getCameraSceneCoordinatesFromSceneCoordinates(x, y);
+                            mClickOnPointPopup.setClickableArea(res[0], res[1],
+                                    SizeConstants.INCOME_IMAGE_SIZE, SizeConstants.INCOME_IMAGE_SIZE);
+                            mClickOnPointPopup.setStateChangeListener(new IPopup.StateChangingListener() {
+                                @Override
+                                public void onShowed() {
+                                }
 
-                                    @Override
-                                    public void onHided() {
-                                        mClickOnPointPopup.removeStateChangeListener();
-                                        emulateClick(incomeButton);
-                                        pause(false);
-                                        hud.blockInput(true);
-                                        final ClientGameHud hud = (ClientGameHud) mHud;
-                                        mClickOnPointPopup.removeStateChangeListener();
-                                        mClickOnPointPopup.initText1(SizeConstants.HALF_FIELD_WIDTH,
-                                                350, R.string.tutorial_constructions_button);
-                                        mClickOnPointPopup.initPointer1(675, 170, 36);
-                                        mClickOnPointPopup.setClickableArea(SizeConstants.HALF_FIELD_WIDTH,
-                                                SizeConstants.CONSTRUCTIONS_POPUP_INVOCATION_BUTTON_HEIGHT / 2,
-                                                SizeConstants.CONSTRUCTIONS_POPUP_INVOCATION_BUTTON_WIDTH,
-                                                SizeConstants.CONSTRUCTIONS_POPUP_INVOCATION_BUTTON_HEIGHT);
-                                        mClickOnPointPopup.setStateChangeListener(new IPopup.StateChangingListener() {
-                                            @Override
-                                            public void onShowed() {
-                                            }
+                                @Override
+                                public void onHided() {
+                                    mClickOnPointPopup.removeStateChangeListener();
+                                    emulateClick(incomeButton);
+                                    pause(false);
+                                    hud.blockInput(true);
+                                    final ClientGameHud hud1 = (ClientGameHud) mHud;
+                                    mClickOnPointPopup.removeStateChangeListener();
+                                    mClickOnPointPopup.initText1(SizeConstants.HALF_FIELD_WIDTH,
+                                            350, R.string.tutorial_constructions_button);
+                                    mClickOnPointPopup.initPointer1(675, 170, 36);
+                                    mClickOnPointPopup.setClickableArea(SizeConstants.HALF_FIELD_WIDTH,
+                                            SizeConstants.CONSTRUCTIONS_POPUP_INVOCATION_BUTTON_HEIGHT / 2,
+                                            SizeConstants.CONSTRUCTIONS_POPUP_INVOCATION_BUTTON_WIDTH,
+                                            SizeConstants.CONSTRUCTIONS_POPUP_INVOCATION_BUTTON_HEIGHT);
+                                    mClickOnPointPopup.setStateChangeListener(new IPopup.StateChangingListener() {
+                                        @Override
+                                        public void onShowed() {
+                                        }
 
-                                            @Override
-                                            public void onHided() {
-                                                mClickOnPointPopup.removeStateChangeListener();
-                                                hud.blockInput(false);
-                                                ButtonSprite button = hud.getConstructionButton();
-                                                emulateClick(button);
-                                            }
-                                        });
-                                        mClickOnPointPopup.showPopup();
-                                    }
-                                });
-                                mClickOnPointPopup.showPopup();
-                            }
+                                        @Override
+                                        public void onHided() {
+                                            mClickOnPointPopup.removeStateChangeListener();
+                                            hud1.blockInput(false);
+                                            ButtonSprite button = hud1.getConstructionButton();
+                                            emulateClick(button);
+                                        }
+                                    });
+                                    mClickOnPointPopup.showPopup();
+                                }
+                            });
+                            mClickOnPointPopup.showPopup();
                         }));
                 return;
             }
@@ -99,5 +96,10 @@ public class FirstMissionActivity extends BaseTutorialActivity {
                 ClientIncomeHandler.getIncomeHandler().unregisterIncomeListener(this);
             }
         }
+    }
+
+    @Override
+    protected String getScreenName() {
+        return "Mission 1 Screen";
     }
 }

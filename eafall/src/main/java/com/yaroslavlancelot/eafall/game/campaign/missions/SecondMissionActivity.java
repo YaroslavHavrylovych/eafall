@@ -47,4 +47,9 @@ public class SecondMissionActivity extends BaseTutorialActivity {
         }
         mCreatedBuildingsAmount++;
     }
+
+    @Override
+    protected String getScreenName() {
+        return "Mission 2 Screen";
+    }
 }

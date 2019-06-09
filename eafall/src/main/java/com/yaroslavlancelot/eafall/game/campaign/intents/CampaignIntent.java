@@ -1,6 +1,7 @@
 package com.yaroslavlancelot.eafall.game.campaign.intents;
 
 import com.yaroslavlancelot.eafall.EaFallApplication;
+import com.yaroslavlancelot.eafall.android.analytics.AnalyticsFactory;
 import com.yaroslavlancelot.eafall.game.campaign.CampaignActivity;
 import com.yaroslavlancelot.eafall.android.StartableIntent;
 import com.yaroslavlancelot.eafall.game.resources.ResourceFactory;
@@ -24,6 +25,11 @@ public class CampaignIntent extends StartableIntent {
 
     public CampaignIntent(String campaignFileName, boolean success, Integer missionId) {
         this(campaignFileName);
+        if(success) {
+            AnalyticsFactory.getInstance().missionCompletedEvent("Mission " + missionId + 1);
+        } else {
+            AnalyticsFactory.getInstance().missionsFailedEvent("Mission " + missionId + 1);
+        }
         putExtra(GAME_RESULT_SUCCESS_KEY, success);
         putExtra(CAMPAIGN_MISSION_ID_KEY, missionId);
     }

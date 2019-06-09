@@ -8,6 +8,7 @@ import android.view.Window;
 import android.widget.Button;
 
 import com.yaroslavlancelot.eafall.R;
+import com.yaroslavlancelot.eafall.android.analytics.AnalyticsFactory;
 import com.yaroslavlancelot.eafall.game.EaFallActivity;
 
 /**
@@ -51,6 +52,7 @@ public class ExitConfirmationDialog extends Dialog {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        AnalyticsFactory.getInstance().screenViewEvent("Exit Dialog Screen");
     }
 
     // ===========================================================

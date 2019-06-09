@@ -6,6 +6,7 @@ import android.widget.Toast;
 import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.R;
 import com.yaroslavlancelot.eafall.android.StartableIntent;
+import com.yaroslavlancelot.eafall.android.analytics.AnalyticsFactory;
 import com.yaroslavlancelot.eafall.android.utils.music.Music;
 import com.yaroslavlancelot.eafall.game.EaFallActivity;
 import com.yaroslavlancelot.eafall.game.camera.EaFallCamera;
@@ -161,6 +162,11 @@ public class CampaignActivity extends EaFallActivity {
             getIntent().getExtras().remove(CampaignIntent.GAME_RESULT_SUCCESS_KEY);
             int missionId = getIntent().getExtras().getInt(CampaignIntent.CAMPAIGN_MISSION_ID_KEY);
             if (missionId == mCampaignPassage.getPassedCampaignsAmount()) {
+                List<CampaignDataLoader> campaign = mCampaignFileLoader.getCampaignsList();
+                if (campaign.size() < mCampaignPassage.getLastPlayedMission()) {
+                    AnalyticsFactory.getInstance().missionCompletedEvent(
+                            campaign.get(mCampaignPassage.getLastPlayedMission()).name);
+                }
                 mCampaignPassage.markNewCampaignPassed();
             }
         }
@@ -282,6 +288,11 @@ public class CampaignActivity extends EaFallActivity {
     }
 
     @Override
+    protected String getScreenName() {
+        return "Campaign Screen";
+    }
+
+    @Override
     public String toString() {
         return "campaign activity";
     }
@@ -328,36 +339,20 @@ public class CampaignActivity extends EaFallActivity {
 
     private void initStartButton() {
         mHud.attachChild(mStartButton);
-        mStartButton.setOnClickListener(new ButtonSprite.OnClickListener() {
-            @Override
-            public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX,
-                                float pTouchAreaLocalY) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        int plot = getResources().getIdentifier(
-                                "campaign_demo_plot" + (mScreenId + 1), "string",
-                                getApplicationInfo().packageName);
-                        PlotPresenter plotPresenter = new PlotPresenter(plot,
-                                mTitleText.getText().toString(),
-                                CampaignActivity.this,
-                                new PlotPresenter.PlotPresentedCallback() {
-                                    @Override
-                                    public void onPresentationDone() {
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                startMission(getCampaign(mScreenId).mission);
-                                                finish();
-                                            }
-                                        });
-                                    }
-                                });
-                        plotPresenter.startPresentation();
-                    }
-                });
-            }
-        });
+        mStartButton.setOnClickListener((pButtonSprite, pTouchAreaLocalX, pTouchAreaLocalY)
+                -> runOnUiThread(() -> {
+            int plot = getResources().getIdentifier(
+                    "campaign_demo_plot" + (mScreenId + 1), "string",
+                    getApplicationInfo().packageName);
+            PlotPresenter plotPresenter = new PlotPresenter(plot,
+                    mTitleText.getText().toString(),
+                    CampaignActivity.this,
+                    () -> runOnUiThread(() -> {
+                        startMission(getCampaign(mScreenId).mission);
+                        finish();
+                    }));
+            plotPresenter.startPresentation();
+        }));
         mHud.registerTouchArea(mStartButton);
     }
 
@@ -373,6 +368,7 @@ public class CampaignActivity extends EaFallActivity {
             campaignIntent = new CampaignMissionIntent(getMissionActivity(missionData),
                     missionData, mCampaignFileName, mScreenId);
         }
+        AnalyticsFactory.getInstance().missionStartedEvent(missionData.name);
         campaignIntent.start(this);
     }
 
@@ -454,16 +450,13 @@ public class CampaignActivity extends EaFallActivity {
     }
 
     private void showClickToast(final String str) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mPreviousToast != null) {
-                    mPreviousToast.cancel();
-                }
-                mPreviousToast = Toast.makeText(CampaignActivity.this, str,
-                        Toast.LENGTH_SHORT);
-                mPreviousToast.show();
+        runOnUiThread(() -> {
+            if (mPreviousToast != null) {
+                mPreviousToast.cancel();
             }
+            mPreviousToast = Toast.makeText(CampaignActivity.this, str,
+                    Toast.LENGTH_SHORT);
+            mPreviousToast.show();
         });
     }
 }

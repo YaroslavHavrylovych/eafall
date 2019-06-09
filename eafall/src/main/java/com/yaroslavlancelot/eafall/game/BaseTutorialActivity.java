@@ -14,7 +14,7 @@ import org.andengine.input.touch.TouchEvent;
  *
  * @author Yaroslav Havrylovych
  */
-public class BaseTutorialActivity extends SinglePlayerGameActivity {
+public abstract class BaseTutorialActivity extends SinglePlayerGameActivity {
     // ===========================================================
     // Constants
     // ===========================================================

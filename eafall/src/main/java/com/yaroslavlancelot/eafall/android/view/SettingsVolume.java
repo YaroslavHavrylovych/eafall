@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.R;
+import com.yaroslavlancelot.eafall.android.analytics.AnalyticsFactory;
 
 /**
  * Settings float element which have own seek-bar and a checkbox. The element can be disabled

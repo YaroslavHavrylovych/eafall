@@ -14,6 +14,11 @@ public class PreGameCustomizationActivity extends PreGameCustomizationBaseActivi
         initStartButton();
     }
 
+    @Override
+    protected String getScreenName() {
+        return "PreGame Customization Screen";
+    }
+
     private void initStartButton() {
         mStartTheGame.setOnClickListener(getStartButtonOnClick(
                 SinglePlayerGameActivity.class, IPlayer.ControlType.USER_CONTROL_ON_SERVER_SIDE,

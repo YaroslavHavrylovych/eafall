@@ -1,7 +1,5 @@
 package com.yaroslavlancelot.eafall.game.campaign.missions.utils;
 
-import android.os.Handler;
-import android.os.Looper;
 import android.widget.Toast;
 
 import com.yaroslavlancelot.eafall.R;

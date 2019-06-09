@@ -38,4 +38,9 @@ public class FourthMissionActivity extends FindPathMissionActivity {
         createEnemy(70, new int[]{1276, 340}, new int[]{1680, 340});
         createEnemy(70, new int[]{1276, 740}, new int[]{1680, 740});
     }
+
+    @Override
+    protected String getScreenName() {
+        return "Mission 4 Screen";
+    }
 }
