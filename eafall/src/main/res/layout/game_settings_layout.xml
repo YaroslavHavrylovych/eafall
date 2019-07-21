@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/settings_fragment_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="1080">
+
+        <android.support.v4.widget.Space
+            android:layout_width="0dp"
+            android:layout_height="0dip"
+            android:layout_weight="225" />
+
+        <!-- game sounds -->
+        <com.yaroslavlancelot.eafall.android.view.SettingsVolume
+            android:id="@+id/sound_volume"
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="153" />
+
+        <android.support.v4.widget.Space
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="89" />
+
+        <!-- game music -->
+        <com.yaroslavlancelot.eafall.android.view.SettingsVolume
+            android:id="@+id/music_volume"
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="153" />
+
+        <android.support.v4.widget.Space
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="51" />
+
+        <!-- health bar and dev mode -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="252"
+            android:orientation="horizontal"
+            android:weightSum="1920">
+
+            <android.support.v4.widget.Space
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="83" />
+
+            <LinearLayout
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1719"
+                android:weightSum="1719">
+
+                <LinearLayout
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent"
+                    android:layout_weight="765"
+                    android:orientation="vertical">
+
+                    <android.support.v4.widget.Space
+                        android:layout_width="match_parent"
+                        android:layout_height="0dip"
+                        android:layout_weight="69" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dip"
+                        android:layout_weight="183"
+                        android:weightSum="765">
+
+                        <View
+                            android:layout_width="0dip"
+                            android:layout_height="match_parent"
+                            android:layout_weight="222"
+                            android:background="@drawable/settings_health_bar_holder" />
+
+                        <LinearLayout
+                            android:layout_width="0dip"
+                            android:layout_height="match_parent"
+                            android:layout_weight="543"
+                            android:orientation="vertical"
+                            android:weightSum="183">
+
+                            <com.yaroslavlancelot.eafall.android.view.SoundButton
+                                android:id="@+id/health_bar_behaviour"
+                                style="@style/SettingsHealthBarText"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dip"
+                                android:layout_weight="124"
+                                android:background="@drawable/settings_health_bar_button_selector"
+                                android:gravity="center"
+                                android:text="@string/settings_health_bar_behaviour" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0dip"
+                                android:layout_weight="59"
+                                android:background="@drawable/settings_health_bar_wires" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <android.support.v4.widget.Space
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent"
+                    android:layout_weight="57" />
+
+                <!-- developers options -->
+                <FrameLayout
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent"
+                    android:layout_weight="897">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/settings_dev_mode_outer_shape"
+                        android:gravity="center">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/settings_dev_mode_inner_shape"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:padding="@dimen/settings_dev_mode_inner_background_padding">
+
+                            <com.yaroslavlancelot.eafall.android.view.MagicTextView
+                                style="@style/SettingsCheckboxTitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/developers_mode" />
+
+                            <TextView
+                                android:id="@+id/developers_mode_state_text"
+                                style="@style/SettingsDevModeCheckboxDescription"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/developers_mode_off" />
+                        </LinearLayout>
+
+                        <CheckBox
+                            android:id="@+id/developers_mode_checkbox"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/settings_dev_mode_check_box_padding"
+                            android:layout_marginLeft="@dimen/settings_dev_mode_check_box_padding"
+                            android:background="@null"
+                            android:button="@drawable/settings_checkbox_selector" />
+
+                    </LinearLayout>
+                </FrameLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

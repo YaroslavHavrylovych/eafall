@@ -33,7 +33,7 @@ import java.util.WeakHashMap;
  * <br/>
  * Copied from https://github.com/m5/MagicTextView
  */
-public class MagicTextView extends TextView {
+public class MagicTextView extends android.support.v7.widget.AppCompatTextView {
     private ArrayList<Shadow> outerShadows;
     private ArrayList<Shadow> innerShadows;
 
@@ -280,7 +280,7 @@ public class MagicTextView extends TextView {
                 && (innerShadows.size() > 0
                 || foregroundDrawable != null
         )
-                ) {
+        ) {
             setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
     }

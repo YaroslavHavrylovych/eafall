@@ -33,6 +33,7 @@
         <com.yaroslavlancelot.eafall.android.view.SoundButton
             android:id="@+id/confirm"
             style="@style/ExitDialogButton"
+            android:gravity="center"
             android:text="@string/next"/>
 
     </LinearLayout>

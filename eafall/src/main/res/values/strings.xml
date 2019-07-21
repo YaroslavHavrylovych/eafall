@@ -103,6 +103,12 @@
     <string name="music_off">Music disabled</string>
     <string name="category_sounds">Sounds</string>
     <string name="category_other">Other</string>
+    <string name="gathering_user_data_text">Gathering user data</string>
+    <string name="user_info_text"><u>User Info</u></string>
+    <string name="privacy_policy_text"><u>Privacy Policy</u></string>
+    <string name="policy_text">Policy</string>
+    <string name="stats_gathering_enabled">Statistics gathering enabled</string>
+    <string name="stats_gathering_disabled">Statistics gathering disabled</string>
 
     <!-- general -->
     <string name="app_name">Empires Always Fall</string>

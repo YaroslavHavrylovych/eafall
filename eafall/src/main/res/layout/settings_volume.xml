@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="horizontal"
-              android:weightSum="1920">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:weightSum="1920">
 
     <android.support.v4.widget.Space
         android:layout_width="0dip"
         android:layout_height="match_parent"
-        android:layout_weight="160"/>
+        android:layout_weight="160" />
 
     <LinearLayout
         android:layout_width="0dip"
@@ -22,7 +22,7 @@
             android:layout_height="match_parent"
             android:layout_weight="153"
             android:background="@null"
-            android:button="@drawable/settings_checkbox_selector"/>
+            android:button="@drawable/settings_checkbox_selector" />
 
         <LinearLayout
             android:id="@+id/text"
@@ -38,14 +38,14 @@
                 style="@style/SettingsCheckboxTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/game_sounds"/>
+                android:text="@string/game_sounds" />
 
             <TextView
                 android:id="@+id/volume_description"
                 style="@style/SettingsCheckboxDescription"
-                android:text="@string/developers_mode_off"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:text="@string/developers_mode_off" />
         </LinearLayout>
 
         <FrameLayout
@@ -63,27 +63,29 @@
                     android:layout_width="0dip"
                     android:layout_height="match_parent"
                     android:layout_weight="111"
-                    android:background="@drawable/volume_decrease_selector"/>
+                    android:background="@drawable/volume_decrease_selector"
+                    android:gravity="center" />
 
                 <View
                     android:id="@+id/middle"
                     android:layout_width="0dip"
                     android:layout_height="match_parent"
                     android:layout_weight="780"
-                    android:background="@drawable/volume_middle_part"/>
+                    android:background="@drawable/volume_middle_part" />
 
                 <com.yaroslavlancelot.eafall.android.view.SoundButton
                     android:id="@+id/increase"
                     android:layout_width="0dip"
                     android:layout_height="match_parent"
                     android:layout_weight="158"
-                    android:background="@drawable/volume_increase_selector"/>
+                    android:background="@drawable/volume_increase_selector"
+                    android:gravity="center" />
             </LinearLayout>
 
             <com.yaroslavlancelot.eafall.android.view.PercentLight
                 android:id="@+id/light"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
         </FrameLayout>
     </LinearLayout>
 

@@ -59,6 +59,7 @@
         android:layout_width="@dimen/dialog_building_settings_done_btn_width"
         android:layout_height="@dimen/dialog_building_settings_done_btn_height"
         android:layout_centerHorizontal="true"
+        android:gravity="center"
         style="@style/DialogTitleText"
         android:text="@string/done"
         android:background="@drawable/building_settings_done_button_selector"/>

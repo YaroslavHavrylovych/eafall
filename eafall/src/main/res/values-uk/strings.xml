@@ -4,7 +4,7 @@
     <string name="not_int_demo">Не включено в демо версію</string>
     <string name="not_implemented">Не реалізовано</string>
     <string name="pass_campaign">Спочатку пройдіть перші 4 місії кампанії</string>
-   <!-- /versions -->
+    <!-- /versions -->
 
     <!-- game types -->
     <string name="campaign">КАМПАНІЯ</string>
@@ -103,6 +103,12 @@
     <string name="music_off">Вимкена</string>
     <string name="category_sounds">Звук</string>
     <string name="category_other">Інше</string>
+    <string name="gathering_user_data_text">Збір статистики</string>
+    <string name="user_info_text"><u>Інформація для користувача</u></string>
+    <string name="privacy_policy_text"><u>Політика конфідейційності</u></string>
+    <string name="policy_text">Конфідейційність</string>
+    <string name="stats_gathering_enabled">Збір статистики дозволений</string>
+    <string name="stats_gathering_disabled">Збір статистики заборонений</string>
 
     <!-- general -->
     <string name="app_name">Empires Always Fall</string>

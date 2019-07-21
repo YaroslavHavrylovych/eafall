@@ -1,8 +1,28 @@
 package com.yaroslavlancelot.eafall.android.analytics;
 
+import android.preference.PreferenceManager;
+
+import com.yaroslavlancelot.eafall.EaFallApplication;
+
 import timber.log.Timber;
 
 public class LoggerAnalytics implements IAnalytics {
+    private Boolean mAnalyticsDefaultState = false;
+    private String mAnalyticsPrefsKey = "eafall_analytics_enabled_key";
+
+    @Override
+    public void setStatsState(boolean enabled) {
+        PreferenceManager.getDefaultSharedPreferences(EaFallApplication.getContext())
+                .edit().putBoolean(mAnalyticsPrefsKey, enabled).apply();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return PreferenceManager.getDefaultSharedPreferences(
+                EaFallApplication.getContext()).getBoolean(mAnalyticsPrefsKey,
+                mAnalyticsDefaultState);
+    }
+
     @Override
     public void screenViewEvent(String screenName) {
         Timber.i("screenViewEvent");

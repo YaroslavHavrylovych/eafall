@@ -10,7 +10,7 @@ import android.view.Window;
 
 import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.R;
-import com.yaroslavlancelot.eafall.android.fragment.SettingsFragment;
+import com.yaroslavlancelot.eafall.android.fragment.GameSettingsFragment;
 import com.yaroslavlancelot.eafall.game.configuration.IConfig;
 
 /**
@@ -58,7 +58,8 @@ public class SettingsDialog extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.holder_layout, container, true);
+        View view = inflater.inflate(R.layout.settings_holder_layout, container, true);
+        view.findViewById(R.id.back_button).setOnClickListener(v -> SettingsDialog.this.dismiss());
         initSettingsFragment();
         return view;
     }
@@ -68,13 +69,7 @@ public class SettingsDialog extends DialogFragment {
      * to initialize the content.
      */
     private void initSettingsFragment() {
-        SettingsFragment fragment = new SettingsFragment();
-        fragment.addBackButtonOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                SettingsDialog.this.dismiss();
-            }
-        });
+        GameSettingsFragment fragment = new GameSettingsFragment();
         getChildFragmentManager().beginTransaction()
                 .replace(R.id.content, fragment)
                 .commit();
