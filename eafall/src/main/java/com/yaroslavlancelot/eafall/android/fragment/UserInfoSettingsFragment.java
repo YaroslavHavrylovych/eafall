@@ -22,7 +22,6 @@ public class UserInfoSettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.user_info_settings_layout, container, false);
-        view.findViewById(R.id.user_info).setOnClickListener(this::openUserInfo);
         view.findViewById(R.id.privacy_policy).setOnClickListener(this::openPrivacyPolicy);
         initStatsGatheringState(view.findViewById(R.id.send_data_checkbox),
                 view.findViewById(R.id.data_send_description));
@@ -42,15 +41,9 @@ public class UserInfoSettingsFragment extends Fragment {
         });
     }
 
-    private void openUserInfo(View view) {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-                Uri.parse("http://www.google.com"));
-        startActivity(browserIntent);
-    }
-
     private void openPrivacyPolicy(View view) {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-                Uri.parse("http://www.google.com"));
+                Uri.parse("https://github.com/YaroslavHavrylovych/eafall/wiki/Privacy_policy"));
         startActivity(browserIntent);
     }
 

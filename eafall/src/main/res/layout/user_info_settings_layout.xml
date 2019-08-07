@@ -30,17 +30,6 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/user_info"
-        style="@style/SettingsCheckboxTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="30dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:text="@string/user_info_text" />
-
-    <TextView
         android:id="@+id/privacy_policy"
         style="@style/SettingsCheckboxTitle"
         android:layout_width="wrap_content"
