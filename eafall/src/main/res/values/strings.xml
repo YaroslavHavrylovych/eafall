@@ -110,6 +110,10 @@
     <string name="stats_gathering_enabled">Statistics gathering enabled</string>
     <string name="stats_gathering_disabled">Statistics gathering disabled</string>
 
+    <!-- User infor popup -->
+    <string name="gathering_user_data_popup_content">We inform you, that by clicking at "Continue", you\'re agreeing with User Agreement and Privacy Policy. Click on the text to get more information. You can always disable all the statistics, from the settings.</string>
+    <string name="gathering_user_data_popup_continue">Continue</string>
+
     <!-- general -->
     <string name="app_name">Empires Always Fall</string>
     <string name="exit">Exit</string>

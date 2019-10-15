@@ -110,6 +110,10 @@
     <string name="stats_gathering_enabled">Збір статистики дозволений</string>
     <string name="stats_gathering_disabled">Збір статистики заборонений</string>
 
+    <!-- User infor popup -->
+    <string name="gathering_user_data_popup_content">Повідомляємо вас, що настинувши "Продовжити", ви погоджуєтесь із Правилами Користувача і Політикою Конфіденційності. Настиність на текст, щоб отримати більше інформації. Ви завжди можете вимкнути статистику із Налаштувань.</string>
+    <string name="gathering_user_data_popup_continue">Продовжити</string>
+
     <!-- general -->
     <string name="app_name">Empires Always Fall</string>
     <string name="exit">Вихід</string>

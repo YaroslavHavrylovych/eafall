@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.R;
 import com.yaroslavlancelot.eafall.android.analytics.AnalyticsFactory;
 
@@ -43,7 +44,7 @@ public class UserInfoSettingsFragment extends Fragment {
 
     private void openPrivacyPolicy(View view) {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-                Uri.parse("https://github.com/YaroslavHavrylovych/eafall/wiki/Privacy_policy"));
+                Uri.parse(EaFallApplication.getContext().getString(R.string.user_agreement_url)));
         startActivity(browserIntent);
     }
 
