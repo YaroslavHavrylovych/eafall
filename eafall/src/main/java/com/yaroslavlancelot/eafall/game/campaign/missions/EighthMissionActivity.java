@@ -20,10 +20,9 @@ import com.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.SortedSet;
 
 /** Ninth mission include waves user need to leave */
-public class NinthMissionActivity extends BaseTutorialActivity {
+public class EighthMissionActivity extends BaseTutorialActivity {
     @Override
     protected void onPopulateWorkingScene(final EaFallScene scene) {
         super.onPopulateWorkingScene(scene);
@@ -111,7 +110,7 @@ public class NinthMissionActivity extends BaseTutorialActivity {
     }
 
     private void showInfoToast(final int strId) {
-        runOnUiThread(() -> Toast.makeText(NinthMissionActivity.this, strId, Toast.LENGTH_SHORT).show());
+        runOnUiThread(() -> Toast.makeText(EighthMissionActivity.this, strId, Toast.LENGTH_SHORT).show());
     }
 
     @Override

@@ -361,7 +361,7 @@ public class CampaignActivity extends EaFallActivity {
         SelfCleanable.clearMemory();
         mCampaignPassage.setLastPlayedMission(mScreenId);
         StartableIntent campaignIntent;
-        if (mScreenId == 3 || mScreenId == 5) { //those are not usual missions
+        if (mScreenId == 0 || mScreenId == 5) { //those are not usual missions
             campaignIntent = new CampaignFindPathMissionIntent(getMissionActivity(missionData),
                     missionData, mCampaignFileName, mScreenId);
         } else {

@@ -61,6 +61,10 @@
             android:configChanges="screenSize"
             android:screenOrientation="landscape" />
         <activity
+            android:name=".game.campaign.missions.ZeroMissionActivity"
+            android:configChanges="screenSize"
+            android:screenOrientation="landscape" />
+        <activity
             android:name=".game.campaign.missions.FourthMissionActivity"
             android:configChanges="screenSize"
             android:screenOrientation="landscape" />
@@ -69,11 +73,7 @@
             android:configChanges="screenSize"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".game.campaign.missions.SixthMissionActivity"
-            android:configChanges="screenSize"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name=".game.campaign.missions.NinthMissionActivity"
+            android:name=".game.campaign.missions.EighthMissionActivity"
             android:configChanges="screenSize"
             android:screenOrientation="landscape" />
     </application>

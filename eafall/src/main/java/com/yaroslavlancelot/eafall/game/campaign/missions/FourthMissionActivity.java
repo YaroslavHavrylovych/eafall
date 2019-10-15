@@ -1,46 +1,96 @@
 package com.yaroslavlancelot.eafall.game.campaign.missions;
 
-import com.yaroslavlancelot.eafall.game.campaign.missions.utils.FindPathMissionActivity;
+import android.widget.Toast;
 
-/** Fourth mission to reach your friends */
-public class FourthMissionActivity extends FindPathMissionActivity {
-    private final int[] mUnitPos = new int[]{100, 540};
-    private final int[] mEndpointPos = new int[]{1680, 540};
+import com.yaroslavlancelot.eafall.R;
+import com.yaroslavlancelot.eafall.game.BaseTutorialActivity;
+import com.yaroslavlancelot.eafall.game.constant.SizeConstants;
+import com.yaroslavlancelot.eafall.game.constant.StringConstants;
+import com.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.OffenceUnit;
+import com.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.IUnitPath;
+import com.yaroslavlancelot.eafall.game.entity.gameobject.unit.offence.path.implementation.SingleWayThoughCenterUnitPath;
+import com.yaroslavlancelot.eafall.game.events.SharedEvents;
+import com.yaroslavlancelot.eafall.game.events.periodic.time.GameTime;
+import com.yaroslavlancelot.eafall.game.player.IPlayer;
+import com.yaroslavlancelot.eafall.game.player.PlayersHolder;
+import com.yaroslavlancelot.eafall.game.scene.scenes.EaFallScene;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+/** Fifth mission include waves user need to leave */
+public class FourthMissionActivity extends BaseTutorialActivity {
     @Override
-    protected int[] getMainUnitCoords() {
-        return mUnitPos;
+    protected void onPopulateWorkingScene(final EaFallScene scene) {
+        super.onPopulateWorkingScene(scene);
+        String callbackKey = GameTime.GAME_TIMER_TICK_KEY;
+        SharedEvents.addCallback(new SharedEvents.DataChangedCallback(callbackKey) {
+            @Override
+            public void callback(final String key, final Object value) {
+                Integer intVal = (Integer) value;
+                switch (intVal) {
+                    case 180: {
+                        showInfoToast(R.string.ninth_mission_pre_support);
+                        break;
+                    }
+                    case 170: {
+                        wave(3);
+                        break;
+                    }
+                    case 30: {
+                        wave(5);
+                        break;
+                    }
+                }
+            }
+        });
     }
 
-    @Override
-    protected int[] getEndpointCoords() {
-        return mEndpointPos;
+    private void wave(int amountOfUnitPerPath) {
+        IPlayer player = getBotPlayer();
+        List<Integer> unitsIds = new ArrayList<>(player.getAlliance().getMovableUnitsIds());
+        unitsIds.remove(unitsIds.size() - 1);// removing defence unit
+        Random random = new Random();
+        //top support
+        for (int i = 0; i < amountOfUnitPerPath; i++) {
+            int id = unitsIds.get(random.nextInt(unitsIds.size()));
+            int y = SizeConstants.GAME_FIELD_HEIGHT * 9 / 10 + i / 10 * SizeConstants.UNIT_SIZE;
+            int x = SizeConstants.GAME_FIELD_WIDTH / 2
+                    + (((i % 10) - 2) * SizeConstants.UNIT_SIZE + 5);
+            OffenceUnit unit = createMovableUnit(player, id, x, y,
+                    new SingleWayThoughCenterUnitPath(false));
+            IUnitPath path = unit.getUnitPath();
+            path.setCurrentPathPoint(path.getTotalPathPoints() / 2);
+        }
+        //bottom support
+        for (int i = 0; i < amountOfUnitPerPath; i++) {
+            int id = unitsIds.get(random.nextInt(unitsIds.size()));
+            int x = SizeConstants.GAME_FIELD_WIDTH / 2 +
+                    (((i % 10) - 2) * SizeConstants.UNIT_SIZE + 5);
+            int y  = SizeConstants.GAME_FIELD_HEIGHT / 10 + i / 10 * SizeConstants.UNIT_SIZE;
+            OffenceUnit unit = createMovableUnit(player, id, x, y,
+                    new SingleWayThoughCenterUnitPath(false));
+            IUnitPath path = unit.getUnitPath();
+            path.setCurrentPathPoint(path.getTotalPathPoints() / 2);
+        }
+        showInfoToast(R.string.ninth_mission_support);
     }
 
-    @Override
-    protected int getMainUnitId() {
-        return 50;
+    private IPlayer getBotPlayer() {
+        IPlayer player = PlayersHolder.getPlayer(StringConstants.FIRST_PLAYER_CONTROL_BEHAVIOUR_TYPE);
+        if (player.getControlType().user()) {
+            player = player.getEnemyPlayer();
+        }
+        return player;
     }
 
-    @Override
-    protected void onPopulateEnemies() {
-        //first line
-        createEnemy(50, new int[]{360, 1080 - 50}, new int[]{360, 1080 - 500});
-        createEnemy(50, new int[]{360, 1080 - 300}, new int[]{360, 1080 - 750});
-        createEnemy(21, new int[]{410, 40}, new int[]{410, 1040});
-        //middle
-        createEnemy(12, new int[]{720, 20}, new int[]{720, 270});
-        createEnemy(12, new int[]{960, 20}, new int[]{960, 270});
-        createEnemy(12, new int[]{720, 1080 - 270}, new int[]{720, 1080 - 20});
-        createEnemy(12, new int[]{960, 1080 - 270}, new int[]{960, 1080 - 20});
-        //end
-        createEnemy(70, new int[]{1680, 540}, new int[]{1276, 540});
-        createEnemy(70, new int[]{1276, 340}, new int[]{1680, 340});
-        createEnemy(70, new int[]{1276, 740}, new int[]{1680, 740});
+    private void showInfoToast(final int strId) {
+        runOnUiThread(() -> Toast.makeText(FourthMissionActivity.this, strId, Toast.LENGTH_SHORT).show());
     }
 
     @Override
     protected String getScreenName() {
-        return "Mission 4 Screen";
+        return "Mission 5 Screen";
     }
 }
