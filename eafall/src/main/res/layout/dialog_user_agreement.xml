@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@null">
+
+    <FrameLayout
+        android:id="@+id/title_container"
+        android:layout_width="@dimen/dialog_health_bar_width"
+        android:layout_height="@dimen/dialog_health_bar_title_height"
+        android:background="@drawable/health_bar_dialog_header"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/title_text"
+            style="@style/DialogTitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/pick_unit_health_bar_behavior" />
+    </FrameLayout>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="@dimen/dialog_health_bar_width"
+        android:layout_height="@dimen/dialog_health_bar_other_height"
+        android:layout_below="@id/title_container"
+        android:background="@drawable/health_bar_dialog_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/title_container"
+        app:layout_constraintTop_toBottomOf="@+id/title_container" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/consent_text"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/dialog_user_info_text_margin"
+        android:layout_marginEnd="@dimen/dialog_user_info_text_margin"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:autoSizeTextType="uniform"
+        android:text="@string/gathering_user_data_popup_content"
+        app:layout_constraintBottom_toTopOf="@+id/done_button"
+        app:layout_constraintEnd_toEndOf="@+id/view"
+        app:layout_constraintStart_toStartOf="@+id/view"
+        app:layout_constraintTop_toBottomOf="@+id/title_container" />
+
+    <com.yaroslavlancelot.eafall.android.view.SoundButton
+        android:id="@+id/done_button"
+        style="@style/DialogTitleText"
+        android:layout_width="@dimen/dialog_health_bar_done_button_width"
+        android:layout_height="@dimen/dialog_health_bar_done_button_height"
+        android:layout_below="@id/title_container"
+        android:background="@drawable/dialog_button_selector"
+        android:gravity="center"
+        android:text="@string/gathering_user_data_popup_continue"
+        app:layout_constraintBottom_toBottomOf="@+id/view"
+        app:layout_constraintEnd_toEndOf="@+id/view"
+        app:layout_constraintStart_toStartOf="@+id/view" />
+
+</android.support.constraint.ConstraintLayout>

@@ -1,40 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:orientation="vertical"
-                android:layout_gravity="center_horizontal"
-                android:layout_width="@dimen/dialog_exit_width"
-                android:layout_height="@dimen/dialog_exit_height"
-                android:background="@drawable/confirmation_popup">
+    android:layout_width="@dimen/dialog_exit_width"
+    android:layout_height="@dimen/dialog_exit_height"
+    android:layout_gravity="center_horizontal"
+    android:background="@drawable/confirmation_popup"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/exit_confirmation"
-        android:text="@string/exit_confirmation"
-        android:textSize="@dimen/dialog_exit_body_text"
-        android:textColor="@color/confirmation_popup_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/dialog_exit_text_margin_top"
         android:gravity="center"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"/>
+        android:text="@string/exit_confirmation"
+        android:textColor="@color/confirmation_popup_text"
+        android:textSize="@dimen/dialog_exit_body_text" />
 
     <LinearLayout
         android:id="@+id/buttons_container"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/dialog_exit_buttons_margin_bottom"
-        android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/dialog_exit_buttons_margin_bottom"
+        android:orientation="horizontal">
 
         <com.yaroslavlancelot.eafall.android.view.SoundButton
             android:id="@+id/yes"
-            android:text="@string/yes"
-            style="@style/ExitDialogButton"/>
+            style="@style/ExitDialogButton"
+            android:gravity="center"
+            android:text="@string/yes" />
 
         <com.yaroslavlancelot.eafall.android.view.SoundButton
             android:id="@+id/no"
-            android:text="@string/no"
-            style="@style/ExitDialogButton"/>
+            style="@style/ExitDialogButton"
+            android:gravity="center"
+            android:text="@string/no" />
     </LinearLayout>
 </RelativeLayout>

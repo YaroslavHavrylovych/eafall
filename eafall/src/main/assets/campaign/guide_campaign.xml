@@ -2,7 +2,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="scheme/campaign_scheme_definition.xml">
 
-    <background>graphics/images/background.png</background>
+    <background>campaign_background.png</background>
     <parallax_background>false</parallax_background>
 
     <campaign screen="0">

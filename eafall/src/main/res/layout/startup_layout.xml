@@ -1,85 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/background_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_gravity="center"
-                android:background="@drawable/startup_background">
+    android:id="@+id/background_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@drawable/startup_background"
+    android:orientation="vertical">
 
     <ImageView
-        android:layout_centerHorizontal="true"
+        android:id="@+id/logo"
         android:layout_width="match_parent"
         android:layout_height="@dimen/startup_screen_logo_height"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/startup_screen_logo_margin_top"
         android:layout_marginBottom="@dimen/startup_screen_logo_margin_bottom"
-        android:id="@+id/logo"
-        android:src="@drawable/startup_logo"
         android:adjustViewBounds="true"
-        android:scaleType="fitCenter"/>
+        android:scaleType="fitCenter"
+        android:src="@drawable/startup_logo" />
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="@dimen/startup_screen_button_width"
         android:layout_height="match_parent"
-        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/logo"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:gravity="center"
-        android:layout_below="@+id/logo">
+        android:orientation="vertical">
 
         <com.yaroslavlancelot.eafall.android.view.SoundButton
             android:id="@+id/campaign"
             android:layout_width="match_parent"
             android:layout_height="@dimen/startup_screen_button_height"
             android:layout_marginBottom="@dimen/startup_screen_button_margin_bottom"
-            android:text="@string/campaign"
-            android:textSize="@dimen/startup_screen_button_text_size"
             android:background="@drawable/startup_button"
-            android:textStyle="bold"
-            android:textColor="@color/startup_screen_button_text_bottom"/>
+            android:gravity="center"
+            android:text="@string/campaign"
+            android:textColor="@color/startup_screen_button_text_bottom"
+            android:textSize="@dimen/startup_screen_button_text_size"
+            android:textStyle="bold" />
 
         <com.yaroslavlancelot.eafall.android.view.SoundButton
             android:id="@+id/single_game"
             android:layout_width="match_parent"
             android:layout_height="@dimen/startup_screen_button_height"
             android:layout_marginBottom="@dimen/startup_screen_button_margin_bottom"
-            android:text="@string/single_game"
-            android:textSize="@dimen/startup_screen_button_text_size"
             android:background="@drawable/startup_button"
-            android:textStyle="bold"
-            android:textColor="@color/startup_screen_button_text_bottom"/>
+            android:gravity="center"
+            android:text="@string/single_game"
+            android:textColor="@color/startup_screen_button_text_bottom"
+            android:textSize="@dimen/startup_screen_button_text_size"
+            android:textStyle="bold" />
 
         <com.yaroslavlancelot.eafall.android.view.SoundButton
             android:id="@+id/multiplayer_game"
             android:layout_width="match_parent"
             android:layout_height="@dimen/startup_screen_button_height"
-            android:text="@string/multiplayer_game"
-            android:textSize="@dimen/startup_screen_button_text_size"
             android:background="@drawable/startup_button"
-            android:textStyle="bold"
-            android:textColor="@color/startup_screen_button_text_bottom"/>
+            android:gravity="center"
+            android:text="@string/multiplayer_game"
+            android:textColor="@color/startup_screen_button_text_bottom"
+            android:textSize="@dimen/startup_screen_button_text_size"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <com.yaroslavlancelot.eafall.android.view.SoundButton
         android:id="@+id/settings"
         android:layout_width="@dimen/startup_screen_round_button_size"
         android:layout_height="@dimen/startup_screen_round_button_size"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/startup_screen_round_button_margin"
         android:background="@drawable/startup_button_settings"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:contentDescription="@string/settings"/>
+        android:contentDescription="@string/settings"
+        android:gravity="center" />
 
     <com.yaroslavlancelot.eafall.android.view.SoundButton
         android:id="@+id/exit"
         android:layout_width="@dimen/startup_screen_round_button_size"
         android:layout_height="@dimen/startup_screen_round_button_size"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/startup_screen_round_button_margin"
         android:background="@drawable/startup_button_exit"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:contentDescription="@string/exit"/>
+        android:contentDescription="@string/exit"
+        android:gravity="center" />
 </RelativeLayout>

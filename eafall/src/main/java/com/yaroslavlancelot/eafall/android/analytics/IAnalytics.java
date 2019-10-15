@@ -1,6 +1,11 @@
 package com.yaroslavlancelot.eafall.android.analytics;
 
 public interface IAnalytics {
+    //general
+    void setStatsState(boolean enabled);
+
+    boolean isEnabled();
+
     //events
     void screenViewEvent(String screenName);
 

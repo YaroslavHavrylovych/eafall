@@ -9,20 +9,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.R;
-import com.yaroslavlancelot.eafall.android.activities.StartupActivity;
-import com.yaroslavlancelot.eafall.android.dialog.HealthBarDialog;
 import com.yaroslavlancelot.eafall.android.view.SettingsVolume;
 import com.yaroslavlancelot.eafall.game.configuration.game.ApplicationSettings;
 
 /** Full-screen application settings */
-public class SettingsFragment extends Fragment {
+public class GameSettingsFragment extends Fragment {
     /*Constants (or it has to be constants)*/
     private String KEY_DEV_MODE;
     private String KEY_HEALTH_BAR;
@@ -41,86 +37,56 @@ public class SettingsFragment extends Fragment {
     private CheckBox mDevelopersModeCheckBox;
     /** unit health bar behaviour picket */
     private Button mHealthBarBehaviour;
-    /** settings on screen back button */
-    private ImageButton mBackButton;
-    /** back button on click listener */
-    private View.OnClickListener mBackButtonOnClickListener;
 
-    public SettingsFragment() {
+    public GameSettingsFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.settings_full_screen_layout, container, false);
+        View view = inflater.inflate(R.layout.game_settings_layout, container, false);
         mSharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(EaFallApplication.getContext());
         initKeys();
-        //header
-        TextView textView = (TextView) view.findViewById(R.id.title_text);
-        textView.getPaint().setShader(StartupActivity.getTextGradient(
-                (int) getResources().getDimension(R.dimen.settings_title_text)));
         ApplicationSettings applicationSettings = EaFallApplication.getConfig().getSettings();
         //background music volume
-        mMusicVolume = (SettingsVolume) view.findViewById(R.id.music_volume);
+        mMusicVolume = view.findViewById(R.id.music_volume);
         mMusicVolume.setTitle(R.string.music);
         mMusicVolume.initSettingsVolume(KEY_MUSIC, KEY_MUSIC_VOLUME,
                 R.string.music_on, R.string.music_off, applicationSettings.getMusicVolumeMax());
         //game sound volume
-        mSoundVolume = (SettingsVolume) view.findViewById(R.id.sound_volume);
+        mSoundVolume = view.findViewById(R.id.sound_volume);
         mSoundVolume.setTitle(R.string.game_sounds);
         mSoundVolume.initSettingsVolume(KEY_SOUND, KEY_SOUND_VOLUME,
                 R.string.game_sounds_on, R.string.game_sounds_off,
                 applicationSettings.getSoundVolumeMax());
         //dev mode
-        mDevelopersModeCheckBox = (CheckBox) view.findViewById(R.id.developers_mode_checkbox);
+        mDevelopersModeCheckBox = view.findViewById(R.id.developers_mode_checkbox);
         initDeveloperModeSettings(mDevelopersModeCheckBox,
-                (TextView) view.findViewById(R.id.developers_mode_state_text));
+                view.findViewById(R.id.developers_mode_state_text));
         //health bar
-        mHealthBarBehaviour = (Button) view.findViewById(R.id.health_bar_behaviour);
+        mHealthBarBehaviour = view.findViewById(R.id.health_bar_behaviour);
         initHealthBar(mHealthBarBehaviour);
-        //back button
-        mBackButton = (ImageButton) view.findViewById(R.id.back_button);
-        mBackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                if (mBackButtonOnClickListener != null) {
-                    mBackButtonOnClickListener.onClick(v);
-                }
-            }
-        });
         return view;
-    }
-
-    /**
-     * settings back button click listener (used to close the settings)
-     *
-     * @param onClickListener back button new click listener
-     */
-    public void addBackButtonOnClickListener(View.OnClickListener onClickListener) {
-        mBackButtonOnClickListener = onClickListener;
     }
 
     /** initialize health bar button */
     private void initHealthBar(final Button button) {
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                Toast.makeText(getContext(), R.string.not_implemented, Toast.LENGTH_SHORT).show();
-//                String val = mSharedPreferences.getString(KEY_HEALTH_BAR,
-//                        ApplicationSettings.UnitHealthBarBehavior.DEFAULT.name());
-//                ApplicationSettings.UnitHealthBarBehavior behavior =
-//                        ApplicationSettings.UnitHealthBarBehavior.valueOf(val);
-//                HealthBarDialog dialogFragment = new HealthBarDialog();
-//                dialogFragment.init(new HealthBarDialog.HealthBarTypeSet() {
-//                    @Override
-//                    public void onTypeSet(final ApplicationSettings.UnitHealthBarBehavior healthBarBehavior) {
-//                        mSharedPreferences.edit().putString(KEY_HEALTH_BAR,
-//                                healthBarBehavior.name()).apply();
-//                    }
-//                }, behavior);
-//                dialogFragment.show(getFragmentManager(), HealthBarDialog.KEY);
-            }
+        button.setOnClickListener(v -> {
+            Toast.makeText(getContext(), R.string.not_implemented, Toast.LENGTH_SHORT).show();
+            //                String val = mSharedPreferences.getString(KEY_HEALTH_BAR,
+            //                        ApplicationSettings.UnitHealthBarBehavior.DEFAULT.name());
+            //                ApplicationSettings.UnitHealthBarBehavior behavior =
+            //                        ApplicationSettings.UnitHealthBarBehavior.valueOf(val);
+            //                HealthBarDialog dialogFragment = new HealthBarDialog();
+            //                dialogFragment.init(new HealthBarDialog.HealthBarTypeSet() {
+            //                    @Override
+            //                    public void onTypeSet(final ApplicationSettings.UnitHealthBarBehavior healthBarBehavior) {
+            //                        mSharedPreferences.edit().putString(KEY_HEALTH_BAR,
+            //                                healthBarBehavior.name()).apply();
+            //                    }
+            //                }, behavior);
+            //                dialogFragment.show(getFragmentManager(), HealthBarDialog.KEY);
         });
     }
 
@@ -130,13 +96,10 @@ public class SettingsFragment extends Fragment {
         checkBox.setChecked(isChecked);
         updateTextView(isChecked, R.string.developers_mode_on,
                 R.string.developers_mode_off, description);
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
-                updateTextView(isChecked, R.string.developers_mode_on,
-                        R.string.developers_mode_off, description);
-                mSharedPreferences.edit().putBoolean(KEY_DEV_MODE, isChecked).apply();
-            }
+        checkBox.setOnCheckedChangeListener((buttonView, isChecked1) -> {
+            updateTextView(isChecked1, R.string.developers_mode_on,
+                    R.string.developers_mode_off, description);
+            mSharedPreferences.edit().putBoolean(KEY_DEV_MODE, isChecked1).apply();
         });
     }
 

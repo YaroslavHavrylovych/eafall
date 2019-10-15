@@ -55,6 +55,7 @@
     <com.yaroslavlancelot.eafall.android.view.SoundButton
         android:id="@+id/done_button"
         android:layout_below="@id/title_container"
+        android:gravity="center"
         android:layout_marginTop="@dimen/dialog_health_bar_done_button_margin_top"
         android:paddingLeft="@dimen/dialog_health_bar_done_button_padding_left"
         android:paddingRight="@dimen/dialog_health_bar_done_button_padding_right"

@@ -2,44 +2,44 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="@string/category_sounds">
         <CheckBoxPreference
+            android:defaultValue="true"
             android:key="@string/pref_sounds_enabled"
-            android:title="@string/game_sounds"
-            android:summaryOn="@string/game_sounds_on"
             android:summaryOff="@string/game_sounds_off"
-            android:defaultValue="true"/>
+            android:summaryOn="@string/game_sounds_on"
+            android:title="@string/game_sounds" />
         <com.yaroslavlancelot.eafall.general.settings.SeekBarPreference
+            android:defaultValue="0.8"
             android:dependency="@string/pref_sounds_enabled"
             android:key="@string/pref_sounds_volume"
-            android:title="@string/game_sounds"
             android:max="99"
-            android:defaultValue="0.8"/>
+            android:title="@string/game_sounds" />
         <CheckBoxPreference
+            android:defaultValue="true"
             android:key="@string/pref_music_enabled"
-            android:title="@string/music"
-            android:summaryOn="@string/music_on"
             android:summaryOff="@string/music_off"
-            android:defaultValue="true"/>
+            android:summaryOn="@string/music_on"
+            android:title="@string/music" />
         <com.yaroslavlancelot.eafall.general.settings.SeekBarPreference
+            android:defaultValue="0.2"
             android:dependency="@string/pref_music_enabled"
             android:key="@string/pref_music_volume"
-            android:title="@string/music"
             android:max="99"
-            android:defaultValue="0.2"/>
+            android:title="@string/music" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/category_game">
         <ListPreference
-            android:title="@string/pick_unit_health_bar_behavior"
-            android:key="@string/pref_health_bar_behaviour"
+            android:defaultValue="DEFAULT"
             android:entries="@array/unit_health_bar_behavior"
             android:entryValues="@array/unit_health_bar_behavior_value"
-            android:defaultValue="DEFAULT"/>
+            android:key="@string/pref_health_bar_behaviour"
+            android:title="@string/pick_unit_health_bar_behavior" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/category_other">
         <CheckBoxPreference
+            android:defaultValue="false"
             android:key="@string/pref_dev_mode"
-            android:title="@string/developers_mode"
-            android:summaryOn="@string/developers_mode_on"
             android:summaryOff="@string/developers_mode_off"
-            android:defaultValue="false"/>
+            android:summaryOn="@string/developers_mode_on"
+            android:title="@string/developers_mode" />
     </PreferenceCategory>
 </PreferenceScreen>

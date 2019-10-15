@@ -12,7 +12,8 @@ import com.yaroslavlancelot.eafall.EaFallApplication;
 import com.yaroslavlancelot.eafall.R;
 
 /** The simplest way to have custom click sound on a button */
-public class SoundButton extends Button implements Button.OnClickListener {
+public class SoundButton extends android.support.v7.widget.AppCompatButton
+        implements Button.OnClickListener {
     private Button.OnClickListener mOnClickListener;
 
     public SoundButton(Context context) {
@@ -27,12 +28,6 @@ public class SoundButton extends Button implements Button.OnClickListener {
 
     public SoundButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public SoundButton(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
         init();
     }
 
@@ -56,13 +51,9 @@ public class SoundButton extends Button implements Button.OnClickListener {
         Context context = getContext();
         MediaPlayer mp;
         mp = MediaPlayer.create(context, R.raw.click_button);
-        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                mp.reset();
-                mp.release();
-            }
-
+        mp.setOnCompletionListener(mp1 -> {
+            mp1.reset();
+            mp1.release();
         });
         float volume = EaFallApplication.getConfig().getSettings().getSoundVolumeMax();
         mp.setVolume(volume, volume);

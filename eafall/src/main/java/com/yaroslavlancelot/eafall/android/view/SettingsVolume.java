@@ -118,12 +118,9 @@ public class SettingsVolume extends LinearLayout {
         boolean currentStatus
                 = mSharedPreferences.getBoolean(mVolumeEnabledPreferencesKey, false);
         mVolumeCheckbox.setChecked(currentStatus);
-        mVolumeCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
-                updateVolumeSettings(isChecked);
-                mSharedPreferences.edit().putBoolean(mVolumeEnabledPreferencesKey, isChecked).apply();
-            }
+        mVolumeCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            updateVolumeSettings(isChecked);
+            mSharedPreferences.edit().putBoolean(mVolumeEnabledPreferencesKey, isChecked).apply();
         });
     }
 
@@ -148,35 +145,25 @@ public class SettingsVolume extends LinearLayout {
     /** used in constructor to initialize the view */
     private void _init_() {
         View view = inflate(getContext(), R.layout.settings_volume, this);
-        mLight = (PercentLight) view.findViewById(R.id.light);
-        mIncreaseButton = (SoundButton) view.findViewById(R.id.increase);
+        mLight = view.findViewById(R.id.light);
+        mIncreaseButton = view.findViewById(R.id.increase);
         initIncButton(mIncreaseButton);
-        mDecreaseButton = (SoundButton) view.findViewById(R.id.decrease);
+        mDecreaseButton = view.findViewById(R.id.decrease);
         initDecButton(mDecreaseButton);
-        mVolumeCheckbox = (CheckBox) view.findViewById(R.id.volume_checkbox);
-        mTitle = (TextView) view.findViewById(R.id.volume_text);
-        mStatusDescription = (TextView) view.findViewById(R.id.volume_description);
+        mVolumeCheckbox = view.findViewById(R.id.volume_checkbox);
+        mTitle = view.findViewById(R.id.volume_text);
+        mStatusDescription = view.findViewById(R.id.volume_description);
         mVolumeBackground = view.findViewById(R.id.middle);
     }
 
     /** increase volume button initialization */
     private void initIncButton(Button button) {
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                mLight.increase();
-            }
-        });
+        button.setOnClickListener(v -> mLight.increase());
     }
 
     /** decrease volume button initialization */
     private void initDecButton(Button button) {
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                mLight.decrease();
-            }
-        });
+        button.setOnClickListener(v -> mLight.decrease());
     }
 
     // ===========================================================

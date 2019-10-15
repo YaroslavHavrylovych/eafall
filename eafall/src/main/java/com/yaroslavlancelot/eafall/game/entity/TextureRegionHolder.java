@@ -1,6 +1,7 @@
 package com.yaroslavlancelot.eafall.game.entity;
 
 import android.content.Context;
+import android.support.annotation.DrawableRes;
 
 import com.yaroslavlancelot.eafall.general.Holder;
 
@@ -87,6 +88,25 @@ public class TextureRegionHolder extends Holder<ITextureRegion> {
         if (!sTextureRegionHolderUtils.isElementExist(key)) {
             TextureRegion textureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
                     textureAtlas, context, path, x, y);
+            return sTextureRegionHolderUtils.addElement(key, textureRegion);
+        }
+        return sTextureRegionHolderUtils.getElement(key);
+    }
+
+    /**
+     * add element to texture atlas and add it to {@link TextureRegionHolder}
+     *
+     * @param key          Used like element key for {@link TextureRegionHolder}.
+     * @param resId        resource id
+     * @param textureAtlas texture atlas to loadGeneralGameTextures texture
+     * @param context      app context
+     */
+    public static ITextureRegion addElementFromResource(String key, @DrawableRes int resId,
+                                                        BuildableBitmapTextureAtlas textureAtlas,
+                                                        Context context) {
+        if (!sTextureRegionHolderUtils.isElementExist(key)) {
+            TextureRegion textureRegion = BitmapTextureAtlasTextureRegionFactory.createFromResource(
+                    textureAtlas, context, resId);
             return sTextureRegionHolderUtils.addElement(key, textureRegion);
         }
         return sTextureRegionHolderUtils.getElement(key);
