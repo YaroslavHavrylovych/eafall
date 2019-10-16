@@ -1,8 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
-import groovy.swing.SwingBuilder
-
 int target_v = 28
 int compiled_v = 28
 
@@ -54,8 +52,8 @@ android {
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion target_v
-        versionCode 104
-        versionName "1.0.4"
+        versionCode 106
+        versionName "1.0.6"
         multiDexEnabled true
         testInstrumentationRunner "com.yaroslavlancelot.eafall.test.DefaultInstrumentationTestRunner"
         testApplicationId "com.yaroslavlancelot.eafall.test"
@@ -101,59 +99,4 @@ android {
             abortOnError false
         }
     }
-}
-
-task askForPasswords {
-    doLast {
-        def cons = System.console()
-        def storePass, keyPass, alias
-        if (cons == null) {
-            keyPass = readStringInDialog("Enter a key password", "Please enter it here")
-            alias = readStringInDialog("Enter your alias", "Please enter it here")
-            storePass = readStringInDialog("Enter a keystore password", "Please enter it here")
-        } else {
-            keyPass = new String(cons.readPassword("\n\$ Enter key password: "))
-            alias = cons.readLine("\n\$ Enter alias name: ")
-            storePass = new String(cons.readPassword("\n\$ Enter keystore password: "))
-        }
-
-        if (keyPass == null || alias == null || storePass == null ||
-                keyPass.isEmpty() || alias.isEmpty() || storePass.isEmpty()) {
-            throw new InvalidUserDataException("You must enter both passwords and an alias to proceed")
-        }
-
-        android.signingConfigs.release.storePassword = storePass
-        android.signingConfigs.release.keyPassword = keyPass
-        android.signingConfigs.release.keyAlias = alias
-    }
-}
-
-tasks.whenTaskAdded { theTask ->
-    if (theTask.name.toLowerCase().contains("packageRelease".toLowerCase())) {
-        theTask.dependsOn "askForPasswords"
-    }
-}
-
-def String readStringInDialog(title, hint) {
-    def string = ""
-    new SwingBuilder().edt {
-        dialog(modal: true, // Otherwise the build will continue running before you closed the dialog
-                title: title, // Dialog title
-                alwaysOnTop: true, // pretty much what the name says
-                resizable: true, // Don't allow the user to resize the dialog
-                locationRelativeTo: null, // Place dialog in center of the screen
-                pack: true, // We need to pack the dialog (so it will take the size of it's children)
-                show: true // Let's show it
-        ) {
-            vbox {
-                label(text: hint)
-                passwordField(id: 'text')
-                button(defaultButton: true, text: 'OK', actionPerformed: {
-                    dispose();
-                    string = text.text
-                })
-            }
-        }
-    }
-    return string;
 }
