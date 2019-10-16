@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/pick_unit_health_bar_behavior" />
+            android:text="@string/privacy_policy_text" />
     </FrameLayout>
 
     <View

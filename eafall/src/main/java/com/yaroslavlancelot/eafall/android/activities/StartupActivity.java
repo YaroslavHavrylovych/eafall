@@ -16,7 +16,7 @@ import com.yaroslavlancelot.eafall.android.activities.settings.SettingsActivity;
 import com.yaroslavlancelot.eafall.android.activities.singleplayer.PreGameCustomizationActivity;
 import com.yaroslavlancelot.eafall.android.analytics.AnalyticsFactory;
 import com.yaroslavlancelot.eafall.android.analytics.UserConsent;
-import com.yaroslavlancelot.eafall.android.dialog.UserInfoDialogFragment;
+import com.yaroslavlancelot.eafall.android.dialog.UserInfoDialog;
 import com.yaroslavlancelot.eafall.game.alliance.mutants.Mutants;
 import com.yaroslavlancelot.eafall.game.campaign.intents.CampaignIntent;
 import com.yaroslavlancelot.eafall.game.campaign.pass.CampaignPassage;
@@ -60,7 +60,7 @@ public class StartupActivity extends BaseNonGameActivity {
                         .getBoolean(settings.KEY_PREF_MUSIC, true));
 
         if (!UserConsent.getInstance().isUserConsentAsked()) {
-            new UserInfoDialogFragment(this).show();
+            new UserInfoDialog(this).show();
         }
     }
 

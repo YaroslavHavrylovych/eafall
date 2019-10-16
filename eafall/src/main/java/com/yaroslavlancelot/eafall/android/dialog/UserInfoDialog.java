@@ -1,6 +1,5 @@
 package com.yaroslavlancelot.eafall.android.dialog;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -17,7 +16,7 @@ import com.yaroslavlancelot.eafall.android.analytics.AnalyticsFactory;
 import com.yaroslavlancelot.eafall.android.analytics.UserConsent;
 
 /** Dialog which appear when the app starts to inform the user about Privacy Policy */
-public class UserInfoDialogFragment extends Dialog {
+public class UserInfoDialog extends Dialog {
 
     // ===========================================================
     // Constants
@@ -30,7 +29,7 @@ public class UserInfoDialogFragment extends Dialog {
     // ===========================================================
     // Constructors
     // ===========================================================
-    public UserInfoDialogFragment(final Context context) {
+    public UserInfoDialog(final Context context) {
         super(context);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setCanceledOnTouchOutside(false);
