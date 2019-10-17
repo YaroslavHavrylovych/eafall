@@ -70,28 +70,28 @@
 
 ## Будинки
 
-Notes:
-* Each building (which produces ships) generates oxygen in an amount which equals to 5% of building original price.
-* Upgrade of the build would exclude previous price 
-(e.g. first building 230, upgraded building 430 so upgrade price 430-230 = 200)
+Нотатки:
+* Кожна споруда яка будує кораблі - генерує кисень, як 5% від вартості початкового будинку.
+* Кожне покращення не включає попередню ціну
+(приклад: перший будинок коштує 230, оновлення - 430, отже ціна оновлення 430-230 = 200)
 
-| Building | Produces | Cost | Effective against (by damage type) |
+| Будинок | Дія | Ціня | Ефективно проти (за типами атаки) |
 | -------- | -------- | ------------ | ---------------- |
-| ![Water Cave][water_cave] | Lizard, Tortoise, Dragon | 270, 330, 430 | Buildings and group units (splash) |
-| ![Invisible Plain][invisible_plain] |Scorpion, King Scorpion | 237, 350 | Massive attack |
-| ![Hydra Pond][hydra_pond] | Young hydra, Hydra | 400, 445 | Water cave |
-| ![Poison Cave][poison_cave] | Eel, Cobra | 335, 445 | Web, Hydra Pond |
-| ![Web][web] | Spider1, Spider2 | 495, 535 | Mountain cave, Invisible Plain |
-| ![Mountain Cave][mountain_cave] | Bat, Vampire | 585, 650 | Poison Cave, Hell |
-| ![Hell][hell] | Agat, Kak | 665, 745 | Everyone but expensive |
+| ![Water Cave][water_cave] | Ящірка, Черепаха, Дракон | 270, 330, 430 | Будинки і групи юнітів (гуртова) |
+| ![Invisible Plain][invisible_plain] | Скорпіон, Король скорпіонів | 237, 350 | Гуртова атака|
+| ![Hydra Pond][hydra_pond] | Молода гідра, Гідра | 400, 445 | Водна печера |
+| ![Poison Cave][poison_cave] | Вуж, Кобра | 335, 445 | Павутина, Загата Гідр |
+| ![Web][web] | Малий павук, Великий павук | 495, 535 | Гірська печера, Схована місцина |
+| ![Mountain Cave][mountain_cave] | Кажан, Вампір | 585, 650 | Отруйна печера, Пекло |
+| ![Hell][hell] | Агат, Кек | 665, 745 | Усі крім дорогих |
 
 ## Special buildings
 
 | Building | Cost | Special |
 | -------- | ---- | ------- |
-| ![Bastion][bastion] | 1200 | Creates 3 defence towers |
-| ![Reptile City][reptile_city] | 500 | Firs increase income by 40%, each next by 5% |
-| ![King of snakes][king_of_snakes] | 500 | Increase each unit attack power by 40% |
+| ![Bastion][bastion] | 1200 | Будує 3 захисні споруди навколо планети |
+| ![Reptile City][reptile_city] | 500 | Перший будино зібльшує дохід на 40%, кожен наступний на 5% |
+| ![King of snakes][king_of_snakes] | 500 | Збільшує силу атаки кожного юніта на 40% |
 
 [water_cave]: readme_files/buildings/water_cave.png
 [invisible_plain]: readme_files/buildings/invisible_plain.png

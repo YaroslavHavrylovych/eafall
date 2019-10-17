@@ -9,16 +9,16 @@
 ## Instead Intro
 
 
-** EAFall ** - the name originates from the 
-[Enter Shikari's] (https://www.youtube.com/watch?v=TXKPYXIlv54) song, and
+**EAFall** - the name originates from the 
+[Enter Shikari's](https://www.youtube.com/watch?v=TXKPYXIlv54) song, and
 was finally established during the events of the 14th when the world's 
 attention was drawn to unprecedented action from one country to another.
 
 The game's idea came up one summer day while playing WarCraft on an 
-[Enfos] (https://www.epicwar.com/maps/188675/) map.
+[Enfos](https://www.epicwar.com/maps/188675/) map.
 Obviously that a lot of things changed during development: landmark, balance, campaign,
 control, etc. The cult saga 
-[SpaceRangers] (https://en.wikipedia.org/wiki/Space_Rangers_ (video_game))
+[SpaceRangers](https://en.wikipedia.org/wiki/Space_Rangers_(video_game))
 made a significant impact.
 
 If you have any fresh ideas or want to practice (programming), or change anything -
@@ -26,7 +26,7 @@ then I will be surprised, and I can advise you a bunch of other projects.
 If even these warnings wouldn't stop you, then ping me at yaroslavlancelot@gmail.com.
 
 Anyone who finished the whole campaign can appear in the finishers list
-[discoverers] (https://github.com/YaroslavHavrylovych/eafall/blob/develop/finishers_list.md).
+[discoverers](https://github.com/YaroslavHavrylovych/eafall/blob/develop/finishers_list.md).
 
 ## The Small Plot
 
@@ -67,11 +67,11 @@ By the time this was written, I had forgotten almost everything I had planned.
 But there is something left on the shelves of memory:
 
 - All dates are not coincidental.
-- Each mission has the name of the old [Slavic god] (https://en.wikipedia.org/wiki/Deities_of_Slavic_religion).
+- Each mission has the name of the old [Slavic god](https://en.wikipedia.org/wiki/Deities_of_Slavic_religion).
 - EAFall has nothing to do with EAGames :).
-- EAFall has something ideological about [Enter Shikari] (https://en.wikipedia.org/wiki/Enter_Shikari).
-- Planets other than Earth are known, at the time of writing, [exoplanets] (https://en.wikipedia.org/wiki/Exoplanet).
-- All the stars are the sun under the names of [Greek] (https://en.wikipedia.org/wiki/Helios) god, or [Japanese] (https://en.wikipedia.org/wiki/Amaterasu) Goddess.
+- EAFall has something ideological about [Enter Shikari](https://en.wikipedia.org/wiki/Enter_Shikari).
+- Planets other than Earth are known, at the time of writing, [exoplanets](https://en.wikipedia.org/wiki/Exoplanet).
+- All the stars are the sun under the names of [Greek](https://en.wikipedia.org/wiki/Helios) god, or [Japanese](https://en.wikipedia.org/wiki/Amaterasu) Goddess.
 
 ## Buildings 
 
