@@ -1,0 +1,134 @@
+# Імперія Завжди Приречена 
+
+[![EAFall](./readme_files/eafall_big_logo.jpg)](https://www.facebook.com/eafallgame)
+
+[![Build Status](https://travis-ci.org/YaroslavHavrylovych/eafall.svg?branch=develop)](https://travis-ci.org/YaroslavHavrylovych/eafall)
+
+*Читати [English](README.md)*
+
+## Замість вступу
+
+**EAFall** - назва бере свій початок із пісні
+[Enter Shikari](https://www.youtube.com/watch?v=TXKPYXIlv54),
+під час подій 14ого року, коли увага світу була прикута до безпрецeднтних дій
+одних країн, на території інших.
+
+Ідея ж гри з'явилась одного літнього дня, під час посиденьок у WarCraft на мапі
+[enfos](https://www.epicwar.com/maps/188675/).
+Звичайно багато чого було змінено під час розробки: орієнтир, баланс, кампанія,
+керування і т.п. Великий вплив зробила культова сага
+[SpaceRangers](https://en.wikipedia.org/wiki/Space_Rangers_(video_game)).
+
+Якщо у вас будуть якісь ідеї для гри, або бажання попрактикуватись, чи щось змінити -
+то я взагалі буде дуже здивований і може порадити купу інших проектів. Якщо ж навіть
+це вас не запинить - yaroslavlancelot@gmail.com.
+
+Кожен хто пройде гру може додати себе до списку 
+[першовідкривачів](https://github.com/YaroslavHavrylovych/eafall/blob/develop/finishers_list.md).
+
+## Маленький сюжет
+
+Історія розповідає про далекий світ майбутнього, коли людство розселене на купи
+планет. В один час планети почали воювати між собою і знищили майже половину населення
+галактики. В такій боротьбі народилася Імперія. Централізація, пригнічення
+влсаного населення, стандартизація вигляду, одягу - це лиш початок. Експерименти
+над людьми, групами людей, містами людей, планетами людей. Всі бунти суворо карались,
+кожного їх учасника і весь його рід вирізали під корінь.
+
+Ох, маленький ліричний відступ наслідків людської діяльності. Думаєте люди просто
+так почали колонізувати космос? Земля була настільки закиноютою, вигрібною ямою.
+Люди які там лишились - виживали, постійні війни за ресурси, голод. Закономірно
+це призвело до повномаштабної ядерної війни. З тих пір на землі лишились
+лиш малочисельні мутанти, ті хто вижили. Мало що ми знали про їх історію, доки
+не побачили, як їх кораблі виходять у відкритий космос. Живі кораблі.
+
+І от, в цій бурхливій суміші подій почались перші паростки повстань. 
+Марс. 
+Майже всі солдати Імперії на планеті перейшли на бік повстанців. Невелику
+групу представників Імперії відправили на перемовини. За пару днів,
+коли було роз'яснено всі умови і домовлено про наступні кроки, почалось щось неочікуване.
+Всіх перемовників Імперія оголосила вибитими, повстанці не схотіли домовлятись і
+планету потрібно знищити, заради миру галактики.
+
+Ідеальний аргумент для початку війни між імперією і марсом. Так, однією планетою на
+мірило всесвіту. Але до цього буде пізніше.  Перша кампанія не проце, вона про історії набагато давніші.
+
+Рік 3014. Люди (чи нелюди) на планеті Земля дізнаються, що їх буде атаковано представниками галактики.
+Галактика вирішила очистиит землю від радіації, від мутантів і зробити її зоною
+власної величі. Для цього необхідно було лиш зачистити невеличку когорту противників того.
+
+## Цікаві невипадковості
+
+До моменту написання цього, я забув майже усе, що планував. Але дещо лишилось на поличках пам'яті:
+
+- Всі дати обрані не випадково.
+- Всі місії мають назви старих [слов'янкських богів](https://uk.wikipedia.org/wiki/%D0%A1%D0%BF%D0%B8%D1%81%D0%BE%D0%BA_%D1%81%D0%BB%D0%BE%D0%B2%27%D1%8F%D0%BD%D1%81%D1%8C%D0%BA%D0%B8%D1%85_%D0%B1%D0%BE%D0%B3%D1%96%D0%B2).
+- EAFall немає нічого спільного з EAGames :) .
+- EAFall має щось ідейне від [Enter Shikari](https://uk.wikipedia.org/wiki/Enter_Shikari).
+- Планети, крім землі, є відомими, на час написання, [екзопланетами](https://uk.wikipedia.org/wiki/%D0%95%D0%BA%D0%B7%D0%BE%D0%BF%D0%BB%D0%B0%D0%BD%D0%B5%D1%82%D0%B0). 
+- Всі зірки - це сонце під іменами [грецького](https://uk.wikipedia.org/wiki/%D0%93%D0%B5%D0%BB%D1%96%D0%BE%D1%81) бога, чи [японської](https://uk.wikipedia.org/wiki/%D0%90%D0%BC%D0%B0%D1%82%D0%B5%D1%80%D0%B0%D1%81%D1%83) богині.
+
+## Будинки
+
+Notes:
+* Each building (which produces ships) generates oxygen in an amount which equals to 5% of building original price.
+* Upgrade of the build would exclude previous price 
+(e.g. first building 230, upgraded building 430 so upgrade price 430-230 = 200)
+
+| Building | Produces | Cost | Effective against (by damage type) |
+| -------- | -------- | ------------ | ---------------- |
+| ![Water Cave][water_cave] | Lizard, Tortoise, Dragon | 270, 330, 430 | Buildings and group units (splash) |
+| ![Invisible Plain][invisible_plain] |Scorpion, King Scorpion | 237, 350 | Massive attack |
+| ![Hydra Pond][hydra_pond] | Young hydra, Hydra | 400, 445 | Water cave |
+| ![Poison Cave][poison_cave] | Eel, Cobra | 335, 445 | Web, Hydra Pond |
+| ![Web][web] | Spider1, Spider2 | 495, 535 | Mountain cave, Invisible Plain |
+| ![Mountain Cave][mountain_cave] | Bat, Vampire | 585, 650 | Poison Cave, Hell |
+| ![Hell][hell] | Agat, Kak | 665, 745 | Everyone but expensive |
+
+## Special buildings
+
+| Building | Cost | Special |
+| -------- | ---- | ------- |
+| ![Bastion][bastion] | 1200 | Creates 3 defence towers |
+| ![Reptile City][reptile_city] | 500 | Firs increase income by 40%, each next by 5% |
+| ![King of snakes][king_of_snakes] | 500 | Increase each unit attack power by 40% |
+
+[water_cave]: readme_files/buildings/water_cave.png
+[invisible_plain]: readme_files/buildings/invisible_plain.png
+[hydra_pond]: readme_files/buildings/hydra_pond.png
+[poison_cave]: readme_files/buildings/poison_cave.png
+[web]: readme_files/buildings/web.png
+[mountain_cave]: readme_files/buildings/mountain_cave.png
+[hell]: readme_files/buildings/hell.png
+[bastion]: readme_files/buildings/bastion.png
+[reptile_city]: readme_files/buildings/reptile_city.png
+[king_of_snakes]: readme_files/buildings/king_of_snakes.png
+
+## Кораблі
+
+Кораблів набагато більше ніж будинків і їх потрібно пізнівати через гру.
+
+## Огляд проекту
+
+Є окремий вікі [розділ](https://github.com/YaroslavHavrylovych/eafall/wiki/Project-overview).
+
+## Як зібрати проект?
+
+Теж є окремий вікі [розділ](https://github.com/YaroslavHavrylovych/eafall/wiki/Building-the-project).
+
+## Корисні посилання
+
+[GooglePlay](https://play.google.com/store/apps/details?id=com.yaroslavlancelot.eafall).
+
+Вікі [проекту](https://github.com/YaroslavHavrylovych/eafall/wiki).
+
+*Note* :
+Проект побудовано з використанням [AndEngine](https://github.com/nicolasgramlich/AndEngine) graphics, physics.
+
+Список людей, які допомагали у [створенні](https://github.com/YaroslavHavrylovych/eafall/wiki#contributors).
+
+[Ліцензія Apache версія 2 ](license.txt)
+
+
+---------------------------------------
+Ярослав Гаврилович
