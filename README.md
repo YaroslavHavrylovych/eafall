@@ -32,8 +32,8 @@ Anyone who finished the whole campaign can appear in the finishers list
 
 History tells of a distant world of the future when humanity is displaced into distant planets.
 At one time, the planets began fighting each other and destroyed almost half of the galaxy's population. 
-In such a struggle, the Empire was born. Centralization, oppression
-of the population, appearance standards - is just the beginning. Experiments over people,
+In such a struggle, the Empire was born. Its basement - centralization, 
+its goal - oppression. And that was just a beginning. Experiments over people,
 groups of people, cities of people, planets of people. 
 All riots were severely punished, each of their participants and all his family was cut to the root.
 
